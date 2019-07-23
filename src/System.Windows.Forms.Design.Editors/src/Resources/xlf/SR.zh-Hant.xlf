@@ -127,9 +127,16 @@
         <target state="translated">開啟檔案</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
-        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
-        <target state="translated">按 ENTER 開始新行。\r\n按 CTRL+ENTER 接受文字。</target>
+        <source>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</source>
+        <target state="translated">按 Enter 開始新行。
+按 Ctrl+Enter 接受文字。</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

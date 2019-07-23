@@ -642,7 +642,7 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
             // Handle shadowed properties
             string[] shadowProps = new string[] { "Opacity", "Menu", "IsMdiContainer", "Size", "ShowInTaskBar", "WindowState", "AutoSize", "AcceptButton", "CancelButton" };
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];

@@ -50,8 +50,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Creates a new selection manager object.  The selection manager manages all selection of all designers under the current form file.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
+        /// </summary>
         public SelectionUIService(IDesignerHost host) : base()
         {
             SetStyle(ControlStyles.StandardClick | ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
@@ -495,8 +494,6 @@ namespace System.Windows.Forms.Design
         /// Overrides Control to handle our selection grab handles.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         protected override void OnMouseDown(MouseEventArgs me)
         {
             if (_dragHandler == null && _selSvc != null)
@@ -694,8 +691,6 @@ namespace System.Windows.Forms.Design
         /// Overrides Control to handle our selection grab handles.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         protected override void OnMouseUp(MouseEventArgs me)
         {
             try
@@ -929,8 +924,6 @@ namespace System.Windows.Forms.Design
         /// This can be called by an outside party to begin a drag of the currently selected set of components.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         bool ISelectionUIService.BeginDrag(SelectionRules rules, int initialX, int initialY)
         {
             if (_dragHandler != null)
@@ -1078,8 +1071,6 @@ namespace System.Windows.Forms.Design
         /// Called by an outside party to finish a drag operation.  This can only be called after a successful call to beginDrag.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         void ISelectionUIService.EndDrag(bool cancel)
         {
             _containerDrag = null;
@@ -1146,7 +1137,7 @@ namespace System.Windows.Forms.Design
             object[] selection = null;
             if (components == null)
             {
-                return new object[0];
+                return Array.Empty<object>();
             }
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
@@ -1165,7 +1156,7 @@ namespace System.Windows.Forms.Design
                 }
                 selection = (object[])list.ToArray();
             }
-            return selection ?? (new object[0]);
+            return selection ?? (Array.Empty<object>());
         }
 
         /// <summary>
@@ -1392,8 +1383,7 @@ namespace System.Windows.Forms.Design
             private SelectionRules _selectionRules;
             private readonly ISelectionUIHandler _handler; // the components selection UI handler (can be null)
 
-            /// Its ok to call virtual method as this is a private class.            
-            [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+            /// Its ok to call virtual method as this is a private class.
             public SelectionUIItem(SelectionUIService selUIsvc, object component)
             {
                 _selUIsvc = selUIsvc;
@@ -1938,8 +1928,6 @@ namespace System.Windows.Forms.Design
             }
 
             // Standard 'catch all - rethrow critical' exception pattern
-            [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             public override bool Equals(object obj)
             {
                 try

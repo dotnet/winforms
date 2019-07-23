@@ -177,10 +177,10 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(item);
             var subItem = new ListViewItem.ListViewSubItem();
             item.SubItems.Add(subItem);
-            
+
             subItem.BackColor = value;
             Assert.Equal(expected, subItem.BackColor);
-            
+
             // Set same.
             subItem.BackColor = value;
             Assert.Equal(expected, subItem.BackColor);
@@ -196,10 +196,10 @@ namespace System.Windows.Forms.Tests
             };
             var subItem = new ListViewItem.ListViewSubItem();
             item.SubItems.Add(subItem);
-            
+
             subItem.BackColor = value;
             Assert.Equal(expected, subItem.BackColor);
-            
+
             // Set same.
             subItem.BackColor = value;
             Assert.Equal(expected, subItem.BackColor);
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Tests
                 Font = value
             };
             Assert.Same(value ?? Control.DefaultFont, subItem.Font);
-            
+
             // Set same.
             subItem.Font = value;
             Assert.Same(value ?? Control.DefaultFont, subItem.Font);
@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Tests
 
             subItem.Font = value;
             Assert.Equal(value ?? SystemFonts.CaptionFont, subItem.Font);
-            
+
             // Set same.
             subItem.Font = value;
             Assert.Equal(value ?? SystemFonts.CaptionFont, subItem.Font);
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Tests
             };
             var subItem = new ListViewItem.ListViewSubItem();
             item.SubItems.Add(subItem);
-            
+
             subItem.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
 
@@ -425,10 +425,10 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(item);
             var subItem = new ListViewItem.ListViewSubItem();
             item.SubItems.Add(subItem);
-            
+
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
-            
+
             // Set same.
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
@@ -444,10 +444,10 @@ namespace System.Windows.Forms.Tests
             };
             var subItem = new ListViewItem.ListViewSubItem();
             item.SubItems.Add(subItem);
-            
+
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
-            
+
             // Set same.
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
@@ -462,11 +462,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
 
             // Set same.
             subItem.Name = value;
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
         }
 
         [Theory]
@@ -477,11 +477,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
 
             // Set same.
             subItem.Name = value;
-            Assert.Same(expected, subItem.Name);
+            Assert.Equal(expected, subItem.Name);
         }
 
         [Theory]
@@ -508,11 +508,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
 
             // Set same.
             subItem.Text = value;
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
         }
 
         [Theory]
@@ -523,11 +523,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
 
             // Set same.
             subItem.Text = value;
-            Assert.Same(expected, subItem.Text);
+            Assert.Equal(expected, subItem.Text);
         }
 
         public static IEnumerable<object[]> ResetStyle_Owner_TestData()

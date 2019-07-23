@@ -42,7 +42,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual void RefreshItems()
         {
-
         }
     }
 }

@@ -33,8 +33,6 @@ namespace WinformsControlsTest
         public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
                                                int x, int y, int cx, int cy, int flags);
 
-
-
         [DllImport("user32", ExactSpelling = true)]
         internal static extern bool EnableNonClientDpiScaling(HandleRef hWnd);
 
@@ -44,7 +42,6 @@ namespace WinformsControlsTest
         internal const double LogicalDpi = 96.0;
         internal const int LOGPIXELSX = 88;
         internal const int LOGPIXELSY = 90;
-
 
         internal static void GetDevicePixels(HandleRef handleRef, out double x, out double y)
         {
@@ -130,7 +127,6 @@ namespace WinformsControlsTest
         }
         protected override void WndProc(ref Message m)
         {
-
             uint dpi;
             switch (m.Msg)
             {

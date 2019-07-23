@@ -127,9 +127,16 @@
         <target state="translated">Dosya Aç</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
-        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
-        <target state="translated">Yeni satıra başlamak için Enter tuşuna basın.\r\nMetni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
+        <source>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</source>
+        <target state="translated">Yeni satıra başlamak için Enter tuşuna basın.
+Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

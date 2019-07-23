@@ -6,8 +6,6 @@ namespace System.Windows.Forms
 {
     using System;
     using System.Drawing;
-    using System.Windows.Forms;
-    using System.Drawing.Imaging;
     using System.ComponentModel;
     using System.Windows.Forms.Design;
 
@@ -15,7 +13,6 @@ namespace System.Windows.Forms
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripButton : ToolStripItem
     {
-
         private CheckState checkState = CheckState.Unchecked;
         private bool checkOnClick = false;
         private const int STANDARD_BUTTON_WIDTH = 23;
@@ -52,7 +49,6 @@ namespace System.Windows.Forms
             Initialize();
         }
 
-
         [DefaultValue(true)]
         public new bool AutoToolTip
         {
@@ -65,7 +61,6 @@ namespace System.Windows.Forms
                 base.AutoToolTip = value;
             }
         }
-
 
         /// <summary>
         /// Summary of CanSelect.
@@ -96,10 +91,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>
-        /// Gets or sets a value indicating whether the item is checked.
-        /// </para>
-        /// </summary>
+            /// Gets or sets a value indicating whether the item is checked.
+            /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -124,8 +117,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets
-        /// or sets a value indicating whether the check box is checked.</para>
+        /// Gets
+        /// or sets a value indicating whether the check box is checked.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -158,9 +151,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Occurs when the
-        /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
-        /// property changes.</para>
+        /// Occurs when the
+        /// value of the <see cref='CheckBox.Checked'/>
+        /// property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged
@@ -169,9 +162,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventCheckedChanged, value);
         }
         /// <summary>
-        /// <para>Occurs when the
-        /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
-        /// property changes.</para>
+        /// Occurs when the
+        /// value of the <see cref='CheckBox.CheckState'/>
+        /// property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged
@@ -179,7 +172,6 @@ namespace System.Windows.Forms
             add => Events.AddHandler(EventCheckStateChanged, value);
             remove => Events.RemoveHandler(EventCheckStateChanged, value);
         }
-
 
         protected override bool DefaultAutoToolTip
         {
@@ -237,8 +229,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckedChanged'/>
-        /// event.</para>
+        /// Raises the <see cref='ToolStripMenuItem.CheckedChanged'/>
+        /// event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
         {
@@ -246,7 +238,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckStateChanged'/> event.</para>
+        /// Raises the <see cref='ToolStripMenuItem.CheckStateChanged'/> event.
         /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e)
         {
@@ -257,9 +249,8 @@ namespace System.Windows.Forms
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </summary>
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-
             if (Owner != null)
             {
                 ToolStripRenderer renderer = Renderer;
@@ -292,9 +283,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An implementation of AccessibleChild for use with ToolStripItems        
+        /// An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripButtonAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripButton ownerItem = null;

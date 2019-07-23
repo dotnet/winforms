@@ -127,9 +127,16 @@
         <target state="translated">Otevřít soubor</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
-        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
-        <target state="translated">Stisknutím klávesy Enter přejděte na nový řádek.\r\nStisknutím kombinace kláves Ctrl+Enter text přijmete.</target>
+        <source>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</source>
+        <target state="translated">Stisknutím klávesy Enter přejděte na nový řádek.
+Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

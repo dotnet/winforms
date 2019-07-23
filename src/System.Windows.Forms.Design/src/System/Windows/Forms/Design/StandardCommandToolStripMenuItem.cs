@@ -21,10 +21,7 @@ namespace System.Windows.Forms.Design
         private readonly string _name;
         private readonly MenuCommand _menuCommand;
 
-        // Ok to call MenuService.FindComand to find the menuCommand mapping to the appropriated menuID.        
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
+        // Ok to call MenuService.FindComand to find the menuCommand mapping to the appropriated menuID.
         public StandardCommandToolStripMenuItem(CommandID menuID, string text, string imageName, IServiceProvider serviceProvider)
         {
             _menuID = menuID;
@@ -73,7 +70,6 @@ namespace System.Windows.Forms.Design
         public override Image Image
         {
             // Standard 'catch all - rethrow critical' exception pattern
-            [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
             get
             {
                 // Defer loading the image until we're sure we need it
@@ -84,7 +80,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_name != null)
                         {
-                            _image = new Icon(typeof(ToolStripMenuItem), _name + ".bmp").ToBitmap();
+                            _image = new Icon(typeof(ToolStripMenuItem), _name).ToBitmap();
                         }
                         ImageTransparentColor = Color.Magenta;
                     }

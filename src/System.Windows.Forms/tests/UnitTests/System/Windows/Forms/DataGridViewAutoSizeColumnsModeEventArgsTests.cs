@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_DataGridViewAutoSizeColumnModeArray_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new DataGridViewAutoSizeColumnMode[0] };
+            yield return new object[] { Array.Empty<DataGridViewAutoSizeColumnMode>() };
             yield return new object[] { new DataGridViewAutoSizeColumnMode[] { DataGridViewAutoSizeColumnMode.AllCells, (DataGridViewAutoSizeColumnMode)(DataGridViewAutoSizeColumnMode.None - 1) } };
         }
 

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace System.ComponentModel.Design.Serialization
@@ -12,7 +11,6 @@ namespace System.ComponentModel.Design.Serialization
     /// The exception that is thrown when the code dom serializer experiences an error.
     /// </summary>
     [Serializable]
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
     public class CodeDomSerializerException : SystemException
     {
         public CodeDomSerializerException(string message, CodeLinePragma linePragma) : base(message)

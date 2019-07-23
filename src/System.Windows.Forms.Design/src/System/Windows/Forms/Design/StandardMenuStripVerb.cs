@@ -37,7 +37,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// When the verb is invoked, use all the stuff above to show the dialog, etc.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void InsertItems()
         {
             DesignerActionUIService actionUIService = (DesignerActionUIService)_host.GetService(typeof(DesignerActionUIService));
@@ -67,9 +66,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Here is where all the fun stuff starts.  We create the structure and apply the naming here.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void CreateStandardMenuStrip(System.ComponentModel.Design.IDesignerHost host, MenuStrip tool)
         {
             // build the static menu items structure.
@@ -254,12 +250,8 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Here is where all the fun stuff starts.  We create the structure and apply the naming here.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void CreateStandardToolStrip(IDesignerHost host, ToolStrip tool)
         {
-
             // build the static menu items structure.
             //
             string[] menuItemNames = new string[] { SR.StandardMenuNew, SR.StandardMenuOpen, SR.StandardMenuSave, SR.StandardMenuPrint, "-", SR.StandardToolCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardToolHelp };
@@ -410,45 +402,44 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Helper Function to get Images from types.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private Bitmap GetImage(string name)
         {
             Bitmap image = null;
             if (name.StartsWith("new"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "new.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "new").ToBitmap();
             }
             else if (name.StartsWith("open"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "open.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "open").ToBitmap();
             }
             else if (name.StartsWith("save"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "save.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "save").ToBitmap();
             }
             else if (name.StartsWith("printPreview"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "printPreview.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "printPreview").ToBitmap();
             }
             else if (name.StartsWith("print"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "print.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "print").ToBitmap();
             }
             else if (name.StartsWith("cut"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "cut.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "cut").ToBitmap();
             }
             else if (name.StartsWith("copy"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "copy.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "copy").ToBitmap();
             }
             else if (name.StartsWith("paste"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "paste.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "paste").ToBitmap();
             }
             else if (name.StartsWith("help"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "help.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "help").ToBitmap();
             }
             return image;
         }
@@ -456,7 +447,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Computes a name from a text label by removing all spaces and non-alphanumeric characters.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private string NameFromText(string text, Type itemType, INameCreationService nameCreationService, bool adjustCapitalization)
         {
             string baseName;

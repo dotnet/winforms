@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/> event.
+    /// Provides data for the <see cref='CheckedListBox.ItemCheck'/> event.
     /// </summary>
     [ComVisible(true)]
     public class ItemCheckEventArgs : EventArgs

@@ -2,29 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms;
-    using System.Collections;
-    using System.Drawing.Drawing2D;
-    using System.Globalization;
-
     /// <summary>
-    ///    A SplitContainer is a ContainerControl with 2 panels separated with a splitter
-    ///    in the middle. This is a composite control. The user can drag and drop this control from Toolbox.
-    ///    Controls can be added to the right panel and the left panel. The Orientation can be either Horizontal or Vertical.
-    ///    The Controls inside the Panels would be redrawn with the new Orientation.
-    ///    With this control the user need be aware of docking, z-order of the controls. The controls get parented when thry are
-    ///    dropped on the SpitContainer.
+    ///  A SplitContainer is a ContainerControl with 2 panels separated with a splitter
+    ///  in the middle. This is a composite control. The user can drag and drop this control from Toolbox.
+    ///  Controls can be added to the right panel and the left panel. The Orientation can be either Horizontal or Vertical.
+    ///  The Controls inside the Panels would be redrawn with the new Orientation.
+    ///  With this control the user need be aware of docking, z-order of the controls. The controls get parented when thry are
+    ///  dropped on the SpitContainer.
     /// </summary>
     [
     ComVisible(true),
@@ -36,7 +28,6 @@ namespace System.Windows.Forms
     ]
     public class SplitContainer : ContainerControl, ISupportInitialize
     {
-
         //
         // CONTANTS USED DURING DRAWING SPLITTER MOOVEMENTS
         //
@@ -47,7 +38,6 @@ namespace System.Windows.Forms
         private const int leftBorder = 2;
 
         private int BORDERSIZE = 0;
-
 
         //
         // SplitContainer private Cached copies of public properties...
@@ -162,13 +152,10 @@ namespace System.Windows.Forms
         //                                                                                         //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
         /// <summary>
-        ///     This property is overridden to allow the AutoScroll to be set on all the panels when
-        ///     The autoScroll on SplitContainer is shown.
-        ///     Here we dont set the base value ... but set autoscroll for panels.
+        ///  This property is overridden to allow the AutoScroll to be set on all the panels when
+        ///  The autoScroll on SplitContainer is shown.
+        ///  Here we dont set the base value ... but set autoscroll for panels.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -209,7 +196,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Override AutoScrollMinSize to make it hidden from the user in the designer
+        ///  Override AutoScrollMinSize to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -228,9 +215,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    Override AutoScrollMargin to make it hidden from the user in the designer
+        ///  Override AutoScrollMargin to make it hidden from the user in the designer
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -248,7 +234,6 @@ namespace System.Windows.Forms
                 base.AutoScrollMargin = value;
             }
         }
-
 
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -270,7 +255,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>Hide AutoSize, as it can mean more than one thing and might confuse users</para>
+        ///  Hide AutoSize, as it can mean more than one thing and might confuse users
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -292,7 +277,6 @@ namespace System.Windows.Forms
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
-
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override Image BackgroundImage
@@ -320,16 +304,12 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///    <para>
-        ///       The binding manager for the container control.
-        ///    </para>
+        ///  The binding manager for the container control.
         /// </summary>
         [
         Browsable(false),
-        SRDescription(nameof(SR.ContainerControlBindingContextDescr)),
-        SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")
+        SRDescription(nameof(SR.ContainerControlBindingContextDescr))
         ]
         public override BindingContext BindingContext
         {
@@ -344,13 +324,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates what type of border the Splitter control has.  This value
-        ///     comes from the System.Windows.Forms.BorderStyle enumeration.
+        ///  Indicates what type of border the Splitter control has.  This value
+        ///  comes from the System.Windows.Forms.BorderStyle enumeration.
         /// </summary>
         [
         DefaultValue(BorderStyle.None),
         SRCategory(nameof(SR.CatAppearance)),
-        System.Runtime.InteropServices.DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
+        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
         SRDescription(nameof(SR.SplitterBorderStyleDescr))
         ]
         public BorderStyle BorderStyle
@@ -399,12 +379,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Controls Collection...
-        ///     This is overriden so that the Controls.Add ( ) is not Code Gened...
+        ///  Controls Collection...
+        ///  This is overriden so that the Controls.Add ( ) is not Code Gened...
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new Control.ControlCollection Controls
+        public new ControlCollection Controls
         {
             get
             {
@@ -425,10 +405,10 @@ namespace System.Windows.Forms
             remove => base.ControlRemoved -= value;
         }
         /// <summary>
-        ///     The dock property. The dock property controls to which edge
-        ///     of the container this control is docked to. For example, when docked to
-        ///     the top of the container, the control will be displayed flush at the
-        ///     top of the container, extending the length of the container.
+        ///  The dock property. The dock property controls to which edge
+        ///  of the container this control is docked to. For example, when docked to
+        ///  the top of the container, the control will be displayed flush at the
+        ///  top of the container, extending the length of the container.
         /// </summary>
         public new DockStyle Dock
         {
@@ -452,8 +432,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -464,8 +444,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates what type of border the Splitter control has.  This value
-        ///     comes from the System.Windows.Forms.BorderStyle enumeration.
+        ///  Indicates what type of border the Splitter control has.  This value
+        ///  comes from the System.Windows.Forms.BorderStyle enumeration.
         /// </summary>
         [
         DefaultValue(FixedPanel.None),
@@ -646,7 +626,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        ///     Collapses or restores the given panel
+        ///  Collapses or restores the given panel
         ///</summary>
         private void CollapsePanel(SplitterPanel p, bool collapsing)
         {
@@ -711,7 +691,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
         /// <summary>
         /// Collapses or restores panel2
@@ -834,7 +813,6 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(SplitterDistance), string.Format(SR.InvalidLowBoundArgument, "SplitterDistance", value, 0));
                     }
 
-
                     try
                     {
                         setSplitterDistance = true;
@@ -909,7 +887,6 @@ namespace System.Windows.Forms
 
         private int SplitterDistanceInternal
         {
-
             get
             {
                 return splitterDistance;
@@ -946,7 +923,6 @@ namespace System.Windows.Forms
                 splitterInc = value;
             }
         }
-
 
         /// <summary>
         /// This property determines the rectangle bounds of the splitter.
@@ -993,8 +969,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    We need to have a internal Property for the SplitterWidth which returns zero if we are in collapased mode.
-        ///    This property is used to Layout SplitContainer.
+        ///  We need to have a internal Property for the SplitterWidth which returns zero if we are in collapased mode.
+        ///  This property is used to Layout SplitContainer.
         /// </summary>
         private int SplitterWidthInternal
         {
@@ -1006,8 +982,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Indicates whether the user can give the focus to this control using the TAB
-        ///       key. This property is read-only.</para>
+        ///  Indicates whether the user can give the focus to this control using the TAB
+        ///  key. This property is read-only.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1031,8 +1007,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text
         {
@@ -1052,7 +1026,6 @@ namespace System.Windows.Forms
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-
         /////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                            //
         //Start PUBLIC FUNCTIONS                                                      //
@@ -1060,8 +1033,8 @@ namespace System.Windows.Forms
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        ///     ISupportInitialize support. Disables splitter panel min size and splitter width
-        ///     validation during initialization.
+        ///  ISupportInitialize support. Disables splitter panel min size and splitter width
+        ///  validation during initialization.
         /// </summary>
         public void BeginInit()
         {
@@ -1069,8 +1042,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     ISupportInitialize support. Enables splitter panel min size and splitter width
-        ///     validation after initialization.
+        ///  ISupportInitialize support. Enables splitter panel min size and splitter width
+        ///  validation after initialization.
         /// </summary>
         public void EndInit()
         {
@@ -1096,7 +1069,6 @@ namespace System.Windows.Forms
         //End PUBLIC FUNCTIONS                                                        //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
 
         /////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                            //
@@ -1145,8 +1117,6 @@ namespace System.Windows.Forms
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         /////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                            //
         //start EVENT Delegates                                                       //
@@ -1154,7 +1124,7 @@ namespace System.Windows.Forms
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        ///     Overides the Control.OnGotFocus to Invalidate...
+        ///  Overides the Control.OnGotFocus to Invalidate...
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -1164,7 +1134,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overrides the Control.OnKeydown for implementing splitter movements.
+        ///  Overrides the Control.OnKeydown for implementing splitter movements.
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -1240,7 +1210,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overrides the Control.OnKeydown for implementing splitter movements.
+        ///  Overrides the Control.OnKeydown for implementing splitter movements.
         /// </summary>
         protected override void OnKeyUp(KeyEventArgs e)
         {
@@ -1279,7 +1249,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overrides the Control.OnLayout.
+        ///  Overrides the Control.OnLayout.
         /// </summary>
         protected override void OnLayout(LayoutEventArgs e)
         {
@@ -1293,7 +1263,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overrides the Control.OnLostFocus to Invalidate.
+        ///  Overrides the Control.OnLostFocus to Invalidate.
         /// </summary>
         protected override void OnLostFocus(EventArgs e)
         {
@@ -1302,7 +1272,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.MouseMove'/> event.</para>
+        /// Raises the <see cref='SplitContainer.MouseMove'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseMove(MouseEventArgs e)
@@ -1360,7 +1330,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseLeave'/> event.</para>
+        /// Raises the <see cref='OnMouseLeave'/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -1373,7 +1343,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseDown'/> event.</para>
+        /// Raises the <see cref='OnMouseDown'/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -1411,7 +1381,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseUp'/> event.</para>
+        /// Raises the <see cref='OnMouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
@@ -1440,8 +1410,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overrides the Control.OnMove() to synchronize the 
-        ///     splitterRect with the position of the SplitContainer.
+        ///  Overrides the Control.OnMove() to synchronize the
+        ///  splitterRect with the position of the SplitContainer.
         /// </summary>
         protected override void OnMove(EventArgs e)
         {
@@ -1449,9 +1419,8 @@ namespace System.Windows.Forms
             SetSplitterRect(Orientation == Orientation.Vertical);
         }
 
-
         /// <summary>
-        ///     Overrides the Control.OnPaint() to focus the Splitter.
+        ///  Overrides the Control.OnPaint() to focus the Splitter.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -1463,9 +1432,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Inherriting classes should override this method to respond to the
-        ///     splitterMoving event. This event occurs while the splitter is
-        ///     being moved by the user.
+        ///  Inherriting classes should override this method to respond to the
+        ///  splitterMoving event. This event occurs while the splitter is
+        ///  being moved by the user.
         /// </summary>
         public void OnSplitterMoving(SplitterCancelEventArgs e)
         {
@@ -1473,9 +1442,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Inherriting classes should override this method to respond to the
-        ///     splitterMoved event. This event occurs when the user finishes
-        ///     moving the splitter.
+        ///  Inherriting classes should override this method to respond to the
+        ///  splitterMoved event. This event occurs when the user finishes
+        ///  moving the splitter.
         /// </summary>
         public void OnSplitterMoved(SplitterEventArgs e)
         {
@@ -1498,16 +1467,14 @@ namespace System.Windows.Forms
             UpdateSplitter();
         }
 
-
         ////////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                                            //
         ///START PRIVATE FUNCTIONS                                                                    //
         //                                                                                            //
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
         /// <summary>
-        ///     Validate and set the minimum size for Panel1.
+        ///  Validate and set the minimum size for Panel1.
         /// </summary>
         private void ApplyPanel1MinSize(int value)
         {
@@ -1539,7 +1506,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Validate and set the minimum size for Panel2.
+        ///  Validate and set the minimum size for Panel2.
         /// </summary>
         private void ApplyPanel2MinSize(int value)
         {
@@ -1570,7 +1537,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Validate and set the splitter width.
+        ///  Validate and set the splitter width.
         /// </summary>
         private void ApplySplitterWidth(int value)
         {
@@ -1598,13 +1565,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the split position to be the current split size. This is called
-        ///     by splitEdit
+        ///  Sets the split position to be the current split size. This is called
+        ///  by splitEdit
         /// </summary>
         private void ApplySplitterDistance()
         {
-
-            using (new System.Windows.Forms.Layout.LayoutTransaction(this, this, "SplitterDistance", false))
+            using (new Layout.LayoutTransaction(this, this, "SplitterDistance", false))
             {
                 SplitterDistanceInternal = splitterDistance;
             }
@@ -1635,12 +1601,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Calculates the bounding rect of the split line. minWeight refers
-        ///     to the minimum height or width of the splitline.
+        ///  Calculates the bounding rect of the split line. minWeight refers
+        ///  to the minimum height or width of the splitline.
         /// </summary>
         private Rectangle CalcSplitLine(int splitSize, int minWeight)
         {
-
             Rectangle r = new Rectangle();
             switch (Orientation)
             {
@@ -1663,7 +1628,6 @@ namespace System.Windows.Forms
 
                     break;
 
-
                 case Orientation.Horizontal:
                     r.Width = Width;
                     r.Height = SplitterWidthInternal;
@@ -1678,8 +1642,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Draws the splitter bar at the current location. Will automatically
-        ///     cleanup anyplace the splitter was drawn previously.
+        ///  Draws the splitter bar at the current location. Will automatically
+        ///  cleanup anyplace the splitter was drawn previously.
         /// </summary>
         private void DrawSplitBar(int mode)
         {
@@ -1720,10 +1684,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Draws the focus rectangle if the control has focus.
-        ///
-        ///    </para>
+        ///  Draws the focus rectangle if the control has focus.
         /// </summary>
         private void DrawFocus(Graphics g, Rectangle r)
         {
@@ -1732,12 +1693,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Draws the splitter line at the requested location. Should only be called
-        ///     by drawSpltBar.
+        ///  Draws the splitter line at the requested location. Should only be called
+        ///  by drawSpltBar.
         /// </summary>
         private void DrawSplitHelper(int splitSize)
         {
-
             Rectangle r = CalcSplitLine(splitSize, 3);
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
@@ -1750,7 +1710,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Calculates the split size based on the mouse position (x, y).
+        ///  Calculates the split size based on the mouse position (x, y).
         /// </summary>
         private int GetSplitterDistance(int x, int y)
         {
@@ -1796,8 +1756,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Process an arrowKey press by selecting the next control in the group
-        ///     that the activeControl belongs to.
+        ///  Process an arrowKey press by selecting the next control in the group
+        ///  that the activeControl belongs to.
         /// </summary>
         private bool ProcessArrowKey(bool forward)
         {
@@ -1810,7 +1770,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Re paint SplitterRect for SplitContainer
+        ///  Re paint SplitterRect for SplitContainer
         /// </summary>
         private void RepaintSplitterRect()
         {
@@ -1836,7 +1796,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private void SetSplitterRect(bool vertical)
         {
             if (vertical)
@@ -1856,7 +1815,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Reize SplitContainer
+        ///  Reize SplitContainer
         /// </summary>
         private void ResizeSplitContainer()
         {
@@ -1970,7 +1929,6 @@ namespace System.Windows.Forms
                             panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
                             panel2.Location = new Point(0, panel2Start);
 
-
                         }
                         RepaintSplitterRect();
                         SetSplitterRect(false);
@@ -2003,15 +1961,14 @@ namespace System.Windows.Forms
             panel2.ResumeLayout();
         }
 
-
         /// <summary>
-        ///     Scales an individual control's location, size, padding and margin.
-        ///     If the control is top level, this will not scale the control's location.
-        ///     This does not scale children or the size of auto sized controls.  You can
-        ///     omit scaling in any direction by changing BoundsSpecified.
+        ///  Scales an individual control's location, size, padding and margin.
+        ///  If the control is top level, this will not scale the control's location.
+        ///  This does not scale children or the size of auto sized controls.  You can
+        ///  omit scaling in any direction by changing BoundsSpecified.
         ///
-        ///     After the control is scaled the RequiredScaling property is set to
-        ///     BoundsSpecified.None.
+        ///  After the control is scaled the RequiredScaling property is set to
+        ///  BoundsSpecified.None.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -2074,7 +2031,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Selects the next control following ctl.
+        ///  Selects the next control following ctl.
         /// </summary>
         private bool SelectNextControlInContainer(Control ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
@@ -2170,13 +2127,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Selects the next control following ctl.
+        ///  Selects the next control following ctl.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         private bool SelectNextControlInPanel(Control ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
         {
-
             if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
             {
                 ctl = null;
@@ -2264,7 +2219,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Selects the innermost PANEL.
+        ///  Selects the innermost PANEL.
         /// </summary>
         private void SetInnerMostBorder(SplitContainer sc)
         {
@@ -2296,16 +2251,14 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     This protected override allows us to check is an unvalid value is set for Width and Height.
-        ///     The SplitContainer would not throw on invalid Size (i.e Width and Height) settings, but would correct the error like Form
-        ///     Say, the Panel1MinSize == 150 , Panel2MinSize == 50 and SplitterWidth == 4 and the user tries
-        ///     to set SplitContainer.Width = 50 ... then this function would try to correct the value to 204.. instead of throwing.
+        ///  This protected override allows us to check is an unvalid value is set for Width and Height.
+        ///  The SplitContainer would not throw on invalid Size (i.e Width and Height) settings, but would correct the error like Form
+        ///  Say, the Panel1MinSize == 150 , Panel2MinSize == 50 and SplitterWidth == 4 and the user tries
+        ///  to set SplitContainer.Width = 50 ... then this function would try to correct the value to 204.. instead of throwing.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-
             // If we are changing Height, check if its greater than minimun else ... make it equal to the minimum
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None && Orientation == Orientation.Horizontal)
             {
@@ -2330,7 +2283,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Begins the splitter moving.
+        ///  Begins the splitter moving.
         /// </summary>
         private void SplitBegin(int x, int y)
         {
@@ -2350,7 +2303,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The split movement.
+        ///  The split movement.
         /// </summary>
         private void SplitMove(int x, int y)
         {
@@ -2378,7 +2331,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Finishes the split movement.
+        ///  Finishes the split movement.
         /// </summary>
         private void SplitEnd(bool accept)
         {
@@ -2404,7 +2357,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Update Splitter
+        ///  Update Splitter
         /// </summary>
         private void UpdateSplitter()
         {
@@ -2443,7 +2396,6 @@ namespace System.Windows.Forms
                     {
                         ratioWidth = ((double)(Width) / (double)(panel1.Width) > 0) ? (double)(Width) / (double)(panel1.Width) : ratioWidth;
                     }
-
 
                 }
                 else
@@ -2511,11 +2463,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the WM_SETCURSOR message
+        ///  Handles the WM_SETCURSOR message
         /// </summary>
         private void WmSetCursor(ref Message m)
         {
-
             // Accessing through the Handle property has side effects that break this
             // logic. You must use InternalHandle.
             //
@@ -2543,9 +2494,6 @@ namespace System.Windows.Forms
         //                                                                                               //
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                                               //
         // Start PROTECTED OVERRIDE FUNCTIONS                                                            //
@@ -2571,13 +2519,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Processes a dialog key. Overrides Control.processDialogKey(). This
-        ///    method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
-        ///    keys in dialogs.
-        ///    The method performs no processing on keys that include the ALT or
-        ///    CONTROL modifiers. For the TAB key, the method selects the next control
-        ///    on the form. For the arrow keys,
-        ///    !!!
+        ///  Processes a dialog key. Overrides Control.processDialogKey(). This
+        ///  method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
+        ///  keys in dialogs.
+        ///  The method performs no processing on keys that include the ALT or
+        ///  CONTROL modifiers. For the TAB key, the method selects the next control
+        ///  on the form. For the arrow keys,
+        ///  !!!
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -2621,8 +2569,8 @@ namespace System.Windows.Forms
         }
 
         /// /// <summary>
-        ///   This will process the TabKey for the SplitContainer. The Focus needs to Shift from controls to the Left of the Splitter
-        ///   to the splitter and then to the controls on the right of the splitter. This override implements this Logic.
+        ///  This will process the TabKey for the SplitContainer. The Focus needs to Shift from controls to the Left of the Splitter
+        ///  to the splitter and then to the controls on the right of the splitter. This override implements this Logic.
         /// </summary>
         protected override bool ProcessTabKey(bool forward)
         {
@@ -2683,8 +2631,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override void WndProc(ref Message msg)
         {
             switch (msg.Msg)
@@ -2707,22 +2653,17 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <summary>
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override Control.ControlCollection CreateControlsInstance()
+        protected override ControlCollection CreateControlsInstance()
         {
             return new SplitContainerTypedControlCollection(this, typeof(SplitterPanel), /*isReadOnly*/true);
         }
-
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                                 //
         // End   PROTECTED OVERRIDE FUNCTIONS                                              //
         //                                                                                 //
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-
 
         private class SplitContainerMessageFilter : IMessageFilter
         {

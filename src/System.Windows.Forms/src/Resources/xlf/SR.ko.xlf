@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">ActiveX 컨트롤은 창 없는 컨트롤입니다. 이번 버전의 .NET Framework에서는 이러한 컨트롤을 지원하지 않습니다.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">ActiveX 컨트롤은 창 없는 컨트롤입니다. 이번 버전의 .NET 에서는 이러한 컨트롤을 지원하지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="CatPrivate">
         <source>Private</source>
-        <target state="translated">비공개</target>
+        <target state="translated">프라이빗</target>
         <note />
       </trans-unit>
       <trans-unit id="CatPropertyChanged">
@@ -5065,8 +5065,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ just-in-time (JIT) debugging instead of this dialog box.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET Framework 구성 도구를 사용하십시오.
+        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET 구성 도구를 사용하십시오.
 
 [계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다.
 
@@ -5204,12 +5204,12 @@ If you click Continue, the application will ignore this error and attempt to con
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET Framework 구성 도구를 사용하십시오.
+        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET 구성 도구를 사용하십시오.
 
 [계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 응용 프로그램이 즉시 닫힙니다.
 
@@ -7153,7 +7153,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;폼 없음&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7832,8 +7832,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">설명 창</target>
+        <source>Description</source>
+        <target state="translated">설명</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">도구 모음</target>
+        <source>PropertyGrid</source>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11778,7 +11778,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Del</target>
+        <target state="translated">Delete</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11798,7 +11798,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Insert</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11808,12 +11808,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">Page Down</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">Page Up</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

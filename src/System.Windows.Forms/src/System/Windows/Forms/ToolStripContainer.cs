@@ -2,38 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
 /// this is the UBER container for ToolStripPanels.
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms;
-    using System.Collections;
-    using System.Globalization;
-    using System.Windows.Forms.Layout;
-
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripContainerDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.ToolStripContainerDesc))]
     public class ToolStripContainer : ContainerControl
     {
-
         private readonly ToolStripPanel topPanel;
         private readonly ToolStripPanel bottomPanel;
         private readonly ToolStripPanel leftPanel;
         private readonly ToolStripPanel rightPanel;
         private readonly ToolStripContentPanel contentPanel;
 
-
         public ToolStripContainer()
         {
-
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
 
             SuspendLayout();
@@ -69,7 +59,6 @@ namespace System.Windows.Forms
                 ResumeLayout(true);
             }
         }
-
 
         [
         Browsable(false),
@@ -135,7 +124,6 @@ namespace System.Windows.Forms
             get { return base.BackgroundImage; }
             set { base.BackgroundImage = value; }
         }
-
 
         [
         Browsable(false),
@@ -273,7 +261,6 @@ namespace System.Windows.Forms
             remove => base.CursorChanged -= value;
         }
 
-
         protected override Size DefaultSize
         {
             get
@@ -318,7 +305,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.ToolStripContainerLeftToolStripPanelVisibleDescr)),
@@ -335,7 +321,6 @@ namespace System.Windows.Forms
                 LeftToolStripPanel.Visible = value;
             }
         }
-
 
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -400,12 +385,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Controls Collection...
-        ///     This is overriden so that the Controls.Add ( ) is not Code Gened...
+        ///  Controls Collection...
+        ///  This is overriden so that the Controls.Add ( ) is not Code Gened...
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new Control.ControlCollection Controls
+        public new ControlCollection Controls
         {
             get
             {
@@ -414,7 +399,7 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override Control.ControlCollection CreateControlsInstance()
+        protected override ControlCollection CreateControlsInstance()
         {
             return new ToolStripContainerTypedControlCollection(this, /*isReadOnly*/true);
         }
@@ -469,7 +454,6 @@ namespace System.Windows.Forms
         {
             return false;
         }
-
 
         internal class ToolStripContainerTypedControlCollection : WindowsFormsUtils.ReadOnlyControlCollection
         {
@@ -539,6 +523,5 @@ namespace System.Windows.Forms
         }
 
     }
-
 
 }

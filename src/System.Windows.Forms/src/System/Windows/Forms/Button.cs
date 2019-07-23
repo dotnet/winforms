@@ -2,27 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.ButtonInternal;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Windows.Forms.ButtonInternal;
-    using System.ComponentModel.Design;
-    using System.ComponentModel;
-    using System.Windows.Forms.Layout;
-
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>Represents a
-    ///       Windows button.</para>
+    ///  Represents a
+    ///  Windows button.
     /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -31,26 +22,23 @@ namespace System.Windows.Forms
     ]
     public class Button : ButtonBase, IButtonControl
     {
-
         /// <summary>
-        ///     The dialog result that will be sent to the parent dialog form when
-        ///     we are clicked.
+        ///  The dialog result that will be sent to the parent dialog form when
+        ///  we are clicked.
         /// </summary>
         private DialogResult dialogResult;
 
         private const int InvalidDimensionValue = int.MinValue;
 
         /// <summary>
-        ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels  
-        ///     of the border around the button.
+        ///  For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels
+        ///  of the border around the button.
         /// </summary>
         private Size systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Button'/>
-        ///       class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='Button'/>
+        ///  class.
         /// </summary>
         public Button() : base()
         {
@@ -61,7 +49,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -145,13 +133,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       This is called when creating a window. Inheriting classes can overide
-        ///       this to add extra functionality, but should not forget to first call
-        ///       base.CreateParams() to make sure the control continues to work
-        ///       correctly.
-        ///
-        ///    </para>
+        ///  This is called when creating a window. Inheriting classes can overide
+        ///  this to add extra functionality, but should not forget to first call
+        ///  base.CreateParams() to make sure the control continues to work
+        ///  correctly.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -176,11 +161,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value that is returned to the
-        ///       parent form when the button
-        ///       is clicked.
-        ///    </para>
+        ///  Gets or sets a value that is returned to the
+        ///  parent form when the button
+        ///  is clicked.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -205,9 +188,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
-        ///    </para>
+        ///  Raises the <see cref='Control.OnMouseEnter'/> event.
         /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
@@ -215,9 +196,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
-        ///    </para>
+        ///  Raises the <see cref='Control.OnMouseLeave'/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -241,12 +220,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Notifies the <see cref='System.Windows.Forms.Button'/>
-        ///       whether it is the default button so that it can adjust its appearance
-        ///       accordingly.
-        ///       
-        ///    </para>
+        ///  Notifies the <see cref='Button'/>
+        ///  whether it is the default button so that it can adjust its appearance
+        ///  accordingly.
         /// </summary>
         public virtual void NotifyDefault(bool value)
         {
@@ -257,14 +233,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       This method actually raises the Click event. Inheriting classes should
-        ///       override this if they wish to be notified of a Click event. (This is far
-        ///       preferable to actually adding an event handler.) They should not,
-        ///       however, forget to call base.onClick(e); before exiting, to ensure that
-        ///       other recipients do actually get the event.
-        ///
-        ///    </para>
+        ///  This method actually raises the Click event. Inheriting classes should
+        ///  override this if they wish to be notified of a Click event. (This is far
+        ///  preferable to actually adding an event handler.) They should not,
+        ///  however, forget to call base.onClick(e); before exiting, to ensure that
+        ///  other recipients do actually get the event.
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
@@ -273,7 +246,6 @@ namespace System.Windows.Forms
             {
                 form.DialogResult = dialogResult;
             }
-
 
             // accessibility stuff
             //
@@ -290,10 +262,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
-        ///       
-        ///    </para>
+        ///  Raises the <see cref='ButtonBase.OnMouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -330,8 +299,8 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when 
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
+        /// Must call the base class method to get the current DPI values. This method is invoked only when
+        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
         /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
@@ -348,10 +317,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for a
-        ///       button.
-        ///    </para>
+        ///  Generates a <see cref='Control.Click'/> event for a
+        ///  button.
         /// </summary>
         public void PerformClick()
         {
@@ -369,13 +336,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Lets a control process mnmemonic characters. Inheriting classes can
-        ///       override this to add extra functionality, but should not forget to call
-        ///       base.ProcessMnemonic(charCode); to ensure basic functionality
-        ///       remains unchanged.
-        ///
-        ///    </para>
+        ///  Lets a control process mnmemonic characters. Inheriting classes can
+        ///  override this to add extra functionality, but should not forget to call
+        ///  base.ProcessMnemonic(charCode); to ensure basic functionality
+        ///  remains unchanged.
         /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
@@ -388,22 +352,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Provides some interesting information for the Button control in
-        ///       String form.
-        ///    </para>
+        ///  Provides some interesting information for the Button control in
+        ///  String form.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", Text: " + Text;
         }
 
         /// <summary>
-        ///     The button's window procedure.  Inheriting classes can override this
-        ///     to add extra functionality, but should not forget to call
-        ///     base.wndProc(m); to ensure the button continues to function properly.
+        ///  The button's window procedure.  Inheriting classes can override this
+        ///  to add extra functionality, but should not forget to call
+        ///  base.wndProc(m); to ensure the button continues to function properly.
         /// </summary>
         protected override void WndProc(ref Message m)
         {

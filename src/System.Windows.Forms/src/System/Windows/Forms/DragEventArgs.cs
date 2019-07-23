@@ -7,14 +7,14 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.DragDrop'/>, <see cref='System.Windows.Forms.Control.DragEnter'/>,
-    /// or <see cref='System.Windows.Forms.Control.DragOver'/> event.
+    /// Provides data for the <see cref='Control.DragDrop'/>, <see cref='Control.DragEnter'/>,
+    /// or <see cref='Control.DragOver'/> event.
     /// </summary>
     [ComVisible(true)]
     public class DragEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.DragEventArgs'/> class.
+        /// Initializes a new instance of the <see cref='DragEventArgs'/> class.
         /// </summary>
         public DragEventArgs(IDataObject data, int keyState, int x, int y, DragDropEffects allowedEffect, DragDropEffects effect)
         {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The <see cref='System.Windows.Forms.IDataObject'/> that contains the data associated
+        /// The <see cref='IDataObject'/> that contains the data associated
         /// with this event.
         /// </summary>
         public IDataObject Data { get; }

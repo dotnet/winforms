@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     public class HelpEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.HelpEventArgs'/>class.
+        /// Initializes a new instance of the <see cref='HelpEventArgs'/>class.
         /// </summary>
         public HelpEventArgs(Point mousePos)
         {

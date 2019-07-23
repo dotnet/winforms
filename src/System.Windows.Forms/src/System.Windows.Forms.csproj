@@ -37,13 +37,14 @@
     <Compile Include="..\..\Common\src\NativeMethods.cs" Link="System\Windows\Forms\NativeMethods.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
     <Compile Include="..\..\Common\src\SafeNativeMethods.cs" Link="System\Windows\Forms\SafeNativeMethods.cs" />
+    <Compile Include="..\..\Common\src\SpanHelpers.cs" Link="Common\SpanHelpers.cs" />
     <Compile Include="..\..\Common\src\UnsafeNativeMethods.cs" Link="System\Windows\Forms\UnsafeNativeMethods.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.HRESULT.cs" Link="Interop\Interop.HRESULT.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.BOOL.cs" Link="Interop\Interop.BOOL.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.EditMessages.cs" Link="Interop\Interop.EditMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.RichEditMessages.cs" Link="Interop\Interop.RichEditMessages.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
-    <Compile Include="..\..\Common\src\Interop\Interop.CommonHandles.cs" Link="Interop\Interop.CommonHandles.cs" />
-    <Compile Include="..\..\Common\src\Interop\Interop.HandleCollector.cs" Link="Interop\Interop.HandleCollector.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.TaskDialog.cs" Link="Interop\Interop.TaskDialog.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />

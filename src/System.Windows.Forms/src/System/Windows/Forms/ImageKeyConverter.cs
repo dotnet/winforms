@@ -2,26 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Reflection;
-    using System.Collections.Specialized;
-
     /// <summary>
     /// ImageIndexConverter is a class that can be used to convert
     /// image index values one data type to another.
     /// </summary>
     public class ImageKeyConverter : StringConverter
     {
-
         private string parentImageListProperty = "Parent";
 
         protected virtual bool IncludeNoneAsStandardValue
@@ -32,10 +24,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// this is the property to look at when there is no ImageList property
-        /// on the current object.  For example, in ToolBarButton - the ImageList is 
-        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
+        /// on the current object.  For example, in ToolBarButton - the ImageList is
+        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
         /// the ToolStripItem.Owner property.
         /// </summary>
         internal string ParentImageListProperty
@@ -50,8 +42,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// <para>Gets a value indicating whether this converter can convert an object in the
-        /// given source type to a string using the specified context.</para>
+        /// Gets a value indicating whether this converter can convert an object in the
+        /// given source type to a string using the specified context.
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
@@ -63,7 +55,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Converts the specified value object to a string object.</para>
+        /// Converts the specified value object to a string object.
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
@@ -77,8 +69,6 @@ namespace System.Windows.Forms
             }
             return base.ConvertFrom(context, culture, value);
         }
-
-
 
         /// <summary>
         /// Converts the given object to another type.  The most common types to convert
@@ -105,7 +95,6 @@ namespace System.Windows.Forms
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
-
 
         /// <summary>
         /// Retrieves a collection containing a set of standard values
@@ -136,7 +125,7 @@ namespace System.Windows.Forms
                     if (imageListProp == null)
                     {
 
-                        // We didn't find the image list in this component.  See if the 
+                        // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
@@ -174,7 +163,6 @@ namespace System.Windows.Forms
                             values = new object[nImages];
                         }
 
-
                         // Fill in the array
                         //
                         StringCollection imageKeys = imageList.Images.Keys;
@@ -197,7 +185,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return new StandardValuesCollection(new object[0]);
+                return new StandardValuesCollection(Array.Empty<object>());
             }
         }
 

@@ -127,9 +127,16 @@
         <target state="translated">ファイルを開く</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
-        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
-        <target state="translated">Enter を押して、新しい行を開始します。\r\nCtrl+Enter を押して、テキストを受け入れます。</target>
+        <source>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</source>
+        <target state="translated">'Enter' を押して、新しい行を開始します。
+'Ctrl-Enter' を押して、テキストを受け入れます。</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

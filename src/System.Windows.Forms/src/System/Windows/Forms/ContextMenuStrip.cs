@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
     /// <devdoc/> this class is just a conceptual wrapper around ToolStripDropDownMenu. </summary>
     [
     ComVisible(true),
@@ -18,7 +17,6 @@ namespace System.Windows.Forms
     ]
     public class ContextMenuStrip : ToolStripDropDownMenu
     {
-
         /// <summary>
         /// Summary of ContextMenuStrip.
         /// </summary>
@@ -57,8 +55,7 @@ namespace System.Windows.Forms
         // minimal Clone implementation for DGV support only.
         internal ContextMenuStrip Clone()
         {
-
-            // VERY limited support for cloning.  
+            // VERY limited support for cloning.
 
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
@@ -71,7 +68,6 @@ namespace System.Windows.Forms
             contextMenuStrip.ImageList = ImageList;
             contextMenuStrip.ShowCheckMargin = ShowCheckMargin;
             contextMenuStrip.ShowImageMargin = ShowImageMargin;
-
 
             // copy over relevant properties
 

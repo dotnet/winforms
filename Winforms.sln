@@ -52,7 +52,56 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accessibility", "Accessibil
 		src\Accessibility\readme.md = src\Accessibility\readme.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maui", "maui", "{8F20A905-BD37-4D80-B8DF-FA45276FC23F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiButtonTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiButtonTests\MauiButtonTests.csproj", "{8AB0265C-B32D-444E-BFCB-8902FE45143A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Maui.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.Maui.IntegrationTests\System.Windows.Forms.Maui.IntegrationTests.csproj", "{87CF8481-647B-4951-8A57-468B2F0CD84B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8AB0265C-B32D-444E-BFCB-8902FE45143A} = {8AB0265C-B32D-444E-BFCB-8902FE45143A}
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsControlsClassicTests", "src\System.Windows.Forms\tests\IntegrationTests\WinFormsControlsClassicTests\WinFormsControlsClassicTests.csproj", "{840B70B2-4F4B-4FF0-A26F-185789625C78}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests.Common", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiComboBoxTest", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiComboBoxTests\MauiComboBoxTests.csproj", "{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{462AD69A-9395-4E98-882D-569CDE562559}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		build-local.ps1 = build-local.ps1
+		build.cmd = build.cmd
+		eng\ci.yml = eng\ci.yml
+		eng\CIBuild.cmd = eng\CIBuild.cmd
+		eng\CodeCoverage.proj = eng\CodeCoverage.proj
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		eng\FacadeAssemblies.props = eng\FacadeAssemblies.props
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+		eng\Version.Details.xml = eng\Version.Details.xml
+		eng\versioning.targets = eng\versioning.targets
+		eng\Versions.props = eng\Versions.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{C029199F-7D5C-417C-AA52-913A214E3285}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\building.md = Documentation\building.md
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		Documentation\contributing.md = Documentation\contributing.md
+		Documentation\debugging.md = Documentation\debugging.md
+		Documentation\developer-guide.md = Documentation\developer-guide.md
+		Documentation\getting-started.md = Documentation\getting-started.md
+		Documentation\intellisense.md = Documentation\intellisense.md
+		Documentation\issue-guide.md = Documentation\issue-guide.md
+		Documentation\porting-guidelines.md = Documentation\porting-guidelines.md
+		README.md = README.md
+		roadmap.md = roadmap.md
+		Documentation\testing.md = Documentation\testing.md
+		THIRD-PARTY-NOTICES.TXT = THIRD-PARTY-NOTICES.TXT
+		Documentation\winforms-designer.md = Documentation\winforms-designer.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -124,8 +173,26 @@ Global
 		{6103E743-057D-41C6-946C-23A751A08748}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6103E743-057D-41C6-946C-23A751A08748}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6103E743-057D-41C6-946C-23A751A08748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AB0265C-B32D-444E-BFCB-8902FE45143A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AB0265C-B32D-444E-BFCB-8902FE45143A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AB0265C-B32D-444E-BFCB-8902FE45143A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AB0265C-B32D-444E-BFCB-8902FE45143A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87CF8481-647B-4951-8A57-468B2F0CD84B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{840B70B2-4F4B-4FF0-A26F-185789625C78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{840B70B2-4F4B-4FF0-A26F-185789625C78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{840B70B2-4F4B-4FF0-A26F-185789625C78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{840B70B2-4F4B-4FF0-A26F-185789625C78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48979B4E-EAEC-4B41-BB49-44CA230BECAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48979B4E-EAEC-4B41-BB49-44CA230BECAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48979B4E-EAEC-4B41-BB49-44CA230BECAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48979B4E-EAEC-4B41-BB49-44CA230BECAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -150,7 +217,12 @@ Global
 		{351D8601-6E21-45E8-B3B9-847C4540BD4E} = {088DD24C-DF6B-45F3-A8BC-592580A4B2A9}
 		{6103E743-057D-41C6-946C-23A751A08748} = {088DD24C-DF6B-45F3-A8BC-592580A4B2A9}
 		{088DD24C-DF6B-45F3-A8BC-592580A4B2A9} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
+		{8F20A905-BD37-4D80-B8DF-FA45276FC23F} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
+		{8AB0265C-B32D-444E-BFCB-8902FE45143A} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{87CF8481-647B-4951-8A57-468B2F0CD84B} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{840B70B2-4F4B-4FF0-A26F-185789625C78} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
+		{48979B4E-EAEC-4B41-BB49-44CA230BECAB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
+		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

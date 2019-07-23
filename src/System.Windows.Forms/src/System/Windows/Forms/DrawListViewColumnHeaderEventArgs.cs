@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -42,7 +41,7 @@ namespace System.Windows.Forms
         public Rectangle Bounds { get; }
 
         /// <summary>
-        /// The index of this column. 
+        /// The index of this column.
         /// </summary>
         public int ColumnIndex { get; }
 
@@ -116,7 +115,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the header's text (overloaded) 
+        /// Draws the header's text (overloaded)
         /// </summary>
         public void DrawText()
         {
@@ -132,7 +131,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Draws the header's text (overloaded) - takes a TextFormatFlags argument.
         /// </summary>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // We want to measure the size of blank space so we don't have to localize it.
         public void DrawText(TextFormatFlags flags)
         {
             string text = Header.Text;

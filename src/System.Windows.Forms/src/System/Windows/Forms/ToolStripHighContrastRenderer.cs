@@ -4,25 +4,17 @@
 
 #region Using directives
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 using System.Collections.Specialized;
-
 
 #endregion
 
 namespace System.Windows.Forms
 {
-
     // this renderer supports high contrast for ToolStripProfessional and ToolStripSystemRenderer.
     internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
     {
-
         private const int GRIP_PADDING = 4;
 
         BitVector32 options = new BitVector32();
@@ -61,7 +53,6 @@ namespace System.Windows.Forms
 
         protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
         {
-
             if (DottedGrip)
             {
                 Graphics g = e.Graphics;
@@ -90,8 +81,6 @@ namespace System.Windows.Forms
 
                     g.FillRectangles(SystemBrushes.ControlLight, shadowRects);
 
-
-
                 }
             }
             else
@@ -100,10 +89,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
-
             if (FillWhenSelected)
             {
                 RenderItemInternalFilled(e, false);
@@ -149,7 +136,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
-            // do nothing 
+            // do nothing
         }
         protected override void OnRenderItemBackground(ToolStripItemRenderEventArgs e)
         {
@@ -200,7 +187,6 @@ namespace System.Windows.Forms
         }
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
-
             base.OnRenderMenuItemBackground(e);
             if (!e.Item.IsOnDropDown && e.Item.Pressed)
             {
@@ -218,7 +204,6 @@ namespace System.Windows.Forms
                 Color arrowColor = item.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
                 DrawArrow(new ToolStripArrowRenderEventArgs(g, item, new Rectangle(Point.Empty, item.Size), arrowColor, ArrowDirection.Down));
 
-
             }
             else
             {
@@ -228,7 +213,6 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-
             if (e.Item.Selected && (!e.Item.Pressed || e.Item is ToolStripButton))
             {
                 e.DefaultTextColor = SystemColors.HighlightText;
@@ -245,7 +229,6 @@ namespace System.Windows.Forms
                     e.DefaultTextColor = SystemColors.ControlText;
                 }
             }
-
 
             // ToolstripButtons that are checked are rendered with a highlight
             // background. In that case, set the text color to highlight as well.
@@ -268,7 +251,6 @@ namespace System.Windows.Forms
         {
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
             Graphics g = e.Graphics;
-
 
             if (e.ToolStrip is ToolStripDropDown)
             {
@@ -361,12 +343,10 @@ namespace System.Windows.Forms
         }
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
-
             Pen foreColorPen = SystemPens.ButtonShadow;
 
             Graphics g = e.Graphics;
             Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-
 
             if (e.Vertical)
             {
@@ -435,7 +415,6 @@ namespace System.Windows.Forms
                         cm2.NewColor = Color.Black;
                         cm3.OldColor = Color.FromArgb(0, 0, 128);
                         cm3.NewColor = Color.White;
-
 
                         attrs.SetRemapTable(new ColorMap[] { cm1, cm2, cm3 }, ColorAdjustType.Bitmap);
                     }
@@ -510,7 +489,6 @@ namespace System.Windows.Forms
                 g.FillRectangle(SystemBrushes.Highlight, bounds);
                 g.DrawRectangle(SystemPens.ControlLight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
-
 
         }
 

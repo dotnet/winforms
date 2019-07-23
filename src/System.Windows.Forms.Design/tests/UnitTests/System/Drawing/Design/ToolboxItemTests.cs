@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -140,13 +140,13 @@ namespace System.Drawing.Design.Tests
             {
                 Company = value
             };
-            Assert.Same(expected, item.Company);
-            Assert.Same(expected, item.Properties["Company"]);
+            Assert.Equal(expected, item.Company);
+            Assert.Equal(expected, item.Properties["Company"]);
 
             // Set same.
             item.Company = value;
-            Assert.Same(expected, item.Company);
-            Assert.Same(expected, item.Properties["Company"]);
+            Assert.Equal(expected, item.Company);
+            Assert.Equal(expected, item.Properties["Company"]);
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace System.Drawing.Design.Tests
         public static IEnumerable<object[]> DependentAssemblies_Set_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new AssemblyName[0] };
+            yield return new object[] { Array.Empty<AssemblyName>() };
             yield return new object[] { new AssemblyName[] { null } };
             yield return new object[] { new AssemblyName[] { new AssemblyName() } };
         }
@@ -216,13 +216,13 @@ namespace System.Drawing.Design.Tests
             {
                 Description = value
             };
-            Assert.Same(expected, item.Description);
-            Assert.Same(expected, item.Properties["Description"]);
+            Assert.Equal(expected, item.Description);
+            Assert.Equal(expected, item.Properties["Description"]);
 
             // Set same.
             item.Description = value;
-            Assert.Same(expected, item.Description);
-            Assert.Same(expected, item.Properties["Description"]);
+            Assert.Equal(expected, item.Description);
+            Assert.Equal(expected, item.Properties["Description"]);
         }
 
         [Fact]
@@ -240,13 +240,13 @@ namespace System.Drawing.Design.Tests
             {
                 DisplayName = value
             };
-            Assert.Same(expected, item.DisplayName);
-            Assert.Same(expected, item.Properties["DisplayName"]);
+            Assert.Equal(expected, item.DisplayName);
+            Assert.Equal(expected, item.Properties["DisplayName"]);
 
             // Set same.
             item.DisplayName = value;
-            Assert.Same(expected, item.DisplayName);
-            Assert.Same(expected, item.Properties["DisplayName"]);
+            Assert.Equal(expected, item.DisplayName);
+            Assert.Equal(expected, item.Properties["DisplayName"]);
         }
 
         [Fact]
@@ -258,9 +258,9 @@ namespace System.Drawing.Design.Tests
 
         public static IEnumerable<object[]> Filter_Set_TestData()
         {
-            yield return new object[] { null, new object[0] };
-            yield return new object[] { new object[0], new object[0] };
-            yield return new object[] { new object[] { null }, new object[0] };
+            yield return new object[] { null, Array.Empty<object>() };
+            yield return new object[] { Array.Empty<object>(), Array.Empty<object>() };
+            yield return new object[] { new object[] { null }, Array.Empty<object>() };
             yield return new object[] { new object[] { new object(), new ToolboxItemFilterAttribute("filterString") }, new object[] { new ToolboxItemFilterAttribute("filterString") } };
         }
 
@@ -351,13 +351,13 @@ namespace System.Drawing.Design.Tests
             {
                 TypeName = value
             };
-            Assert.Same(expected, item.TypeName);
-            Assert.Same(expected, item.Properties["TypeName"]);
+            Assert.Equal(expected, item.TypeName);
+            Assert.Equal(expected, item.Properties["TypeName"]);
 
             // Set same.
             item.TypeName = value;
-            Assert.Same(expected, item.TypeName);
-            Assert.Same(expected, item.Properties["TypeName"]);
+            Assert.Equal(expected, item.TypeName);
+            Assert.Equal(expected, item.Properties["TypeName"]);
         }
 
         [Fact]
@@ -1146,7 +1146,7 @@ namespace System.Drawing.Design.Tests
             yield return new object[] { "typename", null, null, true };
 
             yield return new object[] { "Filter", null, Array.Empty<ToolboxItemFilterAttribute>(), false };
-            yield return new object[] { "Filter", new ToolboxItemFilterAttribute[0], new ToolboxItemFilterAttribute[0], true };
+            yield return new object[] { "Filter", Array.Empty<ToolboxItemFilterAttribute>(), Array.Empty<ToolboxItemFilterAttribute>(), true };
             yield return new object[] { "Filter", o, o, true };
             yield return new object[] { "filter", null, null, true };
 
@@ -1555,8 +1555,8 @@ namespace System.Drawing.Design.Tests
             yield return new object[] { "TypeName", "value", "value" };
 
             var filter = new ToolboxItemFilterAttribute("filter");
-            yield return new object[] { "Filter", null, new ToolboxItemFilterAttribute[0] };
-            yield return new object[] { "Filter", new ToolboxItemFilterAttribute[0], new ToolboxItemFilterAttribute[0] };
+            yield return new object[] { "Filter", null, Array.Empty<ToolboxItemFilterAttribute>() };
+            yield return new object[] { "Filter", Array.Empty<ToolboxItemFilterAttribute>(), Array.Empty<ToolboxItemFilterAttribute>() };
             yield return new object[] { "Filter", new object[] { null, "value", filter, filter }, new ToolboxItemFilterAttribute[] { filter, filter } };
 
             yield return new object[] { "NoSuchProperty", null, null };

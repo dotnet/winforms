@@ -10,10 +10,16 @@
     <ApplicationManifest>app1.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netcoreapp\d'))">
+    <DefineConstants>NETCORE</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,23 +77,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="SmallA.bmp">
+    <EmbeddedResource Include="Images\SmallA.bmp">
       <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="SmallABlue.bmp">
+    <EmbeddedResource Include="Images\SmallABlue.bmp">
       <LogicalName>WinformsControlsTest.SmallABlue.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="LargeA.bmp">
+    <EmbeddedResource Include="Images\LargeA.bmp">
       <LogicalName>WinformsControlsTest.LargeA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="LargeABlue.bmp">
+    <EmbeddedResource Include="Images\LargeABlue.bmp">
       <LogicalName>WinformsControlsTest.LargeABlue.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

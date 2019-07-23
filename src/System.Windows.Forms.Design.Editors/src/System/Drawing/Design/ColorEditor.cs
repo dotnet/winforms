@@ -17,43 +17,41 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///     Provides an editor for visually picking a color.
+    /// Provides an editor for visually picking a color.
     /// </summary>
     [CLSCompliant(false)]
     public class ColorEditor : UITypeEditor
     {
-        private ColorUI colorUI;
+        private ColorUI _colorUI;
 
         /// <summary>
         /// Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            object returnValue = value;
-
-            if (provider != null)
+            if (provider == null)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-                if (edSvc != null)
-                {
-                    if (colorUI == null)
-                    {
-                        colorUI = new ColorUI(this);
-                    }
-                    colorUI.Start(edSvc, value);
-                    edSvc.DropDownControl(colorUI);
-
-                    if (colorUI.Value != null && ((Color)colorUI.Value) != Color.Empty)
-                    {
-                        value = colorUI.Value;
-                    }
-
-                    colorUI.End();
-                }
+                return value;
+            }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
             }
 
+            if (_colorUI == null)
+            {
+                _colorUI = new ColorUI(this);
+            }
+
+            _colorUI.Start(edSvc, value);
+            edSvc.DropDownControl(_colorUI);
+
+            if (_colorUI.Value is Color colorValue && colorValue != Color.Empty)
+            {
+                value = colorValue;
+            }
+
+            _colorUI.End();
             return value;
         }
 
@@ -79,9 +77,6 @@ namespace System.Drawing.Design
         /// Paints a representative value of the given object to the provided canvas.
         /// Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
-        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Benign code")]
         public override void PaintValue(PaintValueEventArgs e)
         {
             if (e.Value is Color color)
@@ -93,7 +88,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///     A control to display the color palette.
+        /// A control to display the color palette.
         /// </summary>
         private class ColorPalette : Control
         {
@@ -169,7 +164,6 @@ namespace System.Drawing.Design
                 CustomColors = customColors;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public Color[] CustomColors { get; }
 
             internal int FocusedCell => Get1DFrom2D(focus);
@@ -661,7 +655,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///      Editor UI for the color editor.
+        ///  Editor UI for the color editor.
         /// </summary>
         private class ColorUI : Control
         {
@@ -696,7 +690,6 @@ namespace System.Drawing.Design
             /// <summary>
             /// Retrieves the array of custom colors for our use.
             /// </summary>
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             private Color[] CustomColors
             {
                 get
@@ -724,7 +717,7 @@ namespace System.Drawing.Design
             /// </summary>
             public IWindowsFormsEditorService EditorService => edSvc;
 
-            /// <summary> 
+            /// <summary>
             /// Array of system colors.
             /// </summary>
             private object[] SystemColorValues => systemColorConstants ?? (systemColorConstants = GetConstants(typeof(SystemColors)));
@@ -876,7 +869,6 @@ namespace System.Drawing.Design
                 commonHeightSet = systemHeightSet = false;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
             private void OnListClick(object sender, EventArgs e)
             {
                 ListBox lb = (ListBox)sender;
@@ -1163,7 +1155,6 @@ namespace System.Drawing.Design
         /// </summary>
         private class SystemColorComparer : IComparer
         {
-            [SuppressMessage("Microsoft.Globalization", "CA130:UseOrdinalStringComparison")]
             public int Compare(object x, object y)
             {
                 return string.Compare(((Color)x).Name, ((Color)y).Name, false, CultureInfo.InvariantCulture);

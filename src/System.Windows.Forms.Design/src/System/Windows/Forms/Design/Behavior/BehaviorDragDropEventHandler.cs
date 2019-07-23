@@ -7,9 +7,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     Delegate used by the BehaviorService to send BeginDrag and EndDrag
-    ///     events.
+    ///  Delegate used by the BehaviorService to send BeginDrag and EndDrag
+    ///  events.
     /// </summary>
-    [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
     public delegate void BehaviorDragDropEventHandler(object sender, BehaviorDragDropEventArgs e);
 }

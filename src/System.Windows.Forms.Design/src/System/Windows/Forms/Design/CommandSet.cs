@@ -245,8 +245,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Disposes of this object, removing all commands from the menu service.
         /// </summary>
-        // We don't need to Dispose snapLineTimer
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public virtual void Dispose()
         {
             if (_menuService != null)
@@ -315,7 +313,7 @@ namespace System.Windows.Forms.Design
             object[] selection = null;
             if (components == null)
             {
-                return new object[0];
+                return Array.Empty<object>();
             }
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
@@ -334,7 +332,7 @@ namespace System.Windows.Forms.Design
                     selection = list.ToArray();
                 }
             }
-            return selection ?? (new object[0]);
+            return selection ?? (Array.Empty<object>());
         }
 
         /// <summary>
@@ -1326,7 +1324,7 @@ namespace System.Windows.Forms.Design
                         {
                             trans = host.CreateTransaction(string.Format(SR.CommandSetCutMultiple, cutCount));
                             // clear the selected components so we aren't browsing them
-                            SelectionService.SetSelectedComponents(new object[0], SelectionTypes.Replace);
+                            SelectionService.SetSelectedComponents(Array.Empty<object>(), SelectionTypes.Replace);
                             object[] selComps = new object[selectedComponents.Count];
                             selectedComponents.CopyTo(selComps, 0);
                             for (int i = 0; i < selComps.Length; i++)
@@ -1463,7 +1461,7 @@ namespace System.Windows.Forms.Design
                         try
                         {
                             trans = host.CreateTransaction(desc);
-                            SelectionService.SetSelectedComponents(new object[0], SelectionTypes.Replace);
+                            SelectionService.SetSelectedComponents(Array.Empty<object>(), SelectionTypes.Replace);
                             foreach (object obj in comps)
                             {
                                 if (!(obj is IComponent comp) || comp.Site == null)
@@ -1674,8 +1672,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Called when the paste menu item is selected.
         /// </summary>
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
         protected void OnMenuPaste(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -2030,7 +2026,7 @@ namespace System.Windows.Forms.Design
                         object[] selComps;
                         if (components == null || components.Count == 0)
                         {
-                            selComps = new IComponent[0];
+                            selComps = Array.Empty<IComponent>();
                         }
                         else
                         {
@@ -3223,7 +3219,6 @@ namespace System.Windows.Forms.Design
             /// <summary>
             /// Creates a new CommandSetItem.
             /// </summary>
-            [SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, bool optimizeStatus, IUIService uiService)
             : base(invokeHandler, id)
             {

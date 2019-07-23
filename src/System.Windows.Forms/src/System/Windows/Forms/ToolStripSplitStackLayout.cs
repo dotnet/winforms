@@ -2,61 +2,37 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Windows.Forms.Layout;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Globalization;
-
     internal class ToolStripSplitStackLayout : LayoutEngine
     {
-        private int backwardsWalkingIndex;
-        private int forwardsWalkingIndex;
-        private readonly ToolStrip toolStrip;
-        private int overflowSpace;
-        private bool overflowRequired;
         private Point noMansLand;
         private Rectangle displayRectangle = Rectangle.Empty;
 
-#if DEBUG        
+#if DEBUG
         internal static readonly TraceSwitch DebugLayoutTraceSwitch = new TraceSwitch("DebugLayout", "Debug ToolStrip Layout code");
 #else
         internal static readonly TraceSwitch DebugLayoutTraceSwitch;
 #endif
         internal ToolStripSplitStackLayout(ToolStrip owner)
         {
-            toolStrip = owner;
+            ToolStrip = owner;
         }
 
-        // this is the index we use to send items to the overflow
-        // if we run out of room
-        protected int BackwardsWalkingIndex
-        {
-            get
-            {
-                return backwardsWalkingIndex;
-            }
-            set
-            {
-                backwardsWalkingIndex = value;
-            }
-        }
+        /// <summary>
+        /// This is the index we use to send items to the overflow if we run out of room
+        /// </summary>
+        protected int BackwardsWalkingIndex { get; set; }
 
-        // this is the index we use to walk the items and make 
-        // decisions if there is enough room.
-        protected int ForwardsWalkingIndex
-        {
-            get
-            {
-                return forwardsWalkingIndex;
-            }
-            set
-            {
-                forwardsWalkingIndex = value;
-            }
-        }
+        /// <summary>
+        // This is the index we use to walk the items and make  decisions if there is enough room.
+        /// </summary>
+        protected int ForwardsWalkingIndex { get; set; }
 
         private Size OverflowButtonSize
         {
@@ -70,53 +46,28 @@ namespace System.Windows.Forms
 
                 // since we havent parented the item yet - the auto size wont have reset the size yet.
                 Size overflowButtonSize = toolStrip.OverflowButton.AutoSize ? toolStrip.OverflowButton.GetPreferredSize(displayRectangle.Size) : toolStrip.OverflowButton.Size;
-
                 return overflowButtonSize + toolStrip.OverflowButton.Margin.Size;
             }
         }
 
-        private int OverflowSpace
-        {
-            get
-            {
-                return overflowSpace;
-            }
-            set
-            {
-                overflowSpace = value;
-            }
-        }
+        private int OverflowSpace { get; set; }
 
-        private bool OverflowRequired
-        {
-            get
-            {
-                return overflowRequired;
-            }
-            set
-            {
-                overflowRequired = value;
-            }
-        }
+        private bool OverflowRequired { get; set; }
 
-        // the current ToolStrip we're operating over.
-        public ToolStrip ToolStrip
-        {
-            get
-            {
-                return toolStrip;
-            }
-        }
+        /// <summary>
+        /// The current ToolStrip we're operating over.
+        /// </summary>
+        public ToolStrip ToolStrip { get; }
 
-        //
-        // This method will mark whether items should be placed in the overflow or on the main ToolStrip.
-        //
+        /// <summary>
+        /// This method will mark whether items should be placed in the overflow or on the main ToolStrip.
+        /// </summary>
         private void CalculatePlacementsHorizontal()
         {
             ResetItemPlacements();
 
             ToolStrip toolStrip = ToolStrip;
-            int currentWidth = 0; //toolStrip.Padding.Horizontal;
+            int currentWidth = 0;
 
             if (ToolStrip.CanOverflow)
             {
@@ -136,8 +87,10 @@ namespace System.Windows.Forms
                     {
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
-                        { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to alaways overflow: {0} ", item)); }
-#endif                        
+                        {
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to alaways overflow: {0} ", item));
+                        }
+#endif
                         OverflowRequired = true;
                     }
 
@@ -154,8 +107,10 @@ namespace System.Windows.Forms
                         {
 #if DEBUG
                             if (DebugLayoutTraceSwitch.TraceVerbose)
-                            { Debug.WriteLine("SendNextItemToOverflow to fres space for " + item.ToString()); }
-#endif                            
+                            {
+                                Debug.WriteLine("SendNextItemToOverflow to fres space for " + item.ToString());
+                            }
+#endif
                             int spaceRecovered = SendNextItemToOverflow((currentWidth + overflowWidth) - displayRectangle.Width, true);
 
                             currentWidth -= spaceRecovered;
@@ -167,9 +122,9 @@ namespace System.Windows.Forms
             PlaceItems();
         }
 
-        //
-        // This method will mark whether items should be placed in the overflow or on the main ToolStrip.
-        //
+        /// <summary>
+        /// This method will mark whether items should be placed in the overflow or on the main ToolStrip.
+        /// </summary>
         private void CalculatePlacementsVertical()
         {
             ResetItemPlacements();
@@ -209,16 +164,16 @@ namespace System.Windows.Forms
                         int overflowWidth = (OverflowRequired) ? OverflowButtonSize.Height : 0;
 
                         currentHeight += itemSize.Height + item.Margin.Vertical;
-#if DEBUG                        
+#if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Adding {0} Size {1} to currentHeight = {2}", item.ToString(), itemSize, currentHeight)); }
-#endif                        
+#endif
                         if (currentHeight > displayRectangle.Height - overflowWidth)
                         {
-#if DEBUG                       
+#if DEBUG
                             if (DebugLayoutTraceSwitch.TraceVerbose)
                             { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Got to {0} and realized that currentHeight = {1} is larger than displayRect {2} minus overflow {3}", item.ToString(), currentHeight, displayRectangle, overflowWidth)); }
-#endif                            
+#endif
                             int spaceRecovered = SendNextItemToOverflow(currentHeight - displayRectangle.Height, false);
 
                             currentHeight -= spaceRecovered;
@@ -238,7 +193,7 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ToolStripSplitStackLayoutContainerMustBeAToolStrip);
             }
 
-            if (toolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow)
+            if (ToolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow)
             {
                 return ToolStrip.GetPreferredSizeHorizontal(container, proposedConstraints);
             }
@@ -248,21 +203,16 @@ namespace System.Windows.Forms
             }
         }
 
-
-        // each time we perform a complete layout this stuff should be re-initialized
         private void InvalidateLayout()
         {
-            forwardsWalkingIndex = 0;
-            backwardsWalkingIndex = -1;
-            overflowSpace = 0;
-            overflowRequired = false;
+            ForwardsWalkingIndex = 0;
+            BackwardsWalkingIndex = -1;
+            OverflowSpace = 0;
+            OverflowRequired = false;
             displayRectangle = Rectangle.Empty;
         }
 
-
-
-        // this is part of the LayoutEngine - called when we need to do a layout.
-        internal override bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
+        private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
         {
             if (!(container is ToolStrip))
             {
@@ -270,15 +220,15 @@ namespace System.Windows.Forms
             }
 
             InvalidateLayout();
-            displayRectangle = toolStrip.DisplayRectangle;
+            displayRectangle = ToolStrip.DisplayRectangle;
 
             // pick a location that's outside of the displayed region to send
             // items that will potentially clobber/overlay others.
             noMansLand = displayRectangle.Location;
-            noMansLand.X += toolStrip.ClientSize.Width + 1;
-            noMansLand.Y += toolStrip.ClientSize.Height + 1;
+            noMansLand.X += ToolStrip.ClientSize.Width + 1;
+            noMansLand.Y += ToolStrip.ClientSize.Height + 1;
 
-            if (toolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow)
+            if (ToolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow)
             {
                 LayoutHorizontal();
             }
@@ -296,15 +246,17 @@ namespace System.Windows.Forms
             Rectangle clientRectangle = toolStrip.ClientRectangle;
 #if DEBUG
             if (DebugLayoutTraceSwitch.TraceVerbose)
-            { Debug.WriteLine("_________________________\r\nHorizontal Layout:" + toolStrip.ToString() + displayRectangle.ToString()); }
-#endif            
-            int lastRight = displayRectangle.Right;// - toolStrip.Padding.Right;
-            int lastLeft = displayRectangle.Left;// + toolStrip.Padding.Left;
+            {
+                Debug.WriteLine("_________________________\r\nHorizontal Layout:" + toolStrip.ToString() + displayRectangle.ToString());
+            }
+#endif
+
+            int lastRight = displayRectangle.Right;
+            int lastLeft = displayRectangle.Left;
             bool needsMoreSpace = false;
             Size itemSize = Size.Empty;
             Rectangle alignedLeftItems = Rectangle.Empty;
             Rectangle alignedRightItems = Rectangle.Empty;
-
 
             // this will determine where the item should be placed.
             CalculatePlacementsHorizontal();
@@ -360,17 +312,16 @@ namespace System.Windows.Forms
                 }
 
                 // if it turns out we dont need the overflow (because there are no Overflow.Always items and the width of everything
-                // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to 
+                // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
                 {
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
                     { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
-#endif                    
+#endif
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
-
 
                 // Now do the guts of setting X, Y and parenting.
                 // We need to honor left to right and head and tail.
@@ -389,7 +340,6 @@ namespace System.Windows.Forms
                         //                   Margin.Left
                         // this item should be placed to the right
                         // we work backwards from the right edge - that is place items from right to left.
-
                         x = lastRight - (itemMargin.Right + itemSize.Width);
                         y += itemMargin.Top;
                         lastRight = x - itemMargin.Left;
@@ -445,19 +395,24 @@ namespace System.Windows.Forms
                 }
 #if DEBUG
                 if (DebugLayoutTraceSwitch.TraceVerbose)
-                { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString())); }
+                {
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString()));
+                }
 #endif
             }
-            // 
+
             return needsMoreSpace;
         }
 
         private bool LayoutVertical()
         {
-#if DEBUG          
+#if DEBUG
             if (DebugLayoutTraceSwitch.TraceVerbose)
-            { Debug.WriteLine("_________________________\r\nVertical Layout" + displayRectangle.ToString()); }
+            {
+                Debug.WriteLine("_________________________\r\nVertical Layout" + displayRectangle.ToString());
+            }
 #endif
+
             ToolStrip toolStrip = ToolStrip;
             Rectangle clientRectangle = toolStrip.ClientRectangle;
             int lastBottom = displayRectangle.Bottom;
@@ -475,6 +430,7 @@ namespace System.Windows.Forms
                 // width of the display rectangle.
                 toolStripPreferredSize = ToolStrip.GetPreferredSizeVertical(toolStrip, Size.Empty) - toolStrip.Padding.Size;
             }
+
             CalculatePlacementsVertical();
 
             bool needOverflow = toolStrip.CanOverflow && ((OverflowRequired) || (OverflowSpace >= OverflowButtonSize.Height));
@@ -499,32 +455,34 @@ namespace System.Windows.Forms
                         item.SetPlacement(ToolStripItemPlacement.None);
                         continue;
                     }
-                    itemSize = OverflowButtonSize;
 
+                    itemSize = OverflowButtonSize;
                 }
                 else
                 {
                     item = toolStrip.Items[j];
-
                     if (!((IArrangedElement)item).ParticipatesInLayout)
                     {
                         // skip over items not participating in layout.  E.G. not visible items
                         continue;
                     }
+
                     // since we havent parented the item yet - the auto size wont have reset the size yet.
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
 
                 }
 
                 // if it turns out we dont need the overflow (because there are no Overflow.Always items and the height of everything
-                // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to 
+                // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
                 {
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
-                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
-#endif                    
+                    {
+                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item));
+                    }
+#endif
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
 
@@ -558,7 +516,6 @@ namespace System.Windows.Forms
                     item.ParentInternal = ToolStrip;
                     Point itemLocation = new Point(x, y);
 
-
                     if (!clientRectangle.Contains(x, y))
                     {
                         item.SetPlacement(ToolStripItemPlacement.None);
@@ -587,38 +544,39 @@ namespace System.Windows.Forms
                 {
                     item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
                 }
-#if DEBUG                
+#if DEBUG
                 if (DebugLayoutTraceSwitch.TraceVerbose)
-                { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString())); }
-#endif                
+                {
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString()));
+                }
+#endif
             }
 
-
-            // 
             return needsMoreSpace;
         }
 
         private void SetItemLocation(ToolStripItem item, Point itemLocation, Size itemSize)
         {
             // make sure that things that dont fit within the display rectangle arent laid out.
-            if ((item.Placement == ToolStripItemPlacement.Main)
-             && !(item is ToolStripOverflowButton))
-            { // overflow buttons can be placed outside the display rect.
-
+            if ((item.Placement == ToolStripItemPlacement.Main) && !(item is ToolStripOverflowButton))
+            {
+                // overflow buttons can be placed outside the display rect.
                 bool horizontal = (ToolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow);
                 Rectangle displayRect = displayRectangle;
                 Rectangle itemBounds = new Rectangle(itemLocation, itemSize);
+
                 // in horizontal if something bleeds over the top/bottom that's ok - its left/right we care about
                 // same in vertical.
                 if (horizontal)
                 {
-                    if ((itemBounds.Right > displayRectangle.Right)
-                        || (itemBounds.Left < displayRectangle.Left))
+                    if ((itemBounds.Right > displayRectangle.Right) || (itemBounds.Left < displayRectangle.Left))
                     {
-#if DEBUG 
+#if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
-                        { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit horizontally within the DRect", item)); }
-#endif                        
+                        {
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit horizontally within the DRect", item));
+                        }
+#endif
                         itemLocation = noMansLand;
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
@@ -626,12 +584,13 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if ((itemBounds.Bottom > displayRectangle.Bottom)
-                        || (itemBounds.Top < displayRectangle.Top))
+                    if ((itemBounds.Bottom > displayRectangle.Bottom) || (itemBounds.Top < displayRectangle.Top))
                     {
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
-                        { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit verticallu within the DRect", item)); }
+                        {
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit verticallu within the DRect", item));
+                        }
 #endif
 
                         itemLocation = noMansLand;
@@ -639,14 +598,13 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            item.SetBounds(new Rectangle(itemLocation, itemSize));
 
+            item.SetBounds(new Rectangle(itemLocation, itemSize));
         }
 
         private void PlaceItems()
         {
             ToolStrip toolStrip = ToolStrip;
-
             for (int i = 0; i < toolStrip.Items.Count; i++)
             {
                 ToolStripItem item = toolStrip.Items[i];
@@ -655,7 +613,7 @@ namespace System.Windows.Forms
                 {
                     if (item.Overflow != ToolStripItemOverflow.Always)
                     {
-                        // as needed items will have already been placed into the overflow if they 
+                        // as needed items will have already been placed into the overflow if they
                         // needed to move over.
                         item.SetPlacement(ToolStripItemPlacement.Main);
                     }
@@ -682,15 +640,18 @@ namespace System.Windows.Forms
             }
         }
 
-        // 
-        // This method is called when we are walking through the item collection and we have realized that we 
-        // need to free up "X" amount of space to be able to fit an item onto the ToolStrip.
+        /// <summary>
+        /// This method is called when we are walking through the item collection and we have realized that we
+        /// need to free up "X" amount of space to be able to fit an item onto the ToolStrip.
+        /// </summary>
         private int SendNextItemToOverflow(int spaceNeeded, bool horizontal)
         {
 #if DEBUG
             if (DebugLayoutTraceSwitch.TraceVerbose)
-            { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "SendNextItemToOverflow attempting to free {0}", spaceNeeded)); }
-#endif            
+            {
+                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "SendNextItemToOverflow attempting to free {0}", spaceNeeded));
+            }
+#endif
             Debug.Indent();
 
             int freedSpace = 0;
@@ -700,12 +661,12 @@ namespace System.Windows.Forms
             for (; BackwardsWalkingIndex >= 0; BackwardsWalkingIndex--)
             {
                 ToolStripItem item = ToolStrip.Items[BackwardsWalkingIndex];
-
                 if (!((IArrangedElement)item).ParticipatesInLayout)
                 {
                     // skip over items not participating in layout.  E.G. not visible items
                     continue;
                 }
+
                 Padding itemMargin = item.Margin;
 
                 // look for items that say they're ok for overflowing.
@@ -714,8 +675,10 @@ namespace System.Windows.Forms
                 {
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
-                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Found candidate for sending to overflow {0}", item.ToString())); }
-#endif                    
+                    {
+                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Found candidate for sending to overflow {0}", item.ToString()));
+                    }
+#endif
 
                     // since we havent parented the item yet - the auto size wont have reset the size yet.
                     Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
@@ -728,8 +691,10 @@ namespace System.Windows.Forms
                         freedSpace += (horizontal) ? itemSize.Width + itemMargin.Horizontal : itemSize.Height + itemMargin.Vertical;
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
-                        { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Sweet! {0} FreedSpace - which is now {1}", itemSize, freedSpace.ToString(CultureInfo.InvariantCulture))); }
-#endif                        
+                        {
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Sweet! {0} FreedSpace - which is now {1}", itemSize, freedSpace.ToString(CultureInfo.InvariantCulture)));
+                        }
+#endif
                     }
 
                     // send the item to the overflow.
@@ -737,12 +702,12 @@ namespace System.Windows.Forms
                     if (OverflowRequired == false)
                     {
                         // this is the first item we're sending down.
-                        // we now need to account for the width or height of the overflow button      
+                        // we now need to account for the width or height of the overflow button
                         spaceNeeded += (horizontal) ? OverflowButtonSize.Width : OverflowButtonSize.Height;
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Turns out we now need an overflow button, space needed now: {0}", spaceNeeded.ToString(CultureInfo.InvariantCulture))); }
-#endif                        
+#endif
                         OverflowRequired = true;
                     }
 

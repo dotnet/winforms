@@ -119,7 +119,6 @@ namespace System.Windows.Forms
                 +------------------------+-------------------------+
                 31                     16 15                      0   bit
 
-
                 Language ID
                 +---------------------------+-----------------------+
                 |     Sublanguage ID        | Primary Language ID   |

@@ -2,28 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "System.Drawing.Design.Com2ExtendedUITypeEditor..ctor(System.Type)")]
-
+using System.ComponentModel;
 
 namespace System.Drawing.Design
 {
-
-    using System.Diagnostics;
-
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using System.Drawing.Design;
-
     /// <summary>
-    ///    <para>Provides an editor that provides a way to visually edit the values of a COM2 
-    ///       type.</para>
+    ///  Provides an editor that provides a way to visually edit the values of a COM2 type.
     /// </summary>
     internal class Com2ExtendedUITypeEditor : UITypeEditor
     {
-
         private readonly UITypeEditor innerEditor;
 
         public Com2ExtendedUITypeEditor(UITypeEditor baseTypeEditor)
@@ -45,9 +32,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///      Edits the given object value using the editor style provided by
-        ///      GetEditorStyle.  A service provider is provided so that any
-        ///      required editing services can be obtained.
+        ///  Edits the given object value using the editor style provided by
+        ///  GetEditorStyle.  A service provider is provided so that any
+        ///  required editing services can be obtained.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -62,8 +49,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///      Determines if this editor supports the painting of a representation
-        ///      of an object's value.
+        ///  Determines if this editor supports the painting of a representation
+        ///  of an object's value.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
@@ -75,8 +62,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///      Retrieves the editing style of the Edit method.  If the method
-        ///      is not supported, this will return None.
+        ///  Retrieves the editing style of the Edit method.  If the method
+        ///  is not supported, this will return None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -88,9 +75,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///      Paints a representative value of the given object to the provided
-        ///      canvas.  Painting should be done within the boundaries of the
-        ///      provided rectangle.
+        ///  Paints a representative value of the given object to the provided
+        ///  canvas.  Painting should be done within the boundaries of the
+        ///  provided rectangle.
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)
         {

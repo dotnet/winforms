@@ -2,22 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Text;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///      Encapsulates the state of a DataGrid that changes when the
-    ///      user navigates back and forth through ADO.NET data relations.
+    ///  Encapsulates the state of a DataGrid that changes when the
+    ///  user navigates back and forth through ADO.NET data relations.
     /// </summary>
     internal sealed class DataGridState : ICloneable
     {
@@ -26,7 +20,7 @@ namespace System.Windows.Forms
         public object DataSource = null;
         public string DataMember = null;
         public CurrencyManager ListManager = null;
-        public DataGridRow[] DataGridRows = new DataGridRow[0];
+        public DataGridRow[] DataGridRows = Array.Empty<DataGridRow>();
         public DataGrid DataGrid;
         public int DataGridRowsLength = 0;
         public GridColumnStylesCollection GridColumnStyles = null;
@@ -83,8 +77,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by a DataGrid when it wishes to preserve its
-        ///      transient state in the current DataGridState object.
+        ///  Called by a DataGrid when it wishes to preserve its
+        ///  transient state in the current DataGridState object.
         /// </summary>
         public void PushState(DataGrid dataGrid)
         {
@@ -119,8 +113,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Called by a grid when it wishes to match its transient
-        ///      state with the current DataGridState object.
+        ///  Called by a grid when it wishes to match its transient
+        ///  state with the current DataGridState object.
         /// </summary>
         public void PullState(DataGrid dataGrid, bool createColumn)
         {
@@ -161,7 +155,6 @@ namespace System.Windows.Forms
                 DataGrid.ParentRowsDataChanged();
             }
         }
-
 
         [ComVisible(true)]
         internal class DataGridStateParentRowAccessibleObject : AccessibleObject
@@ -242,7 +235,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///      Navigate to the next or previous grid entry.
+            ///  Navigate to the next or previous grid entry.
             /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir)
             {

@@ -4,15 +4,10 @@
 
 namespace System.Collections.Specialized
 {
-
-    using Microsoft.Win32;
     using System.Collections;
-    using System.Runtime.Serialization;
-    using System.Globalization;
 
     internal class BackCompatibleStringComparer : IEqualityComparer
     {
-
         static internal IEqualityComparer Default = new BackCompatibleStringComparer();
 
         internal BackCompatibleStringComparer()

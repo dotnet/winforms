@@ -2,35 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.IO;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.IO;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para>
-    ///       Represents a common dialog box
-    ///       that displays the control that allows the user to open a file. This class
-    ///       cannot be inherited.
-    ///    </para>
+    ///  Represents a common dialog box
+    ///  that displays the control that allows the user to open a file. This class
+    ///  cannot be inherited.
     /// </summary>
     [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
     public sealed class OpenFileDialog : FileDialog
     {
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dialog box displays a
-        ///       warning if the user specifies a file name that does not exist.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the dialog box displays a
+        ///  warning if the user specifies a file name that does not exist.
         /// </summary>
         [
         DefaultValue(true),
@@ -49,10 +36,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value
-        ///       indicating whether the dialog box allows multiple files to be selected.
-        ///    </para>
+        ///  Gets or sets a value
+        ///  indicating whether the dialog box allows multiple files to be selected.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -72,10 +57,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether
-        ///       the read-only check box is selected.
-        ///    </para>
+        ///  Gets or sets a value indicating whether
+        ///  the read-only check box is selected.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -95,9 +78,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dialog contains a read-only check box.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the dialog contains a read-only check box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -117,12 +98,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Opens the file selected by the user with read-only permission.  The file
-        ///       attempted is specified by the <see cref='System.Windows.Forms.FileDialog.FileName'/> property.
-        ///    </para>
-        /// </summary>        
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
+        ///  Opens the file selected by the user with read-only permission.  The file
+        ///  attempted is specified by the <see cref='FileDialog.FileName'/> property.
+        /// </summary>
         public Stream OpenFile()
         {
             string filename = FileNames[0];
@@ -135,9 +113,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Resets all properties to their default values.
-        ///    </para>
+        ///  Resets all properties to their default values.
         /// </summary>
         public override void Reset()
         {
@@ -146,7 +122,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Displays a file open dialog.
+        ///  Displays a file open dialog.
         /// </summary>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
@@ -222,14 +198,13 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public string[] SafeFileNames
         {
             get
             {
                 string[] fullPaths = FileNames;
                 if (null == fullPaths || 0 == fullPaths.Length)
-                { return new string[0]; }
+                { return Array.Empty<string>(); }
                 string[] safePaths = new string[fullPaths.Length];
                 for (int i = 0; i < safePaths.Length; ++i)
                 {

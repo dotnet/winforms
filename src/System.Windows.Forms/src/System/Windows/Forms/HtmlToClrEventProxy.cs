@@ -45,7 +45,6 @@ namespace System.Windows.Forms
             eventHandler?.Invoke(sender, EventArgs.Empty);
         }
 
-
         #region IReflect
 
         Type IReflect.UnderlyingSystemType
@@ -57,43 +56,43 @@ namespace System.Windows.Forms
         }
 
         // Methods
-        System.Reflection.FieldInfo IReflect.GetField(string name, System.Reflection.BindingFlags bindingAttr)
+        FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetField(name, bindingAttr);
         }
-        System.Reflection.FieldInfo[] IReflect.GetFields(System.Reflection.BindingFlags bindingAttr)
+        FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetFields(bindingAttr);
         }
-        System.Reflection.MemberInfo[] IReflect.GetMember(string name, System.Reflection.BindingFlags bindingAttr)
+        MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetMember(name, bindingAttr);
         }
-        System.Reflection.MemberInfo[] IReflect.GetMembers(System.Reflection.BindingFlags bindingAttr)
+        MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetMembers(bindingAttr);
         }
-        System.Reflection.MethodInfo IReflect.GetMethod(string name, System.Reflection.BindingFlags bindingAttr)
+        MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetMethod(name, bindingAttr);
         }
-        System.Reflection.MethodInfo IReflect.GetMethod(string name, System.Reflection.BindingFlags bindingAttr, System.Reflection.Binder binder, Type[] types, System.Reflection.ParameterModifier[] modifiers)
+        MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
         {
             return typeIReflectImplementation.GetMethod(name, bindingAttr, binder, types, modifiers);
         }
-        System.Reflection.MethodInfo[] IReflect.GetMethods(System.Reflection.BindingFlags bindingAttr)
+        MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetMethods(bindingAttr);
         }
-        System.Reflection.PropertyInfo[] IReflect.GetProperties(System.Reflection.BindingFlags bindingAttr)
+        PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetProperties(bindingAttr);
         }
-        System.Reflection.PropertyInfo IReflect.GetProperty(string name, System.Reflection.BindingFlags bindingAttr)
+        PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
         {
             return typeIReflectImplementation.GetProperty(name, bindingAttr);
         }
-        System.Reflection.PropertyInfo IReflect.GetProperty(string name, System.Reflection.BindingFlags bindingAttr, System.Reflection.Binder binder, Type returnType, Type[] types, System.Reflection.ParameterModifier[] modifiers)
+        PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
         {
             return typeIReflectImplementation.GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
         }
@@ -101,10 +100,9 @@ namespace System.Windows.Forms
         // InvokeMember:
         // If we get a call for DISPID=0, fire the CLR event.
         //
-        object IReflect.InvokeMember(string name, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object target, object[] args, System.Reflection.ParameterModifier[] modifiers, System.Globalization.CultureInfo culture, string[] namedParameters)
+        object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, Globalization.CultureInfo culture, string[] namedParameters)
         {
-
-            // 
+            //
             if (name == "[DISPID=0]")
             {
                 // we know we're getting called back to fire the event - translate this now into a CLR event.

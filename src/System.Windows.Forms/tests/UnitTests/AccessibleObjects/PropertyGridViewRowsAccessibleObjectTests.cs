@@ -74,13 +74,13 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             domainUpDown = new DomainUpDown();
             propertyGrid = new PropertyGrid();
-            // 
+            //
             // propertyGrid
-            // 
+            //
             propertyGrid.Size = new Size(223, 244);
-            // 
+            //
             // TestForm
-            // 
+            //
             ClientSize = new Size(508, 367);
             Controls.Add(propertyGrid);
             Controls.Add(domainUpDown);

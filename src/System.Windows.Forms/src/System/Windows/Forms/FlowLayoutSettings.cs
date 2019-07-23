@@ -2,31 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Layout;
-
     [DefaultProperty(nameof(FlowDirection))]
     public class FlowLayoutSettings : LayoutSettings
     {
-
-        internal FlowLayoutSettings(IArrangedElement owner) : base(owner) { }
-
-        public override LayoutEngine LayoutEngine
+        internal FlowLayoutSettings(IArrangedElement owner) : base(owner)
         {
-            get { return FlowLayout.Instance; }
         }
+
+        public override LayoutEngine LayoutEngine => FlowLayout.Instance;
 
         [SRDescription(nameof(SR.FlowPanelFlowDirectionDescr))]
         [DefaultValue(FlowDirection.LeftToRight)]
         [SRCategory(nameof(SR.CatLayout))]
         public FlowDirection FlowDirection
         {
-            get { return FlowLayout.GetFlowDirection(Owner); }
+            get => FlowLayout.GetFlowDirection(Owner);
             set
             {
                 FlowLayout.SetFlowDirection(Owner, value);
@@ -39,7 +35,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout))]
         public bool WrapContents
         {
-            get { return FlowLayout.GetWrapContents(Owner); }
+            get => FlowLayout.GetWrapContents(Owner);
             set
             {
                 FlowLayout.SetWrapContents(Owner, value);
@@ -49,6 +45,11 @@ namespace System.Windows.Forms
 
         public void SetFlowBreak(object child, bool value)
         {
+            if (child == null)
+            {
+                throw new ArgumentNullException(nameof(child));
+            }
+
             IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
             if (GetFlowBreak(child) != value)
             {
@@ -58,11 +59,13 @@ namespace System.Windows.Forms
 
         public bool GetFlowBreak(object child)
         {
+            if (child == null)
+            {
+                throw new ArgumentNullException(nameof(child));
+            }
+
             IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
             return CommonProperties.GetFlowBreak(element);
         }
-
-
     }
 }
-

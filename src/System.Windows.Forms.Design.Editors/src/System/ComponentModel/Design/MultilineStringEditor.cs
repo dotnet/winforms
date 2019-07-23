@@ -32,13 +32,13 @@ namespace System.ComponentModel.Design
         {
             if (provider != null)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-                if (edSvc != null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
                     if (_editorUI == null)
                     {
                         _editorUI = new MultilineStringEditorUI();
                     }
+
                     _editorUI.BeginEdit(edSvc, value);
                     edSvc.DropDownControl(_editorUI);
                     object newValue = _editorUI.Value;
@@ -48,6 +48,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return value;
         }
 
@@ -184,7 +185,7 @@ namespace System.ComponentModel.Design
                 _watermarkSize = Size.Empty;
                 _escapePressed = false;
                 _ctrlEnterPressed = false;
-                Text = (string)value;
+                Text = value as string;
             }
 
             internal bool EndEdit()
@@ -473,7 +474,6 @@ namespace System.ComponentModel.Design
             {
                 _owner = owner;
             }
-
 
             public int GetNewStorage(out UnsafeNativeMethods.IStorage storage)
             {

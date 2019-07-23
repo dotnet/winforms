@@ -13,8 +13,6 @@ namespace System.Windows.Forms.Design
     {
         readonly DesignerVerb _verb;
 
-        // Text is a virtual method on the base class, but since we don't override it we should be okay.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DesignerVerbToolStripMenuItem(DesignerVerb verb)
         {
             _verb = verb;

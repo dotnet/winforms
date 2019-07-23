@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
 using System.Collections;
 
@@ -49,12 +48,10 @@ namespace System.Windows.Forms
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
         internal PropertyManager(object dataSource) : base(dataSource)
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
         internal PropertyManager(object dataSource, string propName) : base()
         {
             _propName = propName;

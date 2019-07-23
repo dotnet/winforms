@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the type of action used to raise the <see cref='System.Windows.Forms.ScrollBar.Scroll'/> event.
+    /// Specifies the type of action used to raise the <see cref='ScrollBar.Scroll'/> event.
     /// </summary>
     [ComVisible(true)]
     public enum ScrollEventType
@@ -41,7 +41,6 @@ namespace System.Windows.Forms
         LargeIncrement = NativeMethods.SB_PAGERIGHT,
 
         /// <summary>
-        ///    <para>
         /// The scroll box was moved.
         /// </summary>
         ThumbPosition = NativeMethods.SB_THUMBPOSITION,
@@ -52,13 +51,13 @@ namespace System.Windows.Forms
         ThumbTrack = NativeMethods.SB_THUMBTRACK,
 
         /// <summary>
-        /// The scroll box was moved to the <see cref='System.Windows.Forms.ScrollBar.Minimum'/>
+        /// The scroll box was moved to the <see cref='ScrollBar.Minimum'/>
         /// position.
         /// </summary>
         First = NativeMethods.SB_LEFT,
 
         /// <summary>
-        /// The scroll box was moved to the <see cref='System.Windows.Forms.ScrollBar.Maximum'/>
+        /// The scroll box was moved to the <see cref='ScrollBar.Maximum'/>
         /// position.
         /// </summary>
         Last = NativeMethods.SB_RIGHT,

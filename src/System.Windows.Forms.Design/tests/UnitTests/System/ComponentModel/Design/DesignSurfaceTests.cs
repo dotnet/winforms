@@ -41,6 +41,12 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(ContainerFilterService)))
                 .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IDesignerEventService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IHelpService)))
+                .Returns(null);
             yield return new object[] { null };
             yield return new object[] { mockServiceProvider.Object };
         }
@@ -66,6 +72,105 @@ namespace System.ComponentModel.Design.Tests
             Assert.Empty(surface.LoadErrors);
             Assert.NotNull(surface.ServiceContainer);
             Assert.Throws<InvalidOperationException>(() => surface.View);
+        }
+
+        [Fact]
+        public void DesignSurface_Ctor_Type()
+        {
+            var surface = new SubDesignSurface(typeof(RootDesignerComponent));
+            Assert.NotNull(surface.ComponentContainer);
+            Assert.Single(surface.ComponentContainer.Components);
+            Assert.False(surface.DtelLoading);
+            Assert.False(surface.Host.CanReloadWithErrors);
+            Assert.Same(surface.Host, surface.Host.Container);
+            Assert.False(surface.Host.Loading);
+            Assert.False(surface.Host.IgnoreErrorsDuringReload);
+            Assert.False(surface.Host.InTransaction);
+            Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
+            Assert.IsType<RootDesignerComponent>(surface.Host.RootComponent);
+            Assert.Equal(typeof(RootDesignerComponent).FullName, surface.Host.RootComponentClassName);
+            Assert.Null(surface.Host.TransactionDescription);
+            Assert.True(surface.IsLoaded);
+            Assert.Empty(surface.LoadErrors);
+            Assert.NotNull(surface.ServiceContainer);
+            Assert.Same(RootComponentDesigner.View, surface.View);
+        }
+
+        [Fact]
+        public void DesignSurface_Ctor_IServiceProvider_Type_NullParentProvider()
+        {
+            var surface = new SubDesignSurface(null, typeof(RootDesignerComponent));
+            Assert.NotNull(surface.ComponentContainer);
+            Assert.Single(surface.ComponentContainer.Components);
+            Assert.False(surface.DtelLoading);
+            Assert.False(surface.Host.CanReloadWithErrors);
+            Assert.Same(surface.Host, surface.Host.Container);
+            Assert.False(surface.Host.Loading);
+            Assert.False(surface.Host.IgnoreErrorsDuringReload);
+            Assert.False(surface.Host.InTransaction);
+            Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
+            Assert.IsType<RootDesignerComponent>(surface.Host.RootComponent);
+            Assert.Equal(typeof(RootDesignerComponent).FullName, surface.Host.RootComponentClassName);
+            Assert.Null(surface.Host.TransactionDescription);
+            Assert.True(surface.IsLoaded);
+            Assert.Empty(surface.LoadErrors);
+            Assert.NotNull(surface.ServiceContainer);
+            Assert.Same(RootComponentDesigner.View, surface.View);
+        }
+
+        [Fact]
+        public void DesignSurface_Ctor_IServiceProvider_Type_CustomParentProvider()
+        {
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IDesignerEventService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(TypeDescriptionProvider)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(INameCreationService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(ITypeResolutionService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IHelpService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(ContainerFilterService)))
+                .Returns(null);
+            var surface = new SubDesignSurface(mockServiceProvider.Object, typeof(RootDesignerComponent));
+            Assert.NotNull(surface.ComponentContainer);
+            Assert.Single(surface.ComponentContainer.Components);
+            Assert.False(surface.DtelLoading);
+            Assert.False(surface.Host.CanReloadWithErrors);
+            Assert.Same(surface.Host, surface.Host.Container);
+            Assert.False(surface.Host.Loading);
+            Assert.False(surface.Host.IgnoreErrorsDuringReload);
+            Assert.False(surface.Host.InTransaction);
+            Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
+            Assert.IsType<RootDesignerComponent>(surface.Host.RootComponent);
+            Assert.Equal(typeof(RootDesignerComponent).FullName, surface.Host.RootComponentClassName);
+            Assert.Null(surface.Host.TransactionDescription);
+            Assert.True(surface.IsLoaded);
+            Assert.Empty(surface.LoadErrors);
+            Assert.NotNull(surface.ServiceContainer);
+            Assert.Same(RootComponentDesigner.View, surface.View);
+        }
+
+        [Fact]
+        public void DesignSurface_Ctor_NullRootComponentType_ThrowsArgumentNullException()
+        {
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface((Type)null));
+            Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface(mockServiceProvider.Object, (Type)null));
         }
 
         [Fact]
@@ -225,12 +330,58 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.ServiceContainer);
         }
 
+        [Theory]
+        [InlineData(typeof(NullSupportedTechnologiesRootDesignerComponent))]
+        [InlineData(typeof(EmptySupportedTechnologiesRootDesignerComponent))]
+        public void DesignSurface_View_GetWithInvalidSupportedTechnologies_ThrowsNotSupportedException(Type rootComponentType)
+        {
+            var surface = new SubDesignSurface();
+            surface.BeginLoad(rootComponentType);
+            Assert.Throws<NotSupportedException>(() => surface.View);
+        }
+
         [Fact]
         public void DesignSurface_View_GetDisposed_ThrowsObjectDisposedException()
         {
             var surface = new DesignSurface();
             surface.Dispose();
             Assert.Throws<ObjectDisposedException>(() => surface.View);
+        }
+
+        [Fact]
+        public void DesignSurface_View_GetWithExceptionLoadErrors_ThrowsInvalidOperationException()
+        {
+            var exception = new Exception();
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host))
+                .Throws(exception);
+            surface.BeginLoad(mockLoader.Object);
+            Assert.Same(exception, Assert.Throws<InvalidOperationException>(() => surface.View).InnerException);
+        }
+
+        public static IEnumerable<object[]> View_GetLoadError_TestData()
+        {
+            yield return new object[] { new object[0] };
+            yield return new object[] { new object[] { new Exception() } };
+            yield return new object[] { new object[] { "Error" } };
+            yield return new object[] { new object[] { null } };
+        }
+
+        [Theory]
+        [MemberData(nameof(View_GetLoadError_TestData))]
+        public void DesignSurface_View_GetWithLoadErrors_ThrowsInvalidOperationException(object[] errorCollection)
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host));
+            surface.BeginLoad(mockLoader.Object);
+            host.EndLoad("BaseClassName", false, errorCollection);
+            Assert.Throws<InvalidOperationException>(() => surface.View);
         }
 
         public static IEnumerable<object[]> BeginLoad_TestData()
@@ -274,6 +425,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.True(host.Loading);
             Assert.Null(host.RootComponent);
             Assert.Null(host.RootComponentClassName);
+            Assert.Throws<InvalidOperationException>(() => surface.View);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
 
@@ -379,7 +531,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
 
-            // Begin again.
+            // Reload.
             surface.BeginLoad(mockLoader.Object);
             Assert.False(surface.IsLoaded);
             Assert.Empty(surface.LoadErrors);
@@ -443,7 +595,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
 
-            // Begin again.
+            // Reload.
             surface.BeginLoad(mockLoader.Object);
             Assert.False(surface.IsLoaded);
             Assert.False(surface.Host.Loading);
@@ -453,6 +605,127 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(2, loadedCallCount);
             Assert.Equal(0, flushedCallCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void DesignSurface_BeginLoad_InvokeDefaultIExtenderProvider_Success()
+        {
+            var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IExtenderProviderService)))
+                .Returns(mockExtenderProviderService.Object)
+                .Verifiable();
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IDesignerEventService)))
+                .Returns(null)
+                .Verifiable();
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
+            IDesignerLoaderHost2 host = surface.Host;
+
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host))
+                .Verifiable();
+            var mockExtenderProvider = mockLoader.As<IExtenderProvider>();
+            surface.BeginLoad(mockLoader.Object);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
+            Assert.Same(mockExtenderProvider.Object, Assert.Single(defaultProviderService.GetExtenderProviders()));
+
+            // Reload.
+            surface.BeginLoad(mockLoader.Object);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
+            Assert.Same(mockExtenderProvider.Object, Assert.Single(defaultProviderService.GetExtenderProviders()));
+        }
+
+        [Fact]
+        public void DesignSurface_BeginLoad_InvokeValidIExtenderProvider_CallsAddExtenderProvider()
+        {
+            var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
+            mockExtenderProviderService
+                .Setup(s => s.AddExtenderProvider(It.IsAny<IExtenderProvider>()))
+                .Verifiable();
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IExtenderProviderService)))
+                .Returns(mockExtenderProviderService.Object)
+                .Verifiable();
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IDesignerEventService)))
+                .Returns(null)
+                .Verifiable();
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
+            surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
+            IDesignerLoaderHost2 host = surface.Host;
+
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host))
+                .Verifiable();
+            var mockExtenderProvider = mockLoader.As<IExtenderProvider>();
+            surface.BeginLoad(mockLoader.Object);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
+            mockExtenderProviderService.Verify(s => s.AddExtenderProvider(mockExtenderProvider.Object), Times.Once());
+            Assert.Empty(defaultProviderService.GetExtenderProviders());
+
+            // Reload.
+            surface.BeginLoad(mockLoader.Object);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
+            mockExtenderProviderService.Verify(s => s.AddExtenderProvider(mockExtenderProvider.Object), Times.Once());
+            Assert.Empty(defaultProviderService.GetExtenderProviders());
+        }
+
+        public static IEnumerable<object[]> BeginLoad_InvalidIExtenderProvider_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new object() };
+        }
+
+        [Theory]
+        [MemberData(nameof(BeginLoad_InvalidIExtenderProvider_TestData))]
+        public void DesignSurface_BeginLoad_InvokeInvalidIExtenderProvider_Success(object service)
+        {
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IExtenderProviderService)))
+                .Returns(service)
+                .Verifiable();
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IDesignerEventService)))
+                .Returns(null)
+                .Verifiable();
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
+            surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
+            IDesignerLoaderHost2 host = surface.Host;
+
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host))
+                .Verifiable();
+            var mockExtenderProvider = mockLoader.As<IExtenderProvider>();
+            surface.BeginLoad(mockLoader.Object);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
+            Assert.Empty(defaultProviderService.GetExtenderProviders());
+
+            // Reload.
+            surface.BeginLoad(mockLoader.Object);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
+            Assert.Empty(defaultProviderService.GetExtenderProviders());
         }
 
         [Fact]
@@ -475,6 +748,11 @@ namespace System.ComponentModel.Design.Tests
             surface.BeginLoad(mockLoader.Object);
             Assert.Equal(1, callCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
+
+            // Reload.
+            surface.BeginLoad(mockLoader.Object);
+            Assert.Equal(2, callCount);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
         }
 
         [Fact]
@@ -484,7 +762,8 @@ namespace System.ComponentModel.Design.Tests
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
-                .Returns(mockDesignerEventService.Object);
+                .Returns(mockDesignerEventService.Object)
+                .Verifiable();
             var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             int callCount = 0;
@@ -502,6 +781,13 @@ namespace System.ComponentModel.Design.Tests
             surface.BeginLoad(mockLoader.Object);
             Assert.Equal(0, callCount);
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
+
+            // Reload.
+            surface.BeginLoad(mockLoader.Object);
+            Assert.Equal(0, callCount);
+            mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
+            mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
         }
 
         [Fact]
@@ -640,6 +926,28 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
+        public void DesignSurface_BeginLoad_InvokeType_Success()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            surface.BeginLoad(typeof(RootDesignerComponent));
+            Assert.True(surface.IsLoaded);
+            Assert.Empty(surface.LoadErrors);
+            Assert.False(surface.Host.Loading);
+            Assert.False(host.Loading);
+            Assert.IsType<RootDesignerComponent>(host.RootComponent);
+            Assert.Equal(typeof(RootDesignerComponent).FullName, host.RootComponentClassName);
+            Assert.Same(RootComponentDesigner.View, surface.View);
+        }
+
+        [Fact]
+        public void DesignSurface_BeginLoad_NullRootComponentType_ThrowsArgumentNullException()
+        {
+            var surface = new DesignSurface();
+            Assert.Throws<ArgumentNullException>("rootComponentType", () => surface.BeginLoad((Type)null));
+        }
+
+        [Fact]
         public void DesignSurface_BeginLoad_AlreadyCalled_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -652,6 +960,7 @@ namespace System.ComponentModel.Design.Tests
             otherMockLoader
                 .Setup(l => l.BeginLoad(host));
             surface.BeginLoad(mockLoader.Object);
+            Assert.Throws<InvalidOperationException>(() => surface.BeginLoad(typeof(RootDesignerComponent)));
             Assert.Throws<InvalidOperationException>(() => surface.BeginLoad(otherMockLoader.Object));
         }
 
@@ -661,6 +970,7 @@ namespace System.ComponentModel.Design.Tests
             var surface = new DesignSurface();
             surface.Dispose();
             var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            Assert.Throws<ObjectDisposedException>(() => surface.BeginLoad(typeof(RootDesignerComponent)));
             Assert.Throws<ObjectDisposedException>(() => surface.BeginLoad(mockLoader.Object));
         }
 
@@ -817,9 +1127,19 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("type", () => surface.CreateInstance(null));
         }
 
+        [Fact]
+        public void DesignSurface_CreateNestedContainer_InvokeObject_ReturnsExpected()
+        {
+            var surface = new DesignSurface();
+            var ownerComponent = new Component();
+            INestedContainer container = surface.CreateNestedContainer(ownerComponent);
+            Assert.Empty(container.Components);
+            Assert.Same(ownerComponent, container.Owner);
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void DesignSurface_CreateNestedContainer_Invoke_ReturnsExpected(string containerName)
+        public void DesignSurface_CreateNestedContainer_InvokeObjectString_ReturnsExpected(string containerName)
         {
             var surface = new DesignSurface();
             var ownerComponent = new Component();
@@ -832,6 +1152,7 @@ namespace System.ComponentModel.Design.Tests
         public void DesignSurface_CreateNestedContainer_NullOwningComponent_ThrowsArgumentNullException()
         {
             var surface = new DesignSurface();
+            Assert.Throws<ArgumentNullException>("owningComponent", () => surface.CreateNestedContainer(null));
             Assert.Throws<ArgumentNullException>("owningComponent", () => surface.CreateNestedContainer(null, "name"));
         }
 
@@ -844,7 +1165,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void DesignSurface_Dispose_MultipleTimes_Success()
+        public void DesignSurface_Dispose_InvokeMultipleTimes_Success()
         {
             var surface = new DesignSurface();
             surface.Dispose();
@@ -852,7 +1173,18 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void DesignSurface_Dispose_HasLoader_ThrowsInvalidOperationException()
+        public void DesignSurface_Dispose_Invoke_RemovesDesignSurfaceService()
+        {
+            var surface = new SubDesignSurface();
+            ServiceContainer container = surface.ServiceContainer;
+            Assert.Same(surface, container.GetService(typeof(DesignSurface)));
+
+            surface.Dispose();
+            Assert.Null(container.GetService(typeof(DesignSurface)));
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_InvokeHasLoader_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -869,7 +1201,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void DesignSurface_Dispose_HasHostWithTransactions_ThrowsInvalidOperationException()
+        public void DesignSurface_Dispose_InvokeHasHostWithTransactions_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -891,6 +1223,181 @@ namespace System.ComponentModel.Design.Tests
             Assert.True(host.Loading);
             Assert.True(host.InTransaction);
             Assert.Equal("Transaction1", host.TransactionDescription);
+        }
+
+        [Fact]
+        public void Dispose_InvokeWithDisposed_CallsHandler()
+        {
+            var surface = new DesignSurface();
+            surface.Dispose();
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(surface, sender);
+                Assert.Equal(EventArgs.Empty, e);
+                callCount++;
+            };
+            surface.Disposed += handler;
+
+            // Call with handler.
+            surface.Dispose();
+            Assert.Equal(1, callCount);
+
+            // Call again.
+            surface.Dispose();
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            surface.Disposed -= handler;
+            surface.Dispose();
+            Assert.Equal(2, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DesignSurface_Dispose_InvokeDisposingMultipleTimes_Success(bool disposing)
+        {
+            var surface = new SubDesignSurface();
+            surface.Dispose(disposing);
+            surface.Dispose(disposing);
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_InvokeDisposing_RemovesDesignSurfaceService()
+        {
+            var surface = new SubDesignSurface();
+            ServiceContainer container = surface.ServiceContainer;
+            Assert.Same(surface, container.GetService(typeof(DesignSurface)));
+
+            surface.Dispose(true);
+            Assert.Null(container.GetService(typeof(DesignSurface)));
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_InvokeNotDisposing_DoesNotRemoveDesignSurfaceService()
+        {
+            var surface = new SubDesignSurface();
+            ServiceContainer container = surface.ServiceContainer;
+            Assert.Same(surface, container.GetService(typeof(DesignSurface)));
+
+            surface.Dispose(false);
+            Assert.Same(surface, container.GetService(typeof(DesignSurface)));
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_InvokeDisposingHasLoader_ThrowsInvalidOperationException()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host));
+            surface.BeginLoad(mockLoader.Object);
+            Assert.Throws<InvalidOperationException>(() => surface.Dispose(true));
+            Assert.True(host.Loading);
+
+            // Should not throw again.
+            surface.Dispose(true);
+            Assert.True(host.Loading);
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_InvokeNotDisposingHasLoader_Nop()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host));
+            surface.BeginLoad(mockLoader.Object);
+            surface.Dispose(false);
+            Assert.True(host.Loading);
+
+            // Should not throw again.
+            surface.Dispose(false);
+            Assert.True(host.Loading);
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_InvokeDisposingHasHostWithTransactions_ThrowsInvalidOperationException()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            DesignerTransaction transaction = host.CreateTransaction("Transaction1");
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host));
+            surface.BeginLoad(mockLoader.Object);
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+            Assert.Throws<InvalidOperationException>(() => surface.Dispose(true));
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+
+            // Should not throw again.
+            surface.Dispose(true);
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+        }
+
+        [Fact]
+        public void DesignSurface_Dispose_InvokeNotDisposingHasHostWithTransactions_Nop()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            DesignerTransaction transaction = host.CreateTransaction("Transaction1");
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(host));
+            surface.BeginLoad(mockLoader.Object);
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+            surface.Dispose(false);
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+
+            // Should not throw again.
+            surface.Dispose(false);
+            Assert.True(host.Loading);
+            Assert.True(host.InTransaction);
+            Assert.Equal("Transaction1", host.TransactionDescription);
+        }
+
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void Dispose_InvokeDisposingWithDisposed_CallsHandler(bool disposing, int expectedCallCount)
+        {
+            var surface = new SubDesignSurface();
+            surface.Dispose();
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(surface, sender);
+                Assert.Equal(EventArgs.Empty, e);
+                callCount++;
+            };
+            surface.Disposed += handler;
+
+            // Call with handler.
+            surface.Dispose(disposing);
+            Assert.Equal(expectedCallCount, callCount);
+
+            // Call again.
+            surface.Dispose(disposing);
+            Assert.Equal(expectedCallCount * 2, callCount);
+
+            // Remove handler.
+            surface.Disposed -= handler;
+            surface.Dispose(disposing);
+            Assert.Equal(expectedCallCount * 2, callCount);
         }
 
         [Fact]
@@ -1215,9 +1722,19 @@ namespace System.ComponentModel.Design.Tests
             {
             }
 
+            public SubDesignSurface(Type rootComponentType) : base(rootComponentType)
+            {
+            }
+
+            public SubDesignSurface(IServiceProvider parentProvider, Type rootComponentType) : base(parentProvider, rootComponentType)
+            {
+            }
+
             public new ServiceContainer ServiceContainer => base.ServiceContainer;
 
             public IDesignerLoaderHost2 Host => Assert.IsAssignableFrom<IDesignerLoaderHost2>(ComponentContainer);
+
+            public new void Dispose(bool disposing) => base.Dispose(disposing);
 
             public new void OnLoading(EventArgs e) => base.OnLoading(e);
 
@@ -1237,12 +1754,40 @@ namespace System.ComponentModel.Design.Tests
 
         private class RootComponentDesigner : ComponentDesigner, IRootDesigner
         {
-            public ViewTechnology[] SupportedTechnologies { get; }
-            public object GetView(ViewTechnology technology) => throw new NotImplementedException();
+            public static object View { get; } = new object();
+
+            public ViewTechnology[] SupportedTechnologies => new ViewTechnology[] { ViewTechnology.Default + 1 };
+            public object GetView(ViewTechnology technology)
+            {
+                Assert.Equal(ViewTechnology.Default + 1, technology);
+                return View;
+            }
         }
 
         [Designer(typeof(RootComponentDesigner), typeof(IRootDesigner))]
         private class RootDesignerComponent : Component
+        {
+        }
+
+        private class NullSupportedTechnologiesRootComponentDesigner : ComponentDesigner, IRootDesigner
+        {
+            public ViewTechnology[] SupportedTechnologies => null;
+            public object GetView(ViewTechnology technology) => throw new NotImplementedException();
+        }
+
+        [Designer(typeof(NullSupportedTechnologiesRootComponentDesigner), typeof(IRootDesigner))]
+        private class NullSupportedTechnologiesRootDesignerComponent : Component
+        {
+        }
+
+        private class EmptySupportedTechnologiesRootComponentDesigner : ComponentDesigner, IRootDesigner
+        {
+            public ViewTechnology[] SupportedTechnologies => new ViewTechnology[0];
+            public object GetView(ViewTechnology technology) => throw new NotImplementedException();
+        }
+
+        [Designer(typeof(EmptySupportedTechnologiesRootComponentDesigner), typeof(IRootDesigner))]
+        private class EmptySupportedTechnologiesRootDesignerComponent : Component
         {
         }
 

@@ -2,25 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Globalization;
 
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Reflection;
-
     /// <summary>
-    ///      ImageIndexConverter is a class that can be used to convert
-    ///      image index values one data type to another.
+    ///  ImageIndexConverter is a class that can be used to convert
+    ///  image index values one data type to another.
     /// </summary>
     public class ImageIndexConverter : Int32Converter
     {
-
         private string parentImageListProperty = "Parent";
 
         protected virtual bool IncludeNoneAsStandardValue
@@ -31,10 +23,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// this is the property to look at when there is no ImageList property
-        /// on the current object.  For example, in ToolBarButton - the ImageList is 
-        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
+        /// on the current object.  For example, in ToolBarButton - the ImageList is
+        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
         /// the ToolStripItem.Owner property.
         /// </summary>
         internal string ParentImageListProperty
@@ -50,9 +42,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Converts the given value object to a 32-bit signed integer object.
-        ///    </para>
+        ///  Converts the given value object to a 32-bit signed integer object.
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
@@ -64,13 +54,12 @@ namespace System.Windows.Forms
             return base.ConvertFrom(context, culture, value);
         }
 
-
         /// <summary>
-        ///      Converts the given object to another type.  The most common types to convert
-        ///      are to and from a string object.  The default implementation will make a call
-        ///      to ToString on the object if the object is valid and if the destination
-        ///      type is string.  If this cannot convert to the desitnation type, this will
-        ///      throw a NotSupportedException.
+        ///  Converts the given object to another type.  The most common types to convert
+        ///  are to and from a string object.  The default implementation will make a call
+        ///  to ToString on the object if the object is valid and if the destination
+        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
@@ -88,10 +77,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Retrieves a collection containing a set of standard values
-        ///      for the data type this validator is designed for.  This
-        ///      will return null if the data type does not support a
-        ///      standard set of values.
+        ///  Retrieves a collection containing a set of standard values
+        ///  for the data type this validator is designed for.  This
+        ///  will return null if the data type does not support a
+        ///  standard set of values.
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
@@ -117,7 +106,7 @@ namespace System.Windows.Forms
                     if (imageListProp == null)
                     {
 
-                        // We didn't find the image list in this component.  See if the 
+                        // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
@@ -155,7 +144,6 @@ namespace System.Windows.Forms
                             values = new object[nImages];
                         }
 
-
                         // Fill in the array
                         //
                         for (int i = 0; i < nImages; i++)
@@ -174,17 +162,17 @@ namespace System.Windows.Forms
             }
             else
             {
-                return new StandardValuesCollection(new object[0]);
+                return new StandardValuesCollection(Array.Empty<object>());
             }
         }
 
         /// <summary>
-        ///      Determines if the list of standard values returned from
-        ///      GetStandardValues is an exclusive list.  If the list
-        ///      is exclusive, then no other values are valid, such as
-        ///      in an enum data type.  If the list is not exclusive,
-        ///      then there are other valid values besides the list of
-        ///      standard values GetStandardValues provides.
+        ///  Determines if the list of standard values returned from
+        ///  GetStandardValues is an exclusive list.  If the list
+        ///  is exclusive, then no other values are valid, such as
+        ///  in an enum data type.  If the list is not exclusive,
+        ///  then there are other valid values besides the list of
+        ///  standard values GetStandardValues provides.
         /// </summary>
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
         {
@@ -192,8 +180,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Determines if this object supports a standard set of values
-        ///      that can be picked from a list.
+        ///  Determines if this object supports a standard set of values
+        ///  that can be picked from a list.
         /// </summary>
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {

@@ -2,32 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Automation;
+using System.Windows.Forms.Internal;
+using System.Windows.Forms.Layout;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Design;
-    using System.Drawing.Imaging;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Serialization.Formatters;
-    using System.Windows.Forms.Layout;
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.Versioning;
-    using Automation;
-
-
     /// <summary>
-    ///    <para>
-    ///       Represents a standard Windows label. </para>
+    ///  Represents a standard Windows label.
     /// </summary>
     [
     ComVisible(true),
@@ -41,7 +29,6 @@ namespace System.Windows.Forms
     // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
     public class Label : Control, IAutomationLiveRegion
     {
-
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
 
         private static readonly BitVector32.Section StateUseMnemonic = BitVector32.CreateSection(1);
@@ -86,9 +73,7 @@ namespace System.Windows.Forms
         ///////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Label'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='Label'/> class.
         /// </summary>
         public Label()
         : base()
@@ -116,10 +101,9 @@ namespace System.Windows.Forms
             requestedWidth = Width;
         }
 
-
         /// <summary>
-        ///    <para> Indicates whether the control is automatically resized
-        ///       to fit its contents. </para>
+        ///  Indicates whether the control is automatically resized
+        ///  to fit its contents.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -156,8 +140,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> This property controls the activation handling of bleedover for the text that
-        ///    extends beyond the width of the label. </para>
+        ///  This property controls the activation handling of bleedover for the text that
+        ///  extends beyond the width of the label.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -190,7 +174,6 @@ namespace System.Windows.Forms
                         }
                     }
 
-
                     if (ParentInternal != null)
                     {
                         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.AutoEllipsis);
@@ -201,9 +184,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the image rendered on the background of the control.
-        ///    </para>
+        ///  Gets or sets the image rendered on the background of the control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -231,9 +212,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the image layout for the background of the control.
-        ///    </para>
+        ///  Gets or sets the image layout for the background of the control.
         /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
@@ -258,9 +237,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the border style for the control.
-        ///    </para>
+        ///  Gets or sets the border style for the control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -299,8 +276,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether the current state of the control allows for rendering text using TextRenderer (GDI).
-        ///     See LinkLabel implementation for details.
+        ///  Determines whether the current state of the control allows for rendering text using TextRenderer (GDI).
+        ///  See LinkLabel implementation for details.
         /// </summary>
         internal virtual bool CanUseTextRenderer
         {
@@ -311,7 +288,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overrides Control.  A Label is a Win32 STATIC control, which we setup here.
+        ///  Overrides Control.  A Label is a Win32 STATIC control, which we setup here.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -332,7 +309,6 @@ namespace System.Windows.Forms
                     //
                     cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
                 }
-
 
                 if (!OwnerDraw)
                 {
@@ -398,8 +374,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -457,9 +433,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
-        ///    </para>
+        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
         /// </summary>
         [
         Localizable(true),
@@ -468,8 +442,6 @@ namespace System.Windows.Forms
         ]
         public Image Image
         {
-
-
             get
             {
                 Image image = (Image)Properties.GetObject(PropImage);
@@ -505,13 +477,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the index value of the images displayed on the
-        ///    <see cref='System.Windows.Forms.Label'/>.
-        ///    </para>
+        ///  Gets or sets the index value of the images displayed on the
+        ///  <see cref='Label'/>.
         /// </summary>
         [
-        TypeConverterAttribute(typeof(ImageIndexConverter)),
+        TypeConverter(typeof(ImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DefaultValue(-1),
         Localizable(true),
@@ -558,14 +528,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the key accessor for the image list.  This specifies the image
+        ///  Gets or sets the key accessor for the image list.  This specifies the image
 	    ///	  from the image list to display on
-        ///    <see cref='System.Windows.Forms.Label'/>.
-        ///    </para>
+        ///  <see cref='Label'/>.
         /// </summary>
         [
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
+        TypeConverter(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DefaultValue(""),
         Localizable(true),
@@ -619,9 +587,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the images displayed in a <see cref='System.Windows.Forms.Label'/>.
-        ///    </para>
+        ///  Gets or sets the images displayed in a <see cref='Label'/>.
         /// </summary>
         [
         DefaultValue(null),
@@ -675,9 +641,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the alignment of the image on the <see cref='System.Windows.Forms.Label'/>.
-        ///    </para>
+        ///  Gets or sets the alignment of the image on the <see cref='Label'/>.
         /// </summary>
         [
         DefaultValue(ContentAlignment.MiddleCenter),
@@ -811,10 +775,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the height of the control (in pixels), assuming a
-        ///       single line of text is displayed.
-        ///    </para>
+        ///  Gets the height of the control (in pixels), assuming a
+        ///  single line of text is displayed.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -828,10 +790,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the width of the control (in pixels), assuming a single line
-        ///       of text is displayed.
-        ///    </para>
+        ///  Gets the width of the control (in pixels), assuming a single line
+        ///  of text is displayed.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -845,8 +805,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para> Indicates whether
-        ///       the container control background is rendered on the <see cref='System.Windows.Forms.Label'/>.</para>
+        ///  Indicates whether
+        ///  the container control background is rendered on the <see cref='Label'/>.
         /// </summary>
         [Obsolete("This property has been deprecated. Use BackColor instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         virtual new protected bool RenderTransparent
@@ -860,7 +820,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private bool SelfSizing
         {
             get
@@ -870,10 +829,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the user can tab to the
-        ///    <see cref='System.Windows.Forms.Label'/>.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the user can tab to the
+        ///  <see cref='Label'/>.
         /// </summary>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
@@ -896,10 +853,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the
-        ///       horizontal alignment of the text in the control.
-        ///    </para>
+        ///  Gets or sets the
+        ///  horizontal alignment of the text in the control.
         /// </summary>
         [
         SRDescription(nameof(SR.LabelTextAlignDescr)),
@@ -943,10 +898,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the text in the Label. Since we can have multiline support
-        ///       this property just overides the base to pluck in the Multiline editor.
-        ///    </para>
+        ///  Gets or sets the text in the Label. Since we can have multiline support
+        ///  this property just overides the base to pluck in the Multiline editor.
         /// </summary>
         [
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -964,7 +917,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged
         {
@@ -974,7 +926,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
+        ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
         [
         DefaultValue(false),
@@ -1004,9 +956,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether the control supports rendering text using GDI+ and GDI.
-        ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
-        ///     value if the child control supports it.
+        ///  Determines whether the control supports rendering text using GDI+ and GDI.
+        ///  This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
+        ///  value if the child control supports it.
         /// </summary>
         internal override bool SupportsUseCompatibleTextRendering
         {
@@ -1017,8 +969,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Gets or sets a value indicating whether an ampersand (&amp;) included in the text of
-        ///       the control.</para>
+        ///  Gets or sets a value indicating whether an ampersand (&amp;) included in the text of
+        ///  the control.
         /// </summary>
         [
         SRDescription(nameof(SR.LabelUseMnemonicDescr)),
@@ -1039,7 +991,6 @@ namespace System.Windows.Forms
                 {
                     labelState[StateUseMnemonic] = value ? 1 : 0;
                     MeasureTextCache.InvalidateCache();
-
 
                     // The size of the label need to be adjusted when the Mnemonic
                     // is set irrespective of auto-sizing
@@ -1068,10 +1019,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Updates the control in response to events that could affect either
-        ///     the size of the control, or the size of the text within it.
+        ///  Updates the control in response to events that could affect either
+        ///  the size of the control, or the size of the text within it.
         /// </summary>
         internal void AdjustSize()
         {
@@ -1158,7 +1108,6 @@ namespace System.Windows.Forms
                 xLoc = r.X + (r.Width - pointImageSize.Width) / 2;
             }
 
-
             if ((align & WindowsFormsUtils.AnyBottomAlign) != 0)
             {
                 yLoc = (r.Y + r.Height - 4) - pointImageSize.Height;
@@ -1175,17 +1124,14 @@ namespace System.Windows.Forms
             return new Rectangle(xLoc, yLoc, pointImageSize.Width, pointImageSize.Height);
         }
 
-
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new LabelAccessibleObject(this);
         }
 
         /// <summary>
-        ///     Get StringFormat object for rendering text using GDI+ (Graphics).
+        ///  Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </summary>
-
-
         internal virtual StringFormat CreateStringFormat()
         {
             return ControlPaint.CreateStringFormat(this, TextAlign, AutoEllipsis, UseMnemonic);
@@ -1196,12 +1142,11 @@ namespace System.Windows.Forms
             return CreateTextFormatFlags(Size - GetBordersAndPadding());
         }
         /// <summary>
-        ///     Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
+        ///  Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
         /// </summary>
         internal virtual TextFormatFlags CreateTextFormatFlags(Size constrainingSize)
         {
-
-            // PREFERRED SIZE CACHING: 
+            // PREFERRED SIZE CACHING:
             // Please read if you're adding a new TextFormatFlag.
             // whenever something can change the TextFormatFlags used
             // MeasureTextCache.InvalidateCache() should be called so we can approprately clear.
@@ -1211,8 +1156,8 @@ namespace System.Windows.Forms
             // Remove WordBreak if the size is large enough to display all the text.
             if (!MeasureTextCache.TextRequiresWordBreak(Text, Font, constrainingSize, flags))
             {
-                // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize 
-                // is false and a one-word line still doesn't fit the binding box (width).  The other effect is that partially visible 
+                // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize
+                // is false and a one-word line still doesn't fit the binding box (width).  The other effect is that partially visible
                 // lines are clipped; this is how GDI+ works by default.
                 flags &= ~(TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
             }
@@ -1224,7 +1169,6 @@ namespace System.Windows.Forms
         {
             ImageList = null;
         }
-
 
         protected override void Dispose(bool disposing)
         {
@@ -1255,11 +1199,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Draws an <see cref='System.Drawing.Image'/> within the specified bounds.
-        ///    </para>
+        ///  Draws an <see cref='Drawing.Image'/> within the specified bounds.
         /// </summary>
-        protected void DrawImage(System.Drawing.Graphics g, Image image, Rectangle r, ContentAlignment align)
+        protected void DrawImage(Graphics g, Image image, Rectangle r, ContentAlignment align)
         {
             Rectangle loc = CalcImageRenderBounds(image, r, align);
 
@@ -1274,9 +1216,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       This Function returns the number of lines in the label Text.
-        ///    </para>
+        ///  This Function returns the number of lines in the label Text.
         /// </summary>
         /* FxCop rule 'AvoidBuildingNonCallableCode' - Left here in case it is needed in the future.
         private ArrayList GetLines() {
@@ -1310,7 +1250,7 @@ namespace System.Windows.Forms
         {
             Size bordersAndPadding = Padding.Size;
 
-            // COMPAT: Everett added random numbers to the height of the label               
+            // COMPAT: Everett added random numbers to the height of the label
             if (UseCompatibleTextRendering)
             {
                 //Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
@@ -1339,7 +1279,6 @@ namespace System.Windows.Forms
 
         }
 
-
         public override Size GetPreferredSize(Size proposedSize)
         {
             //make sure the behavior is consistent with GetPreferredSizeCore
@@ -1359,7 +1298,7 @@ namespace System.Windows.Forms
             return (FlatStyle == FlatStyle.System || !UseCompatibleTextRendering);
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // See ComboBox.cs GetComboHeight
+// See ComboBox.cs GetComboHeight
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
         {
             Size bordersAndPadding = GetBordersAndPadding();
@@ -1372,7 +1311,7 @@ namespace System.Windows.Forms
             Size requiredSize;
 
             //
-            // TEXT Measurement 
+            // TEXT Measurement
             //
 
             if (string.IsNullOrEmpty(Text))
@@ -1413,12 +1352,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This method is to be called by LabelDesigner, using private reflection, to get the location of the text snaplines.
+        ///  This method is to be called by LabelDesigner, using private reflection, to get the location of the text snaplines.
         /// </summary>
-        [
-            // This method is called by LabelDesigner, using private reflection.
-            System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")
-        ]
         private int GetLeadingTextPaddingFromTextFormatFlags()
         {
             if (!IsHandleCreated)
@@ -1465,7 +1400,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).
+        ///  Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).
         /// </summary>
         internal override bool IsMnemonicsListenerAxSourced
         {
@@ -1476,10 +1411,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    This method is required because the Label constructor needs to know if the control is OwnerDraw but it should
-        ///    not call the virtual property for the following reason (from FxCop rule 'ConstructorsShouldNotCallBaseClassVirtualMethods'):
-        ///    Virtual methods defined on the class should not be called from constructors. If a derived class has overridden
-        ///    the method, the derived class version will be called (before the derived class constructor is called).
+        ///  This method is required because the Label constructor needs to know if the control is OwnerDraw but it should
+        ///  not call the virtual property for the following reason (from FxCop rule 'ConstructorsShouldNotCallBaseClassVirtualMethods'):
+        ///  Virtual methods defined on the class should not be called from constructors. If a derived class has overridden
+        ///  the method, the derived class version will be called (before the derived class constructor is called).
         /// </summary>
         internal bool IsOwnerDraw()
         {
@@ -1487,9 +1422,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
-        ///    </para>
+        ///  Raises the <see cref='Control.OnMouseEnter'/> event.
         /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
@@ -1511,11 +1444,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
-        ///    </para>
+        ///  Raises the <see cref='Control.OnMouseLeave'/> event.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         protected override void OnMouseLeave(EventArgs e)
         {
             if (!controlToolTip && textToolTip != null && textToolTip.GetHandleCreated())
@@ -1551,8 +1481,6 @@ namespace System.Windows.Forms
             Invalidate();
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
@@ -1564,7 +1492,6 @@ namespace System.Windows.Forms
 
         protected override void OnTextChanged(EventArgs e)
         {
-
             using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text))
             {
                 MeasureTextCache.InvalidateCache();
@@ -1593,8 +1520,6 @@ namespace System.Windows.Forms
             AdjustSize();
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
             Animate();
@@ -1680,7 +1605,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overriden by LinkLabel.
+        ///  Overriden by LinkLabel.
         /// </summary>
         internal virtual void OnAutoEllipsisChanged(/*EventArgs e*/)
         {
@@ -1691,7 +1616,6 @@ namespace System.Windows.Forms
             base.OnEnabledChanged(e);
             Animate();
         }
-
 
         protected override void OnParentChanged(EventArgs e)
         {
@@ -1730,15 +1654,11 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         /// <summary>
-        ///    <para>
-        ///       Overrides Control. This is called when the user has pressed an Alt-CHAR
-        ///       key combination and determines if that combination is an interesting
-        ///       mnemonic for this control.
-        ///    </para>
-        /// </summary>        
+        ///  Overrides Control. This is called when the user has pressed an Alt-CHAR
+        ///  key combination and determines if that combination is an interesting
+        ///  mnemonic for this control.
+        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic())
@@ -1760,7 +1680,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Overrides Control.setBoundsCore to enforce autoSize.
+        ///  Overrides Control.setBoundsCore to enforce autoSize.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
@@ -1797,9 +1717,8 @@ namespace System.Windows.Forms
             return Properties.GetObject(PropImage) != null;
         }
 
-
         /// <summary>
-        ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
+        ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
         internal void SetToolTip(ToolTip toolTip)
         {
@@ -1812,7 +1731,7 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        ///    Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
@@ -1821,10 +1740,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Overrides Control. This processes certain messages that the Win32 STATIC
-        ///       class would normally override.
-        ///    </para>
+        ///  Overrides Control. This processes certain messages that the Win32 STATIC
+        ///  class would normally override.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
@@ -1845,10 +1762,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         internal class LabelAccessibleObject : ControlAccessibleObject
         {
-
             public LabelAccessibleObject(Label owner) : base(owner)
             {
             }
@@ -1880,12 +1796,8 @@ namespace System.Windows.Forms
         }
     }
 
-
-
     /// <summary>
-    ///    <para>
-    ///            Override ImageList.Indexer to support Label's ImageList semantics.
-    ///    </para>
+    ///  Override ImageList.Indexer to support Label's ImageList semantics.
     /// </summary>
     internal class LabelImageIndexer : ImageList.Indexer
     {
@@ -1903,7 +1815,6 @@ namespace System.Windows.Forms
 
             set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
         }
-
 
         public override string Key
         {
@@ -1926,7 +1837,6 @@ namespace System.Windows.Forms
 
         }
 
-
         public override int ActualIndex
         {
             get
@@ -1945,7 +1855,6 @@ namespace System.Windows.Forms
                 return -1;
             }
         }
-
 
     }
 

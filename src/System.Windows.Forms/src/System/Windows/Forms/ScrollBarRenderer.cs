@@ -2,23 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms.VisualStyles;
-    using System.Diagnostics.CodeAnalysis;
-    using Microsoft.Win32;
-
     /// <summary>
-    ///    <para>
-    ///       This is a rendering class for the ScrollBar control.
-    ///    </para>
+    ///  This is a rendering class for the ScrollBar control.
     /// </summary>
     public sealed class ScrollBarRenderer
     {
-
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
@@ -29,10 +22,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns true if this class is supported for the current OS and user/application settings, 
-        ///       otherwise returns false.
-        ///    </para>
+        ///  Returns true if this class is supported for the current OS and user/application settings,
+        ///  otherwise returns false.
         /// </summary>
         public static bool IsSupported
         {
@@ -43,11 +34,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a ScrollBar arrow button.
-        ///    </para>
+        ///  Renders a ScrollBar arrow button.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawArrowButton(Graphics g, Rectangle bounds, ScrollBarArrowButtonState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.ArrowButton.LeftNormal, (int)state);
@@ -56,11 +44,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a horizontal ScrollBar thumb.
-        ///    </para>
+        ///  Renders a horizontal ScrollBar thumb.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawHorizontalThumb(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.ThumbButtonHorizontal.Normal, (int)state);
@@ -69,11 +54,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a vertical ScrollBar thumb.
-        ///    </para>
+        ///  Renders a vertical ScrollBar thumb.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawVerticalThumb(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.ThumbButtonVertical.Normal, (int)state);
@@ -82,11 +64,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a horizontal ScrollBar thumb grip.
-        ///    </para>
+        ///  Renders a horizontal ScrollBar thumb grip.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawHorizontalThumbGrip(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.GripperHorizontal.Normal, (int)state);
@@ -95,11 +74,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a vertical ScrollBar thumb grip.
-        ///    </para>
+        ///  Renders a vertical ScrollBar thumb grip.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawVerticalThumbGrip(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.GripperVertical.Normal, (int)state);
@@ -108,11 +84,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a horizontal ScrollBar thumb.
-        ///    </para>
+        ///  Renders a horizontal ScrollBar thumb.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawRightHorizontalTrack(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.RightTrackHorizontal.Normal, (int)state);
@@ -121,11 +94,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a horizontal ScrollBar thumb.
-        ///    </para>
+        ///  Renders a horizontal ScrollBar thumb.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawLeftHorizontalTrack(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.LeftTrackHorizontal.Normal, (int)state);
@@ -134,11 +104,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a vertical ScrollBar thumb in the center of the given bounds.
-        ///    </para>
+        ///  Renders a vertical ScrollBar thumb in the center of the given bounds.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawUpperVerticalTrack(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.UpperTrackVertical.Normal, (int)state);
@@ -147,11 +114,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a vertical ScrollBar thumb in the center of the given bounds.
-        ///    </para>
+        ///  Renders a vertical ScrollBar thumb in the center of the given bounds.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawLowerVerticalTrack(Graphics g, Rectangle bounds, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.LowerTrackVertical.Normal, (int)state);
@@ -160,11 +124,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Renders a ScrollBar size box in the center of the given bounds.
-        ///    </para>
+        ///  Renders a ScrollBar size box in the center of the given bounds.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawSizeBox(Graphics g, Rectangle bounds, ScrollBarSizeBoxState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.SizeBox.LeftAlign, (int)state);
@@ -173,11 +134,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns the size of the ScrollBar thumb grip.
-        ///    </para>
+        ///  Returns the size of the ScrollBar thumb grip.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static Size GetThumbGripSize(Graphics g, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.GripperHorizontal.Normal, (int)state);
@@ -186,11 +144,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns the size of the ScrollBar size box.
-        ///    </para>
+        ///  Returns the size of the ScrollBar size box.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static Size GetSizeBoxSize(Graphics g, ScrollBarState state)
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.SizeBox.LeftAlign, (int)state);

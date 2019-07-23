@@ -4,12 +4,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
 using System.Security;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using Moq;
 using Xunit;
 
 namespace WinForms.Common.Tests
@@ -296,6 +299,24 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Color, Color> GetBackColorTheoryData()
+        {
+            return new TheoryData<Color, Color>
+            {
+                { Color.Red, Color.Red },
+                { Color.Empty, Control.DefaultBackColor }
+            };
+        }
+
+        public static TheoryData<Color, Color> GetForeColorTheoryData()
+        {
+            return new TheoryData<Color, Color>
+            {
+                { Color.Red, Color.Red },
+                { Color.Empty, Control.DefaultForeColor }
+            };
+        }
+
         public static TheoryData<Image> GetImageTheoryData()
         {
             var data = new TheoryData<Image>
@@ -451,6 +472,89 @@ namespace WinForms.Common.Tests
                 new EventArgs()
             };
             return data;
+        }
+
+        public static TheoryData<PaintEventArgs> GetPaintEventArgsTheoryData()
+        {
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
+            return new TheoryData<PaintEventArgs>
+            {
+                null,
+                new PaintEventArgs(graphics, Rectangle.Empty)
+            };
+        }
+
+        public static TheoryData<KeyEventArgs> GetKeyEventArgsTheoryData()
+        {
+            var data = new TheoryData<KeyEventArgs>
+            {
+                null,
+                new KeyEventArgs(Keys.Cancel)
+            };
+            return data;
+        }
+
+        public static TheoryData<KeyPressEventArgs> GetKeyPressEventArgsTheoryData()
+        {
+            var data = new TheoryData<KeyPressEventArgs>
+            {
+                null,
+                new KeyPressEventArgs('1')
+            };
+            return data;
+        }
+
+        public static TheoryData<LayoutEventArgs> GetLayoutEventArgsTheoryData()
+        {
+            var data = new TheoryData<LayoutEventArgs>
+            {
+                null,
+                new LayoutEventArgs(null, null),
+                new LayoutEventArgs(new Control(), "affectedProperty")
+            };
+            return data;
+        }
+
+        public static TheoryData<MouseEventArgs> GetMouseEventArgsTheoryData()
+        {
+            return new TheoryData<MouseEventArgs>
+            {
+                null,
+                new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4),
+                new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)
+            };
+        }
+
+        public static TheoryData<IServiceProvider, object> GetEditValueInvalidProviderTestData()
+        {
+            var nullServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            nullServiceProviderMock
+                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
+                .Returns(null);
+            var invalidServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            invalidServiceProviderMock
+                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
+                .Returns(new object());
+            var value = new object();
+            return new TheoryData<IServiceProvider, object>
+            {
+                { null, null },
+                { null, value },
+                { nullServiceProviderMock.Object, null },
+                { nullServiceProviderMock.Object, value },
+                { invalidServiceProviderMock.Object, null },
+                { invalidServiceProviderMock.Object, value }
+            };
+        }
+
+        public static TheoryData<ITypeDescriptorContext> GetITypeDescriptorContextTestData()
+        {
+            return new TheoryData<ITypeDescriptorContext>
+            {
+                null,
+                new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object
+            };
         }
 
         #endregion

@@ -628,180 +628,150 @@ namespace System.Windows.Forms
         /// </summary>
         AltF12 = Keys.Alt + Keys.F12,
 
-
         /// <summary>
         /// The shortcut keys ALT+0.
         /// </summary>
         Alt0 = Keys.Alt + Keys.D0,
-
 
         /// <summary>
         /// The shortcut keys ALT+1.
         /// </summary>
         Alt1 = Keys.Alt + Keys.D1,
 
-
         /// <summary>
         /// The shortcut keys ALT+2.
         /// </summary>
         Alt2 = Keys.Alt + Keys.D2,
-
 
         /// <summary>
         /// The shortcut keys ALT+3.
         /// </summary>
         Alt3 = Keys.Alt + Keys.D3,
 
-
         /// <summary>
         /// The shortcut keys ALT+4.
         /// </summary>
         Alt4 = Keys.Alt + Keys.D4,
-
 
         /// <summary>
         /// The shortcut keys ALT+5.
         /// </summary>
         Alt5 = Keys.Alt + Keys.D5,
 
-
         /// <summary>
         /// The shortcut keys ALT+6.
         /// </summary>
         Alt6 = Keys.Alt + Keys.D6,
-
 
         /// <summary>
         /// The shortcut keys ALT+7.
         /// </summary>
         Alt7 = Keys.Alt + Keys.D7,
 
-
         /// <summary>
         /// The shortcut keys ALT+8.
         /// </summary>
         Alt8 = Keys.Alt + Keys.D8,
-
 
         /// <summary>
         /// The shortcut keys ALT+9.
         /// </summary>
         Alt9 = Keys.Alt + Keys.D9,
 
-
         /// <summary>
         /// The shortcut keys CTRL+0.
         /// </summary>
         Ctrl0 = Keys.Control + Keys.D0,
-
 
         /// <summary>
         /// The shortcut keys CTRL+1.
         /// </summary>
         Ctrl1 = Keys.Control + Keys.D1,
 
-
         /// <summary>
         /// The shortcut keys CTRL+2.
         /// </summary>
         Ctrl2 = Keys.Control + Keys.D2,
-
 
         /// <summary>
         /// The shortcut keys CTRL+3.
         /// </summary>
         Ctrl3 = Keys.Control + Keys.D3,
 
-
         /// <summary>
         /// The shortcut keys CTRL+4.
         /// </summary>
         Ctrl4 = Keys.Control + Keys.D4,
-
 
         /// <summary>
         /// The shortcut keys CTRL+5.
         /// </summary>
         Ctrl5 = Keys.Control + Keys.D5,
 
-
         /// <summary>
         /// The shortcut keys CTRL+6.
         /// </summary>
         Ctrl6 = Keys.Control + Keys.D6,
-
 
         /// <summary>
         /// The shortcut keys CTRL+7.
         /// </summary>
         Ctrl7 = Keys.Control + Keys.D7,
 
-
         /// <summary>
         /// The shortcut keys CTRL+8.
         /// </summary>
         Ctrl8 = Keys.Control + Keys.D8,
-
 
         /// <summary>
         /// The shortcut keys CTRL+9.
         /// </summary>
         Ctrl9 = Keys.Control + Keys.D9,
 
-
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+0.
         /// </summary>
         CtrlShift0 = Keys.Control + Keys.Shift + Keys.D0,
-
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+1.
         /// </summary>
         CtrlShift1 = Keys.Control + Keys.Shift + Keys.D1,
 
-
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+2.
         /// </summary>
         CtrlShift2 = Keys.Control + Keys.Shift + Keys.D2,
-
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+3.
         /// </summary>
         CtrlShift3 = Keys.Control + Keys.Shift + Keys.D3,
 
-
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+4.
         /// </summary>
         CtrlShift4 = Keys.Control + Keys.Shift + Keys.D4,
-
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+5.
         /// </summary>
         CtrlShift5 = Keys.Control + Keys.Shift + Keys.D5,
 
-
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+6.
         /// </summary>
         CtrlShift6 = Keys.Control + Keys.Shift + Keys.D6,
-
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+7.
         /// </summary>
         CtrlShift7 = Keys.Control + Keys.Shift + Keys.D7,
 
-
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+8.
         /// </summary>
         CtrlShift8 = Keys.Control + Keys.Shift + Keys.D8,
-
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+9.

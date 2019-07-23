@@ -2,21 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms.ButtonInternal;
+using System.Windows.Forms.Internal;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Drawing2D;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms.VisualStyles;
-    using System.Windows.Forms.ButtonInternal;
-    using System.Globalization;
-
     /// <summary>
-    ///    <para>Identifies a button cell in the dataGridView.</para>
+    ///  Identifies a button cell in the dataGridView.
     /// </summary>
     public class DataGridViewButtonCell : DataGridViewCell
     {
@@ -205,7 +202,6 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle contentBounds = PaintPrivate(graphics,
@@ -258,7 +254,6 @@ namespace System.Windows.Forms
             {
                 return Rectangle.Empty;
             }
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -642,7 +637,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -721,7 +716,7 @@ namespace System.Windows.Forms
                         {
                             if (paint && DataGridViewCell.PaintContentBackground(paintParts))
                             {
-                                VisualStyles.PushButtonState pbState = VisualStyles.PushButtonState.Normal;
+                                PushButtonState pbState = VisualStyles.PushButtonState.Normal;
                                 if ((ButtonState & (ButtonState.Pushed | ButtonState.Checked)) != 0)
                                 {
                                     pbState = VisualStyles.PushButtonState.Pressed;
@@ -778,14 +773,14 @@ namespace System.Windows.Forms
                                         using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
                                         {
 
-                                            System.Windows.Forms.Internal.WindowsBrush windowsBrush;
+                                            WindowsBrush windowsBrush;
                                             if (colors.options.highContrast)
                                             {
-                                                windowsBrush = new System.Windows.Forms.Internal.WindowsSolidBrush(wg.DeviceContext, colors.buttonShadow);
+                                                windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.buttonShadow);
                                             }
                                             else
                                             {
-                                                windowsBrush = new System.Windows.Forms.Internal.WindowsSolidBrush(wg.DeviceContext, colors.lowHighlight);
+                                                windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.lowHighlight);
                                             }
                                             try
                                             {
@@ -812,7 +807,7 @@ namespace System.Windows.Forms
                                         using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
                                         {
                                             Color mouseOverBackColor = SystemColors.ControlDark;
-                                            using (System.Windows.Forms.Internal.WindowsBrush windowBrush = new System.Windows.Forms.Internal.WindowsSolidBrush(wg.DeviceContext, mouseOverBackColor))
+                                            using (WindowsBrush windowBrush = new WindowsSolidBrush(wg.DeviceContext, mouseOverBackColor))
                                             {
                                                 ButtonInternal.ButtonBaseAdapter.PaintButtonBackground(wg, valBounds, windowBrush);
                                             }
@@ -962,7 +957,6 @@ namespace System.Windows.Forms
                                                                                                                    DataGridView.RightToLeft);
                             options.everettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
-
 
                             ControlPaint.DrawFocusRectangle(g,
                                                             layout.focus,

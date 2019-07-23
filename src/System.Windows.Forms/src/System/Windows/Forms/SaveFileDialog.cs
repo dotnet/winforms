@@ -2,26 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.IO;
+
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.IO;
-    using System.Drawing;
-    using System.Diagnostics.CodeAnalysis;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para>
-    ///       Represents
-    ///       a common dialog box that allows the user to specify options for saving a
-    ///       file. This class cannot be inherited.
-    ///    </para>
+    ///  Represents
+    ///  a common dialog box that allows the user to specify options for saving a
+    ///  file. This class cannot be inherited.
     /// </summary>
     [
     Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign),
@@ -29,12 +18,9 @@ namespace System.Windows.Forms
     ]
     public sealed class SaveFileDialog : FileDialog
     {
-
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dialog box prompts the user for
-        ///       permission to create a file if the user specifies a file that does not exist.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the dialog box prompts the user for
+        ///  permission to create a file if the user specifies a file that does not exist.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -54,10 +40,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
-        ///       a file name that already exists.
-        ///    </para>
+        ///  Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
+        ///  a file name that already exists.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -77,12 +61,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Opens the file with read/write permission selected by the user.
-        ///    </para>
+        ///  Opens the file with read/write permission selected by the user.
         /// </summary>
-
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public Stream OpenFile()
         {
             string filename = FileNames[0];
@@ -95,13 +75,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
-        ///       when a file is about to be created. This method is
-        ///       invoked when the CreatePrompt property is true and the specified file
-        ///       does not exist. A return value of false prevents the dialog from
-        ///       closing.
-        ///    </para>
+        ///  Prompts the user with a <see cref='MessageBox'/>
+        ///  when a file is about to be created. This method is
+        ///  invoked when the CreatePrompt property is true and the specified file
+        ///  does not exist. A return value of false prevents the dialog from
+        ///  closing.
         /// </summary>
         private bool PromptFileCreate(string fileName)
         {
@@ -110,13 +88,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Prompts the user when a file is about to be overwritten. This method is
-        ///       invoked when the "overwritePrompt" property is true and the specified
-        ///       file already exists. A return value of false prevents the dialog from
-        ///       closing.
-        ///       
-        ///    </para>
+        ///  Prompts the user when a file is about to be overwritten. This method is
+        ///  invoked when the "overwritePrompt" property is true and the specified
+        ///  file already exists. A return value of false prevents the dialog from
+        ///  closing.
         /// </summary>
         private bool PromptFileOverwrite(string fileName)
         {
@@ -155,10 +130,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Resets all dialog box options to their default
-        ///       values.
-        ///    </para>
+        ///  Resets all dialog box options to their default
+        ///  values.
         /// </summary>
         public override void Reset()
         {
@@ -166,8 +139,6 @@ namespace System.Windows.Forms
             SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
         }
 
-        /// <summary>
-        /// </summary>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);

@@ -4,14 +4,11 @@
 
 namespace System.Windows.Forms
 {
-
-
     /// <summary>
-    ///      Just returns false for IncludeNoneAsStandardValue
+    ///  Just returns false for IncludeNoneAsStandardValue
     /// </summary>
     internal sealed class NoneExcludedImageIndexConverter : ImageIndexConverter
     {
-
         protected override bool IncludeNoneAsStandardValue
         {
             get

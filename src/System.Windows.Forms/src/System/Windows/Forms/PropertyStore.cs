@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -527,7 +526,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Removes the given key from the array
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void RemoveObject(int key)
         {
             short entryKey = SplitKey(key, out short element);

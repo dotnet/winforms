@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.ComponentModel.Design
@@ -106,14 +105,13 @@ namespace System.ComponentModel.Design
                 {
                     return _loadErrors;
                 }
-                return new object[0];
+                return Array.Empty<object>();
             }
         }
 
         /// <summary>
         /// Returns true if DTEL (WSOD) is currently loading.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtel", Justification = "DTEL - is an abbreviation for Design Time Error Loader")]
         public bool DtelLoading
         {
             get;
@@ -145,7 +143,6 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                Exception ex;
                 if (_host == null)
                 {
                     throw new ObjectDisposedException(ToString());
@@ -159,47 +156,42 @@ namespace System.ComponentModel.Design
                     {
                         foreach (object o in _loadErrors)
                         {
-                            ex = o as Exception;
-                            if (ex != null)
+                            if (o is Exception ex)
                             {
                                 throw new InvalidOperationException(ex.Message, ex);
                             }
-                            else
+                            else if (o != null)
                             {
                                 throw new InvalidOperationException(o.ToString());
                             }
                         }
                     }
                     // loader didn't provide any help.  Just generally fail.
-                    ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
+                    throw new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
                         HelpLink = SR.DesignSurfaceNoRootComponent
                     };
-                    throw ex;
                 }
 
                 if (!(((IDesignerHost)_host).GetDesigner(rootComponent) is IRootDesigner rootDesigner))
                 {
-                    ex = new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
+                    throw new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                     {
                         HelpLink = SR.DesignSurfaceDesignerNotLoaded
                     };
-                    throw ex;
                 }
 
                 ViewTechnology[] designerViews = rootDesigner.SupportedTechnologies;
-                // We just feed the available technologies back into the root designer. ViewTechnology itself is outdated.
-                foreach (ViewTechnology availableTech in designerViews)
+                if (designerViews == null || designerViews.Length == 0)
                 {
-                    return rootDesigner.GetView(availableTech);
+                    throw new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
+                    {
+                        HelpLink = SR.DesignSurfaceNoSupportedTechnology
+                    };
                 }
 
-                // We are out of luck here.  Throw.
-                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
-                {
-                    HelpLink = SR.DesignSurfaceNoSupportedTechnology
-                };
-                throw ex;
+                // We just feed the available technologies back into the root designer. ViewTechnology itself is outdated.
+                return rootDesigner.GetView(designerViews[0]);
             }
         }
 
@@ -325,10 +317,10 @@ namespace System.ComponentModel.Design
 
             // Locate an appropriate constructor for IComponents.
             object instance = null;
-            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(new Type[0]);
+            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
             if (ctor != null)
             {
-                instance = TypeDescriptor.CreateInstance(this, type, new Type[0], new object[0]);
+                instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
             }
             else
             {
@@ -385,8 +377,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Protected override of Dispose that allows for cleanup.
         /// </summary>
-        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -484,13 +475,8 @@ namespace System.ComponentModel.Design
                 return new TypeDescriptorFilterService();
             }
 
-            if (serviceType == typeof(IReferenceService))
-            {
-                return new ReferenceService(container);
-            }
-
-            Debug.Fail("Demand created service not supported: " + serviceType.Name);
-            return null;
+            Debug.Assert(serviceType == typeof(IReferenceService), "Demand created service not supported: " + serviceType.Name);
+            return new ReferenceService(container);
         }
 
         /// <summary>
@@ -527,7 +513,6 @@ namespace System.ComponentModel.Design
         /// Called when the loading process has completed.  This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load.  It can also be used to create a view for this design surface.  If code in this event handler or override throws an exception,
         /// the designer will be unloaded.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoaded(LoadedEventArgs e)
         {
             Loaded?.Invoke(this, e);
@@ -544,7 +529,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when the loading process is about to begin.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoading(EventArgs e)
         {
             Loading?.Invoke(this, e);
@@ -561,7 +545,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when a designer has finished unloading a document.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloaded(EventArgs e)
         {
             Unloaded?.Invoke(this, e);
@@ -579,7 +562,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloading(EventArgs e)
         {
             Unloading?.Invoke(this, e);
@@ -588,7 +570,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnViewActivate(EventArgs e)
         {
             ViewActivated?.Invoke(this, e);
@@ -600,36 +581,16 @@ namespace System.ComponentModel.Design
         private class DefaultDesignerLoader : DesignerLoader
         {
             private readonly Type _type;
-            private readonly ICollection _components;
 
             public DefaultDesignerLoader(Type type)
             {
                 _type = type;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public DefaultDesignerLoader(ICollection components)
-            {
-                _components = components;
-            }
-
             public override void BeginLoad(IDesignerLoaderHost loaderHost)
             {
-                string typeName = null;
-                if (_type != null)
-                {
-                    loaderHost.CreateComponent(_type);
-                    typeName = _type.FullName;
-                }
-                else
-                {
-                    foreach (IComponent component in _components)
-                    {
-                        loaderHost.Container.Add(component);
-                    }
-                }
-
-                loaderHost.EndLoad(typeName, true, null);
+                loaderHost.CreateComponent(_type);
+                loaderHost.EndLoad(_type.FullName, true, null);
             }
             public override void Dispose()
             {

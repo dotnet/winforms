@@ -2,38 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
 
 namespace System.Windows.Forms
 {
-    using System.Text;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Drawing.Design;
-    using System.Collections;
-    using System.Globalization;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
     /// <summary>
-    ///    <para>
-    ///       Implements a node of a <see cref='System.Windows.Forms.TreeView'/>.
-    ///
-    ///    </para>
+    ///  Implements a node of a <see cref='Forms.TreeView'/>.
     /// </summary>
     [
-    TypeConverterAttribute(typeof(TreeNodeConverter)), Serializable,
+    TypeConverter(typeof(TreeNodeConverter)), Serializable,
     DefaultProperty(nameof(Text)),
-    SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")
     ]
     public class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
@@ -59,7 +45,7 @@ namespace System.Windows.Forms
         //private bool isChecked = false;
         private const int TREENODESTATE_isChecked = 0x00000001;
 
-        private System.Collections.Specialized.BitVector32 treeNodeState;
+        private Collections.Specialized.BitVector32 treeNodeState;
 
         private TreeNodeImageIndexer imageIndexer;
         private TreeNodeImageIndexer selectedImageIndexer;
@@ -114,8 +100,6 @@ namespace System.Windows.Forms
 
         }
 
-
-
         internal TreeNodeImageIndexer ImageIndexer
         {
             get
@@ -157,7 +141,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         internal int index;                  // our index into our parents child array
         internal int childCount;
         internal TreeNode[] children;
@@ -174,11 +157,11 @@ namespace System.Windows.Forms
                              | NativeMethods.TVIF_SELECTEDIMAGE;
 
         /// <summary>
-        ///     Creates a TreeNode object.
+        ///  Creates a TreeNode object.
         /// </summary>
         public TreeNode()
         {
-            treeNodeState = new System.Collections.Specialized.BitVector32();
+            treeNodeState = new Collections.Specialized.BitVector32();
         }
 
         internal TreeNode(TreeView treeView) : this()
@@ -187,7 +170,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a TreeNode object.
+        ///  Creates a TreeNode object.
         /// </summary>
         public TreeNode(string text) : this()
         {
@@ -195,7 +178,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a TreeNode object.
+        ///  Creates a TreeNode object.
         /// </summary>
         public TreeNode(string text, TreeNode[] children) : this()
         {
@@ -204,7 +187,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a TreeNode object.
+        ///  Creates a TreeNode object.
         /// </summary>
         public TreeNode(string text, int imageIndex, int selectedImageIndex) : this()
         {
@@ -214,7 +197,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Creates a TreeNode object.
+        ///  Creates a TreeNode object.
         /// </summary>
         public TreeNode(string text, int imageIndex, int selectedImageIndex, TreeNode[] children) : this()
         {
@@ -227,21 +210,15 @@ namespace System.Windows.Forms
         /**
          * Constructor used in deserialization
          */
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Changing Deserialize to be non-virtual
-                                                                                                    // would be a breaking change.
-        ]
         protected TreeNode(SerializationInfo serializationInfo, StreamingContext context) : this()
         {
             Deserialize(serializationInfo, context);
         }
 
         /// <summary>
-        ///     The background color of this node.
-        ///     If null, the color used will be the default color from the TreeView control that this
-        ///     node is attached to
+        ///  The background color of this node.
+        ///  If null, the color used will be the default color from the TreeView control that this
+        ///  node is attached to
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -295,8 +272,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The bounding rectangle for the node (text area only). The coordinates
-        ///     are relative to the upper left corner of the TreeView control.
+        ///  The bounding rectangle for the node (text area only). The coordinates
+        ///  are relative to the upper left corner of the TreeView control.
         /// </summary>
         [Browsable(false)]
         public Rectangle Bounds
@@ -323,8 +300,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The bounding rectangle for the node (full row). The coordinates
-        ///     are relative to the upper left corner of the TreeView control.
+        ///  The bounding rectangle for the node (full row). The coordinates
+        ///  are relative to the upper left corner of the TreeView control.
         /// </summary>
         internal Rectangle RowBounds
         {
@@ -392,12 +369,11 @@ namespace System.Windows.Forms
                 item.state |= value ? CHECKED : UNCHECKED;
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
 
-
             }
         }
 
         /// <summary>	
-        ///     Indicates whether the node's checkbox is checked.
+        ///  Indicates whether the node's checkbox is checked.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -409,7 +385,7 @@ namespace System.Windows.Forms
             get
             {
 #if DEBUG
-                if (handle != IntPtr.Zero)
+                if (handle != IntPtr.Zero && !treeView.IsDisposed)
                 {
                     NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
                     {
@@ -444,8 +420,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The contextMenu associated with this tree node. The contextMenu
-        ///     will be shown when the user right clicks the mouse on the control.
+        ///  The contextMenu associated with this tree node. The contextMenu
+        ///  will be shown when the user right clicks the mouse on the control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -464,8 +440,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -484,7 +458,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The first child node of this node.
+        ///  The first child node of this node.
         /// </summary>
         [Browsable(false)]
         public TreeNode FirstNode
@@ -514,9 +488,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The foreground color of this node.
-        ///     If null, the color used will be the default color from the TreeView control that this
-        ///     node is attached to
+        ///  The foreground color of this node.
+        ///  If null, the color used will be the default color from the TreeView control that this
+        ///  node is attached to
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -569,9 +543,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the full path of this node.
-        ///     The path consists of the labels of each of the nodes from the root to this node,
-        ///     each separated by the pathSeperator.
+        ///  Returns the full path of this node.
+        ///  The path consists of the labels of each of the nodes from the root to this node,
+        ///  each separated by the pathSeperator.
         /// </summary>
         [Browsable(false)]
         public string FullPath
@@ -593,15 +567,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The HTREEITEM handle associated with this node.  If the handle
-        ///     has not yet been created, this will force handle creation.
+        ///  The HTREEITEM handle associated with this node.  If the handle
+        ///  has not yet been created, this will force handle creation.
         /// </summary>
         [Browsable(false)]
         public IntPtr Handle
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (handle == IntPtr.Zero && TreeView != null)
                 {
                     TreeView.CreateControl(); // force handle creation
                 }
@@ -610,14 +584,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The index of the image to be displayed when the node is in the unselected state.
-        ///     The image is contained in the ImageList referenced by the imageList property.
+        ///  The index of the image to be displayed when the node is in the unselected state.
+        ///  The image is contained in the ImageList referenced by the imageList property.
         /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TreeNodeImageIndexDescr)),
-        TypeConverterAttribute(typeof(TreeViewImageIndexConverter)),
+        TypeConverter(typeof(TreeViewImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
         DefaultValue(-1),
@@ -633,16 +607,15 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     The index of the image to be displayed when the node is in the unselected state.
-        ///     The image is contained in the ImageList referenced by the imageList property.
+        ///  The index of the image to be displayed when the node is in the unselected state.
+        ///  The image is contained in the ImageList referenced by the imageList property.
         /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TreeNodeImageKeyDescr)),
-        TypeConverterAttribute(typeof(TreeViewImageKeyConverter)),
+        TypeConverter(typeof(TreeViewImageKeyConverter)),
         DefaultValue(""),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -658,9 +631,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Returns the position of this node in relation to its siblings
+        ///  Returns the position of this node in relation to its siblings
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -672,7 +644,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether this node is being edited by the user.
+        ///  Specifies whether this node is being edited by the user.
         /// </summary>
         [Browsable(false)]
         public bool IsEditing
@@ -691,7 +663,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether this node is in the expanded state.
+        ///  Specifies whether this node is in the expanded state.
         /// </summary>
         [Browsable(false)]
         public bool IsExpanded
@@ -707,7 +679,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether this node is in the selected state.
+        ///  Specifies whether this node is in the selected state.
         /// </summary>
         [Browsable(false)]
         public bool IsSelected
@@ -724,7 +696,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether this node is visible.
+        ///  Specifies whether this node is visible.
         /// </summary>
         [Browsable(false)]
         public bool IsVisible
@@ -757,7 +729,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The last child node of this node.
+        ///  The last child node of this node.
         /// </summary>
         [Browsable(false)]
         public TreeNode LastNode
@@ -773,9 +745,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     This denotes the depth of nesting of the treenode.
+        ///  This denotes the depth of nesting of the treenode.
         /// </summary>
         [Browsable(false)]
         public int Level
@@ -793,17 +764,15 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         /// <summary>
-        ///     The next sibling node.
+        ///  The next sibling node.
         /// </summary>
         [Browsable(false)]
         public TreeNode NextNode
         {
             get
             {
-                if (index + 1 < parent.Nodes.Count)
+                if (parent != null && index + 1 < parent.Nodes.Count)
                 {
                     return parent.Nodes[index + 1];
                 }
@@ -815,8 +784,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The next visible node.  It may be a child, sibling,
-        ///     or a node from another branch.
+        ///  The next visible node.  It may be a child, sibling,
+        ///  or a node from another branch.
         /// </summary>
         [Browsable(false)]
         public TreeNode NextVisibleNode
@@ -849,11 +818,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The font that will be used to draw this node
-        ///     If null, the font used will be the default font from the TreeView control that this
-        ///     node is attached to.
-        ///     NOTE: If the node font is larger than the default font from the TreeView control, then
-        ///     the node will be clipped.
+        ///  The font that will be used to draw this node
+        ///  If null, the font used will be the default font from the TreeView control that this
+        ///  node is attached to.
+        ///  NOTE: If the node font is larger than the default font from the TreeView control, then
+        ///  the node will be clipped.
         /// </summary>
         [
         Localizable(true),
@@ -924,7 +893,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Retrieves parent node.
+        ///  Retrieves parent node.
         /// </summary>
         [Browsable(false)]
         public TreeNode Parent
@@ -944,13 +913,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The previous sibling node.
+        ///  The previous sibling node.
         /// </summary>
         [Browsable(false)]
         public TreeNode PrevNode
         {
             get
             {
+                if (parent == null)
+                {
+                    return null;
+                }
+
                 //fixedIndex is used for perf. optimization in case of adding big ranges of nodes
                 int currentInd = index;
                 int fixedInd = parent.Nodes.FixedIndex;
@@ -972,8 +946,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The next visible node.  It may be a parent, sibling,
-        ///     or a node from another branch.
+        ///  The next visible node.  It may be a parent, sibling,
+        ///  or a node from another branch.
         /// </summary>
         [Browsable(false)]
         public TreeNode PrevVisibleNode
@@ -1006,14 +980,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The index of the image displayed when the node is in the selected state.
-        ///     The image is contained in the ImageList referenced by the imageList property.
+        ///  The index of the image displayed when the node is in the selected state.
+        ///  The image is contained in the ImageList referenced by the imageList property.
         /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TreeNodeSelectedImageIndexDescr)),
-        TypeConverterAttribute(typeof(TreeViewImageIndexConverter)),
+        TypeConverter(typeof(TreeViewImageIndexConverter)),
         DefaultValue(-1),
         RefreshProperties(RefreshProperties.Repaint),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -1033,14 +1007,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The index of the image displayed when the node is in the selected state.
-        ///     The image is contained in the ImageList referenced by the imageList property.
+        ///  The index of the image displayed when the node is in the selected state.
+        ///  The image is contained in the ImageList referenced by the imageList property.
         /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TreeNodeSelectedImageKeyDescr)),
-        TypeConverterAttribute(typeof(TreeViewImageKeyConverter)),
+        TypeConverter(typeof(TreeViewImageKeyConverter)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -1060,7 +1034,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Retrieve state bits for this node
+        ///  Retrieve state bits for this node
         /// </summary>
         internal int State
         {
@@ -1087,16 +1061,14 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         /// <summary>
-        ///     The key of the StateImage that the user want to display.
+        ///  The key of the StateImage that the user want to display.
         /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TreeNodeStateImageKeyDescr)),
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
+        TypeConverter(typeof(ImageKeyConverter)),
         DefaultValue(""),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -1123,7 +1095,7 @@ namespace System.Windows.Forms
 
         [
         Localizable(true),
-        TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
+        TypeConverter(typeof(NoneExcludedImageIndexConverter)),
         DefaultValue(-1),
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TreeNodeStateImageIndexDescr)),
@@ -1172,7 +1144,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The label text for the tree node
+        ///  The label text for the tree node
         /// </summary>
         [
         Localizable(true),
@@ -1192,9 +1164,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     The ToolTip text that will be displayed when the mouse hovers over the node.
+        ///  The ToolTip text that will be displayed when the mouse hovers over the node.
         /// </summary>
         [
         Localizable(false),
@@ -1215,7 +1186,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The name for the tree node - useful for indexing.
+        ///  The name for the tree node - useful for indexing.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1233,11 +1204,8 @@ namespace System.Windows.Forms
             }
         }
 
-
-
-
         /// <summary>
-        ///     Return the TreeView control this node belongs to.
+        ///  Return the TreeView control this node belongs to.
         /// </summary>
         [Browsable(false)]
         public TreeView TreeView
@@ -1254,7 +1222,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Adds a new child node at the appropriate sorted position
+        ///  Adds a new child node at the appropriate sorted position
         /// </summary>
         internal int AddSorted(TreeNode node)
         {
@@ -1319,7 +1287,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns a TreeNode object for the given HTREEITEM handle
+        ///  Returns a TreeNode object for the given HTREEITEM handle
         /// </summary>
         public static TreeNode FromHandle(TreeView tree, IntPtr handle)
         {
@@ -1328,7 +1296,7 @@ namespace System.Windows.Forms
 
         private void SortChildren(TreeView parentTreeView)
         {
-            // 
+            //
             if (childCount > 0)
             {
                 TreeNode[] newOrder = new TreeNode[childCount];
@@ -1400,10 +1368,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Initiate editing of the node's label.
-        ///     Only effective if LabelEdit property is true.
+        ///  Initiate editing of the node's label.
+        ///  Only effective if LabelEdit property is true.
         /// </summary>
         public void BeginEdit()
         {
@@ -1425,20 +1392,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Called by the tree node collection to clear all nodes.  We optimize here if
-        ///     this is the root node.
+        ///  Called by the tree node collection to clear all nodes.  We optimize here if
+        ///  this is the root node.
         /// </summary>
         internal void Clear()
         {
-
-
             // This is a node that is a child of some other node.  We have
             // to selectively remove children here.
             //
             bool isBulkOperation = false;
             TreeView tv = TreeView;
-
-
 
             try
             {
@@ -1460,7 +1423,6 @@ namespace System.Windows.Forms
                 }
                 children = null;
 
-
                 if (tv != null && isBulkOperation)
                 {
                     tv.EndUpdate();
@@ -1477,7 +1439,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Clone the entire subtree rooted at this node.
+        ///  Clone the entire subtree rooted at this node.
         /// </summary>
         public virtual object Clone()
         {
@@ -1590,7 +1552,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Collapse the node ignoring its children while collapsing the parent
+        ///  Collapse the node ignoring its children while collapsing the parent
         /// </summary>
         public void Collapse(bool ignoreChildren)
         {
@@ -1598,7 +1560,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Collapse the node.
+        ///  Collapse the node.
         /// </summary>
         public void Collapse()
         {
@@ -1606,7 +1568,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Windows TreeView doesn't send the proper notifications on collapse, so we do it manually.
+        ///  Windows TreeView doesn't send the proper notifications on collapse, so we do it manually.
         /// </summary>
         private void DoCollapse(TreeView tv)
         {
@@ -1624,7 +1586,6 @@ namespace System.Windows.Forms
 
         protected virtual void Deserialize(SerializationInfo serializationInfo, StreamingContext context)
         {
-
             int childCount = 0;
             int imageIndex = -1;
             string imageKey = null;
@@ -1725,7 +1686,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Terminate the editing of any tree view item's label.
+        ///  Terminate the editing of any tree view item's label.
         /// </summary>
         public void EndEdit(bool cancel)
         {
@@ -1738,7 +1699,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Makes sure there is enough room to add n children
+        ///  Makes sure there is enough room to add n children
         /// </summary>
         internal void EnsureCapacity(int num)
         {
@@ -1766,7 +1727,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Ensures the the node's StateImageIndex value is properly set.
+        ///  Ensures the the node's StateImageIndex value is properly set.
         /// </summary>
         private void EnsureStateImageValue()
         {
@@ -1791,8 +1752,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Ensure that the node is visible, expanding nodes and scrolling the
-        ///     TreeView control as necessary.
+        ///  Ensure that the node is visible, expanding nodes and scrolling the
+        ///  TreeView control as necessary.
         /// </summary>
         public void EnsureVisible()
         {
@@ -1805,7 +1766,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Expand the node.
+        ///  Expand the node.
         /// </summary>
         public void Expand()
         {
@@ -1824,9 +1785,8 @@ namespace System.Windows.Forms
             expandOnRealization = false;
         }
 
-
         /// <summary>
-        ///     Expand the node.
+        ///  Expand the node.
         /// </summary>
         public void ExpandAll()
         {
@@ -1838,9 +1798,9 @@ namespace System.Windows.Forms
 
         }
         /// <summary>
-        ///     Locate this tree node's containing tree view control by scanning
-        ///     up to the virtual root, whose treeView pointer we know to be
-        ///     correct
+        ///  Locate this tree node's containing tree view control by scanning
+        ///  up to the virtual root, whose treeView pointer we know to be
+        ///  correct
         /// </summary>
         internal TreeView FindTreeView()
         {
@@ -1854,7 +1814,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Helper function for getFullPath().
+        ///  Helper function for getFullPath().
         /// </summary>
         private void GetFullPath(StringBuilder path, string pathSeparator)
         {
@@ -1871,7 +1831,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns number of child nodes.
+        ///  Returns number of child nodes.
         /// </summary>
         public int GetNodeCount(bool includeSubTrees)
         {
@@ -1887,7 +1847,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Check for any circular reference in the ancestors chain.
+        ///  Check for any circular reference in the ancestors chain.
         /// </summary>
         internal void CheckParentingCycle(TreeNode candidateToAdd)
         {
@@ -1904,7 +1864,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Helper function to add node at a given index after all validation has been done
+        ///  Helper function to add node at a given index after all validation has been done
         /// </summary>
         internal void InsertNodeAt(int index, TreeNode node)
         {
@@ -1926,7 +1886,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Invalidates the treeview control that is hosting this node
+        ///  Invalidates the treeview control that is hosting this node
         /// </summary>
         private void InvalidateHostTree()
         {
@@ -1936,8 +1896,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal void Realize(bool insertFirst)
         {
             // Debug.assert(handle == 0, "Node already realized");
@@ -1992,7 +1950,6 @@ namespace System.Windows.Forms
                     tvis.item_state = ((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
                 }
 
-
                 if (tvis.item_iImage >= 0)
                 {
                     tvis.item_mask |= NativeMethods.TVIF_IMAGE;
@@ -2036,7 +1993,7 @@ namespace System.Windows.Forms
                 if (parent.nodesCleared && (insertFirst || prev == null) && !tv.Scrollable)
                 {
                     // We need to Redraw the TreeView ...
-                    // If and only If we are not scrollable ... 
+                    // If and only If we are not scrollable ...
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
@@ -2067,22 +2024,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Remove this node from the TreeView control.  Child nodes are also removed from the
-        ///     TreeView, but are still attached to this node.
+        ///  Remove this node from the TreeView control.  Child nodes are also removed from the
+        ///  TreeView, but are still attached to this node.
         /// </summary>
         public void Remove()
         {
             Remove(true);
         }
 
-        /// <summary>
-        /// </summary>
         internal void Remove(bool notify)
         {
             bool expanded = IsExpanded;
 
             // unlink our children
-            // 
+            //
 
             for (int i = 0; i < childCount; i++)
             {
@@ -2125,7 +2080,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Removes the propBag object if it's now devoid of useful data
+        ///  Removes the propBag object if it's now devoid of useful data
         /// </summary>
         private void RemovePropBagIfEmpty()
         {
@@ -2167,11 +2122,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Saves this TreeNode object to the given data stream.
+        ///  Saves this TreeNode object to the given data stream.
         /// </summary>
         /// Review: Changing this would break VB users. so suppresing this message.
-        /// 
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        ///
         protected virtual void Serialize(SerializationInfo si, StreamingContext context)
         {
             if (propBag != null)
@@ -2214,8 +2168,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     Toggle the state of the node. Expand if collapsed or collapse if
-        ///     expanded.
+        ///  Toggle the state of the node. Expand if collapsed or collapse if
+        ///  expanded.
         /// </summary>
         public void Toggle()
         {
@@ -2233,9 +2187,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Returns the label text for the tree node
+        ///  Returns the label text for the tree node
         /// </summary>
         public override string ToString()
         {
@@ -2243,7 +2196,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Tell the TreeView to refresh this node
+        ///  Tell the TreeView to refresh this node
         /// </summary>
         private void UpdateNode(int mask)
         {

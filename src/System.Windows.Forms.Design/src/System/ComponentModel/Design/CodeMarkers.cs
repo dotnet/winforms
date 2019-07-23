@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.ComponentModel.Design
 {
@@ -16,18 +15,15 @@ namespace System.ComponentModel.Design
 
         static class NativeMethods
         {
-
             [DllImport(TestDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void TestDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] aUserParams, int cbParams);
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             [DllImport(TestDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void TestDllPerfCodeMarkerString(int nTimerID, [MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] string aUserParams, int cbParams);
 
             [DllImport(ProductDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void ProductDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] aUserParams, int cbParams);
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             [DllImport(ProductDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void ProductDllPerfCodeMarkerString(int nTimerID, [MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] string aUserParams, int cbParams);
 
@@ -88,7 +84,6 @@ namespace System.ComponentModel.Design
         // And also match toolsrc\Telescope\Batch\PerfWatsonService.Reducer\SessionProcessors\ScenarioProcessor.cs
         private static readonly byte[] s_correlationMarkBytes = new Guid("AA10EEA0-F6AD-4E21-8865-C427DAE8EDB9").ToByteArray();
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public bool ShouldUseTestDll
         {
             get
@@ -99,7 +94,7 @@ namespace System.ComponentModel.Design
                     {
                         // this code can either be used in an InitPerf (loads CodeMarker DLL) or AttachPerf context (CodeMarker DLL already loaded)
                         // in the InitPerf context we have a regroot and should check for the test DLL registration
-                        // in the AttachPerf context we should see which module is already loaded 
+                        // in the AttachPerf context we should see which module is already loaded
                         if (_regroot == null)
                         {
                             _shouldUseTestDll = NativeMethods.GetModuleHandle(ProductDllName) == IntPtr.Zero;
@@ -132,7 +127,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         /// <param name="nTimerID">The code marker event ID</param>
         /// <returns>true if the code marker was successfully sent, false if code markers are not enabled or an error occurred.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool CodeMarker(int nTimerID)
         {
             if (!IsEnabled)
@@ -168,7 +162,6 @@ namespace System.ComponentModel.Design
         /// <param name="aBuff">User data buffer. May not be null.</param>
         /// <returns>true if the code marker was successfully sent, false if code markers are not enabled or an error occurred.</returns>
         /// <exception cref="ArgumentNullException">aBuff was null</exception>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool CodeMarkerEx(int nTimerID, byte[] aBuff)
         {
             if (!IsEnabled)
@@ -208,12 +201,10 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Used by ManagedPerfTrack.cs to report errors accessing the DLL.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void SetStateDLLException()
         {
             _state = State.DisabledDueToDllImportException;
         }
-
 
         /// <summary>
         /// Sends a code marker event with additional Guid user data
@@ -221,7 +212,6 @@ namespace System.ComponentModel.Design
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="guidData">The additional Guid to include with the event</param>
         /// <returns>true if the code marker was successfully sent, false if code markers are not enabled or an error occurred.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool CodeMarkerEx(int nTimerID, Guid guidData)
         {
             return CodeMarkerEx(nTimerID, guidData.ToByteArray());
@@ -233,7 +223,6 @@ namespace System.ComponentModel.Design
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="stringData">The additional String to include with the event</param>
         /// <returns>true if the code marker was successfully sent, false if code markers are not enabled or an error occurred.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool CodeMarkerEx(int nTimerID, string stringData)
         {
             if (!IsEnabled)
@@ -274,7 +263,6 @@ namespace System.ComponentModel.Design
         /// Converts a string into a byte buffer including a zero terminator (needed for proper ETW message formatting)
         /// </summary>
         /// <param name="stringData">String to be converted to bytes</param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal static byte[] StringToBytesZeroTerminated(string stringData)
         {
             Text.Encoding encoding = Text.Encoding.Unicode;
@@ -284,7 +272,6 @@ namespace System.ComponentModel.Design
             return data;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static byte[] AttachCorrelationId(byte[] buffer, Guid correlationId)
         {
             if (correlationId == Guid.Empty)
@@ -310,7 +297,6 @@ namespace System.ComponentModel.Design
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="uintData">The additional DWORD to include with the event</param>
         /// <returns>true if the code marker was successfully sent, false if code markers are not enabled or an error occurred.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool CodeMarkerEx(int nTimerID, uint uintData)
         {
             return CodeMarkerEx(nTimerID, BitConverter.GetBytes(uintData));
@@ -322,7 +308,6 @@ namespace System.ComponentModel.Design
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="ulongData">The additional QWORD to include with the event</param>
         /// <returns>true if the code marker was successfully sent, false if code markers are not enabled or an error occurred.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool CodeMarkerEx(int nTimerID, ulong ulongData)
         {
             return CodeMarkerEx(nTimerID, BitConverter.GetBytes(ulongData));
@@ -373,9 +358,8 @@ namespace System.ComponentModel.Design
         /// successfully once.
         /// false indicates that either CodeMarkers are not enabled in the registry, or that the CodeMarkers transport
         /// DLL failed to load.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool InitPerformanceDll(int iApp, string strRegRoot)
-        {            
+        {
             return InitPerformanceDll(iApp, strRegRoot, RegistryView.Default);
         }
 
@@ -394,7 +378,7 @@ namespace System.ComponentModel.Design
         /// false indicates that either CodeMarkers are not enabled in the registry, or that the CodeMarkers transport
         /// DLL failed to load.</returns>
         public bool InitPerformanceDll(int iApp, string strRegRoot, RegistryView registryView)
-        {           
+        {
             // Prevent multiple initializations.
             if (IsEnabled)
             {
@@ -405,7 +389,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(strRegRoot));
             }
-            
+
             this.regroot = strRegRoot;
             this.registryView = registryView;
 
@@ -419,11 +403,11 @@ namespace System.ComponentModel.Design
                 {
                     NativeMethods.ProductDllInitPerf(iApp);
                 }
-                
+
                 this.state = State.Enabled;
-                
+
                 // Add an ATOM so that other CodeMarker enabled code in this process
-                // knows that CodeMarkers are enabled 
+                // knows that CodeMarkers are enabled
                 NativeMethods.AddAtom(AtomName);
             }
             // catch BadImageFormatException to handle 64-bit process loading 32-bit CodeMarker DLL (e.g., msbuild.exe)
@@ -440,7 +424,7 @@ namespace System.ComponentModel.Design
             return true;
         }
 
-        
+
         // Opposite of InitPerformanceDLL. Call it when your app does not need the code markers dll.
         public void UninitializePerformanceDLL(int iApp)
         {
@@ -480,7 +464,7 @@ namespace System.ComponentModel.Design
             {
                 // Swallow exception
             }
-        }        
+        }
 #endif //Codemarkers_IncludeAppEnum
     }
 
@@ -493,7 +477,6 @@ namespace System.ComponentModel.Design
         private int _end;
         private byte[] _buffer;
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal CodeMarkerStartEnd(int begin, int end, bool correlated = false)
         {
             Debug.Assert(end != default);
@@ -536,7 +519,6 @@ namespace System.ComponentModel.Design
         private int _end;
         private byte[] _aBuff;
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal CodeMarkerExStartEnd(int begin, int end, byte[] aBuff, bool correlated = false)
         {
             Debug.Assert(end != default);
@@ -549,28 +531,24 @@ namespace System.ComponentModel.Design
         }
 
         // Specialization to use Guids for the code marker data
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal CodeMarkerExStartEnd(int begin, int end, Guid guidData, bool correlated = false)
             : this(begin, end, guidData.ToByteArray(), correlated)
         {
         }
 
         // Specialization for string
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal CodeMarkerExStartEnd(int begin, int end, string stringData, bool correlated = false)
             : this(begin, end, CodeMarkers.StringToBytesZeroTerminated(stringData), correlated)
         {
         }
 
         // Specialization for uint
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal CodeMarkerExStartEnd(int begin, int end, uint uintData, bool correlated = false)
             : this(begin, end, BitConverter.GetBytes(uintData), correlated)
         {
         }
 
         // Specialization for ulong
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal CodeMarkerExStartEnd(int begin, int end, ulong ulongData, bool correlated = false)
             : this(begin, end, BitConverter.GetBytes(ulongData), correlated)
         {

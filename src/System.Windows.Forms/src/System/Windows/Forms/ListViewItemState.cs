@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Gives state information about a ListView item/sub-item. Used with owner draw. 
+    /// Gives state information about a ListView item/sub-item. Used with owner draw.
     /// </summary>
     [Flags]
     public enum ListViewItemStates

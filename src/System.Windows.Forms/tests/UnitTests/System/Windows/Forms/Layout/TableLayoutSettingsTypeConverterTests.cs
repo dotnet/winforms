@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Layout.Tests
                 var mockDescriptor = new Mock<ICustomTypeDescriptor>(MockBehavior.Strict);
                 mockDescriptor
                     .Setup(c => c.GetProperties())
-                    .Returns(new PropertyDescriptorCollection(new PropertyDescriptor[0]));
+                    .Returns(new PropertyDescriptorCollection(Array.Empty<PropertyDescriptor>()));
                 return mockDescriptor.Object;
             }
         }

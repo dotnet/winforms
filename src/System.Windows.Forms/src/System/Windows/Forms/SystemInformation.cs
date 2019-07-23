@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
@@ -19,8 +18,6 @@ namespace System.Windows.Forms
         // Figure out if all the multimon stuff is supported on the OS
         private static bool s_checkMultiMonitorSupport;
         private static bool s_multiMonitorSupport;
-        private static bool s_checkNativeMouseWheelSupport;
-        private static bool s_nativeMouseWheelSupport = true;
         private static bool s_highContrast;
         private static bool s_systemEventsAttached;
         private static bool s_systemEventsDirty = true;
@@ -33,17 +30,10 @@ namespace System.Windows.Forms
         private const int DefaultMouseWheelScrollLines = 3;
 
         /// <summary>
-        /// Gets a value indicating whether the user has enabled full window drag.
+        ///  Gets a value indicating whether the user has enabled full window drag.
         /// </summary>
         public static bool DragFullWindows
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDRAGFULLWINDOWS, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETDRAGFULLWINDOWS);
 
         /// <summary>
         /// Gets a value indicating whether the user has selected to run in high contrast.
@@ -55,22 +45,10 @@ namespace System.Windows.Forms
                 EnsureSystemEvents();
                 if (s_systemEventsDirty)
                 {
-                    var data = new NativeMethods.HIGHCONTRAST_I
-                    {
-                        cbSize = Marshal.SizeOf<NativeMethods.HIGHCONTRAST_I>(),
-                        dwFlags = 0,
-                        lpszDefaultScheme = IntPtr.Zero
-                    };
+                    NativeMethods.HIGHCONTRASTW data = default;
 
-                    // Force it to false if we fail to get the parameter.
-                    if (UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHIGHCONTRAST, data.cbSize, ref data, 0))
-                    {
-                        s_highContrast = (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
-                    }
-                    else
-                    {
-                        s_highContrast = false;
-                    }
+                    s_highContrast = UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                        && (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
 
                     s_systemEventsDirty = false;
                 }
@@ -80,49 +58,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the number of lines to scroll when the mouse wheel is rotated.
+        ///  Gets the number of lines to scroll when the mouse wheel is rotated.
         /// </summary>
         public static int MouseWheelScrollLines
-        {
-            get
-            {
-                if (NativeMouseWheelSupport)
-                {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETWHEELSCROLLLINES, 0, ref data, 0);
-                    return data;
-                }
-
-                // Check for the MouseZ "service". This is a little app that generated the
-                // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
-                // found, then there is no support for MouseWheels on the system.
-                IntPtr hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
-                if (hWndMouseWheel != IntPtr.Zero)
-                {
-                    // Register the MSH_SCROLL_LINES message...
-                    int message = SafeNativeMethods.RegisterWindowMessage(NativeMethods.MSH_SCROLL_LINES);
-                    int lines = (int)UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndMouseWheel), message, 0, 0);
-
-                    // This fails under terminal server, so we default to 3, which is the Windows
-                    // default. Nobody seems to pay attention to this value anyways.
-                    if (lines != 0)
-                    {
-                        return lines;
-                    }
-                }
-
-                return DefaultMouseWheelScrollLines;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETWHEELSCROLLLINES);
 
         /// <summary>
-        /// Gets the dimensions of the primary display monitor in pixels.
+        ///  Gets the dimensions of the primary display monitor in pixels.
         /// </summary>
         public static Size PrimaryMonitorSize
-        {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN));
-        }
+            => new Size(
+                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN),
+                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN));
 
         /// <summary>
         /// Gets the width of the vertical scroll bar in pixels.
@@ -260,36 +207,32 @@ namespace System.Windows.Forms
             return GetMenuFontHelper((uint)dpi, DpiHelper.IsPerMonitorV2Awareness);
         }
 
-        private static Font GetMenuFontHelper(uint dpi, bool useDpi)
+        private unsafe static Font GetMenuFontHelper(uint dpi, bool useDpi)
         {
-            Font menuFont = null;
-
             // We can get the system's menu font through the NONCLIENTMETRICS structure
             // via SystemParametersInfo
-            var data = new NativeMethods.NONCLIENTMETRICS();
-            bool result;
-            if (useDpi)
-            {
-                result = UnsafeNativeMethods.TrySystemParametersInfoForDpi(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0, dpi);
-            }
-            else
-            {
-                result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-            }
+            NativeMethods.NONCLIENTMETRICSW data = default;
 
-            if (result && data.lfMenuFont != null)
+            bool result = useDpi
+                ? UnsafeNativeMethods.TrySystemParametersInfoForDpi(ref data, dpi)
+                : UnsafeNativeMethods.SystemParametersInfoW(ref data);
+
+            if (result)
             {
                 try
                 {
-                    menuFont = Font.FromLogFont(data.lfMenuFont);
+                    return Font.FromLogFont(data.lfMenuFont);
                 }
-                catch
+#pragma warning disable CA1031 // Do not catch general exception types
+                catch (ArgumentException)
                 {
-                    // Menu font is not true type. Default to standard control font.
-                    menuFont = Control.DefaultFont;
+                    // Font.FromLogFont throws ArgumentException when it finds
+                    // a font that is not TrueType. Default to standard control font.
                 }
+#pragma warning restore CA1031
             }
-            return menuFont;
+
+            return Control.DefaultFont;
         }
 
         /// <summary>
@@ -315,9 +258,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                var rc = new NativeMethods.RECT();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETWORKAREA, 0, ref rc, 0);
-                return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
+                var rect = new NativeMethods.RECT();
+                UnsafeNativeMethods.SystemParametersInfoW(NativeMethods.SPI_GETWORKAREA, ref rect);
+                return rect;
             }
         }
 
@@ -684,45 +627,25 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether the system natively supports the mouse wheel
-        /// in newer mice.
+        ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
         /// </summary>
+        /// <remarks>
+        ///  This was never really correct. All versions of Windows NT from 4.0 onward
+        ///  supported the mouse wheel directly. This should have been a version check.
+        ///  Rather than change it and risk breaking apps we'll keep it equivalent to
+        ///  <see cref="MouseWheelPresent" />
+        /// </remarks>
         public static bool NativeMouseWheelSupport
-        {
-            get
-            {
-                if (!s_checkNativeMouseWheelSupport)
-                {
-                    s_nativeMouseWheelSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0);
-                    s_checkNativeMouseWheelSupport = true;
-                }
-
-                return s_nativeMouseWheelSupport;
-            }
-        }
+            => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0;
 
         /// <summary>
-        /// Gets a value indicating whether there is a mouse with a mouse wheel
-        /// installed on this machine.
+        ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
         /// </summary>
         public static bool MouseWheelPresent
-        {
-            get
-            {
-                if (!NativeMouseWheelSupport)
-                {
-                    // Check for the MouseZ "service". This is a little app that generated the
-                    // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
-                    // found, then there is no support for MouseWheels on the system.
-                    return UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE) != IntPtr.Zero;
-                }
-
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0;
-            }
-        }
+            => NativeMouseWheelSupport;
 
         /// <summary>
-        /// Gets the bounds of the virtual screen.
+        ///  Gets the bounds of the virtual screen.
         /// </summary>
         public static Rectangle VirtualScreen
         {
@@ -795,7 +718,7 @@ namespace System.Windows.Forms
         /// Gets a value indicating whether the current process is running in user
         /// interactive mode.
         /// </summary>
-        public static bool UserInteractive
+        public unsafe static bool UserInteractive
         {
             get
             {
@@ -805,9 +728,9 @@ namespace System.Windows.Forms
                     s_isUserInteractive = true;
 
                     int lengthNeeded = 0;
-                    NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
 
-                    if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, flags, Marshal.SizeOf(flags), ref lengthNeeded))
+                    NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
+                    if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, ref flags, sizeof(NativeMethods.USEROBJECTFLAGS), ref lengthNeeded))
                     {
                         if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0)
                         {
@@ -851,420 +774,200 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether the drop shadow effect in enabled.
-        /// Defaults to false downlevel.
+        ///  Gets whether the drop shadow effect in enabled.
         /// </summary>
         public static bool IsDropShadowEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDROPSHADOW, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETDROPSHADOW);
 
         /// <summary>
-        /// Gets a value indicating whether the native user menus have a flat menu
-        /// appearance. Defaults to false downlevel.
+        ///  Gets whether the native user menus have a flat menu appearance.
         /// </summary>
         public static bool IsFlatMenuEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFLATMENU, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETFLATMENU);
 
         /// <summary>
-        /// Gets a value indicating whether the Font Smoothing OSFeature.Feature is enabled.
+        ///  Gets whether font smoothing is enabled.
         /// </summary>
         public static bool IsFontSmoothingEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETFONTSMOOTHING);
 
         /// <summary>
-        /// Returns a contrast value that is ClearType smoothing.
+        ///  Returns the ClearType smoothing contrast value.
         /// </summary>
         public static int FontSmoothingContrast
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGCONTRAST, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETFONTSMOOTHINGCONTRAST);
 
         /// <summary>
-        /// Returns a type of Font smoothing.
+        ///  Returns a type of Font smoothing.
         /// </summary>
         public static int FontSmoothingType
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGTYPE, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETFONTSMOOTHINGTYPE);
 
         /// <summary>
-        /// Retrieves the width in pixels of an icon cell.
+        ///  Retrieves the width in pixels of an icon cell.
         /// </summary>
         public static int IconHorizontalSpacing
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_ICONHORIZONTALSPACING, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_ICONHORIZONTALSPACING);
 
         /// <summary>
-        /// Retrieves the height in pixels of an icon cell.
+        ///  Retrieves the height in pixels of an icon cell.
         /// </summary>
         public static int IconVerticalSpacing
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_ICONVERTICALSPACING, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_ICONVERTICALSPACING);
 
         /// <summary>
-        /// Gets a value indicating whether the Icon title wrapping is enabled.
+        ///  Gets whether icon title wrapping is enabled.
         /// </summary>
         public static bool IsIconTitleWrappingEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETICONTITLEWRAP, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETICONTITLEWRAP);
 
         /// <summary>
-        /// Gets a value indicating whether the menu access keys are always underlined.
+        ///  Gets whether menu access keys are underlined.
         /// </summary>
         public static bool MenuAccessKeysUnderlined
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDCUES, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETKEYBOARDCUES);
 
         /// <summary>
-        /// Retrieves the Keyboard repeat delay setting, which is a value in the range
-        /// from 0 through 3. The Actual Delay Associated with each value may vary
-        /// depending on the hardware.
+        ///  Retrieves the Keyboard repeat delay setting, which is a value in the range
+        ///  from 0 through 3. The actual delay associated with each value may vary
+        ///  depending on the hardware.
         /// </summary>
         public static int KeyboardDelay
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDDELAY, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETKEYBOARDDELAY);
 
         /// <summary>
-        /// Gets a value indicating whether the user relies on Keyboard instead of mouse and wants
-        /// applications to display keyboard interfaces that would be otherwise hidden.
+        ///  Gets whether the user relies on keyboard instead of mouse and wants
+        ///  applications to display keyboard interfaces that would be otherwise hidden.
         /// </summary>
         public static bool IsKeyboardPreferred
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDPREF, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETKEYBOARDPREF);
 
         /// <summary>
-        /// Retrieves the Keyboard repeat speed setting, which is a value in the range
-        /// from 0 through 31. The actual rate may vary depending on the hardware.
+        ///  Retrieves the Keyboard repeat speed setting, which is a value in the range
+        ///  from 0 through 31. The actual rate may vary depending on the hardware.
         /// </summary>
         public static int KeyboardSpeed
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDSPEED, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETKEYBOARDSPEED);
 
         /// <summary>
-        /// Gets the Size in pixels of the rectangle within which the mouse pointer has to stay.
+        ///  Gets the <see cref="Size"/> in pixels of the rectangle within which the mouse
+        ///  pointer has to stay to be considered hovering.
         /// </summary>
         public static Size MouseHoverSize
-        {
-            get
-            {
-                int height = 0;
-                int width = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSEHOVERHEIGHT, 0, ref height, 0);
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSEHOVERWIDTH, 0, ref width, 0);
-                return new Size(width, height);
-            }
-        }
+            => new Size(
+                UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSEHOVERWIDTH),
+                UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSEHOVERHEIGHT));
 
         /// <summary>
-        /// Gets the time, in milliseconds, that the mouse pointer has to stay in the hover rectangle.
+        ///  Gets the time, in milliseconds, that the mouse pointer has to stay in the hover
+        ///  rectangle to be considered hovering.
         /// </summary>
         public static int MouseHoverTime
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSEHOVERTIME, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSEHOVERTIME);
 
         /// <summary>
-        /// Gets the current mouse speed.
+        ///  Gets the current mouse speed.
         /// </summary>
         public static int MouseSpeed
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSESPEED, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSESPEED);
 
         /// <summary>
-        /// Determines whether the snap-to-default-button feature is enabled.
+        ///  Determines whether the snap-to-default-button feature is enabled.
         /// </summary>
         public static bool IsSnapToDefaultEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETSNAPTODEFBUTTON, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETSNAPTODEFBUTTON);
 
         /// <summary>
-        /// Determines whether the Popup Menus are left Aligned or Right Aligned.
+        ///  Determines whether the popup menus are left aligned or right aligned.
         /// </summary>
         public static LeftRightAlignment PopupMenuAlignment
-        {
-            get
-            {
-                bool data = false;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUDROPALIGNMENT, 0, ref data, 0);
-                return data ? LeftRightAlignment.Left : LeftRightAlignment.Right;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETMENUDROPALIGNMENT)
+                ? LeftRightAlignment.Left : LeftRightAlignment.Right;
 
         /// <summary>
-        /// Determines whether the maenu fade animation feature is enabled. Defaults to false
-        /// downlevel.
+        ///  Determines whether the menu fade animation feature is enabled.
         /// </summary>
         public static bool IsMenuFadeEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUFADE, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETMENUFADE);
 
         /// <summary>
-        /// Indicates the time, in milliseconds, that the system waits before displaying
-        /// a shortcut menu.
+        ///  Indicates the time, in milliseconds, that the system waits before displaying
+        ///  a shortcut menu.
         /// </summary>
         public static int MenuShowDelay
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUSHOWDELAY, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMENUSHOWDELAY);
 
         /// <summary>
-        /// Indicates whether the slide open effect for combo boxes is enabled.
+        ///  Indicates whether the slide open effect for combo boxes is enabled.
         /// </summary>
         public static bool IsComboBoxAnimationEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETCOMBOBOXANIMATION, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETCOMBOBOXANIMATION);
 
         /// <summary>
-        /// Indicates whether the gradient effect for windows title bars is enabled.
+        ///  Indicates whether the gradient effect for windows title bars is enabled.
         /// </summary>
         public static bool IsTitleBarGradientEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETGRADIENTCAPTIONS, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETGRADIENTCAPTIONS);
 
         /// <summary>
-        /// Indicates whether the hot tracking of user interface elements is enabled.
+        ///  Indicates whether the hot tracking of user interface elements is enabled.
         /// </summary>
         public static bool IsHotTrackingEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHOTTRACKING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETHOTTRACKING);
 
         /// <summary>
-        /// Indicates whether the smooth scrolling effect for listbox is enabled.
+        ///  Indicates whether the smooth scrolling effect for listbox is enabled.
         /// </summary>
         public static bool IsListBoxSmoothScrollingEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETLISTBOXSMOOTHSCROLLING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETLISTBOXSMOOTHSCROLLING);
 
         /// <summary>
-        /// Indicates whether the menu animation feature is enabled.
+        ///  Indicates whether the menu animation feature is enabled.
         /// </summary>
         public static bool IsMenuAnimationEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUANIMATION, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETMENUANIMATION);
 
         /// <summary>
-        /// Indicates whether the selection fade effect is enabled. Defaults to false
-        /// downlevel.
+        ///  Indicates whether the selection fade effect is enabled.
         /// </summary>
         public static bool IsSelectionFadeEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETSELECTIONFADE, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETSELECTIONFADE);
 
         /// <summary>
-        /// Indicates whether the tool tip animation is enabled. Defaults to false
-        /// downlevel.
+        ///  Indicates whether tool tip animation is enabled.
         /// </summary>
         public static bool IsToolTipAnimationEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETTOOLTIPANIMATION, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETTOOLTIPANIMATION);
 
         /// <summary>
-        /// Indicates whether all the UI Effects are enabled. Defaults to false
-        /// downlevel.
+        ///  Indicates whether UI effects are enabled.
         /// </summary>
         public static bool UIEffectsEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETUIEFFECTS, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETUIEFFECTS);
 
         /// <summary>
-        /// Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
+        ///  Indicates whether the windows tracking (activating the window the mouse in on) is ON or OFF.
         /// </summary>
         public static bool IsActiveWindowTrackingEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETACTIVEWINDOWTRACKING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETACTIVEWINDOWTRACKING);
 
         /// <summary>
-        /// Retrieves the active window tracking delay, in milliseconds.
+        ///  Retrieves the active window tracking delay in milliseconds.
         /// </summary>
         public static int ActiveWindowTrackingDelay
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETACTIVEWNDTRKTIMEOUT, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETACTIVEWNDTRKTIMEOUT);
 
         /// <summary>
-        /// Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
+        ///  Indicates whether windows minimize/restore animation is enabled.
         /// </summary>
         public static bool IsMinimizeRestoreAnimationEnabled
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETANIMATION, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETANIMATION);
 
         /// <summary>
-        /// Retrieves the border multiplier factor that determines the width of a windo's sizing border.
+        ///  Retrieves the border multiplier factor that determines the width of a window's sizing border.
         /// </summary>
         public static int BorderMultiplierFactor
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETBORDER, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETBORDER);
 
         /// <summary>
         /// Indicates the caret blink time.
@@ -1275,17 +978,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the caret width in edit controls.
+        ///  Indicates the caret width in edit controls.
         /// </summary>
         public static int CaretWidth
-        {
-            get
-            {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETCARETWIDTH, 0, ref data, 0);
-                return data;
-            }
-        }
+            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETCARETWIDTH);
+
 
         public static int MouseWheelScrollDelta => NativeMethods.WHEEL_DELTA;
 
@@ -1352,58 +1049,45 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the thikness, in pixels, of the Sizing Border.
+        ///  The thickness, in pixels, of the sizing border.
         /// </summary>
         public static int SizingBorderWidth
         {
             get
             {
-                // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                var data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                return result && data.iBorderWidth > 0 ? data.iBorderWidth : 0;
+                NativeMethods.NONCLIENTMETRICSW data = default;
+                return UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                    && data.iBorderWidth > 0 ? data.iBorderWidth : 0;
             }
         }
 
         /// <summary>
-        /// Specified the Size, in pixels, of the small caption buttons.
+        ///  The <see cref="Size"/>, in pixels, of the small caption buttons.
         /// </summary>
-        public static Size SmallCaptionButtonSize
+        public unsafe static Size SmallCaptionButtonSize
         {
             get
             {
-                // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                var data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0)
-                {
-                    return new Size(data.iSmCaptionWidth, data.iSmCaptionHeight);
-                }
-                else
-                {
-                    return Size.Empty;
-                }
+                NativeMethods.NONCLIENTMETRICSW data = default;
+                return UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                    && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0
+                        ? new Size(data.iSmCaptionWidth, data.iSmCaptionHeight)
+                        : Size.Empty;
             }
         }
 
         /// <summary>
-        /// Specified the Size, in pixels, of the menu bar buttons.
+        ///  The <see cref="Size"/>, in pixels, of the menu bar buttons.
         /// </summary>
-        public static Size MenuBarButtonSize
+        public unsafe static Size MenuBarButtonSize
         {
             get
             {
-                // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                var data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iMenuHeight > 0 && data.iMenuWidth > 0)
-                {
-                    return new Size(data.iMenuWidth, data.iMenuHeight);
-                }
-                else
-                {
-                    return Size.Empty;
-                }
+                NativeMethods.NONCLIENTMETRICSW data = default;
+                return UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                    && data.iMenuHeight > 0 && data.iMenuWidth > 0
+                        ? new Size(data.iMenuWidth, data.iMenuHeight)
+                        : Size.Empty;
             }
         }
 

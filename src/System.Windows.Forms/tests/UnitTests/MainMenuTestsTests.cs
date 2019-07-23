@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_MenuItemArray_TestData()
         {
             yield return new object[] { null, false };
-            yield return new object[] { new MenuItem[0], false };
+            yield return new object[] { Array.Empty<MenuItem>(), false };
             yield return new object[] { new MenuItem[] { new MenuItem() }, true };
         }
 
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Tests
         public void MainMenu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent)
         {
             var menu = new MainMenu(items);
-            Assert.Equal(items ?? new MenuItem[0], menu.MenuItems.Cast<MenuItem>());
+            Assert.Equal(items ?? Array.Empty<MenuItem>(), menu.MenuItems.Cast<MenuItem>());
             for (int i = 0; i < (items?.Length ?? 0); i++)
             {
                 Assert.Equal(i, menu.MenuItems[i].Index);
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CloneMenu_TestData()
         {
-            yield return new object[] { new MenuItem[0] };
+            yield return new object[] { Array.Empty<MenuItem>() };
             yield return new object[] { new MenuItem[] { new MenuItem("text") } };
         }
 

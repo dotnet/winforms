@@ -123,12 +123,19 @@ namespace System.Windows.Forms.Tests
             // Set same.
             panel.AutoSize = value;
             Assert.Equal(value, panel.AutoSize);
+
+            // Set different.
+            panel.AutoSize = !value;
+            Assert.Equal(!value, panel.AutoSize);
         }
 
         [Fact]
         public void AutoSize_SetWithHandler_CallsAutoSizeChanged()
         {
-            var panel = new ToolStripPanel();
+            var panel = new ToolStripPanel
+            {
+                AutoSize = true
+            };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {

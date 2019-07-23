@@ -12,17 +12,17 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This class represents all the information to render the toolStrip
-        /// </summary>        
+        /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
         {
             Graphics = g;
             ToolStrip = toolStrip;
-            AffectedBounds = new Rectangle(Point.Empty, toolStrip.Size);
+            AffectedBounds = new Rectangle(Point.Empty, toolStrip?.Size ?? Size.Empty);
         }
 
         /// <summary>
         ///  This class represents all the information to render the toolStrip
-        /// </summary>        
+        /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip, Rectangle affectedBounds, Color backColor)
         {
             Graphics = g;
@@ -53,25 +53,35 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_backColor == Color.Empty)
+                if (_backColor != Color.Empty)
                 {
-                    // get the user specified color
-                    _backColor = ToolStrip.RawBackColor;
-                    if (_backColor == Color.Empty)
-                    {
-                        if (ToolStrip is ToolStripDropDown)
-                        {
-                            _backColor = SystemColors.Menu;
-                        }
-                        else if (ToolStrip is MenuStrip)
-                        {
-                            _backColor = SystemColors.MenuBar;
-                        }
-                        else
-                        {
-                            _backColor = SystemColors.Control;
-                        }
-                    }
+                    return _backColor;
+                }
+
+                // get the user specified color
+                if (ToolStrip == null)
+                {
+                    _backColor = SystemColors.Control;
+                    return _backColor;
+                }
+
+                _backColor = ToolStrip.RawBackColor;
+                if (_backColor != Color.Empty)
+                {
+                    return _backColor;
+                }
+
+                if (ToolStrip is ToolStripDropDown)
+                {
+                    _backColor = SystemColors.Menu;
+                }
+                else if (ToolStrip is MenuStrip)
+                {
+                    _backColor = SystemColors.MenuBar;
+                }
+                else
+                {
+                    _backColor = SystemColors.Control;
                 }
 
                 return _backColor;
@@ -114,7 +124,7 @@ namespace System.Windows.Forms
                                         return new Rectangle(itemBounds.X + 1, 0, itemBounds.Width - 2, 2);
                                     }
 
-                                    // If its overlapping more than one pixel, this means we've pushed it to obscure 
+                                    // If its overlapping more than one pixel, this means we've pushed it to obscure
                                     // the menu item. In this case pretend it's not connected.
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.Right:

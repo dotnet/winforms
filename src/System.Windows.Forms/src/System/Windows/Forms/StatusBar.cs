@@ -2,25 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Windows.Forms.VisualStyles;
-    using System.Globalization;
-
-
     /// <summary>
-    ///    <para>
-    ///       Represents a Windows status bar control.
-    ///    </para>
+    ///  Represents a Windows status bar control.
     /// </summary>
     [
     ComVisible(true),
@@ -31,7 +24,6 @@ namespace System.Windows.Forms
     ]
     public class StatusBar : Control
     {
-
         private int sizeGripWidth = 0;
         private const int SIMPLE_INDEX = 0xFF;
 
@@ -52,9 +44,7 @@ namespace System.Windows.Forms
         private bool toolTipSet = false;
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBar'/> class.
-        ///    </para>
+        ///  Initializes a new default instance of the <see cref='StatusBar'/> class.
         /// </summary>
         public StatusBar()
         : base()
@@ -68,7 +58,7 @@ namespace System.Windows.Forms
         private static VisualStyleRenderer renderer = null;
 
         /// <summary>
-        ///     A VisualStyleRenderer we can use to get information about the current UI theme
+        ///  A VisualStyleRenderer we can use to get information about the current UI theme
         /// </summary>
         private static VisualStyleRenderer VisualStyleRenderer
         {
@@ -128,10 +118,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       The background color of this control. This is an ambient property and will
-        ///       always return a non-null value.
-        ///    </para>
+        ///  The background color of this control. This is an ambient property and will
+        ///  always return a non-null value.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
@@ -156,11 +144,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the image rendered on the background of the
-        ///    <see cref='System.Windows.Forms.StatusBar'/>
-        ///    control.
-        /// </para>
+        ///  Gets or sets the image rendered on the background of the
+        ///  <see cref='StatusBar'/>
+        ///  control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
@@ -203,10 +189,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns the CreateParams used to create the handle for this control.
-        ///       Inheriting classes should call base.getCreateParams in the manor below:
-        ///    </para>
+        ///  Returns the CreateParams used to create the handle for this control.
+        ///  Inheriting classes should call base.getCreateParams in the manor below:
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -238,8 +222,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -250,8 +234,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This property is overridden and hidden from statement completion
-        ///     on controls that are based on Win32 Native Controls.
+        ///  This property is overridden and hidden from statement completion
+        ///  on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
@@ -267,9 +251,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the docking behavior of the <see cref='System.Windows.Forms.StatusBar'/> control.
-        ///    </para>
+        ///  Gets or sets the docking behavior of the <see cref='StatusBar'/> control.
         /// </summary>
         [
         Localizable(true),
@@ -288,11 +270,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the font the <see cref='System.Windows.Forms.StatusBar'/>
-        ///       control will use to display
-        ///       information.
-        ///    </para>
+        ///  Gets or sets the font the <see cref='StatusBar'/>
+        ///  control will use to display
+        ///  information.
         /// </summary>
         [
         Localizable(true)
@@ -308,10 +288,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets
-        ///       the forecolor for the control.
-        ///    </para>
+        ///  Gets or sets
+        ///  the forecolor for the control.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
@@ -354,11 +332,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the collection of <see cref='System.Windows.Forms.StatusBar'/>
-        ///       panels contained within the
-        ///       control.
-        ///    </para>
+        ///  Gets the collection of <see cref='StatusBar'/>
+        ///  panels contained within the
+        ///  control.
         /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -381,9 +357,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       The status bar text.
-        ///    </para>
+        ///  The status bar text.
         /// </summary>
         [
         Localizable(true)
@@ -423,9 +397,7 @@ namespace System.Windows.Forms
         */
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether panels should be shown.
-        ///    </para>
+        ///  Gets or sets a value indicating whether panels should be shown.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -471,11 +443,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether a sizing grip
-        ///       will be rendered on the corner of the <see cref='System.Windows.Forms.StatusBar'/>
-        ///       control.
-        ///    </para>
+        ///  Gets or sets a value indicating whether a sizing grip
+        ///  will be rendered on the corner of the <see cref='StatusBar'/>
+        ///  control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -499,10 +469,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the user will be able to tab to the
-        ///    <see cref='System.Windows.Forms.StatusBar'/> .
-        ///    </para>
+        ///  Gets or sets a value indicating whether the user will be able to tab to the
+        ///  <see cref='StatusBar'/> .
         /// </summary>
         [DefaultValue(false)]
         new public bool TabStop
@@ -534,9 +502,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Occurs when a visual aspect of an owner-drawn status bar changes.
-        ///    </para>
+        ///  Occurs when a visual aspect of an owner-drawn status bar changes.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.StatusBarDrawItem))]
         public event StatusBarDrawItemEventHandler DrawItem
@@ -546,9 +512,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Occurs when a panel on the status bar is clicked.
-        ///    </para>
+        ///  Occurs when a panel on the status bar is clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.StatusBarOnPanelClickDescr))]
         public event StatusBarPanelClickEventHandler PanelClick
@@ -558,7 +522,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     StatusBar Onpaint.
+        ///  StatusBar Onpaint.
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -569,22 +533,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Tells whether the panels have been realized.
+        ///  Tells whether the panels have been realized.
         /// </summary>
         internal bool ArePanelsRealized()
         {
             return showPanels && IsHandleCreated;
         }
 
-        /// <summary>
-        /// </summary>
         internal void DirtyLayout()
         {
             layoutDirty = true;
         }
 
         /// <summary>
-        ///     Makes the panel according to the sizes in the panel list.
+        ///  Makes the panel according to the sizes in the panel list.
         /// </summary>
         private void ApplyPanelWidths()
         {
@@ -636,8 +598,6 @@ namespace System.Windows.Forms
             layoutDirty = false;
         }
 
-        /// <summary>
-        /// </summary>
         protected override void CreateHandle()
         {
             if (!RecreatingHandle)
@@ -662,7 +622,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Disposes this control
+        ///  Disposes this control
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -684,7 +644,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Forces the panels to be updated, location, repainting, etc.
+        ///  Forces the panels to be updated, location, repainting, etc.
         /// </summary>
         private void ForcePanelUpdate()
         {
@@ -698,10 +658,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.CreateHandle'/>
-        ///       event.
-        ///    </para>
+        ///  Raises the <see cref='Control.CreateHandle'/>
+        ///  event.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -723,9 +681,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnHandleDestroyed'/> event.
-        ///    </para>
+        ///  Raises the <see cref='OnHandleDestroyed'/> event.
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
@@ -738,8 +694,6 @@ namespace System.Windows.Forms
         }
 
         /* Not used
-        /// <summary>
-        /// </summary>
         private sealed class EnumChildren {
 
             public IntPtr hWndFound = IntPtr.Zero;
@@ -763,9 +717,7 @@ namespace System.Windows.Forms
         }*/
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnMouseDown'/> event.
-        ///    </para>
+        ///  Raises the <see cref='OnMouseDown'/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -775,9 +727,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/> event.
-        ///    </para>
+        ///  Raises the <see cref='OnPanelClick'/> event.
         /// </summary>
         protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e)
         {
@@ -785,9 +735,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the Layout event.
-        ///    </para>
+        ///  Raises the Layout event.
         /// </summary>
         protected override void OnLayout(LayoutEventArgs levent)
         {
@@ -803,8 +751,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This function sets up all the panel on the status bar according to
-        ///     the internal this.panels List.
+        ///  This function sets up all the panel on the status bar according to
+        ///  the internal this.panels List.
         /// </summary>
         internal void RealizePanels()
         {
@@ -839,7 +787,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Remove the internal list of panels without updating the control.
+        ///  Remove the internal list of panels without updating the control.
         /// </summary>
         internal void RemoveAllPanelsWithoutUpdate()
         {
@@ -861,8 +809,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the widths of any panels that have the
-        ///     StatusBarPanelAutoSize.CONTENTS property set.
+        ///  Sets the widths of any panels that have the
+        ///  StatusBarPanelAutoSize.CONTENTS property set.
         /// </summary>
         internal void SetPanelContentsWidths(bool newPanels)
         {
@@ -904,8 +852,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sizes the the panels appropriately.  It looks at the SPRING AutoSize
-        ///     property.
+        ///  Sizes the the panels appropriately.  It looks at the SPRING AutoSize
+        ///  property.
         /// </summary>
         private void LayoutPanels()
         {
@@ -928,7 +876,6 @@ namespace System.Windows.Forms
                     barPanelWidth += panel.Width;
                 }
             }
-
 
             if (springNum > 0)
             {
@@ -989,10 +936,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>
-        ///       event.
-        ///    </para>
+        ///  Raises the <see cref='OnDrawItem'/>
+        ///  event.
         /// </summary>
         protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent)
         {
@@ -1000,10 +945,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnResize'/>
-        ///       event.
-        ///    </para>
+        ///  Raises the <see cref='OnResize'/>
+        ///  event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -1012,13 +955,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Returns a string representation for this control.
-        ///    </para>
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             if (Panels != null)
             {
@@ -1045,7 +985,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated && !DesignMode)
                 {
-                    //This shouldn't happen: tooltips should've already been set.  The best we can 
+                    //This shouldn't happen: tooltips should've already been set.  The best we can
                     //do here is reset it.
                     tooltips = new ControlToolTip(this);
                 }
@@ -1083,7 +1023,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Processes messages for ownerdraw panels.
+        ///  Processes messages for ownerdraw panels.
         /// </summary>
         private void WmDrawItem(ref Message m)
         {
@@ -1106,11 +1046,8 @@ namespace System.Windows.Forms
             g.Dispose();
         }
 
-        /// <summary>
-        /// </summary>
         private void WmNotifyNMClick(NativeMethods.NMHDR note)
         {
-
             if (!showPanels)
             {
                 return;
@@ -1197,7 +1134,7 @@ namespace System.Windows.Forms
 
                     if (callSuper)
                     {
-                        Control.ControlCollection children = parent.Controls;
+                        ControlCollection children = parent.Controls;
                         int c = children.Count;
                         for (int i = 0; i < c; i++)
                         {
@@ -1230,11 +1167,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Base wndProc. All messages are sent to wndProc after getting filtered through
-        ///       the preProcessMessage function. Inheriting controls should call base.wndProc
-        ///       for any messages that they don't handle.
-        ///    </para>
+        ///  Base wndProc. All messages are sent to wndProc after getting filtered through
+        ///  the preProcessMessage function. Inheriting controls should call base.wndProc
+        ///  for any messages that they don't handle.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
@@ -1270,10 +1205,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       The collection of StatusBarPanels that the StatusBar manages.
-        ///       event.
-        ///    </para>
+        ///  The collection of StatusBarPanels that the StatusBar manages.
+        ///  event.
         /// </summary>
         [
         ListBindable(false)
@@ -1286,19 +1219,16 @@ namespace System.Windows.Forms
             /// issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
-
             /// <summary>
-            ///    <para>
-            ///       Constructor for the StatusBarPanelCollection class
-            ///    </para>
-            /// </summary>
+                ///  Constructor for the StatusBarPanelCollection class
+                /// </summary>
             public StatusBarPanelCollection(StatusBar owner)
             {
                 this.owner = owner;
             }
 
             /// <summary>
-            ///       This method will return an individual StatusBarPanel with the appropriate index.
+            ///  This method will return an individual StatusBarPanel with the appropriate index.
             /// </summary>
             public virtual StatusBarPanel this[int index]
             {
@@ -1365,7 +1295,7 @@ namespace System.Windows.Forms
                 }
             }
             /// <summary>
-            ///     <para>Retrieves the child control with the specified key.</para>
+            ///  Retrieves the child control with the specified key.
             /// </summary>
             public virtual StatusBarPanel this[string key]
             {
@@ -1392,11 +1322,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>
-            ///       Returns an integer representing the number of StatusBarPanels
-            ///       in this collection.
-            ///    </para>
-            /// </summary>
+                ///  Returns an integer representing the number of StatusBarPanels
+            ///  in this collection.
+                /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             public int Count
             {
@@ -1439,10 +1367,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>
-            ///       Adds a StatusBarPanel to the collection.
-            ///    </para>
-            /// </summary>
+                ///  Adds a StatusBarPanel to the collection.
+                /// </summary>
             public virtual StatusBarPanel Add(string text)
             {
                 StatusBarPanel panel = new StatusBarPanel
@@ -1454,10 +1380,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>
-            ///       Adds a StatusBarPanel to the collection.
-            ///    </para>
-            /// </summary>
+                ///  Adds a StatusBarPanel to the collection.
+                /// </summary>
             public virtual int Add(StatusBarPanel value)
             {
                 int index = owner.panels.Count;
@@ -1507,13 +1431,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
+            ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
             public virtual bool ContainsKey(string key)
             {
                 return IsValidIndex(IndexOfKey(key));
             }
-
 
             public int IndexOf(StatusBarPanel panel)
             {
@@ -1540,7 +1463,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
+            ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
             public virtual int IndexOfKey(string key)
             {
@@ -1574,12 +1497,9 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-
             /// <summary>
-            ///    <para>
-            ///       Inserts a StatusBarPanel in the collection.
-            ///    </para>
-            /// </summary>
+                ///  Inserts a StatusBarPanel in the collection.
+                /// </summary>
             public virtual void Insert(int index, StatusBarPanel value)
             {
 
@@ -1589,7 +1509,6 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
                 //end check
-
 
                 owner.layoutDirty = true;
                 if (value.Parent != owner && value.Parent != null)
@@ -1635,7 +1554,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>Determines if the index is valid for the collection.</para>
+            ///  Determines if the index is valid for the collection.
             /// </summary>
             private bool IsValidIndex(int index)
             {
@@ -1643,10 +1562,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>
-            ///       Removes all the StatusBarPanels in the collection.
-            ///    </para>
-            /// </summary>
+                ///  Removes all the StatusBarPanels in the collection.
+                /// </summary>
             public virtual void Clear()
             {
                 owner.RemoveAllPanelsWithoutUpdate();
@@ -1655,10 +1572,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>
-            ///       Removes an individual StatusBarPanel in the collection.
-            ///    </para>
-            /// </summary>
+                ///  Removes an individual StatusBarPanel in the collection.
+                /// </summary>
             public virtual void Remove(StatusBarPanel value)
             {
 
@@ -1684,12 +1599,9 @@ namespace System.Windows.Forms
                 }
             }
 
-
             /// <summary>
-            ///    <para>
-            ///       Removes an individual StatusBarPanel in the collection at the given index.
-            ///    </para>
-            /// </summary>
+                ///  Removes an individual StatusBarPanel in the collection at the given index.
+                /// </summary>
             public virtual void RemoveAt(int index)
             {
                 int length = Count;
@@ -1715,7 +1627,7 @@ namespace System.Windows.Forms
                 owner.ForcePanelUpdate();
             }
             /// <summary>
-            ///     <para>Removes the child control with the specified key.</para>
+            ///  Removes the child control with the specified key.
             /// </summary>
             public virtual void RemoveByKey(string key)
             {
@@ -1732,10 +1644,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    <para>
-            ///       Returns the Enumerator for this collection.
-            ///    </para>
-            /// </summary>
+                ///  Returns the Enumerator for this collection.
+                /// </summary>
             public IEnumerator GetEnumerator()
             {
                 if (owner.panels != null)
@@ -1744,22 +1654,21 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new StatusBarPanel[0].GetEnumerator();
+                    return Array.Empty<StatusBarPanel>().GetEnumerator();
                 }
             }
         }
         /// <summary>
-        ///     This is a tooltip control that provides tips for a single
-        ///     control. Each "tool" region is defined by a rectangle and
-        ///     the string that should be displayed. This implementation
-        ///     is based on System.Windows.Forms.ToolTip, but this control
-        ///     is lighter weight and provides less functionality... however
-        ///     this control binds to rectangular regions, instead of
-        ///     full controls.
+        ///  This is a tooltip control that provides tips for a single
+        ///  control. Each "tool" region is defined by a rectangle and
+        ///  the string that should be displayed. This implementation
+        ///  is based on System.Windows.Forms.ToolTip, but this control
+        ///  is lighter weight and provides less functionality... however
+        ///  this control binds to rectangular regions, instead of
+        ///  full controls.
         /// </summary>
         private class ControlToolTip
         {
-
             public class Tool
             {
                 public Rectangle rect = Rectangle.Empty;
@@ -1773,7 +1682,7 @@ namespace System.Windows.Forms
             private int nextId = 0;
 
             /// <summary>
-            ///    Creates a new ControlToolTip.
+            ///  Creates a new ControlToolTip.
             /// </summary>
             public ControlToolTip(Control parent)
             {
@@ -1782,7 +1691,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    Returns the createParams to create the window.
+            ///  Returns the createParams to create the window.
             /// </summary>
             protected CreateParams CreateParams
             {
@@ -1831,15 +1740,15 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    Sets the tool for the specified key. Keep in mind
-            ///    that as soon as setTool is called, the handle for
-            ///    the ControlToolTip is created, and the handle for
-            ///    the parent control is also created. If the parent
-            ///    handle is recreated in the future, all tools must
-            ///    be re-added. The old tool for the specified key
-            ///    will be removed. Passing null in for the
-            ///    tool parameter will result in the tool
-            ///    region being removed.
+            ///  Sets the tool for the specified key. Keep in mind
+            ///  that as soon as setTool is called, the handle for
+            ///  the ControlToolTip is created, and the handle for
+            ///  the parent control is also created. If the parent
+            ///  handle is recreated in the future, all tools must
+            ///  be re-added. The old tool for the specified key
+            ///  will be removed. Passing null in for the
+            ///  tool parameter will result in the tool
+            ///  region being removed.
             /// </summary>
             public void SetTool(object key, Tool tool)
             {
@@ -1895,14 +1804,13 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    Returns the tool associated with the specified key,
-            ///    or null if there is no area.
+            ///  Returns the tool associated with the specified key,
+            ///  or null if there is no area.
             /// </summary>
             public Tool GetTool(object key)
             {
                 return (Tool)tools[key];
             }
-
 
             private void AddTool(Tool tool)
             {
@@ -1940,9 +1848,8 @@ namespace System.Windows.Forms
                 }
             }
 
-
             /// <summary>
-            ///    Creates the handle for the control.
+            ///  Creates the handle for the control.
             /// </summary>
             protected void CreateHandle()
             {
@@ -1964,7 +1871,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    Destroys the handle for this control.
+            ///  Destroys the handle for this control.
             /// </summary>
             protected void DestroyHandle()
             {
@@ -1976,9 +1883,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    Disposes of the component.  Call dispose when the component is no longer needed.
-            ///    This method removes the component from its container (if the component has a site)
-            ///    and triggers the dispose event.
+            ///  Disposes of the component.  Call dispose when the component is no longer needed.
+            ///  This method removes the component from its container (if the component has a site)
+            ///  and triggers the dispose event.
             /// </summary>
             public void Dispose()
             {
@@ -1986,9 +1893,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Returns a new instance of the TOOLINFO_T structure with the minimum
-            ///     required data to uniquely identify a region. This is used primarily
-            ///     for delete operations. NOTE: This cannot force the creation of a handle.
+            ///  Returns a new instance of the TOOLINFO_T structure with the minimum
+            ///  required data to uniquely identify a region. This is used primarily
+            ///  for delete operations. NOTE: This cannot force the creation of a handle.
             /// </summary>
             private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool)
             {
@@ -2014,8 +1921,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Returns a detailed TOOLINFO_T structure that represents the specified
-            ///     region. NOTE: This may force the creation of a handle.
+            ///  Returns a detailed TOOLINFO_T structure that represents the specified
+            ///  region. NOTE: This may force the creation of a handle.
             /// </summary>
             private NativeMethods.TOOLINFO_T GetTOOLINFO(Tool tool)
             {
@@ -2036,7 +1943,6 @@ namespace System.Windows.Forms
                 return ti;
             }
 
-
             /// <summary>
             /// </summary>
             ~ControlToolTip()
@@ -2045,17 +1951,14 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///    WNDPROC
+            ///  WNDPROC
             /// </summary>
-
             protected void WndProc(ref Message msg)
             {
                 switch (msg.Msg)
                 {
                     case Interop.WindowMessages.WM_SETFOCUS:
-                        // 
-
-
+                        //
 
                         return;
                     default:
@@ -2084,7 +1987,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
     }
 }

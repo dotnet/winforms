@@ -2,26 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Text;
+using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Diagnostics.CodeAnalysis;
-
-    [ToolboxBitmapAttribute(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
+    [ToolboxBitmap(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
         private static readonly Type columnType = typeof(DataGridViewButtonColumn);
 
         private string text;
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors") // Can't think of a workaround.
-        ]
         public DataGridViewButtonColumn()
             : base(new DataGridViewButtonCell())
         {
@@ -44,7 +38,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && !(value is System.Windows.Forms.DataGridViewButtonCell))
+                if (value != null && !(value is DataGridViewButtonCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
                 }

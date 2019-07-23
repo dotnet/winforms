@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">ActiveX denetimi penceresiz bir denetim. Denetim .NET Framework'un bu sürümünde desteklenmiyor.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">ActiveX denetimi penceresiz bir denetim. Denetim .NET'un bu sürümünde desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ hakkında detaylı bilgi için bu iletinin sonuna bakın.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.
+        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Yapılandırma aracını kullanın.
 
 Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır.
 
@@ -5204,12 +5204,12 @@ Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalış
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.
+        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Yapılandırma aracını kullanın.
 
 Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'ı tıklatırsanız, uygulama hemen kapatılır.
 
@@ -7153,7 +7153,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;Form Yok&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7832,8 +7832,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Açıklama Bölmesi</target>
+        <source>Description</source>
+        <target state="translated">Açıklama</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8812,8 +8812,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">ToolBar</target>
+        <source>PropertyGrid</source>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11778,7 +11778,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Del</target>
+        <target state="translated">Delete</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11798,7 +11798,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Insert</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11808,12 +11808,12 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">Page Down</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">Page Up</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

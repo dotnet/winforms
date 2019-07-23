@@ -2339,10 +2339,51 @@ namespace System.Windows.Forms.Tests
                 GetRow(true, false), DataGridViewAdvancedCellBorderStyle.None, true, true, true, true,
                 false, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None
             };
+
             yield return new object[]
             {
                 new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.None, true, true, true, true,
                 false, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.Single, true, true, true, true,
+                false, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.Single, true, false, true, true,
+                false, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.InsetDouble, true, true, true, true,
+                true, DataGridViewAdvancedCellBorderStyle.InsetDouble, DataGridViewAdvancedCellBorderStyle.Inset, DataGridViewAdvancedCellBorderStyle.InsetDouble, DataGridViewAdvancedCellBorderStyle.Inset
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.InsetDouble, true, false, true, true,
+                true, DataGridViewAdvancedCellBorderStyle.InsetDouble, DataGridViewAdvancedCellBorderStyle.Inset, DataGridViewAdvancedCellBorderStyle.InsetDouble, DataGridViewAdvancedCellBorderStyle.Inset
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.OutsetDouble, true, true, true, true,
+                true, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.OutsetDouble, true, false, true, true,
+                true, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, true, true,
+                true, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset
+            };
+            yield return new object[]
+            {
+                new DataGridViewRow(), DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, false, true, true,
+                true, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset
             };
         }
 
@@ -2368,26 +2409,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedRight, result.Right);
             Assert.Equal(expectedTop, result.Top);
             Assert.Equal(expectedBottom, result.Bottom);
-        }
-
-        [Theory]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.Single, true, true, true, true)]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.Single, true, false, true, true)]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.InsetDouble, true, true, true, true)]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.InsetDouble, true, false, true, true)]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.OutsetDouble, true, true, true, true)]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.OutsetDouble, true, false, true, true)]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, true, true)]
-        [InlineData(DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, false, true, true)]
-        public void DataGridViewRow_AdjustRowHeaderBorderStyle_SingleNullDataGridView_ThrowsNullReferenceException(DataGridViewAdvancedCellBorderStyle all, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow)
-        {
-            var row = new DataGridViewRow();
-            var dataGridViewAdvancedBorderStyleInput = new DataGridViewAdvancedBorderStyle
-            {
-                All = all
-            };
-            var dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
-            Assert.Throws<NullReferenceException>(() => row.AdjustRowHeaderBorderStyle(dataGridViewAdvancedBorderStyleInput, dataGridViewAdvancedBorderStylePlaceholder, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow));
         }
 
         [Fact]
@@ -2585,7 +2606,7 @@ namespace System.Windows.Forms.Tests
         {
             var row = new DataGridViewRow();
             Assert.Throws<ArgumentNullException>("dataGridView", () => row.CreateCells(null));
-            Assert.Throws<ArgumentNullException>("dataGridView", () => row.CreateCells(null, new object[0]));
+            Assert.Throws<ArgumentNullException>("dataGridView", () => row.CreateCells(null, Array.Empty<object>()));
         }
 
         [Fact]
@@ -2595,7 +2616,7 @@ namespace System.Windows.Forms.Tests
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Throws<InvalidOperationException>(() => row.CreateCells(new DataGridView()));
-            Assert.Throws<InvalidOperationException>(() => row.CreateCells(new DataGridView(), new object[0]));
+            Assert.Throws<InvalidOperationException>(() => row.CreateCells(new DataGridView(), Array.Empty<object>()));
         }
 
         [Fact]
@@ -2606,7 +2627,7 @@ namespace System.Windows.Forms.Tests
             dataGridView.Columns[0].CellTemplate = null;
             var row = new DataGridViewRow();
             Assert.Throws<InvalidOperationException>(() => row.CreateCells(dataGridView));
-            Assert.Throws<InvalidOperationException>(() => row.CreateCells(dataGridView, new object[0]));
+            Assert.Throws<InvalidOperationException>(() => row.CreateCells(dataGridView, Array.Empty<object>()));
         }
 
         [Fact]
@@ -3471,14 +3492,14 @@ namespace System.Windows.Forms.Tests
             var dataGridView = new DataGridView { ColumnCount = 1, VirtualMode = true };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
-            Assert.Throws<InvalidOperationException>(() => row.SetValues(new object[0]));
+            Assert.Throws<InvalidOperationException>(() => row.SetValues(Array.Empty<object>()));
         }
 
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_SetValues_Shared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
-            Assert.Throws<InvalidOperationException>(() => row.SetValues(new object[0]));
+            Assert.Throws<InvalidOperationException>(() => row.SetValues(Array.Empty<object>()));
         }
 
         private class SubDataGridViewCell : DataGridViewCell

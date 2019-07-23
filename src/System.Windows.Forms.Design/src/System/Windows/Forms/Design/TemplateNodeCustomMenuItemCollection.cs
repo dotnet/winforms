@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Immediate parent - can be ToolStrip if the Item is on the toplevel 
+        /// Immediate parent - can be ToolStrip if the Item is on the toplevel
         /// </summary>
         private ToolStrip ParentTool
         {
@@ -61,8 +61,6 @@ namespace System.Windows.Forms.Design
         /// Insert Item into ToolStrip.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void InsertToolStripItem(Type t)
         {
             IDesignerHost designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
@@ -88,7 +86,7 @@ namespace System.Windows.Forms.Design
                     Image image = null;
                     try
                     {
-                        image = new Bitmap(typeof(ToolStripButton), "blank.bmp");
+                        image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                     }
                     catch (Exception e)
                     {

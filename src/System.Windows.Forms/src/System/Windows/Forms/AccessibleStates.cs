@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// The object has a rapidly or constantly changing appearance. Graphics
         /// that are occasionally animated, but not always, should be defined as
-        /// <see cref='AccessibleRole.Graphic'/>|<see cref='AccessibleStates.Animated'/>.
+        /// <see cref='AccessibleRole.Graphic'/>|<see cref='Animated'/>.
         /// This state should not be used to indicate that the object's location
         /// is changing.
         /// </summary>
@@ -203,7 +203,6 @@ namespace System.Windows.Forms
         /// magnification program would scroll the screen so that the battery
         /// indicator is in view. This state is also appropriate for any prompt
         /// or operation that must be completed before the user can continue.
-        ///    </para>
         /// </summary>
         AlertHigh = 0x10000000,
 

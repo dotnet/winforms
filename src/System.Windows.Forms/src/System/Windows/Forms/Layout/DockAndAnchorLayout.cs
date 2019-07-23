@@ -2,38 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+
 namespace System.Windows.Forms.Layout
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-
-    using ControlCollection = System.Windows.Forms.Control.ControlCollection;
-    using CompModSwitches = System.ComponentModel.CompModSwitches;
-
     internal class DefaultLayout : LayoutEngine
     {
-
-        // Singleton instance shared by all controls.
         internal static readonly DefaultLayout Instance = new DefaultLayout();
 
-        private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
-        private static readonly int _cachedBoundsProperty = PropertyStore.CreateKey();
+        private static readonly int s_layoutInfoProperty = PropertyStore.CreateKey();
+        private static readonly int s_cachedBoundsProperty = PropertyStore.CreateKey();
 
-        // Loop through the AutoSized controls and expand them if they are smaller than
-        // their preferred size.  If expanding the controls causes overlap, bump the overlapped
-        // control if it is AutoRelocatable.
+        /// <summary>
+        /// Loop through the AutoSized controls and expand them if they are smaller than
+        /// their preferred size. If expanding the controls causes overlap, bump the overlapped
+        /// control if it is AutoRelocatable.
+        /// </summary>
         private static void LayoutAutoSizedControls(IArrangedElement container)
         {
             ArrangedElementCollection children = container.Children;
             for (int i = children.Count - 1; i >= 0; i--)
             {
                 IArrangedElement element = children[i];
-
                 if (CommonProperties.xGetAutoSizedAndAnchored(element))
                 {
                     Rectangle bounds = GetCachedBounds(element);
@@ -49,10 +43,9 @@ namespace System.Windows.Forms.Layout
                     {
                         proposedConstraints.Height = bounds.Height;
                     }
+
                     Size prefSize = element.GetPreferredSize(proposedConstraints);
-
                     Rectangle newBounds = bounds;
-
                     if (CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink)
                     {
                         // this is the case for simple things like radio button, checkbox, etc.
@@ -60,14 +53,15 @@ namespace System.Windows.Forms.Layout
                     }
                     else
                     {
-                        // we had whacked this check, but it turns out it causes undesirable 
-                        // behavior in things like panel.  a panel with no elements sizes to 0,0.
+                        // we had whacked this check, but it turns out it causes undesirable
+                        // behavior in things like panel. a panel with no elements sizes to 0,0.
                         if (bounds.Width < prefSize.Width || bounds.Height < prefSize.Height)
                         {
                             Size newSize = LayoutUtils.UnionSizes(bounds.Size, prefSize);
                             newBounds = GetGrowthBounds(element, newSize);
                         }
                     }
+
                     if (newBounds != bounds)
                     {
                         SetCachedBounds(element, newBounds);
@@ -76,9 +70,11 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        // Gets the bounds of the element after growing to newSize (note that depending on
-        // anchoring the element may grow to the left/updwards rather than to the
-        // right/downwards. i.e., it may be translated.)
+        /// <summary>
+        /// Gets the bounds of the element after growing to newSize (note that depending on
+        /// anchoring the element may grow to the left/updwards rather than to the
+        /// right/downwards. i.e., it may be translated.)
+        /// </summary>
         private static Rectangle GetGrowthBounds(IArrangedElement element, Size newSize)
         {
             GrowthDirection direction = GetGrowthDirection(element);
@@ -106,7 +102,10 @@ namespace System.Windows.Forms.Layout
 
             return newBounds;
         }
-        // Examines an elements anchoring to figure out which direction it should grow.
+
+        /// <summary>
+        /// Examines an elements anchoring to figure out which direction it should grow.
+        /// </summary>
         private static GrowthDirection GetGrowthDirection(IArrangedElement element)
         {
             AnchorStyles anchor = GetAnchor(element);
@@ -145,7 +144,9 @@ namespace System.Windows.Forms.Layout
             return growthDirection;
         }
 
-        // Layout for a single anchored control.  There's no order dependency when laying out anchored controls.
+        /// <summary>
+        /// Layout for a single anchored control. There's no order dependency when laying out anchored controls.
+        /// </summary>
         private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
             // Container can not be null since we AschorControls takes a non-null container.
@@ -275,17 +276,15 @@ namespace System.Windows.Forms.Layout
             Rectangle displayRectangle = container.DisplayRectangle;
             if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
             {
-                // we havent set oursleves to the preferred size yet.  proceeding will
-                // just set all the control widths to zero.  let's return here
+                // we havent set oursleves to the preferred size yet. proceeding will
+                // just set all the control widths to zero. let's return here
                 return;
             }
-
 
             ArrangedElementCollection children = container.Children;
             for (int i = children.Count - 1; i >= 0; i--)
             {
                 IArrangedElement element = children[i];
-
                 if (CommonProperties.GetNeedsAnchorLayout(element))
                 {
                     Debug.Assert(GetAnchorInfo(element) != null, "AnchorInfo should be initialized before LayoutAnchorControls().");
@@ -297,8 +296,7 @@ namespace System.Windows.Forms.Layout
         private static Size LayoutDockedControls(IArrangedElement container, bool measureOnly)
         {
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tDock Processing");
-            Debug.Assert(!HasCachedBounds(container),
-                "Do not call this method with an active cached bounds list.");
+            Debug.Assert(!HasCachedBounds(container), "Do not call this method with an active cached bounds list.");
 
             // If measuring, we start with an empty rectangle and add as needed.
             // If doing actual layout, we start with the container's rect and subtract as we layout.
@@ -308,17 +306,15 @@ namespace System.Windows.Forms.Layout
             IArrangedElement mdiClient = null;
 
             // Docking layout is order dependent. After much debate, we decided to use z-order as the
-            // docking order.  (Introducing a DockOrder property was a close second)
+            // docking order. (Introducing a DockOrder property was a close second)
             ArrangedElementCollection children = container.Children;
             for (int i = children.Count - 1; i >= 0; i--)
             {
                 IArrangedElement element = children[i];
-
                 Debug.Assert(element.Bounds == GetCachedBounds(element), "Why do we have cachedBounds for a docked element?");
-
                 if (CommonProperties.GetNeedsDockLayout(element))
                 {
-                    // Some controls modify their bounds when you call SetBoundsCore.  We
+                    // Some controls modify their bounds when you call SetBoundsCore. We
                     // therefore need to read the value of bounds back when adjusting our layout rectangle.
                     switch (GetDock(element))
                     {
@@ -327,7 +323,7 @@ namespace System.Windows.Forms.Layout
                                 Size elementSize = GetVerticalDockedSize(element, remainingBounds.Size, measureOnly);
                                 Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
-                                xLayoutDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
+                                TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: top += element.Bounds.Height;
                                 remainingBounds.Y += element.Bounds.Height;
@@ -339,7 +335,7 @@ namespace System.Windows.Forms.Layout
                                 Size elementSize = GetVerticalDockedSize(element, remainingBounds.Size, measureOnly);
                                 Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Bottom - elementSize.Height, elementSize.Width, elementSize.Height);
 
-                                xLayoutDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
+                                TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: bottom -= element.Bounds.Height;
                                 remainingBounds.Height -= element.Bounds.Height;
@@ -351,7 +347,7 @@ namespace System.Windows.Forms.Layout
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
                                 Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
-                                xLayoutDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
+                                TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: left += element.Bounds.Width;
                                 remainingBounds.X += element.Bounds.Width;
@@ -363,7 +359,7 @@ namespace System.Windows.Forms.Layout
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
                                 Rectangle newElementBounds = new Rectangle(remainingBounds.Right - elementSize.Width, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
-                                xLayoutDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
+                                TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: right -= element.Bounds.Width;
                                 remainingBounds.Width -= element.Bounds.Width;
@@ -377,10 +373,10 @@ namespace System.Windows.Forms.Layout
                             }
                             else
                             {
-                                Size elementSize = remainingBounds.Size;//GetFillDockedSize(element, remainingBounds.Size, measureOnly);
+                                Size elementSize = remainingBounds.Size;
                                 Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
-                                xLayoutDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
+                                TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
                             }
                             break;
                         default:
@@ -395,12 +391,15 @@ namespace System.Windows.Forms.Layout
                     SetCachedBounds(mdiClient, remainingBounds);
                 }
             }
+
             return preferredSize;
         }
 
-        // Helper method that either sets the element bounds or does the preferredSize computation based on
-        // the value of measureOnly.
-        private static void xLayoutDockedControl(IArrangedElement element, Rectangle newElementBounds, bool measureOnly, ref Size preferredSize, ref Rectangle remainingBounds)
+        /// <summary>
+        /// Helper method that either sets the element bounds or does the preferredSize computation based on
+        /// the value of measureOnly.
+        /// </summary>
+        private static void TryCalculatePreferredSizeDockedControl(IArrangedElement element, Rectangle newElementBounds, bool measureOnly, ref Size preferredSize, ref Rectangle remainingBounds)
         {
             if (measureOnly)
             {
@@ -436,10 +435,10 @@ namespace System.Windows.Forms.Layout
 #if DEBUG
                 Control control = element as Control;
                 newElementBounds.Size = control.ApplySizeConstraints(newElementBounds.Size);
+
                 // This usually happens when a Control overrides its SetBoundsCore or sets size during OnResize
-                // to enforce constraints like AutoSize.  Generally you can just move this code to Control.GetAdjustedSize
-                // and then PreferredSize will also pick up these constraints.  See ComboBox as an example.
-                //
+                // to enforce constraints like AutoSize. Generally you can just move this code to Control.GetAdjustedSize
+                // and then PreferredSize will also pick up these constraints. See ComboBox as an example.
                 if (CommonProperties.GetAutoSize(element) && !CommonProperties.GetSelfAutoSizeInDefaultLayout(element))
                 {
                     Debug.Assert(
@@ -454,7 +453,6 @@ namespace System.Windows.Forms.Layout
         private static Size GetVerticalDockedSize(IArrangedElement element, Size remainingSize, bool measureOnly)
         {
             Size newSize = xGetDockedSize(element, remainingSize, /* constraints = */ new Size(remainingSize.Width, 1), measureOnly);
-
             if (!measureOnly)
             {
                 newSize.Width = remainingSize.Width;
@@ -466,14 +464,12 @@ namespace System.Windows.Forms.Layout
 
             Debug.Assert((measureOnly && (newSize.Width >= remainingSize.Width)) || (newSize.Width == remainingSize.Width),
                 "Error detected in GetVerticalDockedSize: Dock size computed incorrectly during layout.");
-
             return newSize;
         }
 
         private static Size GetHorizontalDockedSize(IArrangedElement element, Size remainingSize, bool measureOnly)
         {
             Size newSize = xGetDockedSize(element, remainingSize, /* constraints = */ new Size(1, remainingSize.Height), measureOnly);
-
             if (!measureOnly)
             {
                 newSize.Height = remainingSize.Height;
@@ -485,31 +481,12 @@ namespace System.Windows.Forms.Layout
 
             Debug.Assert((measureOnly && (newSize.Height >= remainingSize.Height)) || (newSize.Height == remainingSize.Height),
                 "Error detected in GetHorizontalDockedSize: Dock size computed incorrectly during layout.");
-
             return newSize;
         }
-
-        //Unused
-        //private static Size GetFillDockedSize(IArrangedElement element, Size remainingSize, bool measureOnly) {
-        //    Size newSize = xGetDockedSize(element, remainingSize, /* constraints = */ remainingSize, measureOnly);
-        //    newSize = LayoutUtils.UnionSizes(newSize, remainingSize);
-
-        //    if (!measureOnly) {
-        //        newSize = LayoutUtils.IntersectSizes(newSize, remainingSize);
-        //    }
-
-        //    Debug.Assert(newSize.Width >= remainingSize.Width && newSize.Height >= remainingSize.Height,
-        //        "Error detected in GetFillDockedSize: Element did not stretch to remaning size.");
-        //    Debug.Assert(measureOnly || (newSize.Width == remainingSize.Width && newSize.Height == remainingSize.Height),
-        //        "Error detected in GetFillDockedSize: Dock size computed incorrectly during layout.");
-
-        //    return newSize;
-        //}
 
         private static Size xGetDockedSize(IArrangedElement element, Size remainingSize, Size constraints, bool measureOnly)
         {
             Size desiredSize;
-
             if (CommonProperties.GetAutoSize(element))
             {
                 // Ask control for its desired size using the provided constraints.
@@ -526,26 +503,21 @@ namespace System.Windows.Forms.Layout
             return desiredSize;
         }
 
-        internal override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
+        private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
         {
-            // PreferredSize is garbage if we are not measuring.
-            return xLayout(container, /* measureOnly = */ false, out Size garbage);
+            return TryCalculatePreferredSize(container, measureOnly: false, preferredSize: out Size _);
         }
 
-        // Note: PreferredSize is only computed if measureOnly = true.
-        private static bool xLayout(IArrangedElement container, bool measureOnly, out Size preferredSize)
+        /// <remarks>
+        /// PreferredSize is only computed if measureOnly = true.
+        /// </remarks>
+        private static bool TryCalculatePreferredSize(IArrangedElement container, bool measureOnly, out Size preferredSize)
         {
-            /*
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, 
-                                  string.Format("{1}(hwnd=0x{0:X}).OnLayout", 
-                                                (container.IsHandleCreated ? container.Handle : IntPtr.Zero), 
-                                                container.GetType().FullName));
-            */
-
             ArrangedElementCollection children = container.Children;
-            preferredSize = new Size(-7103, -7105);     // PreferredSize is garbage unless measureOnly is specified
+            // PreferredSize is garbage unless measureOnly is specified
+            preferredSize = new Size(-7103, -7105);
 
-            // short circuit for items with no children
+            // Short circuit for items with no children
             if (!measureOnly && children.Count == 0)
             {
                 return CommonProperties.GetAutoSize(container);
@@ -554,12 +526,9 @@ namespace System.Windows.Forms.Layout
             bool dock = false;
             bool anchor = false;
             bool autoSize = false;
-
-
             for (int i = children.Count - 1; i >= 0; i--)
             {
                 IArrangedElement element = children[i];
-
                 if (CommonProperties.GetNeedsDockAndAnchorLayout(element))
                 {
                     if (!dock && CommonProperties.GetNeedsDockLayout(element))
@@ -592,7 +561,7 @@ namespace System.Windows.Forms.Layout
 
             if (anchor && !measureOnly)
             {
-                // in the case of anchor, where we currently are defines the preferred size,
+                // In the case of anchor, where we currently are defines the preferred size,
                 // so dont recalculate the positions of everything.
                 LayoutAnchoredControls(container);
             }
@@ -615,11 +584,12 @@ namespace System.Windows.Forms.Layout
                 Padding containerPadding = Padding.Empty;
                 if (container is Control control)
                 {
-                    // calling this will respect Control.DefaultPadding.
+                    // Calling this will respect Control.DefaultPadding.
                     containerPadding = control.Padding;
                 }
                 else
-                { // not likely to happen but…
+                {
+                    // Not likely to happen but handle this gracefully.
                     containerPadding = CommonProperties.GetPadding(container, Padding.Empty);
                 }
 
@@ -628,20 +598,18 @@ namespace System.Windows.Forms.Layout
 
                 ClearCachedBounds(container);
                 preferredSize = LayoutUtils.UnionSizes(preferredSizeForDocking, preferredSizeForAnchoring);
-
             }
+
             return CommonProperties.GetAutoSize(container);
         }
 
         /// <summary>
-        ///     Updates the Anchor information based on the controls current bounds.
-        ///     This should only be called when the parent control changes or the
-        ///     anchor mode changes.
+        /// Updates the Anchor information based on the controls current bounds. This should only be called
+        /// when the parent control changes or the anchor mode changes.
         /// </summary>
         private static void UpdateAnchorInfo(IArrangedElement element)
         {
-            Debug.Assert(!HasCachedBounds(element.Container),
-                "Do not call this method with an active cached bounds list.");
+            Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
 
             AnchorInfo anchorInfo = GetAnchorInfo(element);
             if (anchorInfo == null)
@@ -654,12 +622,9 @@ namespace System.Windows.Forms.Layout
             Debug.Indent();
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container == null ? "No parent" : "Parent");
 
-
             if (CommonProperties.GetNeedsAnchorLayout(element) && element.Container != null)
             {
-
                 Rectangle bounds = GetCachedBounds(element);
-
                 AnchorInfo oldAnchorInfo = new AnchorInfo
                 {
                     Left = anchorInfo.Left,
@@ -692,7 +657,8 @@ namespace System.Windows.Forms.Layout
                     {
                         // parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond right edge
                         anchorInfo.Right = oldAnchorInfo.Right;
-                        anchorInfo.Left = oldAnchorInfo.Right - bounds.Width;   // control might have been resized, update Left anchor
+                        // control might have been resized, update Left anchor
+                        anchorInfo.Left = oldAnchorInfo.Right - bounds.Width;
                     }
                     else
                     {
@@ -716,7 +682,8 @@ namespace System.Windows.Forms.Layout
                     {
                         // parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond bottom edge
                         anchorInfo.Bottom = oldAnchorInfo.Bottom;
-                        anchorInfo.Top = oldAnchorInfo.Bottom - bounds.Height;   // control might have been resized, update Top anchor
+                        // control might have been resized, update Top anchor
+                        anchorInfo.Top = oldAnchorInfo.Bottom - bounds.Height;
                     }
                     else
                     {
@@ -733,15 +700,14 @@ namespace System.Windows.Forms.Layout
                     anchorInfo.Bottom -= (parentHeight / 2);
                     anchorInfo.Top -= (parentHeight / 2);
                 }
+
                 Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "anchor info (l,t,r,b): (" + anchorInfo.Left + ", " + anchorInfo.Top + ", " + anchorInfo.Right + ", " + anchorInfo.Bottom + ")");
             }
+
             Debug.Unindent();
         }
 
-        public static AnchorStyles GetAnchor(IArrangedElement element)
-        {
-            return CommonProperties.xGetAnchor(element);
-        }
+        public static AnchorStyles GetAnchor(IArrangedElement element) => CommonProperties.xGetAnchor(element);
 
         public static void SetAnchor(IArrangedElement container, IArrangedElement element, AnchorStyles value)
         {
@@ -772,29 +738,23 @@ namespace System.Windows.Forms.Layout
                     if (element.Container.Container != null && (rightReleased || bottomReleased))
                     {
                         // If the right or bottom anchor is being released, we have a special case where the element's
-                        // margin may affect preferredSize where it didn't previously.  Rather than do an expensive
+                        // margin may affect preferredSize where it didn't previously. Rather than do an expensive
                         // check for this in OnLayout, we just detect the case her and force a relayout.
                         LayoutTransaction.DoLayout(element.Container.Container, element, PropertyNames.Anchor);
                     }
                     LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Anchor);
                 }
             }
-            Debug.Assert(GetAnchor(element) == value, "Error setting Anchor value.");
         }
 
-        public static DockStyle GetDock(IArrangedElement element)
-        {
-            return CommonProperties.xGetDock(element);
-        }
+        public static DockStyle GetDock(IArrangedElement element) => CommonProperties.xGetDock(element);
 
         public static void SetDock(IArrangedElement element, DockStyle value)
         {
-            Debug.Assert(!HasCachedBounds(element.Container),
-                "Do not call this method with an active cached bounds list.");
+            Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
 
             if (GetDock(element) != value)
             {
-                //valid values are 0x0 to 0x5
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
@@ -807,7 +767,6 @@ namespace System.Windows.Forms.Layout
                 {
                     // if the item is autosized, calling setbounds performs a layout, which
                     // if we havent set the anchor info properly yet makes dock/anchor layout cranky.
-
                     if (value == DockStyle.None)
                     {
                         if (dockNeedsLayout)
@@ -821,12 +780,11 @@ namespace System.Windows.Forms.Layout
                     else
                     {
                         // Now setup the new bounds.
-                        //
                         element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.All);
                     }
                 }
-
             }
+
             Debug.Assert(GetDock(element) == value, "Error setting Dock value.");
         }
 
@@ -850,7 +808,7 @@ namespace System.Windows.Forms.Layout
         {
             if (element.Container != null)
             {
-                IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(_cachedBoundsProperty);
+                IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(s_cachedBoundsProperty);
                 if (dictionary != null)
                 {
                     object bounds = dictionary[element];
@@ -860,19 +818,20 @@ namespace System.Windows.Forms.Layout
                     }
                 }
             }
+
             return element.Bounds;
         }
 
         private static bool HasCachedBounds(IArrangedElement container)
         {
-            return container != null && container.Properties.GetObject(_cachedBoundsProperty) != null;
+            return container != null && container.Properties.GetObject(s_cachedBoundsProperty) != null;
         }
 
         private static void ApplyCachedBounds(IArrangedElement container)
         {
             if (CommonProperties.GetAutoSize(container))
             {
-                //Avoiding calling DisplayRectangle before checking AutoSize for Everett compat
+                // Avoiding calling DisplayRectangle before checking AutoSize for Everett compat
                 Rectangle displayRectangle = container.DisplayRectangle;
                 if ((displayRectangle.Width == 0) || (displayRectangle.Height == 0))
                 {
@@ -881,9 +840,7 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
-
-
-            IDictionary dictionary = (IDictionary)container.Properties.GetObject(_cachedBoundsProperty);
+            IDictionary dictionary = (IDictionary)container.Properties.GetObject(s_cachedBoundsProperty);
             if (dictionary != null)
             {
 #if DEBUG
@@ -899,7 +856,7 @@ namespace System.Windows.Forms.Layout
 
                         Debug.Assert(element.Container == container, "We have non-children in our containers cached bounds store.");
 #if DEBUG
-                        // We are about to set the bounds to the cached value.  We clear the cached value
+                        // We are about to set the bounds to the cached value. We clear the cached value
                         // before SetBounds because some controls fiddle with the bounds on SetBounds
                         // and will callback InitLayout with a different bounds and BoundsSpecified.
                         dictionary.Remove(entry.Key);
@@ -911,40 +868,42 @@ namespace System.Windows.Forms.Layout
                     }
 #endif
                 }
+
                 ClearCachedBounds(container);
             }
         }
 
         private static void ClearCachedBounds(IArrangedElement container)
         {
-            container.Properties.SetObject(_cachedBoundsProperty, null);
+            container.Properties.SetObject(s_cachedBoundsProperty, null);
         }
 
         private static void SetCachedBounds(IArrangedElement element, Rectangle bounds)
         {
             if (bounds != GetCachedBounds(element))
             {
-                IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(_cachedBoundsProperty);
+                IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(s_cachedBoundsProperty);
                 if (dictionary == null)
                 {
                     dictionary = new HybridDictionary();
-                    element.Container.Properties.SetObject(_cachedBoundsProperty, dictionary);
+                    element.Container.Properties.SetObject(s_cachedBoundsProperty, dictionary);
                 }
+
                 dictionary[element] = bounds;
             }
         }
 
         private static AnchorInfo GetAnchorInfo(IArrangedElement element)
         {
-            return (AnchorInfo)element.Properties.GetObject(_layoutInfoProperty);
+            return (AnchorInfo)element.Properties.GetObject(s_layoutInfoProperty);
         }
 
         private static void SetAnchorInfo(IArrangedElement element, AnchorInfo value)
         {
-            element.Properties.SetObject(_layoutInfoProperty, value);
+            element.Properties.SetObject(s_layoutInfoProperty, value);
         }
 
-        internal override void InitLayoutCore(IArrangedElement element, BoundsSpecified specified)
+        private protected override void InitLayoutCore(IArrangedElement element, BoundsSpecified specified)
         {
             Debug.Assert(specified == BoundsSpecified.None || GetCachedBounds(element) == element.Bounds,
                 "Attempt to InitLayout while element has active cached bounds.");
@@ -957,19 +916,9 @@ namespace System.Windows.Forms.Layout
 
         internal override Size GetPreferredSize(IArrangedElement container, Size proposedBounds)
         {
-            Debug.Assert(!HasCachedBounds(container),
-                "Do not call this method with an active cached bounds list.");
+            Debug.Assert(!HasCachedBounds(container), "Do not call this method with an active cached bounds list.");
 
-
-            xLayout(container, /* measureOnly = */ true, out Size prefSize);
-            /*            container.Bounds = prefSize;
-                        xLayout(container, false, out prefSize);
-
-                        // make sure controls are big enough to fit on form if not - increase container size
-                        container.Bounds = newBounds;
-
-                        xLayout(container, true, out prefSize);*/
-
+            TryCalculatePreferredSize(container, measureOnly: true, preferredSize: out Size prefSize);
             return prefSize;
         }
 
@@ -994,18 +943,17 @@ namespace System.Windows.Forms.Layout
                         prefSize.Width = Math.Max(prefSize.Width, elementSpace.Right);
                     }
 
-                    if (/*IsAnchored(anchor, AnchorStyles.Top) &&*/ !IsAnchored(anchor, AnchorStyles.Bottom))
+                    if (!IsAnchored(anchor, AnchorStyles.Bottom))
                     {
                         // If we are anchored to the top we make sure the container is large enough not to clip us
                         // (unless we are bottom anchored, in which case growing the container will just resize us.)
                         prefSize.Height = Math.Max(prefSize.Height, elementSpace.Bottom);
-
                     }
 
                     if (IsAnchored(anchor, AnchorStyles.Right))
                     {
                         // If we are right anchored, see what the anchor distance between our right edge and
-                        // the container is, and make sure our container is large enough to accomodate us.                            
+                        // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
                         if (anchorDest.Width < 0)
                         {
@@ -1020,7 +968,7 @@ namespace System.Windows.Forms.Layout
                     if (IsAnchored(anchor, AnchorStyles.Bottom))
                     {
                         // If we are right anchored, see what the anchor distance between our right edge and
-                        // the container is, and make sure our container is large enough to accomodate us.                            
+                        // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
                         if (anchorDest.Height < 0)
                         {
@@ -1031,10 +979,9 @@ namespace System.Windows.Forms.Layout
                             prefSize.Height = Math.Max(prefSize.Height, anchorDest.Bottom);
                         }
                     }
-
-
                 }
             }
+
             return prefSize;
         }
 
@@ -1053,73 +1000,83 @@ namespace System.Windows.Forms.Layout
             Right = 0x08
         }
 
-
 #if DEBUG_PAINT_ANCHOR
-	// handy method for drawing out the child anchor infos
-        internal static void  DebugPaintAnchor(Graphics g, Control parent) {
-            foreach (Control child in parent.Controls) {
-
-                
+	    // handy method for drawing out the child anchor infos
+        internal static void  DebugPaintAnchor(Graphics g, Control parent)
+        {
+            foreach (Control child in parent.Controls)
+            {
                 AnchorInfo layout = GetAnchorInfo(child as IArrangedElement);
                 Rectangle displayRect = parent.DisplayRectangle;
-
-                if (layout == null) {
+                if (layout == null)
+                {
                     continue;
                 }
+
                 int left = layout.Left + displayRect.X;
                 int top = layout.Top + displayRect.Y;
                 int right = layout.Right + displayRect.X;
                 int bottom = layout.Bottom + displayRect.Y;
-     
+
                 AnchorStyles anchor = GetAnchor(child as IArrangedElement);
 
                 // Repeat of GetAnchorDestination
-                if (IsAnchored(anchor, AnchorStyles.Right)) {
+                if (IsAnchored(anchor, AnchorStyles.Right))
+                {
                     Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting right");
                     right += displayRect.Width;
-     
-                    if (!IsAnchored(anchor, AnchorStyles.Left)) {
+
+                    if (!IsAnchored(anchor, AnchorStyles.Left))
+                    {
                         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting left");
                         left += displayRect.Width;
                     }
                 }
-                else if (!IsAnchored(anchor, AnchorStyles.Left)) {
+                else if (!IsAnchored(anchor, AnchorStyles.Left))
+                {
                     Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting left & right");
                     right += (displayRect.Width / 2);
                     left += (displayRect.Width / 2);
                 }
-     
-                if (IsAnchored(anchor, AnchorStyles.Bottom)) {
+
+                if (IsAnchored(anchor, AnchorStyles.Bottom))
+                {
                     Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting bottom");
                     bottom += displayRect.Height;
-     
-                    if (!IsAnchored(anchor, AnchorStyles.Top)) {
+
+                    if (!IsAnchored(anchor, AnchorStyles.Top))
+                    {
                         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting top");
                         top += displayRect.Height;
                     }
                 }
-                else if (!IsAnchored(anchor, AnchorStyles.Top)) {
+                else if (!IsAnchored(anchor, AnchorStyles.Top))
+                {
                     Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting top & bottom");
                     bottom += (displayRect.Height/2);
                     top += (displayRect.Height/2);
                 }
 
-                if (IsAnchored(anchor, AnchorStyles.Right)) {
+                if (IsAnchored(anchor, AnchorStyles.Right))
+                {
                     TextRenderer.DrawText(g, "right " + layout.Right.ToString(), parent.Font, new Point(right/2, child.Top - 20), Color.HotPink);
                     g.FillRectangle(Brushes.HotPink, 0,  child.Top -4, right, 1);
                 }
-                if (IsAnchored(anchor, AnchorStyles.Left)) {
+                if (IsAnchored(anchor, AnchorStyles.Left))
+                {
                     TextRenderer.DrawText(g, "left " + layout.Left.ToString(), parent.Font, new Point(left/2, child.Top - 16), Color.Green);
-                    g.FillRectangle(Brushes.Green, 0, child.Top -2, left, 1);                    
-                }                          
-                if (IsAnchored(anchor, AnchorStyles.Top)) {
+                    g.FillRectangle(Brushes.Green, 0, child.Top -2, left, 1);
+                }
+                if (IsAnchored(anchor, AnchorStyles.Top))
+                {
                     TextRenderer.DrawText(g, "top " + layout.Top.ToString(), parent.Font, new Point(child.Left -100, top/2), Color.Blue);
 
-                    g.FillRectangle(Brushes.Blue, child.Left -1, 0, 1, top);                    
+                    g.FillRectangle(Brushes.Blue, child.Left -1, 0, 1, top);
                 }
-                if (IsAnchored(anchor, AnchorStyles.Bottom)) {
+                if (IsAnchored(anchor, AnchorStyles.Bottom))
+                {
                     TextRenderer.DrawText(g, "bottom " + layout.Bottom.ToString(), parent.Font, new Point(child.Left -100, right/2), Color.Red);
-                    g.FillRectangle(Brushes.Red, child.Left -2, 1, 1, bottom);                    
+                    g.FillRectangle(Brushes.Red, child.Left -2, 1, 1, bottom);
                 }
             }
         }
@@ -1127,48 +1084,53 @@ namespace System.Windows.Forms.Layout
 
 #if DEBUG_LAYOUT
 #if DEBUG
+        internal static string Debug_GetAllLayoutInformation(Control start, int indents)
+        {
+            string info = Debug_GetLayoutInfo(start, indents) + Environment.NewLine;
+            for (int i = 0; i < start.Controls.Count; i++)
+            {
+                info += Debug_GetIndents(indents) + "+-->" + Debug_GetAllLayoutInformation(start.Controls[i], indents + 1) + "\r\n";
+            }
 
-        internal static string Debug_GetAllLayoutInformation(Control start, int indents) {
-             string info = Debug_GetLayoutInfo(start, indents) + "\r\n";
-     
-             for (int i = 0; i < start.Controls.Count; i++) {
-                 info += Debug_GetIndents(indents) + "+-->" + Debug_GetAllLayoutInformation(start.Controls[i], indents + 1) + "\r\n";
-             }
-             return info;
-         }
-         internal static string Debug_GetIndents(int indents) {
-             string str = string.Empty;
-             for (int i = 0; i < indents; i++) {
-                 str += "\t";
-             }
-             return str;
-         }
-         internal static string Debug_GetLayoutInfo(Control control, int indents) {
-             string lineBreak = "\r\n" + Debug_GetIndents(indents + 1);
-             string layoutInfo = string.Format(System.Globalization.CultureInfo.CurrentCulture, 
-                                                "Handle {9} Name {1} Type {2} {0} Bounds {3} {0} AutoSize {4} {0} Dock [{5}] Anchor [{6}] {0} Padding [{7}] Margin [{8}]",
-                                                 lineBreak,
-                                                 control.Name,
-                                                 control.GetType().Name,
-                                                 control.Bounds,
-                                                 control.AutoSize,
-                                                 control.Dock,
-                                                 control.Anchor,
-                                                 control.Padding,
-                                                 control.Margin,
-                                                 !control.IsHandleCreated ? "[not created]" : "0x" + ((int)(control.Handle)).ToString("x"));
-             if (control is TableLayoutPanel) {
-                 TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutSettings));
-     
-                 layoutInfo += lineBreak + converter.ConvertTo(control as TableLayoutPanel, typeof(string));
-             }
-             return layoutInfo;
-     
-         }
+            return info;
+        }
+
+        internal static string Debug_GetIndents(int indents)
+        {
+            string str = string.Empty;
+            for (int i = 0; i < indents; i++)
+            {
+                str += '\t';
+            }
+            return str;
+        }
+
+        internal static string Debug_GetLayoutInfo(Control control, int indents)
+        {
+            string lineBreak = Environment.NewLine + Debug_GetIndents(indents + 1);
+            string layoutInfo = string.Format(System.Globalization.CultureInfo.CurrentCulture,
+                                            "Handle {9} Name {1} Type {2} {0} Bounds {3} {0} AutoSize {4} {0} Dock [{5}] Anchor [{6}] {0} Padding [{7}] Margin [{8}]",
+                                                lineBreak,
+                                                control.Name,
+                                                control.GetType().Name,
+                                                control.Bounds,
+                                                control.AutoSize,
+                                                control.Dock,
+                                                control.Anchor,
+                                                control.Padding,
+                                                control.Margin,
+                                                !control.IsHandleCreated ? "[not created]" : "0x" + ((int)(control.Handle)).ToString("x"));
+            if (control is TableLayoutPanel panelControl)
+            {
+                TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutSettings));
+                layoutInfo += lineBreak + converter.ConvertTo(panelControl, typeof(string));
+            }
+
+            return layoutInfo;
+        }
 #endif
 #endif
 
-        #region AnchorInfo
         private sealed class AnchorInfo
         {
             public int Left;
@@ -1176,6 +1138,5 @@ namespace System.Windows.Forms.Layout
             public int Right;
             public int Bottom;
         }
-        #endregion AnchorInfo
     }
 }

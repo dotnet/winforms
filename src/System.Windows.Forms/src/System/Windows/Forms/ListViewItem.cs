@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -16,14 +15,13 @@ using System.Runtime.Serialization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Implements an item of a <see cref='System.Windows.Forms.ListView'/>.
+    /// Implements an item of a <see cref='Forms.ListView'/>.
     /// </summary>
-    [TypeConverterAttribute(typeof(ListViewItemConverter))]
+    [TypeConverter(typeof(ListViewItemConverter))]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Text))]
     [Serializable]
-    [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
     public class ListViewItem : ICloneable, ISerializable
     {
         private const int MaxSubItems = 4096;
@@ -62,12 +60,10 @@ namespace System.Windows.Forms
         {
             private readonly ListViewItem _owner;
 
-
             public ListViewItemImageIndexer(ListViewItem item)
             {
                 _owner = item;
             }
-
 
             public override ImageList ImageList
             {
@@ -86,7 +82,6 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates a ListViewItem object from an Stream.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Changing this would be a breaking change")]
         protected ListViewItem(SerializationInfo info, StreamingContext context) : this()
         {
             Deserialize(info, context);
@@ -295,7 +290,7 @@ namespace System.Windows.Forms
         }
 
         [DefaultValue(false)]
-        [RefreshPropertiesAttribute(RefreshProperties.Repaint)]
+        [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatAppearance))]
         public bool Checked
         {
@@ -439,7 +434,7 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ListViewItemImageIndexDescr))]
-        [TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))]
+        [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
         public int ImageIndex
         {
             get
@@ -473,7 +468,7 @@ namespace System.Windows.Forms
         /// Returns the ListViewItem's currently set image index
         /// </summary>
         [DefaultValue("")]
-        [TypeConverterAttribute(typeof(ImageKeyConverter))]
+        [TypeConverter(typeof(ImageKeyConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -685,7 +680,7 @@ namespace System.Windows.Forms
         }
 
         [Localizable(true)]
-        [TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))]
+        [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
         [DefaultValue(-1)]
         [SRDescription(nameof(SR.ListViewItemStateImageIndexDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -1296,14 +1291,13 @@ namespace System.Windows.Forms
             Serialize(info, context);
         }
 
-        [TypeConverterAttribute(typeof(ListViewSubItemConverter))]
+        [TypeConverter(typeof(ListViewSubItemConverter))]
         [ToolboxItem(false)]
         [DesignTimeVisible(false)]
         [DefaultProperty(nameof(Text))]
         [Serializable]
         public class ListViewSubItem
         {
-
             [NonSerialized]
             internal ListViewItem owner;
 
@@ -1338,7 +1332,6 @@ namespace System.Windows.Forms
                     font = font
                 };
             }
-
 
             public Color BackColor
             {
@@ -1518,7 +1511,6 @@ namespace System.Windows.Forms
             }
 
             [OnDeserialized]
-            [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
             private void OnDeserialized(StreamingContext ctx)
             {
                 name = null;
@@ -1986,7 +1978,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new ListViewSubItem[0].GetEnumerator();
+                    return Array.Empty<ListViewSubItem>().GetEnumerator();
                 }
 
             }

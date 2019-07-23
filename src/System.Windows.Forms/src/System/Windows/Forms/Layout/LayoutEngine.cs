@@ -4,7 +4,6 @@
 
 //#define LAYOUT_PERFWATCH
 
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout
@@ -17,6 +16,7 @@ namespace System.Windows.Forms.Layout
             {
                 throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
             }
+
             return element;
         }
 
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Layout
             InitLayoutCore(CastToArrangedElement(child), specified);
         }
 
-        internal virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds)
+        private protected virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds)
         {
         }
 
@@ -47,7 +47,6 @@ namespace System.Windows.Forms.Layout
         private const int LayoutWatch = 100;
 #endif
 
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
         {
             if (container == null)
@@ -62,7 +61,7 @@ namespace System.Windows.Forms.Layout
             Debug.Indent();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-#endif            
+#endif
             bool parentNeedsLayout = LayoutCore(CastToArrangedElement(container), layoutEventArgs);
 
 #if LAYOUT_PERFWATCH
@@ -77,7 +76,7 @@ namespace System.Windows.Forms.Layout
             return parentNeedsLayout;
         }
 
-        internal virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
+        private protected virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
         {
             return false;
         }

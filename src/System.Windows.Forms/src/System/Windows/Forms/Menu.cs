@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -25,11 +24,11 @@ namespace System.Windows.Forms
         internal const int CHANGE_ITEMADDED = 4; // mergeType or mergeOrder changed
 
         /// <summary>
-        ///     Used by findMenuItem
+        ///  Used by findMenuItem
         /// </summary>
         public const int FindHandle = 0;
         /// <summary>
-        ///     Used by findMenuItem
+        ///  Used by findMenuItem
         /// </summary>
         public const int FindShortcut = 1;
 
@@ -42,8 +41,8 @@ namespace System.Windows.Forms
         private string name;
 
         /// <summary>
-        ///     This is an abstract class.  Instances cannot be created, so the constructor
-        ///     is only called from derived classes.
+        ///  This is an abstract class.  Instances cannot be created, so the constructor
+        ///  is only called from derived classes.
         /// </summary>
         protected Menu(MenuItem[] items)
         {
@@ -54,7 +53,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The HMENU handle corresponding to this menu.
+        ///  The HMENU handle corresponding to this menu.
         /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -76,7 +75,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Specifies whether this menu contains any items.
+        ///  Specifies whether this menu contains any items.
         /// </summary>
         [
         Browsable(false),
@@ -100,7 +99,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The MenuItem that contains the list of MDI child windows.
+        ///  The MenuItem that contains the list of MDI child windows.
         /// </summary>
         [
         Browsable(false),
@@ -133,9 +132,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Name of this control. The designer will set this to the same
-        ///     as the programatic Id "(name)" of the control - however this
-        ///     property has no bearing on the runtime aspects of this control.
+        ///  Name of this control. The designer will set this to the same
+        ///  as the programatic Id "(name)" of the control - however this
+        ///  property has no bearing on the runtime aspects of this control.
         /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -163,7 +162,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
 
         [
         Browsable(false),
@@ -193,7 +191,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -215,7 +212,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Notifies Menu that someone called Windows.DeleteMenu on its handle.
+        ///  Notifies Menu that someone called Windows.DeleteMenu on its handle.
         /// </summary>
         internal void ClearHandles()
         {
@@ -235,11 +232,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets this menu to be an identical copy of another menu.
+        ///  Sets this menu to be an identical copy of another menu.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Shipped as is in Everett
-        ]
         protected internal void CloneMenu(Menu menuSrc)
         {
             if (menuSrc == null)
@@ -264,17 +258,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
-
-
         protected virtual IntPtr CreateMenuHandle()
         {
             return UnsafeNativeMethods.CreatePopupMenu();
         }
 
-        /// <summary>
-        /// </summary>
         internal void CreateMenuItems()
         {
             if (!created)
@@ -287,8 +275,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal void DestroyMenuItems()
         {
             if (created)
@@ -306,9 +292,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Disposes of the component.  Call dispose when the component is no longer needed.
-        ///     This method removes the component from its container (if the component has a site)
-        ///     and triggers the dispose event.
+        ///  Disposes of the component.  Call dispose when the component is no longer needed.
+        ///  This method removes the component from its container (if the component has a site)
+        ///  and triggers the dispose event.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -374,8 +360,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <summary>
-        /// </summary>
         protected int FindMergePosition(int mergeOrder)
         {
             int iMin, iLim, iT;
@@ -395,8 +379,6 @@ namespace System.Windows.Forms
             return iMin;
         }
 
-        /// <summary>
-        /// </summary>
         // A new method for finding the approximate merge position. The original
         // method assumed (incorrectly) that the MergeOrder of the target menu would be sequential
         // as it's guaranteed to be in the MDI imlementation of merging container and child
@@ -444,11 +426,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the ContextMenu that contains this menu.  The ContextMenu
-        ///     is at the top of this menu's parent chain.
-        ///     Returns null if this menu is not contained in a ContextMenu.
-        ///     This can occur if it's contained in a MainMenu or if it isn't
-        ///     currently contained in any menu at all.
+        ///  Returns the ContextMenu that contains this menu.  The ContextMenu
+        ///  is at the top of this menu's parent chain.
+        ///  Returns null if this menu is not contained in a ContextMenu.
+        ///  This can occur if it's contained in a MainMenu or if it isn't
+        ///  currently contained in any menu at all.
         /// </summary>
         public ContextMenu GetContextMenu()
         {
@@ -467,11 +449,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the MainMenu item that contains this menu.  The MainMenu
-        ///     is at the top of this menu's parent chain.
-        ///     Returns null if this menu is not contained in a MainMenu.
-        ///     This can occur if it's contained in a ContextMenu or if it isn't
-        ///     currently contained in any menu at all.
+        ///  Returns the MainMenu item that contains this menu.  The MainMenu
+        ///  is at the top of this menu's parent chain.
+        ///  Returns null if this menu is not contained in a MainMenu.
+        ///  This can occur if it's contained in a ContextMenu or if it isn't
+        ///  currently contained in any menu at all.
         /// </summary>
         public MainMenu GetMainMenu()
         {
@@ -488,8 +470,6 @@ namespace System.Windows.Forms
             return (MainMenu)menuT;
         }
 
-        /// <summary>
-        /// </summary>
         internal virtual void ItemsChanged(int change)
         {
             switch (change)
@@ -502,13 +482,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Walks the menu item collection, using a caller-supplied delegate to find one
-        ///     with a matching access key. Walk starts at specified item index and performs one
-        ///     full pass of the entire collection, looping back to the top if necessary.
+        ///  Walks the menu item collection, using a caller-supplied delegate to find one
+        ///  with a matching access key. Walk starts at specified item index and performs one
+        ///  full pass of the entire collection, looping back to the top if necessary.
         ///
-        ///     Return value is intended for return from WM_MENUCHAR message. It includes both
-        ///     index of matching item, and action for OS to take (execute or select). Zero is
-        ///     used to indicate that no match was found (OS should ignore key and beep).
+        ///  Return value is intended for return from WM_MENUCHAR message. It includes both
+        ///  index of matching item, and action for OS to take (execute or select). Zero is
+        ///  used to indicate that no match was found (OS should ignore key and beep).
         /// </summary>
         private IntPtr MatchKeyToMenuItem(int startItem, char key, MenuItemKeyComparer comparer)
         {
@@ -546,13 +526,10 @@ namespace System.Windows.Forms
         private delegate bool MenuItemKeyComparer(MenuItem mi, char key);
 
         /// <summary>
-        ///     Merges another menu's items with this one's.  Menu items are merged according to their
-        ///     mergeType and mergeOrder properties.  This function is typically used to
-        ///     merge an MDI container's menu with that of its active MDI child.
+        ///  Merges another menu's items with this one's.  Menu items are merged according to their
+        ///  mergeType and mergeOrder properties.  This function is typically used to
+        ///  merge an MDI container's menu with that of its active MDI child.
         /// </summary>
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Shipped as is in Everett
-        ]
         public virtual void MergeMenu(Menu menuSrc)
         {
             if (menuSrc == null)
@@ -630,8 +607,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         internal virtual bool ProcessInitMenuPopup(IntPtr handle)
         {
             MenuItem item = FindMenuItem(FindHandle, handle);
@@ -644,8 +619,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <summary>
-        /// </summary>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             MenuItem item = FindMenuItem(FindShortcut, (IntPtr)(int)keyData);
@@ -653,8 +626,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns index of currently selected menu item in
-        ///     this menu, or -1 if no item is currently selected.
+        ///  Returns index of currently selected menu item in
+        ///  this menu, or -1 if no item is currently selected.
         /// </summary>
         internal int SelectedMenuItemIndex
         {
@@ -672,20 +645,18 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", Items.Count: " + ItemCount.ToString(CultureInfo.CurrentCulture);
         }
 
         /// <summary>
-        ///     Handles the WM_MENUCHAR message, forwarding it to the intended Menu
-        ///     object. All the real work is done inside WmMenuCharInternal().
+        ///  Handles the WM_MENUCHAR message, forwarding it to the intended Menu
+        ///  object. All the real work is done inside WmMenuCharInternal().
         /// </summary>
         internal void WmMenuChar(ref Message m)
         {
@@ -702,9 +673,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles WM_MENUCHAR to provide access key support for owner-draw menu items (which
-        ///     means *all* menu items on a menu when IsImageMarginPresent == true). Attempts to
-        ///     simulate the exact behavior that the OS provides for non owner-draw menu items.
+        ///  Handles WM_MENUCHAR to provide access key support for owner-draw menu items (which
+        ///  means *all* menu items on a menu when IsImageMarginPresent == true). Attempts to
+        ///  simulate the exact behavior that the OS provides for non owner-draw menu items.
         /// </summary>
         internal IntPtr WmMenuCharInternal(char key)
         {
@@ -781,7 +752,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>Retrieves the child control with the specified key.</para>
+            ///  Retrieves the child control with the specified key.
             /// </summary>
             public virtual MenuItem this[string key]
             {
@@ -847,9 +818,8 @@ namespace System.Windows.Forms
                 }
             }
 
-
             /// <summary>
-            ///     Adds a new MenuItem to the end of this menu with the specified caption.
+            ///  Adds a new MenuItem to the end of this menu with the specified caption.
             /// </summary>
             public virtual MenuItem Add(string caption)
             {
@@ -859,8 +829,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds a new MenuItem to the end of this menu with the specified caption,
-            ///     and click handler.
+            ///  Adds a new MenuItem to the end of this menu with the specified caption,
+            ///  and click handler.
             /// </summary>
             public virtual MenuItem Add(string caption, EventHandler onClick)
             {
@@ -870,8 +840,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds a new MenuItem to the end of this menu with the specified caption,
-            ///     click handler, and items.
+            ///  Adds a new MenuItem to the end of this menu with the specified caption,
+            ///  click handler, and items.
             /// </summary>
             public virtual MenuItem Add(string caption, MenuItem[] items)
             {
@@ -881,9 +851,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds a MenuItem to the end of this menu
-            ///     MenuItems can only be contained in one menu at a time, and may not be added
-            ///     more than once to the same menu.
+            ///  Adds a MenuItem to the end of this menu
+            ///  MenuItems can only be contained in one menu at a time, and may not be added
+            ///  more than once to the same menu.
             /// </summary>
             public virtual int Add(MenuItem item)
             {
@@ -891,10 +861,10 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds a MenuItem to this menu at the specified index.  The item currently at
-            ///     that index, and all items after it, will be moved up one slot.
-            ///     MenuItems can only be contained in one menu at a time, and may not be added
-            ///     more than once to the same menu.
+            ///  Adds a MenuItem to this menu at the specified index.  The item currently at
+            ///  that index, and all items after it, will be moved up one slot.
+            ///  MenuItems can only be contained in one menu at a time, and may not be added
+            ///  more than once to the same menu.
             /// </summary>
             public virtual int Add(int index, MenuItem item)
             {
@@ -1010,7 +980,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
+            ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
             public virtual bool ContainsKey(string key)
             {
@@ -1018,18 +988,16 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>Searches for Controls by their Name property, builds up an array 
-            ///           of all the controls that match. 
-            ///     </para>
-            /// </summary>
+            ///  Searches for Controls by their Name property, builds up an array
+            ///  of all the controls that match.
+                    /// </summary>
             public MenuItem[] Find(string key, bool searchAllChildren)
             {
 
                 if ((key == null) || (key.Length == 0))
                 {
-                    throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
+                    throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
-
 
                 ArrayList foundMenuItems = FindInternal(key, searchAllChildren, this, new ArrayList());
 
@@ -1041,15 +1009,14 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>Searches for Controls by their Name property, builds up an array list
-            ///           of all the controls that match. 
-            ///     </para>
-            /// </summary>
+            ///  Searches for Controls by their Name property, builds up an array list
+            ///  of all the controls that match.
+                    /// </summary>
             private ArrayList FindInternal(string key, bool searchAllChildren, MenuItemCollection menuItemsToLookIn, ArrayList foundMenuItems)
             {
                 if ((menuItemsToLookIn == null) || (foundMenuItems == null))
                 {
-                    return null;  // 
+                    return null;  //
                 }
 
                 // Perform breadth first search - as it's likely people will want controls belonging
@@ -1113,7 +1080,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
+            ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
             public virtual int IndexOfKey(string key)
             {
@@ -1159,18 +1126,16 @@ namespace System.Windows.Forms
                 }
             }
 
-
             /// <summary>
-            ///     <para>Determines if the index is valid for the collection.</para>
+            ///  Determines if the index is valid for the collection.
             /// </summary>
             private bool IsValidIndex(int index)
             {
                 return ((index >= 0) && (index < Count));
             }
 
-
             /// <summary>
-            ///     Removes all existing MenuItems from this menu
+            ///  Removes all existing MenuItems from this menu
             /// </summary>
             public virtual void Clear()
             {
@@ -1208,8 +1173,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes the item at the specified index in this menu.  All subsequent
-            ///     items are moved up one slot.
+            ///  Removes the item at the specified index in this menu.  All subsequent
+            ///  items are moved up one slot.
             /// </summary>
             public virtual void RemoveAt(int index)
             {
@@ -1235,7 +1200,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     <para>Removes the menu iteml with the specified key.</para>
+            ///  Removes the menu iteml with the specified key.
             /// </summary>
             public virtual void RemoveByKey(string key)
             {
@@ -1247,8 +1212,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes the specified item from this menu.  All subsequent
-            ///     items are moved down one slot.
+            ///  Removes the specified item from this menu.  All subsequent
+            ///  items are moved down one slot.
             /// </summary>
             public virtual void Remove(MenuItem item)
             {

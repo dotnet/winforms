@@ -2,29 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    using System.Runtime.InteropServices;
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Globalization;
-
     internal class MultiSelectRootGridEntry : SingleSelectRootGridEntry
     {
-
         private static readonly PDComparer PropertyComparer = new PDComparer();
-
 
         internal MultiSelectRootGridEntry(PropertyGridView view, object obj, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType)
         : base(view, obj, baseProvider, host, tab, sortType)
@@ -68,7 +57,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 object[] rgobjs = (object[])objValue;
 
-
                 ChildCollection.Clear();
 
                 MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, PropertySort, CurrentTab);
@@ -94,10 +82,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-
         internal static class PropertyMerger
         {
-
             public static MultiPropertyDescriptorGridEntry[] GetMergedProperties(object[] rgobjs, GridEntry parentEntry, PropertySort sort, PropertyTab tab)
             {
 
@@ -178,7 +164,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 ArrayList mergedList = new ArrayList();
                 PropertyDescriptor[] matchArray = new PropertyDescriptor[objs.Length];
 
-                // 
+                //
                 // Merge the property descriptors
                 //
                 int[] posArray = new int[propCollections.Length];
@@ -271,8 +257,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 return mergedList;
             }
-
-
 
             private static MultiPropertyDescriptorGridEntry[] SortParenEntries(MultiPropertyDescriptorGridEntry[] entries)
             {
@@ -394,7 +378,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (result == 0)
                 {
-                    // 
+                    //
                     result = string.Compare(a1.PropertyType.FullName, a2.PropertyType.FullName, true, System.Globalization.CultureInfo.CurrentCulture);
                 }
                 return result;

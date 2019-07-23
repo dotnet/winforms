@@ -728,7 +728,6 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             /// Creates a resource set hashtable for the given resource reader.
             /// </summary>
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             private Hashtable CreateResourceSet(IResourceReader reader, CultureInfo culture)
             {
                 Hashtable result = new Hashtable();
@@ -1023,7 +1022,6 @@ namespace System.ComponentModel.Design.Serialization
                                 invariantWriter.AddResource(name, value);
                             }
                             _invariantCultureResourcesDirty = false;
-
 
                             // Followed by the metadata.
                             Debug.Assert(_metadata != null, "No metadata, but it's dirty?");

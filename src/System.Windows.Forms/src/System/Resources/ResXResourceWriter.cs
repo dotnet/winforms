@@ -2,27 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Xml;
+
 namespace System.Resources
 {
-
-    using System.Diagnostics;
-    using System.Reflection;
-    using System;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Drawing;
-    using System.IO;
-    using System.Text;
-    using System.ComponentModel;
-    using System.Collections;
-    using System.Resources;
-    using System.Xml;
-    using System.Runtime.Serialization;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    ///     ResX resource writer. See the text in "ResourceSchema" for more 
-    ///     information.
+    ///  ResX resource writer. See the text in "ResourceSchema" for more
+    ///  information.
     /// </summary>
     public class ResXResourceWriter : IResourceWriter
     {
@@ -45,19 +36,6 @@ namespace System.Resources
 
         private static readonly TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
 
-        internal static readonly string Beta2CompatSerializedObjectMimeType = "text/microsoft-urt/psuedoml-serialized/base64";
-
-        // These two "compat" mimetypes are here. In Beta 2 and RTM we used the term "URT"
-        // internally to refer to parts of the .NET Framework. Since these references
-        // will be in Beta 2 ResX files, and RTM ResX files for customers that had 
-        // early access to releases, we don't want to break that. We will read 
-        // and parse these types correctly in version 1.0, but will always 
-        // write out the new version. So, opening and editing a ResX file in VS will
-        // update it to the new types.
-        //
-        internal static readonly string CompatBinSerializedObjectMimeType = "text/microsoft-urt/binary-serialized/base64";
-        internal static readonly string CompatSoapSerializedObjectMimeType = "text/microsoft-urt/soap-serialized/base64";
-
         public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
         public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
         public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;
@@ -79,7 +57,7 @@ namespace System.Resources
                             <xsd:attribute name=""name"" use=""required"" type=""xsd:string""/>
                             <xsd:attribute name=""type"" type=""xsd:string""/>
                             <xsd:attribute name=""mimetype"" type=""xsd:string""/>
-                            <xsd:attribute ref=""xml:space""/>                            
+                            <xsd:attribute ref=""xml:space""/>
                         </xsd:complexType>
                     </xsd:element>
                     <xsd:element name=""assembly"">
@@ -113,6 +91,7 @@ namespace System.Resources
         </xsd:element>
         </xsd:schema>
         ";
+
         readonly string fileName;
         Stream stream;
         TextWriter textWriter;
@@ -124,12 +103,12 @@ namespace System.Resources
         private readonly Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
 
         /// <summary>
-        ///     Base Path for ResXFileRefs.
+        ///  Base Path for ResXFileRefs.
         /// </summary>
         public string BasePath { get; set; }
 
         /// <summary>
-        ///     Creates a new ResXResourceWriter that will write to the specified file.
+        ///  Creates a new ResXResourceWriter that will write to the specified file.
         /// </summary>
         public ResXResourceWriter(string fileName)
         {
@@ -142,7 +121,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Creates a new ResXResourceWriter that will write to the specified stream.
+        ///  Creates a new ResXResourceWriter that will write to the specified stream.
         /// </summary>
         public ResXResourceWriter(Stream stream)
         {
@@ -155,7 +134,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Creates a new ResXResourceWriter that will write to the specified TextWriter.
+        ///  Creates a new ResXResourceWriter that will write to the specified TextWriter.
         /// </summary>
         public ResXResourceWriter(TextWriter textWriter)
         {
@@ -176,7 +155,7 @@ namespace System.Resources
         {
             if (xmlTextWriter == null)
             {
-                // 
+                //
 
                 bool writeHeaderRequired = false;
 
@@ -273,7 +252,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Adds aliases to the resource file...
+        ///  Adds aliases to the resource file...
         /// </summary>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
         {
@@ -290,10 +269,9 @@ namespace System.Resources
             cachedAliases[assemblyName.FullName] = aliasName;
         }
 
-
         /// <summary>
-        ///    Adds the given value to the collection of metadata.  These name/value pairs 
-        ///    will be emitted to the <metadata> elements in the .resx file.
+        ///  Adds the given value to the collection of metadata.  These name/value pairs
+        ///  will be emitted to the <metadata> elements in the .resx file.
         /// </summary>
         public void AddMetadata(string name, byte[] value)
         {
@@ -301,8 +279,8 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Adds the given value to the collection of metadata.  These name/value pairs 
-        ///    will be emitted to the <metadata> elements in the .resx file.
+        ///  Adds the given value to the collection of metadata.  These name/value pairs
+        ///  will be emitted to the <metadata> elements in the .resx file.
         /// </summary>
         public void AddMetadata(string name, string value)
         {
@@ -310,8 +288,8 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///    Adds the given value to the collection of metadata.  These name/value pairs 
-        ///    will be emitted to the <metadata> elements in the .resx file.
+        ///  Adds the given value to the collection of metadata.  These name/value pairs
+        ///  will be emitted to the <metadata> elements in the .resx file.
         /// </summary>
         public void AddMetadata(string name, object value)
         {
@@ -319,7 +297,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a blob resource to the resources.
+        ///  Adds a blob resource to the resources.
         /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, byte[] value)
@@ -328,9 +306,9 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a resource to the resources. If the resource is a string,
-        ///     it will be saved that way, otherwise it will be serialized
-        ///     and stored as in binary.
+        ///  Adds a resource to the resources. If the resource is a string,
+        ///  it will be saved that way, otherwise it will be serialized
+        ///  and stored as in binary.
         /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, object value)
@@ -346,7 +324,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a string resource to the resources.
+        ///  Adds a string resource to the resources.
         /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, string value)
@@ -355,7 +333,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a string resource to the resources.
+        ///  Adds a string resource to the resources.
         /// </summary>
         public void AddResource(ResXDataNode node)
         {
@@ -381,7 +359,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a blob resource to the resources.
+        ///  Adds a blob resource to the resources.
         /// </summary>
         private void AddDataRow(string elementName, string name, byte[] value)
         {
@@ -389,9 +367,9 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a resource to the resources. If the resource is a string,
-        ///     it will be saved that way, otherwise it will be serialized
-        ///     and stored as in binary.
+        ///  Adds a resource to the resources. If the resource is a string,
+        ///  it will be saved that way, otherwise it will be serialized
+        ///  and stored as in binary.
         /// </summary>
         private void AddDataRow(string elementName, string name, object value)
         {
@@ -422,7 +400,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a string resource to the resources.
+        ///  Adds a string resource to the resources.
         /// </summary>
         private void AddDataRow(string elementName, string name, string value)
         {
@@ -435,10 +413,9 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Adds a new row to the Resources table. This helper is used because
-        ///     we want to always late bind to the columns for greater flexibility.
+        ///  Adds a new row to the Resources table. This helper is used because
+        ///  we want to always late bind to the columns for greater flexibility.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment)
         {
             if (hasBeenSaved)
@@ -526,7 +503,6 @@ namespace System.Resources
             Writer.WriteEndElement();
         }
 
-
         private void AddAssemblyRow(string elementName, string alias, string name)
         {
             Writer.WriteStartElement(elementName);
@@ -562,7 +538,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Closes any files or streams locked by the writer.
+        ///  Closes any files or streams locked by the writer.
         /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void Close()
@@ -653,7 +629,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///     Writes the resources out to the file or stream.
+        ///  Writes the resources out to the file or stream.
         /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void Generate()
@@ -673,6 +649,5 @@ namespace System.Resources
         }
     }
 }
-
 
 

@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
-    [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     [Flags]
     public enum DragDropEffects
     {
@@ -36,7 +33,7 @@ namespace System.Windows.Forms
         Scroll = unchecked((int)0x80000000),
 
         /// <summary>
-        /// The data is copied, removed from the drag source, and scrolled in the 
+        /// The data is copied, removed from the drag source, and scrolled in the
         /// drop target. NOTE: Link is intentionally not present in All.
         /// </summary>
         All = Copy | Move | Scroll,

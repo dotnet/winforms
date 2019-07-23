@@ -2,27 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
-    using System;
-
     /// <summary>
-    ///     Adds padding related to the drawing bounding box, computed according to the font size.
+    ///  Adds padding related to the drawing bounding box, computed according to the font size.
     /// </summary>
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    enum TextPaddingOptions
+    internal enum TextPaddingOptions
     {
-        // Add some extra points to account for some glyphs overhanging (like for letter f in some fonts or 
+        // Add some extra points to account for some glyphs overhanging (like for letter f in some fonts or
         // when italized).
         // For an illustration, type letter f in Wordpad and make it 72-point "Times New Roman" italic
         // observe that the lower left part of the letter is clipped.  Also, try selecting the letter,

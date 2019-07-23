@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     public class MouseEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.MouseEventArgs'/> class.
+        /// Initializes a new instance of the <see cref='MouseEventArgs'/> class.
         /// </summary>
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
         {

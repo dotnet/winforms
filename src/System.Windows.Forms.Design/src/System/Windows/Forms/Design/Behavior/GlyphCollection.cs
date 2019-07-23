@@ -7,19 +7,19 @@ using System.Collections;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     A strongly-typed collection that stores Behavior.Glyph objects.
+    ///  A strongly-typed collection that stores Behavior.Glyph objects.
     /// </summary>
     public class GlyphCollection : CollectionBase
     {
         /// <summary>
-        ///     Initializes a new instance of Behavior.GlyphCollection.
+        ///  Initializes a new instance of Behavior.GlyphCollection.
         /// </summary>
         public GlyphCollection()
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of Behavior.GlyphCollection based on another Behavior.GlyphCollection.
+        ///  Initializes a new instance of Behavior.GlyphCollection based on another Behavior.GlyphCollection.
         /// </summary>
         public GlyphCollection(GlyphCollection value)
         {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Initializes a new instance of Behavior.GlyphCollection containing any array of Behavior.Glyph objects.
+        ///  Initializes a new instance of Behavior.GlyphCollection containing any array of Behavior.Glyph objects.
         /// </summary>
         public GlyphCollection(Glyph[] value)
         {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Represents the entry at the specified index of the Behavior.Glyph.
+        ///  Represents the entry at the specified index of the Behavior.Glyph.
         /// </summary>
         public Glyph this[int index]
         {
@@ -44,8 +44,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Adds a Behavior.Glyph with the specified value to the
-        ///     Behavior.GlyphCollection .
+        ///  Adds a Behavior.Glyph with the specified value to the
+        ///  Behavior.GlyphCollection .
         /// </summary>
         public int Add(Glyph value)
         {
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Copies the elements of an array to the end of the Behavior.GlyphCollection.
+        ///  Copies the elements of an array to the end of the Behavior.GlyphCollection.
         /// </summary>
         public void AddRange(Glyph[] value)
         {
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Adds the contents of another Behavior.GlyphCollection to the end of the collection.
+        ///  Adds the contents of another Behavior.GlyphCollection to the end of the collection.
         /// </summary>
         public void AddRange(GlyphCollection value)
         {
@@ -75,8 +75,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Gets a value indicating whether the
-        ///     Behavior.GlyphCollection contains the specified Behavior.Glyph.
+        ///  Gets a value indicating whether the
+        ///  Behavior.GlyphCollection contains the specified Behavior.Glyph.
         /// </summary>
         public bool Contains(Glyph value)
         {
@@ -84,10 +84,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Copies the Behavior.GlyphCollection values to a one-dimensional
-        ///     <see cref='System.Array instance at the 
-        /// specified index.
-        /// 
+        ///  Copies the Behavior.GlyphCollection values to a one-dimensional
+        ///  <see cref='System.Array'/> instance at the specified index.
         /// </summary>
         public void CopyTo(Glyph[] array, int index)
         {
@@ -95,8 +93,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Returns the index of a Behavior.Glyph in
-        ///     the Behavior.GlyphCollection .
+        ///  Returns the index of a Behavior.Glyph in
+        ///  the Behavior.GlyphCollection .
         /// </summary>
         public int IndexOf(Glyph value)
         {
@@ -104,7 +102,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Inserts a Behavior.Glyph into the Behavior.GlyphCollection at the specified index.
+        ///  Inserts a Behavior.Glyph into the Behavior.GlyphCollection at the specified index.
         /// </summary>
         public void Insert(int index, Glyph value)
         {
@@ -112,8 +110,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Removes a specific Behavior.Glyph from the
-        ///     Behavior.GlyphCollection .
+        ///  Removes a specific Behavior.Glyph from the
+        ///  Behavior.GlyphCollection .
         /// </summary>
         public void Remove(Glyph value)
         {

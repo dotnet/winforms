@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// The Bounds of this glyph. 
+        /// The Bounds of this glyph.
         /// </summary>
         public override Rectangle Bounds
         {

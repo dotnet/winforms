@@ -2,21 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Design;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Windows.Forms.Design;
-
     internal class Com2ComponentEditor : WindowsFormsComponentEditor
     {
-
         public static bool NeedsComponentEditor(object obj)
         {
             if (obj is NativeMethods.IPerPropertyBrowsing)
@@ -60,12 +53,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return false;
         }
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // This was shipped in Everett.
-        ]
         public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
         {
-
             IntPtr handle = (parent == null ? IntPtr.Zero : parent.Handle);
 
             // try to get the page guid

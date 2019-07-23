@@ -4,17 +4,9 @@
 
 namespace System.Windows.Forms
 {
-
-    using System.Diagnostics;
-
-    using System;
-
-
     /// <summary>
-    ///    <para>
-    ///       Represents the method that will handle the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/>
-    ///       event of a <see cref='System.Windows.Forms.StatusBar'/>.
-    ///    </para>
+    ///  Represents the method that will handle the <see cref='StatusBar.OnPanelClick'/>
+    ///  event of a <see cref='StatusBar'/>.
     /// </summary>
     public delegate void StatusBarPanelClickEventHandler(object sender, StatusBarPanelClickEventArgs e);
 }

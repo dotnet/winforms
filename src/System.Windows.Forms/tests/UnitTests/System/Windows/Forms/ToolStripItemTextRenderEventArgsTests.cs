@@ -62,13 +62,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Ctor_NullItem_ThrowsNullReferenceException()
+        public void Ctor_NullItem_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                Assert.Throws<NullReferenceException>(() => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Top));
-                Assert.Throws<NullReferenceException>(() => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.TopLeft));
+                Assert.Throws<ArgumentNullException>("item", () => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Top));
+                Assert.Throws<ArgumentNullException>("item", () => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.TopLeft));
             }
         }
 

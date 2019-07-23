@@ -9,10 +9,10 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Translates between WinForms text-based <see cref='System.Windows.Forms.Clipboard'/>
+    /// Translates between WinForms text-based <see cref='Clipboard'/>
     /// formats and <see langword='Microsoft.Win32'/> 32-bit signed integer-based clipboard
     /// formats. Provides <see langword='static '/> methods to create new
-    /// <see cref='System.Windows.Forms.Clipboard'/> formats and add them to the Windows Registry.
+    /// <see cref='Clipboard'/> formats and add them to the Windows Registry.
     /// </summary>
     public static class DataFormats
     {
@@ -47,9 +47,8 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Specifies the Windows metafile format, which WinForms does not directly use.
-        /// This <see langword='static '/> field is read-only.
+        /// This <see langword='static'/> field is read-only.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Would be a breaking change to rename this")]
         public static readonly string MetafilePict = "MetaFilePict";
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Specifies the wave audio format, which Win Forms does not
-        ///   directly use. This <see langword='static '/> field is read-only.
+        ///  directly use. This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string WaveAudio = "WaveAudio";
 
@@ -152,7 +151,7 @@ namespace System.Windows.Forms
         private static readonly object s_internalSyncObject = new object();
 
         /// <summary>
-        /// Gets a <see cref='System.Windows.Forms.DataFormats.Format'/> with the Windows
+        /// Gets a <see cref='Format'/> with the Windows
         /// Clipboard numeric ID and name for the specified format.
         /// </summary>
         public static Format GetFormat(string format)
@@ -193,7 +192,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a <see cref='System.Windows.Forms.DataFormats.Format'/> with the Windows
+        /// Gets a <see cref='Format'/> with the Windows
         /// Clipboard numeric ID and name for the specified ID.
         /// </summary>
         public static Format GetFormat(int id)
@@ -293,7 +292,7 @@ namespace System.Windows.Forms
         public class Format
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref='System.Windows.Forms.DataFormats.Format'/>
+            /// Initializes a new instance of the <see cref='Format'/>
             /// class and specifies whether a <see langword='Win32 '/> handle is expected with this format.
             /// </summary>
             public Format(string name, int id)

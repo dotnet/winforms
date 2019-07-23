@@ -576,14 +576,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.BackColor);
         }
 
-        public static IEnumerable<object[]> BackColor_Set_TestData()
-        {
-            yield return new object[] { Color.Empty, Control.DefaultBackColor };
-            yield return new object[] { Color.Red, Color.Red };
-        }
-
         [Theory]
-        [MemberData(nameof(BackColor_Set_TestData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             var item = new SubToolStripItem
@@ -598,7 +592,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(BackColor_Set_TestData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
         {
             var parent = new ToolStrip();
@@ -1118,14 +1112,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.ForeColor);
         }
 
-        public static IEnumerable<object[]> ForeColor_Set_TestData()
-        {
-            yield return new object[] { Color.Empty, Control.DefaultForeColor };
-            yield return new object[] { Color.Red, Color.Red };
-        }
-
         [Theory]
-        [MemberData(nameof(ForeColor_Set_TestData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             var item = new SubToolStripItem
@@ -1140,7 +1128,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(ForeColor_Set_TestData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
         {
             var parent = new ToolStrip();

@@ -2,29 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DRAWING_DESIGN_NAMESPACE
-namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
-{
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Collections;
-    using System.Text;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    partial class IntNativeMethods
+namespace System.Windows.Forms.Internal
+{
+    internal partial class IntNativeMethods
     {
         public const int
         DT_TOP = 0x00000000,
@@ -82,7 +65,6 @@ namespace System.Experimental.Gdi
         WHITENESS = 0x00FF0062, /* dest = WHITE                    */
         CAPTUREBLT = 0x40000000, /* Include layered windows */
 
-
         /* FONT WEIGHT (BOLD) VALUES */
         FW_DONTCARE = 0,
         FW_NORMAL = 400,
@@ -138,7 +120,6 @@ namespace System.Experimental.Gdi
         // Code page
         CP_ACP = 0, // ANSI
 
-
         FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
         FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
         FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
@@ -169,7 +150,7 @@ namespace System.Experimental.Gdi
                 this.bottom = bottom;
             }
 
-            public RECT(System.Drawing.Rectangle r)
+            public RECT(Rectangle r)
             {
                 left = r.Left;
                 top = r.Top;
@@ -193,50 +174,6 @@ namespace System.Experimental.Gdi
                     return new Size(right - left, bottom - top);
                 }
             }
-
-            public System.Drawing.Rectangle ToRectangle()
-            {
-                return new Rectangle(
-                    left,
-                    top,
-                    right - left,
-                    bottom - top);
-            }
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                Size size = this.Size;
-                return string.Format("{0}=[left={1}, top={2}, width={3}, height={4}]", this.GetType().Name, left, top, size.Width, size.Height);
-            }
-#endif
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class POINT
-        {
-            public int x;
-            public int y;
-
-            public POINT()
-            {
-            }
-
-            public POINT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-
-            public System.Drawing.Point ToPoint()
-            {
-                return new System.Drawing.Point(x, y);
-            }
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                return string.Format("{0}=[x={1}, y={2}]", this.GetType().Name, x, y);
-            }
-#endif
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -248,9 +185,9 @@ namespace System.Experimental.Gdi
             public int iRightMargin;
 
             /// <summary>
-            ///     Receives the number of characters processed by DrawTextEx, including white-space characters. 
-            ///     The number can be the length of the string or the index of the first line that falls below the drawing area. 
-            ///     Note that DrawTextEx always processes the entire string if the DT_NOCLIP formatting flag is specified. 
+            ///  Receives the number of characters processed by DrawTextEx, including white-space characters.
+            ///  The number can be the length of the string or the index of the first line that falls below the drawing area.
+            ///  Note that DrawTextEx always processes the entire string if the DT_NOCLIP formatting flag is specified.
             /// </summary>
             public int uiLengthDrawn;
 
@@ -269,99 +206,6 @@ namespace System.Experimental.Gdi
                 iLeftMargin = leftMargin;
                 iRightMargin = rightMargin;
             }
-
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                return string.Format("{0}=[tabLength={1}, leftMargin={2}, rightMargin={3}, lengthDrawn={4}]", this.GetType().Name, iTabLength, iLeftMargin, iRightMargin, uiLengthDrawn);
-            }
-#endif
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class LOGBRUSH
-        {
-            public int lbStyle;
-            public int lbColor;
-            public int lbHatch;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LOGFONT
-        {
-            public int lfHeight;
-            public int lfWidth;
-            public int lfEscapement;
-            public int lfOrientation;
-            public int lfWeight;
-            public byte lfItalic;
-            public byte lfUnderline;
-            public byte lfStrikeOut;
-            public byte lfCharSet;
-            public byte lfOutPrecision;
-            public byte lfClipPrecision;
-            public byte lfQuality;
-            public byte lfPitchAndFamily;
-            [MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string lfFaceName;
-
-            public LOGFONT()
-            {
-            }
-
-            public LOGFONT(LOGFONT lf)
-            {
-                Debug.Assert(lf != null, "lf is null");
-
-                lfHeight = lf.lfHeight;
-                lfWidth = lf.lfWidth;
-                lfEscapement = lf.lfEscapement;
-                lfOrientation = lf.lfOrientation;
-                lfWeight = lf.lfWeight;
-                lfItalic = lf.lfItalic;
-                lfUnderline = lf.lfUnderline;
-                lfStrikeOut = lf.lfStrikeOut;
-                lfCharSet = lf.lfCharSet;
-                lfOutPrecision = lf.lfOutPrecision;
-                lfClipPrecision = lf.lfClipPrecision;
-                lfQuality = lf.lfQuality;
-                lfPitchAndFamily = lf.lfPitchAndFamily;
-                lfFaceName = lf.lfFaceName;
-            }
-
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString() 
-            {
-                return 
-                    "FaceName="  + lfFaceName + ", " +
-                    "Height="    + lfHeight   + ", " +
-                    "Width="     + lfWidth    + ", " +
-                    "Bold="      + (lfWeight    <= FW_NORMAL ? false : true) + ", " +
-                    "Italic="    + (lfItalic    == 0 ? false : true) + ", " +
-                    "Underline=" + (lfUnderline == 0 ? false : true) + ", " +
-                    "StrikeOut=" + (lfStrikeOut == 0 ? false : true) + ", " +
-                    "CharSet="   + lfCharSet;
-            }
-
-            public string DumpObject() 
-            {
-                return 
-                    "Height="         + lfHeight         + ", " +
-                    "Width="          + lfWidth          + ", " +
-                    "Escapement="     + lfEscapement     + ", " +
-                    "Orientation="    + lfOrientation    + ", " +
-                    "Weight="         + lfWeight         + ", " +
-                    "Italic="         + lfItalic         + ", " +
-                    "Underline="      + lfUnderline      + ", " +
-                    "StrikeOut="      + lfStrikeOut      + ", " +
-                    "CharSet="        + lfCharSet        + ", " +
-                    "OutPrecision="   + lfOutPrecision   + ", " +
-                    "ClipPrecision="  + lfClipPrecision  + ", " +
-                    "Quality="        + lfQuality        + ", " +
-                    "PitchAndFamily=" + lfPitchAndFamily + ", " +
-                    "FaceName="       + lfFaceName;
-            }
-#endif
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -387,59 +231,6 @@ namespace System.Experimental.Gdi
             public byte tmStruckOut;
             public byte tmPitchAndFamily;
             public byte tmCharSet;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public struct TEXTMETRICA
-        {
-            public int tmHeight;
-            public int tmAscent;
-            public int tmDescent;
-            public int tmInternalLeading;
-            public int tmExternalLeading;
-            public int tmAveCharWidth;
-            public int tmMaxCharWidth;
-            public int tmWeight;
-            public int tmOverhang;
-            public int tmDigitizedAspectX;
-            public int tmDigitizedAspectY;
-            public byte tmFirstChar;
-            public byte tmLastChar;
-            public byte tmDefaultChar;
-            public byte tmBreakChar;
-            public byte tmItalic;
-            public byte tmUnderlined;
-            public byte tmStruckOut;
-            public byte tmPitchAndFamily;
-            public byte tmCharSet;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class SIZE
-        {
-            public int cx;
-            public int cy;
-
-            public SIZE()
-            {
-            }
-
-            public SIZE(int cx, int cy)
-            {
-                this.cx = cx;
-                this.cy = cy;
-            }
-
-            public System.Drawing.Size ToSize()
-            {
-                return new System.Drawing.Size(cx, cy);
-            }
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString()
-            {
-                return string.Format("{0}=[width={1}, height={2}]", this.GetType().Name, cx, cy);
-            }
-#endif
         }
     }
 }

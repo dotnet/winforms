@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -367,7 +366,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Executes a command on the document</para>
+        ///  Executes a command on the document
         /// </summary>
         public void ExecCommand(string command, bool showUI, object value)
         {
@@ -476,7 +475,6 @@ namespace System.Windows.Forms
             return InvokeScript(scriptName, null);
         }
 
-
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
@@ -526,7 +524,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Occurs when the mouse leaves the document</para>
+        ///  Occurs when the mouse leaves the document
         /// </summary>
         public event HtmlElementEventHandler MouseLeave
         {
@@ -633,20 +631,19 @@ namespace System.Windows.Forms
             return Color.Empty;
         }
 
-
         ///<summary>
         /// HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
-        ///                    and our CLR callbacks.  
-        ///             
-        ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
-        ///     HTMLDocumentEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-        ///                        on our an instance of HTMLDocumentEvents2.  The HTMLDocumentEvents2 class then fires the event.
+        ///          and our CLR callbacks.
         ///
-        ///     IHTMLDocument3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
-        ///                                 for a method named DISPID=0.  For each event that's subscribed, we create 
-        ///                                 a new HtmlToClrEventProxy, detect the callback and fire the corresponding
-        ///                                 CLR event.
-        ///</summary>      
+        ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
+        ///  HTMLDocumentEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
+        ///              on our an instance of HTMLDocumentEvents2.  The HTMLDocumentEvents2 class then fires the event.
+        ///
+        ///  IHTMLDocument3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
+        ///                       for a method named DISPID=0.  For each event that's subscribed, we create
+        ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
+        ///                       CLR event.
+        ///</summary>
         internal class HtmlDocumentShim : HtmlShim
         {
             private AxHost.ConnectionPointCookie cookie;
@@ -686,8 +683,8 @@ namespace System.Windows.Forms
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
 
-                // IE likes to call back on an IDispatch of DISPID=0 when it has an event, 
-                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on 
+                // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
+                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
@@ -949,7 +946,6 @@ namespace System.Windows.Forms
 
         #region operators
 
-        [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlDocument left, HtmlDocument right)
         {
             //Not equal if only one's null.
@@ -991,10 +987,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode()
-        {
-            return htmlDocument2 == null ? 0 : htmlDocument2.GetHashCode();
-        }
+        public override int GetHashCode() => htmlDocument2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

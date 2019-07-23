@@ -2,16 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.Globalization;
+using System.Reflection;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Windows.Forms;
-    using System.Globalization;
-    using System.ComponentModel;
-    using System.Reflection;
-    using System.Runtime.Serialization.Formatters;
-    using System.ComponentModel.Design.Serialization;
-
     // used by the designer to serialize the DataGridViewCell class
     internal class DataGridViewCellConverter : ExpandableObjectConverter
     {
@@ -34,10 +31,10 @@ namespace System.Windows.Forms
 
             if (destinationType == typeof(InstanceDescriptor) && value is DataGridViewCell cell)
             {
-                ConstructorInfo ctor = cell.GetType().GetConstructor(new Type[0]);
+                ConstructorInfo ctor = cell.GetType().GetConstructor(Array.Empty<Type>());
                 if (ctor != null)
                 {
-                    return new InstanceDescriptor(ctor, new object[0], false);
+                    return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
                 }
             }
 

@@ -45,13 +45,13 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// Specifies the <see langword='IAccessible '/>interface used by this
-        /// <see cref='System.Windows.Forms.AccessibleObject'/>.
+        /// <see cref='AccessibleObject'/>.
         /// </summary>
         private IAccessible systemIAccessible = null;
 
         /// <summary>
         /// Specifies the <see cref='NativeMethods.IEnumVariant'/> used by this
-        /// <see cref='System.Windows.Forms.AccessibleObject'/> .
+        /// <see cref='AccessibleObject'/> .
         /// </summary>
         private UnsafeNativeMethods.IEnumVariant systemIEnumVariant = null;
         private UnsafeNativeMethods.IEnumVariant enumVariant = null;
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the object name.</para>
+        /// Gets or sets the object name.
         /// </summary>
         public virtual string Name
         {
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// When overridden in a derived class, gets or sets the parent of an
-        /// accessible object.</para>
+        /// accessible object.
         /// </summary>
         public virtual AccessibleObject Parent
         {
@@ -276,7 +276,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the state of this accessible object.</para>
+        /// Gets the state of this accessible object.
         /// </summary>
         public virtual AccessibleStates State
         {
@@ -718,7 +718,6 @@ namespace System.Windows.Forms
             // Calling DoDefaultAction here is consistent with MSAA Proxy implementation.
             DoDefaultAction();
         }
-
 
         internal virtual bool IsReadOnly => false;
 
@@ -2658,7 +2657,7 @@ namespace System.Windows.Forms
     /// </Summary>
     internal sealed class InternalAccessibleObject : StandardOleMarshalObject,
                                     UnsafeNativeMethods.IAccessibleInternal,
-                                    System.Reflection.IReflect,
+                                    IReflect,
                                     UnsafeNativeMethods.IServiceProvider,
                                     UnsafeNativeMethods.IAccessibleEx,
                                     UnsafeNativeMethods.IRawElementProviderSimple,
@@ -2678,9 +2677,9 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.ILegacyIAccessibleProvider,
                                     UnsafeNativeMethods.ISelectionProvider,
                                     UnsafeNativeMethods.ISelectionItemProvider,
+                                    UnsafeNativeMethods.IScrollItemProvider,
                                     UnsafeNativeMethods.IRawElementProviderHwndOverride
     {
-
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
         private readonly UnsafeNativeMethods.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
         private readonly UnsafeNativeMethods.IOleWindow publicIOleWindow;     // AccessibleObject as IOleWindow
@@ -2705,6 +2704,7 @@ namespace System.Windows.Forms
         private readonly UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;   // AccessibleObject as ILegayAccessibleProvider
         private readonly UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
         private readonly UnsafeNativeMethods.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
+        private readonly UnsafeNativeMethods.IScrollItemProvider publicIScrollItemProvider;          // AccessibleObject as IScrollItemProvider
         private readonly UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
@@ -2734,6 +2734,7 @@ namespace System.Windows.Forms
             publicILegacyIAccessibleProvider = (UnsafeNativeMethods.ILegacyIAccessibleProvider)accessibleImplemention;
             publicISelectionProvider = (UnsafeNativeMethods.ISelectionProvider)accessibleImplemention;
             publicISelectionItemProvider = (UnsafeNativeMethods.ISelectionItemProvider)accessibleImplemention;
+            publicIScrollItemProvider = (UnsafeNativeMethods.IScrollItemProvider)accessibleImplemention;
             publicIRawElementProviderHwndOverride = (UnsafeNativeMethods.IRawElementProviderHwndOverride)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
@@ -3061,6 +3062,10 @@ namespace System.Windows.Forms
                 {
                     return (UnsafeNativeMethods.ISelectionItemProvider)this;
                 }
+                else if (patternId == NativeMethods.UIA_ScrollItemPatternId)
+                {
+                    return (UnsafeNativeMethods.IScrollItemProvider)this;
+                }
                 else
                 {
                     return null;
@@ -3353,6 +3358,11 @@ namespace System.Windows.Forms
             get => publicISelectionItemProvider.IsSelected;
         }
 
+        void UnsafeNativeMethods.IScrollItemProvider.ScrollIntoView()
+        {
+            publicIScrollItemProvider.ScrollIntoView();
+        }
+
         /// <summary>
         /// The logical element that supports the SelectionPattern for this Item.
         /// </summary>
@@ -3372,6 +3382,5 @@ namespace System.Windows.Forms
         {
             return publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
         }
-
     }
 }

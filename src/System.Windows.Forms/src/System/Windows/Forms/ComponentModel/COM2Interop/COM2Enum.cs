@@ -2,15 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Globalization;
-
     /// <summary>
     /// This class mimics a clr enum that we can create at runtime.
     /// It associates an array of names with an array of values and converts
@@ -26,19 +21,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2Enum
     {
-
         /// <summary>
         /// Our array of value string names
         /// </summary>
         private string[] names;
 
-
         /// <summary>
         /// Our values
         /// </summary>
         private object[] values;
-
-
 
         /// <summary>
         /// Our cached array of value.ToString()'s
@@ -55,7 +46,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public Com2Enum(string[] names, object[] values, bool allowUnknownValues)
         {
-
             this.allowUnknownValues = allowUnknownValues;
 
             // these have to be null and the same length

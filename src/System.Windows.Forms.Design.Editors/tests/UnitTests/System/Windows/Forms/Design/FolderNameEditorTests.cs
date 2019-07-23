@@ -14,14 +14,30 @@ namespace System.Windows.Forms.Design.Tests
     public class FolderNameEditorTests
     {
         [Fact]
-        public void GetEditStyle_Invoke_ReturnsModal()
+        public void FolderNameEditor_Ctor_Default()
+        {
+            var editor = new FileNameEditor();
+            Assert.False(editor.IsDropDownResizable);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void FolderNameEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new FolderNameEditor();
-            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(null));
+            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void FolderNameEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
+        {
+            var editor = new FolderNameEditor();
+            Assert.False(editor.GetPaintValueSupported(context));
         }
 
         [Fact]
-        public void InitializeDialog_Invoke_Nop()
+        public void FolderNameEditor_InitializeDialog_Invoke_Nop()
         {
             var editor = new SubFolderNameEditor();
             editor.InitializeDialog();
@@ -30,7 +46,7 @@ namespace System.Windows.Forms.Design.Tests
         public class FolderBrowserTests : FolderNameEditor
         {
             [Fact]
-            public void Ctor_Default()
+            public void FolderBrowser_Ctor_Default()
             {
                 var browser = new FolderBrowser();
                 Assert.Empty(browser.DirectoryPath);
@@ -41,23 +57,23 @@ namespace System.Windows.Forms.Design.Tests
 
             [Theory]
             [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
-            public void Description_Set_GetReturnsExpected(string value, string expected)
+            public void FolderBrowser_Description_Set_GetReturnsExpected(string value, string expected)
             {
                 var browser = new FolderBrowser
                 {
                     Description = value
                 };
-                Assert.Same(expected, browser.Description);
+                Assert.Equal(expected, browser.Description);
 
                 // Set same.
                 browser.Description = value;
-                Assert.Same(expected, browser.Description);
+                Assert.Equal(expected, browser.Description);
             }
 
             [Theory]
             [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserFolder))]
             [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserFolder))]
-            protected void StartLocation_Set_GetReturnsExpected(FolderBrowserFolder value)
+            protected void FolderBrowser_StartLocation_Set_GetReturnsExpected(FolderBrowserFolder value)
             {
                 var browser = new FolderBrowser
                 {
@@ -73,7 +89,7 @@ namespace System.Windows.Forms.Design.Tests
             [Theory]
             [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserStyles))]
             [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserStyles))]
-            protected void Style_Set_GetReturnsExpected(FolderBrowserStyles value)
+            protected void FolderBrowser_Style_Set_GetReturnsExpected(FolderBrowserStyles value)
             {
                 var browser = new FolderBrowser
                 {

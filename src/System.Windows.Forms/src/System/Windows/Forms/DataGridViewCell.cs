@@ -2,27 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.IO;
-    using System.Text;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Reflection;
-    using System.Globalization;
-    using System.ComponentModel;
-    using System.Windows.Forms.Internal;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Versioning;
-
     /// <summary>
-    ///    <para>Identifies a cell in the dataGridView.</para>
+    ///  Identifies a cell in the dataGridView.
     /// </summary>
-    [
-        TypeConverterAttribute(typeof(DataGridViewCellConverter))
-    ]
+    [TypeConverter(typeof(DataGridViewCellConverter))]
     public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable
     {
         private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
@@ -56,17 +49,13 @@ namespace System.Windows.Forms
         private static Bitmap errorBmp = null;
 
         private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
-        private DataGridViewRow owningRow;
-        private DataGridViewColumn owningColumn;
 
         private static readonly Type stringType = typeof(string);        // cache the string type for performance
 
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
 
         /// <summary>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCell'/> class.
-        ///    </para>
+        ///  Initializes a new instance of the <see cref='DataGridViewCell'/> class.
         /// </summary>
         protected DataGridViewCell() : base()
         {
@@ -81,7 +70,7 @@ namespace System.Windows.Forms
             }
 
             propertyStore = new PropertyStore();
-            StateInternal = DataGridViewElementStates.None;
+            State = DataGridViewElementStates.None;
         }
 
         ~DataGridViewCell()
@@ -108,19 +97,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets the Index of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
+        /// Gets or sets the Index of a column in the <see cref='DataGrid'/> control.
         /// </summary>
-        public int ColumnIndex
-        {
-            get
-            {
-                if (owningColumn == null)
-                {
-                    return -1;
-                }
-                return owningColumn.Index;
-            }
-        }
+        public int ColumnIndex => OwningColumn?.Index ?? -1;
 
         [
             Browsable(false)
@@ -219,7 +198,7 @@ namespace System.Windows.Forms
                 if (RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Displayed && owningRow.Displayed;
+                    return OwningColumn.Displayed && OwningRow.Displayed;
                 }
 
                 return false;
@@ -252,7 +231,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return typeof(System.Windows.Forms.DataGridViewTextBoxEditingControl);
+                return typeof(DataGridViewTextBoxEditingControl);
             }
         }
 
@@ -271,7 +250,6 @@ namespace System.Windows.Forms
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // ErrorIconBounds/GetErrorIconBounds existence is intentional
         ]
         public Rectangle ErrorIconBounds
         {
@@ -377,27 +355,22 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Frozen && owningRow.Frozen;
+                    return OwningColumn.Frozen && OwningRow.Frozen;
                 }
-                else if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0))
+                else if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0))
                 {
-                    return owningRow.Frozen;
+                    return OwningRow.Frozen;
                 }
                 return false;
             }
         }
 
-        internal bool HasErrorText
+        private bool HasErrorText
         {
-            get
-            {
-                return Properties.ContainsObject(PropCellErrorText) && Properties.GetObject(PropCellErrorText) != null;
-            }
+            get => Properties.ContainsObject(PropCellErrorText) && Properties.GetObject(PropCellErrorText) != null;
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public bool HasStyle
         {
             get
@@ -422,18 +395,12 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual bool HasValueType
+        private protected virtual bool HasValueType
         {
-            get
-            {
-                return Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
-            }
+            get => Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
         }
 
-        [
-            Browsable(false),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // InheritedState/GetInheritedState existence is intentional
-        ]
+        [Browsable(false)]
         public DataGridViewElementStates InheritedState
         {
             get
@@ -442,10 +409,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // InheritedStyle/GetInheritedStyle existence is intentional
-        ]
+        [Browsable(false)]
         public DataGridViewCellStyle InheritedStyle
         {
             get
@@ -480,45 +444,13 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
-        public DataGridViewColumn OwningColumn
-        {
-            get
-            {
-                return owningColumn;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public DataGridViewColumn OwningColumn { get; internal set; }
 
-        internal DataGridViewColumn OwningColumnInternal
-        {
-            set
-            {
-                owningColumn = value;
-            }
-        }
-
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
-        public DataGridViewRow OwningRow
-        {
-            get
-            {
-                return owningRow;
-            }
-        }
-
-        internal DataGridViewRow OwningRowInternal
-        {
-            set
-            {
-                owningRow = value;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public DataGridViewRow OwningRow { get; internal set; }
 
         [
             Browsable(false)
@@ -551,14 +483,14 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0) && owningRow.ReadOnly)
+                if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0) && OwningRow.ReadOnly)
                 {
                     return true;
                 }
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.ReadOnly;
+                    return OwningColumn.ReadOnly;
                 }
                 return false;
             }
@@ -580,17 +512,17 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (owningRow == null)
+                    if (OwningRow == null)
                     {
                         if (value != ReadOnly)
                         {
                             // We do not allow the read-only flag of a cell to be changed before it is added to a row.
-                            throw new InvalidOperationException(string.Format(SR.DataGridViewCell_CannotSetReadOnlyState));
+                            throw new InvalidOperationException(SR.DataGridViewCell_CannotSetReadOnlyState);
                         }
                     }
                     else
                     {
-                        owningRow.SetReadOnlyCellCore(this, value);
+                        OwningRow.SetReadOnlyCellCore(this, value);
                     }
                 }
             }
@@ -603,16 +535,14 @@ namespace System.Windows.Forms
                 Debug.Assert(value != ReadOnly);
                 if (value)
                 {
-                    StateInternal = State | DataGridViewElementStates.ReadOnly;
+                    State = State | DataGridViewElementStates.ReadOnly;
                 }
                 else
                 {
-                    StateInternal = State & ~DataGridViewElementStates.ReadOnly;
+                    State = State & ~DataGridViewElementStates.ReadOnly;
                 }
-                if (DataGridView != null)
-                {
-                    DataGridView.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
-                }
+                
+                DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
             }
         }
 
@@ -625,7 +555,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert((State & DataGridViewElementStates.Resizable) == 0);
 
-                if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0) && owningRow.Resizable == DataGridViewTriState.True)
+                if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0) && OwningRow.Resizable == DataGridViewTriState.True)
                 {
                     return true;
                 }
@@ -633,7 +563,7 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Resizable == DataGridViewTriState.True;
+                    return OwningColumn.Resizable == DataGridViewTriState.True;
                 }
 
                 return false;
@@ -641,22 +571,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Gets or sets the index of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
+        /// Gets or sets the index of a row in the <see cref='DataGrid'/> control.
         /// </summary>
-        [
-            Browsable(false)
-        ]
-        public int RowIndex
-        {
-            get
-            {
-                if (owningRow == null)
-                {
-                    return -1;
-                }
-                return owningRow.Index;
-            }
-        }
+        [Browsable(false)]
+        public int RowIndex => OwningRow?.Index ?? -1;
 
         [
             Browsable(false),
@@ -671,7 +589,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0) && owningRow.Selected)
+                if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0) && OwningRow.Selected)
                 {
                     return true;
                 }
@@ -679,7 +597,7 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Selected;
+                    return OwningColumn.Selected;
                 }
 
                 return false;
@@ -710,11 +628,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Selected);
                 if (value)
                 {
-                    StateInternal = State | DataGridViewElementStates.Selected;
+                    State = State | DataGridViewElementStates.Selected;
                 }
                 else
                 {
-                    StateInternal = State & ~DataGridViewElementStates.Selected;
+                    State = State & ~DataGridViewElementStates.Selected;
                 }
                 if (DataGridView != null)
                 {
@@ -723,10 +641,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods") // Size/GetSize existence is intentional
-        ]
+        [Browsable(false)]
         public Size Size
         {
             get
@@ -735,19 +650,20 @@ namespace System.Windows.Forms
             }
         }
 
-        internal Rectangle StdBorderWidths
+        private protected Rectangle StdBorderWidths
         {
             get
             {
                 if (DataGridView != null)
                 {
                     DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
-                    dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle,
+                    dgvabsEffective = AdjustCellBorderStyle(
+                        DataGridView.AdvancedCellBorderStyle,
                         dataGridViewAdvancedBorderStylePlaceholder,
-                        false /*singleVerticalBorderAdded*/,
-                        false /*singleHorizontalBorderAdded*/,
-                        false /*isFirstDisplayedColumn*/,
-                        false /*isFirstDisplayedRow*/);
+                        singleVerticalBorderAdded: false,
+                        singleHorizontalBorderAdded: false,
+                        isFirstDisplayedColumn: false,
+                        isFirstDisplayedRow: false);
                     return BorderWidths(dgvabsEffective);
                 }
                 else
@@ -935,16 +851,15 @@ namespace System.Windows.Forms
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                    return owningColumn.Visible && owningRow.Visible;
+                    return OwningColumn.Visible && OwningRow.Visible;
                 }
-                else if (owningRow != null && (owningRow.DataGridView == null || RowIndex >= 0))
+                else if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0))
                 {
-                    return owningRow.Visible;
+                    return OwningRow.Visible;
                 }
                 return false;
             }
         }
-
 
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -956,6 +871,15 @@ namespace System.Windows.Forms
             bool isFirstDisplayedColumn,
             bool isFirstDisplayedRow)
         {
+            if (dataGridViewAdvancedBorderStyleInput == null)
+            {
+                throw new ArgumentNullException(nameof(dataGridViewAdvancedBorderStyleInput));
+            }
+            if (dataGridViewAdvancedBorderStylePlaceholder == null)
+            {
+                throw new ArgumentNullException(nameof(dataGridViewAdvancedBorderStylePlaceholder));
+            }
+
             switch (dataGridViewAdvancedBorderStyleInput.All)
             {
                 case DataGridViewAdvancedCellBorderStyle.Single:
@@ -1008,6 +932,11 @@ namespace System.Windows.Forms
 
         protected virtual Rectangle BorderWidths(DataGridViewAdvancedBorderStyle advancedBorderStyle)
         {
+            if (advancedBorderStyle == null)
+            {
+                throw new ArgumentNullException(nameof(advancedBorderStyle));
+            }
+
             Rectangle rect = new Rectangle
             {
                 X = (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None) ? 0 : 1
@@ -1035,20 +964,20 @@ namespace System.Windows.Forms
                 rect.Height++;
             }
 
-            if (owningColumn != null)
+            if (OwningColumn != null)
             {
                 if (DataGridView != null && DataGridView.RightToLeftInternal)
                 {
-                    rect.X += owningColumn.DividerWidth;
+                    rect.X += OwningColumn.DividerWidth;
                 }
                 else
                 {
-                    rect.Width += owningColumn.DividerWidth;
+                    rect.Width += OwningColumn.DividerWidth;
                 }
             }
-            if (owningRow != null)
+            if (OwningRow != null)
             {
-                rect.Height += owningRow.DividerHeight;
+                rect.Height += OwningRow.DividerHeight;
             }
 
             return rect;
@@ -1060,29 +989,18 @@ namespace System.Windows.Forms
         {
         }
 
-        /* Unused at this point.
-        internal DataGridViewElementStates CellStateFromColumnRowStates()
-        {
-            Debug.Assert(this.DataGridView != null);
-            Debug.Assert(this.RowIndex >= 0);
-            return CellStateFromColumnRowStates(this.owningRow.State);
-        }*/
-
         internal DataGridViewElementStates CellStateFromColumnRowStates(DataGridViewElementStates rowState)
         {
             Debug.Assert(DataGridView != null);
             Debug.Assert(ColumnIndex >= 0);
             DataGridViewElementStates orFlags = DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.Selected;
             DataGridViewElementStates andFlags = DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Visible;
-            DataGridViewElementStates cellState = (owningColumn.State & orFlags);
+            DataGridViewElementStates cellState = (OwningColumn.State & orFlags);
             cellState |= (rowState & orFlags);
-            cellState |= ((owningColumn.State & andFlags) & (rowState & andFlags));
+            cellState |= ((OwningColumn.State & andFlags) & (rowState & andFlags));
             return cellState;
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool ClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1115,7 +1033,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.ContextMenuStrip = ContextMenuStripInternal.Clone();
             }
-            dataGridViewCell.StateInternal = State & ~DataGridViewElementStates.Selected;
+            dataGridViewCell.State = State & ~DataGridViewElementStates.Selected;
             dataGridViewCell.Tag = Tag;
         }
 
@@ -1214,9 +1132,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool ContentClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1227,9 +1142,6 @@ namespace System.Windows.Forms
             return ContentClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool ContentDoubleClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1271,7 +1183,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // We don't want the grid to get the keyboard focus
-                        // when the editing control gets parented to the parking window, 
+                        // when the editing control gets parented to the parking window,
                         // because some other window is in the middle of receiving the focus.
                         UnsafeNativeMethods.SetFocus(new HandleRef(null, IntPtr.Zero));
                     }
@@ -1309,7 +1221,7 @@ namespace System.Windows.Forms
             Debug.Assert(dgv.EditingPanel.Controls.Count == 0);
 
             // Since the tooltip is removed when the editing control is shown,
-            // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet 
+            // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet
             // so that the tooltip appears again on mousemove after the editing.
             CurrentMouseLocation = DATAGRIDVIEWCELL_flagAreaNotSet;
         }
@@ -1332,9 +1244,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool DoubleClickUnsharesRow(DataGridViewCellEventArgs e)
         {
             return false;
@@ -1345,9 +1254,6 @@ namespace System.Windows.Forms
             return DoubleClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool EnterUnsharesRow(int rowIndex, bool throughMouseClick)
         {
             return false;
@@ -1455,7 +1361,7 @@ namespace System.Windows.Forms
                     case '\n':
                         output.Write("<br>");
                         break;
-                    // 
+                    //
                     default:
                         // The seemingly arbitrary 160 comes from RFC
                         // Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
@@ -1809,9 +1715,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")  // using ref is OK.
-        ]
         protected virtual object GetFormattedValue(object value,
                                                    int rowIndex,
                                                    ref DataGridViewCellStyle cellStyle,
@@ -1871,9 +1774,9 @@ namespace System.Windows.Forms
                 if (formattedValue == null &&
                     cellStyle.NullValue == null &&
                     FormattedValueType != null &&
-                    !typeof(System.ValueType).IsAssignableFrom(FormattedValueType))
+                    !typeof(ValueType).IsAssignableFrom(FormattedValueType))
                 {
-                    // null is an acceptable formatted value 
+                    // null is an acceptable formatted value
                     return null;
                 }
                 Exception exception = null;
@@ -1934,8 +1837,9 @@ namespace System.Windows.Forms
             {
                 return -1;
             }
-            Debug.Assert(owningRow != null);
-            return owningRow.GetHeight(rowIndex);
+
+            Debug.Assert(OwningRow != null);
+            return OwningRow.GetHeight(rowIndex);
         }
 
         public virtual ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
@@ -1959,18 +1863,18 @@ namespace System.Windows.Forms
                 return contextMenuStrip;
             }
 
-            if (owningRow != null)
+            if (OwningRow != null)
             {
-                contextMenuStrip = owningRow.GetContextMenuStrip(rowIndex);
+                contextMenuStrip = OwningRow.GetContextMenuStrip(rowIndex);
                 if (contextMenuStrip != null)
                 {
                     return contextMenuStrip;
                 }
             }
 
-            if (owningColumn != null)
+            if (OwningColumn != null)
             {
-                contextMenuStrip = owningColumn.ContextMenuStrip;
+                contextMenuStrip = OwningColumn.ContextMenuStrip;
                 if (contextMenuStrip != null)
                 {
                     return contextMenuStrip;
@@ -1998,10 +1902,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
-                if (owningRow != null)
+                if (OwningRow != null)
                 {
-                    state |= (owningRow.GetState(-1) & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible));
-                    if (owningRow.GetResizable(rowIndex) == DataGridViewTriState.True)
+                    state |= (OwningRow.GetState(-1) & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible));
+                    if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True)
                     {
                         state |= DataGridViewElementStates.Resizable;
                     }
@@ -2015,33 +1919,33 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            Debug.Assert(owningColumn != null);
-            Debug.Assert(owningRow != null);
+            Debug.Assert(OwningColumn != null);
+            Debug.Assert(OwningRow != null);
             Debug.Assert(ColumnIndex >= 0);
 
-            if (DataGridView.Rows.SharedRow(rowIndex) != owningRow)
+            if (DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
             {
                 throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
             }
 
             DataGridViewElementStates rowEffectiveState = DataGridView.Rows.GetRowState(rowIndex);
             state |= (rowEffectiveState & (DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected));
-            state |= (owningColumn.State & (DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected));
+            state |= (OwningColumn.State & (DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected));
 
-            if (owningRow.GetResizable(rowIndex) == DataGridViewTriState.True ||
-                owningColumn.Resizable == DataGridViewTriState.True)
+            if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True ||
+                OwningColumn.Resizable == DataGridViewTriState.True)
             {
                 state |= DataGridViewElementStates.Resizable;
             }
-            if (owningColumn.Visible && owningRow.GetVisible(rowIndex))
+            if (OwningColumn.Visible && OwningRow.GetVisible(rowIndex))
             {
                 state |= DataGridViewElementStates.Visible;
-                if (owningColumn.Displayed && owningRow.GetDisplayed(rowIndex))
+                if (OwningColumn.Displayed && OwningRow.GetDisplayed(rowIndex))
                 {
                     state |= DataGridViewElementStates.Displayed;
                 }
             }
-            if (owningColumn.Frozen && owningRow.GetFrozen(rowIndex))
+            if (OwningColumn.Frozen && OwningRow.GetFrozen(rowIndex))
             {
                 state |= DataGridViewElementStates.Frozen;
             }
@@ -2125,9 +2029,9 @@ namespace System.Windows.Forms
             }
 
             DataGridViewCellStyle columnStyle = null;
-            if (owningColumn.HasDefaultCellStyle)
+            if (OwningColumn.HasDefaultCellStyle)
             {
-                columnStyle = owningColumn.DefaultCellStyle;
+                columnStyle = OwningColumn.DefaultCellStyle;
                 Debug.Assert(columnStyle != null);
             }
 
@@ -2569,9 +2473,10 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedCell, "Size"));
             }
-            Debug.Assert(owningColumn != null);
-            Debug.Assert(owningRow != null);
-            return new Size(owningColumn.Thickness, owningRow.GetHeight(rowIndex));
+
+            Debug.Assert(OwningColumn != null);
+            Debug.Assert(OwningRow != null);
+            return new Size(OwningColumn.Thickness, OwningRow.GetHeight(rowIndex));
         }
 
         private string GetToolTipText(int rowIndex)
@@ -2681,9 +2586,6 @@ namespace System.Windows.Forms
             AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, dgv.EditingControlAccessibleObject.RuntimeId);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return false;
@@ -2699,9 +2601,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool KeyPressUnsharesRow(KeyPressEventArgs e, int rowIndex)
         {
             return false;
@@ -2712,9 +2611,6 @@ namespace System.Windows.Forms
             return KeyPressUnsharesRow(e, rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             return false;
@@ -2725,9 +2621,6 @@ namespace System.Windows.Forms
             return KeyUpUnsharesRow(e, rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool LeaveUnsharesRow(int rowIndex, bool throughMouseClick)
         {
             return false;
@@ -2746,11 +2639,7 @@ namespace System.Windows.Forms
             return DataGridViewCell.MeasureTextHeight(graphics, text, font, maxWidth, flags, out bool widthTruncated);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), // We don't want to use IDeviceContext here.
-            SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters") // out param OK here.
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static int MeasureTextHeight(Graphics graphics, string text, Font font, int maxWidth, TextFormatFlags flags, out bool widthTruncated)
         {
             if (graphics == null)
@@ -2780,9 +2669,7 @@ namespace System.Windows.Forms
             return requiredSize.Height;
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextPreferredSize(Graphics graphics, string text, Font font, float maxRatio, TextFormatFlags flags)
         {
             if (graphics == null)
@@ -2833,10 +2720,7 @@ namespace System.Windows.Forms
             return textSize;
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // We don't want to use IDeviceContext here.
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextSize(Graphics graphics, string text, Font font, TextFormatFlags flags)
         {
             if (graphics == null)
@@ -2900,9 +2784,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseClickUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2913,9 +2794,6 @@ namespace System.Windows.Forms
             return MouseClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseDoubleClickUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2926,9 +2804,6 @@ namespace System.Windows.Forms
             return MouseDoubleClickUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2939,9 +2814,6 @@ namespace System.Windows.Forms
             return MouseDownUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseEnterUnsharesRow(int rowIndex)
         {
             return false;
@@ -2952,9 +2824,6 @@ namespace System.Windows.Forms
             return MouseEnterUnsharesRow(rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseLeaveUnsharesRow(int rowIndex)
         {
             return false;
@@ -2965,9 +2834,6 @@ namespace System.Windows.Forms
             return MouseLeaveUnsharesRow(rowIndex);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseMoveUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -2978,9 +2844,6 @@ namespace System.Windows.Forms
             return MouseMoveUnsharesRow(e);
         }
 
-        [
-            SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Unshares is OK.
-        ]
         protected virtual bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return false;
@@ -3421,10 +3284,13 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
-
             if (cellStyle == null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
+            }
+            if (advancedBorderStyle == null)
+            {
+                throw new ArgumentNullException(nameof(advancedBorderStyle));
             }
 
             if (DataGridView == null)
@@ -3441,7 +3307,7 @@ namespace System.Windows.Forms
 
             GetContrastedPens(cellStyle.BackColor, ref penControlDark, ref penControlLightLight);
 
-            int dividerThickness = owningColumn == null ? 0 : owningColumn.DividerWidth;
+            int dividerThickness = OwningColumn?.DividerWidth ?? 0;
             if (dividerThickness != 0)
             {
                 if (dividerThickness > bounds.Width)
@@ -3479,7 +3345,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            dividerThickness = owningRow == null ? 0 : owningRow.DividerHeight;
+            dividerThickness = OwningRow?.DividerHeight ?? 0;
             if (dividerThickness != 0)
             {
                 if (dividerThickness > bounds.Height)
@@ -3804,7 +3670,7 @@ namespace System.Windows.Forms
 
             using (WindowsGraphics windowsGraphics = WindowsGraphics.FromGraphics(graphics))
             {
-                int dividerThickness = this.owningColumn == null ? 0 : this.owningColumn.DividerWidth;
+                int dividerThickness = this.owningColumn == null ? 0 : this.OwningColumn.DividerWidth;
                 if (dividerThickness != 0)
                 {
                     if (dividerThickness > bounds.Width)
@@ -3842,7 +3708,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                dividerThickness = this.owningRow == null ? 0 : this.owningRow.DividerHeight;
+                dividerThickness = OwningRow.DividerHeight ?? 0;
                 if (dividerThickness != 0)
                 {
                     if (dividerThickness > bounds.Height)
@@ -4170,6 +4036,16 @@ namespace System.Windows.Forms
 
         protected virtual void PaintErrorIcon(Graphics graphics, Rectangle clipBounds, Rectangle cellValueBounds, string errorText)
         {
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
+            if (DataGridView == null)
+            {
+                return;
+            }
+
             if (!string.IsNullOrEmpty(errorText) &&
                 cellValueBounds.Width >= DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth &&
                 cellValueBounds.Height >= DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight)
@@ -4178,9 +4054,13 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
         private static void PaintErrorIcon(Graphics graphics, Rectangle iconBounds)
         {
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
             Bitmap bmp = DataGridViewCell.ErrorBitmap;
             if (bmp != null)
             {
@@ -4384,10 +4264,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters") // singleVerticalBorderAdded/singleHorizontalBorderAdded names are OK
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         // Positions the editing panel and returns the normal bounds of the editing control, within the editing panel.
         public virtual Rectangle PositionEditingPanel(Rectangle cellBounds,
                                                       Rectangle cellClip,
@@ -4467,7 +4344,7 @@ namespace System.Windows.Forms
             hEditingControl = cellBounds.Height - borderAndPaddingWidths.Y - borderAndPaddingWidths.Height;
             DataGridView.EditingPanel.Location = new Point(xEditingPanel, yEditingPanel);
             DataGridView.EditingPanel.Size = new Size(wEditingPanel, hEditingPanel);
-            /* 
+            /*
             if (this.DataGridView.RightToLeftInternal)
             {
                 xEditingControl = wEditingPanel - xEditingControl - wEditingControl;
@@ -4508,7 +4385,7 @@ namespace System.Windows.Forms
                             // As a result of pushing the value in the back end, the data grid view row and/or data grid view cell
                             // became disconnected from the DataGridView.
                             // Return true because the operation succeded.
-                            // However, because the row which was edited became disconnected  from the DataGridView, 
+                            // However, because the row which was edited became disconnected  from the DataGridView,
                             // do not mark the current row in the data grid view as being dirty.
                             // And because the data grid view cell which was edited became disconnected from the data grid view
                             // do not fire CellValueChanged event.
@@ -4569,9 +4446,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets the row Index and column Index of the cell.
-        ///    </para>
+        ///  Gets the row Index and column Index of the cell.
         /// </summary>
         public override string ToString()
         {
@@ -4602,7 +4477,7 @@ namespace System.Windows.Forms
         }
 
         [
-            System.Runtime.InteropServices.ComVisible(true)
+            ComVisible(true)
         ]
         protected class DataGridViewCellAccessibleObject : AccessibleObject
         {
@@ -4716,16 +4591,10 @@ namespace System.Windows.Forms
                 {
                     if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
-                    if (owner.OwningRow == null)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return owner.OwningRow.AccessibilityObject;
-                    }
+                    
+                    return owner.OwningRow?.AccessibilityObject;
                 }
             }
 
@@ -4747,7 +4616,7 @@ namespace System.Windows.Forms
                     }
 
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
-                    if (owner == owner.DataGridView.CurrentCell)
+                    if (owner.DataGridView != null && owner == owner.DataGridView.CurrentCell)
                     {
                         state |= AccessibleStates.Focused;
                     }
@@ -4762,27 +4631,30 @@ namespace System.Windows.Forms
                         state |= AccessibleStates.ReadOnly;
                     }
 
-                    Rectangle cellBounds;
-                    if (owner.OwningColumn != null && owner.OwningRow != null)
+                    if (Owner.DataGridView != null)
                     {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, owner.OwningRow.Index, false /*cutOverflow*/);
-                    }
-                    else if (owner.OwningRow != null)
-                    {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, owner.OwningRow.Index, false /*cutOverflow*/);
-                    }
-                    else if (owner.OwningColumn != null)
-                    {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, -1, false /*cutOverflow*/);
-                    }
-                    else
-                    {
-                        cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, -1, false /*cutOverflow*/);
-                    }
+                        Rectangle cellBounds;
+                        if (owner.OwningColumn != null && owner.OwningRow != null)
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, owner.OwningRow.Index, false /*cutOverflow*/);
+                        }
+                        else if (owner.OwningRow != null)
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, owner.OwningRow.Index, false /*cutOverflow*/);
+                        }
+                        else if (owner.OwningColumn != null)
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(owner.OwningColumn.Index, -1, false /*cutOverflow*/);
+                        }
+                        else
+                        {
+                            cellBounds = owner.DataGridView.GetCellDisplayRectangle(-1, -1, false /*cutOverflow*/);
+                        }
 
-                    if (!cellBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
-                    {
-                        state |= AccessibleStates.Offscreen;
+                        if (!cellBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
+                        {
+                            state |= AccessibleStates.Offscreen;
+                        }
                     }
 
                     return state;
@@ -4956,7 +4828,6 @@ namespace System.Windows.Forms
                 }
                 cellRect.X = cellLeft;
 
-
                 if (cellRight > rowRect.Right - rightToLeftRowHeadersWidth)
                 {
                     cellRight = rowRect.Right - rightToLeftRowHeadersWidth;
@@ -5000,7 +4871,8 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
-                if (owner.DataGridView.EditingControl != null &&
+                if (owner.DataGridView != null &&
+                    owner.DataGridView.EditingControl != null &&
                     owner.DataGridView.IsCurrentCellInEditMode &&
                     owner.DataGridView.CurrentCell == owner &&
                     index == 0)
@@ -5020,7 +4892,8 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
                 }
 
-                if (owner.DataGridView.EditingControl != null &&
+                if (owner.DataGridView != null &&
+                    owner.DataGridView.EditingControl != null &&
                     owner.DataGridView.IsCurrentCellInEditMode &&
                     owner.DataGridView.CurrentCell == owner)
                 {
@@ -5200,12 +5073,15 @@ namespace System.Windows.Forms
                 }
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
-                    owner.DataGridView.Focus();
+                    owner.DataGridView?.Focus();
                 }
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
                     owner.Selected = true;
-                    owner.DataGridView.CurrentCell = owner; // Do not change old selection
+                    if (owner.DataGridView != null)
+                    {
+                        owner.DataGridView.CurrentCell = owner; // Do not change old selection
+                    }
                 }
                 if ((flags & AccessibleSelection.AddSelection) == AccessibleSelection.AddSelection)
                 {

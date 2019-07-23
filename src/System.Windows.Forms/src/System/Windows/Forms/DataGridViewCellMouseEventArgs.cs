@@ -10,7 +10,7 @@ namespace System.Windows.Forms
             int rowIndex,
             int localX,
             int localY,
-            MouseEventArgs e) : base(e.Button, e.Clicks, localX, localY, e.Delta)
+            MouseEventArgs e) : base(e?.Button ?? MouseButtons.None, e?.Clicks ?? 0, localX, localY, e?.Delta ?? 0)
         {
             if (columnIndex < -1)
             {
@@ -19,6 +19,10 @@ namespace System.Windows.Forms
             if (rowIndex < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            }
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
             }
 
             ColumnIndex = columnIndex;

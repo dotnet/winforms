@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
@@ -46,7 +45,7 @@ namespace System.Windows.Forms
             get => _enabled;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -54,17 +53,20 @@ namespace System.Windows.Forms
                 if (value != _enabled)
                 {
                     _enabled = value;
-                    UnsafeNativeMethods.EnableScrollBar(
-                        new HandleRef(_parent, _parent.Handle),
-                        Orientation,
-                        value ? NativeMethods.ESB_ENABLE_BOTH : NativeMethods.ESB_DISABLE_BOTH
-                    );
+                    if (_parent != null)
+                    {
+                        UnsafeNativeMethods.EnableScrollBar(
+                            new HandleRef(_parent, _parent.Handle),
+                            Orientation,
+                            value ? NativeMethods.ESB_ENABLE_BOTH : NativeMethods.ESB_DISABLE_BOTH
+                        );
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Gets or sets a value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollProperties.LargeChange'/>
+        /// Gets or sets a value to be added or subtracted to the <see cref='LargeChange'/>
         /// property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -109,7 +111,7 @@ namespace System.Windows.Forms
             get => _maximum;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -144,7 +146,7 @@ namespace System.Windows.Forms
             get => _minimum;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -180,7 +182,7 @@ namespace System.Windows.Forms
         internal abstract int VerticalDisplayPosition { get; }
 
         /// <summary>
-        /// Gets or sets the value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollBar.Value'/>
+        /// Gets or sets the value to be added or subtracted to the <see cref='ScrollBar.Value'/>
         /// property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -191,8 +193,8 @@ namespace System.Windows.Forms
             get
             {
                 // We can't have SmallChange > LargeChange, but we shouldn't manipulate
-                // the set values for these properties, so we just return the smaller 
-                // value here. 
+                // the set values for these properties, so we just return the smaller
+                // value here.
                 return Math.Min(_smallChange, LargeChange);
             }
             set
@@ -233,11 +235,10 @@ namespace System.Windows.Forms
 
                     _value = value;
                     UpdateScrollInfo();
-                    _parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    _parent?.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
                 }
             }
         }
-
 
         /// <summary>
         /// Gets or sets a bool value controlling whether the scrollbar is showing.
@@ -250,7 +251,7 @@ namespace System.Windows.Forms
             get => _visible;
             set
             {
-                if (_parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -258,16 +259,16 @@ namespace System.Windows.Forms
                 if (value != _visible)
                 {
                     _visible = value;
-                    _parent.UpdateStylesCore();
+                    _parent?.UpdateStylesCore();
                     UpdateScrollInfo();
-                    _parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    _parent?.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
                 }
             }
         }
 
         internal void UpdateScrollInfo()
         {
-            if (_parent.IsHandleCreated && _visible)
+            if (_parent != null && _parent.IsHandleCreated && _visible)
             {
                 var si = new NativeMethods.SCROLLINFO
                 {

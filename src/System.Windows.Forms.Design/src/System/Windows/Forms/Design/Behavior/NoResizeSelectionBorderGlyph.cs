@@ -24,7 +24,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void InitializeGlyph(Rectangle controlBounds, SelectionRules selRules, SelectionBorderGlyphType type)
         {
-
             rules = SelectionRules.None;
             hitTestCursor = Cursors.Default;
             if ((selRules & SelectionRules.Moveable) != 0)
@@ -60,7 +59,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         /// <summary>
         /// Simple painting logic for selection Glyphs.
-        /// </summary> 
+        /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
             DesignerUtils.DrawSelectionBorder(pe.Graphics, bounds);

@@ -13,7 +13,7 @@ namespace System.Drawing.Design.Tests
         public static IEnumerable<object[]> Ctor_IComponentArray_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new IComponent[0] };
+            yield return new object[] { Array.Empty<IComponent>() };
             yield return new object[] { new IComponent[] { null } };
         }
 

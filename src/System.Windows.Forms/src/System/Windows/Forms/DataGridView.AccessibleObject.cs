@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -10,7 +9,7 @@ namespace System.Windows.Forms
     public partial class DataGridView
     {
         [
-            System.Runtime.InteropServices.ComVisible(true)
+            Runtime.InteropServices.ComVisible(true)
         ]
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
@@ -28,7 +27,6 @@ namespace System.Windows.Forms
 
             public override string Name
             {
-                [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // Don't localize string "DataGridView".
                 get
                 {
                     string name = Owner.AccessibleName;
@@ -300,7 +298,6 @@ namespace System.Windows.Forms
 
                         break;
                 }
-
 
                 return base.GetPropertyValue(propertyID);
             }

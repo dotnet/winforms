@@ -78,8 +78,8 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetList_NoSuchDataMember_TestData()
         {
             yield return new object[] { new DataClass(), "NoSuchProperty" };
-            yield return new object[] { new IEnumerableWrapper(new object[0]), "NoSuchProperty" };
-            yield return new object[] { new IEnumerableWrapper(new object[0]), "Property" };
+            yield return new object[] { new IEnumerableWrapper(Array.Empty<object>()), "NoSuchProperty" };
+            yield return new object[] { new IEnumerableWrapper(Array.Empty<object>()), "Property" };
         }
 
         [Theory]
@@ -157,10 +157,9 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new NullIListSource(), null };
             yield return new object[] { typeof(NullIListSource), null };
 
-
             // Type that wraps an enumerable but ONLY implements non-generic IEnumerable.
             yield return new object[] { new IEnumerableWrapper(null), typeof(object) };
-            yield return new object[] { new IEnumerableWrapper(new object[0]), typeof(object) };
+            yield return new object[] { new IEnumerableWrapper(Array.Empty<object>()), typeof(object) };
             yield return new object[] { new IEnumerableWrapper(new int[] { 1 }), typeof(int) };
             yield return new object[] { new IEnumerableWrapper(new object[] { 1 }), typeof(int) };
             yield return new object[] { new IEnumerableWrapper(new object[] { 1, string.Empty }), typeof(int) };
@@ -237,9 +236,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetListItemProperties_Object_TestData()
         {
             // Simple objects.
-            yield return new object[] { null, new string[0] };
-            yield return new object[] { 1, new string[0] };
-            yield return new object[] { typeof(int), new string[0] };
+            yield return new object[] { null, Array.Empty<string>() };
+            yield return new object[] { 1, Array.Empty<string>() };
+            yield return new object[] { typeof(int), Array.Empty<string>() };
 
             yield return new object[] { string.Empty, new string[] { "Length" } };
             yield return new object[] { typeof(string), new string[] { "Length" } };
@@ -251,26 +250,26 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new List<DataClass>(), new string[] { "Property" } };
             yield return new object[] { typeof(IList<DataClass>), new string[] { "Property" } };
 
-            yield return new object[] { new List<ICustomTypeDescriptor>(), new string[0] };
-            yield return new object[] { typeof(IList<ICustomTypeDescriptor>), new string[0] };
+            yield return new object[] { new List<ICustomTypeDescriptor>(), Array.Empty<string>() };
+            yield return new object[] { typeof(IList<ICustomTypeDescriptor>), Array.Empty<string>() };
 
             // Array.
-            yield return new object[] { new DataClass[0], new string[] { "Property" } };
+            yield return new object[] { Array.Empty<DataClass>(), new string[] { "Property" } };
             yield return new object[] { typeof(DataClass[]), new string[] { "Property" } };
-            yield return new object[] { new object[0], new string[0] };
-            yield return new object[] { new object[] { new DataClass() }, new string[0] };
+            yield return new object[] { Array.Empty<object>(), Array.Empty<string>() };
+            yield return new object[] { new object[] { new DataClass() }, Array.Empty<string>() };
 
             // Only implements IEnumerable.
-            yield return new object[] { new IEnumerableWrapper(new object[0]), new string[0] };
+            yield return new object[] { new IEnumerableWrapper(Array.Empty<object>()), Array.Empty<string>() };
             yield return new object[] { new IEnumerableWrapper(new object[] { new DataClass() }), new string[] { "Property" } };
             yield return new object[] { new IEnumerableWrapper(new object[] { 1 }), new string[] { "Property" } };
-            yield return new object[] { new IEnumerableWrapper(new object[] { null }), new string[0] };
+            yield return new object[] { new IEnumerableWrapper(new object[] { null }), Array.Empty<string>() };
 
             // Only implements IList.
-            yield return new object[] { new ArrayList(), new string[0] };
+            yield return new object[] { new ArrayList(), Array.Empty<string>() };
             yield return new object[] { new ArrayList { new DataClass() }, new string[] { "Property" } };
-            yield return new object[] { new ArrayList { 1 }, new string[0] };
-            yield return new object[] { new ArrayList { null }, new string[0] };
+            yield return new object[] { new ArrayList { 1 }, Array.Empty<string>() };
+            yield return new object[] { new ArrayList { null }, Array.Empty<string>() };
 
             // ITypedList.
             var mockTypedList = new Mock<ITypedList>(MockBehavior.Strict);
@@ -300,24 +299,24 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, properties?.Select(p => p.Name));
 
             // Empty list accessors.
-            properties = ListBindingHelper.GetListItemProperties(list, new PropertyDescriptor[0])?.Cast<PropertyDescriptor>();
+            properties = ListBindingHelper.GetListItemProperties(list, Array.Empty<PropertyDescriptor>())?.Cast<PropertyDescriptor>();
             Assert.Equal(expected, properties?.Select(p => p.Name));
 
             // Null data member.
-            properties = ListBindingHelper.GetListItemProperties(list, null, new PropertyDescriptor[0])?.Cast<PropertyDescriptor>();
+            properties = ListBindingHelper.GetListItemProperties(list, null, Array.Empty<PropertyDescriptor>())?.Cast<PropertyDescriptor>();
             Assert.Equal(expected, properties?.Select(p => p.Name));
 
             // Empty data member.
-            properties = ListBindingHelper.GetListItemProperties(list, string.Empty, new PropertyDescriptor[0])?.Cast<PropertyDescriptor>();
+            properties = ListBindingHelper.GetListItemProperties(list, string.Empty, Array.Empty<PropertyDescriptor>())?.Cast<PropertyDescriptor>();
             Assert.Equal(expected, properties?.Select(p => p.Name));
         }
 
         public static IEnumerable<object[]> GetListItemProperties_Object_PropertyDescriptorArray_TestData()
         {
-            yield return new object[] { null, TypeDescriptor.GetProperties(typeof(DataClass)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
+            yield return new object[] { null, TypeDescriptor.GetProperties(typeof(DataClass)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
 
-            yield return new object[] { new DataClass(), TypeDescriptor.GetProperties(typeof(DataClass)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
-            yield return new object[] { typeof(DataClass), TypeDescriptor.GetProperties(typeof(DataClass)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
+            yield return new object[] { new DataClass(), TypeDescriptor.GetProperties(typeof(DataClass)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+            yield return new object[] { typeof(DataClass), TypeDescriptor.GetProperties(typeof(DataClass)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
 
             yield return new object[] { new ListDataClass(), TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
             yield return new object[] { new ListDataClass() { ListProperty = new List<DataClass> { new DataClass() } }, TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
@@ -331,12 +330,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { typeof(MultiListDataClass), TypeDescriptor.GetProperties(typeof(MultiListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "ListProperty" } };
 
             yield return new object[] { typeof(DataClass), TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
-            yield return new object[] { new DataClass(), new PropertyDescriptor[] { null }, new string[0] };
-            yield return new object[] { typeof(DataClass), new PropertyDescriptor[] { null }, new string[0] };
+            yield return new object[] { new DataClass(), new PropertyDescriptor[] { null }, Array.Empty<string>() };
+            yield return new object[] { typeof(DataClass), new PropertyDescriptor[] { null }, Array.Empty<string>() };
 
             // Only implements IEnumerable.
             PropertyDescriptor[] descriptors = TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray();
-            yield return new object[] { new IEnumerableWrapper(new object[0]), descriptors, new string[] { "Property" } };
+            yield return new object[] { new IEnumerableWrapper(Array.Empty<object>()), descriptors, new string[] { "Property" } };
             yield return new object[] { new IEnumerableWrapper(new object[] { new ListDataClass() }), descriptors, new string[] { "Property" } };
             yield return new object[] { new IEnumerableWrapper(new object[] { new MultiListDataClass() }), inner.Take(2).ToArray(), new string[] { "Property" } };
             yield return new object[] { new IEnumerableWrapper(new object[] { null }), descriptors, new string[] { "Property" } };
@@ -351,7 +350,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass>() } }, inner.Take(2).ToArray(), new string[] { "Property" } };
             yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } } }, inner.Take(0).ToArray(), new string[] { "ParentListProperty" } };
             yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } } }, inner.Take(2).ToArray(), new string[] { "Property" } };
-            yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } } }, inner.Take(3).ToArray(), new string[0] };
+            yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } } }, inner.Take(3).ToArray(), Array.Empty<string>() };
             yield return new object[] { new ArrayList { null }, descriptors, new string[] { "Property" } };
 
             // ITypedList.
@@ -365,18 +364,18 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { new EnumerableITypedListImplementor(), descriptors, new string[] { "Property" } };
             yield return new object[] { typeof(EnumerableITypedListImplementor), descriptors, new string[] { "Property" } };
-            yield return new object[] { new EnumerableITypedListImplementor[] { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
-            yield return new object[] { new List<EnumerableITypedListImplementor> { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
-            yield return new object[] { new ArrayList { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
-            yield return new object[] { new IEnumerableWrapper(new object[] { new EnumerableITypedListImplementor() }), TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
+            yield return new object[] { new EnumerableITypedListImplementor[] { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+            yield return new object[] { new List<EnumerableITypedListImplementor> { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+            yield return new object[] { new ArrayList { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+            yield return new object[] { new IEnumerableWrapper(new object[] { new EnumerableITypedListImplementor() }), TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
             yield return new object[] { typeof(EnumerableITypedListImplementor[]), descriptors, new string[] { "Property" } };
 
             yield return new object[] { new NonEnumerableITypedListImplementor(), descriptors, new string[] { "Property" } };
             yield return new object[] { typeof(NonEnumerableITypedListImplementor), descriptors, new string[] { "Property" } };
-            yield return new object[] { new NonEnumerableITypedListImplementor[] { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
-            yield return new object[] { new List<NonEnumerableITypedListImplementor> { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
-            yield return new object[] { new ArrayList { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
-            yield return new object[] { new IEnumerableWrapper(new object[] { new NonEnumerableITypedListImplementor() }), TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), new string[0] };
+            yield return new object[] { new NonEnumerableITypedListImplementor[] { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+            yield return new object[] { new List<NonEnumerableITypedListImplementor> { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+            yield return new object[] { new ArrayList { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+            yield return new object[] { new IEnumerableWrapper(new object[] { new NonEnumerableITypedListImplementor() }), TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
             yield return new object[] { typeof(NonEnumerableITypedListImplementor[]), descriptors, new string[] { "Property" } };
 
             var typedListDataClass = new ITypedListDataClass { ListProperty = new List<EnumerableITypedListImplementor>() { new EnumerableITypedListImplementor() } };
@@ -425,10 +424,10 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetListItemProperties_Object_String_PropertyDescriptorArray_TestData()
         {
             yield return new object[] { new ListDataClass(), "ListProperty", null, new string[] { "Property" } };
-            yield return new object[] { new ListDataClass(), "listproperty", new PropertyDescriptor[0], new string[] { "Property" } };
+            yield return new object[] { new ListDataClass(), "listproperty", Array.Empty<PropertyDescriptor>(), new string[] { "Property" } };
             yield return new object[] { new MultiListDataClass(), "ParentListProperty", TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
             yield return new object[] { typeof(ListDataClass), "ListProperty", null, new string[] { "Property" } };
-            yield return new object[] { typeof(ListDataClass), "listproperty", new PropertyDescriptor[0], new string[] { "Property" } };
+            yield return new object[] { typeof(ListDataClass), "listproperty", Array.Empty<PropertyDescriptor>(), new string[] { "Property" } };
             yield return new object[] { typeof(MultiListDataClass), "ParentListProperty", TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
         }
 
@@ -472,14 +471,14 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { 1, null, "Int32" };
             yield return new object[] { typeof(int), null, "Int32" };
-            yield return new object[] { 1, new PropertyDescriptor[0], "Int32" };
-            yield return new object[] { typeof(int), new PropertyDescriptor[0], "Int32" };
+            yield return new object[] { 1, Array.Empty<PropertyDescriptor>(), "Int32" };
+            yield return new object[] { typeof(int), Array.Empty<PropertyDescriptor>(), "Int32" };
             yield return new object[] { 1, new PropertyDescriptor[] { null }, "Int32" };
             yield return new object[] { typeof(int), new PropertyDescriptor[] { null }, "Int32" };
 
-            yield return new object[] { new int[0], null, "Int32" };
+            yield return new object[] { Array.Empty<int>(), null, "Int32" };
             yield return new object[] { typeof(int[]), null, "Int32" };
-            yield return new object[] { new object[0], null, "Object" };
+            yield return new object[] { Array.Empty<object>(), null, "Object" };
             yield return new object[] { typeof(object[]), null, "Object" };
 
             yield return new object[] { new List<int>(), null, "Int32" };

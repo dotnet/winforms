@@ -155,7 +155,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
         /// </summary>
         private string SettingsKey
@@ -350,7 +350,6 @@ namespace System.Windows.Forms.Design
         /// Initialize the item.
         /// </summary>
         // EditorServiceContext is newed up to add Edit Items verb.
-        [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
         public override void Initialize(IComponent component)
         {
             base.Initialize(component);
@@ -448,7 +447,7 @@ namespace System.Windows.Forms.Design
                     comp = (IComponent)keyboardHandlingService.SelectedDesignerControl;
                 }
             }
-            // This case covers (a) and (b) above.... 
+            // This case covers (a) and (b) above....
             if (comp is ToolStripDropDownItem)
             {
                 if (comp is ToolStripDropDownItem currentItem && currentItem == menuItem)
@@ -557,7 +556,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         /// <summary>
         /// Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
         /// </summary>
@@ -566,7 +564,7 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
             PropertyDescriptor prop;
             string[] shadowProps = new string[] { "AutoClose", SettingsKeyName, "RightToLeft", "AllowDrop" };
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
@@ -760,7 +758,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps... 
+        /// This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
         /// </summary>
         internal class ContextMenuStripBehavior : System.Windows.Forms.Design.Behavior.Behavior
         {

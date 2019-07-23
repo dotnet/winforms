@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 namespace System.Windows.Forms
 {
     using System.ComponentModel;
@@ -10,18 +9,13 @@ namespace System.Windows.Forms
     using System;
     using System.Drawing;
     using System.Drawing.Design;
-    using System.ComponentModel.Design;
     using System.Text;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Windows.Forms.VisualStyles;
     using System.Runtime.InteropServices;
-    using System.Globalization;
     using System.Windows.Forms.Layout;
 
     /// <summary>
-    ///     TabPage implements a single page of a tab control.  It is essentially
-    ///     a Panel with TabItem properties.
+    ///  TabPage implements a single page of a tab control.  It is essentially
+    ///  a Panel with TabItem properties.
     /// </summary>
     [
     ComVisible(true),
@@ -40,9 +34,8 @@ namespace System.Windows.Forms
         private bool leaveFired = false;
         private bool useVisualStyleBackColor = false;
 
-
         /// <summary>
-        ///     Constructs an empty TabPage.
+        ///  Constructs an empty TabPage.
         /// </summary>
         public TabPage()
         : base()
@@ -52,7 +45,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -72,7 +65,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     <para>Hide AutoSize: it doesn't make sense for this control</para>
+        ///  Hide AutoSize: it doesn't make sense for this control
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -96,10 +89,9 @@ namespace System.Windows.Forms
             remove => base.AutoSizeChanged -= value;
         }
 
-
         /// <summary>
-        ///     The background color of this control. This is an ambient property and
-        ///     will always return a non-null value.
+        ///  The background color of this control. This is an ambient property and
+        ///  will always return a non-null value.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -147,15 +139,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Constructs the new instance of the Controls collection objects. Subclasses
-        ///     should not call base.CreateControlsInstance.  Our version creates a control
-        ///     collection that does not support
+        ///  Constructs the new instance of the Controls collection objects. Subclasses
+        ///  should not call base.CreateControlsInstance.  Our version creates a control
+        ///  collection that does not support
         /// </summary>
-        protected override Control.ControlCollection CreateControlsInstance()
+        protected override ControlCollection CreateControlsInstance()
         {
             return new TabPageControlCollection(this);
         }
-
 
         internal ImageList.Indexer ImageIndexer
         {
@@ -171,11 +162,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the imageIndex for the tabPage.  This should point to an image
-        ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
+        ///  Returns the imageIndex for the tabPage.  This should point to an image
+        ///  in the TabControl's associated imageList that will appear on the tab, or be -1.
         /// </summary>
         [
-        TypeConverterAttribute(typeof(ImageIndexConverter)),
+        TypeConverter(typeof(ImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
@@ -195,7 +186,6 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
 
-
                 if (ParentInternal is TabControl parent)
                 {
                     ImageIndexer.ImageList = parent.ImageList;
@@ -207,11 +197,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the imageIndex for the tabPage.  This should point to an image
-        ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
+        ///  Returns the imageIndex for the tabPage.  This should point to an image
+        ///  in the TabControl's associated imageList that will appear on the tab, or be -1.
         /// </summary>
         [
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
+        TypeConverter(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Localizable(true),
         DefaultValue(""),
@@ -228,7 +218,6 @@ namespace System.Windows.Forms
             {
                 ImageIndexer.Key = value;
 
-
                 if (ParentInternal is TabControl parent)
                 {
                     ImageIndexer.ImageList = parent.ImageList;
@@ -239,7 +228,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Constructs a TabPage with text for the tab.
+        ///  Constructs a TabPage with text for the tab.
         /// </summary>
         public TabPage(string text) : this()
         {
@@ -331,7 +320,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged
         {
@@ -380,7 +368,6 @@ namespace System.Windows.Forms
                 base.TabIndex = value;
             }
         }
-
 
         /// <summary>
         /// This property is required by certain controls (TabPage) to render its transparency using theming API.
@@ -447,8 +434,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The toolTipText for the tab, that will appear when the mouse hovers
-        ///     over the tab and the TabControl's showToolTips property is true.
+        ///  The toolTipText for the tab, that will appear when the mouse hovers
+        ///  over the tab and the TabControl's showToolTips property is true.
         /// </summary>
         [
         DefaultValue(""),
@@ -499,8 +486,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Assigns a new parent control. Sends out the appropriate property change
-        ///     notifications for properties that are affected by the change of parent.
+        ///  Assigns a new parent control. Sends out the appropriate property change
+        ///  notifications for properties that are affected by the change of parent.
         /// </summary>
         internal override void AssignParent(Control value)
         {
@@ -513,7 +500,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Given a component, this retrieves the tab page that it's parented to, or
+        ///  Given a component, this retrieves the tab page that it's parented to, or
         /// null if it's not parented to any tab page.
         /// </summary>
         public static TabPage GetTabPageOfComponent(object comp)
@@ -533,8 +520,6 @@ namespace System.Windows.Forms
             return (TabPage)c;
         }
 
-        /// <summary>
-        /// </summary>
         internal NativeMethods.TCITEM_T GetTCITEM()
         {
             NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T
@@ -564,7 +549,7 @@ namespace System.Windows.Forms
 
         private void PrefixAmpersands(ref string value)
         {
-            // Due to a comctl32 problem, ampersands underline the next letter in the 
+            // Due to a comctl32 problem, ampersands underline the next letter in the
             // text string, but the accelerators don't work.
             // So in this function, we prefix ampersands with another ampersand
             // so that they actually appear as ampersands.
@@ -626,15 +611,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Actually goes and fires the OnEnter event.  Inheriting controls
-        ///     should use this to know when the event is fired [this is preferable to
-        ///     adding an event handler on yourself for this event].  They should,
-        ///     however, remember to call base.OnEnter(e); to ensure the event is
-        ///     still fired to external listeners
-        ///     This listener is overidden so that we can fire SAME ENTER and LEAVE 
-        ///     events on the TabPage.
-        ///     TabPage should fire enter when the focus is on the TABPAGE and not when the control
-        ///     within the TabPage gets Focused.
+        ///  Actually goes and fires the OnEnter event.  Inheriting controls
+        ///  should use this to know when the event is fired [this is preferable to
+        ///  adding an event handler on yourself for this event].  They should,
+        ///  however, remember to call base.OnEnter(e); to ensure the event is
+        ///  still fired to external listeners
+        ///  This listener is overidden so that we can fire SAME ENTER and LEAVE
+        ///  events on the TabPage.
+        ///  TabPage should fire enter when the focus is on the TABPAGE and not when the control
+        ///  within the TabPage gets Focused.
         /// </summary>
         protected override void OnEnter(EventArgs e)
         {
@@ -650,17 +635,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Actually goes and fires the OnLeave event.  Inheriting controls
-        ///     should use this to know when the event is fired [this is preferable to
-        ///     adding an event handler on yourself for this event].  They should,
-        ///     however, remember to call base.OnLeave(e); to ensure the event is
-        ///     still fired to external listeners
-        ///     This listener is overidden so that we can fire SAME ENTER and LEAVE 
-        ///     events on the TabPage.
-        ///     TabPage should fire enter when the focus is on the TABPAGE and not when the control
-        ///     within the TabPage gets Focused.
-        ///     Similary the Leave should fire when the TabControl (and hence the TabPage) looses
-        ///     Focus. 
+        ///  Actually goes and fires the OnLeave event.  Inheriting controls
+        ///  should use this to know when the event is fired [this is preferable to
+        ///  adding an event handler on yourself for this event].  They should,
+        ///  however, remember to call base.OnLeave(e); to ensure the event is
+        ///  still fired to external listeners
+        ///  This listener is overidden so that we can fire SAME ENTER and LEAVE
+        ///  events on the TabPage.
+        ///  TabPage should fire enter when the focus is on the TABPAGE and not when the control
+        ///  within the TabPage gets Focused.
+        ///  Similary the Leave should fire when the TabControl (and hence the TabPage) looses
+        ///  Focus.
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
@@ -690,8 +675,6 @@ namespace System.Windows.Forms
                 Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : BackColor;
                 Rectangle inflateRect = LayoutUtils.InflateRect(DisplayRectangle, Padding);
 
-
-
                 //To ensure that the tabpage draws correctly (the border will get clipped and
                 // and gradient fill will match correctly with the tabcontrol).  Unfortunately, there is no good way to determine
                 // the padding used on the tabpage.
@@ -701,7 +684,7 @@ namespace System.Windows.Forms
                 //Rectangle rectWithBorder = new Rectangle(inflateRect.X - themePadding.Left,
                 //    inflateRect.Y - themePadding.Top,
                 //    inflateRect.Width + themePadding.Right + themePadding.Left,
-                //    inflateRect.Height + themePadding.Bottom + themePadding.Top); 
+                //    inflateRect.Height + themePadding.Bottom + themePadding.Top);
                 Rectangle rectWithBorder = new Rectangle(inflateRect.X - 4, inflateRect.Y - 2, inflateRect.Width + 8, inflateRect.Height + 6);
 
                 TabRenderer.DrawTabPage(e.Graphics, rectWithBorder);
@@ -720,8 +703,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     overrides main setting of our bounds so that we can control our size and that of our
-        ///     TabPages...
+        ///  overrides main setting of our bounds so that we can control our size and that of our
+        ///  TabPages...
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
@@ -742,7 +725,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if the Location property needs to be persisted.
+        ///  Determines if the Location property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeLocation()
@@ -751,15 +734,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The text property is what is returned for the TabPages default printing.
+        ///  The text property is what is returned for the TabPages default printing.
         /// </summary>
         public override string ToString()
         {
             return "TabPage: {" + Text + "}";
         }
 
-        /// <summary>
-        /// </summary>
         internal void UpdateParent()
         {
             if (ParentInternal is TabControl parent)
@@ -769,24 +750,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///      Our control collection will throw an exception if you try to add other tab pages.
+        ///  Our control collection will throw an exception if you try to add other tab pages.
         /// </summary>
         [ComVisible(false)]
-        public class TabPageControlCollection : Control.ControlCollection
+        public class TabPageControlCollection : ControlCollection
         {
             /// <summary>
-            ///      Creates a new TabPageControlCollection.
+            ///  Creates a new TabPageControlCollection.
             /// </summary>
             public TabPageControlCollection(TabPage owner) : base(owner)
             {
             }
 
             /// <summary>
-            ///     Adds a child control to this control. The control becomes the last control
-            ///     in the child control list. If the control is already a child of another
-            ///     control it is first removed from that control.  The tab page overrides
-            ///     this method to ensure that child tab pages are not added to it, as these
-            ///     are illegal.
+            ///  Adds a child control to this control. The control becomes the last control
+            ///  in the child control list. If the control is already a child of another
+            ///  control it is first removed from that control.  The tab page overrides
+            ///  this method to ensure that child tab pages are not added to it, as these
+            ///  are illegal.
             /// </summary>
             public override void Add(Control value)
             {

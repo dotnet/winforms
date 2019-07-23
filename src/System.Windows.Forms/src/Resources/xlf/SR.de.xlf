@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">Das ActiveX-Steuerelement ist ein fensterloses Steuerelement. Es wird in dieser Version von .NET Framework nicht unterstützt.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">Das ActiveX-Steuerelement ist ein fensterloses Steuerelement. Es wird in dieser Version von .NET nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -5065,8 +5065,8 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +5191,12 @@ anstelle dieses Dialogfelds finden Sie am Ende dieser Meldung.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Die Anwendung hat einen Vorgang versucht, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET Framework-Konfigurationstool.
+        <target state="translated">Die Anwendung hat einen Vorgang versucht, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET-Konfigurationstool.
 
 Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den Vorgang fort.
 
@@ -5204,12 +5204,12 @@ Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den 
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Die Anwendung hat einen Vorgang versucht, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET Framework-Konfigurationstool.
+        <target state="translated">Die Anwendung hat einen Vorgang versucht, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET-Konfigurationstool.
 
 Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den Vorgang fort. Wenn Sie auf "Beenden" klicken, wird die Anwendung sofort beendet.
 
@@ -7153,7 +7153,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MainMenuToStringNoForm">
         <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;Kein Formular&gt;</target>
+        <target state="translated">&lt;No Form&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
@@ -7832,8 +7832,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Beschreibungsbereich</target>
+        <source>Description</source>
+        <target state="translated">Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7858,7 +7858,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PBRSToolTipCategorized">
         <source>Categorized</source>
-        <target state="translated">Nach Kategorien</target>
+        <target state="translated">Nach Kategorien.</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSToolTipEvents">
@@ -8812,8 +8812,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">Symbolleiste</target>
+        <source>PropertyGrid</source>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -11778,7 +11778,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">ENTF</target>
+        <target state="translated">Entf</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11808,12 +11808,12 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">BILD-AB</target>
+        <target state="translated">Bild ab</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">BILD-AUF</target>
+        <target state="translated">Bild auf</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

@@ -2,24 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
+
 namespace System.Windows.Forms
 {
-
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Reflection;
-
     /// <summary>
-    ///      ListViewItemStateImageIndexConverter is a class that can be used to convert
-    ///      image index values one data type to another.
+    ///  ListViewItemStateImageIndexConverter is a class that can be used to convert
+    ///  image index values one data type to another.
     /// </summary>
     public class ListViewItemStateImageIndexConverter : ImageIndexConverter
     {
-
         protected override bool IncludeNoneAsStandardValue
         {
             get
@@ -28,12 +21,11 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///      Retrieves a collection containing a set of standard values
-        ///      for the data type this validator is designed for.  This
-        ///      will return null if the data type does not support a
-        ///      standard set of values.
+        ///  Retrieves a collection containing a set of standard values
+        ///  for the data type this validator is designed for.  This
+        ///  will return null if the data type does not support a
+        ///  standard set of values.
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
@@ -80,7 +72,6 @@ namespace System.Windows.Forms
                         values = new object[nImages];
                     }
 
-
                     // Fill in the array
                     //
                     for (int i = 0; i < nImages; i++)
@@ -98,11 +89,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                return new StandardValuesCollection(new object[0]);
+                return new StandardValuesCollection(Array.Empty<object>());
             }
 
         }
-
 
     }
 }

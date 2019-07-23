@@ -16,28 +16,92 @@ namespace System.Windows.Forms.Tests
         public void ScrollableControl_Ctor_Default()
         {
             var control = new SubScrollableControl();
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoScroll);
             Assert.Equal(Size.Empty, control.AutoScrollMargin);
+            Assert.Equal(Size.Empty, control.AutoScrollMinSize);
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.AutoSize);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BackgroundImage);
+            Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
-            Assert.Equal(Size.Empty, control.ClientSize);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
-            Assert.NotNull(control.HorizontalScroll);
-            Assert.Same(control.HorizontalScroll, control.HorizontalScroll);
-            Assert.NotNull(control.VerticalScroll);
-            Assert.Same(control.VerticalScroll, control.VerticalScroll);
+            Assert.Equal(Size.Empty, control.ClientSize);
+            Assert.Null(control.Container);
+            Assert.Empty(control.Controls);
+            Assert.Same(control.Controls, control.Controls);
+            Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
+            Assert.Same(Cursors.Default, control.DefaultCursor);
+            Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
+            Assert.Equal(new Padding(3), control.DefaultMargin);
+            Assert.Equal(Size.Empty, control.DefaultMaximumSize);
+            Assert.Equal(Size.Empty, control.DefaultMinimumSize);
+            Assert.Equal(Padding.Empty, control.DefaultPadding);
+            Assert.Equal(Size.Empty, control.DefaultSize);
+            Assert.False(control.DesignMode);
+            Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
             Assert.Equal(0, control.DockPadding.Top);
             Assert.Equal(0, control.DockPadding.Bottom);
             Assert.Equal(0, control.DockPadding.Left);
             Assert.Equal(0, control.DockPadding.Right);
-            Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
+            Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(0, control.Height);
+            Assert.NotNull(control.HorizontalScroll);
+            Assert.Same(control.HorizontalScroll, control.HorizontalScroll);
             Assert.False(control.HScroll);
+            Assert.Equal(ImeMode.NoControl, control.ImeMode);
+            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
-            Assert.False(control.VScroll);
+            Assert.Null(control.Site);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.True(control.TabStop);
+            Assert.Empty(control.Text);
+            Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
+            Assert.NotNull(control.VerticalScroll);
+            Assert.Same(control.VerticalScroll, control.VerticalScroll);
+            Assert.False(control.VScroll);
+            Assert.Equal(0, control.Width);
+        }
+
+        [Fact]
+        public void ScrollableControl_CreateParams_GetDefault_ReturnsExpected()
+        {
+            var control = new SubScrollableControl();
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x10000, createParams.ExStyle);
+            Assert.Equal(0, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010000, createParams.Style);
+            Assert.Equal(0, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
         }
 
         [Theory]
@@ -377,6 +441,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedVScroll, control.VScroll);
         }
 
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ScrollableControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            var control = new SubScrollableControl();
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           control.Layout -= handler;
+           control.OnLayout(eventArgs);
+           Assert.Equal(1, callCount);
+        }
+
 #pragma warning disable 0618
         [Fact]
         public void ScrollableControl_ScaleCore_InvokeWithDockPadding_Success()
@@ -615,6 +703,32 @@ namespace System.Windows.Forms.Tests
 
             public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
+            public new bool CanEnableIme => base.CanEnableIme;
+
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
+            public new CreateParams CreateParams => base.CreateParams;
+
+            public new Cursor DefaultCursor => base.DefaultCursor;
+
+            public new ImeMode DefaultImeMode => base.DefaultImeMode;
+
+            public new Padding DefaultMargin => base.DefaultMargin;
+
+            public new Size DefaultMaximumSize => base.DefaultMaximumSize;
+
+            public new Size DefaultMinimumSize => base.DefaultMinimumSize;
+
+            public new Padding DefaultPadding => base.DefaultPadding;
+
+            public new Size DefaultSize => base.DefaultSize;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new EventHandlerList Events => base.Events;
+
+            public new ImeMode ImeModeBase => base.ImeModeBase;
+
             public new bool HScroll
             {
                 get => base.HScroll;
@@ -630,6 +744,8 @@ namespace System.Windows.Forms.Tests
             public new void AdjustFormScrollbars(bool displayScrollbars) => base.AdjustFormScrollbars(displayScrollbars);
 
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
+
+            public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
             public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
 

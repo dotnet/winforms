@@ -2,38 +2,46 @@
 // The .NET Foundation licenses this file to you under the MIT license.	
 // See the LICENSE file in the project root for more information.	
 
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
     public class PropertyValueUIItemTests
     {
-        private void Dummy_PropertyValueUIItemInvokeHandler(ITypeDescriptorContext context, PropertyDescriptor propDesc, PropertyValueUIItem invokedItem) { }
-
-        [Fact]
-        public void Ctor_Throws_ArgumentNullException()
+        public static IEnumerable<object[]> Ctor_Image_PropertyValueUIItemInvokeHandler_String_TestData()
         {
-            AssertExtensions.Throws<ArgumentNullException>("uiItemImage", () => new PropertyValueUIItem(null, Dummy_PropertyValueUIItemInvokeHandler, "toolTip"));
+            yield return new object[] { new Bitmap(10, 10), (PropertyValueUIItemInvokeHandler)Dummy_PropertyValueUIItemInvokeHandler, null };
+            yield return new object[] { new Bitmap(10, 10), (PropertyValueUIItemInvokeHandler)Dummy_PropertyValueUIItemInvokeHandler, string.Empty };
+            yield return new object[] { new Bitmap(10, 10), (PropertyValueUIItemInvokeHandler)Dummy_PropertyValueUIItemInvokeHandler, "tooltip" };
+        }
 
-            using (Image img = Image.FromFile(Path.Combine("bitmaps", "nature24bits.jpg")))
-            {
-                AssertExtensions.Throws<ArgumentNullException>("handler", () => new PropertyValueUIItem(img, null, "toolTip"));
-            }
+        [Theory]
+        [MemberData(nameof(Ctor_Image_PropertyValueUIItemInvokeHandler_String_TestData))]
+        public void PropertyValueUIItem_Ctor_Image_PropertyValueUIItemInvokeHandler_String(Image uiItemImage, PropertyValueUIItemInvokeHandler handler, string tooltip)
+        {
+            var item = new PropertyValueUIItem(uiItemImage, handler, tooltip);
+            Assert.Same(uiItemImage, item.Image);
+            Assert.Same(handler, item.InvokeHandler);
+            Assert.Same(tooltip, item.ToolTip);
         }
 
         [Fact]
-        public void Ctor_PropertiesAssignedCorrectly()
+        public void PropertyValueUIItem_Ctor_NullUiItemImage_ThrowsArgumentNullException()
         {
-            string toolTip = "Custom toolTip";
-            using (Image img = Image.FromFile(Path.Combine("bitmaps", "nature24bits.jpg")))
+            Assert.Throws<ArgumentNullException>("uiItemImage", () => new PropertyValueUIItem(null, Dummy_PropertyValueUIItemInvokeHandler, "tooltip"));
+        }
+
+        [Fact]
+        public void PropertyValueUIItem_Ctor_NullHandler_ThrowsArgumentNullException()
+        {
+            using (var uiItemImage = new Bitmap(10, 10))
             {
-                var propertyValue = new PropertyValueUIItem(img, Dummy_PropertyValueUIItemInvokeHandler, toolTip);
-                Assert.Equal(img, propertyValue.Image);
-                Assert.Equal(Dummy_PropertyValueUIItemInvokeHandler, propertyValue.InvokeHandler);
-                Assert.Equal(toolTip, propertyValue.ToolTip);
+                Assert.Throws<ArgumentNullException>("handler", () => new PropertyValueUIItem(uiItemImage, null, "tooltip"));
             }
         }
+
+        private static void Dummy_PropertyValueUIItemInvokeHandler(ITypeDescriptorContext context, PropertyDescriptor propDesc, PropertyValueUIItem invokedItem) { }
     }
 }

@@ -18,10 +18,11 @@ namespace System.ComponentModel.Design.Tests
     public class CollectionEditorTests
     {
         [Theory]
-        [InlineData(null, typeof(object))]
         [InlineData(typeof(object), typeof(object))]
+        [InlineData(typeof(string), typeof(object))]
         [InlineData(typeof(int[]), typeof(object))]
         [InlineData(typeof(IList<int>), typeof(int))]
+        [InlineData(typeof(IList), typeof(object))]
         [InlineData(typeof(ClassWithItem), typeof(int))]
         [InlineData(typeof(ClassWithPrivateItem), typeof(object))]
         [InlineData(typeof(ClassWithStaticItem), typeof(object))]
@@ -31,27 +32,25 @@ namespace System.ComponentModel.Design.Tests
         public void CollectionEditor_Ctor_Type(Type type, Type expectedItemType)
         {
             var editor = new SubCollectionEditor(type);
-            if (type == null)
-            {
-                Assert.Throws<ArgumentNullException>("type", () => editor.CollectionItemType);
-            }
-            else
-            {
-                Assert.Equal(expectedItemType, editor.CollectionItemType);
-                Assert.Same(editor.CollectionItemType, editor.CollectionItemType);
-            }
+            Assert.Equal(expectedItemType, editor.CollectionItemType);
+            Assert.Same(editor.CollectionItemType, editor.CollectionItemType);
             Assert.Equal(type, editor.CollectionType);
             Assert.Null(editor.Context);
             Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
             Assert.False(editor.IsDropDownResizable);
-            if (type == null)
-            {
-                Assert.Throws<ArgumentNullException>("type", () => editor.NewItemTypes);
-            }
-            else
-            {
-                Assert.Equal(new Type[] { expectedItemType }, editor.NewItemTypes);
-            }
+            Assert.Equal(new Type[] { expectedItemType }, editor.NewItemTypes);
+        }
+
+        [Fact]
+        public void CollectionEditor_Ctor_NullType()
+        {
+            var editor = new SubCollectionEditor(null);
+            Assert.Throws<ArgumentNullException>("type", () => editor.CollectionItemType);
+            Assert.Null(editor.CollectionType);
+            Assert.Null(editor.Context);
+            Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
+            Assert.False(editor.IsDropDownResizable);
+            Assert.Throws<ArgumentNullException>("type", () => editor.NewItemTypes);
         }
 
         [Fact]
@@ -748,47 +747,30 @@ namespace System.ComponentModel.Design.Tests
             var value = new object();
             Assert.Throws<ArgumentNullException>("type", () => editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
         }
-        public static IEnumerable<object[]> EditValue_InvalidProvider_TestData()
-        {
-            yield return new object[] { null };
-
-            var nullServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            nullServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(null);
-            yield return new object[] { nullServiceProviderMock.Object };
-
-            var invalidServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            invalidServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(new object());
-            yield return new object[] { invalidServiceProviderMock.Object };
-        }
 
         [Theory]
-        [MemberData(nameof(EditValue_InvalidProvider_TestData))]
-        public void CollectionEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider)
+        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        public void CollectionEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new SubCollectionEditor(null);
-            var value = new object();
             Assert.Same(value, editor.EditValue(null, provider, value));
             Assert.Null(editor.Context);
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("value")]
-        public void CollectionEditor_EditValue_NullProvider_ReturnsValue(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void CollectionEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
-            var editor = new SubCollectionEditor(null);
-            Assert.Same(value, editor.EditValue(null, null, value));
+            var editor = new CollectionEditor(null);
+            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
         }
 
-        [Fact]
-        public void CollectionEditor_GetEditStyle_Invoke_ReturnsModal()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void CollectionEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
-            var editor = new SubCollectionEditor(null);
-            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(null));
+            var editor = new CollectionEditor(null);
+            Assert.False(editor.GetPaintValueSupported(context));
         }
 
         public static IEnumerable<Object[]> GetDisplayText_TestData()
@@ -836,8 +818,9 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> GetItems_TestData()
         {
-            yield return new object[] { null, new object[0] };
-            yield return new object[] { new object(), new object[0] };
+            yield return new object[] { null, Array.Empty<object>() };
+            yield return new object[] { new object(), Array.Empty<object>() };
+            yield return new object[] { new int[] { 1, 2, 3 }, new object[] { 1, 2, 3, } };
             yield return new object[] { new ArrayList { 1, 2, 3 }, new object[] { 1, 2, 3, } };
         }
 
@@ -848,6 +831,7 @@ namespace System.ComponentModel.Design.Tests
             var editor = new SubCollectionEditor(null);
             object[] items = editor.GetItems(editValue);
             Assert.Equal(expected, items);
+            Assert.IsType(expected.GetType(), items);
             Assert.NotSame(editValue, items);
         }
 
@@ -916,17 +900,20 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> SetItems_TestData()
         {
             yield return new object[] { null, new object[] { 1, 2, 3 }, null };
-            yield return new object[] { null, new object[0], null };
+            yield return new object[] { null, Array.Empty<object>(), null };
             yield return new object[] { null, null, null };
 
             var o = new object();
             yield return new object[] { o, new object[] { 1, 2, 3 }, o };
-            yield return new object[] { o, new object[0], o };
+            yield return new object[] { o, Array.Empty<object>(), o };
             yield return new object[] { o, null, o };
 
+            yield return new object[] { new int[] { 1, 2, 3 }, Array.Empty<object>(), new object[] { 0, 0, 0 } };
+            yield return new object[] { new int[] { 1, 2, 3 }, null, new object[] { 0, 0, 0 } };
+
             yield return new object[] { new ArrayList { 1, 2, 3 }, new object[] { 1 }, new object[] { 1 } };
-            yield return new object[] { new ArrayList { 1, 2, 3 }, new object[0], new object[0] };
-            yield return new object[] { new ArrayList { 1, 2, 3 }, null, new object[0] };
+            yield return new object[] { new ArrayList { 1, 2, 3 }, Array.Empty<object>(), Array.Empty<object>() };
+            yield return new object[] { new ArrayList { 1, 2, 3 }, null, Array.Empty<object>() };
         }
 
         [Theory]
@@ -937,6 +924,13 @@ namespace System.ComponentModel.Design.Tests
             object items = editor.SetItems(editValue, value);
             Assert.Equal(expected, items);
             Assert.Same(editValue, items);
+        }
+
+        [Fact]
+        public void CollectionEditor_SetItems_InvokeArray_ThrowsNotSupportedException()
+        {
+            var editor = new SubCollectionEditor(null);
+            Assert.Throws<NotSupportedException>(() => editor.SetItems(new object[1], new object[1]));
         }
 
         [Fact]

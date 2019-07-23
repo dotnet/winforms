@@ -2,34 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Drawing.Imaging;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.ComponentModel.Com2Interop;
+using System.Windows.Forms.Design;
+using System.Windows.Forms.PropertyGridInternal;
+using Microsoft.Win32;
+
 namespace System.Windows.Forms
 {
-
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Drawing.Imaging;
-    using System.Globalization;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.ComponentModel.Com2Interop;
-    using System.Windows.Forms.Design;
-    using System.Windows.Forms.PropertyGridInternal;
-    using Microsoft.Win32;
-
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public class PropertyGrid : ContainerControl, IComPropertyBrowser, UnsafeNativeMethods.IPropertyNotifySink
     {
-
         private readonly DocComment doccomment;
         private int dcSizeRatio = -1;
         private int hcSizeRatio = -1;
@@ -47,15 +43,14 @@ namespace System.Windows.Forms
         // our array of viewTabs
         private bool viewTabsDirty = true;
         private bool drawFlatToolBar = false;
-        private PropertyTab[] viewTabs = new PropertyTab[0];
-        private PropertyTabScope[] viewTabScopes = new PropertyTabScope[0];
+        private PropertyTab[] viewTabs = Array.Empty<PropertyTab>();
+        private PropertyTabScope[] viewTabScopes = Array.Empty<PropertyTabScope>();
         private Hashtable viewTabProps;
 
         // the tab view buttons
         private ToolStripButton[] viewTabButtons;
         // the index of the currently selected tab view
         private int selectedViewTab;
-
 
         // our view type buttons (Alpha vs. categorized)
         private ToolStripButton[] viewSortButtons;
@@ -70,7 +65,6 @@ namespace System.Windows.Forms
 
         // our main baby
         private readonly PropertyGridView gridView;
-
 
         private IDesignerHost designerHost;
         private IDesignerEventService designerEventService;
@@ -151,7 +145,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private readonly ComponentEventHandler onComponentAdd;
         private readonly ComponentEventHandler onComponentRemove;
         private readonly ComponentChangedEventHandler onComponentChanged;
@@ -167,13 +160,8 @@ namespace System.Windows.Forms
         private static readonly object EventPropertySortChanged = new object();
         private static readonly object EventSelectedObjectsChanged = new object();
 
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // the "PropertyGridToolBar" caption is for testing.
-                                                                                                        // So we don't have to localize it.
-        ]
         public PropertyGrid()
         {
-
             onComponentAdd = new ComponentEventHandler(OnComponentAdd);
             onComponentRemove = new ComponentEventHandler(OnComponentRemove);
             onComponentChanged = new ComponentChangedEventHandler(OnComponentChanged);
@@ -181,7 +169,7 @@ namespace System.Windows.Forms
             SuspendLayout();
             AutoScaleMode = AutoScaleMode.None;
 
-            // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue. 
+            // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue.
             // So, recalculate static variables everytime property grid initialized.
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
@@ -228,9 +216,8 @@ namespace System.Windows.Forms
                 toolStrip.TabIndex = 1;
                 toolStrip.ImageScalingSize = normalButtonSize;
 
-                // parity with the old... 
+                // parity with the old...
                 toolStrip.CanOverflow = false;
-
 
                 // hide the grip but add in a few more pixels of padding.
                 toolStrip.GripStyle = ToolStripGripStyle.Hidden;
@@ -238,7 +225,6 @@ namespace System.Windows.Forms
                 toolStripPadding.Left = 2;
                 toolStrip.Padding = toolStripPadding;
                 SetToolStripRenderer();
-
 
                 // always add the property tab here
                 AddRefTab(DefaultTabType, null, PropertyTabScope.Static, true);
@@ -251,8 +237,6 @@ namespace System.Windows.Forms
                 doccomment.ForeColor = SystemColors.ControlText;
                 doccomment.MouseMove += new MouseEventHandler(OnChildMouseMove);
                 doccomment.MouseDown += new MouseEventHandler(OnChildMouseDown);
-
-
 
                 hotcommands = new HotCommands(this);
                 hotcommands.SuspendLayout();
@@ -327,8 +311,6 @@ namespace System.Windows.Forms
                         RemoveTabs(PropertyTabScope.Document, true);
                         designerHost = null;
                     }
-
-
 
                     if (value != null)
                     {
@@ -634,7 +616,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The border color for the hot commands region</para>
+        ///  The border color for the hot commands region
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -712,7 +694,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Collection of child controls.
+        ///  Collection of child controls.
         /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -725,7 +707,6 @@ namespace System.Windows.Forms
                 return base.Controls;
             }
         }
-
 
         protected override Size DefaultSize
         {
@@ -870,7 +851,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>The border color for the help region</para>
+        ///  The border color for the help region
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -949,7 +930,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Background color for Highlighted text.</para>
+        ///  Background color for Highlighted text.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -973,7 +954,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Foreground color for Highlighted (selected) text.</para>
+        ///  Foreground color for Highlighted (selected) text.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -997,7 +978,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Foreground color for disabled text in the Grid View</para>
+        ///  Foreground color for disabled text in the Grid View
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1018,7 +999,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Color for the horizontal splitter line separating property categories.</para>
+        ///  Color for the horizontal splitter line separating property categories.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1042,7 +1023,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.</para>
+        ///  Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1160,7 +1141,6 @@ namespace System.Windows.Forms
 
                 GridItem selectedGridItem = SelectedGridItem;
 
-
                 OnViewSortButtonClick(newButton, EventArgs.Empty);
 
                 propertySortValue = value;
@@ -1171,7 +1151,7 @@ namespace System.Windows.Forms
                     {
                         SelectedGridItem = selectedGridItem;
                     }
-                    catch (System.ArgumentException)
+                    catch (ArgumentException)
                     {
                         // When no row is selected, SelectedGridItem returns grid entry for root
                         // object. But this is not a selectable item. So don't worry if setting SelectedGridItem
@@ -1220,7 +1200,7 @@ namespace System.Windows.Forms
             {
                 if (value == null)
                 {
-                    SelectedObjects = new object[0];
+                    SelectedObjects = Array.Empty<object>();
                 }
                 else
                 {
@@ -1296,7 +1276,7 @@ namespace System.Windows.Forms
                             }
                             Type newType = objTemp.GetType();
 
-                            // check if the types are the same.  If they are, and they 
+                            // check if the types are the same.  If they are, and they
                             // are COM objects, check their GUID's.  If they are different
                             // or Guid.Emtpy, assume the classes are different.
                             //
@@ -1319,13 +1299,13 @@ namespace System.Windows.Forms
 
                         ClearCachedProps();
 
-                        // The default selected entry might still reference the previous selected 
+                        // The default selected entry might still reference the previous selected
                         // objects. Set it to null to avoid leaks.
                         peDefault = null;
 
                         if (value == null)
                         {
-                            currentObjects = new object[0];
+                            currentObjects = Array.Empty<object>();
                         }
                         else
                         {
@@ -1334,7 +1314,6 @@ namespace System.Windows.Forms
 
                         SinkPropertyNotifyEvents();
                         SetFlag(PropertiesChanged, true);
-
 
                         // Since we are changing the selection, we need to make sure that the
                         // keywords for the currently selected grid entry gets removed
@@ -1436,12 +1415,11 @@ namespace System.Windows.Forms
                         OnSelectedObjectsChanged(EventArgs.Empty);
                     }
 
-
                     /*
-       
+
                     Microsoft, hopefully this won't be a big perf problem, but it looks like we
                            need to refresh even if we didn't change the selected objects.
-       
+
                     if (propertiesChanged) {*/
                     if (!GetFlag(TabsChanging))
                     {
@@ -1501,7 +1479,7 @@ namespace System.Windows.Forms
             {
                 if (currentObjects == null)
                 {
-                    return new object[0];
+                    return Array.Empty<object>();
                 }
                 return (object[])currentObjects.Clone();
             }
@@ -1519,8 +1497,6 @@ namespace System.Windows.Forms
                 return viewTabs[selectedViewTab];
             }
         }
-
-
 
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -1612,7 +1588,6 @@ namespace System.Windows.Forms
             remove => base.TextChanged -= value;
         }
 
-
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridLargeButtonsDesc)),
@@ -1695,8 +1670,6 @@ namespace System.Windows.Forms
             }
         }
 
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected ToolStripRenderer ToolStripRenderer
         {
             get
@@ -1754,7 +1727,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Border color for the property grid view.</para>
+        ///  Border color for the property grid view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1801,7 +1774,6 @@ namespace System.Windows.Forms
             remove => base.KeyDown -= value;
         }
 
-
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress
@@ -1809,7 +1781,6 @@ namespace System.Windows.Forms
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
         }
-
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1904,12 +1875,10 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventSelectedObjectsChanged, value);
         }
 
-
         internal void AddTab(Type tabType, PropertyTabScope scope)
         {
             AddRefTab(tabType, null, scope, true);
         }
-
 
         internal void AddRefTab(Type tabType, object component, PropertyTabScope type, bool setupToolbar)
         {
@@ -2059,7 +2028,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
         /// Clears the tabs of the given scope or smaller.
         /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
@@ -2138,7 +2106,6 @@ namespace System.Windows.Forms
                     param = Site;
                 }
 
-
                 if (param != null && constructor != null)
                 {
                     tab = (PropertyTab)constructor.Invoke(new object[] { param });
@@ -2146,7 +2113,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // just call the default ctor
-                    // 
+                    //
                     tab = (PropertyTab)Activator.CreateInstance(tabType);
                 }
             }
@@ -2287,10 +2254,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            // don't show verbs if a prop grid is on the form at design time.            
+            // don't show verbs if a prop grid is on the form at design time.
             if (!DesignMode)
             {
-
 
                 if (verbs != null && verbs.Length > 0)
                 {
@@ -2310,7 +2276,6 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing)
         {
-
             if (disposing)
             {
                 // Unhook IDesignerEventService.ActiveDesignerChanged event
@@ -2407,7 +2372,6 @@ namespace System.Windows.Forms
 
         private SnappableControl DividerInside(int x, int y)
         {
-
             int useGrid = -1;
 
             if (hotcommands.Visible)
@@ -2543,8 +2507,6 @@ namespace System.Windows.Forms
                 Debug.Assert(viewTabs != null, "Invalid tab array");
                 Debug.Assert(viewTabs.Length == viewTabScopes.Length && viewTabScopes.Length == viewTabButtons.Length, "Uh oh, tab arrays aren't all the same length! tabs=" + viewTabs.Length.ToString(CultureInfo.InvariantCulture) + ", scopes=" + viewTabScopes.Length.ToString(CultureInfo.InvariantCulture) + ", buttons=" + viewTabButtons.Length.ToString(CultureInfo.InvariantCulture));
 
-
-
                 // skip the property tab since it's always valid
                 for (int i = 1; i < viewTabs.Length; i++)
                 {
@@ -2659,7 +2621,6 @@ namespace System.Windows.Forms
 
         bool IComPropertyBrowser.EnsurePendingChangesCommitted()
         {
-
             // The commits sometimes cause transactions to open
             // and close, which will cause refreshes, which we want to ignore.
 
@@ -2691,10 +2652,9 @@ namespace System.Windows.Forms
 
         private static Type[] GetCommonTabs(object[] objs, PropertyTabScope tabScope)
         {
-
             if (objs == null || objs.Length == 0)
             {
-                return new Type[0];
+                return Array.Empty<Type>();
             }
 
             Type[] tabTypes = new Type[5];
@@ -2704,7 +2664,7 @@ namespace System.Windows.Forms
 
             if (tabAttr == null)
             {
-                return new Type[0];
+                return Array.Empty<Type>();
             }
 
             // filter out all the types of the current scope
@@ -2726,7 +2686,7 @@ namespace System.Windows.Forms
 
             if (types == 0)
             {
-                return new Type[0];
+                return Array.Empty<Type>();
             }
 
             bool found;
@@ -2740,7 +2700,7 @@ namespace System.Windows.Forms
                 if (tabAttr == null)
                 {
                     // if this guy has no tabs at all, we can fail right now
-                    return new Type[0];
+                    return Array.Empty<Type>();
                 }
 
                 // make sure this guy has all the items in the array,
@@ -2835,7 +2795,6 @@ namespace System.Windows.Forms
 
         internal GridEntryCollection GetPropEntries()
         {
-
             if (currentPropEntries == null)
             {
                 UpdateSelection();
@@ -2844,16 +2803,13 @@ namespace System.Windows.Forms
             return currentPropEntries;
         }
 
-
         private PropertyGridView GetPropertyGridView()
         {
             return gridView;
         }
 
-
         void IComPropertyBrowser.HandleF4()
         {
-
             if (gridView.ContainsFocus)
             {
                 return;
@@ -2870,7 +2826,6 @@ namespace System.Windows.Forms
         {
             return GetFlag(PropertiesChanged);
         }
-
 
         void IComPropertyBrowser.LoadState(RegistryKey optRoot)
         {
@@ -2892,7 +2847,6 @@ namespace System.Windows.Forms
 
                 val = optRoot.GetValue("PbrsShowCommands", "0");
                 CommandsVisibleIfAvailable = (val != null && val.ToString().Equals("1"));
-
 
                 val = optRoot.GetValue("PbrsDescHeightRatio", "-1");
 
@@ -2937,7 +2891,6 @@ namespace System.Windows.Forms
         // are offering up any new tabs
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
         {
-
             if (e.OldDesigner != null && e.OldDesigner == designerHost)
             {
                 ActiveDesigner = null;
@@ -3024,7 +2977,6 @@ namespace System.Windows.Forms
 
         private void OnComponentAdd(object sender, ComponentEventArgs e)
         {
-
             PropertyTabAttribute attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
 
             if (attribute == null)
@@ -3069,7 +3021,6 @@ namespace System.Windows.Forms
 
         private void OnComponentRemove(object sender, ComponentEventArgs e)
         {
-
             PropertyTabAttribute attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
 
             if (attribute == null)
@@ -3095,7 +3046,7 @@ namespace System.Windows.Forms
                     Array.Copy(currentObjects, 0, newObjects, 0, i);
                     if (i < newObjects.Length)
                     {
-                        // Dev10 
+                        // Dev10
 
                         Array.Copy(currentObjects, i + 1, newObjects, i, newObjects.Length - i);
                     }
@@ -3119,31 +3070,26 @@ namespace System.Windows.Forms
 
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
             Refresh();
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
             Refresh();
         }
 
-        /// <summary>
-        /// </summary>
         internal void OnGridViewMouseWheel(MouseEventArgs e)
         {
             OnMouseWheel(e);
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -3155,20 +3101,16 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnHandleDestroyed(EventArgs e)
         {
             TypeDescriptor.Refreshed -= new RefreshEventHandler(OnTypeDescriptorRefreshed);
             base.OnHandleDestroyed(e);
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnGotFocus(EventArgs e)
         {
-
             base.OnGotFocus(e);
 
             if (ActiveControl == null)
@@ -3200,7 +3142,6 @@ namespace System.Windows.Forms
 
         private void OnLayoutInternal(bool dividerOnly)
         {
-
             if (!IsHandleCreated || !Visible)
             {
                 return;
@@ -3354,7 +3295,6 @@ namespace System.Windows.Forms
                 {
                     maxSpace -= cyDivider;
 
-
                     if (maxSpace > hcRequestedHeight)
                     {
                         // full size
@@ -3391,9 +3331,7 @@ namespace System.Windows.Forms
             }
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnMouseDown(MouseEventArgs me)
         {
             SnappableControl target = DividerInside(me.X, me.Y);
@@ -3408,12 +3346,9 @@ namespace System.Windows.Forms
             base.OnMouseDown(me);
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnMouseMove(MouseEventArgs me)
         {
-
             if (dividerMoveY == -1)
             {
                 if (DividerInside(me.X, me.Y) != null)
@@ -3438,9 +3373,7 @@ namespace System.Windows.Forms
             base.OnMouseMove(me);
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnMouseUp(MouseEventArgs me)
         {
             if (dividerMoveY == -1)
@@ -3488,9 +3421,7 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnResize(EventArgs e)
         {
             if (IsHandleCreated && Visible)
@@ -3499,8 +3430,6 @@ namespace System.Windows.Forms
             }
             base.OnResize(e);
         }
-
-
 
         private void OnButtonClick(object sender, EventArgs e)
         {
@@ -3511,16 +3440,13 @@ namespace System.Windows.Forms
             }
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected void OnComComponentNameChanged(ComponentRenameEventArgs e)
         {
             ((ComponentRenameEventHandler)Events[EventComComponentNameChanged])?.Invoke(this, e);
         }
 
-
         // Seems safe - doesn't do anything interesting
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected void OnNotifyPropertyValueUIItemsChanged(object sender, EventArgs e)
         {
             gridView.LabelPaintMargin = 0;
@@ -3528,10 +3454,8 @@ namespace System.Windows.Forms
         }
 
         // Seems safe - doesn't do anything interesting
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnPaint(PaintEventArgs pevent)
         {
-
             // just erase the stuff above and below the properties window
             // so we don't flicker.
             Point psheetLoc = gridView.Location;
@@ -3581,21 +3505,18 @@ namespace System.Windows.Forms
         }
 
         // Seems safe - just fires an event
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertySortChanged(EventArgs e)
         {
             ((EventHandler)Events[EventPropertySortChanged])?.Invoke(this, e);
         }
 
         // Seems safe - just fires an event
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyTabChanged(PropertyTabChangedEventArgs e)
         {
             ((PropertyTabChangedEventHandler)Events[EventPropertyTabChanged])?.Invoke(this, e);
         }
 
         // Seems safe - just fires an event
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyValueChanged(PropertyValueChangedEventArgs e)
         {
             ((PropertyValueChangedEventHandler)Events[EventPropertyValueChanged])?.Invoke(this, e);
@@ -3635,17 +3556,13 @@ namespace System.Windows.Forms
             OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(oldEntry, newEntry));
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnSelectedGridItemChanged(SelectedGridItemChangedEventArgs e)
         {
             ((SelectedGridItemChangedEventHandler)Events[EventSelectedGridItemChanged])?.Invoke(this, e);
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnSelectedObjectsChanged(EventArgs e)
         {
             ((EventHandler)Events[EventSelectedObjectsChanged])?.Invoke(this, e);
@@ -3790,7 +3707,6 @@ namespace System.Windows.Forms
 
         private void OnViewButtonClickPP(object sender, EventArgs e)
         {
-
             if (btnViewPropertyPages.Enabled &&
                 currentObjects != null &&
                 currentObjects.Length > 0)
@@ -3893,9 +3809,7 @@ namespace System.Windows.Forms
             OnButtonClick(sender, e);
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
@@ -3907,7 +3821,7 @@ namespace System.Windows.Forms
         }
 
         /*
-            
+
         /// <summary>
         /// Returns the first child control that can take focus
         /// </summary>
@@ -3932,7 +3846,7 @@ namespace System.Windows.Forms
             }
         }
 
-        
+
         private Control LastFocusableChild {
             get {
                 if (doccomment.Visible) {
@@ -3951,53 +3865,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        //
 
 */
 
@@ -4172,10 +4040,8 @@ namespace System.Windows.Forms
             base.Refresh();
         }
 
-
         private void Refresh(bool clearCached)
         {
-
             if (Disposing)
             {
                 return;
@@ -4208,7 +4074,6 @@ namespace System.Windows.Forms
 
         internal void RefreshProperties(bool clearCached)
         {
-
             // Clear our current cache so we can do a full refresh.
             if (clearCached && selectedViewTab != -1 && viewTabs != null)
             {
@@ -4224,14 +4089,12 @@ namespace System.Windows.Forms
             UpdateSelection();
         }
 
-
         /// <summary>
         /// Refreshes the tabs of the given scope by deleting them and requerying objects and documents
         /// for them.
         /// </summary>
         public void RefreshTabs(PropertyTabScope tabScope)
         {
-
             if (tabScope < PropertyTabScope.Document)
             {
                 throw new ArgumentException(SR.PropertyGridTabScope);
@@ -4408,7 +4271,7 @@ namespace System.Windows.Forms
                 // clear the component refs of the tabs
                 for (int i = 0; i < viewTabs.Length; i++)
                 {
-                    viewTabs[i].Components = new object[0];
+                    viewTabs[i].Components = Array.Empty<object>();
                 }
             }
         }
@@ -4426,7 +4289,6 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.PropertyGridRemoveStaticTabs);
             }
-
 
             if (selectedViewTab == tabIndex)
             {
@@ -4573,7 +4435,6 @@ namespace System.Windows.Forms
 
         void IComPropertyBrowser.SaveState(RegistryKey optRoot)
         {
-
             if (optRoot == null)
             {
                 return;
@@ -4605,7 +4466,6 @@ namespace System.Windows.Forms
 
         private void SelectViewTabButton(ToolStripButton button, bool updateSelection)
         {
-
             Debug.Assert(viewTabButtons != null, "No view tab buttons to select!");
 
             int oldTab = selectedViewTab;
@@ -4673,12 +4533,8 @@ namespace System.Windows.Forms
             return false;
         }
 
-
-
         private void SetSelectState(int state)
         {
-
-
             if (state >= (viewTabs.Length * viewSortButtons.Length))
             {
                 state = 0;
@@ -4687,7 +4543,6 @@ namespace System.Windows.Forms
             {
                 state = (viewTabs.Length * viewSortButtons.Length) - 1;
             }
-
 
             // NOTE: See GetSelectState for the full description
             // of the state transitions
@@ -4717,7 +4572,7 @@ namespace System.Windows.Forms
         {
             if (DrawFlatToolbar || SystemInformation.HighContrast)
             {
-                // use an office look and feel with system colors 
+                // use an office look and feel with system colors
                 ProfessionalColorTable colorTable = new ProfessionalColorTable
                 {
                     UseSystemColors = true
@@ -4730,8 +4585,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         private void SetupToolbar()
         {
             SetupToolbar(false);
@@ -4739,7 +4592,6 @@ namespace System.Windows.Forms
 
         private void SetupToolbar(bool fullRebuild)
         {
-
             // if the tab array hasn't changed, don't bother to do all
             // this work.
             //
@@ -4751,7 +4603,6 @@ namespace System.Windows.Forms
             try
             {
                 FreezePainting = true;
-
 
                 if (imageList[NORMAL_BUTTONS] == null || fullRebuild)
                 {
@@ -4769,7 +4620,6 @@ namespace System.Windows.Forms
 
                 Bitmap b;
                 int i;
-
 
                 // we manange the buttons as a seperate list so the toobar doesn't flash
                 ArrayList buttonList;
@@ -4955,7 +4805,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This 16x16 Bitmap is applied to the button which orders properties alphabetically.
-        /// </summary>      
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5077,7 +4927,6 @@ namespace System.Windows.Forms
 
         private bool ShouldForwardChildMouseMessage(Control child, MouseEventArgs me, ref Point pt)
         {
-
             Size size = child.Size;
 
             // are we within two pixels of the edge?
@@ -5128,7 +4977,6 @@ namespace System.Windows.Forms
 
         internal void UpdateSelection()
         {
-
             if (!GetFlag(PropertiesChanged))
             {
                 return;
@@ -5162,7 +5010,7 @@ namespace System.Windows.Forms
 
                 if (peMain == null)
                 {
-                    currentPropEntries = new GridEntryCollection(null, new GridEntry[0]);
+                    currentPropEntries = new GridEntryCollection(null, Array.Empty<GridEntry>());
                     gridView.ClearProps();
                     return;
                 }
@@ -5187,7 +5035,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
+        ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
         [
         DefaultValue(false),
@@ -5215,9 +5063,9 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        ///     Determines whether the control supports rendering text using GDI+ and GDI.
-        ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
-        ///     value if the child control supports it.
+        ///  Determines whether the control supports rendering text using GDI+ and GDI.
+        ///  This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
+        ///  value if the child control supports it.
         /// </summary>
         internal override bool SupportsUseCompatibleTextRendering
         {
@@ -5260,9 +5108,7 @@ namespace System.Windows.Forms
             }
         }
 
-
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnSystemColorsChanged(EventArgs e)
         {
             // refresh the toolbar buttons
@@ -5305,7 +5151,6 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-
             switch (m.Msg)
             {
                 case Interop.WindowMessages.WM_UNDO:
@@ -5505,7 +5350,6 @@ namespace System.Windows.Forms
                 }
             }
 
-
             protected override void OnControlAdded(ControlEventArgs ce)
             {
                 //ce.Control.MouseEnter += new EventHandler(this.OnChildMouseEnter);
@@ -5546,7 +5390,6 @@ namespace System.Windows.Forms
 
         public class PropertyTabCollection : ICollection
         {
-
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);
 
             private readonly PropertyGrid owner;
@@ -5557,7 +5400,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the number of member attributes.
+            ///  Retrieves the number of member attributes.
             /// </summary>
             public int Count
             {
@@ -5588,7 +5431,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the member attribute with the specified index.
+            ///  Retrieves the member attribute with the specified index.
             /// </summary>
             public PropertyTab this[int index]
             {
@@ -5633,7 +5476,6 @@ namespace System.Windows.Forms
                 owner.ClearTabs(tabScope);
             }
 
-
             void ICollection.CopyTo(Array dest, int index)
             {
                 if (owner == null)
@@ -5646,13 +5488,13 @@ namespace System.Windows.Forms
                 }
             }
             /// <summary>
-            ///      Creates and retrieves a new enumerator for this collection.
+            ///  Creates and retrieves a new enumerator for this collection.
             /// </summary>
             public IEnumerator GetEnumerator()
             {
                 if (owner == null)
                 {
-                    return new PropertyTab[0].GetEnumerator();
+                    return Array.Empty<PropertyTab>().GetEnumerator();
                 }
 
                 return owner.viewTabs.GetEnumerator();
@@ -5670,23 +5512,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     An unimplemented interface.  What is this?  It is an interface that nobody ever
-        ///     implements, of course? Where and why would it be used?  Why, to find cross-process
-        ///     remoted objects, of course!  If a well-known object comes in from a cross process
-        ///     connection, the remoting layer does contain enough type information to determine
-        ///     if an object implements an interface.  It assumes that if you are going to cast
-        ///     an object to an interface that you know what you're doing, and allows the cast,
-        ///     even for objects that DON'T actually implement the interface.  The error here
-        ///     is raised later when you make your first call on that interface pointer:  you
-        ///     get a remoting exception.
+        ///  An unimplemented interface.  What is this?  It is an interface that nobody ever
+        ///  implements, of course? Where and why would it be used?  Why, to find cross-process
+        ///  remoted objects, of course!  If a well-known object comes in from a cross process
+        ///  connection, the remoting layer does contain enough type information to determine
+        ///  if an object implements an interface.  It assumes that if you are going to cast
+        ///  an object to an interface that you know what you're doing, and allows the cast,
+        ///  even for objects that DON'T actually implement the interface.  The error here
+        ///  is raised later when you make your first call on that interface pointer:  you
+        ///  get a remoting exception.
         ///
-        ///     This is a big problem for code that does "is" and "as" checks to detect the
-        ///     presence of an interface.  We do that all over the place here, so we do a check
-        ///     during parameter validation to see if an object implements IUnimplemented.  If it
-        ///     does, we know that what we really have is a lying remoting proxy, and we bail.
+        ///  This is a big problem for code that does "is" and "as" checks to detect the
+        ///  presence of an interface.  We do that all over the place here, so we do a check
+        ///  during parameter validation to see if an object implements IUnimplemented.  If it
+        ///  does, we know that what we really have is a lying remoting proxy, and we bail.
         /// </summary>
         private interface IUnimplemented { }
-
 
         internal class SelectedObjectConverter : ReferenceConverter
         {
@@ -5727,7 +5568,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Helper class to support rendering text using either GDI or GDI+.
+        ///  Helper class to support rendering text using either GDI or GDI+.
         /// </summary>
         internal static class MeasureTextHelper
         {
@@ -5799,12 +5640,11 @@ namespace System.Windows.Forms
         internal const int PGM_GETTESTINGINFO = Interop.WindowMessages.WM_USER + 0x59;
 
         /// <summary>
-        ///     Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where 
-        ///     'file id' is a unique id that is return by this method.
-        ///     This is to support MAUI interaction with the PropertyGrid control and MAUI should remove the 
-        ///     file after used.
+        ///  Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where
+        ///  'file id' is a unique id that is return by this method.
+        ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should remove the
+        ///  file after used.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public static IntPtr WriteAutomationText(string text)
         {
             IntPtr fileId = IntPtr.Zero;
@@ -5830,11 +5670,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Writes the contents of a test file as text.  This file needs to have the following naming convention:
-        ///     %TEMP%\"Maui.[file id].log", where 'file id' is a unique id sent to this window.
-        ///     This is to support MAUI interaction with the PropertyGrid control and MAUI should create/delete this file.
+        ///  Writes the contents of a test file as text.  This file needs to have the following naming convention:
+        ///  %TEMP%\"Maui.[file id].log", where 'file id' is a unique id sent to this window.
+        ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should create/delete this file.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public static string ReadAutomationText(IntPtr fileId)
         {
             Debug.Assert(fileId != IntPtr.Zero, "Invalid file Id");
@@ -5867,7 +5706,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Generate log file from id.
+        ///  Generate log file from id.
         /// </summary>
         private static string GenerateLogFileName(ref IntPtr fileId)
         {
@@ -5898,7 +5737,6 @@ namespace System.Windows.Forms
     [ComVisible(true)]
     internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject
     {
-
         private readonly PropertyGrid _owningPropertyGrid;
 
         /// <summary>
@@ -6007,7 +5845,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the accessible child corresponding to the specified index.</para>
+        /// Gets the accessible child corresponding to the specified index.
         /// </summary>
         /// <param name="index">The child index.</param>
         /// <returns>The accessible child.</returns>
@@ -6127,7 +5965,6 @@ namespace System.Windows.Forms
     /// </summary>
     internal class PropertyGridToolStrip : ToolStrip
     {
-
         private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
@@ -6161,7 +5998,6 @@ namespace System.Windows.Forms
     [ComVisible(true)]
     internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
     {
-
         private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>

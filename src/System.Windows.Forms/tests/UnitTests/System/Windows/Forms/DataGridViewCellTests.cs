@@ -798,11 +798,11 @@ namespace System.Windows.Forms.Tests
             {
                 ToolTipText = value
             };
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
 
             // Set same.
             cell.ToolTipText = value;
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
         }
 
         [Theory]
@@ -814,11 +814,11 @@ namespace System.Windows.Forms.Tests
                 ToolTipText = "ToolTipText"
             };
             cell.ToolTipText = value;
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
 
             // Set same.
             cell.ToolTipText = value;
-            Assert.Same(expected, cell.ToolTipText);
+            Assert.Equal(expected, cell.ToolTipText);
         }
 
         public static IEnumerable<object[]> Value_TestData()
@@ -953,11 +953,20 @@ namespace System.Windows.Forms.Tests
             {
                 All = all
             };
-            Assert.Same(dataGridViewAdvancedBorderStyleInput, cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, null, true, true, true, true));
+            var dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
+            Assert.Same(dataGridViewAdvancedBorderStyleInput, cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, dataGridViewAdvancedBorderStylePlaceholder, true, true, true, true));
         }
 
         [Fact]
-        public void DataGridViewCell_AdjustCellBorderStyle_AllNotSetWithoutDataGridViewNullDataGridViewAdvancedBorderStylePlaceholder_ReturnsExpected()
+        public void DataGridViewCell_AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStyleInput_ThrowsArgumentNullException()
+        {
+            var cell = new SubDataGridViewCell();
+            var dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
+            Assert.Throws<ArgumentNullException>("dataGridViewAdvancedBorderStyleInput", () => cell.AdjustCellBorderStyle(null, dataGridViewAdvancedBorderStylePlaceholder, true, true, true, true));
+        }
+
+        [Fact]
+        public void DataGridViewCell_AdjustCellBorderStyle_AllNotSetWithoutDataGridView_ReturnsExpected()
         {
             var cell = new SubDataGridViewCell();
             var dataGridViewAdvancedBorderStyleInput = new DataGridViewAdvancedBorderStyle
@@ -965,25 +974,27 @@ namespace System.Windows.Forms.Tests
                 Left = DataGridViewAdvancedCellBorderStyle.Single,
                 Right = DataGridViewAdvancedCellBorderStyle.None
             };
-            Assert.Same(dataGridViewAdvancedBorderStyleInput, cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, null, true, true, true, true));
+            var dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
+            Assert.Same(dataGridViewAdvancedBorderStyleInput, cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, dataGridViewAdvancedBorderStylePlaceholder, true, true, true, true));
         }
 
-        [Fact]
-        public void DataGridViewCell_AdjustCellBorderStyle_AllSingleWithoutDataGridViewNullDataGridViewAdvancedBorderStylePlaceholder_ThrowsNullReferenceException()
+        public static IEnumerable<object[]> AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStylePlaceholder_TestData()
         {
-            var cell = new SubDataGridViewCell();
-            var dataGridViewAdvancedBorderStyleInput = new DataGridViewAdvancedBorderStyle
-            {
-                All = DataGridViewAdvancedCellBorderStyle.Single
-            };
-            Assert.Throws<NullReferenceException>(() => cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, null, true, true, true, true));
+            yield return new object[] { new DataGridViewAdvancedBorderStyle { All = DataGridViewAdvancedCellBorderStyle.None } };
+            yield return new object[] { new DataGridViewAdvancedBorderStyle { All = DataGridViewAdvancedCellBorderStyle.Inset } };
+            yield return new object[] { new DataGridViewAdvancedBorderStyle { All = DataGridViewAdvancedCellBorderStyle.InsetDouble } };
+            yield return new object[] { new DataGridViewAdvancedBorderStyle { All = DataGridViewAdvancedCellBorderStyle.Outset } };
+            yield return new object[] { new DataGridViewAdvancedBorderStyle { All = DataGridViewAdvancedCellBorderStyle.OutsetDouble } };
+            yield return new object[] { new DataGridViewAdvancedBorderStyle { All = DataGridViewAdvancedCellBorderStyle.OutsetPartial } };
+            yield return new object[] { new DataGridViewAdvancedBorderStyle { Left = DataGridViewAdvancedCellBorderStyle.Inset, Right = DataGridViewAdvancedCellBorderStyle.Outset } };
         }
 
-        [Fact]
-        public void DataGridViewCell_AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStyleInput_ThrowsNullReferenceException()
+        [Theory]
+        [MemberData(nameof(AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStylePlaceholder_TestData))]
+        public void DataGridViewCell_AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStylePlaceholder_ThrowsArgumentNullException(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput)
         {
             var cell = new SubDataGridViewCell();
-            Assert.Throws<NullReferenceException>(() => cell.AdjustCellBorderStyle(null, new DataGridViewAdvancedBorderStyle(), true, true, true, true));
+            Assert.Throws<ArgumentNullException>("dataGridViewAdvancedBorderStylePlaceholder", () => cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, null, true, true, true, true));
         }
 
         public static IEnumerable<object[]> BorderWidths_TestData()
@@ -1078,10 +1089,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DataGridViewCell_BorderWidths_NullDataGridViewAdvancedBorderStyleInput_ThrowsNullReferenceException()
+        public void DataGridViewCell_BorderWidths_NullAdvancedBorderStyleInput_ThrowsArgumentNullException()
         {
             var cell = new SubDataGridViewCell();
-            Assert.Throws<NullReferenceException>(() => cell.BorderWidths(null));
+            Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => cell.BorderWidths(null));
         }
 
         [Fact]
@@ -2026,42 +2037,31 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
-        public void DataGridViewCell_PaintErrorIcon__NullGraphicsNullOrEmptyText_Nop(string errorText)
-        {
-            var cell = new SubDataGridViewCell();
-            cell.PaintErrorIcon(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), errorText);
-        }
-
-        [Theory]
-        [InlineData(-1, 100)]
-        [InlineData(0, 100)]
-        [InlineData(19, 100)]
-        [InlineData(100, -1)]
-        [InlineData(100, 0)]
-        [InlineData(100, 18)]
-        public void DataGridViewCell_PaintErrorIcon_NullGraphicsInvalidSize_Nop(int cellValueBoundsWidth, int cellValueBoundsHeight)
-        {
-            var cell = new SubDataGridViewCell();
-            cell.PaintErrorIcon(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, cellValueBoundsWidth, cellValueBoundsHeight), "errorText");
-        }
-
-        [Fact]
-        public void DataGridViewCell_PaintErrorIcon_NullGraphics_ThrowsNullReferenceException()
-        {
-            var cell = new SubDataGridViewCell();
-            Assert.Throws<NullReferenceException>(() => cell.PaintErrorIcon(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 20, 19), "errorText"));
-        }
-
-        [Fact]
-        public void DataGridViewCell_PaintErrorIcon_NoDataGridView_ThrowsNullReferenceException()
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void DataGridViewCell_PaintErrorIcon_NoDataGridView_Nop(string errorText)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
                 var cell = new SubDataGridViewCell();
-                Assert.Throws<NullReferenceException>(() => cell.PaintErrorIcon(graphics, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 20, 19), "errorText"));
+                cell.PaintErrorIcon(graphics, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 20, 19), errorText);
             }
+        }
+
+        [Theory]
+        [InlineData(-1, 100, "errorText")]
+        [InlineData(0, 100, "errorText")]
+        [InlineData(19, 100, "errorText")]
+        [InlineData(100, -1, "errorText")]
+        [InlineData(100, 0, "errorText")]
+        [InlineData(100, 18, "errorText")]
+        [InlineData(3, 4, "errorText")]
+        [InlineData(3, 4, "")]
+        [InlineData(3, 4, null)]
+        public void DataGridViewCell_PaintErrorIcon_NullGraphicsInvalidSize_ThrowsArgumentNullException(int cellValueBoundsWidth, int cellValueBoundsHeight, string errorText)
+        {
+            var cell = new SubDataGridViewCell();
+            Assert.Throws<ArgumentNullException>("graphics", () => cell.PaintErrorIcon(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, cellValueBoundsWidth, cellValueBoundsHeight), errorText));
         }
 
         public static IEnumerable<object[]> ParseFormattedValue_TestData()
@@ -2362,7 +2362,6 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseMove(DataGridViewCellMouseEventArgs e) => base.OnMouseMove(e);
 
             public new void OnMouseUp(DataGridViewCellMouseEventArgs e) => base.OnMouseUp(e);
-
 
             public new void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
             {

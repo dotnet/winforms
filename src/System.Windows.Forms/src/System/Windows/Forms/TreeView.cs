@@ -2,33 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Design;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Reflection;
-    using System.Windows.Forms.Layout;
-    using System.Globalization;
-    using System.Windows.Forms.VisualStyles;
-
     /// <summary>
-    ///    <para>
-    ///       Displays a hierarchical list of items, or nodes. Each
-    ///       node includes a caption and an optional bitmap. The user can select a node. If
-    ///       it has sub-nodes, the user can collapse or expand the node.
-    ///
-    ///    </para>
+    ///  Displays a hierarchical list of items, or nodes. Each
+    ///  node includes a caption and an optional bitmap. The user can select a node. If
+    ///  it has sub-nodes, the user can collapse or expand the node.
     /// </summary>
     [
     ComVisible(true),
@@ -41,7 +30,6 @@ namespace System.Windows.Forms
     ]
     public class TreeView : Control
     {
-
         private const int MaxIndent = 32000;      // Maximum allowable TreeView indent
         private const string backSlash = "\\";
         private const int DefaultTreeViewIndent = 19;
@@ -69,7 +57,6 @@ namespace System.Windows.Forms
         private bool hoveredAlready = false;
         private bool rightToLeftLayout = false;
 
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         private IntPtr hNodeMouseDown = IntPtr.Zero;//ensures we fire nodeclick on the correct node
 
         private const int TREEVIEWSTATE_hideSelection = 0x00000001;
@@ -91,7 +78,7 @@ namespace System.Windows.Forms
         private const int TREEVIEWSTATE_ignoreSelects = 0x00010000;
 
         // PERF: take all the bools and put them into a state variable
-        private System.Collections.Specialized.BitVector32 treeViewState; // see TREEVIEWSTATE_ consts above
+        private Collections.Specialized.BitVector32 treeViewState; // see TREEVIEWSTATE_ consts above
 
         private static bool isScalingInitialized = false;
         private static Size? scaledStateImageSize = null;
@@ -162,19 +149,17 @@ namespace System.Windows.Forms
         // Sorting
         private IComparer treeViewNodeSorter = null;
 
-
         //Events
         private TreeNodeMouseClickEventHandler onNodeMouseClick;
         private TreeNodeMouseClickEventHandler onNodeMouseDoubleClick;
 
         /// <summary>
-        ///     Creates a TreeView control
+        ///  Creates a TreeView control
         /// </summary>
         public TreeView()
         : base()
         {
-
-            treeViewState = new System.Collections.Specialized.BitVector32(TREEVIEWSTATE_showRootLines |
+            treeViewState = new Collections.Specialized.BitVector32(TREEVIEWSTATE_showRootLines |
                                                                                 TREEVIEWSTATE_showPlusMinus |
                                                                                 TREEVIEWSTATE_showLines |
                                                                                 TREEVIEWSTATE_scrollable |
@@ -192,9 +177,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The background color for this control. Specifying null for
-        ///     this parameter sets the
-        ///     control's background color to its parent's background color.
+        ///  The background color for this control. Specifying null for
+        ///  this parameter sets the
+        ///  control's background color to its parent's background color.
         /// </summary>
         public override Color BackColor
         {
@@ -245,7 +230,6 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageChanged -= value;
         }
 
-
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
@@ -267,7 +251,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The border style of the window.
+        ///  The border style of the window.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -301,9 +285,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The value of the CheckBoxes property. The CheckBoxes
-        ///     property determines if check boxes are shown next to node in the
-        ///     tree view.
+        ///  The value of the CheckBoxes property. The CheckBoxes
+        ///  property determines if check boxes are shown next to node in the
+        ///  tree view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -343,15 +327,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_TREEVIEW;
-
 
                 // Keep the scrollbar if we are just updating styles...
                 //
@@ -422,7 +403,6 @@ namespace System.Windows.Forms
                     cp.Style |= NativeMethods.TVS_INFOTIP;
                 }
 
-
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (CheckBoxes && IsHandleCreated)
@@ -452,8 +432,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -464,8 +444,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This property is overridden and hidden from statement completion
-        ///     on controls that are based on Win32 Native Controls.
+        ///  This property is overridden and hidden from statement completion
+        ///  on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
@@ -481,8 +461,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The current foreground color for this control, which is the
-        ///     color the control uses to draw its text.
+        ///  The current foreground color for this control, which is the
+        ///  color the control uses to draw its text.
         /// </summary>
         public override Color ForeColor
         {
@@ -509,8 +489,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines whether the selection highlight spans across the width of the TreeView.
-        ///     This property will have no effect if ShowLines is true.
+        ///  Determines whether the selection highlight spans across the width of the TreeView.
+        ///  This property will have no effect if ShowLines is true.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -534,8 +514,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The HideSelection property specifies whether the selected node will
-        ///     be highlighted even when the TreeView loses focus.
+        ///  The HideSelection property specifies whether the selected node will
+        ///  be highlighted even when the TreeView loses focus.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -563,9 +543,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The value of the HotTracking property. The HotTracking
-        ///     property determines if nodes are highlighted as the mousepointer
-        ///     passes over them.
+        ///  The value of the HotTracking property. The HotTracking
+        ///  property determines if nodes are highlighted as the mousepointer
+        ///  passes over them.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -593,14 +573,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The default image index for nodes in the tree view.
+        ///  The default image index for nodes in the tree view.
         /// </summary>
         [
         DefaultValue(-1),
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
-        TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
+        TypeConverter(typeof(NoneExcludedImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SRDescription(nameof(SR.TreeViewImageIndexDescr)),
         RelatedImageList("ImageList")
@@ -633,7 +613,7 @@ namespace System.Windows.Forms
 
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, 0));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, 0));
                 }
 
                 if (ImageIndexer.Index != value)
@@ -648,12 +628,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The default image index for nodes in the tree view.
+        ///  The default image index for nodes in the tree view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
+        TypeConverter(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
@@ -685,7 +665,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the image list control that is bound to the tree view.
+        ///  Returns the image list control that is bound to the tree view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -716,7 +696,7 @@ namespace System.Windows.Forms
                     {
                         SendMessage(NativeMethods.TVM_SETIMAGELIST, 0,
                                     value == null ? IntPtr.Zero : value.Handle);
-                        if (StateImageList != null && StateImageList.Images.Count > 0)
+                        if (StateImageList != null && StateImageList.Images.Count > 0 && internalStateImageList != null)
                         {
                             SetStateImageList(internalStateImageList.Handle);
                         }
@@ -768,9 +748,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Returns the state image list control that is bound to the tree view.
+        ///  Returns the state image list control that is bound to the tree view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -798,7 +777,7 @@ namespace System.Windows.Forms
                     {
                         UpdateNativeStateImageList();
 
-                        // We need to update the checks 
+                        // We need to update the checks
                         // and stateimage value for each node.
                         UpdateCheckedState(root, true);
 
@@ -811,19 +790,17 @@ namespace System.Windows.Forms
                         {
                             // The TreeView shows up the state imageList after sending this message even if the nodes dont have any stateImageIndex set.
                             // In order to avoid that we refresh nodes which would "reset" the images to none.
-                            // This causes flicker but gives us the right behavior                        
+                            // This causes flicker but gives us the right behavior
                             RefreshNodes();
                         }
                     }
-
 
                 }
             }
         }
 
-
         /// <summary>
-        ///     The indentation level in pixels.
+        ///  The indentation level in pixels.
         /// </summary>
         [
         Localizable(true),
@@ -868,7 +845,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The height of every item in the tree view, in pixels.
+        ///  The height of every item in the tree view, in pixels.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -934,8 +911,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The LabelEdit property determines if the label text
-        ///     of nodes in the tree view is editable.
+        ///  The LabelEdit property determines if the label text
+        ///  of nodes in the tree view is editable.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -961,9 +938,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     This is the color of the lines that connect the nodes of the Treeview.
+        ///  This is the color of the lines that connect the nodes of the Treeview.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -996,7 +972,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The collection of nodes associated with this TreeView control
+        ///  The collection of nodes associated with this TreeView control
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1018,10 +994,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>
-        /// Indicates the drawing mode for the tree view.
-        /// </para>
-        /// </summary>
+            /// Indicates the drawing mode for the tree view.
+            /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TreeViewDrawMode.Normal),
@@ -1056,7 +1030,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The delimeter string used by TreeNode.getFullPath().
+        ///  The delimeter string used by TreeNode.getFullPath().
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1097,10 +1071,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///     control placement and text will be from right to left.
+        ///  control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1129,7 +1103,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -1152,13 +1125,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The image index that a node will display when selected.
-        ///     The index applies to the ImageList referred to by the imageList property,
+        ///  The image index that a node will display when selected.
+        ///  The index applies to the ImageList referred to by the imageList property,
         /// </summary>
         [
         DefaultValue(-1),
         SRCategory(nameof(SR.CatBehavior)),
-        TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
+        TypeConverter(typeof(NoneExcludedImageIndexConverter)),
         Localizable(true),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SRDescription(nameof(SR.TreeViewSelectedImageIndexDescr)),
@@ -1205,12 +1178,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The default image index for nodes in the tree view.
+        ///  The default image index for nodes in the tree view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
+        TypeConverter(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DefaultValue(""),
         RefreshProperties(RefreshProperties.Repaint),
@@ -1243,7 +1216,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The currently selected tree node, or null if nothing is selected.
+        ///  The currently selected tree node, or null if nothing is selected.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1296,8 +1269,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ShowLines property determines if lines are drawn between
-        ///     nodes in the tree view.
+        ///  The ShowLines property determines if lines are drawn between
+        ///  nodes in the tree view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1324,7 +1297,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ShowLines property determines whether or not the tooltips willbe displayed on the nodes
+        ///  The ShowLines property determines whether or not the tooltips willbe displayed on the nodes
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1351,8 +1324,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ShowPlusMinus property determines if the "plus/minus"
-        ///     expand button is shown next to tree nodes that have children.
+        ///  The ShowPlusMinus property determines if the "plus/minus"
+        ///  expand button is shown next to tree nodes that have children.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1379,8 +1352,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if lines are draw between nodes at the root of
-        ///     the tree view.
+        ///  Determines if lines are draw between nodes at the root of
+        ///  the tree view.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1404,7 +1377,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The Sorted property determines if nodes in the tree view are sorted.
+        ///  The Sorted property determines if nodes in the tree view are sorted.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1431,9 +1404,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     The sorting comparer for this TreeView.
+        ///  The sorting comparer for this TreeView.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1481,9 +1453,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The first visible node in the TreeView. Initially
-        ///     the first root node is at the top of the TreeView, but if the
-        ///     contents have been scrolled another node may be at the top.
+        ///  The first visible node in the TreeView. Initially
+        ///  the first root node is at the top of the TreeView, but if the
+        ///  contents have been scrolled another node may be at the top.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1524,10 +1496,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The count of fully visible nodes in the tree view.  This number
-        ///     may be greater than the number of nodes in the control.
-        ///     The control calculates this value by dividing the height of the
-        ///     client window by the height of an item
+        ///  The count of fully visible nodes in the tree view.  This number
+        ///  may be greater than the number of nodes in the control.
+        ///  The control calculates this value by dividing the height of the
+        ///  client window by the height of an item
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1548,14 +1520,12 @@ namespace System.Windows.Forms
             }
         }
 
-
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
         public event NodeLabelEditEventHandler BeforeLabelEdit
         {
             add => onBeforeLabelEdit += value;
             remove => onBeforeLabelEdit -= value;
         }
-
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterEditDescr))]
         public event NodeLabelEditEventHandler AfterLabelEdit
@@ -1564,14 +1534,12 @@ namespace System.Windows.Forms
             remove => onAfterLabelEdit -= value;
         }
 
-
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCheckDescr))]
         public event TreeViewCancelEventHandler BeforeCheck
         {
             add => onBeforeCheck += value;
             remove => onBeforeCheck -= value;
         }
-
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCheckDescr))]
         public event TreeViewEventHandler AfterCheck
@@ -1580,14 +1548,12 @@ namespace System.Windows.Forms
             remove => onAfterCheck -= value;
         }
 
-
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCollapseDescr))]
         public event TreeViewCancelEventHandler BeforeCollapse
         {
             add => onBeforeCollapse += value;
             remove => onBeforeCollapse -= value;
         }
-
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCollapseDescr))]
         public event TreeViewEventHandler AfterCollapse
@@ -1596,14 +1562,12 @@ namespace System.Windows.Forms
             remove => onAfterCollapse -= value;
         }
 
-
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeExpandDescr))]
         public event TreeViewCancelEventHandler BeforeExpand
         {
             add => onBeforeExpand += value;
             remove => onBeforeExpand -= value;
         }
-
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterExpandDescr))]
         public event TreeViewEventHandler AfterExpand
@@ -1613,7 +1577,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>Fires when a TreeView node needs to be drawn.</para>
+        ///  Fires when a TreeView node needs to be drawn.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewDrawNodeEventDescr))]
         public event DrawTreeNodeEventHandler DrawNode
@@ -1636,15 +1600,12 @@ namespace System.Windows.Forms
             remove => onNodeMouseHover -= value;
         }
 
-
-
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeSelectDescr))]
         public event TreeViewCancelEventHandler BeforeSelect
         {
             add => onBeforeSelect += value;
             remove => onBeforeSelect -= value;
         }
-
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterSelectDescr))]
         public event TreeViewEventHandler AfterSelect
@@ -1654,7 +1615,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     TreeView Onpaint.
+        ///  TreeView Onpaint.
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1685,12 +1646,11 @@ namespace System.Windows.Forms
             remove => onRightToLeftLayoutChanged -= value;
         }
 
-
         /// <summary>
-        ///     Disables redrawing of the tree view. A call to beginUpdate() must be
-        ///     balanced by a following call to endUpdate(). Following a call to
-        ///     beginUpdate(), any redrawing caused by operations performed on the
-        ///     tree view is deferred until the call to endUpdate().
+        ///  Disables redrawing of the tree view. A call to beginUpdate() must be
+        ///  balanced by a following call to endUpdate(). Following a call to
+        ///  beginUpdate(), any redrawing caused by operations performed on the
+        ///  tree view is deferred until the call to endUpdate().
         /// </summary>
         public void BeginUpdate()
         {
@@ -1698,15 +1658,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Collapses all nodes at the root level.
+        ///  Collapses all nodes at the root level.
         /// </summary>
         public void CollapseAll()
         {
             root.Collapse();
         }
 
-        /// <summary>
-        /// </summary>
         protected override void CreateHandle()
         {
             if (!RecreatingHandle)
@@ -1729,8 +1687,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the imageList to null.  We wire this method up to the imageList's
-        ///     Dispose event, so that we don't hang onto an imageList that's gone away.
+        ///  Resets the imageList to null.  We wire this method up to the imageList's
+        ///  Dispose event, so that we don't hang onto an imageList that's gone away.
         /// </summary>
         private void DetachImageList(object sender, EventArgs e)
         {
@@ -1738,8 +1696,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Resets the stateimageList to null.  We wire this method up to the stateimageList's
-        ///     Dispose event, so that we don't hang onto an stateimageList that's gone away.
+        ///  Resets the stateimageList to null.  We wire this method up to the stateimageList's
+        ///  Dispose event, so that we don't hang onto an stateimageList that's gone away.
         /// </summary>
         private void DetachStateImageList(object sender, EventArgs e)
         {
@@ -1748,8 +1706,6 @@ namespace System.Windows.Forms
 
         }
 
-        /// <summary>
-        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -1760,7 +1716,7 @@ namespace System.Windows.Forms
                     node.ContextMenu = null;
                 }
 
-                // 
+                //
                 lock (this)
                 {
                     DetachImageListHandlers();
@@ -1775,10 +1731,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Reenables redrawing of the tree view. A call to beginUpdate() must be
-        ///     balanced by a following call to endUpdate(). Following a call to
-        ///     beginUpdate(), any redrawing caused by operations performed on the
-        ///     combo box is deferred until the call to endUpdate().
+        ///  Reenables redrawing of the tree view. A call to beginUpdate() must be
+        ///  balanced by a following call to endUpdate(). Following a call to
+        ///  beginUpdate(), any redrawing caused by operations performed on the
+        ///  combo box is deferred until the call to endUpdate().
         /// </summary>
         public void EndUpdate()
         {
@@ -1786,7 +1742,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Expands all nodes at the root level.
+        ///  Expands all nodes at the root level.
         /// </summary>
         public void ExpandAll()
         {
@@ -1794,16 +1750,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Forces the TreeView to recalculate all its nodes widths so that it updates the
-        ///     scrollbars as appropriate.
+        ///  Forces the TreeView to recalculate all its nodes widths so that it updates the
+        ///  scrollbars as appropriate.
         /// </summary>
         internal void ForceScrollbarUpdate(bool delayed)
         {
-
             // ForceScrollbarUpdate call WM_SETREDRAW( FALSE ) followed by WM_SETREDRAW( TRUE )
             // So if TreeView.BeginUpdate is called
             // ForceScrollbarUpdate effectively causes tree view to ignore BeginUpdate and cause control to update on every change.
-            // So gaurd against this scenario by using the new internal method on Control.
+            // So guard against this scenario by using the new internal method on Control.
             if (!IsUpdating())
             {
                 if (IsHandleCreated)
@@ -1822,7 +1777,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
+        ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
         internal void SetToolTip(ToolTip toolTip, string toolTipText)
         {
@@ -1834,9 +1789,8 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Gives the information about which part of the treeNode is at the given point.
+        ///  Gives the information about which part of the treeNode is at the given point.
         /// </summary>
         public TreeViewHitTestInfo HitTest(Point pt)
         {
@@ -1844,7 +1798,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Gives the information about which part of the treeNode is at the given x, y.
+        ///  Gives the information about which part of the treeNode is at the given x, y.
         /// </summary>
         public TreeViewHitTestInfo HitTest(int x, int y)
         {
@@ -1860,10 +1814,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Defined so that a  tree node can use it
-        ///
+        ///  Defined so that a  tree node can use it
         /// </summary>
-
         internal bool TreeViewBeforeCheck(TreeNode node, TreeViewAction actionTaken)
         {
             TreeViewCancelEventArgs tvce = new TreeViewCancelEventArgs(node, false, actionTaken);
@@ -1876,9 +1828,8 @@ namespace System.Windows.Forms
             OnAfterCheck(new TreeViewEventArgs(node, actionTaken));
         }
 
-
         /// <summary>
-        ///     Returns count of nodes at root, optionally including all subtrees.
+        ///  Returns count of nodes at root, optionally including all subtrees.
         /// </summary>
         public int GetNodeCount(bool includeSubTrees)
         {
@@ -1886,7 +1837,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the TreeNode at the given location in tree view coordinates.
+        ///  Returns the TreeNode at the given location in tree view coordinates.
         /// </summary>
         public TreeNode GetNodeAt(Point pt)
         {
@@ -1894,7 +1845,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the TreeNode at the given location in tree view coordinates.
+        ///  Returns the TreeNode at the given location in tree view coordinates.
         /// </summary>
         public TreeNode GetNodeAt(int x, int y)
         {
@@ -1961,7 +1912,7 @@ namespace System.Windows.Forms
         {
             if ((null != sender) && (sender == stateImageList) && IsHandleCreated)
             {
-                // Since the native treeview requires the state imagelist to be 1-indexed we need to 
+                // Since the native treeview requires the state imagelist to be 1-indexed we need to
                 // re add the images if the original collection had changed.
                 if (stateImageList != null && stateImageList.Images.Count > 0)
                 {
@@ -1994,7 +1945,7 @@ namespace System.Windows.Forms
                         SetStateImageList(internalStateImageList.Handle);
                     }
                 }
-                else //stateImageList == null || stateImageList.Images.Count = 0; 
+                else //stateImageList == null || stateImageList.Images.Count = 0;
                 {
                     UpdateCheckedState(root, true);
                 }
@@ -2002,9 +1953,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Overridden to handle RETURN key.
-        ///    </para>
+        ///  Overridden to handle RETURN key.
         /// </summary>
         protected override bool IsInputKey(Keys keyData)
         {
@@ -2028,8 +1977,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    Note this can be null - particularly if any windows messages get generated during
-        ///    the insertion of a tree node (TVM_INSERTITEM)
+        ///  Note this can be null - particularly if any windows messages get generated during
+        ///  the insertion of a tree node (TVM_INSERTITEM)
         /// </summary>
         internal TreeNode NodeFromHandle(IntPtr handle)
         {
@@ -2046,11 +1995,8 @@ namespace System.Windows.Forms
             onDrawNode?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
-
             TreeNode savedSelectedNode = selectedNode;
             selectedNode = null;
 
@@ -2121,9 +2067,9 @@ namespace System.Windows.Forms
                 SendMessage(NativeMethods.TVM_SETITEMHEIGHT, ItemHeight, 0);
             }
 
-            // Essentially we are setting the width to be infinite so that the 
+            // Essentially we are setting the width to be infinite so that the
             // TreeView never thinks it needs a scrollbar when the first node is created
-            // during the first handle creation.  
+            // during the first handle creation.
             //
             // This is set back to the oldSize after the Realize method.
             int oldSize = 0;
@@ -2190,8 +2136,8 @@ namespace System.Windows.Forms
             }
         }
 
-        // Destroying the tree-view control does not destroy the native state image list. 
-        // We must destroy it explicitly. 
+        // Destroying the tree-view control does not destroy the native state image list.
+        // We must destroy it explicitly.
         private void DestroyNativeStateImageList(bool reset)
         {
             IntPtr handle = SendMessage(NativeMethods.TVM_GETIMAGELIST, NativeMethods.TVSIL_STATE, IntPtr.Zero);
@@ -2205,13 +2151,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
             selectedNode = SelectedNode;
 
-            // Unfortunately, to avoid the native tree view leaking it's State Image List, we need to 
+            // Unfortunately, to avoid the native tree view leaking it's State Image List, we need to
             // destroy it ourselves here.
             DestroyNativeStateImageList(true);
 
@@ -2226,7 +2170,6 @@ namespace System.Windows.Forms
             base.OnHandleDestroyed(e);
         }
 
-
         /// <summary>
         ///  We keep track of if we've hovered already so we don't fire multiple hover events
         /// </summary>
@@ -2237,13 +2180,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     In order for the MouseHover event to fire for each item in a TreeView,
-        ///     the node the mouse is hovering over is found. Each time a new node is hovered
-        ///     over a new event is raised.
+        ///  In order for the MouseHover event to fire for each item in a TreeView,
+        ///  the node the mouse is hovering over is found. Each time a new node is hovered
+        ///  over a new event is raised.
         /// </summary>
         protected override void OnMouseHover(EventArgs e)
         {
-
             /// Hover events need to be caught for each node
             /// within the TreeView so the appropriate
             /// NodeHovered event can be raised.
@@ -2276,133 +2218,119 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Fires the beforeLabelEdit event.
+        ///  Fires the beforeLabelEdit event.
         /// </summary>
         protected virtual void OnBeforeLabelEdit(NodeLabelEditEventArgs e)
         {
-            Contract.Requires(e != null);
             onBeforeLabelEdit?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the afterLabelEdit event.
+        ///  Fires the afterLabelEdit event.
         /// </summary>
         protected virtual void OnAfterLabelEdit(NodeLabelEditEventArgs e)
         {
-            Contract.Requires(e != null);
             onAfterLabelEdit?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the beforeCheck event.
+        ///  Fires the beforeCheck event.
         /// </summary>
         protected virtual void OnBeforeCheck(TreeViewCancelEventArgs e)
         {
-            Contract.Requires(e != null);
             onBeforeCheck?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the afterCheck event.
+        ///  Fires the afterCheck event.
         /// </summary>
         protected virtual void OnAfterCheck(TreeViewEventArgs e)
         {
-            Contract.Requires(e != null);
             onAfterCheck?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the beforeCollapse event.
+        ///  Fires the beforeCollapse event.
         /// </summary>
         protected internal virtual void OnBeforeCollapse(TreeViewCancelEventArgs e)
         {
-            Contract.Requires(e != null);
             onBeforeCollapse?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the afterCollapse event.
+        ///  Fires the afterCollapse event.
         /// </summary>
         protected internal virtual void OnAfterCollapse(TreeViewEventArgs e)
         {
-            Contract.Requires(e != null);
             onAfterCollapse?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the beforeExpand event.
+        ///  Fires the beforeExpand event.
         /// </summary>
         protected virtual void OnBeforeExpand(TreeViewCancelEventArgs e)
         {
-            Contract.Requires(e != null);
             onBeforeExpand?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the afterExpand event.
+        ///  Fires the afterExpand event.
         /// </summary>
         protected virtual void OnAfterExpand(TreeViewEventArgs e)
         {
-            Contract.Requires(e != null);
             onAfterExpand?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the ItemDrag event.
+        ///  Fires the ItemDrag event.
         /// </summary>
         protected virtual void OnItemDrag(ItemDragEventArgs e)
         {
-            Contract.Requires(e != null);
             onItemDrag?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the NodeMouseHover event.
+        ///  Fires the NodeMouseHover event.
         /// </summary>
         protected virtual void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e)
         {
-            Contract.Requires(e != null);
             onNodeMouseHover?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the beforeSelect event.
+        ///  Fires the beforeSelect event.
         /// </summary>
         protected virtual void OnBeforeSelect(TreeViewCancelEventArgs e)
         {
-            Contract.Requires(e != null);
             onBeforeSelect?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the afterSelect event.
+        ///  Fires the afterSelect event.
         /// </summary>
         protected virtual void OnAfterSelect(TreeViewEventArgs e)
         {
-            Contract.Requires(e != null);
             onAfterSelect?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the onNodeMouseClick event.
+        ///  Fires the onNodeMouseClick event.
         /// </summary>
         protected virtual void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
         {
-            Contract.Requires(e != null);
             onNodeMouseClick?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Fires the onNodeMouseDoubleClick event.
+        ///  Fires the onNodeMouseDoubleClick event.
         /// </summary>
         protected virtual void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e)
         {
-            Contract.Requires(e != null);
             onNodeMouseDoubleClick?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
+        ///  Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -2431,7 +2359,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
+        ///  Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </summary>
         protected override void OnKeyUp(KeyEventArgs e)
         {
@@ -2449,7 +2377,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
+        ///  Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
@@ -2465,11 +2393,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
         {
-            Contract.Requires(e != null);
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -2483,8 +2409,6 @@ namespace System.Windows.Forms
             onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
-
-
         // Refresh the nodes by clearing the tree and adding the nodes back again
         //
         private void RefreshNodes()
@@ -2497,7 +2421,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This resets the indentation to the system default.
+        ///  This resets the indentation to the system default.
         /// </summary>
         private void ResetIndent()
         {
@@ -2507,7 +2431,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This resets the item height to the system default.
+        ///  This resets the item height to the system default.
         /// </summary>
         private void ResetItemHeight()
         {
@@ -2516,7 +2440,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Retrieves true if the indent should be persisted in code gen.
+        ///  Retrieves true if the indent should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeIndent()
         {
@@ -2524,7 +2448,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Retrieves true if the itemHeight should be persisted in code gen.
+        ///  Retrieves true if the itemHeight should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeItemHeight()
         {
@@ -2540,7 +2464,6 @@ namespace System.Windows.Forms
             return (SelectedImageIndex != -1);
         }
 
-
         private bool ShouldSerializeImageIndex()
         {
             if (imageList != null)
@@ -2550,9 +2473,8 @@ namespace System.Windows.Forms
             return (ImageIndex != -1);
         }
 
-
         /// <summary>
-        ///      Updated the sorted order
+        ///  Updated the sorted order
         /// </summary>
         public void Sort()
         {
@@ -2560,13 +2482,11 @@ namespace System.Windows.Forms
             RefreshNodes();
         }
 
-
         /// <summary>
-        ///     Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             if (Nodes != null)
             {
@@ -2712,7 +2632,6 @@ namespace System.Windows.Forms
 
         private IntPtr TvnBeginLabelEdit(NativeMethods.NMTVDISPINFO nmtvdi)
         {
-
             // Check for invalid node handle
             if (nmtvdi.item.hItem == IntPtr.Zero)
             {
@@ -2818,10 +2737,8 @@ namespace System.Windows.Forms
 
         }
 
-
-
         /// <summary>
-        ///     Performs custom draw handling
+        ///  Performs custom draw handling
         /// </summary>
         private void CustomDraw(ref Message m)
         {
@@ -2849,9 +2766,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-
                     int state = nmcd.nmcd.uItemState;
-
 
                     // The commctrl TreeView allows you to draw the whole row of a node
                     // or nothing at all. The way we provide OwnerDrawText is by asking it
@@ -2973,8 +2888,6 @@ namespace System.Windows.Forms
                             return;
                         }
 
-
-
                         Graphics g = Graphics.FromHdcInternal(nmcd.nmcd.hdc);
 
                         DrawTreeNodeEventArgs e;
@@ -3034,9 +2947,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Generates colors for each item. This can be overridden to provide colors on a per state/per node
-        ///     basis, rather than using the ForeColor/BackColor/NodeFont properties on TreeNode.
-        ///
+        ///  Generates colors for each item. This can be overridden to provide colors on a per state/per node
+        ///  basis, rather than using the ForeColor/BackColor/NodeFont properties on TreeNode.
         /// </summary>
         protected OwnerDrawPropertyBag GetItemRenderStyles(TreeNode node, int state)
         {
@@ -3060,7 +2972,6 @@ namespace System.Windows.Forms
         {
             NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
             IntPtr tooltipHandle = nmhdr->hwndFrom;
-
 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
@@ -3090,8 +3001,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <summary>
-        /// </summary>
         private void WmNeedText(ref Message m)
         {
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
@@ -3130,7 +3039,6 @@ namespace System.Windows.Forms
             }
             Marshal.StructureToPtr(ttt, m.LParam, false);
         }
-
 
         private unsafe void WmNotify(ref Message m)
         {
@@ -3239,14 +3147,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Shows the context menu for the Treenode.
+        ///  Shows the context menu for the Treenode.
         /// </summary>
         private void ShowContextMenu(TreeNode treeNode)
         {
-
             if (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null)
             {
-
 
                 ContextMenu contextMenu = treeNode.ContextMenu;
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
@@ -3310,8 +3216,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -11,13 +10,13 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>>
-    ///         Implements the design time editor for specifying the
-    ///         <see cref='System.Windows.Forms.Control.Dock' /> property.
+    /// Implements the design time editor for specifying the <see cref='System.Windows.Forms.Control.Dock' />
+    /// property.
     /// </summary>
     [CLSCompliant(false)]
     public sealed class DockEditor : UITypeEditor
     {
-        private DockUI dockUI;
+        private DockUI _dockUI;
 
         /// <summary>
         /// Edits the given object value using the editor style provided by GetEditorStyle.
@@ -25,31 +24,30 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider == null)
             {
-                IWindowsFormsEditorService edSvc =
-                    (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-                if (edSvc != null)
-                {
-                    if (dockUI == null)
-                    {
-                        dockUI = new DockUI(this);
-                    }
-
-                    dockUI.Start(edSvc, value);
-                    edSvc.DropDownControl(dockUI);
-                    value = dockUI.Value;
-                    dockUI.End();
-                }
+                return value;
             }
+            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
+            {
+                return value;
+            }
+
+            if (_dockUI == null)
+            {
+                _dockUI = new DockUI(this);
+            }
+
+            _dockUI.Start(edSvc, value);
+            edSvc.DropDownControl(_dockUI);
+            value = _dockUI.Value;
+            _dockUI.End();
 
             return value;
         }
 
         /// <summary>
         /// Retrieves the editing style of the Edit method.
-        /// If the method is not supported, this will return None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -57,9 +55,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     User Interface for the DockEditor.
+        /// User Interface for the DockEditor.
         /// </summary>
-
         private class DockUI : Control
         {
             private const int NONE_HEIGHT = 24;
@@ -169,7 +166,6 @@ namespace System.Windows.Forms.Design
                 return DockStyle.None;
             }
 
-            [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             private void InitializeComponent()
             {
                 SetBounds(0, 0, controlWidth, controlHeight);

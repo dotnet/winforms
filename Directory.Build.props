@@ -5,6 +5,7 @@
   <Import Project="eng\FacadeAssemblies.props" />
 
   <PropertyGroup>
+    <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -39,11 +40,6 @@
   <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
   <PropertyGroup>
     <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppPackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) ">$(MicrosoftNETCoreAppPackageVersion)</RuntimeFrameworkVersion>
   </PropertyGroup>
 
 </Project>

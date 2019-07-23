@@ -2,32 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
-
-// Using nested types here is an intentional design.
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+SizingBarLeft")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+BackgroundLeft")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+BackgroundBottom")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+SizingBarTop")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+TaskbarClock+Time")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+BackgroundTop")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+SizingBarBottom")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+TaskbarClock")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+BackgroundRight")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "System.Windows.Forms.VisualStyles.VisualStyleElement+Taskbar+SizingBarRight")]
-[assembly: SuppressMessage("Microsoft.MSInternal", "CA905:SystemAndMicrosoftNamespacesRequireApproval", Scope = "namespace", Target = "System.Windows.Forms.VisualStyles")]
-
 namespace System.Windows.Forms.VisualStyles
 {
-
     /// <summary>
-    ///    <para>
-    ///       Encapsulates the class, part and state of the "element" you wish to draw using
-    ///       the VisualStyleRenderer. 
-    ///       Usage pattern is something like this: new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
-    ///    </para>
+    ///  Encapsulates the class, part and state of the "element" you wish to draw using
+    ///  the VisualStyleRenderer.
+    ///  Usage pattern is something like this: new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
     /// </summary>
     public class VisualStyleElement
     {
@@ -79,7 +59,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class PushButton
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -229,7 +208,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -249,7 +227,7 @@ namespace System.Windows.Forms.VisualStyles
 
             internal static class Border
             {
-                // Paints a rectangle with a 1 pixel edge + round corners, 
+                // Paints a rectangle with a 1 pixel edge + round corners,
                 // and fills it with a color
                 private const int part = 4;
 
@@ -281,7 +259,7 @@ namespace System.Windows.Forms.VisualStyles
 
             internal static class DropDownButtonRight
             {
-                // Paints a dropdownbutton with right angles on the left side for 
+                // Paints a dropdownbutton with right angles on the left side for
                 // editable comboboxes (DropDownStyle=DropDown) for RTL=false case
                 private const int part = 6;
 
@@ -298,7 +276,7 @@ namespace System.Windows.Forms.VisualStyles
 
             internal static class DropDownButtonLeft
             {
-                // Paints a dropdownbutton with right angles on the right side for 
+                // Paints a dropdownbutton with right angles on the right side for
                 // editable comboboxes (DropDownStyle=DropDown) for RTL=true case
                 private const int part = 7;
 
@@ -322,7 +300,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -343,7 +320,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Down
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -366,7 +342,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -387,7 +362,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class DownHorizontal
             {
                 private static readonly int part = 4;
-
 
                 private static VisualStyleElement normal;
 
@@ -415,7 +389,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -436,7 +409,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Down
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -459,7 +431,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -480,7 +451,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class DownHorizontal
             {
                 private static readonly int part = 4;
-
 
                 private static VisualStyleElement normal;
 
@@ -577,7 +547,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -598,7 +567,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class ThumbButtonVertical
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -621,7 +589,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -642,7 +609,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class LeftTrackHorizontal
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement normal;
 
@@ -665,7 +631,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -686,7 +651,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class UpperTrackVertical
             {
                 private static readonly int part = 7;
-
 
                 private static VisualStyleElement normal;
 
@@ -709,7 +673,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -719,7 +682,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -728,7 +690,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SizeBox
             {
                 private static readonly int part = 10;
-
 
                 private static VisualStyleElement rightalign;
 
@@ -747,7 +708,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class TabItem
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -770,7 +730,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -791,7 +750,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class TabItemRightEdge
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -814,7 +772,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -823,7 +780,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class TopTabItem
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement normal;
 
@@ -847,7 +803,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -868,7 +823,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class TopTabItemRightEdge
             {
                 private static readonly int part = 7;
-
 
                 private static VisualStyleElement normal;
 
@@ -892,7 +846,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -901,7 +854,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Pane
             {
                 private static readonly int part = 9;
-
 
                 private static VisualStyleElement normal;
 
@@ -912,7 +864,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Body
             {
                 private static readonly int part = 10;
-
 
                 private static VisualStyleElement normal;
 
@@ -929,7 +880,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -939,7 +889,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class HeaderClose
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -957,7 +906,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class HeaderPin
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -988,7 +936,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1006,7 +953,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1016,7 +962,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class NormalGroupCollapse
             {
                 private static readonly int part = 6;
-
 
                 private static VisualStyleElement normal;
 
@@ -1035,7 +980,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1048,35 +992,29 @@ namespace System.Windows.Forms.VisualStyles
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
-
 
             public static class NormalGroupHead
             {
                 private static readonly int part = 8;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
-
 
             public static class SpecialGroupBackground
             {
                 private static readonly int part = 9;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
 
             }
 
-
             public static class SpecialGroupCollapse
             {
                 private static readonly int part = 10;
-
 
                 private static VisualStyleElement normal;
 
@@ -1090,13 +1028,11 @@ namespace System.Windows.Forms.VisualStyles
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
-
 
             public static class SpecialGroupExpand
             {
                 private static readonly int part = 11;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1110,11 +1046,9 @@ namespace System.Windows.Forms.VisualStyles
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
 
-
             public static class SpecialGroupHead
             {
                 private static readonly int part = 12;
-
 
                 private static VisualStyleElement normal;
 
@@ -1130,7 +1064,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Item
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -1149,7 +1082,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1166,7 +1098,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class ItemRight
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -1185,11 +1116,9 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement sortedup;
 
                 public static VisualStyleElement SortedUp => sortedup ??= new VisualStyleElement(className, part, 1);
-
 
                 private static VisualStyleElement sorteddown;
 
@@ -1204,7 +1133,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Item
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -1231,7 +1159,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1240,7 +1167,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Detail
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -1251,7 +1177,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1260,7 +1185,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class EmptyText
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement normal;
 
@@ -1276,7 +1200,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class NewApplicationButton
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -1303,11 +1226,9 @@ namespace System.Windows.Forms.VisualStyles
                 public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
 
-
             public static class Separator
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -1322,7 +1243,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Item
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -1341,7 +1261,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1350,7 +1269,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class BarItem
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -1361,7 +1279,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1371,7 +1288,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1380,7 +1296,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Separator
             {
                 private static readonly int part = 6;
-
 
                 private static VisualStyleElement normal;
 
@@ -1396,7 +1311,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1405,7 +1319,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class BarVertical
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -1416,7 +1329,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1425,7 +1337,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class ChunkVertical
             {
                 private static readonly int part = 4;
-
 
                 private static VisualStyleElement normal;
 
@@ -1441,7 +1352,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1450,7 +1360,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class GripperVertical
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -1461,7 +1370,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1471,7 +1379,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Chevron
             {
                 private static readonly int part = 4;
-
 
                 private static VisualStyleElement normal;
 
@@ -1489,7 +1396,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class ChevronVertical
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement normal;
 
@@ -1513,7 +1419,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1523,7 +1428,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1532,7 +1436,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class MoreProgramsArrow
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -1551,7 +1454,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1560,7 +1462,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class ProgListSeparator
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement normal;
 
@@ -1571,7 +1472,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1581,30 +1481,25 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //The verb, not the noun.  Matches "Log Off" button.
-            [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
             public static class LogOff
             {
                 private static readonly int part = 8;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //The verb, not the noun.  Matches "Log Off" button.
-            [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
             public static class LogOffButtons
             {
                 private static readonly int part = 9;
-
 
                 private static VisualStyleElement normal;
 
@@ -1623,7 +1518,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 10;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1632,7 +1526,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Preview
             {
                 private static readonly int part = 11;
-
 
                 private static VisualStyleElement normal;
 
@@ -1655,7 +1548,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1665,7 +1557,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1674,7 +1565,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Gripper
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -1690,7 +1580,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1700,7 +1589,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1709,7 +1597,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class FlashButtonGroupMenu
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -1725,7 +1612,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1740,7 +1626,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1749,7 +1634,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class BackgroundRight
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -1760,7 +1644,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1769,7 +1652,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class BackgroundLeft
             {
                 private static readonly int part = 4;
-
 
                 private static VisualStyleElement normal;
 
@@ -1780,7 +1662,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1789,7 +1670,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SizingBarRight
             {
                 private static readonly int part = 6;
-
 
                 private static VisualStyleElement normal;
 
@@ -1800,7 +1680,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1809,7 +1688,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SizingBarLeft
             {
                 private static readonly int part = 8;
-
 
                 private static VisualStyleElement normal;
 
@@ -1821,7 +1699,7 @@ namespace System.Windows.Forms.VisualStyles
         {
             private static readonly string className = "TOOLBAR";
 
-            // 
+            //
             internal static class Bar
             {
                 private static VisualStyleElement normal;
@@ -1832,7 +1710,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Button
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -1863,7 +1740,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1892,7 +1768,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SplitButton
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -1923,7 +1798,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1953,7 +1827,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -1962,7 +1835,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SeparatorVertical
             {
                 private static readonly int part = 6;
-
 
                 private static VisualStyleElement normal;
 
@@ -1979,7 +1851,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -1993,7 +1864,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -2002,7 +1872,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Balloon
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -2017,7 +1886,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -2026,7 +1894,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Close
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement normal;
 
@@ -2050,7 +1917,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2060,7 +1926,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2069,7 +1934,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Thumb
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement normal;
 
@@ -2096,7 +1960,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2121,7 +1984,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class ThumbTop
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement normal;
 
@@ -2148,7 +2010,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2173,7 +2034,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class ThumbLeft
             {
                 private static readonly int part = 7;
-
 
                 private static VisualStyleElement normal;
 
@@ -2200,7 +2060,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2226,7 +2085,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2235,7 +2093,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class TicksVertical
             {
                 private static readonly int part = 10;
-
 
                 private static VisualStyleElement normal;
 
@@ -2247,11 +2104,9 @@ namespace System.Windows.Forms.VisualStyles
         {
             private static readonly string className = "TREEVIEW";
 
-
             public static class Item
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement normal;
 
@@ -2291,7 +2146,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -2323,8 +2177,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class TextEdit
             {
                 private static readonly int part = 1;
-
-
 
                 private static VisualStyleElement normal;
 
@@ -2359,7 +2211,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -2374,7 +2225,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -2383,7 +2233,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class AnimateBackground
             {
                 private static readonly int part = 2;
-
 
                 private static VisualStyleElement normal;
 
@@ -2398,7 +2247,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class Caption
             {
                 private static readonly int part = 1;
-
 
                 private static VisualStyleElement active;
 
@@ -2417,7 +2265,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-
                 private static VisualStyleElement active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
@@ -2434,7 +2281,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class MinCaption
             {
                 private static readonly int part = 3;
-
 
                 private static VisualStyleElement active;
 
@@ -2453,7 +2299,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-
                 private static VisualStyleElement active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
@@ -2470,7 +2315,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class MaxCaption
             {
                 private static readonly int part = 5;
-
 
                 private static VisualStyleElement active;
 
@@ -2489,7 +2333,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-
                 private static VisualStyleElement active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
@@ -2507,7 +2350,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-
                 private static VisualStyleElement active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
@@ -2520,7 +2362,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class FrameRight
             {
                 private static readonly int part = 8;
-
 
                 private static VisualStyleElement active;
 
@@ -2535,7 +2376,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-
                 private static VisualStyleElement active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
@@ -2548,7 +2388,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SmallFrameLeft
             {
                 private static readonly int part = 10;
-
 
                 private static VisualStyleElement active;
 
@@ -2563,7 +2402,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 11;
 
-
                 private static VisualStyleElement active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
@@ -2577,7 +2415,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 12;
 
-
                 private static VisualStyleElement active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
@@ -2590,7 +2427,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SysButton
             {
                 private static readonly int part = 13;
-
 
                 private static VisualStyleElement normal;
 
@@ -2613,7 +2449,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 14;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2634,7 +2469,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class MinButton
             {
                 private static readonly int part = 15;
-
 
                 private static VisualStyleElement normal;
 
@@ -2657,7 +2491,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 16;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2678,7 +2511,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class MaxButton
             {
                 private static readonly int part = 17;
-
 
                 private static VisualStyleElement normal;
 
@@ -2701,7 +2533,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 18;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2722,7 +2553,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SmallCloseButton
             {
                 private static readonly int part = 19;
-
 
                 private static VisualStyleElement normal;
 
@@ -2745,7 +2575,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 20;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2766,7 +2595,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class RestoreButton
             {
                 private static readonly int part = 21;
-
 
                 private static VisualStyleElement normal;
 
@@ -2789,7 +2617,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 22;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2810,7 +2637,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class HelpButton
             {
                 private static readonly int part = 23;
-
 
                 private static VisualStyleElement normal;
 
@@ -2833,7 +2659,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 24;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2854,7 +2679,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class HorizontalScroll
             {
                 private static readonly int part = 25;
-
 
                 private static VisualStyleElement normal;
 
@@ -2877,7 +2701,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 26;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2898,7 +2721,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class VerticalScroll
             {
                 private static readonly int part = 27;
-
 
                 private static VisualStyleElement normal;
 
@@ -2921,7 +2743,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 28;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
@@ -2943,7 +2764,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 29;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -2952,7 +2772,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class CaptionSizingTemplate
             {
                 private static readonly int part = 30;
-
 
                 private static VisualStyleElement normal;
 
@@ -2963,7 +2782,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 31;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -2972,7 +2790,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class FrameLeftSizingTemplate
             {
                 private static readonly int part = 32;
-
 
                 private static VisualStyleElement normal;
 
@@ -2983,30 +2800,25 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 33;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //Not used as compound word here
-            [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
             public static class FrameRightSizingTemplate
             {
                 private static readonly int part = 34;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
 
             //Not used as compound word here
-            [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
             public static class SmallFrameRightSizingTemplate
             {
                 private static readonly int part = 35;
-
 
                 private static VisualStyleElement normal;
 
@@ -3017,7 +2829,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 36;
 
-
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
@@ -3026,7 +2837,6 @@ namespace System.Windows.Forms.VisualStyles
             public static class SmallFrameBottomSizingTemplate
             {
                 private static readonly int part = 37;
-
 
                 private static VisualStyleElement normal;
 

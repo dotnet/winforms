@@ -4,6 +4,7 @@
 
 using System;
 using System.Windows.Forms;
+using System.Windows.Forms.IntegrationTests.Common;
 using WinformsControlsTest.UserControls;
 
 namespace WinformsControlsTest
@@ -12,6 +13,7 @@ namespace WinformsControlsTest
     {
         public MainForm()
         {
+            this.BringToForeground();
             InitializeComponent();
         }
 
@@ -99,6 +101,11 @@ namespace WinformsControlsTest
         private void FontNameEditor_Click(object sender, EventArgs e)
         {
             new PropertyGrid(new UserControlWithFontNameEditor()).Show();
+        }
+
+        private void CollectionEditors_Click(object sender, EventArgs e)
+        {
+            new PropertyGrid(new UserControlWithCollectionEditors()).Show();
         }
     }
 }

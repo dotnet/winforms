@@ -2,21 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
     [Flags]
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    enum IntTextFormatFlags
+    internal enum IntTextFormatFlags
     {
         Bottom = IntNativeMethods.DT_BOTTOM,
         CalculateRectangle = IntNativeMethods.DT_CALCRECT,

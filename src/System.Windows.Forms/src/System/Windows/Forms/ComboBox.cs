@@ -2,39 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms.Internal;
+using System.Windows.Forms.Layout;
+using Accessibility;
 
 namespace System.Windows.Forms
 {
-    using Accessibility;
-    using System.Runtime.Serialization.Formatters;
-    using System.Threading;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System;
-    using System.Runtime.Versioning;
-    using System.Globalization;
-    using System.Windows.Forms.Layout;
-    using System.Windows.Forms.ComponentModel;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Collections;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Design;
-    using Microsoft.Win32;
-    using System.Reflection;
-    using System.Collections.Specialized;
-    using System.Text;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    ///    <para>
-    ///       Displays an editing field and a list, allowing the user to select from the
-    ///       list or to enter new text. Displays only the editing field until the user
-    ///       explicitly displays the list.
-    ///
-    ///    </para>
+    ///  Displays an editing field and a list, allowing the user to select from the
+    ///  list or to enter new text. Displays only the editing field until the user
+    ///  explicitly displays the list.
     /// </summary>
     [
     ComVisible(true),
@@ -47,7 +34,6 @@ namespace System.Windows.Forms
     ]
     public class ComboBox : ListControl
     {
-
         private static readonly object EVENT_DROPDOWN = new object();
         private static readonly object EVENT_DRAWITEM = new object();
         private static readonly object EVENT_MEASUREITEM = new object();
@@ -122,19 +108,19 @@ namespace System.Windows.Forms
         private bool selectedValueChangedFired;
 
         /// <summary>
-        ///     This stores the value for the autocomplete mode which can be either
-        ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
+        ///  This stores the value for the autocomplete mode which can be either
+        ///  None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         /// </summary>
         private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
 
         /// <summary>
-        ///     This stores the value for the autoCompleteSource mode which can be one of the values
-        ///     from AutoCompleteSource enum.
+        ///  This stores the value for the autoCompleteSource mode which can be one of the values
+        ///  from AutoCompleteSource enum.
         /// </summary>
         private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
 
         /// <summary>
-        ///     This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
+        ///  This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </summary>
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private StringSource stringSource;
@@ -150,8 +136,8 @@ namespace System.Windows.Forms
         private bool dropDownWillBeClosed = false;
 
         /// <summary>
-        ///     Creates a new ComboBox control.  The default style for the combo is
-        ///     a regular DropDown Combo.
+        ///  Creates a new ComboBox control.  The default style for the combo is
+        ///  a regular DropDown Combo.
         /// </summary>
         public ComboBox()
         {
@@ -166,9 +152,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the AutoCompleteMode which can be either
-        ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
-        ///     This property in conjunction with AutoCompleteSource enables the AutoComplete feature for ComboBox.
+        ///  This is the AutoCompleteMode which can be either
+        ///  None, AutoSuggest, AutoAppend or AutoSuggestAppend.
+        ///  This property in conjunction with AutoCompleteSource enables the AutoComplete feature for ComboBox.
         /// </summary>
         [
         DefaultValue(AutoCompleteMode.None),
@@ -209,9 +195,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the AutoCompleteSource which can be one of the
-        ///     values from AutoCompleteSource enumeration.
-        ///     This property in conjunction with AutoCompleteMode enables the AutoComplete feature for ComboBox.
+        ///  This is the AutoCompleteSource which can be one of the
+        ///  values from AutoCompleteSource enumeration.
+        ///  This property in conjunction with AutoCompleteMode enables the AutoComplete feature for ComboBox.
         /// </summary>
         [
         DefaultValue(AutoCompleteSource.None),
@@ -258,8 +244,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the
-        ///     AutoCompleteSource is CustomSource.
+        ///  This is the AutoCompleteCustomSource which is custom StringCollection used when the
+        ///  AutoCompleteSource is CustomSource.
         /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -301,8 +287,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The background color of this control. This is an ambient property and
-        ///     will always return a non-null value.
+        ///  The background color of this control. This is an ambient property and
+        ///  will always return a non-null value.
         /// </summary>
         public override Color BackColor
         {
@@ -404,10 +390,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the parameters needed to create the handle.  Inheriting classes
-        ///     can override this to provide extra functionality.  They should not,
-        ///     however, forget to call base.CreateParams() first to get the struct
-        ///     filled up with the basic info.
+        ///  Returns the parameters needed to create the handle.  Inheriting classes
+        ///  can override this to provide extra functionality.  They should not,
+        ///  however, forget to call base.CreateParams() first to get the struct
+        ///  filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -454,8 +440,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Deriving classes can override this to configure a default size for their control.
-        ///     This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -466,8 +452,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The ListSource to consume as this ListBox's source of data.
-        ///     When set, a user can not modify the Items collection.
+        ///  The ListSource to consume as this ListBox's source of data.
+        ///  When set, a user can not modify the Items collection.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -488,10 +474,9 @@ namespace System.Windows.Forms
             }
         }
 
-
         /// <summary>
-        ///     Retrieves the value of the DrawMode property.  The DrawMode property
-        ///     controls whether the control is drawn by Windows or by the user.
+        ///  Retrieves the value of the DrawMode property.  The DrawMode property
+        ///  controls whether the control is drawn by Windows or by the user.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -528,7 +513,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the width of the drop down box in a combo box.
+        ///  Returns the width of the drop down box in a combo box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -569,7 +554,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Sets the Height of the drop down box in a combo box.
+        ///  Sets the Height of the drop down box in a combo box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -609,7 +594,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates whether the DropDown of the combo is  currently dropped down.
+        ///  Indicates whether the DropDown of the combo is  currently dropped down.
         /// </summary>
         [
         Browsable(false),
@@ -643,11 +628,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or
-        ///       sets
-        ///       the flat style appearance of the button control.
-        ///    </para>
+        ///  Gets or
+        ///  sets
+        ///  the flat style appearance of the button control.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -674,7 +657,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns true if this control has focus.
+        ///  Returns true if this control has focus.
         /// </summary>
         public override bool Focused
         {
@@ -691,9 +674,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the foreground color of the control.
-        ///    </para>
+        ///  Gets or sets the foreground color of the control.
         /// </summary>
         public override Color ForeColor
         {
@@ -715,10 +696,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates if the combo should avoid showing partial Items.  If so,
-        ///     then only full items will be displayed, and the list portion will be resized
-        ///     to prevent partial items from being shown.  Otherwise, they will be
-        ///     shown
+        ///  Indicates if the combo should avoid showing partial Items.  If so,
+        ///  then only full items will be displayed, and the list portion will be resized
+        ///  to prevent partial items from being shown.  Otherwise, they will be
+        ///  shown
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -744,11 +725,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the height of an item in the combo box. When drawMode is Normal
-        ///     or OwnerDrawFixed, all items have the same height. When drawMode is
-        ///     OwnerDrawVariable, this method returns the height that will be given
-        ///     to new items added to the combo box. To determine the actual height of
-        ///     an item, use the GetItemHeight() method with an integer parameter.
+        ///  Returns the height of an item in the combo box. When drawMode is Normal
+        ///  or OwnerDrawFixed, all items have the same height. When drawMode is
+        ///  OwnerDrawVariable, this method returns the height that will be given
+        ///  to new items added to the combo box. To determine the actual height of
+        ///  an item, use the GetItemHeight() method with an integer parameter.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -773,7 +754,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return FontHeight + 2;   // 
+                        return FontHeight + 2;   //
                     }
                 }
 
@@ -809,7 +790,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Collection of the items contained in this ComboBox.
+        ///  Collection of the items contained in this ComboBox.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
@@ -850,8 +831,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The maximum number of items to be shown in the dropdown portion
-        ///     of the ComboBox.  This number can be between 1 and 100.
+        ///  The maximum number of items to be shown in the dropdown portion
+        ///  of the ComboBox.  This number can be between 1 and 100.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -894,8 +875,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The maximum length of the text the user may type into the edit control
-        ///     of a combo box.
+        ///  The maximum length of the text the user may type into the edit control
+        ///  of a combo box.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -928,7 +909,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     If the mouse is over the combobox, draw selection rect.
+        ///  If the mouse is over the combobox, draw selection rect.
         /// </summary>
         internal bool MouseIsOver
         {
@@ -971,10 +952,9 @@ namespace System.Windows.Forms
             remove => base.PaddingChanged -= value;
         }
 
-
         /// <summary>
-        ///     ApplySizeConstraints calls into this method when DropDownStyles is DropDown and DropDownList.
-        ///     This causes PreferredSize to be bounded by PreferredHeight in these two cases only.
+        ///  ApplySizeConstraints calls into this method when DropDownStyles is DropDown and DropDownList.
+        ///  This causes PreferredSize to be bounded by PreferredHeight in these two cases only.
         /// </summary>
         [
         Browsable(false),
@@ -1038,16 +1018,13 @@ namespace System.Windows.Forms
             }
         }
 
-
         // ComboBox.PreferredHeight returns incorrect values
         // This is translated from windows implementation.  Since we cannot control the size
         // of the combo box, we need to use the same calculation they do.
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // "0" is what Windows uses in all languages.
         private int GetComboHeight()
         {
-
             int cyCombo = 0;
-            // Add on CYEDGE just for some extra space in the edit field/static item.       
+            // Add on CYEDGE just for some extra space in the edit field/static item.
             // It's really only for static text items, but we want static & editable
             // controls to be the same height.
             Size textExtent = Size.Empty;
@@ -1068,7 +1045,7 @@ namespace System.Windows.Forms
             }
 
             // Set the initial width to be the combo box rect.  Later we will shorten it
-            // if there is a dropdown button.           
+            // if there is a dropdown button.
             Size fixedFrameBoderSize = SystemInformation.FixedFrameBorderSize;
             cyCombo = 2 * fixedFrameBoderSize.Height + dyEdit;
             return cyCombo;
@@ -1096,14 +1073,13 @@ namespace System.Windows.Forms
                 return strings;
 
             }
-            return new string[0];
+            return Array.Empty<string>();
         }
 
-
         /// <summary>
-        ///     The [zero based] index of the currently selected item in the combos list.
-        ///     Note If the value of index is -1, then the ComboBox is
-        ///     set to have no selection.
+        ///  The [zero based] index of the currently selected item in the combos list.
+        ///  Note If the value of index is -1, then the ComboBox is
+        ///  set to have no selection.
         /// </summary>
         [
         Browsable(false),
@@ -1163,8 +1139,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The handle to the object that is currently selected in the
-        ///     combos list.
+        ///  The handle to the object that is currently selected in the
+        ///  combos list.
         /// </summary>
         [
         Browsable(false),
@@ -1204,9 +1180,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The selected text in the edit component of the ComboBox. If the
-        ///     ComboBox has ComboBoxStyle.DROPDOWNLIST, the return is an empty
-        ///     string ("").
+        ///  The selected text in the edit component of the ComboBox. If the
+        ///  ComboBox has ComboBoxStyle.DROPDOWNLIST, the return is an empty
+        ///  string ("").
         /// </summary>
         [
         Browsable(false),
@@ -1245,7 +1221,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The length, in characters, of the selection in the editbox.
+        ///  The length, in characters, of the selection in the editbox.
         /// </summary>
         [
         Browsable(false),
@@ -1269,7 +1245,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The [zero-based] index of the first character in the current text selection.
+        ///  The [zero-based] index of the first character in the current text selection.
         /// </summary>
         [
         Browsable(false),
@@ -1295,7 +1271,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates if the Combos list is sorted or not.
+        ///  Indicates if the Combos list is sorted or not.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1325,14 +1301,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The type of combo that we are right now.  The value would come
-        ///     from the System.Windows.Forms.ComboBoxStyle enumeration.
+        ///  The type of combo that we are right now.  The value would come
+        ///  from the System.Windows.Forms.ComboBoxStyle enumeration.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ComboBoxStyle.DropDown),
         SRDescription(nameof(SR.ComboBoxStyleDescr)),
-        RefreshPropertiesAttribute(RefreshProperties.Repaint)
+        RefreshProperties(RefreshProperties.Repaint)
         ]
         public ComboBoxStyle DropDownStyle
         {
@@ -1447,7 +1423,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private int FindStringIgnoreCase(string value)
         {
             //look for an exact match and then a case insensitive match if that fails.
@@ -1542,7 +1517,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_DROPDOWN, value);
         }
 
-
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem
         {
@@ -1557,7 +1531,6 @@ namespace System.Windows.Forms
                 UpdateItemHeight();
             }
         }
-
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged
@@ -1581,7 +1554,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     ComboBox Onpaint.
+        ///  ComboBox Onpaint.
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1592,9 +1565,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para>This will fire the TextUpdate Event on the ComboBox. This events fires when the Combobox gets the
-        ///          CBN_EDITUPDATE notification.
-        //     </para>
+        ///  This will fire the TextUpdate Event on the ComboBox. This events fires when the Combobox gets the
+        ///  CBN_EDITUPDATE notification.
+        //
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate
@@ -1603,11 +1576,10 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_TEXTUPDATE, value);
         }
 
-
         /// <summary>
-        ///     <para>This will fire the DropDownClosed Event on the ComboBox. This events fires when the Combobox gets the
-        ///          CBN_CLOSEUP notification. This happens when the DropDown closes.
-        //      </para>
+        ///  This will fire the DropDownClosed Event on the ComboBox. This events fires when the Combobox gets the
+        ///  CBN_CLOSEUP notification. This happens when the DropDown closes.
+        //
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed
@@ -1617,7 +1589,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Performs the work of adding the specified items to the combobox
+        ///  Performs the work of adding the specified items to the combobox
         /// </summary>
         [Obsolete("This method has been deprecated.  There is no replacement.  http://go.microsoft.com/fwlink/?linkid=14202")]
         protected virtual void AddItemsCore(object[] value)
@@ -1640,10 +1612,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Disables redrawing of the combo box. A call to beginUpdate() must be
-        ///     balanced by a following call to endUpdate(). Following a call to
-        ///     beginUpdate(), any redrawing caused by operations performed on the
-        ///     combo box is deferred until the call to endUpdate().
+        ///  Disables redrawing of the combo box. A call to beginUpdate() must be
+        ///  balanced by a following call to endUpdate(). Following a call to
+        ///  beginUpdate(), any redrawing caused by operations performed on the
+        ///  combo box is deferred until the call to endUpdate().
         /// </summary>
         public void BeginUpdate()
         {
@@ -1659,23 +1631,18 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new ComboBoxAccessibleObject(this);
         }
 
-        /// <summary>
-        /// </summary>
         internal bool UpdateNeeded()
         {
             return (updateCount == 0);
         }
 
-
         /// <summary>
-        ///     This procedure takes in the message, converts the Edit handle coordinates into Combo Box Coordinates
+        ///  This procedure takes in the message, converts the Edit handle coordinates into Combo Box Coordinates
         /// </summary>
         internal Point EditToComboboxMapping(Message m)
         {
@@ -1701,14 +1668,12 @@ namespace System.Windows.Forms
 
         }
 
-
         /// <summary>
-        ///     Subclassed window procedure for the edit and list child controls of the
-        ///     combo box.
+        ///  Subclassed window procedure for the edit and list child controls of the
+        ///  combo box.
         /// </summary>
         private void ChildWndProc(ref Message m)
         {
-
             switch (m.Msg)
             {
                 case Interop.WindowMessages.WM_CHAR:
@@ -1812,7 +1777,7 @@ namespace System.Windows.Forms
 
                     break;
                 case Interop.WindowMessages.WM_KILLFOCUS:
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
+                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
                     {
@@ -1835,7 +1800,7 @@ namespace System.Windows.Forms
                     break;
                 case Interop.WindowMessages.WM_SETFOCUS:
 
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
+                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // set the status. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
                     {
@@ -1849,7 +1814,7 @@ namespace System.Windows.Forms
                         {
                             if (c is ContainerControl container)
                             {
-                                if (!container.ActivateControlInternal(this, false))
+                                if (!container.ActivateControl(this, originator: false))
                                 {
                                     return;
                                 }
@@ -2001,9 +1966,7 @@ namespace System.Windows.Forms
                     mouseEvents = true;
 
                     //set the mouse capture .. this is the Child Wndproc..
-                    // 
-
-
+                    //
 
                     if (ContextMenu != null || ContextMenuStrip != null)
                     {
@@ -2117,8 +2080,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         private void DefChildWndProc(ref Message m)
         {
             if (childEdit != null)
@@ -2164,14 +2125,11 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
-
-
-
         /// <summary>
-        ///     Reenables redrawing of the combo box. A call to beginUpdate() must be
-        ///     balanced by a following call to endUpdate(). Following a call to
-        ///     beginUpdate(), any redrawing caused by operations performed on the
-        ///     combo box is deferred until the call to endUpdate().
+        ///  Reenables redrawing of the combo box. A call to beginUpdate() must be
+        ///  balanced by a following call to endUpdate(). Following a call to
+        ///  beginUpdate(), any redrawing caused by operations performed on the
+        ///  combo box is deferred until the call to endUpdate().
         /// </summary>
         public void EndUpdate()
         {
@@ -2249,10 +2207,8 @@ namespace System.Windows.Forms
             return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, proposedHeight);
         }
 
-        [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
-
             if (factor.Width != 1F && factor.Height != 1F)
             {
                 // we get called on scale before we get a notification that our font has changed.
@@ -2263,13 +2219,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Returns the height of the given item in an OwnerDrawVariable style
-        ///     combo box. This method should not be used for Normal or OwnerDrawFixed
-        ///     style combo boxes.
+        ///  Returns the height of the given item in an OwnerDrawVariable style
+        ///  combo box. This method should not be used for Normal or OwnerDrawFixed
+        ///  style combo boxes.
         /// </summary>
         public int GetItemHeight(int index)
         {
-
             // This function is only relevant for OwnerDrawVariable
             if (DrawMode != DrawMode.OwnerDrawVariable)
             {
@@ -2434,13 +2389,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if keyData is in input key that the control wants.
-        ///     Overridden to return true for RETURN and ESCAPE when the combo box is
-        ///     dropped down.
+        ///  Determines if keyData is in input key that the control wants.
+        ///  Overridden to return true for RETURN and ESCAPE when the combo box is
+        ///  dropped down.
         /// </summary>
         protected override bool IsInputKey(Keys keyData)
         {
-
             Keys keyCode = keyData & (Keys.KeyCode | Keys.Alt);
             if (keyCode == Keys.Return || keyCode == Keys.Escape)
             {
@@ -2460,8 +2414,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Adds the given item to the native combo box.  This asserts if the handle hasn't been
-        ///     created.
+        ///  Adds the given item to the native combo box.  This asserts if the handle hasn't been
+        ///  created.
         /// </summary>
         private int NativeAdd(object item)
         {
@@ -2475,7 +2429,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Clears the contents of the combo box.
+        ///  Clears the contents of the combo box.
         /// </summary>
         private void NativeClear()
         {
@@ -2493,7 +2447,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Get the text stored by the native control for the specified list item.
+        ///  Get the text stored by the native control for the specified list item.
         /// </summary>
         private string NativeGetItemText(int index)
         {
@@ -2504,8 +2458,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Inserts the given item to the native combo box at the index.  This asserts if the handle hasn't been
-        ///     created or if the resulting insert index doesn't match the passed in index.
+        ///  Inserts the given item to the native combo box at the index.  This asserts if the handle hasn't been
+        ///  created or if the resulting insert index doesn't match the passed in index.
         /// </summary>
         private int NativeInsert(int index, object item)
         {
@@ -2520,7 +2474,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Removes the native item from the given index.
+        ///  Removes the native item from the given index.
         /// </summary>
         private void NativeRemoveAt(int index)
         {
@@ -2541,7 +2495,6 @@ namespace System.Windows.Forms
 
         internal override void RecreateHandleCore()
         {
-
             string oldText = WindowText;
             base.RecreateHandleCore();
             if (!string.IsNullOrEmpty(oldText) && string.IsNullOrEmpty(WindowText))
@@ -2550,9 +2503,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        ///     Overridden to avoid multiple layouts during handle creation due to combobox size change
+        ///  Overridden to avoid multiple layouts during handle creation due to combobox size change
         /// </summary>
-
         protected override void CreateHandle()
         {
             using (new LayoutTransaction(ParentInternal, this, PropertyNames.Bounds))
@@ -2562,13 +2514,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Overridden to make sure all the items and styles get set up correctly.
-        ///     Inheriting classes should not forget to call
-        ///     base.OnHandleCreated()
+        ///  Overridden to make sure all the items and styles get set up correctly.
+        ///  Inheriting classes should not forget to call
+        ///  base.OnHandleCreated()
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
-
             base.OnHandleCreated(e);
 
             if (MaxLength > 0)
@@ -2590,7 +2541,7 @@ namespace System.Windows.Forms
                 {
 
                     // if it's a simple dropdown list, the first HWND is the list box.
-                    //                    
+                    //
                     if (DropDownStyle == ComboBoxStyle.Simple)
                     {
                         childListBox = new ComboBoxChildNativeWindow(this, ChildWindowType.ListBox);
@@ -2644,7 +2595,6 @@ namespace System.Windows.Forms
                 fromHandleCreate = false;
             }
 
-
             if (itemsCollection != null)
             {
                 foreach (object item in itemsCollection)
@@ -2666,8 +2616,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     We need to un-subclasses everything here.  Inheriting classes should
-        ///     not forget to call base.OnHandleDestroyed()
+        ///  We need to un-subclasses everything here.  Inheriting classes should
+        ///  not forget to call base.OnHandleDestroyed()
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
@@ -2690,9 +2640,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the code that actually fires the drawItem event.  Don't
-        ///     forget to call base.onDrawItem() to ensure that drawItem events
-        ///     are correctly fired at all other times.
+        ///  This is the code that actually fires the drawItem event.  Don't
+        ///  forget to call base.onDrawItem() to ensure that drawItem events
+        ///  are correctly fired at all other times.
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
@@ -2700,9 +2650,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the code that actually fires the dropDown event.  Don't
-        ///     forget to call base.onDropDown() to ensure that dropDown events
-        ///     are correctly fired at all other times.
+        ///  This is the code that actually fires the dropDown event.  Don't
+        ///  forget to call base.onDropDown() to ensure that dropDown events
+        ///  are correctly fired at all other times.
         /// </summary>
         protected virtual void OnDropDown(EventArgs e)
         {
@@ -2721,7 +2671,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.ComboBox.KeyDown'/> event.</para>
+        /// Raises the <see cref='ComboBox.KeyDown'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyDown(KeyEventArgs e)
@@ -2747,12 +2697,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Key press event handler. Overridden to close up the combo box when the
-        ///     user presses RETURN or ESCAPE.
+        ///  Key press event handler. Overridden to close up the combo box when the
+        ///  user presses RETURN or ESCAPE.
         /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
-
             base.OnKeyPress(e);
 
             //return when dropped down already fires commit.
@@ -2776,9 +2725,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the code that actually fires the measuereItem event.  Don't
-        ///     forget to call base.onMeasureItem() to ensure that measureItem
-        ///     events are correctly fired at all other times.
+        ///  This is the code that actually fires the measuereItem event.  Don't
+        ///  forget to call base.onMeasureItem() to ensure that measureItem
+        ///  events are correctly fired at all other times.
         /// </summary>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
         {
@@ -2807,8 +2756,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnSelectionChangeCommittedInternal(EventArgs e)
         {
-            //There are cases where if we disable the combo while in this event handler, it sends the message again.
-            //This is a recursion gaurd to ensure we only send one commit per user action.
+            // There are cases where if we disable the combo while in this event handler, it sends the message again.
+            // This is a recursion guard to ensure we only send one commit per user action.
             if (allowCommit)
             {
                 try
@@ -2824,9 +2773,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the code that actually fires the SelectionChangeCommitted event.
-        ///     Don't forget to call base.OnSelectionChangeCommitted() to ensure
-        ///     that SelectionChangeCommitted events are correctly fired at all other times.
+        ///  This is the code that actually fires the SelectionChangeCommitted event.
+        ///  Don't forget to call base.OnSelectionChangeCommitted() to ensure
+        ///  that SelectionChangeCommitted events are correctly fired at all other times.
         /// </summary>
         protected virtual void OnSelectionChangeCommitted(EventArgs e)
         {
@@ -2842,9 +2791,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the code that actually fires the selectedIndexChanged event.
-        ///     Don't forget to call base.onSelectedIndexChanged() to ensure
-        ///     that selectedIndexChanged events are correctly fired at all other times.
+        ///  This is the code that actually fires the selectedIndexChanged event.
+        ///  Don't forget to call base.onSelectedIndexChanged() to ensure
+        ///  that selectedIndexChanged events are correctly fired at all other times.
         /// </summary>
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
@@ -2901,9 +2850,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the code that actually fires the selectedItemChanged event.
-        ///     Don't forget to call base.onSelectedItemChanged() to ensure
-        ///     that selectedItemChanged events are correctly fired at all other times.
+        ///  This is the code that actually fires the selectedItemChanged event.
+        ///  Don't forget to call base.onSelectedItemChanged() to ensure
+        ///  that selectedItemChanged events are correctly fired at all other times.
         /// </summary>
         protected virtual void OnSelectedItemChanged(EventArgs e)
         {
@@ -2911,7 +2860,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This is the code that actually fires the DropDownStyleChanged event.
+        ///  This is the code that actually fires the DropDownStyleChanged event.
         /// </summary>
         protected virtual void OnDropDownStyleChanged(EventArgs e)
         {
@@ -2919,9 +2868,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     This method is called by the parent control when any property
-        ///     changes on the parent. This can be overriden by inheriting
-        ///     classes, however they must call base.OnParentPropertyChanged.
+        ///  This method is called by the parent control when any property
+        ///  changes on the parent. This can be overriden by inheriting
+        ///  classes, however they must call base.OnParentPropertyChanged.
         /// </summary>
         protected override void OnParentBackColorChanged(EventArgs e)
         {
@@ -2933,8 +2882,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates that a critical property, such as color or font has
-        ///     changed.
+        ///  Indicates that a critical property, such as color or font has
+        ///  changed.
         /// </summary>
         protected override void OnFontChanged(EventArgs e)
         {
@@ -2953,7 +2902,6 @@ namespace System.Windows.Forms
             CommonProperties.xClearPreferredSizeCache(this);
         }
 
-
         private void OnAutoCompleteCustomSourceChanged(object sender, CollectionChangeEventArgs e)
         {
             if (AutoCompleteSource == AutoCompleteSource.CustomSource)
@@ -2971,8 +2919,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates that a critical property, such as color or font has
-        ///     changed.
+        ///  Indicates that a critical property, such as color or font has
+        ///  changed.
         /// </summary>
         protected override void OnBackColorChanged(EventArgs e)
         {
@@ -2981,8 +2929,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates that a critical property, such as color or font has
-        ///     changed.
+        ///  Indicates that a critical property, such as color or font has
+        ///  changed.
         /// </summary>
         protected override void OnForeColorChanged(EventArgs e)
         {
@@ -3041,8 +2989,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.ComboBox.Validating'/>
-        /// event.</para>
+        /// Raises the <see cref='ComboBox.Validating'/>
+        /// event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnValidating(CancelEventArgs e)
@@ -3056,7 +3004,6 @@ namespace System.Windows.Forms
             // Call base
             base.OnValidating(e);
         }
-
 
         private void UpdateControl(bool recreate)
         {
@@ -3080,7 +3027,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
+        /// Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -3123,14 +3070,13 @@ namespace System.Windows.Forms
         {
             base.OnDisplayMemberChanged(e);
 
-            // 
-
+            //
 
             RefreshItems();
         }
 
         /// <summary>
-        ///     This event is fired when the dropdown portion of the combobox is hidden.
+        ///  This event is fired when the dropdown portion of the combobox is hidden.
         /// </summary>
         protected virtual void OnDropDownClosed(EventArgs e)
         {
@@ -3154,10 +3100,9 @@ namespace System.Windows.Forms
             dropDownWillBeClosed = false;
         }
 
-
         /// <summary>
-        ///     This event is fired when the edit portion of a combobox is about to display altered text.
-        ///     This event is NOT fired if the TEXT property is programatically changed.
+        ///  This event is fired when the edit portion of a combobox is about to display altered text.
+        ///  This event is NOT fired if the TEXT property is programatically changed.
         /// </summary>
         protected virtual void OnTextUpdate(EventArgs e)
         {
@@ -3191,7 +3136,8 @@ namespace System.Windows.Forms
             return returnedValue;
         }
 
-        protected override bool ProcessKeyEventArgs(ref Message m) {
+        protected override bool ProcessKeyEventArgs(ref Message m)
+        {
             if (AutoCompleteMode != AutoCompleteMode.None &&
                 AutoCompleteSource == AutoCompleteSource.ListItems &&
                 DropDownStyle == ComboBoxStyle.DropDownList &&
@@ -3214,14 +3160,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void RefreshItems()
         {
-
             // Save off the selection and the current collection.
             //
             int selectedIndex = SelectedIndex;
             ObjectCollection savedItems = itemsCollection;
 
             itemsCollection = null;
-
 
             object[] newItems = null;
 
@@ -3281,12 +3225,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Release the ChildWindow object by un-subclassing the child edit and
-        ///     list controls and freeing the root of the ChildWindow object.
+        ///  Release the ChildWindow object by un-subclassing the child edit and
+        ///  list controls and freeing the root of the ChildWindow object.
         /// </summary>
         private void ReleaseChildWindow()
         {
-
             if (childEdit != null)
             {
 
@@ -3345,10 +3288,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Enables the AutoComplete feature for combobox depending on the properties set.
-        ///     These properties are namely AutoCompleteMode, AutoCompleteSource and AutoCompleteCustomSource.
+        ///  Enables the AutoComplete feature for combobox depending on the properties set.
+        ///  These properties are namely AutoCompleteMode, AutoCompleteSource and AutoCompleteCustomSource.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private void SetAutoComplete(bool reset, bool recreate)
         {
             if (!IsHandleCreated || childEdit == null)
@@ -3462,8 +3404,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Selects the text in the editable portion of the ComboBox at the
-        ///     from the given start index to the given end index.
+        ///  Selects the text in the editable portion of the ComboBox at the
+        ///  from the given start index to the given end index.
         /// </summary>
         public void Select(int start, int length)
         {
@@ -3484,7 +3426,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Selects all the text in the editable portion of the ComboBox.
+        ///  Selects all the text in the editable portion of the ComboBox.
         /// </summary>
         public void SelectAll()
         {
@@ -3505,7 +3447,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Performs the work of setting the specified items to the combobox
+        ///  Performs the work of setting the specified items to the combobox
         /// </summary>
         protected override void SetItemsCore(IList value)
         {
@@ -3560,7 +3502,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Indicates whether the itemHeight property should be persisted.
+        ///  Indicates whether the itemHeight property should be persisted.
         /// </summary>
         internal bool ShouldSerializeItemHeight()
         {
@@ -3568,7 +3510,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Determines if the Text property needs to be persisted.
+        ///  Determines if the Text property needs to be persisted.
         /// </summary>
         internal override bool ShouldSerializeText()
         {
@@ -3576,17 +3518,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Provides some interesting info about this control in String form.
+        ///  Provides some interesting info about this control in String form.
         /// </summary>
         public override string ToString()
         {
-
             string s = base.ToString();
             return s + ", Items.Count: " + ((itemsCollection == null) ? "0" : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
         }
 
-        /// <summary>
-        /// </summary>
         private void UpdateDropDownHeight()
         {
             if (dropDownHandle != IntPtr.Zero)
@@ -3605,9 +3544,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Manufactures a MeasureItemEventArgs for each item in the list to simulate
-        ///     the combobox requesting the info. This gives the effect of allowing the
-        ///     measureitem info to be updated at anytime.
+        ///  Manufactures a MeasureItemEventArgs for each item in the list to simulate
+        ///  the combobox requesting the info. This gives the effect of allowing the
+        ///  measureitem info to be updated at anytime.
         /// </summary>
         private void UpdateItemHeight()
         {
@@ -3640,7 +3579,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Forces the text to be updated based on the current selection.
+        ///  Forces the text to be updated based on the current selection.
         /// </summary>
         private void UpdateText()
         {
@@ -3679,8 +3618,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
@@ -3708,8 +3645,6 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-        /// <summary>
-        /// </summary>
         private void WmParentNotify(ref Message m)
         {
             base.WndProc(ref m);
@@ -3741,64 +3676,62 @@ namespace System.Windows.Forms
         /// Here are the window messages corresponding to each user event.
         ///
         /// DropDown (free text window):
-        ///   Type in Text Window:
-        ///             CBN_EDITUPDATE
-        ///             CBN_EDITCHANGE
-        ///   Down/Up Arrow
-        ///             CBN_SELENDOK   (text not changed yet)
-        ///             CBN_SELCHANGE
-        ///   with text set to beginning of a valid item -- drop and close dropdown (selects that item)
-        ///             CBN_DROPDOWN
-        ///             CBN_CLOSEUP
-        ///   Drop List, up/down arrow to select item, click away
-        ///             CBN_DROPDOWN
-        ///             CBN_SELCHANGE
-        ///             CBN_CLOSEUP
-        ///   Drop List, click on item
-        ///             CBN_DROPDOWN
-        ///             CBN_SELENDOK
-        ///             CBN_CLOSEUP
-        ///             CBN_SELCHANGE (text changes here via selected item)
+        ///  Type in Text Window:
+        ///   CBN_EDITUPDATE
+        ///   CBN_EDITCHANGE
+        ///  Down/Up Arrow
+        ///   CBN_SELENDOK   (text not changed yet)
+        ///   CBN_SELCHANGE
+        ///  with text set to beginning of a valid item -- drop and close dropdown (selects that item)
+        ///   CBN_DROPDOWN
+        ///   CBN_CLOSEUP
+        ///  Drop List, up/down arrow to select item, click away
+        ///   CBN_DROPDOWN
+        ///   CBN_SELCHANGE
+        ///   CBN_CLOSEUP
+        ///  Drop List, click on item
+        ///   CBN_DROPDOWN
+        ///   CBN_SELENDOK
+        ///   CBN_CLOSEUP
+        ///   CBN_SELCHANGE (text changes here via selected item)
         ///
         /// DropDownList (limited text window):
         ///
-        ///   Type text and arrow up/down:
-        ///             CBN_SELENDOK  (text already changed)
-        ///             CBN_SELCHANGE
-        ///   Drop List, up/down arrow to select item, click away
-        ///             CBN_DROPDOWN
-        ///             CBN_SELCHANGE
-        ///             CBN_CLOSEUP
-        ///   Drop List, click on item
-        ///             CBN_DROPDOWN
-        ///             CBN_SELENDOK
-        ///             CBN_CLOSEUP
-        ///             CBN_SELCHANGE
+        ///  Type text and arrow up/down:
+        ///   CBN_SELENDOK  (text already changed)
+        ///   CBN_SELCHANGE
+        ///  Drop List, up/down arrow to select item, click away
+        ///   CBN_DROPDOWN
+        ///   CBN_SELCHANGE
+        ///   CBN_CLOSEUP
+        ///  Drop List, click on item
+        ///   CBN_DROPDOWN
+        ///   CBN_SELENDOK
+        ///   CBN_CLOSEUP
+        ///   CBN_SELCHANGE
         ///
         /// Simple (listbox visible):
-        ///   Type in Text Window:
-        ///             CBN_EDITUPDATE
-        ///             CBN_EDITCHANGE
-        ///   Down/Up Arrow
-        ///             CBN_SELENDOK    (text not changed yet)
-        ///             CBN_SELCHANGE
-        ///   Click on item
-        ///             CBN_SELENDOK    (text not changed yet)
-        ///             CBN_SELCHANGE
+        ///  Type in Text Window:
+        ///   CBN_EDITUPDATE
+        ///   CBN_EDITCHANGE
+        ///  Down/Up Arrow
+        ///   CBN_SELENDOK    (text not changed yet)
+        ///   CBN_SELCHANGE
+        ///  Click on item
+        ///   CBN_SELENDOK    (text not changed yet)
+        ///   CBN_SELCHANGE
         ///
         ///
         /// What we do is fire textchange events in these messages:
-        ///   CBN_SELCHANGE
-        ///   CBN_EDITCHANGE
-        ///   CBN_CLOSEUP
+        ///  CBN_SELCHANGE
+        ///  CBN_EDITCHANGE
+        ///  CBN_CLOSEUP
         ///
         /// and we only actually call the real event if the Text is different than currentText.
         /// currentText is never changed outside this method.
         /// This internal version can be called from anywhere we might suspect text has changed
         /// it's fairly safe to call anywhere.
 
-        /// <summary>
-        /// </summary>
         private void WmReflectCommand(ref Message m)
         {
             switch (NativeMethods.Util.HIWORD(m.WParam))
@@ -3838,8 +3771,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         private void WmReflectDrawItem(ref Message m)
         {
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
@@ -3868,8 +3799,6 @@ namespace System.Windows.Forms
             m.Result = (IntPtr)1;
         }
 
-        /// <summary>
-        /// </summary>
         private void WmReflectMeasureItem(ref Message m)
         {
             NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
@@ -3893,9 +3822,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     The comboboxs window procedure.  Inheritng classes can override this
-        ///     to add extra functionality, but should not forget to call
-        ///     base.wndProc(m); to ensure the combo continues to function properly.
+        ///  The comboboxs window procedure.  Inheritng classes can override this
+        ///  to add extra functionality, but should not forget to call
+        ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
@@ -3927,7 +3856,7 @@ namespace System.Windows.Forms
                         // to move focus. Our response to WM_MOUSELEAVE causes us to repaint everything correctly.
 
                         // With theming off, we do not get a WM_MOUSELEAVE after a WM_KILLFOCUS, and since we don't have a childwndproc
-                        // when we are a Flat DropDownList, we need to force a repaint. The easiest way to do this is to send a 
+                        // when we are a Flat DropDownList, we need to force a repaint. The easiest way to do this is to send a
                         // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                         // as with Theming on.
 
@@ -4101,7 +4030,6 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-
                 case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     if (!suppressNextWindosPos)
                     {
@@ -4127,8 +4055,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        /// </summary>
         [ComVisible(true)]
         private class ComboBoxChildNativeWindow : NativeWindow
         {
@@ -4164,6 +4090,10 @@ namespace System.Windows.Forms
                             {
                                 (_owner.AccessibilityObject as ComboBoxAccessibleObject).SetComboBoxItemFocus();
                             }
+                        }
+                        else
+                        {
+                            _owner.ChildWndProc(ref m);
                         }
                         break;
                     default:
@@ -4206,7 +4136,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleObject uiaProvider = GetChildAccessibleObject(_childWindowType);
 
-                    // If the requested object identifier is UiaRootObjectId, 
+                    // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                     InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
                     m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
@@ -4268,7 +4198,7 @@ namespace System.Windows.Forms
 
         }
 
-        private sealed class ItemComparer : System.Collections.IComparer
+        private sealed class ItemComparer : IComparer
         {
             private readonly ComboBox comboBox;
 
@@ -4304,7 +4234,6 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class ObjectCollection : IList
         {
-
             private readonly ComboBox owner;
             private ArrayList innerList;
             private IComparer comparer;
@@ -4339,7 +4268,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the number of items.
+            ///  Retrieves the number of items.
             /// </summary>
             public int Count
             {
@@ -4382,15 +4311,14 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds an item to the combo box. For an unsorted combo box, the item is
-            ///     added to the end of the existing list of items. For a sorted combo box,
-            ///     the item is inserted into the list according to its sorted position.
-            ///     The item's toString() method is called to obtain the string that is
-            ///     displayed in the combo box.
-            ///     A SystemException occurs if there is insufficient space available to
-            ///     store the new item.
+            ///  Adds an item to the combo box. For an unsorted combo box, the item is
+            ///  added to the end of the existing list of items. For a sorted combo box,
+            ///  the item is inserted into the list according to its sorted position.
+            ///  The item's toString() method is called to obtain the string that is
+            ///  displayed in the combo box.
+            ///  A SystemException occurs if there is insufficient space available to
+            ///  store the new item.
             /// </summary>
-
             public int Add(object item)
             {
                 owner.CheckNoDataSource();
@@ -4401,7 +4329,6 @@ namespace System.Windows.Forms
                 }
                 return index;
             }
-
 
             private int AddInternal(object item)
             {
@@ -4498,7 +4425,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Retrieves the item with the specified index.
+            ///  Retrieves the item with the specified index.
             /// </summary>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual object this[int index]
@@ -4520,7 +4447,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes all items from the ComboBox.
+            ///  Removes all items from the ComboBox.
             /// </summary>
             public void Clear()
             {
@@ -4550,7 +4477,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Copies the ComboBox Items collection to a destination array.
+            ///  Copies the ComboBox Items collection to a destination array.
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
@@ -4563,7 +4490,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Returns an enumerator for the ComboBox Items collection.
+            ///  Returns an enumerator for the ComboBox Items collection.
             /// </summary>
             public IEnumerator GetEnumerator()
             {
@@ -4581,13 +4508,13 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Adds an item to the combo box. For an unsorted combo box, the item is
-            ///     added to the end of the existing list of items. For a sorted combo box,
-            ///     the item is inserted into the list according to its sorted position.
-            ///     The item's toString() method is called to obtain the string that is
-            ///     displayed in the combo box.
-            ///     A SystemException occurs if there is insufficient space available to
-            ///     store the new item.
+            ///  Adds an item to the combo box. For an unsorted combo box, the item is
+            ///  added to the end of the existing list of items. For a sorted combo box,
+            ///  the item is inserted into the list according to its sorted position.
+            ///  The item's toString() method is called to obtain the string that is
+            ///  displayed in the combo box.
+            ///  A SystemException occurs if there is insufficient space available to
+            ///  store the new item.
             /// </summary>
             public void Insert(int index, object item)
             {
@@ -4642,7 +4569,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes an item from the ComboBox at the given index.
+            ///  Removes an item from the ComboBox at the given index.
             /// </summary>
             public void RemoveAt(int index)
             {
@@ -4670,8 +4597,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Removes the given item from the ComboBox, provided that it is
-            ///     actually in the list.
+            ///  Removes the given item from the ComboBox, provided that it is
+            ///  actually in the list.
             /// </summary>
             public void Remove(object value)
             {
@@ -4756,7 +4683,6 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class ComboBoxItemAccessibleObject : AccessibleObject
         {
-
             private readonly ComboBox _owningComboBox;
             private readonly object _owningItem;
             private IAccessible _systemIAccessible;
@@ -5035,7 +4961,6 @@ namespace System.Windows.Forms
 
         internal class ComboBoxItemAccessibleObjectCollection : Hashtable
         {
-
             private readonly ComboBox _owningComboBoxBox;
             private readonly ObjectIDGenerator _idGenerator = new ObjectIDGenerator();
 
@@ -5551,7 +5476,7 @@ namespace System.Windows.Forms
             private readonly IntPtr _childListControlhandle;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildListUiaProvider. 
+            /// Initializes new instance of ComboBoxChildListUiaProvider.
             /// </summary>
             /// <param name="childListControlhandle"></param>
             /// <param name="owner"></param>
@@ -5792,7 +5717,6 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class ComboBoxChildTextUiaProvider : AccessibleObject
         {
-
             private const int COMBOBOX_TEXT_ACC_ITEM_INDEX = 1;
 
             private readonly ComboBox _owner;
@@ -5968,7 +5892,6 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class ComboBoxChildDropDownButtonUiaProvider : AccessibleObject
         {
-
             private const int COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX = 2;
             private readonly ComboBox _owner;
 
@@ -6203,9 +6126,6 @@ namespace System.Windows.Forms
             //this hashtable can contain null for those ACWindows we find, but are sure are not ours.
             private static readonly Hashtable ACWindows = new Hashtable();
 
-            [
-                SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")
-            ]
             internal ACNativeWindow(IntPtr acHandle)
             {
                 Debug.Assert(!ACWindows.ContainsKey(acHandle));
@@ -6216,7 +6136,6 @@ namespace System.Windows.Forms
                     NativeMethods.NullHandleRef);
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
             private static bool RegisterACWindowRecursive(IntPtr handle, IntPtr lparam)
             {
                 if (!ACWindows.ContainsKey(handle))
@@ -6272,7 +6191,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
             internal static void RegisterACWindow(IntPtr acHandle, bool subclass)
             {
                 if (subclass && ACWindows.ContainsKey(acHandle))
@@ -6300,7 +6218,6 @@ namespace System.Windows.Forms
             /// This method clears out null entries so we get a clean BEFORE and AFTER snapshot
             /// null entries are ACWindows that belong to someone else.
             /// </summary>
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")] // Perfectly acceptible when dealing with PropertyDescriptors
             internal static void ClearNullACWindows()
             {
                 ArrayList nulllist = new ArrayList();
@@ -6365,7 +6282,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         private FlatComboAdapter FlatComboBoxAdapter
         {
             get
@@ -6382,7 +6298,6 @@ namespace System.Windows.Forms
         {
             return new FlatComboAdapter(this,/*smallButton=*/false);
         }
-
 
         internal class FlatComboAdapter
         {
@@ -6401,7 +6316,7 @@ namespace System.Windows.Forms
 
             public FlatComboAdapter(ComboBox comboBox, bool smallButton)
             {
-                // adapter is re-created when combobox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly 
+                // adapter is re-created when combobox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly
                 Offset2Pixels = comboBox.LogicalToDeviceUnits(OFFSET_2PIXELS);
 
                 clientRect = comboBox.ClientRectangle;
@@ -6410,7 +6325,6 @@ namespace System.Windows.Forms
                 innerBorder = new Rectangle(outerBorder.X + 1, outerBorder.Y + 1, outerBorder.Width - dropDownButtonWidth - 2, outerBorder.Height - 2);
                 innerInnerBorder = new Rectangle(innerBorder.X + 1, innerBorder.Y + 1, innerBorder.Width - 2, innerBorder.Height - 2);
                 dropDownRect = new Rectangle(innerBorder.Right + 1, innerBorder.Y, dropDownButtonWidth, innerBorder.Height + 1);
-
 
                 // fill in several pixels of the dropdown rect with white so that it looks like the combo button is thinner.
                 if (smallButton)
@@ -6422,7 +6336,6 @@ namespace System.Windows.Forms
                 }
 
                 origRightToLeft = comboBox.RightToLeft;
-
 
                 if (origRightToLeft == RightToLeft.Yes)
                 {
@@ -6440,7 +6353,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Paints over the edges of the combo box to make it appear flat.
+            ///  Paints over the edges of the combo box to make it appear flat.
             /// </summary>
             public virtual void DrawFlatCombo(ComboBox comboBox, Graphics g)
             {
@@ -6466,8 +6379,6 @@ namespace System.Windows.Forms
                         g.FillRectangle(b, whiteFillRect);
                     }
                 }
-
-
 
                 // Draw the outer border
                 if (outerBorderColor.IsSystemColor)
@@ -6515,8 +6426,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-
-
                 // Draw a dark border around everything if we're in popup mode
                 if ((!comboBox.Enabled) || (comboBox.FlatStyle == FlatStyle.Popup))
                 {
@@ -6547,9 +6456,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///     Paints over the edges of the combo box to make it appear flat.
+            ///  Paints over the edges of the combo box to make it appear flat.
             /// </summary>
-
             protected virtual void DrawFlatComboDropDown(ComboBox comboBox, Graphics g, Rectangle dropDownRect)
             {
 
@@ -6595,7 +6503,7 @@ namespace System.Windows.Forms
                 return (comboBox.Enabled) ? comboBox.BackColor : SystemColors.Control;
             }
 
-            // this eliminates flicker by removing the pieces we're going to paint ourselves from 
+            // this eliminates flicker by removing the pieces we're going to paint ourselves from
             // the update region.  Note the UpdateRegionBox is the bounding box of the actual update region.
             // this is just here so we can quickly eliminate rectangles that arent in the update region.
             public void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)

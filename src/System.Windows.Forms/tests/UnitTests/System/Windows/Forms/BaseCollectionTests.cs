@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Tests
         public void CopyTo_InvokeDefault_ThrowsNullReferenceException()
         {
             var collection = new BaseCollection();
-            Assert.Throws<NullReferenceException>(() => collection.CopyTo(new object[0], 0));
+            Assert.Throws<NullReferenceException>(() => collection.CopyTo(Array.Empty<object>(), 0));
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Tests
         public void GetEnumerator_InvokeDefault_ThrowsNullReferenceException()
         {
             var collection = new BaseCollection();
-            Assert.Throws<NullReferenceException>(() => collection.CopyTo(new object[0], 0));
+            Assert.Throws<NullReferenceException>(() => collection.CopyTo(Array.Empty<object>(), 0));
         }
 
         private class SubCollection : BaseCollection

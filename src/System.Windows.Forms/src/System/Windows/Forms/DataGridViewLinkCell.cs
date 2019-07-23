@@ -2,18 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.CompilerServices;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Windows.Forms.Internal;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using Runtime.CompilerServices;
-
     public class DataGridViewLinkCell : DataGridViewCell
     {
         private static readonly DataGridViewContentAlignment anyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
@@ -49,9 +45,6 @@ namespace System.Windows.Forms
 
         public Color ActiveLinkColor
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes") // unboxing OK here.
-            ]
             get
             {
                 if (Properties.ContainsObject(PropLinkCellActiveLinkColor))
@@ -177,9 +170,6 @@ namespace System.Windows.Forms
 
         public Color LinkColor
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes") // unboxing OK here.
-            ]
             get
             {
                 if (Properties.ContainsObject(PropLinkCellLinkColor))
@@ -374,9 +364,6 @@ namespace System.Windows.Forms
 
         public Color VisitedLinkColor
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes") // unboxing OK here.
-            ]
             get
             {
                 if (Properties.ContainsObject(PropLinkCellVisitedLinkColor))
@@ -469,7 +456,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewLinkCell)System.Activator.CreateInstance(thisType);
             }
@@ -540,7 +527,6 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle linkBounds = PaintPrivate(graphics,
@@ -557,7 +543,7 @@ namespace System.Windows.Forms
                 false /*computeErrorIconBounds*/,
                 false /*paint*/);
 
-#if DEBUG            
+#if DEBUG
             Rectangle linkBoundsDebug = PaintPrivate(graphics,
                 cellBounds,
                 cellBounds,
@@ -595,7 +581,6 @@ namespace System.Windows.Forms
 
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
-
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -927,12 +912,11 @@ namespace System.Windows.Forms
                 true /*paint*/);
         }
 
-
         // PaintPrivate is used in three places that need to duplicate the paint code:
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -1127,7 +1111,6 @@ namespace System.Windows.Forms
 
         protected class DataGridViewLinkCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-
             public DataGridViewLinkCellAccessibleObject(DataGridViewCell owner) : base(owner)
             {
             }

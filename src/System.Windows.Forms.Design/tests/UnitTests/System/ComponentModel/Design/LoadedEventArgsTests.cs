@@ -13,7 +13,7 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> Ctor_Bool_ICollection_TestData()
         {
             yield return new object[] { true, null };
-            yield return new object[] { false, new object[0] };
+            yield return new object[] { false, Array.Empty<object>() };
             yield return new object[] { true, new object[] { null } };
         }
 

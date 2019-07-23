@@ -6,23 +6,17 @@ namespace System.Windows.Forms
 {
     using System.Drawing;
     using System.Windows.Forms.Layout;
-    using System.Collections.Specialized;
     using System.Collections;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
 
-
-
     /// this class is a container for toolstrips on a rafting row.
     /// you can set layout styles on this container all day long and not
-    /// affect the underlying toolstrip's properties.... so if its 
+    /// affect the underlying toolstrip's properties.... so if its
     /// removed from a rafting container its still got its defaults
     /// set up for it.
     internal class ToolStripPanelCell : ArrangedElement
     {
-
-
         private ToolStrip _wrappedToolStrip = null;
         private ToolStripPanelRow parent = null;
         private Size maxSize = LayoutUtils.MaxSize;
@@ -39,11 +33,9 @@ namespace System.Windows.Forms
 
         public ToolStripPanelCell(Control control) : this(null, control)
         {
-
         }
         public ToolStripPanelCell(ToolStripPanelRow parent, Control control)
         {
-
 #if DEBUG
 
             // Ensure 1:1 Cell/ToolStripPanel mapping
@@ -77,14 +69,13 @@ namespace System.Windows.Forms
             }
         }
 
-
         public Control Control
         {
             get { return _wrappedToolStrip; }
         }
 
         // ToolStripPanelCell is considered to be Visible if the wrapped control is InDesignMode.
-        // This property is accessed from the ToolStripPanelRow in cases where we are moving the toolStrip around 
+        // This property is accessed from the ToolStripPanelRow in cases where we are moving the toolStrip around
         // during a drag operation.
         public bool ControlInDesignMode
         {
@@ -100,7 +91,6 @@ namespace System.Windows.Forms
         {
             get { return _wrappedToolStrip as ISupportToolStripPanel; }
         }
-
 
         public ToolStripPanelRow ToolStripPanelRow
         {
@@ -142,7 +132,6 @@ namespace System.Windows.Forms
             get { return maxSize; }
         }
 
-
         public override LayoutEngine LayoutEngine
         {
             get { return DefaultLayout.Instance; }
@@ -164,14 +153,13 @@ namespace System.Windows.Forms
                 return GrowHorizontal(growBy);
             }
 
-
         }
 
         private int GrowVertical(int growBy)
         {
             // Grow         ---]
             // Pref [      ]
-            // Max  [      ] 
+            // Max  [      ]
             if (MaximumSize.Height >= Control.PreferredSize.Height)
             {
                 // nothing to grow.
@@ -180,7 +168,7 @@ namespace System.Windows.Forms
 
             // Grow         ---]
             // Pref [        ]
-            // Max  [      ] 
+            // Max  [      ]
             if (MaximumSize.Height + growBy >= Control.PreferredSize.Height)
             {
                 int freed = Control.PreferredSize.Height - MaximumSize.Height;
@@ -190,7 +178,7 @@ namespace System.Windows.Forms
 
             // Grow         ---]
             // Pref [            ]
-            // Max  [      ] 
+            // Max  [      ]
             if (MaximumSize.Height + growBy < Control.PreferredSize.Height)
             {
                 maxSize.Height += growBy;
@@ -202,10 +190,9 @@ namespace System.Windows.Forms
 
         private int GrowHorizontal(int growBy)
         {
-
             // Grow         ---]
             // Pref [      ]
-            // Max  [      ] 
+            // Max  [      ]
             if (MaximumSize.Width >= Control.PreferredSize.Width)
             {
                 // nothing to grow.
@@ -214,7 +201,7 @@ namespace System.Windows.Forms
 
             // Grow         ---]
             // Pref [        ]
-            // Max  [      ] 
+            // Max  [      ]
             if (MaximumSize.Width + growBy >= Control.PreferredSize.Width)
             {
                 int freed = Control.PreferredSize.Width - MaximumSize.Width;
@@ -224,7 +211,7 @@ namespace System.Windows.Forms
 
             // Grow         ---]
             // Pref [            ]
-            // Max  [      ] 
+            // Max  [      ]
             if (MaximumSize.Width + growBy < Control.PreferredSize.Width)
             {
                 maxSize.Width += growBy;
@@ -254,7 +241,7 @@ namespace System.Windows.Forms
                     }
                     parent = null;
                 }
-#if DEBUG            
+#if DEBUG
                 else
                 {
                     cellCount--;
@@ -298,14 +285,12 @@ namespace System.Windows.Forms
                 preferredSize = (!_wrappedToolStrip.AutoSize) ? _wrappedToolStrip.Size : _wrappedToolStrip.GetPreferredSize(constrainingSize);
             }
 
-
             // return LayoutUtils.IntersectSizes(constrainingSize, preferredSize);
             return preferredSize;
         }
 
         protected override void SetBoundsCore(Rectangle bounds, BoundsSpecified specified)
         {
-
             currentlySizing = true;
             CachedBounds = bounds;
             try
@@ -394,7 +379,7 @@ namespace System.Windows.Forms
                 {
                     currentlyDragging = true;
                     Point newloc = e.NewLocation;
-                    // detect if we havent yet performed a layout - force one so we can 
+                    // detect if we havent yet performed a layout - force one so we can
                     // properly join to the row.
                     if (ToolStripPanelRow != null && ToolStripPanelRow.Bounds == Rectangle.Empty)
                     {
@@ -415,7 +400,6 @@ namespace System.Windows.Forms
 
         private void OnToolStripVisibleChanged(object sender, EventArgs e)
         {
-
             if (_wrappedToolStrip != null
                 && !_wrappedToolStrip.IsInDesignMode
 

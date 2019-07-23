@@ -2,30 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-
-
-    /// <summary>
-    /// </summary>
     internal sealed class MdiWindowDialog : Form
     {
-        private System.Windows.Forms.ListBox itemList;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.TableLayoutPanel okCancelTableLayoutPanel;
+        private ListBox itemList;
+        private Button okButton;
+        private Button cancelButton;
+        private TableLayoutPanel okCancelTableLayoutPanel;
         Form active;
 
         public MdiWindowDialog()
             : base()
         {
-
             InitializeComponent();
         }
 
@@ -41,9 +32,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <summary>
-        /// </summary>
         private class ListItem
         {
             public Form form;
@@ -93,57 +81,56 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     NOTE: The following code is required by the Windows Forms
-        ///     designer.  It can be modified using the form editor.  Do not
-        ///     modify it using the code editor.
+        ///  NOTE: The following code is required by the Windows Forms
+        ///  designer.  It can be modified using the form editor.  Do not
+        ///  modify it using the code editor.
         /// </summary>
-
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MdiWindowDialog));
-            itemList = new System.Windows.Forms.ListBox();
-            okButton = new System.Windows.Forms.Button();
-            cancelButton = new System.Windows.Forms.Button();
-            okCancelTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            itemList = new ListBox();
+            okButton = new Button();
+            cancelButton = new Button();
+            okCancelTableLayoutPanel = new TableLayoutPanel();
             okCancelTableLayoutPanel.SuspendLayout();
-            itemList.DoubleClick += new System.EventHandler(ItemList_doubleClick);
+            itemList.DoubleClick += new EventHandler(ItemList_doubleClick);
             itemList.SelectedIndexChanged += new EventHandler(ItemList_selectedIndexChanged);
             SuspendLayout();
-            // 
+            //
             // itemList
-            // 
+            //
             resources.ApplyResources(itemList, "itemList");
             itemList.FormattingEnabled = true;
             itemList.Name = "itemList";
-            // 
+            //
             // okButton
-            // 
+            //
             resources.ApplyResources(okButton, "okButton");
             okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            okButton.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            okButton.Margin = new Padding(0, 0, 3, 0);
             okButton.Name = "okButton";
-            // 
+            //
             // cancelButton
-            // 
+            //
             resources.ApplyResources(cancelButton, "cancelButton");
             cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            cancelButton.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            cancelButton.Margin = new Padding(3, 0, 0, 0);
             cancelButton.Name = "cancelButton";
-            // 
+            //
             // okCancelTableLayoutPanel
-            // 
+            //
             resources.ApplyResources(okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
             okCancelTableLayoutPanel.ColumnCount = 2;
-            okCancelTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            okCancelTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             okCancelTableLayoutPanel.Controls.Add(okButton, 0, 0);
             okCancelTableLayoutPanel.Controls.Add(cancelButton, 1, 0);
             okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
             okCancelTableLayoutPanel.RowCount = 1;
-            okCancelTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            // 
+            okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
+            //
             // MdiWindowDialog
-            // 
+            //
             resources.ApplyResources(this, "$this");
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(okCancelTableLayoutPanel);

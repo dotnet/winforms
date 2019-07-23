@@ -2,18 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.IO;
-    using System.Text;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Windows.Forms.VisualStyles;
-    using System.Windows.Forms.Internal;
-    using System.Globalization;
-
     public class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
     {
         private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
@@ -54,7 +52,7 @@ namespace System.Windows.Forms
                 }
                 isScalingInitialized = true;
             }
-            
+
             sortGlyphDirection = SortOrder.None;
         }
 
@@ -116,7 +114,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewColumnHeaderCell)System.Activator.CreateInstance(thisType);
             }
@@ -751,7 +749,6 @@ namespace System.Windows.Forms
                          true /*paint*/);
         }
 
-
         // PaintPrivate is used in two places that need to duplicate the paint code:
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
@@ -835,7 +832,7 @@ namespace System.Windows.Forms
                         state = (int)HeaderItemState.Pressed;
                     }
 
-                    // Even though Windows provides support for theming the sort glyph, 
+                    // Even though Windows provides support for theming the sort glyph,
                     // we rely on our own implementation for painting the sort glyph
                     if (DataGridView.RightToLeftInternal)
                     {
@@ -1197,7 +1194,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///    <para></para>
         /// </summary>
         public override string ToString()
         {
@@ -1229,7 +1225,7 @@ namespace System.Windows.Forms
                 Rectangle rectClip = Rectangle.Truncate(g.ClipBounds);
                 if ((int)HeaderItemState.Hot == headerState)
                 {
-                    // Workaround for a 
+                    // Workaround for a
                     VisualStyleRenderer.SetParameters(HeaderElement);
                     Rectangle cornerClip = new Rectangle(bounds.Left, bounds.Bottom - 2, 2, 2);
                     cornerClip.Intersect(rectClip);

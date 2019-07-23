@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
@@ -14,7 +13,7 @@ namespace System.Windows.Forms
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ToolStripOverflow : ToolStripDropDown, IArrangedElement
     {
-#if DEBUG        
+#if DEBUG
         internal static readonly TraceSwitch PopupLayoutDebug = new TraceSwitch("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
 #else
         internal static readonly TraceSwitch PopupLayoutDebug;
@@ -30,7 +29,6 @@ namespace System.Windows.Forms
             }
             ownerItem = parentItem as ToolStripOverflowButton;
         }
-
 
         protected internal override ToolStripItemCollection DisplayedItems
         {
@@ -80,7 +78,6 @@ namespace System.Windows.Forms
             get { return GetState(STATE_VISIBLE); }
         }
 
-
         PropertyStore IArrangedElement.Properties
         {
             get { return Properties; }
@@ -108,7 +105,6 @@ namespace System.Windows.Forms
             return new ToolStripOverflowAccessibleObject(this);
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         public override Size GetPreferredSize(Size constrainingSize)
         {
             constrainingSize.Width = 200;
@@ -116,7 +112,6 @@ namespace System.Windows.Forms
         }
         protected override void OnLayout(LayoutEventArgs e)
         {
-
             if (ParentToolStrip != null && ParentToolStrip.IsInDesignMode)
             {
                 if (FlowLayout.GetFlowDirection(this) != FlowDirection.TopDown)
@@ -145,7 +140,7 @@ namespace System.Windows.Forms
 
         protected override void SetDisplayedItems()
         {
-            // do nothing here.... this is really for the setting the overflow/displayed items on the 
+            // do nothing here.... this is really for the setting the overflow/displayed items on the
             // main ToolStrip.   Our working item collection is our displayed item collection... calling
             // base would clear it out.
             Size biggestItemSize = Size.Empty;

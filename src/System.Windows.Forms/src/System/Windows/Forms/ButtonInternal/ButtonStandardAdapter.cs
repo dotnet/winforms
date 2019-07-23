@@ -2,26 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms.ButtonInternal
 {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms.Internal;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
-    using System.Windows.Forms.VisualStyles;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-
-
     internal class ButtonStandardAdapter : ButtonBaseAdapter
     {
-
         private const int borderWidth = 2;
 
         internal ButtonStandardAdapter(ButtonBase control) : base(control) { }
@@ -86,13 +76,12 @@ namespace System.Windows.Forms.ButtonInternal
                 ButtonRenderer.DrawButtonForHandle(e.Graphics, Control.ClientRectangle, false, pbState, Control.HandleInternal);
             }
 
-            // Now overlay the background image or backcolor (the former overrides the latter), leaving a 
+            // Now overlay the background image or backcolor (the former overrides the latter), leaving a
             // margin. We hardcode this margin for now since GetThemeMargins returns 0 all the
-            // time. 
+            // time.
             // Changing this because GetThemeMargins simply does not
             // work in some cases.
             bounds.Inflate(-buttonBorderSize, -buttonBorderSize);
-
 
             //only paint if the user said not to use the themed backcolor.
             if (!Control.UseVisualStyleBackColor)
@@ -263,7 +252,6 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
         private LayoutOptions PaintLayout(PaintEventArgs e, bool up)
         {
             LayoutOptions layout = CommonLayout();

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -607,218 +606,218 @@ namespace System.Windows.Forms
                 case Interop.EditMessages.EM_SCROLLCARET:
                     text = "EM_SCROLLCARET";
                     break;
-                case Interop.EditMessages.EM_CANPASTE:
+                case Interop.RichEditMessages.EM_CANPASTE:
                     text = "EM_CANPASTE";
                     break;
-                case Interop.EditMessages.EM_DISPLAYBAND:
+                case Interop.RichEditMessages.EM_DISPLAYBAND:
                     text = "EM_DISPLAYBAND";
                     break;
-                case Interop.EditMessages.EM_EXGETSEL:
+                case Interop.RichEditMessages.EM_EXGETSEL:
                     text = "EM_EXGETSEL";
                     break;
-                case Interop.EditMessages.EM_EXLIMITTEXT:
+                case Interop.RichEditMessages.EM_EXLIMITTEXT:
                     text = "EM_EXLIMITTEXT";
                     break;
-                case Interop.EditMessages.EM_EXLINEFROMCHAR:
+                case Interop.RichEditMessages.EM_EXLINEFROMCHAR:
                     text = "EM_EXLINEFROMCHAR";
                     break;
-                case Interop.EditMessages.EM_EXSETSEL:
+                case Interop.RichEditMessages.EM_EXSETSEL:
                     text = "EM_EXSETSEL";
                     break;
-                case Interop.EditMessages.EM_FINDTEXT:
+                case Interop.RichEditMessages.EM_FINDTEXT:
                     text = "EM_FINDTEXT";
                     break;
-                case Interop.EditMessages.EM_FORMATRANGE:
+                case Interop.RichEditMessages.EM_FORMATRANGE:
                     text = "EM_FORMATRANGE";
                     break;
-                case Interop.EditMessages.EM_GETCHARFORMAT:
+                case Interop.RichEditMessages.EM_GETCHARFORMAT:
                     text = "EM_GETCHARFORMAT";
                     break;
-                case Interop.EditMessages.EM_GETEVENTMASK:
+                case Interop.RichEditMessages.EM_GETEVENTMASK:
                     text = "EM_GETEVENTMASK";
                     break;
-                case Interop.EditMessages.EM_GETOLEINTERFACE:
+                case Interop.RichEditMessages.EM_GETOLEINTERFACE:
                     text = "EM_GETOLEINTERFACE";
                     break;
-                case Interop.EditMessages.EM_GETPARAFORMAT:
+                case Interop.RichEditMessages.EM_GETPARAFORMAT:
                     text = "EM_GETPARAFORMAT";
                     break;
-                case Interop.EditMessages.EM_GETSELTEXT:
+                case Interop.RichEditMessages.EM_GETSELTEXT:
                     text = "EM_GETSELTEXT";
                     break;
-                case Interop.EditMessages.EM_HIDESELECTION:
+                case Interop.RichEditMessages.EM_HIDESELECTION:
                     text = "EM_HIDESELECTION";
                     break;
-                case Interop.EditMessages.EM_PASTESPECIAL:
+                case Interop.RichEditMessages.EM_PASTESPECIAL:
                     text = "EM_PASTESPECIAL";
                     break;
-                case Interop.EditMessages.EM_REQUESTRESIZE:
+                case Interop.RichEditMessages.EM_REQUESTRESIZE:
                     text = "EM_REQUESTRESIZE";
                     break;
-                case Interop.EditMessages.EM_SELECTIONTYPE:
+                case Interop.RichEditMessages.EM_SELECTIONTYPE:
                     text = "EM_SELECTIONTYPE";
                     break;
-                case Interop.EditMessages.EM_SETBKGNDCOLOR:
+                case Interop.RichEditMessages.EM_SETBKGNDCOLOR:
                     text = "EM_SETBKGNDCOLOR";
                     break;
-                case Interop.EditMessages.EM_SETCHARFORMAT:
+                case Interop.RichEditMessages.EM_SETCHARFORMAT:
                     text = "EM_SETCHARFORMAT";
                     break;
-                case Interop.EditMessages.EM_SETEVENTMASK:
+                case Interop.RichEditMessages.EM_SETEVENTMASK:
                     text = "EM_SETEVENTMASK";
                     break;
-                case Interop.EditMessages.EM_SETOLECALLBACK:
+                case Interop.RichEditMessages.EM_SETOLECALLBACK:
                     text = "EM_SETOLECALLBACK";
                     break;
-                case Interop.EditMessages.EM_SETPARAFORMAT:
+                case Interop.RichEditMessages.EM_SETPARAFORMAT:
                     text = "EM_SETPARAFORMAT";
                     break;
-                case Interop.EditMessages.EM_SETTARGETDEVICE:
+                case Interop.RichEditMessages.EM_SETTARGETDEVICE:
                     text = "EM_SETTARGETDEVICE";
                     break;
-                case Interop.EditMessages.EM_STREAMIN:
+                case Interop.RichEditMessages.EM_STREAMIN:
                     text = "EM_STREAMIN";
                     break;
-                case Interop.EditMessages.EM_STREAMOUT:
+                case Interop.RichEditMessages.EM_STREAMOUT:
                     text = "EM_STREAMOUT";
                     break;
-                case Interop.EditMessages.EM_GETTEXTRANGE:
+                case Interop.RichEditMessages.EM_GETTEXTRANGE:
                     text = "EM_GETTEXTRANGE";
                     break;
-                case Interop.EditMessages.EM_FINDWORDBREAK:
+                case Interop.RichEditMessages.EM_FINDWORDBREAK:
                     text = "EM_FINDWORDBREAK";
                     break;
-                case Interop.EditMessages.EM_SETOPTIONS:
+                case Interop.RichEditMessages.EM_SETOPTIONS:
                     text = "EM_SETOPTIONS";
                     break;
-                case Interop.EditMessages.EM_GETOPTIONS:
+                case Interop.RichEditMessages.EM_GETOPTIONS:
                     text = "EM_GETOPTIONS";
                     break;
-                case Interop.EditMessages.EM_FINDTEXTEX:
+                case Interop.RichEditMessages.EM_FINDTEXTEX:
                     text = "EM_FINDTEXTEX";
                     break;
-                case Interop.EditMessages.EM_GETWORDBREAKPROCEX:
+                case Interop.RichEditMessages.EM_GETWORDBREAKPROCEX:
                     text = "EM_GETWORDBREAKPROCEX";
                     break;
-                case Interop.EditMessages.EM_SETWORDBREAKPROCEX:
+                case Interop.RichEditMessages.EM_SETWORDBREAKPROCEX:
                     text = "EM_SETWORDBREAKPROCEX";
                     break;
 
                 // Richedit v2.0 messages
-                case Interop.EditMessages.EM_SETUNDOLIMIT:
+                case Interop.RichEditMessages.EM_SETUNDOLIMIT:
                     text = "EM_SETUNDOLIMIT";
                     break;
-                case Interop.EditMessages.EM_REDO:
+                case Interop.RichEditMessages.EM_REDO:
                     text = "EM_REDO";
                     break;
-                case Interop.EditMessages.EM_CANREDO:
+                case Interop.RichEditMessages.EM_CANREDO:
                     text = "EM_CANREDO";
                     break;
-                case Interop.EditMessages.EM_GETUNDONAME:
+                case Interop.RichEditMessages.EM_GETUNDONAME:
                     text = "EM_GETUNDONAME";
                     break;
-                case Interop.EditMessages.EM_GETREDONAME:
+                case Interop.RichEditMessages.EM_GETREDONAME:
                     text = "EM_GETREDONAME";
                     break;
-                case Interop.EditMessages.EM_STOPGROUPTYPING:
+                case Interop.RichEditMessages.EM_STOPGROUPTYPING:
                     text = "EM_STOPGROUPTYPING";
                     break;
-                case Interop.EditMessages.EM_SETTEXTMODE:
+                case Interop.RichEditMessages.EM_SETTEXTMODE:
                     text = "EM_SETTEXTMODE";
                     break;
-                case Interop.EditMessages.EM_GETTEXTMODE:
+                case Interop.RichEditMessages.EM_GETTEXTMODE:
                     text = "EM_GETTEXTMODE";
                     break;
-                case Interop.EditMessages.EM_AUTOURLDETECT:
+                case Interop.RichEditMessages.EM_AUTOURLDETECT:
                     text = "EM_AUTOURLDETECT";
                     break;
-                case Interop.EditMessages.EM_GETAUTOURLDETECT:
+                case Interop.RichEditMessages.EM_GETAUTOURLDETECT:
                     text = "EM_GETAUTOURLDETECT";
                     break;
-                case Interop.EditMessages.EM_SETPALETTE:
+                case Interop.RichEditMessages.EM_SETPALETTE:
                     text = "EM_SETPALETTE";
                     break;
-                case Interop.EditMessages.EM_GETTEXTEX:
+                case Interop.RichEditMessages.EM_GETTEXTEX:
                     text = "EM_GETTEXTEX";
                     break;
-                case Interop.EditMessages.EM_GETTEXTLENGTHEX:
+                case Interop.RichEditMessages.EM_GETTEXTLENGTHEX:
                     text = "EM_GETTEXTLENGTHEX";
                     break;
 
                 // Asia specific messages
-                case Interop.EditMessages.EM_SETPUNCTUATION:
+                case Interop.RichEditMessages.EM_SETPUNCTUATION:
                     text = "EM_SETPUNCTUATION";
                     break;
-                case Interop.EditMessages.EM_GETPUNCTUATION:
+                case Interop.RichEditMessages.EM_GETPUNCTUATION:
                     text = "EM_GETPUNCTUATION";
                     break;
-                case Interop.EditMessages.EM_SETWORDWRAPMODE:
+                case Interop.RichEditMessages.EM_SETWORDWRAPMODE:
                     text = "EM_SETWORDWRAPMODE";
                     break;
-                case Interop.EditMessages.EM_GETWORDWRAPMODE:
+                case Interop.RichEditMessages.EM_GETWORDWRAPMODE:
                     text = "EM_GETWORDWRAPMODE";
                     break;
-                case Interop.EditMessages.EM_SETIMECOLOR:
+                case Interop.RichEditMessages.EM_SETIMECOLOR:
                     text = "EM_SETIMECOLOR";
                     break;
-                case Interop.EditMessages.EM_GETIMECOLOR:
+                case Interop.RichEditMessages.EM_GETIMECOLOR:
                     text = "EM_GETIMECOLOR";
                     break;
-                case Interop.EditMessages.EM_SETIMEOPTIONS:
+                case Interop.RichEditMessages.EM_SETIMEOPTIONS:
                     text = "EM_SETIMEOPTIONS";
                     break;
-                case Interop.EditMessages.EM_GETIMEOPTIONS:
+                case Interop.RichEditMessages.EM_GETIMEOPTIONS:
                     text = "EM_GETIMEOPTIONS";
                     break;
-                case Interop.EditMessages.EM_CONVPOSITION:
+                case Interop.RichEditMessages.EM_CONVPOSITION:
                     text = "EM_CONVPOSITION";
                     break;
-                case Interop.EditMessages.EM_SETLANGOPTIONS:
+                case Interop.RichEditMessages.EM_SETLANGOPTIONS:
                     text = "EM_SETLANGOPTIONS";
                     break;
-                case Interop.EditMessages.EM_GETLANGOPTIONS:
+                case Interop.RichEditMessages.EM_GETLANGOPTIONS:
                     text = "EM_GETLANGOPTIONS";
                     break;
-                case Interop.EditMessages.EM_GETIMECOMPMODE:
+                case Interop.RichEditMessages.EM_GETIMECOMPMODE:
                     text = "EM_GETIMECOMPMODE";
                     break;
-                case Interop.EditMessages.EM_FINDTEXTW:
+                case Interop.RichEditMessages.EM_FINDTEXTW:
                     text = "EM_FINDTEXTW";
                     break;
-                case Interop.EditMessages.EM_FINDTEXTEXW:
+                case Interop.RichEditMessages.EM_FINDTEXTEXW:
                     text = "EM_FINDTEXTEXW";
                     break;
 
                 // Rich Edit 3.0 Asia msgs
-                case Interop.EditMessages.EM_RECONVERSION:
+                case Interop.RichEditMessages.EM_RECONVERSION:
                     text = "EM_RECONVERSION";
                     break;
-                case Interop.EditMessages.EM_SETIMEMODEBIAS:
+                case Interop.RichEditMessages.EM_SETIMEMODEBIAS:
                     text = "EM_SETIMEMODEBIAS";
                     break;
-                case Interop.EditMessages.EM_GETIMEMODEBIAS:
+                case Interop.RichEditMessages.EM_GETIMEMODEBIAS:
                     text = "EM_GETIMEMODEBIAS";
                     break;
 
                 // BiDi Specific messages
-                case Interop.EditMessages.EM_SETBIDIOPTIONS:
+                case Interop.RichEditMessages.EM_SETBIDIOPTIONS:
                     text = "EM_SETBIDIOPTIONS";
                     break;
-                case Interop.EditMessages.EM_GETBIDIOPTIONS:
+                case Interop.RichEditMessages.EM_GETBIDIOPTIONS:
                     text = "EM_GETBIDIOPTIONS";
                     break;
-                case Interop.EditMessages.EM_SETTYPOGRAPHYOPTIONS:
+                case Interop.RichEditMessages.EM_SETTYPOGRAPHYOPTIONS:
                     text = "EM_SETTYPOGRAPHYOPTIONS";
                     break;
-                case Interop.EditMessages.EM_GETTYPOGRAPHYOPTIONS:
+                case Interop.RichEditMessages.EM_GETTYPOGRAPHYOPTIONS:
                     text = "EM_GETTYPOGRAPHYOPTIONS";
                     break;
 
                 // Extended Edit style specific messages
-                case Interop.EditMessages.EM_SETEDITSTYLE:
+                case Interop.RichEditMessages.EM_SETEDITSTYLE:
                     text = "EM_SETEDITSTYLE";
                     break;
-                case Interop.EditMessages.EM_GETEDITSTYLE:
+                case Interop.RichEditMessages.EM_GETEDITSTYLE:
                     text = "EM_GETEDITSTYLE";
                     break;
 

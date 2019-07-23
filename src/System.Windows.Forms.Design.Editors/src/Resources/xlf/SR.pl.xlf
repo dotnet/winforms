@@ -127,9 +127,16 @@
         <target state="translated">Otwórz plik</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
-        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
-        <target state="translated">Naciśnij klawisz Enter, aby rozpocząć nowy wiersz.\r\nNaciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
+        <source>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</source>
+        <target state="translated">Naciśnij klawisz Enter, aby rozpocząć nowy wiersz.
+Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

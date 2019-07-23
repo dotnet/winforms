@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_MenuItemArray_TestData()
         {
             yield return new object[] { null, false };
-            yield return new object[] { new MenuItem[0], false };
+            yield return new object[] { Array.Empty<MenuItem>(), false };
             yield return new object[] { new MenuItem[] { new MenuItem() }, true };
         }
 
@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Tests
         public void Menu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent)
         {
             var menu = new SubMenu(items);
-            Assert.Equal(items ?? new MenuItem[0], menu.MenuItems.Cast<MenuItem>());
+            Assert.Equal(items ?? Array.Empty<MenuItem>(), menu.MenuItems.Cast<MenuItem>());
             for (int i = 0; i < (items?.Length ?? 0); i++)
             {
                 Assert.Equal(i, menu.MenuItems[i].Index);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> HandleMenuItems_TestData()
         {
-            yield return new object[] { new MenuItem[0] };
+            yield return new object[] { Array.Empty<MenuItem>() };
             yield return new object[]
             {
                 new MenuItem[]
@@ -138,38 +138,38 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Menu_Name_GetWithSite_ReturnsExpected(string name, string expected)
         {
-            var menu = new SubMenu(new MenuItem[0])
+            var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Site = Mock.Of<ISite>(s => s.Name == name)
             };
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Menu_Name_SetWithoutSite_GetReturnsExpected(string value, string expected)
         {
-            var menu = new SubMenu(new MenuItem[0])
+            var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Name = value
             };
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
 
             // Set same.
             menu.Name = value;
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Menu_Name_SetWithSite_GetReturnsExpected(string value, string expected)
         {
-            var menu = new SubMenu(new MenuItem[0])
+            var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Site = Mock.Of<ISite>(),
                 Name = value
             };
-            Assert.Same(expected, menu.Name);
+            Assert.Equal(expected, menu.Name);
             Assert.Equal(value?.Length == 0 ? null : value, menu.Site.Name);
         }
 
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.Tests
             var listItem1 = new MenuItem { MdiList = true };
             var listItem2 = new MenuItem { MdiList = true };
 
-            yield return new object[] { new MenuItem[0], null };
+            yield return new object[] { Array.Empty<MenuItem>(), null };
             yield return new object[] { new MenuItem[] { listItem1 }, listItem1 };
             yield return new object[] { new MenuItem[] { new MenuItem() }, null };
             yield return new object[] { new MenuItem[] { new MenuItem("parent", new MenuItem[] { listItem2 }) }, listItem2 };
@@ -197,7 +197,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Menu_Tag_Set_GetReturnsExpected(object value)
         {
-            var menu = new SubMenu(new MenuItem[0])
+            var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Tag = value
             };
@@ -210,9 +210,9 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> FindMenuItem_TestData()
         {
-            yield return new object[] { new MenuItem[0], MenuItem.FindHandle, IntPtr.Zero, null };
-            yield return new object[] { new MenuItem[0], MenuItem.FindShortcut, IntPtr.Zero, null };
-            yield return new object[] { new MenuItem[0], 2, IntPtr.Zero, null };
+            yield return new object[] { Array.Empty<MenuItem>(), MenuItem.FindHandle, IntPtr.Zero, null };
+            yield return new object[] { Array.Empty<MenuItem>(), MenuItem.FindShortcut, IntPtr.Zero, null };
+            yield return new object[] { Array.Empty<MenuItem>(), 2, IntPtr.Zero, null };
 
             var menuItem1 = new MenuItem();
             var menuItem2 = new MenuItem();
@@ -369,7 +369,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_Dispose_NoChildren_Success()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             menu.Dispose();
             menu.Dispose();
         }
@@ -424,7 +424,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> FindMergePosition_TestData()
         {
-            yield return new object[] { new MenuItem[0], -1, 0 };
+            yield return new object[] { Array.Empty<MenuItem>(), -1, 0 };
             yield return new object[] { new MenuItem[] { new MenuItem { MergeOrder = 10 }, new MenuItem { MergeOrder = 12 }, new MenuItem(), new MenuItem(), new MenuItem() }, 12, 5 };
             yield return new object[] { new MenuItem[] { new MenuItem { MergeOrder = 10 }, new MenuItem { MergeOrder = 12 }, new MenuItem(), new MenuItem(), new MenuItem() }, 11, 5 };
             yield return new object[] { new MenuItem[] { new MenuItem { MergeOrder = 10 }, new MenuItem { MergeOrder = 12 }, new MenuItem(), new MenuItem(), new MenuItem() }, -1, 0 };
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetContextMenu_TestData()
         {
-            yield return new object[] { new SubMenu(new MenuItem[0]), null };
+            yield return new object[] { new SubMenu(Array.Empty<MenuItem>()), null };
             yield return new object[] { new MenuItem(), null };
 
             var menuItem1 = new MenuItem();
@@ -466,7 +466,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetMainMenu_TestData()
         {
-            yield return new object[] { new SubMenu(new MenuItem[0]), null };
+            yield return new object[] { new SubMenu(Array.Empty<MenuItem>()), null };
             yield return new object[] { new MenuItem(), null };
 
             var menuItem1 = new MenuItem();
@@ -631,7 +631,7 @@ namespace System.Windows.Forms.Tests
                 {
                     null,
                     null,
-                    new MenuItem[0]
+                    Array.Empty<MenuItem>()
                 };
             }
         }
@@ -649,20 +649,20 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_MergeMenu_SameSourceAndDestination_ThrowsArgumentException()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             Assert.Throws<ArgumentException>("menuSrc", () => menu.MergeMenu(menu));
         }
 
         [Fact]
         public void Menu_MergeMenu_NullSource_ThrowsArgumentNullException()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             Assert.Throws<ArgumentNullException>("menuSrc", () => menu.MergeMenu(null));
         }
 
         public static IEnumerable<object[]> CloneMenu_TestData()
         {
-            yield return new object[] { new MenuItem[0] };
+            yield return new object[] { Array.Empty<MenuItem>() };
             yield return new object[] { new MenuItem[] { new MenuItem("text") } };
         }
 
@@ -683,7 +683,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_CloneMenu_NullMenuSource_ThrowsArgumentNullException()
         {
-            var menu = new SubMenu(new MenuItem[0]);
+            var menu = new SubMenu(Array.Empty<MenuItem>());
             Assert.Throws<ArgumentNullException>("menuSrc", () => menu.CloneMenu(null));
         }
 

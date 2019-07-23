@@ -39,7 +39,6 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private ICollection GetCollectionDelta(ICollection original, ICollection modified)
         {
-
             if (original == null || modified == null || original.Count == 0)
             {
                 return modified;
@@ -553,7 +552,7 @@ namespace System.ComponentModel.Design.Serialization
                             };
                             CodeExpression serializedObj = null;
 
-                            // If there is an expression context on the stack at this point, 
+                            // If there is an expression context on the stack at this point,
                             // we need to fix up the ExpressionType on it to be the element type.
                             ExpressionContext newCxt = null;
 
@@ -725,7 +724,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (shouldClear)
             {
-                MethodInfo clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, new Type[0], null);
+                MethodInfo clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, Array.Empty<Type>(), null);
                 if (clearMethod == null || !MethodSupportsSerialization(clearMethod))
                 {
                     shouldClear = false;

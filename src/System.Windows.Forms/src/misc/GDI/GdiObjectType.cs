@@ -2,23 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
-#elif DRAWING_NAMESPACE
-namespace System.Drawing.Internal
-#else
-namespace System.Experimental.Gdi
-#endif
 {
     /// <summary>
-    ///    Specifies the the type of a GDI object.
+    ///  Specifies the the type of a GDI object.
     /// </summary>
-#if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-    public
-#else
-    internal
-#endif
-    enum GdiObjectType
+    internal enum GdiObjectType
     {
         Pen = 1,
         Brush = 2,
@@ -34,17 +23,5 @@ namespace System.Experimental.Gdi
         EnhancedMetafileDC = 12,
         EnhMetafile = 13,
         ColorSpace = 14
-
-        /*
-        OBJ_PEN       = 1,
-        OBJ_BRUSH     = 2,
-        OBJ_FONT      = 6,
-        OBJ_EXTPEN    = 11,
-            
-        OBJ_DC        = 3,
-        OBJ_METADC    = 4,
-        OBJ_MEMDC     = 10,
-        OBJ_ENHMETADC = 12,
-    */
     }
 }

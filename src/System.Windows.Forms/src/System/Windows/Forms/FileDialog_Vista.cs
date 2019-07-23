@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 
@@ -33,7 +32,6 @@ namespace System.Windows.Forms
 
         private protected abstract FileDialogNative.IFileDialog CreateVistaDialog();
 
-        [SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")]
         private bool RunDialogVista(IntPtr hWndOwner)
         {
             FileDialogNative.IFileDialog dialog = CreateVistaDialog();
@@ -118,7 +116,6 @@ namespace System.Windows.Forms
 
         private protected abstract string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog);
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private bool HandleVistaFileOk(FileDialogNative.IFileDialog dialog)
         {
             int saveOptions = _options;

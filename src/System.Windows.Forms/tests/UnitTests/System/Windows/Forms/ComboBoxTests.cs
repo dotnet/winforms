@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void BackgroundImage_SetWithHandler_CallsBackColorChanged()
+        public void BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
             var control = new ComboBox();
             int callCount = 0;
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new List<int>() };
-            yield return new object[] { new int[0] };
+            yield return new object[] { Array.Empty<int>() };
 
             var mockSource = new Mock<IListSource>(MockBehavior.Strict);
             mockSource

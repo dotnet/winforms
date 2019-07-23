@@ -3,21 +3,31 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms.Design;
 using Moq;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
     public class ImageEditorTests
     {
+        [Fact]
+        public void ImageEditor_Ctor_Default()
+        {
+            var editor = new ImageEditor();
+            Assert.False(editor.IsDropDownResizable);
+        }
+
         public static IEnumerable<object[]> CreateExtensionsString_TestData()
         {
             yield return new object[] { null, ",", null };
-            yield return new object[] { new string[0], ",", null };
+            yield return new object[] { Array.Empty<string>(), ",", null };
             yield return new object[] { new string[] { "a", "b", "c" }, ",", "*.a,*.b,*.c" };
             yield return new object[] { new string[] { "a", "b", "c" }, "", "*.a*.b*.c" };
             yield return new object[] { new string[] { "a", "b", "c" }, null, "*.a*.b*.c" };
@@ -49,37 +59,20 @@ namespace System.Drawing.Design.Tests
             Assert.Throws<ArgumentNullException>("e", () => SubImageEditor.CreateFilterEntry(null));
         }
 
-        public static IEnumerable<object[]> EditValue_InvalidProvider_TestData()
-        {
-            yield return new object[] { null };
-
-            var nullServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            nullServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(null);
-            yield return new object[] { nullServiceProviderMock.Object };
-
-            var invalidServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            invalidServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(new object());
-            yield return new object[] { invalidServiceProviderMock.Object };
-        }
-
         [Theory]
-        [MemberData(nameof(EditValue_InvalidProvider_TestData))]
-        public void ImageEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider)
+        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        public void ImageEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new ImageEditor();
-            var value = new object();
             Assert.Same(value, editor.EditValue(null, provider, value));
         }
 
-        [Fact]
-        public void ImageEditor_GetEditStyle_Invoke_ReturnsModal()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void ImageEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new ImageEditor();
-            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(null));
+            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
         }
 
         [Fact]
@@ -129,11 +122,12 @@ namespace System.Drawing.Design.Tests
             Assert.Same(extenders, editor.GetImageExtenders());
         }
 
-        [Fact]
-        public void ImageEditor_GetPaintValueSupported_Invoke_ReturnsTrue()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        public void ImageEditor_GetPaintValueSupported_Invoke_ReturnsTrue(ITypeDescriptorContext context)
         {
             var editor = new ImageEditor();
-            Assert.True(editor.GetPaintValueSupported(null));
+            Assert.True(editor.GetPaintValueSupported(context));
         }
 
         [Fact]

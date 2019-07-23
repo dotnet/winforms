@@ -2,18 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Text;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-
-    [ToolboxBitmapAttribute(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
+    [ToolboxBitmap(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
     public class DataGridViewImageColumn : DataGridViewColumn
     {
         private static readonly Type columnType = typeof(DataGridViewImageColumn);
@@ -24,9 +21,6 @@ namespace System.Windows.Forms
         {
         }
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors") // Can't think of a workaround.
-        ]
         public DataGridViewImageColumn(bool valuesAreIcons)
             : base(new DataGridViewImageCell(valuesAreIcons))
         {
@@ -57,7 +51,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && !(value is System.Windows.Forms.DataGridViewImageCell))
+                if (value != null && !(value is DataGridViewImageCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewImageCell"));
                 }
@@ -274,7 +268,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewColumn = (DataGridViewImageColumn)System.Activator.CreateInstance(thisType);
             }

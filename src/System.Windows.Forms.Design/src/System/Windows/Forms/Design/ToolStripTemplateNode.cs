@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design
             {
                 if (DpiHelper.IsScalingRequired)
                 {
-                    // dimensions of the "Type Here" text box  
+                    // dimensions of the "Type Here" text box
                     TOOLSTRIP_TEMPLATE_HEIGHT = DpiHelper.LogicalToDeviceUnitsY(TOOLSTRIP_TEMPLATE_HEIGHT_ORIGINAL);
                     TEMPLATE_HEIGHT = DpiHelper.LogicalToDeviceUnitsY(TEMPLATE_HEIGHT_ORIGINAL);
                     TOOLSTRIP_TEMPLATE_WIDTH = DpiHelper.LogicalToDeviceUnitsX(TOOLSTRIP_TEMPLATE_WIDTH_ORIGINAL);
@@ -364,7 +364,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         private BehaviorService BehaviorService
         {
             get
@@ -438,7 +437,7 @@ namespace System.Windows.Forms.Design
             _lastSelection = senderItem;
             // Set the property used in the CommitEditor (.. ) to add the correct Type.
             ToolStripItemType = senderItem.ItemType;
-            //Select the parent before adding 
+            //Select the parent before adding
             ToolStrip parent = _controlHost.GetCurrentParent() as ToolStrip;
             // this will add the item to the ToolStrip..
             if (parent is MenuStrip)
@@ -541,7 +540,7 @@ namespace System.Windows.Forms.Design
                                     // If templateNode Active .. commit
                                     KeyboardService.ActiveTemplateNode.Commit(false, false);
                                 }
-                                else  //we have clicked the templateNode of a Invisible Item ... so a dummyItem. In this case select the item.                                
+                                else  //we have clicked the templateNode of a Invisible Item ... so a dummyItem. In this case select the item.
                                 {
                                     // If templateNode Active .. commit and Select
                                     KeyboardService.ActiveTemplateNode.Commit(false, true);
@@ -563,7 +562,7 @@ namespace System.Windows.Forms.Design
                             {
                                 if (_designerHost.GetDesigner(selectedItem) is ToolStripMenuItemDesigner itemDesigner)
                                 {
-                                    //Invalidate the item only if its toplevel. 
+                                    //Invalidate the item only if its toplevel.
                                     if (!selectedItem.IsOnDropDown)
                                     {
                                         Rectangle bounds = itemDesigner.GetGlyphBounds();
@@ -922,7 +921,7 @@ namespace System.Windows.Forms.Design
                 {
                     //if going insitu with a real item, set & select all the text
                     int index = _miniToolStrip.Items.IndexOf(_centerTextBox);
-                    //validate index 
+                    //validate index
                     if (index != -1)
                     {
                         _centerLabel.Text = SR.ToolStripDesignerTemplateNodeEnterText;
@@ -1233,7 +1232,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
-
             for (int i = 0; i < _commands.Length; i++)
             {
                 if (_commands[i].CommandID.Equals(cmd.CommandID))
@@ -1354,9 +1352,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// This function sets up TemplateNode for ToolStrip, StatusStrip, ContextMenuStrip.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         private void SetUpToolTemplateNode(ToolStripTemplateNode owner, string text, Image image, IComponent component)
         {
             _addItemButton = new ToolStripSplitButton
@@ -1395,10 +1390,9 @@ namespace System.Windows.Forms.Design
                 {
                     ItemTypeToolStripMenuItem firstItem = (ItemTypeToolStripMenuItem)_addItemButton.DropDownItems[0];
                     _addItemButton.ImageTransparentColor = Color.Lime;
-                    Bitmap bmp = new Bitmap(typeof(ToolStripTemplateNode), "ToolStripTemplateNode.bmp");
+                    Bitmap bmp = new Icon(typeof(ToolStripTemplateNode), "ToolStripTemplateNode").ToBitmap();
                     if (DpiHelper.IsScalingRequired)
                     {
-                        bmp.MakeTransparent(Color.Lime);
                         DpiHelper.ScaleBitmapLogicalToDevice(ref bmp);
                     }
                     _addItemButton.Image = bmp;
@@ -1420,8 +1414,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// This method does actual edit node creation.
-        /// </summary>    
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
+        /// </summary>
         private void SetupNewEditNode(ToolStripTemplateNode owner, string text, Image image, IComponent currentItem)
         {
             // setup the MINIToolStrip host...
@@ -1556,7 +1549,7 @@ namespace System.Windows.Forms.Design
 
                     // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
                     // 2.Select the text of the item and right click on it
-                    // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph  behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no text to work with.  Thus need to block glyph behaviors while the context menu is displayed.       
+                    // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph  behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no text to work with.  Thus need to block glyph behaviors while the context menu is displayed.
                     case Interop.WindowMessages.WM_CONTEXTMENU:
                         owner.IsSystemContextMenuDisplayed = true;
                         base.WndProc(ref m);
@@ -1731,7 +1724,7 @@ namespace System.Windows.Forms.Design
                 get => (_owner as TransparentToolStrip).TemplateNode;
             }
 
-            #region IValueProvider       
+            #region IValueProvider
             public override void SetValue(string newValue)
             {
                 TemplateNode.CommitTextToDesigner(newValue, true, true, false);
@@ -1858,7 +1851,6 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-
             /// <summary>
             /// Render ToolStrip Border
             /// </summary>
@@ -1977,7 +1969,7 @@ namespace System.Windows.Forms.Design
                     bool splitButtonSelected = false;
                     if (splitButton.DropDownButtonPressed)
                     {
-                        //Button is pressed 
+                        //Button is pressed
                         state = 0;
                         Rectangle fillRect = new Rectangle(buttonBounds.Left + 1, buttonBounds.Top, buttonBounds.Right, buttonBounds.Bottom);
                         using (SolidBrush brush = new SolidBrush(dropDownMouseDownColor))
@@ -2010,7 +2002,7 @@ namespace System.Windows.Forms.Design
 
                     if (splitButtonSelected)
                     {
-                        //DrawSeleted Boder 
+                        //DrawSeleted Boder
                         selectborderPen = new Pen(selectedBorderColor);
                     }
                     else

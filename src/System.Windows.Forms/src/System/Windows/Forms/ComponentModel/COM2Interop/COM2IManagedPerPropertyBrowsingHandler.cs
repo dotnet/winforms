@@ -2,20 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Reflection;
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.Globalization;
-
     internal class Com2IManagedPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
-
         public override Type Interface
         {
             get
@@ -67,7 +63,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (hr != NativeMethods.S_OK || cItems == 0)
             {
-                return new Attribute[0];
+                return Array.Empty<Attribute>();
             }
 
             ArrayList attrs = new ArrayList();
@@ -78,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Debug.Assert(attrTypeNames.Length == varParams.Length, "Mismatched parameter and attribute name length");
             if (attrTypeNames.Length != varParams.Length)
             {
-                return new Attribute[0];
+                return Array.Empty<Attribute>();
             }
 
             // get the types
@@ -99,7 +95,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (t == null)
                 {
-
 
                     // check for an assembly name.
                     //
@@ -169,7 +164,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                     }
                 }
-
 
                 Debug.Assert(typeof(Attribute).IsAssignableFrom(t), "Attribute type " + t.FullName + " does not derive from Attribute");
                 if (!typeof(Attribute).IsAssignableFrom(t))
@@ -266,7 +260,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
         }
 

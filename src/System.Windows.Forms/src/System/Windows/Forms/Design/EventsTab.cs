@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
         private bool _sunkEvent;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.EventsTab'/> class.
+        /// Initializes a new instance of the <see cref='EventsTab'/> class.
         /// </summary>
         public EventsTab(IServiceProvider sp)
         {

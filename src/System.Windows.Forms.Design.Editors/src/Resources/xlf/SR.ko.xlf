@@ -127,9 +127,16 @@
         <target state="translated">파일 열기</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
-        <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
-        <target state="translated">새 줄을 시작하려면 &lt;Enter&gt; 키를 누릅니다.\r\n텍스트를 적용하려면 &lt;Ctrl+Enter&gt;를 누릅니다.</target>
+        <source>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</source>
+        <target state="translated">새 줄을 시작하려면 &lt;Enter&gt; 키를 누르십시오.
+텍스트를 적용하려면 &lt;Ctrl+Enter&gt;를 누르십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
