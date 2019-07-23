@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms
         /// Defines the ToolStripControlHost AccessibleObject.
         /// </summary>
         [Runtime.InteropServices.ComVisible(true)]
-        internal class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
+        public class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripControlHost _ownerItem = null;
 
@@ -1255,10 +1255,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
-                get
-                {
-                    return _ownerItem.RootToolStrip.AccessibilityObject;
-                }
+                get => _ownerItem.RootToolStrip.AccessibilityObject;
             }
         }
 
@@ -1438,7 +1435,8 @@ namespace System.Windows.Forms
                 {
                     if (_toolStripHostedControl != null // Hosted control should not be null.
                         && _toolStripControlHost != null // ToolStripControlHost is a container for ToolStripControl.
-                        && _toolStripControlHost.Owner != null) { // Owner is the ToolStrip.
+                        && _toolStripControlHost.Owner != null) // Owner is the ToolStrip.
+                    {
                         return _toolStripControlHost.Owner.AccessibilityObject; 
                     }
 
