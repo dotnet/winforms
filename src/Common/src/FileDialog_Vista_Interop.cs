@@ -4,22 +4,21 @@
 
 using System.Runtime.InteropServices;
 
-#pragma warning disable 108
 namespace System.Windows.Forms
 {
-    static class FileDialogNative
+    internal static class FileDialogNative
     {
         [ComImport]
         [Guid(IIDGuid.IFileOpenDialog)]
         [CoClass(typeof(FileOpenDialogRCW))]
-        internal interface NativeFileOpenDialog : IFileOpenDialog
+        public interface NativeFileOpenDialog : IFileOpenDialog
         {
         }
 
         [ComImport]
         [Guid(IIDGuid.IFileSaveDialog)]
         [CoClass(typeof(FileSaveDialogRCW))]
-        internal interface NativeFileSaveDialog : IFileSaveDialog
+        public interface NativeFileSaveDialog : IFileSaveDialog
         {
         }
 
@@ -27,7 +26,7 @@ namespace System.Windows.Forms
         [ClassInterface(ClassInterfaceType.None)]
         [TypeLibType(TypeLibTypeFlags.FCanCreate)]
         [Guid(CLSIDGuid.FileOpenDialog)]
-        internal class FileOpenDialogRCW
+        public class FileOpenDialogRCW
         {
         }
 
@@ -35,51 +34,62 @@ namespace System.Windows.Forms
         [ClassInterface(ClassInterfaceType.None)]
         [TypeLibType(TypeLibTypeFlags.FCanCreate)]
         [Guid(CLSIDGuid.FileSaveDialog)]
-        internal class FileSaveDialogRCW
+        public class FileSaveDialogRCW
         {
         }
 
-        internal class IIDGuid
+        /// <summary>
+        /// IID GUID strings for relevant COM interfaces
+        /// </summary>
+        public static class IIDGuid
         {
-            private IIDGuid() { } // Avoid FxCop violation AvoidUninstantiatedInternalClasses
-            // IID GUID strings for relevant COM interfaces
-            internal const string IModalWindow = "b4db1657-70d7-485e-8e3e-6fcb5a5c1802";
-            internal const string IFileDialog = "42f85136-db7e-439c-85f1-e4075d135fc8";
-            internal const string IFileOpenDialog = "d57c7288-d4ad-4768-be02-9d969532d960";
-            internal const string IFileSaveDialog = "84bccd23-5fde-4cdb-aea4-af64b83d78ab";
-            internal const string IFileDialogEvents = "973510DB-7D7F-452B-8975-74A85828D354";
-            internal const string IFileDialogCustomize = "e6fdd21a-163f-4975-9c8c-a69f1ba37034";
-            internal const string IShellItem = "43826D1E-E718-42EE-BC55-A1E261C37BFE";
-            internal const string IShellItemArray = "B63EA76D-1F85-456F-A19C-48159EFA858B";
+            public const string IModalWindow = "b4db1657-70d7-485e-8e3e-6fcb5a5c1802";
+            public const string IFileDialog = "42f85136-db7e-439c-85f1-e4075d135fc8";
+            public const string IFileOpenDialog = "d57c7288-d4ad-4768-be02-9d969532d960";
+            public const string IFileSaveDialog = "84bccd23-5fde-4cdb-aea4-af64b83d78ab";
+            public const string IFileDialogEvents = "973510DB-7D7F-452B-8975-74A85828D354";
+            public const string IFileDialogCustomize = "e6fdd21a-163f-4975-9c8c-a69f1ba37034";
+            public const string IShellItem = "43826D1E-E718-42EE-BC55-A1E261C37BFE";
+            public const string IShellItemArray = "B63EA76D-1F85-456F-A19C-48159EFA858B";
         }
 
-        internal class CLSIDGuid
+        public static class CLSIDGuid
         {
-            private CLSIDGuid() { } // Avoid FxCop violation AvoidUninstantiatedInternalClasses
-            internal const string FileOpenDialog = "DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7";
-            internal const string FileSaveDialog = "C0B4E2F3-BA21-4773-8DBA-335EC946EB8B";
+            public const string FileOpenDialog = "DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7";
+            public const string FileSaveDialog = "C0B4E2F3-BA21-4773-8DBA-335EC946EB8B";
         }
 
-        [ComImport()]
+        [ComImport]
         [Guid(IIDGuid.IModalWindow)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IModalWindow
+        public interface IModalWindow
         {
             [PreserveSig]
             int Show([In] IntPtr parent);
         }
 
-        internal enum SIATTRIBFLAGS
+        public enum SIATTRIBFLAGS
         {
-            SIATTRIBFLAGS_AND = 0x00000001, // if multiple items and the attributes together.
-            SIATTRIBFLAGS_OR = 0x00000002, // if multiple items or the attributes together.
-            SIATTRIBFLAGS_APPCOMPAT = 0x00000003, // Call GetAttributes directly on the ShellFolder for multiple attributes
+            /// <summary>
+            /// Multiple items and the attributes together.
+            /// </summary>
+            SIATTRIBFLAGS_AND = 0x00000001,
+
+            /// <summary>
+            /// Multiple items or the attributes together.
+            /// </summary>
+            SIATTRIBFLAGS_OR = 0x00000002, 
+
+            /// <summary>
+            /// Call GetAttributes directly on the ShellFolder for multiple attributes
+            /// <summary>
+            SIATTRIBFLAGS_APPCOMPAT = 0x00000003
         }
 
         [ComImport]
         [Guid(IIDGuid.IShellItemArray)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IShellItemArray
+        public interface IShellItemArray
         {
             // Not supported: IBindCtx
 
@@ -99,16 +109,16 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        internal struct PROPERTYKEY
+        public struct PROPERTYKEY
         {
-            internal Guid fmtid;
-            internal uint pid;
+            public Guid fmtid;
+            public uint pid;
         }
 
-        [ComImport()]
+        [ComImport]
         [Guid(IIDGuid.IFileDialog)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IFileDialog
+        public interface IFileDialog
         {
             [PreserveSig]
             int Show([In] IntPtr parent);
@@ -160,10 +170,11 @@ namespace System.Windows.Forms
             void SetFilter([MarshalAs(UnmanagedType.Interface)] IntPtr pFilter);
         }
 
-        [ComImport()]
+#pragma warning disable 108
+        [ComImport]
         [Guid(IIDGuid.IFileOpenDialog)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IFileOpenDialog : IFileDialog
+        public interface IFileOpenDialog : IFileDialog
         {
             [PreserveSig]
             int Show([In] IntPtr parent);
@@ -219,10 +230,10 @@ namespace System.Windows.Forms
             void GetSelectedItems([MarshalAs(UnmanagedType.Interface)] out IShellItemArray ppsai);
         }
 
-        [ComImport(),
-        Guid(IIDGuid.IFileSaveDialog),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IFileSaveDialog : IFileDialog
+        [ComImport]
+        [Guid(IIDGuid.IFileSaveDialog)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IFileSaveDialog : IFileDialog
         {
             [PreserveSig]
             int Show([In] IntPtr parent);
@@ -283,16 +294,18 @@ namespace System.Windows.Forms
 
             void ApplyProperties([In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, [In, MarshalAs(UnmanagedType.Interface)] IntPtr pStore, [In, ComAliasName("ShellObjects.wireHWND")] ref IntPtr hwnd, [In, MarshalAs(UnmanagedType.Interface)] IntPtr pSink);
         }
+#pragma warning restore 108
 
-        [ComImport,
-        Guid(IIDGuid.IFileDialogEvents),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IFileDialogEvents
+        /// <remarks>
+        /// Some of these callbacks are cancelable - returning S_FALSE means that the dialog should
+        /// not proceed (e.g. with closing, changing folder); to support this, we need to use the
+        /// PreserveSig attribute to enable us to return the proper HRESULT
+        /// </remarks>
+        [ComImport]
+        [Guid(IIDGuid.IFileDialogEvents)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IFileDialogEvents
         {
-            // NOTE: some of these callbacks are cancelable - returning S_FALSE means that
-            // the dialog should not proceed (e.g. with closing, changing folder); to
-            // support this, we need to use the PreserveSig attribute to enable us to return
-            // the proper HRESULT
             [PreserveSig]
             int OnFileOk([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd);
 
@@ -313,7 +326,7 @@ namespace System.Windows.Forms
         [ComImport,
         Guid(IIDGuid.IFileDialogCustomize),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IFileDialogCustomize
+        public interface IFileDialogCustomize
         {
             void EnableOpenDropDown([In] int dwIDCtl);
 
@@ -347,7 +360,7 @@ namespace System.Windows.Forms
         [ComImport,
         Guid(IIDGuid.IShellItem),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IShellItem
+        public interface IShellItem
         {
             void BindToHandler([In, MarshalAs(UnmanagedType.Interface)] IntPtr pbc, [In] ref Guid bhid, [In] ref Guid riid, out IntPtr ppv);
 
@@ -360,7 +373,7 @@ namespace System.Windows.Forms
             void Compare([In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, [In] uint hint, out int piOrder);
         }
 
-        internal enum SIGDN : uint
+        public enum SIGDN : uint
         {
             SIGDN_NORMALDISPLAY = 0x00000000,           // SHGDN_NORMAL
             SIGDN_PARENTRELATIVEPARSING = 0x80018001,   // SHGDN_INFOLDER | SHGDN_FORPARSING
@@ -374,16 +387,16 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
-        internal struct COMDLG_FILTERSPEC
+        public struct COMDLG_FILTERSPEC
         {
             [MarshalAs(UnmanagedType.LPWStr)]
-            internal string pszName;
+            public string pszName;
             [MarshalAs(UnmanagedType.LPWStr)]
-            internal string pszSpec;
+            public string pszSpec;
         }
 
         [Flags]
-        internal enum FOS : uint
+        public enum FOS : uint
         {
             FOS_OVERWRITEPROMPT = 0x00000002,
             FOS_STRICTFILETYPES = 0x00000004,
@@ -407,21 +420,21 @@ namespace System.Windows.Forms
             FOS_DEFAULTNOMINIMODE = 0x20000000
         }
 
-        internal enum CDCONTROLSTATE
+        public enum CDCONTROLSTATE
         {
             CDCS_INACTIVE = 0x00000000,
             CDCS_ENABLED = 0x00000001,
             CDCS_VISIBLE = 0x00000002
         }
 
-        internal enum FDE_SHAREVIOLATION_RESPONSE
+        public enum FDE_SHAREVIOLATION_RESPONSE
         {
             FDESVR_DEFAULT = 0x00000000,
             FDESVR_ACCEPT = 0x00000001,
             FDESVR_REFUSE = 0x00000002
         }
 
-        internal enum FDE_OVERWRITE_RESPONSE
+        public enum FDE_OVERWRITE_RESPONSE
         {
             FDEOR_DEFAULT = 0x00000000,
             FDEOR_ACCEPT = 0x00000001,
@@ -431,7 +444,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Unicode)]
         private static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppv);
 
-        internal static IShellItem CreateItemFromParsingName(string path)
+        public static IShellItem CreateItemFromParsingName(string path)
         {
             Guid guid = new Guid(IIDGuid.IShellItem);
             int hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);

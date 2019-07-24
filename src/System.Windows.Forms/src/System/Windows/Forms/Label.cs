@@ -674,14 +674,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-        /* FxCop rule 'AvoidBuildingNonCallableCode' - Left here in case it is needed in the future.
-        private Rectangle ImageBounds {
-            get {
-                Image image = (Image)Properties.GetObject(PropImage);
-                return CalcImageRenderBounds(image, ClientRectangle, RtlTranslateAlignment(ImageAlign));
-            }
-        }
-        */
 
         /// <summary>
         /// Indicates the "politeness" level that a client should use
@@ -1215,37 +1207,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  This Function returns the number of lines in the label Text.
-        /// </summary>
-        /* FxCop rule 'AvoidBuildingNonCallableCode' - Left here in case it is needed in the future.
-        private ArrayList GetLines() {
-            string text = Text;
-            ArrayList list = new ArrayList();
-
-            int lineStart = 0;
-            while (lineStart < text.Length) {
-                int lineEnd = lineStart;
-                for (; lineEnd < text.Length; lineEnd++) {
-                    char c = text[lineEnd];
-                    if (c == '\r' || c == '\n')
-                        break;
-                }
-
-                string line = text.Substring(lineStart, lineEnd - lineStart);
-                list.Add(line);
-
-                // Treat "\r", "\r\n", and "\n" as new lines
-                if (lineEnd < text.Length && text[lineEnd] == '\r')
-                    lineEnd++;
-                if (lineEnd < text.Length && text[lineEnd] == '\n')
-                    lineEnd++;
-
-                lineStart = lineEnd;
-            }
-            return list;
-        }
-        */
         private Size GetBordersAndPadding()
         {
             Size bordersAndPadding = Padding.Size;
@@ -1411,15 +1372,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This method is required because the Label constructor needs to know if the control is OwnerDraw but it should
-        ///  not call the virtual property for the following reason (from FxCop rule 'ConstructorsShouldNotCallBaseClassVirtualMethods'):
-        ///  Virtual methods defined on the class should not be called from constructors. If a derived class has overridden
-        ///  the method, the derived class version will be called (before the derived class constructor is called).
+        /// This method is required because the Label constructor needs to know if the control is
+        /// OwnerDraw but it should not call the virtual property because if a derived class has
+        /// overridden the method, the derived class version will be called (before the derived
+        /// class constructor is called).
         /// </summary>
-        internal bool IsOwnerDraw()
-        {
-            return FlatStyle != FlatStyle.System;
-        }
+        private bool IsOwnerDraw() => FlatStyle != FlatStyle.System;
 
         /// <summary>
         ///  Raises the <see cref='Control.OnMouseEnter'/> event.

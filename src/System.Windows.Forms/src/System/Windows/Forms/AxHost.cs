@@ -641,22 +641,6 @@ namespace System.Windows.Forms
             aboutBoxDelegate?.Invoke();
         }
 
-        //
-        /// <summary>
-        ///  Retrieves the OCX control flags.
-        /// </summary>
-#if false
-        // FxCop: Currently not used
-        [   Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        private int OcxFlags {
-            get {
-                return flags;
-            }
-        }
-#endif
-
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged
         {
@@ -1538,18 +1522,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-#if false
-        // FxCop: Currently not used
-        private void TransitionTo(int state) {
-            if (state > GetOcState()) {
-                TransitionUpTo(state);
-            }
-            else if (state < GetOcState()) {
-                TransitionDownTo(state);
-            }
-        }
-#endif
 
         private void TransitionDownTo(int state)
         {
@@ -3103,41 +3075,6 @@ namespace System.Windows.Forms
 
             return null;
         }
-
-#if false
-        // FxCop: Currently not used
-        private void CheckThreadingModel() {
-#if DEBUG
-            if (AxIgnoreTMSwitch.Enabled) return;
-#endif
-            if ((flags & AxFlags.IgnoreThreadModel) != 0) return;
-
-            bool singleThreaded = true;
-
-            try {
-                using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString() + "\\InprocServer32", /*writable*/false)) {
-                    object value = rk.GetValue("ThreadingModel");
-
-                    if (value != null && value is string) {
-                        if (value.Equals("Both")
-                            || value.Equals("Apartment")
-                            || value.Equals("Free")) {
-
-                            singleThreaded = false;
-                        }
-                    }
-                }
-            }
-            catch (Exception t) {
-                Debug.Fail(t.ToString());
-                throw new InvalidOperationException(SR.AXNoThreadInfo);
-            }
-
-            if (singleThreaded) {
-                throw new InvalidOperationException(SR.AXSingleThreaded);
-            }
-        }
-#endif
 
         private void ActivateAxControl()
         {
@@ -5083,29 +5020,6 @@ namespace System.Windows.Forms
         }
 
         // Mapping functions:
-
-#if false
-        // FxCop: Currently not used
-        private static IntPtr CopyPalette(IntPtr hPal) {
-            if (hPal == IntPtr.Zero) return IntPtr.Zero;
-            int[] nEntries = new int[1];
-            UnsafeNativeMethods.GetObject(new HandleRef(null, hPal), 4, nEntries);
-            IntPtr memory = Marshal.AllocHGlobal(nEntries[0] * 4 + 8);
-            IntPtr ret = IntPtr.Zero;
-
-            try {
-                Marshal.WriteInt32(memory, 0, 0x300);
-                Marshal.WriteInt32(memory, 4, nEntries[0]);
-                SafeNativeMethods.GetPaletteEntries(new HandleRef(null, hPal), 0, nEntries[0], (IntPtr)((long)memory + 8));
-                ret = SafeNativeMethods.CreatePalette(new HandleRef(null, memory));
-            }
-            finally {
-                Marshal.FreeHGlobal(memory);
-            }
-            return ret;
-        }
-#endif
-
         private static object GetPICTDESCFromPicture(Image image)
         {
             if (image is Bitmap bmp)
@@ -6186,74 +6100,6 @@ namespace System.Windows.Forms
                 }
                 return null;
             }
-
-#if false
-            // FxCop: Currently not used
-            private void OnOldActiveControl(Control valueOld, Control valueNew) {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "onOAC called with old: "+valueOld.ToString()+" new: "+valueNew.ToString());
-                if (!(valueOld is AxHost)) return;
-                AxContainer c = FindContainerForControl(valueOld);
-                if (c != null) {
-                    c.OnOldActiveControlInternal(valueOld);
-                }
-                else {
-                    Debug.Fail("control w/o a container... pretty bad..."+valueOld.ToString());
-                }
-            }
-
-            // FxCop: Currently not used
-            private void OnOldActiveControlInternal(Control valueOld) {
-                if (siteUIActive == valueOld) siteUIActive.UiDeactivate();
-            }
-
-            // FxCop: Currently not used
-            private void OnNewActiveControl(Control value) {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "onNAC called with new: "+value.ToString());
-                if (!(value is AxHost)) return;
-                AxContainer c = FindContainerForControl(value);
-                if (c != null) {
-                    c.OnNewActiveControlInternal((AxHost)value);
-                }
-                else {
-                    Debug.Fail("control w/o a container... pretty bad..."+value.ToString());
-                }
-            }
-
-            // FxCop: Currently not used
-            private void OnNewActiveControlInternal(AxHost value) {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "New active control. siteUIActive is" +siteUIActive.ToString()+" Control is "+value.ToString());
-                if (siteUIActive != null && siteUIActive != value) {
-                    Debug.Fail("we should not have an ui active site on this container!"+parent.ToString());
-                    siteUIActive.UiDeactivate();
-                }
-#if DEBUG
-                if (siteUIActive != null && siteUIActive != value) Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Why is "+siteUIActive.ToString()+" still active?");
-                if (!value.CanUIActivate) Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "why can't "+value.ToString()+" be uiactivated?");
-#endif
-                if (siteUIActive == null && value.CanUIActivate) {
-                    // we need to uiactivate it ourselves...
-                    try {
-                        ((AxHost)value).UiActivate();
-                    }
-                    catch (Exception e) {
-                        Debug.Fail(e.ToString());
-                    }
-                }
-#if DEBUG
-                if (siteUIActive != parent.ActiveControl && value.CanUIActivate) {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "form's active control is "+parent.ActiveControl.ToString());
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "could not reconcile active controls... bad things loom on the horizon...");
-                }
-#endif
-                if (siteUIActive == null) {
-                    // so now the form thinks that value is the active control but it's not ui active...
-                    // this can often lead to bad things unless we are carefull...
-                    siteActive = value;
-                    // basically, when siteActive goes inplacedeactivate, we need to treat it the same as a
-                    // siteuiactive going uiactivedeactivate...
-                }
-            }
-#endif
 
             internal void OnInPlaceDeactivate(AxHost site)
             {
@@ -8177,24 +8023,6 @@ namespace System.Windows.Forms
                 valueMarshaller = values;
                 arraysFetched = false;
             }
-
-#if false
-            // FxCop: Currently not used
-            private string GetDisplayString(int dispid, ref bool success) {
-                NativeMethods.IPerPropertyBrowsing ppb = (NativeMethods.IPerPropertyBrowsing)owner.GetPerPropertyBrowsing();
-                string[] strVal = new string[1];
-                int hr = ppb.GetDisplayString(dispid, strVal);
-                if (hr == NativeMethods.S_OK) {
-                    success = (strVal[0] != null);
-                    //Debug.Assert(success, "IPerPropertyBrowsing::GetDisplayString returned NULL and S_OK -- this is not a valid state. This component does not property implement IPerPropertyBrowsing. (component class=" + TypeDescriptor.GetClassName(ppb) + ")");
-                    return strVal[0];
-                }
-                else {
-                    success = false;
-                }
-                return null;
-            }
-#endif
 
             protected override void PopulateArrays(string[] names, object[] values)
             {
