@@ -57,11 +57,11 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr SelectObject(HandleRef hDC, IntPtr hObject);
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int DrawTextW(HandleRef hDC, string lpszString, int nCount, ref RECT lpRect, int nFormat);
+        public static extern int DrawTextW(HandleRef hDC, string lpszString, int nCount, ref Interop.RECT lpRect, int nFormat);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
@@ -202,23 +202,6 @@ namespace System.Windows.Forms.Design
             [MarshalAs(UnmanagedType.I4)] public readonly IntPtr ptd = IntPtr.Zero;
 
             [MarshalAs(UnmanagedType.I4)] public readonly int tymed = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-
-            public RECT(int left, int top, int right, int bottom)
-            {
-                this.left = left;
-                this.top = top;
-                this.right = right;
-                this.bottom = bottom;
-            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -739,9 +722,6 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In] [Out] TV_HITTESTINFO lParam);
-
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
-        public static extern bool ExternalDeleteObject(HandleRef hObject);
 
         [StructLayout(LayoutKind.Sequential)]
         public class HDHITTESTINFO

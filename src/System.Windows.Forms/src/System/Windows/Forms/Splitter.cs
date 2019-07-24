@@ -742,22 +742,12 @@ namespace System.Windows.Forms
             IntPtr parentHandle = ParentInternal.Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(ParentInternal, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = SafeNativeMethods.SelectObject(new HandleRef(ParentInternal, dc), new HandleRef(null, halftone));
+            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(ParentInternal, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            SafeNativeMethods.SelectObject(new HandleRef(ParentInternal, dc), new HandleRef(null, saveBrush));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, halftone));
-            UnsafeNativeMethods.ReleaseDC(new HandleRef(ParentInternal, parentHandle), new HandleRef(null, dc));
+            Interop.Gdi32.SelectObject(dc, saveBrush);
+            Interop.Gdi32.DeleteObject(halftone);
+            Interop.Gdi32.ReleaseDC(new HandleRef(ParentInternal, parentHandle), dc);
         }
-
-        /// <summary>
-        ///  Raises a splitter event
-        /// </summary>
-        /* No one seems to be calling this, so it is okay to comment it out
-        private void RaiseSplitterEvent(object key, SplitterEventArgs spevent) {
-            SplitterEventHandler handler = (SplitterEventHandler)Events[key];
-            if (handler != null) handler(this, spevent);
-        }
-        */
 
         /// <summary>
         ///  Finds the target of the splitter. The target of the splitter is the

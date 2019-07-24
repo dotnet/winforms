@@ -630,7 +630,7 @@ namespace System.Windows.Forms
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
-                        NativeMethods.RECT rootHwndClientArea = new NativeMethods.RECT();
+                        Interop.RECT rootHwndClientArea = new Interop.RECT();
                         UnsafeNativeMethods.GetClientRect(rootHwnd, ref rootHwndClientArea);
 
                         // map the size grip FROM statusStrip coords TO the toplevel window coords.

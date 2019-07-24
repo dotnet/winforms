@@ -976,7 +976,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
+                Interop.RECT rect = new Interop.RECT();
 
                 if (IsHandleCreated)
                 {

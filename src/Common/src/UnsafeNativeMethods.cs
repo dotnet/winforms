@@ -333,9 +333,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, SetLastError = true)]
         public static extern bool CloseHandle(HandleRef handle);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr CreateCompatibleDC(HandleRef hDC);
-
         #region SendKeys SendInput functionality
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -457,7 +454,7 @@ namespace System.Windows.Forms
         public static extern IntPtr FindWindow(string className, string windowName);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, [In, Out] ref NativeMethods.RECT rect, int cPoints);
+        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Interop.RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, [In, Out] NativeMethods.POINT pt, int cPoints);
@@ -625,8 +622,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, [In, Out] ref NativeMethods.RECT lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
+        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, ref Interop.RECT lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, ref short wParam, ref short lParam);
@@ -637,8 +634,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, [In, Out] ref NativeMethods.RECT lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
+        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, ref Interop.RECT lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, [In, Out] ref Rectangle lParam);
@@ -654,8 +651,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(HandleRef hWnd, HandleRef hWndParent);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetWindowRect(HandleRef hWnd, [In, Out] ref NativeMethods.RECT rect);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern bool GetWindowRect(HandleRef hWnd, ref Interop.RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
@@ -717,7 +714,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
         private unsafe static extern bool SystemParametersInfoW(uint uiAction, uint uiParam, void* pvParam, uint fWinIni);
 
-        public unsafe static bool SystemParametersInfoW(uint uiAction, ref NativeMethods.RECT rect)
+        public unsafe static bool SystemParametersInfoW(uint uiAction, ref Interop.RECT rect)
         {
             fixed (void* p = &rect)
             {
@@ -892,16 +889,7 @@ namespace System.Windows.Forms
         public static extern bool EndPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr GetDC(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateDC(string lpszDriver, string lpszDeviceName, string lpszOutput, HandleRef devMode);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool SystemParametersInfo(int nAction, int nParam, [In, Out] IntPtr[] rc, int nUpdate);
@@ -911,9 +899,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Shell32, ExactSpelling = true, CharSet = CharSet.Ansi)]
         public static extern void DragAcceptFiles(HandleRef hWnd, bool fAccept);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetDeviceCaps(HandleRef hDC, int nIndex);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, NativeMethods.SCROLLINFO si);
@@ -1035,7 +1020,7 @@ namespace System.Windows.Forms
         public static extern IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ClipCursor(ref NativeMethods.RECT rcClip);
+        public static extern bool ClipCursor(ref Interop.RECT rcClip);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool ClipCursor(NativeMethods.COMRECT rcClip);
@@ -1055,9 +1040,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindow(HandleRef hWnd);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool DeleteDC(HandleRef hDC);
-
         public const int LAYOUT_RTL = 0x00000001;
         public const int LAYOUT_BITMAPORIENTATIONPRESERVED = 0x00000008;
 
@@ -1073,8 +1055,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr PostMessage(HandleRef hwnd, int msg, int wparam, IntPtr lparam);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetClientRect(HandleRef hWnd, [In, Out] ref NativeMethods.RECT rect);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern bool GetClientRect(HandleRef hWnd, ref Interop.RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetClientRect(HandleRef hWnd, IntPtr rect);
@@ -1137,9 +1119,9 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);
 
-        public unsafe static NativeMethods.RECT[] GetRectsFromRegion(IntPtr hRgn)
+        public unsafe static Interop.RECT[] GetRectsFromRegion(IntPtr hRgn)
         {
-            NativeMethods.RECT[] regionRects = null;
+            Interop.RECT[] regionRects = null;
             IntPtr pBytes = IntPtr.Zero;
             try
             {
@@ -1156,17 +1138,17 @@ namespace System.Windows.Forms
                         NativeMethods.RGNDATAHEADER* pRgnDataHeader = (NativeMethods.RGNDATAHEADER*)pBytes;
                         if (pRgnDataHeader->iType == 1)
                         {    // expecting RDH_RECTANGLES
-                            regionRects = new NativeMethods.RECT[pRgnDataHeader->nCount];
+                            regionRects = new Interop.RECT[pRgnDataHeader->nCount];
 
                             Debug.Assert(regionDataSize == pRgnDataHeader->cbSizeOfStruct + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                            Debug.Assert(Marshal.SizeOf<NativeMethods.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
+                            Debug.Assert(Marshal.SizeOf<Interop.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
 
                             // use the header size as the offset, and cast each rect in.
                             int rectStart = pRgnDataHeader->cbSizeOfStruct;
                             for (int i = 0; i < pRgnDataHeader->nCount; i++)
                             {
                                 // use some fancy pointer math to just copy the rect bits directly into the array.
-                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<NativeMethods.RECT>() * i)));
+                                regionRects[i] = *((Interop.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<Interop.RECT>() * i)));
                             }
                         }
                     }
@@ -6722,21 +6704,21 @@ namespace System.Windows.Forms
 
             void SetRect(
                  [In]
-                    ref NativeMethods.RECT prcView);
+                    ref Interop.RECT prcView);
 
             void GetRect(
                  [In, Out]
-                    ref NativeMethods.RECT prcView);
+                    ref Interop.RECT prcView);
 
             void SetRectComplex(
                  [In]
-                    NativeMethods.RECT prcView,
+                    Interop.RECT prcView,
                  [In]
-                    NativeMethods.RECT prcHScroll,
+                    Interop.RECT prcHScroll,
                  [In]
-                    NativeMethods.RECT prcVScroll,
+                    Interop.RECT prcVScroll,
                  [In]
-                    NativeMethods.RECT prcSizeBox);
+                    Interop.RECT prcSizeBox);
 
             void Show(bool fShow);
 

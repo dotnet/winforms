@@ -495,7 +495,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
+                Interop.RECT rect = new Interop.RECT();
                 SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect);
                 SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rect, false);
             }

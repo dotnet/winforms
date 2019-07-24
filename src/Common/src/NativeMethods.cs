@@ -17,14 +17,6 @@ namespace System.Windows.Forms
         public const int BITMAPINFO_MAX_COLORSIZE = 256;
         public const int BI_BITFIELDS = 3;
 
-        public enum RegionFlags
-        {
-            ERROR = 0,
-            NULLREGION = 1,
-            SIMPLEREGION = 2,
-            COMPLEXREGION = 3,
-        }
-
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
         public const int
@@ -138,7 +130,6 @@ namespace System.Windows.Forms
         public const int BCM_GETIDEALSIZE = 0x1601,
         BI_RGB = 0,
         BS_PATTERN = 3,
-        BITSPIXEL = 12,
         BDR_RAISEDOUTER = 0x0001,
         BDR_SUNKENOUTER = 0x0002,
         BDR_RAISEDINNER = 0x0004,
@@ -640,9 +631,7 @@ namespace System.Windows.Forms
         public const int KEYEVENTF_KEYUP = 0x0002;
         public const int KEYEVENTF_UNICODE = 0x0004;
 
-        public const int LOGPIXELSX = 88,
-        LOGPIXELSY = 90,
-        LB_ERR = (-1),
+        public const int LB_ERR = (-1),
         LB_ERRSPACE = (-2),
         LBN_SELCHANGE = 1,
         LBN_DBLCLK = 2,
@@ -1130,7 +1119,6 @@ namespace System.Windows.Forms
         PSD_NONETWORKBUTTON = 0x00200000,
         PS_SOLID = 0,
         PS_DOT = 2,
-        PLANES = 14,
         PRF_CHECKVISIBLE = 0x00000001,
         PRF_NONCLIENT = 0x00000002,
         PRF_CLIENT = 0x00000004,
@@ -1180,9 +1168,6 @@ namespace System.Windows.Forms
 
         public const int RPC_E_CHANGED_MODE = unchecked((int)0x80010106),
             RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D),
-            RGN_AND = 1,
-            RGN_XOR = 3,
-            RGN_DIFF = 4,
             RDW_INVALIDATE = 0x0001,
             RDW_ERASE = 0x0004,
             RDW_ALLCHILDREN = 0x0080,
@@ -2007,7 +1992,7 @@ namespace System.Windows.Forms
             internal POINT pt;
             internal int clrForeground = -1;
             internal int clrBackground = -1;
-            internal RECT rcMargins = RECT.FromXYWH(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
+            internal Interop.RECT rcMargins = new Interop.RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
             internal string pszFont = null;
         }
 
@@ -2032,8 +2017,8 @@ namespace System.Windows.Forms
         public class MONITORINFOEX
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFOEX>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
+            internal Interop.RECT rcMonitor = new Interop.RECT();
+            internal Interop.RECT rcWork = new Interop.RECT();
             internal int dwFlags = 0;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
             internal char[] szDevice = new char[32];
@@ -2043,8 +2028,8 @@ namespace System.Windows.Forms
         public class MONITORINFO
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFO>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
+            internal Interop.RECT rcMonitor = new Interop.RECT();
+            internal Interop.RECT rcWork = new Interop.RECT();
             internal int dwFlags = 0;
         }
 
@@ -2308,40 +2293,6 @@ namespace System.Windows.Forms
         }
 
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-
-            public RECT(int left, int top, int right, int bottom)
-            {
-                this.left = left;
-                this.top = top;
-                this.right = right;
-                this.bottom = bottom;
-            }
-
-            public RECT(Rectangle r)
-            {
-                left = r.Left;
-                top = r.Top;
-                right = r.Right;
-                bottom = r.Bottom;
-            }
-
-            public static implicit operator Rectangle(RECT r)
-                => Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
-
-            public static RECT FromXYWH(int x, int y, int width, int height)
-                => new RECT(x, y, x + width, y + height);
-
-            public Size Size
-                => new Size(right - left, bottom - top);
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct MARGINS
@@ -2822,13 +2773,13 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class ICONINFO
+        public struct ICONINFO
         {
-            public int fIcon = 0;
-            public int xHotspot = 0;
-            public int yHotspot = 0;
-            public IntPtr hbmMask = IntPtr.Zero;
-            public IntPtr hbmColor = IntPtr.Zero;
+            public int fIcon;
+            public int xHotspot;
+            public int yHotspot;
+            public IntPtr hbmMask;
+            public IntPtr hbmColor;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3830,7 +3781,7 @@ namespace System.Windows.Forms
             public int uFlags;
             public IntPtr hwnd;
             public IntPtr uId;
-            public RECT rect;
+            public Interop.RECT rect;
             public IntPtr hinst = IntPtr.Zero;
             public string lpszText;
             public IntPtr lParam = IntPtr.Zero;
@@ -3843,7 +3794,7 @@ namespace System.Windows.Forms
             public int uFlags;
             public IntPtr hwnd;
             public IntPtr uId;
-            public RECT rect;
+            public Interop.RECT rect;
             public IntPtr hinst = IntPtr.Zero;
             public IntPtr lpszText;
             public IntPtr lParam = IntPtr.Zero;
@@ -4082,7 +4033,7 @@ namespace System.Windows.Forms
             public int itemState = 0;
             public IntPtr hwndItem = IntPtr.Zero;
             public IntPtr hDC = IntPtr.Zero;
-            public RECT rcItem;
+            public Interop.RECT rcItem;
             public IntPtr itemData = IntPtr.Zero;
         }
 
@@ -4258,7 +4209,7 @@ namespace System.Windows.Forms
             public NMHDR nmcd;
             public int dwDrawStage;
             public IntPtr hdc;
-            public RECT rc;
+            public Interop.RECT rc;
             public IntPtr dwItemSpec;
             public int uItemState;
             public IntPtr lItemlParam;
@@ -4321,7 +4272,7 @@ namespace System.Windows.Forms
             public int iPartId;
             public int iStateId;
             // Group Custom Draw
-            public RECT rcText;
+            public Interop.RECT rcText;
             public uint uAlign;
         }
 
@@ -4500,7 +4451,7 @@ namespace System.Windows.Forms
             public int dwFlags;
             public SIZE sizeTile;
             public int cLines;
-            public RECT rcLabelMargin;
+            public Interop.RECT rcLabelMargin;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -4781,7 +4732,7 @@ namespace System.Windows.Forms
             public int iType;
             public int nCount;
             public int nRgnSize;
-            // public NativeMethods.RECT rcBound; // Note that we don't define this field as part of the marshaling
+            // public Interop.RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -4882,7 +4833,7 @@ namespace System.Windows.Forms
         public class REQRESIZE
         {
             public NMHDR nmhdr;
-            public RECT rc;
+            public Interop.RECT rc;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -5717,8 +5668,8 @@ namespace System.Windows.Forms
         // Windows 7: this value requires KB2533623 to be installed.
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] ref RECT rect, int cPoints);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Interop.RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] POINT pt, int cPoints);
@@ -5741,17 +5692,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
-        public static extern bool DeleteObject(IntPtr hObject);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
-
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
-        public static extern IntPtr CreateRectRgn(int x1, int y1, int x2, int y2);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern bool GetUpdateRect(IntPtr hwnd, ref Interop.RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCursor();

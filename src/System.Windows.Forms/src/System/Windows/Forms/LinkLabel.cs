@@ -420,7 +420,7 @@ namespace System.Windows.Forms
                         // We want to instantly change the cursor if the mouse is within our bounds.
                         // This includes the case where the mouse is over one of our children
                         NativeMethods.POINT p = new NativeMethods.POINT();
-                        NativeMethods.RECT r = new NativeMethods.RECT();
+                        Interop.RECT r = new Interop.RECT();
                         UnsafeNativeMethods.GetCursorPos(p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 

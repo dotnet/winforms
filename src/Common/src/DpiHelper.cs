@@ -39,12 +39,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr hDC = UnsafeNativeMethods.GetDC(CAPS.NullHandleRef);
+            IntPtr hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
             if (hDC != IntPtr.Zero)
             {
-                s_deviceDpi = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), CAPS.LOGPIXELSX);
-
-                UnsafeNativeMethods.ReleaseDC(CAPS.NullHandleRef, new HandleRef(null, hDC));
+                s_deviceDpi = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSX);
+                Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
             }
             s_isInitialized = true;
         }

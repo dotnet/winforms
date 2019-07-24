@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
-    public static partial class User32
+    internal static partial class User32
     {
         [DllImport(Libraries.User32)]
         public static extern int GetWindowTextLengthW(HandleRef hWnd);

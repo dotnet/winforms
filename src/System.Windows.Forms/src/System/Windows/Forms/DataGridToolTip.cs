@@ -66,7 +66,7 @@ namespace System.Windows.Forms
             toolInfo.hwnd = dataGrid.Handle;
             toolInfo.uId = toolTipId;
             toolInfo.lpszText = toolTipString ?? throw new ArgumentNullException(nameof(toolTipString));
-            toolInfo.rect = NativeMethods.RECT.FromXYWH(iconBounds.X, iconBounds.Y, iconBounds.Width, iconBounds.Height);
+            toolInfo.rect = iconBounds;
             toolInfo.uFlags = NativeMethods.TTF_SUBCLASS;
             UnsafeNativeMethods.SendMessage(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.TTM_ADDTOOL, 0, toolInfo);
         }

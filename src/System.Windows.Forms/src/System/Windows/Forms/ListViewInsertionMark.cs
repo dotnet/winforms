@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
+                Interop.RECT rect = new Interop.RECT();
                 listView.SendMessage(NativeMethods.LVM_GETINSERTMARKRECT, 0, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }

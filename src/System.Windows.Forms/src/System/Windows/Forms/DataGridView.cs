@@ -376,7 +376,7 @@ namespace System.Windows.Forms
         private Hashtable pens;
         private Hashtable brushes;
 
-        private NativeMethods.RECT[] cachedScrollableRegion;
+        private Interop.RECT[] cachedScrollableRegion;
 
         // DataBinding
         private DataGridViewDataConnection dataConnection;
@@ -3204,7 +3204,7 @@ namespace System.Windows.Forms
                     scrollEventType = Columns.GetColumnCount(DataGridViewElementStates.Visible, displayedBandsInfo.FirstDisplayedScrollingCol, oldFirstVisibleScrollingCol) > 1 ? ScrollEventType.LargeDecrement : ScrollEventType.SmallDecrement;
                 }
 
-                NativeMethods.RECT[] rects = CreateScrollableRegion(rectTmp);
+                Interop.RECT[] rects = CreateScrollableRegion(rectTmp);
                 if (RightToLeftInternal)
                 {
                     change = -change;

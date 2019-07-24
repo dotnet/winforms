@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms
 
             if (window is Control associatedControl)
             {
-                var r = new NativeMethods.RECT();
+                var r = new Interop.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
 
                 Cursor currentCursor = Cursor.CurrentInternal;
@@ -1396,7 +1396,7 @@ namespace System.Windows.Forms
                 {
                     // Calculate the dimensions of the visible rectangle which
                     // is used to estimate the upper x,y of the tooltip placement
-                    NativeMethods.RECT visibleRect = new NativeMethods.RECT
+                    Interop.RECT visibleRect = new Interop.RECT
                     {
                         left = (r.left < screen.WorkingArea.Left) ? screen.WorkingArea.Left : r.left,
                         top = (r.top < screen.WorkingArea.Top) ? screen.WorkingArea.Top : r.top,
@@ -1490,7 +1490,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new NativeMethods.RECT();
+                var r = new Interop.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
@@ -1517,7 +1517,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new NativeMethods.RECT();
+                var r = new Interop.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
@@ -1539,7 +1539,7 @@ namespace System.Windows.Forms
 
             if (IsWindowActive(window))
             {
-                var r = new NativeMethods.RECT();
+                var r = new Interop.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms
 
             if (IsWindowActive(window))
             {
-                var r = new NativeMethods.RECT();
+                var r = new Interop.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
@@ -2050,7 +2050,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmMove()
         {
-            var r = new NativeMethods.RECT();
+            var r = new Interop.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
             var ti = new NativeMethods.TOOLINFO_TOOLTIP
             {
@@ -2119,7 +2119,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var r = new NativeMethods.RECT();
+                var r = new Interop.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(win, Control.GetSafeHandle(win)), ref r);
                 Point cursorLocation = Cursor.Position;
 
@@ -2150,7 +2150,7 @@ namespace System.Windows.Forms
         private void WmShow()
         {
             // Get the bounds.
-            var r = new NativeMethods.RECT();
+            var r = new Interop.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
             var ti = new NativeMethods.TOOLINFO_TOOLTIP

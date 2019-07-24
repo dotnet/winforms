@@ -131,7 +131,7 @@ namespace System.Windows.Forms
 
         private DataGridAddNewRow addNewRow = null;
         private LayoutData layout = new LayoutData();
-        private NativeMethods.RECT[] cachedScrollableRegion = null;
+        private Interop.RECT[] cachedScrollableRegion = null;
 
         // header namespace goo
         //
@@ -2495,17 +2495,17 @@ namespace System.Windows.Forms
                     EndEdit();
                 }
 
-                NativeMethods.RECT[] rects = CreateScrollableRegion(scroll);
+                Interop.RECT[] rects = CreateScrollableRegion(scroll);
                 ScrollRectangles(rects, change);
                 OnScroll(EventArgs.Empty);
             }
         }
 
-        private void ScrollRectangles(NativeMethods.RECT[] rects, int change)
+        private void ScrollRectangles(Interop.RECT[] rects, int change)
         {
             if (rects != null)
             {
-                NativeMethods.RECT scroll;
+                Interop.RECT scroll;
                 if (isRightToLeft())
                 {
                     change = -change;
@@ -6311,7 +6311,7 @@ namespace System.Windows.Forms
         ///  This method is invoked whenever the DataGrid needs
         ///  this scrollable region.
         /// </summary>
-        private NativeMethods.RECT[] CreateScrollableRegion(Rectangle scroll)
+        private Interop.RECT[] CreateScrollableRegion(Rectangle scroll)
         {
             if (cachedScrollableRegion != null)
             {
@@ -6425,11 +6425,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, halftone));
+            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, saveBrush));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, halftone));
-            UnsafeNativeMethods.ReleaseDC(new HandleRef(this, parentHandle), new HandleRef(this, dc));
+            Interop.Gdi32.SelectObject(dc, saveBrush);
+            Interop.Gdi32.DeleteObject(halftone);
+            Interop.Gdi32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -9604,7 +9604,7 @@ namespace System.Windows.Forms
                     rowsRect = Rectangle.Union(rowsRect, layout.RowHeaders);
                 }
 
-                NativeMethods.RECT scrollArea = NativeMethods.RECT.FromXYWH(rowsRect.X, rowsRect.Y, rowsRect.Width, rowsRect.Height);
+                Interop.RECT scrollArea = rowsRect;
                 SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, deltaY, ref scrollArea, ref scrollArea);
                 OnScroll(EventArgs.Empty);
 
@@ -9894,27 +9894,13 @@ namespace System.Windows.Forms
 
             if (visible)
             {
-                /*
-                RECT scrollArea = RECT.FromXYWH(underParentRows.X, underParentRows.Y, underParentRows.Width, underParentRows.Height);
-
-                Debug.WriteLineIf(CompModSwitches.DataGridParents.TraceVerbose, "DataGridParents: Making parent rows visible.");
-                SafeNativeMethods.ScrollWindow(this.Handle, 0, parentRowsRect.Height,
-                                     ref scrollArea, ref scrollArea);
-                */
-
                 layout.ParentRowsVisible = true;
-
                 PerformLayout();
-
                 Invalidate();
-
             }
             else
             {
-                // Rectangle scrollArea = Rectangle.Union(layout.ParentRows, underParentRows);
-                // RECT scrollRECT = RECT.FromXYWH(scrollArea.X, scrollArea.Y, scrollArea.Width, scrollArea.Height);
-
-                NativeMethods.RECT scrollRECT = NativeMethods.RECT.FromXYWH(underParentRows.X, underParentRows.Y - layout.ParentRows.Height, underParentRows.Width, underParentRows.Height + layout.ParentRows.Height);
+                Interop.RECT scrollRECT = new Rectangle(underParentRows.X, underParentRows.Y - layout.ParentRows.Height, underParentRows.Width, underParentRows.Height + layout.ParentRows.Height);
 
                 SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, -parentRowsRect.Height, ref scrollRECT, ref scrollRECT);
 

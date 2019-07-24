@@ -131,38 +131,30 @@ namespace System.Windows.Forms
             // GDI+ returns a DIBSECTION based HBITMAP. The clipboard deals well
             // only with bitmaps created using CreateCompatibleBitmap(). So, we
             // convert the DIBSECTION into a compatible bitmap.
-            //
             IntPtr hBitmap = bm.GetHbitmap();
 
             // Get the screen DC.
-            //
-            IntPtr hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
+            IntPtr hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
 
             // Create a compatible DC to render the source bitmap.
-            //
-            IntPtr dcSrc = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hDC));
-            IntPtr srcOld = SafeNativeMethods.SelectObject(new HandleRef(null, dcSrc), new HandleRef(bm, hBitmap));
+            IntPtr dcSrc = Interop.Gdi32.CreateCompatibleDC(hDC);
+            IntPtr srcOld = Interop.Gdi32.SelectObject(dcSrc, hBitmap);
 
             // Create a compatible DC and a new compatible bitmap.
-            //
-            IntPtr dcDest = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hDC));
+            IntPtr dcDest = Interop.Gdi32.CreateCompatibleDC(hDC);
             IntPtr hBitmapNew = SafeNativeMethods.CreateCompatibleBitmap(new HandleRef(null, hDC), bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            //
-            IntPtr destOld = SafeNativeMethods.SelectObject(new HandleRef(null, dcDest), new HandleRef(null, hBitmapNew));
+            IntPtr destOld = Interop.Gdi32.SelectObject(dcDest, hBitmapNew);
             SafeNativeMethods.BitBlt(new HandleRef(null, dcDest), 0, 0, bm.Size.Width, bm.Size.Height, new HandleRef(null, dcSrc), 0, 0, 0x00CC0020);
 
             // Clear the source and destination compatible DCs.
-            //
-            SafeNativeMethods.SelectObject(new HandleRef(null, dcSrc), new HandleRef(null, srcOld));
-            SafeNativeMethods.SelectObject(new HandleRef(null, dcDest), new HandleRef(null, destOld));
+            Interop.Gdi32.SelectObject(dcSrc, srcOld);
+            Interop.Gdi32.SelectObject(dcDest, destOld);
 
-            UnsafeNativeMethods.DeleteDC(new HandleRef(null, dcSrc));
-            UnsafeNativeMethods.DeleteDC(new HandleRef(null, dcDest));
-            UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
-
-            SafeNativeMethods.DeleteObject(new HandleRef(bm, hBitmap));
+            Interop.Gdi32.DeleteDC(dcSrc);
+            Interop.Gdi32.DeleteDC(dcDest);
+            Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
 
             return hBitmapNew;
         }
@@ -535,30 +527,13 @@ namespace System.Windows.Forms
                     }
                     else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
                     {
-                        if (format.Equals(DataFormats.Bitmap) && data is Bitmap)
+                        if (format.Equals(DataFormats.Bitmap) && data is Bitmap bm
+                            && bm != null)
                         {
                             // save bitmap
-                            //
-                            Bitmap bm = (Bitmap)data;
-                            if (bm != null)
-                            {
-                                medium.unionmember = GetCompatibleBitmap(bm);
-                            }
+                            medium.unionmember = GetCompatibleBitmap(bm);
                         }
                     }
-                    /*
-                    else if ((formatetc.tymed & TYMED.TYMED_ENHMF) != 0) {
-                        if (format.Equals(DataFormats.EnhancedMetafile)
-                            && data is Metafile) {
-                            // save metafile
-
-                            Metafile mf = (Metafile)data;
-                            if (mf != null) {
-                                medium.unionmember = mf.Handle;
-                            }
-                        }
-                    }
-                    */
                     else
                     {
                         Marshal.ThrowExceptionForHR(DV_E_TYMED);
@@ -1510,24 +1485,20 @@ namespace System.Windows.Forms
 
                 if (medium.unionmember != IntPtr.Zero)
                 {
-
-                    if (format.Equals(DataFormats.Bitmap)
-                    //||format.Equals(DataFormats.Dib))
-                    )
+                    if (format.Equals(DataFormats.Bitmap))
                     {
                         // as/urt 140870 -- GDI+ doesn't own this HBITMAP, but we can't
                         // delete it while the object is still around.  So we have to do the really expensive
                         // thing of cloning the image so we can release the HBITMAP.
-                        //
 
-                        //This bitmap is created by the com object which originally copied the bitmap to tbe
-                        //clipboard. We call Add here, since DeleteObject calls Remove.
+                        // This bitmap is created by the com object which originally copied the bitmap to tbe
+                        // clipboard. We call Add here, since DeleteObject calls Remove.
                         Image clipboardImage = Image.FromHbitmap(medium.unionmember);
                         if (clipboardImage != null)
                         {
                             Image firstImage = clipboardImage;
                             clipboardImage = (Image)clipboardImage.Clone();
-                            SafeNativeMethods.DeleteObject(new HandleRef(null, medium.unionmember));
+                            Interop.Gdi32.DeleteObject(medium.unionmember);
                             firstImage.Dispose();
                         }
                         data = clipboardImage;

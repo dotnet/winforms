@@ -784,9 +784,8 @@ namespace System.Windows.Forms
 
             if (xDelta != 0 || yDelta != 0 && IsHandleCreated)
             {
-                Rectangle cr = ClientRectangle;
-                NativeMethods.RECT rcClip = NativeMethods.RECT.FromXYWH(cr.X, cr.Y, cr.Width, cr.Height);
-                NativeMethods.RECT rcUpdate = NativeMethods.RECT.FromXYWH(cr.X, cr.Y, cr.Width, cr.Height);
+                Interop.RECT rcClip = ClientRectangle;
+                Interop.RECT rcUpdate = ClientRectangle;
                 SafeNativeMethods.ScrollWindowEx(new HandleRef(this, Handle), xDelta, yDelta,
                                                  null,
                                                  ref rcClip,

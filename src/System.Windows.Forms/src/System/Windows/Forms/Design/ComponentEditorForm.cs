@@ -648,7 +648,7 @@ namespace System.Windows.Forms.Design
             private const int STATE_SELECTED = 1;
             private const int STATE_HOT = 2;
 
-            private IntPtr hbrushDither;
+            private IntPtr _hbrushDither;
 
             public PageSelector()
             {
@@ -679,7 +679,7 @@ namespace System.Windows.Forms.Design
 
             private void CreateDitherBrush()
             {
-                Debug.Assert(hbrushDither == IntPtr.Zero, "Brush should not be recreated.");
+                Debug.Assert(_hbrushDither == IntPtr.Zero, "Brush should not be recreated.");
 
                 short[] patternBits = new short[] {
                     unchecked((short)0xAAAA), unchecked((short)0x5555), unchecked((short)0xAAAA), unchecked((short)0x5555),
@@ -692,16 +692,16 @@ namespace System.Windows.Forms.Design
 
                 if (hbitmapTemp != IntPtr.Zero)
                 {
-                    hbrushDither = SafeNativeMethods.CreatePatternBrush(new HandleRef(null, hbitmapTemp));
+                    _hbrushDither = SafeNativeMethods.CreatePatternBrush(new HandleRef(null, hbitmapTemp));
 
-                    Debug.Assert(hbrushDither != IntPtr.Zero,
+                    Debug.Assert(_hbrushDither != IntPtr.Zero,
                                  "Unable to created dithered brush. Page selector UI will not be correct");
 
-                    SafeNativeMethods.DeleteObject(new HandleRef(null, hbitmapTemp));
+                    Interop.Gdi32.DeleteObject(hbitmapTemp);
                 }
             }
 
-            private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, NativeMethods.RECT rcIn,
+            private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, Interop.RECT rcIn,
                                         int state, int backColor, int textColor)
             {
                 Size size = new Size();
@@ -714,11 +714,12 @@ namespace System.Windows.Forms.Design
                 // when the item is being tracked
                 if ((state & STATE_HOT) != 0)
                 {
-                    hfontOld = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(Parent, ((Control)Parent).FontHandle));
+                    hfontOld = Interop.Gdi32.SelectObject(dc, Parent.FontHandle);
+                    GC.KeepAlive(Parent);
                 }
 
                 // Fill the background
-                if (((state & STATE_SELECTED) != 0) && (hbrushDither != IntPtr.Zero))
+                if (((state & STATE_SELECTED) != 0) && (_hbrushDither != IntPtr.Zero))
                 {
                     FillRectDither(dc, rcIn);
                     SafeNativeMethods.SetBkMode(new HandleRef(null, dc), NativeMethods.TRANSPARENT);
@@ -777,7 +778,7 @@ namespace System.Windows.Forms.Design
 
                 if (hfontOld != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, hfontOld));
+                    Interop.Gdi32.SelectObject(dc, hfontOld);
                 }
             }
 
@@ -791,7 +792,7 @@ namespace System.Windows.Forms.Design
                 itemHeight += 2 * PADDING_VERT;
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETITEMHEIGHT, itemHeight, 0);
 
-                if (hbrushDither == IntPtr.Zero)
+                if (_hbrushDither == IntPtr.Zero)
                 {
                     CreateDitherBrush();
                 }
@@ -846,16 +847,16 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleDestroyed(e);
 
-                if (!RecreatingHandle && (hbrushDither != IntPtr.Zero))
+                if (!RecreatingHandle && (_hbrushDither != IntPtr.Zero))
                 {
-                    SafeNativeMethods.DeleteObject(new HandleRef(this, hbrushDither));
-                    hbrushDither = IntPtr.Zero;
+                    Interop.Gdi32.DeleteObject(_hbrushDither);
+                    _hbrushDither = IntPtr.Zero;
                 }
             }
 
-            private void FillRectDither(IntPtr dc, NativeMethods.RECT rc)
+            private void FillRectDither(IntPtr dc, Interop.RECT rc)
             {
-                IntPtr hbrushOld = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(this, hbrushDither));
+                IntPtr hbrushOld = Interop.Gdi32.SelectObject(dc, _hbrushDither);
 
                 if (hbrushOld != IntPtr.Zero)
                 {

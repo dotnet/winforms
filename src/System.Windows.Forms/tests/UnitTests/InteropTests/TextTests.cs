@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests.InteropTests
             NativeMethods.LOGFONTW logFont = default;
             IntPtr handle = IntUnsafeNativeMethods.CreateFontIndirectW(ref logFont);
             Assert.NotEqual(IntPtr.Zero, handle);
-            Assert.True(NativeMethods.DeleteObject(handle));
+            Assert.True(Interop.Gdi32.DeleteObject(handle) != Interop.BOOL.FALSE);
         }
     }
 }

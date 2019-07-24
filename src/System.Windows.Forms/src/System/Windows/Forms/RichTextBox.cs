@@ -729,7 +729,7 @@ namespace System.Windows.Forms
                         {
                             if (hDC != IntPtr.Zero)
                             {
-                                UnsafeNativeMethods.DeleteDC(new HandleRef(null, hDC));
+                                Interop.Gdi32.DeleteDC(hDC);
                             }
                         }
                     }
@@ -3049,7 +3049,7 @@ namespace System.Windows.Forms
             bool release = false;
             if (hDC == IntPtr.Zero)
             {
-                hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
+                hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
                 release = true;
             }
             if (hDC == IntPtr.Zero)
@@ -3057,11 +3057,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            logPixelsX = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSX);
-            logPixelsY = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSY);
+            logPixelsX = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSX);
+            logPixelsY = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSY);
             if (release)
             {
-                UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
+                Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
             }
         }
 

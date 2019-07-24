@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Internal
                     break;
             }
 
-            NativeMethods.DeleteObject(handleToDelete);
+            Interop.Gdi32.DeleteObject(handleToDelete);
         }
 
         //
@@ -234,28 +234,6 @@ namespace System.Windows.Forms.Internal
         }
 
         /// <summary>
-        ///  CreateDC creates a DeviceContext object wrapping an hdc created with the Win32 CreateDC function.
-        /// </summary>
-        public static DeviceContext CreateDC(string driverName, string deviceName, string fileName, HandleRef devMode)
-        {
-            // Note: All input params can be null but not at the same time.  See MSDN for information.
-
-            IntPtr hdc = UnsafeNativeMethods.CreateDC(driverName, deviceName, fileName, devMode);
-            return new DeviceContext(hdc, DeviceContextType.NamedDevice);
-        }
-
-        /// <summary>
-        ///  CreateIC creates a DeviceContext object wrapping an hdc created with the Win32 CreateIC function.
-        /// </summary>
-        public static DeviceContext CreateIC(string driverName, string deviceName, string fileName, HandleRef devMode)
-        {
-            // Note: All input params can be null but not at the same time.  See MSDN for information.
-
-            IntPtr hdc = UnsafeNativeMethods.CreateIC(driverName, deviceName, fileName, devMode);
-            return new DeviceContext(hdc, DeviceContextType.Information);
-        }
-
-        /// <summary>
         ///  Creates a DeviceContext object wrapping a memory DC compatible with the specified device.
         /// </summary>
         public static DeviceContext FromCompatibleDC(IntPtr hdc)
@@ -264,7 +242,7 @@ namespace System.Windows.Forms.Internal
             // In this case the thread that calls CreateCompatibleDC owns the HDC that is created. When this thread is destroyed,
             // the HDC is no longer valid.
 
-            IntPtr compatibleDc = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hdc));
+            IntPtr compatibleDc = Interop.Gdi32.CreateCompatibleDC(hdc);
             return new DeviceContext(compatibleDc, DeviceContextType.Memory);
         }
 
@@ -327,8 +305,7 @@ namespace System.Windows.Forms.Internal
                     Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteHDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
 #endif
 
-                    UnsafeNativeMethods.DeleteDC(new HandleRef(this, hDC));
-
+                    Interop.Gdi32.DeleteDC(hDC);
                     hDC = IntPtr.Zero;
                     break;
 
@@ -339,8 +316,7 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                     Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
 #endif
-                    UnsafeNativeMethods.DeleteDC(new HandleRef(this, hDC));
-
+                    Interop.Gdi32.DeleteDC(hDC);
                     hDC = IntPtr.Zero;
                     break;
 
@@ -367,7 +343,7 @@ namespace System.Windows.Forms.Internal
 
                 // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved.
                 // For example, the default font is System.
-                hDC = UnsafeNativeMethods.GetDC(new HandleRef(this, hWnd));
+                hDC = Interop.Gdi32.GetDC(new HandleRef(this, hWnd));
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("hdc[0x{0:x8}]=DC.GetHdc(hWnd=0x{1:x8})", unchecked((int) this.hDC), unchecked((int) this.hWnd))));
 #endif
@@ -387,7 +363,7 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                 int retVal =
 #endif
-                UnsafeNativeMethods.ReleaseDC(new HandleRef(this, hWnd), new HandleRef(this, hDC));
+                Interop.Gdi32.ReleaseDC(new HandleRef(this, hWnd), new HandleRef(this, hDC));
                 // Note: retVal == 0 means it was not released but doesn't necessarily means an error; class or private DCs are never released.
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("[ret={0}]=DC.ReleaseDC(hDc=0x{1:x8}, hWnd=0x{2:x8})", retVal, unchecked((int) this.hDC), unchecked((int) this.hWnd))));

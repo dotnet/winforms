@@ -704,7 +704,7 @@ namespace System.Windows.Forms
                 {
                     // get the first visible button and get it's height
                     //
-                    NativeMethods.RECT rect = new NativeMethods.RECT();
+                    Interop.RECT rect = new Interop.RECT();
                     int firstVisible;
 
                     for (firstVisible = 0; firstVisible < buttons.Length; firstVisible++)
@@ -785,7 +785,7 @@ namespace System.Windows.Forms
                     else
                     {
 
-                        NativeMethods.RECT rect = new NativeMethods.RECT();
+                        Interop.RECT rect = new Interop.RECT();
 
                         for (int x = 0; x < buttonCount; x++)
                         {
@@ -1595,7 +1595,7 @@ namespace System.Windows.Forms
             Menu menu = tbb.DropDownMenu;
             if (menu != null)
             {
-                NativeMethods.RECT rc = new NativeMethods.RECT();
+                Interop.RECT rc = new Interop.RECT();
                 NativeMethods.TPMPARAMS tpm = new NativeMethods.TPMPARAMS();
 
                 SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);

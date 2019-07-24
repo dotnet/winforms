@@ -722,7 +722,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
             SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
             using (Graphics graphics = Graphics.FromHdcInternal(m.WParam))
             {

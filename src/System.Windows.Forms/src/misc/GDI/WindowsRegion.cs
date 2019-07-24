@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Internal
         private void CreateRegion(Rectangle rect)
         {
             Debug.Assert(nativeHandle == IntPtr.Zero, "nativeHandle should be null, we're leaking handle");
-            nativeHandle = SafeNativeMethods.CreateRectRgn(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height);
+            nativeHandle = Interop.Gdi32.CreateRectRgn(rect.X, rect.Y, rect.Right, rect.Bottom);
             ownHandle = true;
         }
 
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.Internal
 
                 if (ownHandle)
                 {
-                    NativeMethods.DeleteObject(nativeHandle);
+                    Interop.Gdi32.DeleteObject(nativeHandle);
                 }
 
                 nativeHandle = IntPtr.Zero;

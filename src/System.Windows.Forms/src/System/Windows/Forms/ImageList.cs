@@ -537,16 +537,18 @@ namespace System.Windows.Forms
                 }
             }
         }
-        // Adds bitmap to the Imagelist handle...
-        //
-        private int AddToHandle(Original original, Bitmap bitmap)
+
+        /// <summary>
+        ///  Add the given <paramref name="bitmap"/> to the <see cref="ImageList"/> handle.
+        /// </summary>
+        private int AddToHandle(Bitmap bitmap)
         {
             Debug.Assert(HandleCreated, "Calling AddToHandle when there is no handle");
             IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);   // Calls GDI to create Bitmap.
             IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask); // Calls GDI+ to create Bitmap. Need to add handle to HandleCollector.
-            int index = SafeNativeMethods.ImageList_Add(new HandleRef(this, Handle), new HandleRef(null, hBitmap), new HandleRef(null, hMask));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, hBitmap));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
+            int index = SafeNativeMethods.ImageList_Add(new HandleRef(this, Handle), hBitmap, hMask);
+            Interop.Gdi32.DeleteObject(hBitmap);
+            Interop.Gdi32.DeleteObject(hMask);
 
             if (index == -1)
             {
@@ -621,7 +623,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Bitmap bitmapValue = CreateBitmap(original, out bool ownsBitmap);
-                    AddToHandle(original, bitmapValue);
+                    AddToHandle(bitmapValue);
                     if (ownsBitmap)
                     {
                         bitmapValue.Dispose();
@@ -1278,9 +1280,9 @@ namespace System.Windows.Forms
                     {
                         IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                         IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
-                        bool ok = SafeNativeMethods.ImageList_Replace(new HandleRef(owner, owner.Handle), index, new HandleRef(null, hBitmap), new HandleRef(null, hMask));
-                        SafeNativeMethods.DeleteObject(new HandleRef(null, hBitmap));
-                        SafeNativeMethods.DeleteObject(new HandleRef(null, hMask));
+                        bool ok = SafeNativeMethods.ImageList_Replace(new HandleRef(owner, owner.Handle), index, hBitmap, hMask);
+                        Interop.Gdi32.DeleteObject(hBitmap);
+                        Interop.Gdi32.DeleteObject(hMask);
 
                         if (!ok)
                         {
@@ -1456,7 +1458,7 @@ namespace System.Windows.Forms
                     if (owner.HandleCreated)
                     {
                         Bitmap bitmapValue = owner.CreateBitmap(original, out bool ownsBitmap);
-                        index = owner.AddToHandle(original, bitmapValue);
+                        index = owner.AddToHandle(bitmapValue);
                         if (ownsBitmap)
                         {
                             bitmapValue.Dispose();

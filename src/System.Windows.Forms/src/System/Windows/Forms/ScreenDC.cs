@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Simple wrapper to create a screen HDC within a using statement.
     /// </summary>
-    internal struct ScreenDC : IDisposable
+    internal ref struct ScreenDC
     {
         private IntPtr _handle;
 
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         {
             return new ScreenDC
             {
-                _handle = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef)
+                _handle = Interop.Gdi32.GetDC(IntPtr.Zero)
             };
         }
 
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 
         public void Dispose()
         {
-            UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, _handle));
+            Interop.Gdi32.ReleaseDC(IntPtr.Zero, _handle);
         }
     }
 }

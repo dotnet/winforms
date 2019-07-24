@@ -42,12 +42,21 @@
     <Compile Include="..\..\Common\src\SpanHelpers.cs" Link="Common\SpanHelpers.cs" />
     <Compile Include="..\..\Common\src\UnsafeNativeMethods.cs" Link="System\Windows\Forms\UnsafeNativeMethods.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.BOOL.cs" Link="Interop\Interop.BOOL.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.RECT.cs" Link="Interop\Interop.RECT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateRectRgn.cs" Link="Interop\Gdi32\Interop.CreateRectRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDC.cs" Link="Interop\Gdi32\Interop.GetDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.RegionType.cs" Link="Interop\Gdi32\Interop.RegionType.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.ReleaseDC.cs" Link="Interop\Gdi32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
   </ItemGroup>
   <ItemGroup>

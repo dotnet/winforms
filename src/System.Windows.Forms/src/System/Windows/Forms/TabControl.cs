@@ -392,19 +392,15 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 // Null out cachedDisplayRect whenever we do anything to change it...
-                //
                 if (!cachedDisplayRect.IsEmpty)
                 {
                     return cachedDisplayRect;
                 }
 
-                Rectangle bounds = Bounds;
-                NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                Interop.RECT rect = Bounds;
 
                 // We force a handle creation here, because otherwise the DisplayRectangle will be wildly inaccurate
-                //
                 if (!IsDisposed)
                 {
                     // Since this is called thru the OnResize (and Layout) which is triggered by SetExtent if the TabControl is hosted as
@@ -422,7 +418,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Rectangle r = Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+                Rectangle r = rect;
 
                 Point p = Location;
                 r.X -= p.X;
@@ -1252,7 +1248,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = false;
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
 
             // normally, we would not want to create the handle for this, but since
             // it is dependent on the actual physical display, we simply must.

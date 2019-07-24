@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms
 
                                     // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
                                     // and compensate below
-                                    NativeMethods.RECT rcCheck = NativeMethods.RECT.FromXYWH(0, 0, fullSize.Width, fullSize.Height);
+                                    Interop.RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
                                     Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
                                     using (Graphics offscreen = Graphics.FromImage(bitmap))
                                     {

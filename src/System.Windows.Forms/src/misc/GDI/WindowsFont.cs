@@ -186,7 +186,7 @@ namespace System.Windows.Forms.Internal
                         Debug.Assert(Hfont != IntPtr.Zero, "Unexpected null hFont.");
                         DbgUtil.AssertFinalization(this, disposing);
 
-                        NativeMethods.DeleteObject(Hfont);
+                        Interop.Gdi32.DeleteObject(Hfont);
                         Hfont = IntPtr.Zero;
                         _ownHandle = false;
                         deletedHandle = true;
