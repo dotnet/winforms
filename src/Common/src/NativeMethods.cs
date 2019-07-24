@@ -4839,7 +4839,7 @@ namespace System.Windows.Forms
             OLECMDF_INVISIBLE = 0x00000010,
             OLECMDF_DEFHIDEONCTXTMENU = 0x00000020
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES
