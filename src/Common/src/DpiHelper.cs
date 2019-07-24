@@ -35,16 +35,10 @@ namespace System.Windows.Forms
         private static void Initialize()
         {
             if (s_isInitialized)
-            {
                 return;
-            }
 
-            IntPtr hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
-            if (hDC != IntPtr.Zero)
-            {
-                s_deviceDpi = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSX);
-                Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
-            }
+            using ScreenDC dc = ScreenDC.Create();
+            s_deviceDpi = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
             s_isInitialized = true;
         }
 

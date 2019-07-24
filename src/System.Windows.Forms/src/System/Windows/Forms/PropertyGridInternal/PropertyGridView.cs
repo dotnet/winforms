@@ -4423,7 +4423,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // The listbox draws with GDI, not GDI+.  So, we
                     // use a normal DC here.
 
-                    IntPtr hdc = Interop.Gdi32.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
+                    IntPtr hdc = Interop.User32.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
 
                     // This creates a copy of the given Font, and as such we need to 
                     IntPtr hFont = Font.ToHfont();

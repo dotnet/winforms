@@ -8,14 +8,9 @@ using System.Runtime.InteropServices;
 
 internal partial class Interop
 {
-    internal partial class Gdi32
+    internal partial class User32
     {
-        public enum RegionType
-        {
-            ERROR = 0,
-            NULLREGION = 1,
-            SIMPLEREGION = 2,
-            COMPLEXREGION = 3,
-        }
+        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true)]
+        public static extern RegionType GetUpdateRgn(IntPtr hWnd, IntPtr hRgn, bool bErase);
     }
 }

@@ -1296,16 +1296,15 @@ namespace System.Windows.Forms
         {
             if (logPixelsX == -1 || force)
             {
-                IntPtr hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
-                if (hDC == IntPtr.Zero)
+                using ScreenDC dc = ScreenDC.Create();
+                if (dc == IntPtr.Zero)
                 {
                     return NativeMethods.E_FAIL;
                 }
 
-                logPixelsX = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSX);
-                logPixelsY = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSY);
+                logPixelsX = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+                logPixelsY = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, $"log pixels are: {logPixelsX} {logPixelsY}");
-                Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
             }
 
             return NativeMethods.S_OK;

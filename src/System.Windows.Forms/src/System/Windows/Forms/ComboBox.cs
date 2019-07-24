@@ -3941,7 +3941,7 @@ namespace System.Windows.Forms
                             using (WindowsRegion wr = new WindowsRegion(Bounds))
                             {
                                 // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                                Interop.Gdi32.RegionType updateRegionFlags = Interop.User32.GetUpdateRgn(Handle, wr.HRegion, true);
+                                Interop.RegionType updateRegionFlags = Interop.User32.GetUpdateRgn(Handle, wr.HRegion, Interop.BOOL.TRUE);
 
                                 dr.CombineRegion(wr, dr, RegionCombineMode.DIFF);
 
@@ -3966,13 +3966,13 @@ namespace System.Windows.Forms
                                 {
                                     using (WindowsGraphics wg = new WindowsGraphics(mDC))
                                     {
-                                        if (updateRegionFlags != Interop.Gdi32.RegionType.ERROR)
+                                        if (updateRegionFlags != Interop.RegionType.ERROR)
                                         {
                                             wg.DeviceContext.SetClip(dr);
                                         }
                                         m.WParam = dc;
                                         DefWndProc(ref m);
-                                        if (updateRegionFlags != Interop.Gdi32.RegionType.ERROR)
+                                        if (updateRegionFlags != Interop.RegionType.ERROR)
                                         {
                                             wg.DeviceContext.SetClip(wr);
                                         }

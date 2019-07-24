@@ -299,7 +299,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
 
-                    if (Interop.Gdi32.CombineRgn(rgn1, rgn1, rgn2, Interop.Gdi32.RGN_DIFF) == 0)
+                    if (Interop.Gdi32.CombineRgn(rgn1, rgn1, rgn2, Interop.Gdi32.CombineMode.RGN_DIFF) == 0)
                     {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }

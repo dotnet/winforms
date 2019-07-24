@@ -457,7 +457,7 @@ namespace System.Windows.Forms.Design
         {
             //get the DC's and create our image
             HandleRef hWnd = new HandleRef(control, control.Handle);
-            IntPtr controlDC = Interop.Gdi32.GetDC(hWnd);
+            IntPtr controlDC = Interop.User32.GetDC(hWnd);
             image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
 
             using (Graphics gDest = Graphics.FromImage(image))

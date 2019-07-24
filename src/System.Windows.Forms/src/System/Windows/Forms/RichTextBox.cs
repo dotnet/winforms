@@ -3046,23 +3046,9 @@ namespace System.Windows.Forms
 
         private static void SetupLogPixels(IntPtr hDC)
         {
-            bool release = false;
-            if (hDC == IntPtr.Zero)
-            {
-                hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
-                release = true;
-            }
-            if (hDC == IntPtr.Zero)
-            {
-                return;
-            }
-
-            logPixelsX = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSX);
-            logPixelsY = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSY);
-            if (release)
-            {
-                Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
-            }
+            using ScreenDC dc = ScreenDC.Create();
+            logPixelsX = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+            logPixelsY = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
         }
 
         private static int Pixel2Twip(IntPtr hDC, int v, bool xDirection)

@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             IntPtr hBitmap = bm.GetHbitmap();
 
             // Get the screen DC.
-            IntPtr hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
+            IntPtr hDC = Interop.User32.GetDC(IntPtr.Zero);
 
             // Create a compatible DC to render the source bitmap.
             IntPtr dcSrc = Interop.Gdi32.CreateCompatibleDC(hDC);

@@ -414,8 +414,8 @@ namespace System.Windows.Forms
 
             Graphics tempGraphics = CreateGraphicsInternal();
             IntPtr dc = tempGraphics.GetHdc();
-            screendpi = new Point(Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.LOGPIXELSX),
-                                  Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.LOGPIXELSY));
+            screendpi = new Point(Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX),
+                                  Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY));
             tempGraphics.ReleaseHdcInternal(dc);
             tempGraphics.Dispose();
 

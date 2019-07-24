@@ -302,7 +302,7 @@ namespace System.Windows.Forms
             Size size = bitmap.Size;
 
             IntPtr colorMask = bitmap.GetHbitmap();
-            IntPtr hdcS = Interop.Gdi32.GetDC(IntPtr.Zero);
+            IntPtr hdcS = Interop.User32.GetDC(IntPtr.Zero);
             IntPtr source = Interop.Gdi32.CreateCompatibleDC(hdcS);
             IntPtr target = Interop.Gdi32.CreateCompatibleDC(hdcS);
             Interop.Gdi32.ReleaseDC(IntPtr.Zero, hdcS);

@@ -343,7 +343,7 @@ namespace System.Windows.Forms.Internal
 
                 // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved.
                 // For example, the default font is System.
-                hDC = Interop.Gdi32.GetDC(new HandleRef(this, hWnd));
+                hDC = Interop.User32.GetDC(new HandleRef(this, hWnd));
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("hdc[0x{0:x8}]=DC.GetHdc(hWnd=0x{1:x8})", unchecked((int) this.hDC), unchecked((int) this.hWnd))));
 #endif

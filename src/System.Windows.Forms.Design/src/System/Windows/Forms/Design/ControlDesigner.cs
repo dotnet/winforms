@@ -2040,7 +2040,7 @@ namespace System.Windows.Forms.Design
                     }
                     Interop.RECT clip = new Interop.RECT();
                     IntPtr hrgn = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
-                    Interop.User32.GetUpdateRgn(m.HWnd, hrgn, false);
+                    Interop.User32.GetUpdateRgn(m.HWnd, hrgn, Interop.BOOL.FALSE);
                     NativeMethods.GetUpdateRect(m.HWnd, ref clip, false);
                     Region r = Region.FromHrgn(hrgn);
                     Rectangle paintRect = Rectangle.Empty;

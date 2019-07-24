@@ -95,12 +95,8 @@ namespace System.Windows.Forms
             {
                 if (logPixelsX == -1)
                 {
-                    IntPtr hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
-                    if (hDC != IntPtr.Zero)
-                    {
-                        logPixelsX = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSX);
-                        Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
-                    }
+                    using ScreenDC dc = ScreenDC.Create();
+                    logPixelsX = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
                 }
                 return logPixelsX;
             }
@@ -113,12 +109,8 @@ namespace System.Windows.Forms
             {
                 if (logPixelsY == -1)
                 {
-                    IntPtr hDC = Interop.Gdi32.GetDC(IntPtr.Zero);
-                    if (hDC != IntPtr.Zero)
-                    {
-                        logPixelsY = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.LOGPIXELSY);
-                        Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
-                    }
+                    using ScreenDC dc = ScreenDC.Create();
+                    logPixelsY = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
                 }
                 return logPixelsY;
             }

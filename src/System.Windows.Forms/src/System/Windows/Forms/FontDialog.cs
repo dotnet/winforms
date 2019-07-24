@@ -530,11 +530,9 @@ namespace System.Windows.Forms
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             NativeMethods.LOGFONTW logFont;
 
-            using (ScreenDC dc = ScreenDC.Create())
-            using (Graphics graphics = Graphics.FromHdcInternal(dc))
-            {
-                logFont = NativeMethods.LOGFONTW.FromFont(Font, graphics);
-            }
+            using ScreenDC dc = ScreenDC.Create();
+            using Graphics graphics = Graphics.FromHdcInternal(dc);
+            logFont = NativeMethods.LOGFONTW.FromFont(Font, graphics);
 
             NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT
             {
@@ -621,13 +619,12 @@ namespace System.Windows.Forms
 
         private void UpdateFont(ref NativeMethods.LOGFONTW lf)
         {
-            using (ScreenDC dc = ScreenDC.Create())
-            using (Font fontInWorldUnits = Font.FromLogFont(lf, dc))
-            {
-                // The dialog claims its working in points (a device-independent unit),
-                // but actually gives us something in world units (device-dependent).
-                font = ControlPaint.FontInPoints(fontInWorldUnits);
-            }
+            using ScreenDC dc = ScreenDC.Create();
+            using Font fontInWorldUnits = Font.FromLogFont(lf, dc);
+
+            // The dialog claims its working in points (a device-independent unit),
+            // but actually gives us something in world units (device-dependent).
+            font = ControlPaint.FontInPoints(fontInWorldUnits);
         }
     }
 }

@@ -705,7 +705,7 @@ namespace System.Windows.Forms
                 IntPtr hClientRegion = Interop.Gdi32.CreateRectRgn(absoluteClientRectangle.left, absoluteClientRectangle.top, absoluteClientRectangle.right, absoluteClientRectangle.bottom);
                 IntPtr hNonClientRegion = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
 
-                Interop.Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Interop.Gdi32.RGN_XOR);
+                Interop.Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Interop.Gdi32.CombineMode.RGN_XOR);
 
                 // Call RedrawWindow with the region.
                 Interop.RECT ignored = default;

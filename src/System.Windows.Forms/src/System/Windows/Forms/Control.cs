@@ -10416,9 +10416,9 @@ namespace System.Windows.Forms
             try
             {
                 // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                Interop.Gdi32.RegionType selectResult = Interop.Gdi32.SelectClipRgn(hDC, hClippingRegion);
-                Debug.Assert((selectResult == Interop.Gdi32.RegionType.SIMPLEREGION ||
-                              selectResult == Interop.Gdi32.RegionType.NULLREGION),
+                Interop.RegionType selectResult = Interop.Gdi32.SelectClipRgn(hDC, hClippingRegion);
+                Debug.Assert((selectResult == Interop.RegionType.SIMPLEREGION ||
+                              selectResult == Interop.RegionType.NULLREGION),
                               "SIMPLEREGION or NULLLREGION expected.");
 
                 PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
@@ -13990,7 +13990,7 @@ namespace System.Windows.Forms
         private void WmQueryNewPalette(ref Message m)
         {
             Debug.WriteLineIf(PaletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
-            IntPtr dc = Interop.Gdi32.GetDC(new HandleRef(this, Handle));
+            IntPtr dc = Interop.User32.GetDC(new HandleRef(this, Handle));
             try
             {
                 SetUpPalette(dc, true /*force*/, true/*realize*/);
@@ -16648,10 +16648,9 @@ namespace System.Windows.Forms
                     if (logPixels.IsEmpty)
                     {
                         logPixels = new Point();
-                        IntPtr dc = Interop.Gdi32.GetDC(IntPtr.Zero);
-                        logPixels.X = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.LOGPIXELSX);
-                        logPixels.Y = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.LOGPIXELSY);
-                        Interop.Gdi32.ReleaseDC(IntPtr.Zero, dc);
+                        using ScreenDC dc = ScreenDC.Create();
+                        logPixels.X = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+                        logPixels.Y = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
                     }
                     return logPixels;
                 }
@@ -17675,7 +17674,7 @@ namespace System.Windows.Forms
                 }
 
                 IntPtr newRegion = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
-                Interop.Gdi32.CombineRgn(newRegion, region, clipRegion, Interop.Gdi32.RGN_DIFF);
+                Interop.Gdi32.CombineRgn(newRegion, region, clipRegion, Interop.Gdi32.CombineMode.RGN_DIFF);
                 Interop.Gdi32.DeleteObject(region);
                 return newRegion;
             }
@@ -19523,8 +19522,8 @@ namespace System.Windows.Forms
                 _destRect = new Interop.RECT(0, 0, size.Width, size.Height);
                 HDC = Interop.Gdi32.CreateCompatibleDC(IntPtr.Zero);
 
-                int planes = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.PLANES);
-                int bitsPixel = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.BITSPIXEL);
+                int planes = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.DeviceCapability.PLANES);
+                int bitsPixel = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.DeviceCapability.BITSPIXEL);
                 _hBitmap = SafeNativeMethods.CreateBitmap(size.Width, size.Height, planes, bitsPixel, IntPtr.Zero);
                 _hOriginalBmp = Interop.Gdi32.SelectObject(HDC, _hBitmap);
             }

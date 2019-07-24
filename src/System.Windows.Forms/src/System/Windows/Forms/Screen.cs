@@ -90,8 +90,8 @@ namespace System.Windows.Forms
             }
             hmonitor = monitor;
 
-            bitDepth = Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.BITSPIXEL);
-            bitDepth *= Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.PLANES);
+            bitDepth = Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.DeviceCapability.BITSPIXEL);
+            bitDepth *= Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.DeviceCapability.PLANES);
 
             if (hdc != screenDC)
             {

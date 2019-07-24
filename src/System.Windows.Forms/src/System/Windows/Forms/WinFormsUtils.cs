@@ -609,23 +609,23 @@ namespace System.Windows.Forms
                     success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, lastViewPort);
                     Debug.Assert(success, "SetViewportOrgEx() failed.");
 
-                    Interop.Gdi32.RegionType originalRegionType;
+                    Interop.RegionType originalRegionType;
                     if (result != 0)
                     {
                         // Get the origninal clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
                         Interop.RECT originalClipRect = new Interop.RECT();
                         originalRegionType = Interop.Gdi32.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
-                        Debug.Assert(originalRegionType != Interop.Gdi32.RegionType.ERROR, "ERROR returned from SelectClipRgn while selecting the original clipping region..");
+                        Debug.Assert(originalRegionType != Interop.RegionType.ERROR, "ERROR returned from SelectClipRgn while selecting the original clipping region..");
 
-                        if (originalRegionType == Interop.Gdi32.RegionType.SIMPLEREGION)
+                        if (originalRegionType == Interop.RegionType.SIMPLEREGION)
                         {
                             // Find the intersection of our clipping region and the current clipping region (our parent's)
                             //      Returns a NULLREGION, the two didn't intersect.
                             //      Returns a SIMPLEREGION, the two intersected
                             //      Resulting region (stuff that was in hOriginalClippingRegion AND hClippingRegion is placed in hClippingRegion
-                            Interop.Gdi32.RegionType combineResult = Interop.Gdi32.CombineRgn(hClippingRegion, hClippingRegion, hOriginalClippingRegion, Interop.Gdi32.RGN_AND);
-                            Debug.Assert((combineResult == Interop.Gdi32.RegionType.SIMPLEREGION) ||
-                                            (combineResult == Interop.Gdi32.RegionType.NULLREGION),
+                            Interop.RegionType combineResult = Interop.Gdi32.CombineRgn(hClippingRegion, hClippingRegion, hOriginalClippingRegion, Interop.Gdi32.CombineMode.RGN_AND);
+                            Debug.Assert((combineResult == Interop.RegionType.SIMPLEREGION) ||
+                                            (combineResult == Interop.RegionType.NULLREGION),
                                             "SIMPLEREGION or NULLREGION expected.");
                         }
                     }
@@ -635,13 +635,13 @@ namespace System.Windows.Forms
                         // We don't need to keep track of the original now, since it is empty.
                         Interop.Gdi32.DeleteObject(hOriginalClippingRegion);
                         hOriginalClippingRegion = IntPtr.Zero;
-                        originalRegionType = Interop.Gdi32.RegionType.SIMPLEREGION;
+                        originalRegionType = Interop.RegionType.SIMPLEREGION;
                     }
 
                     // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                    Interop.Gdi32.RegionType selectResult = Interop.Gdi32.SelectClipRgn(hDC, hClippingRegion);
-                    Debug.Assert((selectResult == Interop.Gdi32.RegionType.SIMPLEREGION ||
-                                  selectResult == Interop.Gdi32.RegionType.NULLREGION),
+                    Interop.RegionType selectResult = Interop.Gdi32.SelectClipRgn(hDC, hClippingRegion);
+                    Debug.Assert((selectResult == Interop.RegionType.SIMPLEREGION ||
+                                  selectResult == Interop.RegionType.NULLREGION),
                                   "SIMPLEREGION or NULLLREGION expected.");
 
                 }
