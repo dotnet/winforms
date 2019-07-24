@@ -7686,7 +7686,7 @@ namespace System.Windows.Forms
             ToggleState_On = 1,
             ToggleState_Indeterminate = 2
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [ComImport()]
         [ComVisible(true)]
@@ -7711,7 +7711,7 @@ namespace System.Windows.Forms
             RowOrColumnMajor_ColumnMajor = 1,
             RowOrColumnMajor_Indeterminate = 2
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [ComImport()]
         [ComVisible(true)]
