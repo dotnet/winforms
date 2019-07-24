@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms
         /// Defines the ToolStripControlHost AccessibleObject.
         /// </summary>
         [Runtime.InteropServices.ComVisible(true)]
-        public class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
+        internal class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripControlHost _ownerItem = null;
 
