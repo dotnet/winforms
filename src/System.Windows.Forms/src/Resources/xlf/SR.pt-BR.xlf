@@ -4544,6 +4544,11 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">O objeto Bitmap não oferece suporte direto ao formato de bitmap independente de dispositivo. Especifique a conversão automática ou execute SetData com o formato de dados Bitmap.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">Não foi possível encontrar a propriedade DataMember '{0}' na DataSource.</target>

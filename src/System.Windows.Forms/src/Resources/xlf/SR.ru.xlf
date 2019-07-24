@@ -4544,6 +4544,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Растровый объект непосредственно не поддерживает не зависящий от устройства растровый формат.  Используйте автоматическое приведение либо выполните SetData с растровым форматом данных.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">Свойство '{0}' для DataMember не найдено в DataSource.</target>
