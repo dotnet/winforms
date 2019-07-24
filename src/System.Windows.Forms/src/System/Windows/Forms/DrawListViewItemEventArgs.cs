@@ -16,8 +16,8 @@ namespace System.Windows.Forms
         /// </summary>
         public DrawListViewItemEventArgs(Graphics graphics, ListViewItem item, Rectangle bounds, int itemIndex, ListViewItemStates state)
         {
-            Graphics = graphics;
-            Item = item;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Item = item ?? throw new ArgumentNullException(nameof(item));
             Bounds = bounds;
             ItemIndex = itemIndex;
             State = state;
@@ -58,11 +58,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
-            if (Graphics == null || Item == null)
-            {
-                return;
-            }
-
             using (var backBrush = new SolidBrush(Item.BackColor))
             {
                 Graphics.FillRectangle(backBrush, Bounds);
@@ -75,11 +70,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawFocusRectangle()
         {
-            if (Graphics == null || Item == null)
-            {
-                return;
-            }
-
             if ((State & ListViewItemStates.Focused) == ListViewItemStates.Focused)
             {
                 ControlPaint.DrawFocusRectangle(Graphics, UpdateBounds(Bounds, drawText: false), Item.ForeColor, Item.BackColor);
@@ -89,21 +79,13 @@ namespace System.Windows.Forms
         /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details
         /// </summary>
-        public void DrawText()
-        {
-            DrawText(TextFormatFlags.Left);
-        }
+        public void DrawText() => DrawText(TextFormatFlags.Left);
 
         /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details - takes a TextFormatFlags argument.
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
-            if (Graphics == null || Item == null)
-            {
-                return;
-            }
-
             TextRenderer.DrawText(Graphics, Item.Text, Item.Font, UpdateBounds(Bounds, drawText: true), Item.ForeColor, flags);
         }
 

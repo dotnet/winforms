@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         public DrawToolTipEventArgs(Graphics graphics, IWin32Window associatedWindow, Control associatedControl, Rectangle bounds,
                                     string toolTipText, Color backColor, Color foreColor, Font font)
         {
-            Graphics = graphics;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             AssociatedWindow = associatedWindow;
             AssociatedControl = associatedControl;
             Bounds = bounds;
@@ -65,11 +65,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
-            if (Graphics == null)
-            {
-                return;
-            }
-
             using (var backBrush = new SolidBrush(_backColor))
             {
                 Graphics.FillRectangle(backBrush, Bounds);
@@ -90,11 +85,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
-            if (Graphics == null)
-            {
-                return;
-            }
-
             TextRenderer.DrawText(Graphics, ToolTipText, Font, Bounds, _foreColor, flags);
         }
 
@@ -103,11 +93,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBorder()
         {
-            if (Graphics == null)
-            {
-                return;
-            }
-
             ControlPaint.DrawBorder(Graphics, Bounds, SystemColors.WindowFrame, ButtonBorderStyle.Solid);
         }
     }

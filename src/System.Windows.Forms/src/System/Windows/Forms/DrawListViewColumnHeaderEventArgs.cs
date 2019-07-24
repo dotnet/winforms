@@ -20,7 +20,7 @@ namespace System.Windows.Forms
                                                  ColumnHeader header, ListViewItemStates state,
                                                  Color foreColor, Color backColor, Font font)
         {
-            Graphics = graphics;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             Bounds = bounds;
             ColumnIndex = columnIndex;
             Header = header;
@@ -80,11 +80,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
-            if (Graphics == null)
-            {
-                return;
-            }
-
             if (Application.RenderWithVisualStyles)
             {
                 var vsr = new VisualStyleRenderer(VisualStyleElement.Header.Item.Normal);
@@ -124,12 +119,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText()
         {
-            if (Graphics == null)
-            {
-                return;
-            }
-
-            HorizontalAlignment hAlign = Header.TextAlign;
+            HorizontalAlignment hAlign = Header?.TextAlign ?? HorizontalAlignment.Left;
             TextFormatFlags flags = (hAlign == HorizontalAlignment.Left) ? TextFormatFlags.Left :
                                     ((hAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter :
                                      TextFormatFlags.Right);
@@ -143,11 +133,6 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
-            if (Graphics == null)
-            {
-                return;
-            }
-
             string text = Header?.Text;
             int padding = TextRenderer.MeasureText(" ", Font).Width;
             Rectangle newBounds = Rectangle.Inflate(Bounds, -padding, 0);
