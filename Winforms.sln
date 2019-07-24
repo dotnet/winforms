@@ -135,6 +135,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiBindingSourceTests", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiPanelTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiPanelTests\MauiPanelTests.csproj", "{B4026413-5B13-448D-AAC0-4EF216AA4DC9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiPrintingSecurityChecksTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiPrintingSecurityChecksTests\MauiPrintingSecurityChecksTests.csproj", "{A4FADE94-1112-4C8D-ADC2-794086543BD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiResetItemTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiResetItemTests\MauiResetItemTests.csproj", "{9B9C0CB8-4F48-4D2E-8A4F-E6C07737F106}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -289,6 +293,14 @@ Global
 		{B4026413-5B13-448D-AAC0-4EF216AA4DC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4026413-5B13-448D-AAC0-4EF216AA4DC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4026413-5B13-448D-AAC0-4EF216AA4DC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4FADE94-1112-4C8D-ADC2-794086543BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4FADE94-1112-4C8D-ADC2-794086543BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4FADE94-1112-4C8D-ADC2-794086543BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4FADE94-1112-4C8D-ADC2-794086543BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B9C0CB8-4F48-4D2E-8A4F-E6C07737F106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B9C0CB8-4F48-4D2E-8A4F-E6C07737F106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B9C0CB8-4F48-4D2E-8A4F-E6C07737F106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B9C0CB8-4F48-4D2E-8A4F-E6C07737F106}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -335,6 +347,8 @@ Global
 		{BA8E0887-C84F-440A-AD1C-DA69D7C917FD} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{E61C9250-4064-46AE-BD63-11BD72E62E9C} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{B4026413-5B13-448D-AAC0-4EF216AA4DC9} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{A4FADE94-1112-4C8D-ADC2-794086543BD1} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{9B9C0CB8-4F48-4D2E-8A4F-E6C07737F106} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
