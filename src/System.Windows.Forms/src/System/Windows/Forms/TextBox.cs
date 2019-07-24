@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private bool fromHandleCreate = false;
         private StringSource stringSource = null;
-        private string placeholderText;
+        private string placeholderText = string.Empty;
 
         public TextBox()
         {
@@ -852,10 +852,10 @@ namespace System.Windows.Forms
         /// </summary>
         [
         Localizable(true),
-        DefaultValue(null),
+        DefaultValue(""),
         SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))
         ]
-        public string PlaceholderText
+        public virtual string PlaceholderText
         {
             get
             {
@@ -863,10 +863,18 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (value == null)
+                {
+                    value = string.Empty;
+                }
+
                 if (placeholderText != value)
                 {
                     placeholderText = value;
-                    Invalidate();
+                    if (IsHandleCreated)
+                    {
+                        Invalidate();
+                    }
                 }
             }
         }
@@ -957,10 +965,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if ((m.Msg == Interop.WindowMessages.WM_PAINT || m.Msg == Interop.WindowMessages.WM_KILLFOCUS) &&
-                 !GetStyle(ControlStyles.UserPaint) &&
-                   string.IsNullOrEmpty(Text) &&
-                   !Focused)
+            if (ShouldRenderPlaceHolderText(m))
             {
                 using (Graphics g = CreateGraphics())
                 {
@@ -969,18 +974,25 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance()
+        private bool ShouldRenderPlaceHolderText(in Message m) =>
+                    !string.IsNullOrEmpty(PlaceholderText) &&
+                    (m.Msg == Interop.WindowMessages.WM_PAINT || m.Msg == Interop.WindowMessages.WM_KILLFOCUS) &&
+                    !GetStyle(ControlStyles.UserPaint) &&
+                    !Focused &&
+                    TextLength == 0;
+
+        internal TestAccessor GetTestAccessor() => new TestAccessor(this);
+
+        internal readonly struct TestAccessor
         {
-            if (string.IsNullOrEmpty(Text))
+            private readonly TextBox _textBox;
+
+            public TestAccessor(TextBox textBox)
             {
-                AccessibleObject accessibleObject = base.CreateAccessibilityInstance();
-                accessibleObject.Value = PlaceholderText;
-                return accessibleObject;
+                _textBox = textBox;
             }
-            else
-            {
-                return base.CreateAccessibilityInstance();
-            }
+
+            public bool ShouldRenderPlaceHolderText(in Message m) => _textBox.ShouldRenderPlaceHolderText(m);
         }
 
     }
