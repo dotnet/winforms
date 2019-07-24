@@ -49,36 +49,43 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-
         public object Tag { get; set; }
 
         /// <summary>
-        /// Determines if the help provider can offer it's extender properties to the
-        /// specified target object.
+        /// Determines if the help provider can offer it's extender properties to the specified target
+        /// object.
         /// </summary>
-        public virtual bool CanExtend(object target)
-        {
-            return (target is Control);
-        }
+        public virtual bool CanExtend(object target) => target is Control;
 
         /// <summary>
-        /// Retrieves the Help Keyword displayed when the user invokes Help for the
-        /// specified control.
+        /// Retrieves the Help Keyword displayed when the user invokes Help for the specified control.
         /// </summary>
         [DefaultValue(null)]
         [Localizable(true)]
         [SRDescription(nameof(SR.HelpProviderHelpKeywordDescr))]
-        public virtual string GetHelpKeyword(Control ctl) => (string)_keywords[ctl];
+        public virtual string GetHelpKeyword(Control ctl)
+        {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+            
+            return (string)_keywords[ctl];
+        }
 
         /// <summary>
-        /// Retrieves the contents of the pop-up help window for the specified
-        /// control.
+        /// Retrieves the contents of the pop-up help window for the specified control.
         /// </summary>
         [DefaultValue(HelpNavigator.AssociateIndex)]
         [Localizable(true)]
         [SRDescription(nameof(SR.HelpProviderNavigatorDescr))]
         public virtual HelpNavigator GetHelpNavigator(Control ctl)
         {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+
             object nav = _navigators[ctl];
             return nav == null ? HelpNavigator.AssociateIndex : (HelpNavigator)nav;
         }
@@ -89,7 +96,15 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Localizable(true)]
         [SRDescription(nameof(SR.HelpProviderHelpStringDescr))]
-        public virtual string GetHelpString(Control ctl) => (string)_helpStrings[ctl];
+        public virtual string GetHelpString(Control ctl)
+        {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+            
+            return (string)_helpStrings[ctl];
+        }
 
         /// <summary>
         /// Retrieves a value indicating whether Help displays for the specified control.
@@ -98,6 +113,11 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderShowHelpDescr))]
         public virtual bool GetShowHelp(Control ctl)
         {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+
             object b = _showHelp[ctl];
             return b == null ? false : (bool)b;
         }
@@ -142,14 +162,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // So at this point we don't have a help keyword, so try to display
-            // the whats this help
+            // So at this point we don't have a help keyword, so try to display the whats this help
             if (!string.IsNullOrEmpty(helpString))
             {
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: back to helpstring");
                 Help.ShowPopup(ctl, helpString, hevent.MousePos);
                 hevent.Handled = true;
-                return;
             }
         }
 
@@ -159,7 +177,6 @@ namespace System.Windows.Forms
         private void OnQueryAccessibilityHelp(object sender, QueryAccessibilityHelpEventArgs e)
         {
             Control ctl = (Control)sender;
-
             e.HelpString = GetHelpString(ctl);
             e.HelpKeyword = GetHelpKeyword(ctl);
             e.HelpNamespace = HelpNamespace;
@@ -170,6 +187,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpString(Control ctl, string helpString)
         {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+
             _helpStrings[ctl] = helpString;
             if (!string.IsNullOrEmpty(helpString))
             {
@@ -184,6 +206,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpKeyword(Control ctl, string keyword)
         {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+            
             _keywords[ctl] = keyword;
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -198,6 +225,10 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpNavigator(Control ctl, HelpNavigator navigator)
         {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
             if (!ClientUtils.IsEnumValid(navigator, (int)navigator, (int)HelpNavigator.Topic, (int)HelpNavigator.TopicId))
             {
                 throw new InvalidEnumArgumentException(nameof(navigator), (int)navigator, typeof(HelpNavigator));
@@ -213,6 +244,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetShowHelp(Control ctl, bool value)
         {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+
             _showHelp[ctl] = value;
             UpdateEventBinding(ctl);
         }
@@ -220,12 +256,28 @@ namespace System.Windows.Forms
         /// <summary>
         /// Used by the designer
         /// </summary>
-        internal virtual bool ShouldSerializeShowHelp(Control ctl) => _showHelp.ContainsKey(ctl);
+        internal bool ShouldSerializeShowHelp(Control ctl)
+        {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+
+            return _showHelp.ContainsKey(ctl);
+        }
 
         /// <summary>
         /// Used by the designer
         /// </summary>
-        public virtual void ResetShowHelp(Control ctl) => _showHelp.Remove(ctl);
+        public virtual void ResetShowHelp(Control ctl)
+        {
+            if (ctl == null)
+            {
+                throw new ArgumentNullException(nameof(ctl));
+            }
+            
+            _showHelp.Remove(ctl);
+        }
 
         /// <summary>
         /// Binds/unbinds event handlers to ctl
