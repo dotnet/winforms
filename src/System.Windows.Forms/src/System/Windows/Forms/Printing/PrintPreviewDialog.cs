@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -26,7 +26,8 @@ namespace System.Windows.Forms
     public class PrintPreviewDialog : Form
     {
         readonly PrintPreviewControl previewControl;
-        private ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private ToolStripNumericUpDown pageCounterItem;
         private NumericUpDown pageCounter;
         private ToolStripButton printToolStripButton;
         private ToolStripSplitButton zoomToolStripSplitButton;
@@ -48,6 +49,7 @@ namespace System.Windows.Forms
         private ToolStripSeparator separatorToolStripSeparator1;
         private ToolStripButton closeToolStripButton;
         private ToolStripLabel pageToolStripLabel;
+        
         readonly ImageList imageList;
 
         /// <summary>
@@ -1224,10 +1226,10 @@ namespace System.Windows.Forms
             sixpagesToolStripButton = new ToolStripButton();
             separatorToolStripSeparator1 = new ToolStripSeparator();
             closeToolStripButton = new ToolStripButton();
-            pageCounter = new NumericUpDown();
-            pageToolStripLabel = new ToolStripLabel();
+            pageCounterItem = new ToolStripNumericUpDown();
+            pageCounter = pageCounterItem.NumericUpDownControl;
+            pageToolStripLabel = new System.Windows.Forms.ToolStripLabel();
             toolStrip1.SuspendLayout();
-            ((ISupportInitialize)(pageCounter)).BeginInit();
             SuspendLayout();
 
             //
@@ -1469,10 +1471,7 @@ namespace System.Windows.Forms
             }
 
             //Create the ToolStripControlHost
-            ToolStripControlHost pageCounterItem = new ToolStripControlHost(pageCounter)
-            {
-                Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-            };
+            pageCounterItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 
             toolStrip1.Items.Add(pageCounterItem);
             toolStrip1.Items.Add(pageToolStripLabel);
@@ -1490,7 +1489,6 @@ namespace System.Windows.Forms
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
             toolStrip1.ResumeLayout(false);
-            ((ISupportInitialize)(pageCounter)).EndInit();
             ResumeLayout(false);
             PerformLayout();
 

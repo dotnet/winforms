@@ -120,49 +120,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ToolStripTextBoxAccessibleObject(this);
-        }
-
-        [ComVisible(true)]
-        internal class ToolStripTextBoxAccessibleObject : ToolStripItemAccessibleObject
-        {
-            private readonly ToolStripTextBox ownerItem = null;
-
-            public ToolStripTextBoxAccessibleObject(ToolStripTextBox ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.Text;
-                }
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
-            {
-                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
-                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
-                {
-                    return ownerItem.TextBox.AccessibilityObject;
-                }
-
-                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
-                return base.FragmentNavigate(direction);
-            }
-        }
-
         private static Control CreateControlInstance()
         {
             TextBox textBox = new ToolStripTextBoxControl
@@ -588,7 +545,6 @@ namespace System.Windows.Forms
         private class ToolStripTextBoxControl : TextBox
         {
             private bool mouseIsOver = false;
-            private ToolStripTextBox ownerItem;
             private bool isFontSet = true;
             private bool alreadyHooked;
 
@@ -683,11 +639,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public ToolStripTextBox Owner
-            {
-                get { return ownerItem; }
-                set { ownerItem = value; }
-            }
+            public ToolStripTextBox Owner { get; set; }
 
             internal override bool SupportsUiaProviders => true;
 
@@ -829,7 +781,7 @@ namespace System.Windows.Forms
 
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                return new ToolStripTextBoxControlAccessibleObject(this);
+                return new ToolStripTextBoxControlAccessibleObject(this, Owner);
             }
 
             protected override void Dispose(bool disposing)
@@ -916,50 +868,17 @@ namespace System.Windows.Forms
             }
         }
 
-        private class ToolStripTextBoxControlAccessibleObject : Control.ControlAccessibleObject
+        private class ToolStripTextBoxControlAccessibleObject : ToolStripHostedControlAccessibleObject
         {
-            public ToolStripTextBoxControlAccessibleObject(ToolStripTextBoxControl toolStripTextBoxControl) : base(toolStripTextBoxControl)
+            public ToolStripTextBoxControlAccessibleObject(Control toolStripHostedControl, ToolStripControlHost toolStripControlHost) : base(toolStripHostedControl, toolStripControlHost)
             {
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    if (Owner is ToolStripTextBoxControl toolStripTextBoxControl)
-                    {
-                        return toolStripTextBoxControl.Owner.Owner.AccessibilityObject;
-                    }
-
-                    return base.FragmentRoot;
-                }
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        if (Owner is ToolStripTextBoxControl toolStripTextBoxControl)
-                        {
-                            return toolStripTextBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
-                        }
-                        break;
-                }
-
-                return base.FragmentNavigate(direction);
             }
 
             internal override object GetPropertyValue(int propertyID)
             {
-                switch (propertyID)
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_EditControlTypeId;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                        return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
+                    return NativeMethods.UIA_EditControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -975,7 +894,6 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
         }
-
     }
 
 }
