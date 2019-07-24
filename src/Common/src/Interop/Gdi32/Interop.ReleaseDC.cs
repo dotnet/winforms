@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
         public static int ReleaseDC(HandleRef hWnd, IntPtr hDC)

@@ -16,7 +16,7 @@ internal static partial class Interop
             RGN_DIFF = 4,
         }
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern RegionType CombineRgn(IntPtr hRgn, IntPtr hRgn1, IntPtr hRgn2, CombineMode nCombineMode);
     }
 }

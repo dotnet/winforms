@@ -17,7 +17,7 @@ internal static partial class Interop
             LOGPIXELSY = 90
         }
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern int GetDeviceCaps(IntPtr hDC, DeviceCapability nIndex);
     }
 }

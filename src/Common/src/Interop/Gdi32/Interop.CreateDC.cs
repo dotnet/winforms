@@ -13,7 +13,7 @@ internal static partial class Interop
         ///  Use <see cref="DeleteDC(IntPtr)"/> when finished with the returned DC.
         ///  Calling with ("DISPLAY", null, null, IntPtr.Zero) will retrieve a DC for the entire desktop.
         /// </remarks>
-        [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
+        [DllImport(Libraries.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr CreateDC(string lpszDriver, string lpszDeviceName, string lpszOutput, IntPtr devMode);
     }
 }

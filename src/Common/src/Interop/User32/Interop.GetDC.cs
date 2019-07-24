@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr GetDC(IntPtr hWnd);
 
         public static IntPtr GetDC(HandleRef hWnd)
