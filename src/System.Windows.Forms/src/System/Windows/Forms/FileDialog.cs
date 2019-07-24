@@ -262,7 +262,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets the Win32 instance handle for the application.
         /// </summary>
-        protected virtual IntPtr Instance => UnsafeNativeMethods.GetModuleHandle(null);
+        protected virtual IntPtr Instance => Interop.Kernel32.GetModuleHandleW(null);
 
         /// <summary>
         /// Gets the Win32 common Open File Dialog OFN_* option flags.

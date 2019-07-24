@@ -405,12 +405,12 @@ namespace System.Windows.Forms
             if (Application.UseVisualStyles)
             {
                 // CLR4.0 or later, shell32.dll needs to be loaded explicitly.
-                if (UnsafeNativeMethods.GetModuleHandle(ExternDll.Shell32) == IntPtr.Zero)
+                if (Interop.Kernel32.GetModuleHandleW(Interop.Libraries.Shell32) == IntPtr.Zero)
                 {
-                    if (UnsafeNativeMethods.LoadLibraryFromSystemPathIfAvailable(ExternDll.Shell32) == IntPtr.Zero)
+                    if (Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable(Interop.Libraries.Shell32) == IntPtr.Zero)
                     {
                         int lastWin32Error = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, ExternDll.Shell32));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Interop.Libraries.Shell32));
                     }
                 }
 
