@@ -340,7 +340,7 @@ namespace System.Drawing.Design
                 colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
                 CustomColorDialog dialog = new CustomColorDialog();
 
-                IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+                IntPtr hwndFocus = User32.GetFocus();
                 try
                 {
                     DialogResult result = dialog.ShowDialog();
@@ -358,7 +358,7 @@ namespace System.Drawing.Design
                 {
                     if (hwndFocus != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, hwndFocus));
+                        User32.SetFocus(hwndFocus);
                     }
                 }
             }
@@ -1121,11 +1121,11 @@ namespace System.Drawing.Design
                         NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
-                        NativeMethods.EnableWindow(hwndCtl, false);
-                        NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
+                        User32.EnableWindow(hwndCtl, false);
+                        User32.SetWindowPos(hwndCtl, IntPtr.Zero, flags: User32.WindowPosition.SWP_HIDEWINDOW);
                         hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
-                        NativeMethods.EnableWindow(hwndCtl, false);
-                        NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
+                        User32.EnableWindow(hwndCtl, false);
+                        User32.SetWindowPos(hwndCtl, IntPtr.Zero, flags: User32.WindowPosition.SWP_HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
                     case WindowMessages.WM_COMMAND:

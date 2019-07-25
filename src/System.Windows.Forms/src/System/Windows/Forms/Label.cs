@@ -307,7 +307,7 @@ namespace System.Windows.Forms
                     // Since we're owner draw, I don't see any point in setting the
                     // SS_CENTER/SS_RIGHT styles.
                     //
-                    cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
+                    cp.ExStyle &= ~User32.WindowStyle.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
                 }
 
                 if (!OwnerDraw)
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
                 switch (BorderStyle)
                 {
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= User32.WindowStyle.WS_BORDER;
                         break;
                     case BorderStyle.Fixed3D:
                         cp.Style |= NativeMethods.SS_SUNKEN;

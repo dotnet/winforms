@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~User32.WindowStyle.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:

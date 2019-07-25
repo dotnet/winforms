@@ -292,10 +292,10 @@ namespace System.Windows.Forms
             // for ToolStripDropDown ShowParams returns SW_SHOWNOACTIVATE, in which case we don't
             // want to check IsWindowActive and hence return true.
             if (window is Control windowControl &&
-                (windowControl.ShowParams & 0xF) != NativeMethods.SW_SHOWNOACTIVATE)
+                (windowControl.ShowParams & (User32.ShowWindowCommand)0xF) != User32.ShowWindowCommand.SW_SHOWNOACTIVATE)
             {
-                IntPtr hWnd = UnsafeNativeMethods.GetActiveWindow();
-                IntPtr rootHwnd = UnsafeNativeMethods.GetAncestor(new HandleRef(window, window.Handle), NativeMethods.GA_ROOT);
+                IntPtr hWnd = User32.GetActiveWindow();
+                IntPtr rootHwnd = User32.GetAncestor(new HandleRef(window, window.Handle), User32.GetAncestorFlag.GA_ROOT);
                 if (hWnd != rootHwnd)
                 {
                     TipInfo tt = (TipInfo)_tools[windowControl];
@@ -763,9 +763,9 @@ namespace System.Windows.Forms
             // If in OwnerDraw mode, we don't want the default border.
             if (OwnerDraw)
             {
-                int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style &= ~NativeMethods.WS_BORDER;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                int style = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE)));
+                style &= ~User32.WindowStyle.WS_BORDER;
+                User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE, (IntPtr)style);
             }
 
             // Setting the max width has the added benefit of enabling multiline tool tips.
@@ -1007,9 +1007,8 @@ namespace System.Windows.Forms
             // RightToLeft reading order
             if (TopLevelControl?.RightToLeft == RightToLeft.Yes)
             {
-                bool isWindowMirrored = ((unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(
-                    new HandleRef(this, Control.GetSafeHandle(hWnd)), NativeMethods.GWL_STYLE)) & NativeMethods.WS_EX_LAYOUTRTL) == NativeMethods.WS_EX_LAYOUTRTL);
-
+                bool isWindowMirrored = ((unchecked((int)(long)User32.GetWindowLong(
+                    new HandleRef(this, Control.GetSafeHandle(hWnd)), User32.WindowLong.GWL_STYLE)) & User32.WindowStyle.WS_EX_LAYOUTRTL) == User32.WindowStyle.WS_EX_LAYOUTRTL);
                 // Indicates that the ToolTip text will be displayed in the opposite direction
                 // to the text in the parent window.
                 if (!isWindowMirrored)
@@ -1309,7 +1308,7 @@ namespace System.Windows.Forms
             if (window is Control associatedControl)
             {
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
+                User32.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
 
                 Cursor currentCursor = Cursor.Current;
                 Point cursorLocation = Cursor.Position;
@@ -1418,7 +1417,7 @@ namespace System.Windows.Forms
             {
                 // Set the ToolTips.
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
 
@@ -1445,7 +1444,7 @@ namespace System.Windows.Forms
             {
                 // Set the ToolTips.
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
                 SetTrackPosition(pointX, pointY);
@@ -1467,7 +1466,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1492,7 +1491,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1945,10 +1944,14 @@ namespace System.Windows.Forms
                 moveToLocation.Y = screen.WorkingArea.Bottom - tipSize.Height;
             }
 
-            SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
-            NativeMethods.HWND_TOPMOST,
-            moveToLocation.X, moveToLocation.Y, tipSize.Width, tipSize.Height,
-            NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOOWNERZORDER);
+            User32.SetWindowPos(
+                new HandleRef(this, Handle),
+                User32.HWND_TOPMOST,
+                moveToLocation.X,
+                moveToLocation.Y,
+                tipSize.Width,
+                tipSize.Height,
+                User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOOWNERZORDER);
         }
 
         private IntPtr GetCurrentToolHwnd()
@@ -1993,9 +1996,8 @@ namespace System.Windows.Forms
 
             // Reposition the tooltip when its about to be shown since the tooltip can go out of screen
             // working area bounds Reposition would check the bounds for us.
-
             var r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+            User32.GetWindowRect(new HandleRef(this, Handle), ref r);
 
             if (tt.Position != Point.Empty)
             {
@@ -2013,7 +2015,7 @@ namespace System.Windows.Forms
                 return;
 
             var r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+            User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
             Point cursorLocation = Cursor.Position;
 
             // Do not activate the mouse if its within the bounds of the
@@ -2046,7 +2048,7 @@ namespace System.Windows.Forms
 
             // Get the bounds.
             var r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+            User32.GetWindowRect(new HandleRef(this, Handle), ref r);
 
             Control toolControl = window as Control;
 
@@ -2064,7 +2066,7 @@ namespace System.Windows.Forms
             // any of the tooltip attributes/properties could have been updated
             // during the popup event; in which case the size of the tooltip is
             // affected. e.ToolTipSize is respected over r.Size
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+            User32.GetWindowRect(new HandleRef(this, Handle), ref r);
             currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? r.Size : e.ToolTipSize;
 
             if (IsBalloon)
@@ -2093,23 +2095,23 @@ namespace System.Windows.Forms
             if (e.Cancel)
             {
                 _cancelled = true;
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    NativeMethods.HWND_TOPMOST,
-                    0, 0, 0, 0,
-                    NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
-
+                    User32.HWND_TOPMOST,
+                    flags: User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOOWNERZORDER);
             }
             else
             {
                 _cancelled = false;
 
                 // Only width/height changes are respected, so set top,left to what we got earlier
-                SafeNativeMethods.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    NativeMethods.HWND_TOPMOST,
-                    r.left, r.top, currentTooltipSize.Width, currentTooltipSize.Height,
-                    NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
+                User32.SetWindowPos(new HandleRef(this, Handle),
+                    User32.HWND_TOPMOST,
+                    r.left,
+                    r.top,
+                    currentTooltipSize.Width,
+                    currentTooltipSize.Height,
+                    User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOOWNERZORDER);
             }
         }
 
@@ -2122,7 +2124,7 @@ namespace System.Windows.Forms
         {
             if (_cancelled)
             {
-                SafeNativeMethods.ShowWindow(new HandleRef(this, Handle), NativeMethods.SW_HIDE);
+                User32.ShowWindow(new HandleRef(this, Handle), User32.ShowWindowCommand.SW_HIDE);
                 return true;
             }
 

@@ -822,7 +822,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = NativeMethods.WS_EX_TOOLWINDOW
+                        ExStyle = User32.WindowStyle.WS_EX_TOOLWINDOW
                     };
                     dropDownOwnerWindow.CreateHandle(cp);
                 }
@@ -2065,7 +2065,7 @@ namespace System.Windows.Forms
                 {
                     if (hwndThatLostFocus == IntPtr.Zero)
                     {
-                        SnapFocus(UnsafeNativeMethods.GetFocus());
+                        SnapFocus(User32.GetFocus());
                     }
                     controlHost.Control.Select();
                     controlHost.Control.Focus();
@@ -4501,7 +4501,7 @@ namespace System.Windows.Forms
             if (!focusSuccess)
             {
                 // clear out the focus, we have focus, we're not supposed to anymore.
-                UnsafeNativeMethods.SetFocus(NativeMethods.NullHandleRef);
+                User32.SetFocus(IntPtr.Zero);
             }
         }
 
@@ -4953,7 +4953,7 @@ namespace System.Windows.Forms
 
                     // make sure the otherHandle is not a child of thisHandle
                     if ((thisHandle.Handle != otherHandle.Handle) &&
-                        !UnsafeNativeMethods.IsChild(thisHandle, otherHandle))
+                        !User32.IsChild(thisHandle, otherHandle))
                     {
 
                         // make sure the root window of the otherHwnd is the same as
@@ -5159,7 +5159,7 @@ namespace System.Windows.Forms
                         {
 
                             // snap the active window and compare to our root window.
-                            IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                            IntPtr hwndActive = User32.GetActiveWindow();
                             if (hwndActive != rootHwnd.Handle)
                             {
                                 // Activate the window, and discard the mouse message.
@@ -5174,7 +5174,7 @@ namespace System.Windows.Forms
                 {
                     // we're setting focus to a child control - remember who gave it to us
                     // so we can restore it on ESC.
-                    SnapFocus(UnsafeNativeMethods.GetFocus());
+                    SnapFocus(User32.GetFocus());
                     if (!IsDropDown && !TabStop)
                     {
                         Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "Installing restoreFocusFilter");
@@ -5654,10 +5654,10 @@ namespace System.Windows.Forms
                         {
                             // if we've clicked on something that's not a child of the toolstrip and we
                             // currently have focus, restore it.
-                            if (!UnsafeNativeMethods.IsChild(new HandleRef(this, ownerToolStrip.Handle), new HandleRef(this, m.HWnd)))
+                            if (!User32.IsChild(new HandleRef(this, ownerToolStrip.Handle), new HandleRef(this, m.HWnd)))
                             {
                                 HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(ownerToolStrip);
-                                if (rootHwnd.Handle == m.HWnd || UnsafeNativeMethods.IsChild(rootHwnd, new HandleRef(this, m.HWnd)))
+                                if (rootHwnd.Handle == m.HWnd || User32.IsChild(rootHwnd, new HandleRef(this, m.HWnd)))
                                 {
                                     // Only RestoreFocus if the hwnd is a child of the root window and isnt on the toolstrip.
                                     RestoreFocusInternal();

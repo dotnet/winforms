@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 // If we're using themes then go ahead
                 if (DropShadowEnabled)
                 {
-                    cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_DROPSHADOW;
+                    cp.ClassStyle |= (int)User32.ClassStyle.CS_DROPSHADOW;
                 }
                 // we're a borderless menuless control with no min/max boxes
                 // we dont want to show in the taskbar either
@@ -296,18 +296,18 @@ namespace System.Windows.Forms
                 //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window.
                 //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
 
-                cp.Style &= ~(NativeMethods.WS_CAPTION | NativeMethods.WS_CLIPSIBLINGS);         /* no caption, no siblings */
-                cp.ExStyle &= ~(NativeMethods.WS_EX_APPWINDOW);  /* show in taskbar = false */
-                // | NativeMethods.WS_EX_TOOLWINDOW
-                cp.Style |= (TopLevel) ? NativeMethods.WS_POPUP : NativeMethods.WS_CHILD;
-                cp.ExStyle |= (NativeMethods.WS_EX_CONTROLPARENT);  /* show in taskbar = false */
+                cp.Style &= ~(User32.WindowStyle.WS_CAPTION | User32.WindowStyle.WS_CLIPSIBLINGS);         /* no caption, no siblings */
+                cp.ExStyle &= ~(User32.WindowStyle.WS_EX_APPWINDOW);  /* show in taskbar = false */
+                // | User32.WindowStyle.WS_EX_TOOLWINDOW
+                cp.Style |= (TopLevel) ? User32.WindowStyle.WS_POPUP : User32.WindowStyle.WS_CHILD;
+                cp.ExStyle |= (User32.WindowStyle.WS_EX_CONTROLPARENT);  /* show in taskbar = false */
 
                 bool topLevel = TopLevel;
 
                 // opacity
                 if (topLevel && (state[stateLayered]))
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYERED;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LAYERED;
                 }
                 else if (topLevel)
                 {
@@ -316,11 +316,11 @@ namespace System.Windows.Forms
                     //If the display driver has enough memory, it saves the bits for Windows. If the display driver does not have enough memory, Window
                     //saves the bits itself as a bitmap in global memory and also uses some of User's local heap for housekeeping structures for each window.
                     //When the application removes the window, Windows can restore the screen image quickly by using the stored bits.
-                    cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_SAVEBITS;
+                    cp.ClassStyle |= (int)User32.ClassStyle.CS_SAVEBITS;
                 }
                 else if (!topLevel)
                 {
-                    cp.Style |= NativeMethods.WS_CLIPSIBLINGS;
+                    cp.Style |= User32.WindowStyle.WS_CLIPSIBLINGS;
                 }
 
                 // We're turning off CLIPSIBLINGS because in the designer the elements of the form beneath
@@ -940,13 +940,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override int ShowParams
-        {
-            get
-            {
-                return NativeMethods.SW_SHOWNOACTIVATE;
-            }
-        }
+        internal override User32.ShowWindowCommand ShowParams => User32.ShowWindowCommand.SW_SHOWNOACTIVATE;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged
@@ -1104,9 +1098,10 @@ namespace System.Windows.Forms
         {
             if (TopMost)
             {
-                HandleRef topMostFlag = (topMost) ? NativeMethods.HWND_TOPMOST : NativeMethods.HWND_NOTOPMOST;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), topMostFlag, 0, 0, 0, 0,
-                                             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    topMost ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
             }
         }
 
@@ -1719,7 +1714,7 @@ namespace System.Windows.Forms
         private void ReparentToActiveToolStripWindow()
         {
             ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
+            User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
         }
 
         private void ReparentToDropDownOwnerWindow()
@@ -1728,7 +1723,7 @@ namespace System.Windows.Forms
             // this prevents a taskbar entry.
             NativeWindow ownerWindow = DropDownOwnerWindow;
             HandleRef ownerHandle = new HandleRef(ownerWindow, ownerWindow.Handle);
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, ownerHandle);
+            User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_HWNDPARENT, ownerHandle);
         }
 
         internal override void ResetScaling(int newDpi)
@@ -1830,14 +1825,14 @@ namespace System.Windows.Forms
                 if (value)
                 {
                     // setting toplevel = true
-                    styleFlags &= ~NativeMethods.WS_CHILD;
-                    styleFlags |= NativeMethods.WS_POPUP;
+                    styleFlags &= ~User32.WindowStyle.WS_CHILD;
+                    styleFlags |= User32.WindowStyle.WS_POPUP;
                 }
                 else
                 {
                     // this is a child window
-                    styleFlags &= ~NativeMethods.WS_POPUP;
-                    styleFlags |= NativeMethods.WS_CHILD;
+                    styleFlags &= ~User32.WindowStyle.WS_POPUP;
+                    styleFlags |= User32.WindowStyle.WS_CHILD;
                 }
 
                 WindowStyle = styleFlags;
@@ -1871,7 +1866,7 @@ namespace System.Windows.Forms
                         // Snap the foreground window BEFORE calling any user events so they
                         // dont have a chance to activate something else. This covers the case
                         // where someone handles the opening event and throws up a messagebox.
-                        IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
+                        IntPtr foregroundWindow = User32.GetForegroundWindow();
 
                         // Fire Opening event
                         // Cancellable event in which default value of e.Cancel depends on
@@ -1908,10 +1903,12 @@ namespace System.Windows.Forms
                             {
                                 ApplyTopMost(true);
                             }
-                            else if (IsHandleCreated && SafeNativeMethods.IsWindowEnabled(new HandleRef(this, Handle)))
+                            else if (IsHandleCreated && User32.IsWindowEnabled(new HandleRef(this, Handle)))
                             {
-                                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                                             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+                                User32.SetWindowPos(
+                                    new HandleRef(this, Handle),
+                                    User32.HWND_TOP,
+                                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
                             }
                         }
                     }

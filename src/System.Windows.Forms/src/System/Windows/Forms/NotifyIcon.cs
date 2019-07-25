@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
         private const int WM_TRAYMOUSEMESSAGE = WindowMessages.WM_USER + 1024;
-        private static readonly int WM_TASKBARCREATED = SafeNativeMethods.RegisterWindowMessage("TaskbarCreated");
+        private static readonly int WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
 
         private readonly object syncObj = new object();
 

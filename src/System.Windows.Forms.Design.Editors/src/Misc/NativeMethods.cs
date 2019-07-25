@@ -41,12 +41,6 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr GetDlgItem(IntPtr hWnd, int nIDDlgItem);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool EnableWindow(IntPtr hWnd, bool enable);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -106,7 +100,6 @@ namespace System.Windows.Forms.Design
         public const int E_INVALIDARG = unchecked((int)0x80070057);
         public const int E_FAIL = unchecked((int)0x80004005);
 
-        public const int WS_EX_STATICEDGE = 0x00020000;
         public static readonly int TME_HOVER = 0x00000001;
 
         public const int
@@ -386,17 +379,9 @@ namespace System.Windows.Forms.Design
                 [In] COMRECT lprcPosRect);
         }
 
-        public static readonly int WM_MOUSEENTER = Util.RegisterWindowMessage("WinFormsMouseEnter");
+        public static readonly int WM_MOUSEENTER = User32.RegisterWindowMessageW("WinFormsMouseEnter");
         public static readonly int HDN_ENDTRACK = HDN_ENDTRACKW;
 
-        public const int WS_DISABLED = 0x08000000;
-        public const int WS_CLIPSIBLINGS = 0x04000000;
-        public const int WS_CLIPCHILDREN = 0x02000000;
-        public const int WS_EX_TOOLWINDOW = 0x00000080;
-        public const int WS_POPUP = unchecked((int)0x80000000);
-        public const int WS_BORDER = 0x00800000;
-        public const int CS_DROPSHADOW = 0x00020000;
-        public const int CS_DBLCLKS = 0x0008;
         public const int SRCCOPY = 0x00CC0020;
         public const int LVM_SETCOLUMNWIDTH = 0x1000 + 30;
         public const int LVM_GETHEADER = 0x1000 + 31;
@@ -467,10 +452,6 @@ namespace System.Windows.Forms.Design
         public const int HHT_BELOW = 0x0200;
         public const int HHT_TORIGHT = 0x0400;
         public const int HHT_TOLEFT = 0x0800;
-        public const int HWND_TOP = 0;
-        public const int HWND_BOTTOM = 1;
-        public const int HWND_TOPMOST = -1;
-        public const int HWND_NOTOPMOST = -2;
         public const int CWP_SKIPINVISIBLE = 0x0001;
         public const int RDW_FRAME = 0x0400;
         public const int TVM_GETITEMRECT = 0x1100 + 4;
@@ -499,14 +480,6 @@ namespace System.Windows.Forms.Design
         public const int TVHT_BELOW = 0x0200;
         public const int TVHT_TORIGHT = 0x0400;
         public const int TVHT_TOLEFT = 0x0800;
-        public const int GW_HWNDFIRST = 0;
-        public const int GW_HWNDLAST = 1;
-        public const int GW_HWNDNEXT = 2;
-        public const int GW_HWNDPREV = 3;
-        public const int GW_OWNER = 4;
-        public const int GW_CHILD = 5;
-        public const int GW_MAX = 5;
-        public const int GWL_HWNDPARENT = -8;
         public const int SB_HORZ = 0;
         public const int SB_VERT = 1;
         public const int SB_CTL = 2;
@@ -589,21 +562,6 @@ namespace System.Windows.Forms.Design
         public const int PRF_CLIENT = 0x00000004;
         public const int PRF_ERASEBKGND = 0x00000008;
         public const int PRF_CHILDREN = 0x00000010;
-        public const int SWP_NOSIZE = 0x0001;
-        public const int SWP_NOMOVE = 0x0002;
-        public const int SWP_NOZORDER = 0x0004;
-        public const int SWP_NOREDRAW = 0x0008;
-        public const int SWP_NOACTIVATE = 0x0010;
-        public const int SWP_FRAMECHANGED = 0x0020;
-        public const int SWP_SHOWWINDOW = 0x0040;
-        public const int SWP_HIDEWINDOW = 0x0080;
-        public const int SWP_NOCOPYBITS = 0x0100;
-        public const int SWP_NOOWNERZORDER = 0x0200;
-        public const int SWP_NOSENDCHANGING = 0x0400;
-        public const int SWP_DRAWFRAME = 0x0020;
-        public const int SWP_NOREPOSITION = 0x0200;
-        public const int SWP_DEFERERASE = 0x2000;
-        public const int SWP_ASYNCWINDOWPOS = 0x4000;
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
@@ -658,8 +616,6 @@ namespace System.Windows.Forms.Design
 
         public delegate void TimerProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
         internal class Util
         {
             public static int MAKELONG(int low, int high)
@@ -671,9 +627,6 @@ namespace System.Windows.Forms.Design
             {
                 return n & 0xffff;
             }
-
-            [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-            internal static extern int RegisterWindowMessage(string msg);
         }
 
         internal class ActiveX
@@ -922,9 +875,6 @@ namespace System.Windows.Forms.Design
             QS_ALLINPUT = QS_INPUT | QS_POSTMESSAGE | QS_TIMER | QS_PAINT | QS_HOTKEY | QS_SENDMESSAGE;
 
         public const int MWMO_INPUTAVAILABLE = 0x0004; // don't use MWMO_WAITALL, see ddb#176342
-
-        public const int GWL_EXSTYLE = -20,
-            GWL_STYLE = -16;
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class LOGFONT

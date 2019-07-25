@@ -235,7 +235,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                return UnsafeNativeMethods.GetParent(new HandleRef(Host, Host.Handle));
+                return User32.GetParent(new HandleRef(Host, Host.Handle));
             }
             catch (Exception t)
             {

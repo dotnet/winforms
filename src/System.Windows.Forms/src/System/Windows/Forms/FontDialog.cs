@@ -483,9 +483,9 @@ namespace System.Windows.Forms
                     if (!showColor)
                     {
                         IntPtr hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.cmb4);
-                        SafeNativeMethods.ShowWindow(new HandleRef(null, hWndCtl), NativeMethods.SW_HIDE);
+                        User32.ShowWindow(hWndCtl, User32.ShowWindowCommand.SW_HIDE);
                         hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.stc4);
-                        SafeNativeMethods.ShowWindow(new HandleRef(null, hWndCtl), NativeMethods.SW_HIDE);
+                        User32.ShowWindow(hWndCtl, User32.ShowWindowCommand.SW_HIDE);
                     }
                     break;
             }
@@ -528,7 +528,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
+            User32.WndProc hookProcPtr = new User32.WndProc(HookProc);
             NativeMethods.LOGFONTW logFont;
 
             using ScreenDC dc = ScreenDC.Create();

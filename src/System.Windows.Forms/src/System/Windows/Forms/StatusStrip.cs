@@ -195,7 +195,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // return whether we should paint the sizing grip.
+        /// <summary>
+        /// Returns whether we should paint the sizing grip.
+        /// </summary>
         private bool ShowSizingGrip
         {
             get
@@ -211,13 +213,15 @@ namespace System.Windows.Forms
                         HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(this);
                         if (rootHwnd.Handle != IntPtr.Zero)
                         {
-                            return !UnsafeNativeMethods.IsZoomed(rootHwnd);
+                            return !User32.IsZoomed(rootHwnd);
                         }
                     }
                 }
+
                 return false;
             }
         }
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
@@ -627,7 +631,7 @@ namespace System.Windows.Forms
 
                     // if the main window isnt maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
-                    if (rootHwnd.Handle != IntPtr.Zero && !UnsafeNativeMethods.IsZoomed(rootHwnd))
+                    if (rootHwnd.Handle != IntPtr.Zero && !User32.IsZoomed(rootHwnd))
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
@@ -678,7 +682,7 @@ namespace System.Windows.Forms
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LAYOUTRTL;
                     return cp;
                 }
             }

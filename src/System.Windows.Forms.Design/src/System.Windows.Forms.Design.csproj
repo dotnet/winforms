@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
-    <Compile Include="..\..\Common\src\CommonUnsafeNativeMethods.cs" Link="misc\CommonUnsafeNativeMethods.cs" />
     <Compile Include="..\..\Common\src\CompModSwitches.cs" Link="misc\CompModSwitches.cs" />
     <Compile Include="..\..\Common\src\DpiHelper.cs" Link="misc\DpiHelper.cs" />
     <Compile Include="..\..\Common\src\ExternDll.cs" Link="misc\ExternDll.cs" />
@@ -53,6 +52,9 @@
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextExtentPoint32.cs" Link="Interop\Gdi32\Interop.GetTextExtentPoint32.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetCurrentProcessId.cs" Link="Interop\Kernel32\Interop.GetCurrentProcessId.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetCurrentThreadId.cs" Link="Interop\Kernel32\Interop.GetCurrentThreadId.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetTickCount.cs" Link="Interop\Kernel32\Interop.GetTickCount.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetModuleHandle.cs" Link="Interop\Kernel32\Interop.GetModuleHandle.cs" />
@@ -69,10 +71,35 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGM.cs" Link="Interop\Ole32\Interop.STGM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.AreDpiAwarenessContextsEqual.cs" Link="Interop\User32\Interop.AreDpiAwarenessContextsEqual.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.CallNextHookEx.cs" Link="Interop\User32\Interop.CallNextHookEx.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ClassStyle.cs" Link="Interop\User32\Interop.ClassStyle.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DefWindowProc.cs" Link="Interop\User32\Interop.DefWindowProc.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DpiAwarenessContext.cs" Link="Interop\User32\Interop.DpiAwarenessContext.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCapture.cs" Link="Interop\User32\Interop.GetCapture.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetThreadDpiAwarenessContext.cs" Link="Interop\User32\Interop.GetThreadDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindow.cs" Link="Interop\User32\Interop.GetWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowLong.cs" Link="Interop\User32\Interop.GetWindowLong.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowThreadProcessId.cs" Link="Interop\User32\Interop.GetWindowThreadProcessId.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.IsChild.cs" Link="Interop\User32\Interop.IsChild.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessage.cs" Link="Interop\User32\Interop.RegisterWindowMessage.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseCapture.cs" Link="Interop\User32\Interop.ReleaseCapture.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetActiveWindow.cs" Link="Interop\User32\Interop.SetActiveWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetParent.cs" Link="Interop\User32\Interop.SetParent.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowLong.cs" Link="Interop\User32\Interop.SetWindowLong.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowsHookEx.cs" Link="Interop\User32\Interop.SetWindowsHookEx.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.UnhookWindowsHookEx.cs" Link="Interop\User32\Interop.UnhookWindowsHookEx.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowLong.cs" Link="Interop\User32\Interop.WindowLong.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowPosition.cs" Link="Interop\User32\Interop.WindowPosition.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowStyle.cs" Link="Interop\User32\Interop.WindowStyle.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WndProc.cs" Link="Interop\User32\Interop.WndProc.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">

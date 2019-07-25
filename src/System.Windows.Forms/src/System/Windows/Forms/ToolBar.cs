@@ -397,7 +397,7 @@ namespace System.Windows.Forms
                 //
                 cp.Style |= NativeMethods.CCS_NOPARENTALIGN
                             | NativeMethods.CCS_NORESIZE;
-                // | NativeMethods.WS_CHILD was commented out since setTopLevel should be able to work.
+                // | User32.WindowStyle.WS_CHILD was commented out since setTopLevel should be able to work.
 
                 if (!Divider)
                 {
@@ -414,15 +414,15 @@ namespace System.Windows.Forms
                     cp.Style |= NativeMethods.TBSTYLE_TOOLTIPS;
                 }
 
-                cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
-                cp.Style &= (~NativeMethods.WS_BORDER);
+                cp.ExStyle &= (~User32.WindowStyle.WS_EX_CLIENTEDGE);
+                cp.Style &= (~User32.WindowStyle.WS_BORDER);
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= User32.WindowStyle.WS_BORDER;
                         break;
                 }
 
@@ -1739,8 +1739,7 @@ namespace System.Windows.Forms
                         case NativeMethods.TTN_SHOW:
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
-                            NativeMethods.WINDOWPLACEMENT wndPlacement = new NativeMethods.WINDOWPLACEMENT();
-                            int nRet = UnsafeNativeMethods.GetWindowPlacement(new HandleRef(null, note.hwndFrom), ref wndPlacement);
+                            int nRet = User32.GetWindowPlacement(note.hwndFrom, out User32.WINDOWPLACEMENT wndPlacement);
 
                             // Is this tooltip going to be positioned in the upper left corner of the display,
                             // but nowhere near the toolbar button?
@@ -1791,7 +1790,14 @@ namespace System.Windows.Forms
                                     leftTop.X -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
-                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.X, leftTop.Y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                                User32.SetWindowPos(
+                                    note.hwndFrom,
+                                    IntPtr.Zero,
+                                    leftTop.X,
+                                    leftTop.Y,
+                                    0,
+                                    0,
+                                    User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE);
                                 m.Result = (IntPtr)1;
                                 return;
                             }

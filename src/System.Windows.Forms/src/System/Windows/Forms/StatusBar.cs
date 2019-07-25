@@ -1814,10 +1814,10 @@ namespace System.Windows.Forms
                 }
 
                 window.CreateHandle(CreateParams);
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOPMOST,
-                                     0, 0, 0, 0,
-                                     NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                     NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOPMOST,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
                 User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);

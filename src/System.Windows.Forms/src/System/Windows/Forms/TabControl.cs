@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         ///  display rectangle.  When the message is received, the control calls
         ///  updateTabSelection() to layout the TabPages correctly.
         /// </summary>
-        private readonly int tabBaseReLayoutMessage = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_TabBaseReLayout");
+        private readonly int tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_TabBaseReLayout");
 
         //state
         private TabPage[] tabPages;
@@ -374,9 +374,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LAYOUTRTL | User32.WindowStyle.WS_EX_NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(User32.WindowStyle.WS_EX_RTLREADING | User32.WindowStyle.WS_EX_RIGHT | User32.WindowStyle.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1383,11 +1383,10 @@ namespace System.Windows.Forms
                 tooltipHwnd = SendMessage(NativeMethods.TCM_GETTOOLTIPS, 0, 0);
                 if (tooltipHwnd != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHwnd),
-                                         NativeMethods.HWND_TOPMOST,
-                                         0, 0, 0, 0,
-                                         NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                         NativeMethods.SWP_NOACTIVATE);
+                    User32.SetWindowPos(
+                        new HandleRef(this, tooltipHwnd),
+                        User32.HWND_TOPMOST,
+                        flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
                 }
             }
 

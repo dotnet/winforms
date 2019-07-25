@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                 // Under some circumstances, the dialog does not initially focus on any
                 // control. We fix that by explicitly setting focus ourselves.
                 _defaultControlHwnd = wparam;
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, wparam));
+                User32.SetFocus(wparam);
             }
             else if (msg == WindowMessages.WM_SETFOCUS)
             {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 // If the dialog box gets focus, bounce it to the default control.
                 // So we post a message back to ourselves to wait for the focus change
                 // then push it to the default control.
-                UnsafeNativeMethods.SetFocus(new HandleRef(this, _defaultControlHwnd));
+                User32.SetFocus(new HandleRef(this, _defaultControlHwnd));
             }
 
             return IntPtr.Zero;
@@ -89,13 +89,19 @@ namespace System.Windows.Forms
         /// </summary>
         private protected static void MoveToScreenCenter(IntPtr hWnd)
         {
-            RECT r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(null, hWnd), ref r);
+            var r = new RECT();
+            User32.GetWindowRect(hWnd, ref r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
-            SafeNativeMethods.SetWindowPos(new HandleRef(null, hWnd), NativeMethods.NullHandleRef, x, y, 0, 0, NativeMethods.SWP_NOSIZE |
-                                 NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+            User32.SetWindowPos(
+                hWnd,
+                IntPtr.Zero,
+                x,
+                y,
+                0,
+                0,
+                User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE);
         }
 
         /// <summary>
@@ -134,7 +140,7 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
-            return UnsafeNativeMethods.CallWindowProc(_defOwnerWndProc, hWnd, msg, wparam, lparam);
+            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, msg, wparam, lparam);
 
         }
 
@@ -179,7 +185,7 @@ namespace System.Windows.Forms
 
                 if (hwndOwner == IntPtr.Zero)
                 {
-                    hwndOwner = UnsafeNativeMethods.GetActiveWindow();
+                    hwndOwner = User32.GetActiveWindow();
                 }
 
                 if (hwndOwner == IntPtr.Zero)
@@ -192,18 +198,17 @@ namespace System.Windows.Forms
 
                 if (s_helpMsg == 0)
                 {
-                    s_helpMsg = SafeNativeMethods.RegisterWindowMessage("commdlg_help");
+                    s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
                 }
 
-                NativeMethods.WndProc ownerProc = new NativeMethods.WndProc(OwnerWndProc);
+                User32.WndProc ownerProc = new User32.WndProc(OwnerWndProc);
                 _hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerProc);
                 Debug.Assert(IntPtr.Zero == _defOwnerWndProc, "The previous subclass wasn't properly cleaned up");
 
                 IntPtr userCookie = IntPtr.Zero;
                 try
                 {
-                    // UnsafeNativeMethods.[Get|Set]WindowLong is smart enough to call SetWindowLongPtr on 64-bit OS
-                    _defOwnerWndProc = UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, ownerProc);
+                    _defOwnerWndProc = User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.WindowLong.GWL_WNDPROC, ownerProc);
 
                     if (Application.UseVisualStyles)
                     {
@@ -222,10 +227,10 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    IntPtr currentSubClass = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC);
+                    IntPtr currentSubClass = User32.GetWindowLong(new HandleRef(this, hwndOwner), User32.WindowLong.GWL_WNDPROC);
                     if (_defOwnerWndProc != IntPtr.Zero || currentSubClass != _hookedWndProc)
                     {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defOwnerWndProc));
+                        User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.WindowLong.GWL_WNDPROC, new HandleRef(this, _defOwnerWndProc));
                     }
 
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);

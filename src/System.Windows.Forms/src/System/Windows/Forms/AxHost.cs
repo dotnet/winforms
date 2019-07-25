@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         private const int OLEIVERB_PROPERTIES = -7;
         private const int OLEIVERB_PRIMARY = 0;
 
-        private readonly int REGMSG_MSG = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_subclassCheck");
+        private readonly int REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
         private const int REGMSG_RETVAL = 123;
 
         private static int logPixelsX = -1;
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (axState[fOwnWindow] && IsUserMode())
                 {
-                    cp.Style &= (~NativeMethods.WS_VISIBLE);
+                    cp.Style &= (~User32.WindowStyle.WS_VISIBLE);
                 }
                 return cp;
             }
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms
 
             if (uiDeactivate && IsHandleCreated)
             {
-                uiDeactivate = !UnsafeNativeMethods.IsChild(new HandleRef(this, GetHandleNoCreate()), new HandleRef(null, hwndFocus));
+                uiDeactivate = !User32.IsChild(new HandleRef(this, GetHandleNoCreate()), hwndFocus);
             }
 
             base.OnLostFocus(e);
@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms
             }
 
             IntPtr handle = Handle;
-            IntPtr currentWndproc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
+            IntPtr currentWndproc = User32.GetWindowLong(new HandleRef(this, handle), User32.WindowLong.GWL_WNDPROC);
             if (currentWndproc == wndprocAddr)
             {
                 return true;
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms
             // we need to resubclass outselves now...
             Debug.Assert(!OwnWindow(), "why are we here if we own our window?");
             WindowReleaseHandle();
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC, new HandleRef(this, currentWndproc));
+            User32.SetWindowLong(new HandleRef(this, handle), User32.WindowLong.GWL_WNDPROC, new HandleRef(this, currentWndproc));
             WindowAssignHandle(handle, axState[assignUniqueID]);
             InformOfNewHandle();
             axState[manualUpdate] = true;
@@ -2023,7 +2023,7 @@ namespace System.Windows.Forms
                         message = WindowMessages.WM_SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = (IntPtr)0x20180001,
-                        time = SafeNativeMethods.GetTickCount()
+                        time = Kernel32.GetTickCount()
                     };
                     UnsafeNativeMethods.GetCursorPos(out Point p);
                     msg.pt = p;
@@ -2575,9 +2575,6 @@ namespace System.Windows.Forms
         private void CreateInstance()
         {
             Debug.Assert(instance == null, "instance must be null");
-            //Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "before created "+Windows.GetCurrentThreadId());
-            //Debug.WriteStackTraceIf("AxHTrace");
-            //checkThreadingModel();
             try
             {
                 instance = CreateInstanceCore(clsid);
@@ -2586,7 +2583,8 @@ namespace System.Windows.Forms
             catch (ExternalException e)
             {
                 if (e.ErrorCode == unchecked((int)0x80040112))
-                { // CLASS_E_NOTLICENSED
+                {
+                    // CLASS_E_NOTLICENSED
                     throw new LicenseException(GetType(), this, SR.AXNoLicenseToUse);
                 }
                 throw;
@@ -2699,7 +2697,7 @@ namespace System.Windows.Forms
             AddSelectionHandler();
             editMode = EDITM_HOST;
             SetSelectionStyle(2);
-            IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+            IntPtr hwndFocus = User32.GetFocus();
             try
             {
                 UiActivate();
@@ -3641,8 +3639,8 @@ namespace System.Windows.Forms
             DetachWindow();
             if (handle != IntPtr.Zero)
             {
-                IntPtr wndProc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
-                m.Result = UnsafeNativeMethods.CallWindowProc(wndProc, handle, m.Msg, m.WParam, m.LParam);
+                IntPtr wndProc = User32.GetWindowLong(new HandleRef(this, handle), User32.WindowLong.GWL_WNDPROC);
+                m.Result = User32.CallWindowProcW(wndProc, handle, m.Msg, m.WParam, m.LParam);
             }
         }
 
@@ -3651,15 +3649,6 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 OnHandleDestroyed(EventArgs.Empty);
-                for (Control c = this; c != null; c = c.ParentInternal)
-                {
-                    /* NOT NEEDED
-                    if (c.GetAxState(STATE_HANDLEHOOK)) {
-                        ((IHandleHook)c.Site.GetService(IHandleHook.class)).OnDestroyHandle(GetHandle());
-                        break;
-                    }
-                    */
-                }
                 WindowReleaseHandle();
             }
         }
@@ -3667,19 +3656,7 @@ namespace System.Windows.Forms
         private void InformOfNewHandle()
         {
             Debug.Assert(IsHandleCreated, "we got to have a handle to be here...");
-            for (Control c = this; c != null; c = c.ParentInternal)
-            {
-                /* NOT NEEDED
-                if (c.GetAxState(STATE_HANDLEHOOK)) {
-                    ((IHandleHook)c.Site.GetService(IHandleHook.class)).OnCreateHandle(GetHandle());
-                    break;
-                }
-                */
-            }
-            wndprocAddr = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_WNDPROC);
-            /* NOT NEEDED
-            SetAxState(STATE_CREATENOTIFIED, true);
-            */
+            wndprocAddr = User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_WNDPROC);
         }
 
         private void AttachWindow(IntPtr hwnd)

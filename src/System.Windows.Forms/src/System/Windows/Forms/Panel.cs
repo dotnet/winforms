@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -128,18 +129,18 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                cp.ExStyle |= User32.WindowStyle.WS_EX_CONTROLPARENT;
 
-                cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
-                cp.Style &= (~NativeMethods.WS_BORDER);
+                cp.ExStyle &= (~User32.WindowStyle.WS_EX_CLIENTEDGE);
+                cp.Style &= (~User32.WindowStyle.WS_BORDER);
 
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= User32.WindowStyle.WS_BORDER;
                         break;
                 }
                 return cp;

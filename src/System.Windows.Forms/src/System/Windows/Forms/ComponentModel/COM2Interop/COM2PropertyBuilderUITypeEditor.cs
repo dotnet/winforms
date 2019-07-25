@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -33,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            IntPtr parentHandle = (IntPtr)UnsafeNativeMethods.GetFocus();
+            IntPtr parentHandle = (IntPtr)User32.GetFocus();
 
             IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
             if (uiSvc != null)

@@ -7,6 +7,7 @@ using System.Drawing.Printing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -349,12 +350,12 @@ namespace System.Windows.Forms
 
         protected override bool RunDialog(IntPtr hwndOwner)
         {
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
             if (pageSettings == null)
             {
                 throw new ArgumentException(SR.PSDcantShowWithoutPage);
             }
 
+            var hookProcPtr = new User32.WndProc(HookProc);
             NativeMethods.PAGESETUPDLG data = new NativeMethods.PAGESETUPDLG();
             data.lStructSize = Marshal.SizeOf(data);
             data.Flags = GetFlags();

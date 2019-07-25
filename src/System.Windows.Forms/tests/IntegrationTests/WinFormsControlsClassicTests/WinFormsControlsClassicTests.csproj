@@ -73,7 +73,7 @@
       <Link>Interop.Libraries.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs">
-      <Link>Interop.WindowMessages.cs</Link>
+      <Link>WindowMessages.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs">
       <Link>Gdi32\Interop.GetDeviceCaps.cs</Link>

@@ -2379,9 +2379,9 @@ namespace System.ComponentModel.Design
                     get
                     {
                         CreateParams cp = base.CreateParams;
-                        cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
-                        cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
-                        cp.ClassStyle |= NativeMethods.CS_SAVEBITS;
+                        cp.ExStyle |= User32.WindowStyle.WS_EX_TOOLWINDOW;
+                        cp.Style |= User32.WindowStyle.WS_POPUP | User32.WindowStyle.WS_BORDER;
+                        cp.ClassStyle |= (int)User32.ClassStyle.CS_SAVEBITS;
                         if (_parentControl != null)
                         {
                             if (!_parentControl.IsDisposed)
@@ -2417,7 +2417,7 @@ namespace System.ComponentModel.Design
                 {
                     while (hWnd != IntPtr.Zero)
                     {
-                        hWnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_HWNDPARENT);
+                        hWnd = User32.GetWindowLong(hWnd, User32.WindowLong.GWL_HWNDPARENT);
                         if (hWnd == IntPtr.Zero)
                         {
                             return false;
@@ -2447,14 +2447,15 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
+                        User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
                         // Lifted directly from Form.ShowDialog()...
-                        IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
+                        IntPtr hWndCapture = User32.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
                         {
                             UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, 0, 0);
-                            SafeNativeMethods.ReleaseCapture();
+                            User32.ReleaseCapture();
                         }
+
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
                         FocusComponent();
                         DoModalLoop();
@@ -2462,7 +2463,7 @@ namespace System.ComponentModel.Design
                     finally
                     {
 
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(null, IntPtr.Zero));
+                        User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_HWNDPARENT, IntPtr.Zero);
                         // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
                         if (parent != null && parent.Visible)
                         {
@@ -2506,10 +2507,6 @@ namespace System.ComponentModel.Design
             {
                 public const int WA_INACTIVE = 0;
                 public const int WA_ACTIVE = 1;
-                public const int WS_EX_TOOLWINDOW = 0x00000080;
-                public const int WS_POPUP = unchecked((int)0x80000000);
-                public const int WS_BORDER = 0x00800000;
-                public const int GWL_HWNDPARENT = (-8);
                 public const int QS_KEY = 0x0001;
                 public const int QS_MOUSEMOVE = 0x0002;
                 public const int QS_MOUSEBUTTON = 0x0004;
@@ -2585,9 +2582,6 @@ namespace System.ComponentModel.Design
 
             private static class SafeNativeMethods
             {
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern bool ReleaseCapture();
-
                 [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
 
@@ -2637,19 +2631,10 @@ namespace System.ComponentModel.Design
             private static class UnsafeNativeMethods
             {
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern IntPtr GetWindowLong(HandleRef hWnd, int nIndex);
-
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
-
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds, int dwWakeMask, int dwFlags);
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
-
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern IntPtr GetCapture();
             }
             #endregion
 

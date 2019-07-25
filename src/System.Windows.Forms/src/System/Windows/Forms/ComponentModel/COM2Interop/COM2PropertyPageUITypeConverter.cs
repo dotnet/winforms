@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -29,7 +30,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            IntPtr hWndParent = UnsafeNativeMethods.GetFocus(); // Windows.GetForegroundWindow
+            IntPtr hWndParent = User32.GetFocus();
 
             try
             {

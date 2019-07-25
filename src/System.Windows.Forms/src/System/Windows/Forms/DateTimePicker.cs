@@ -481,14 +481,14 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
                     //We want to turn on mirroring for DateTimePicker explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(User32.WindowStyle.WS_EX_RTLREADING | User32.WindowStyle.WS_EX_RIGHT | User32.WindowStyle.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1673,10 +1673,10 @@ namespace System.Windows.Forms
                 IntPtr handle = SendMessage(NativeMethods.DTM_GETMONTHCAL, 0, 0);
                 if (handle != IntPtr.Zero)
                 {
-                    int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE)));
-                    style |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
-                    style &= ~(NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_RTLREADING);
-                    UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE, new HandleRef(this, (IntPtr)style));
+                    int style = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, handle), User32.WindowLong.GWL_EXSTYLE)));
+                    style |= User32.WindowStyle.WS_EX_LAYOUTRTL | User32.WindowStyle.WS_EX_NOINHERITLAYOUT;
+                    style &= ~(User32.WindowStyle.WS_EX_RIGHT | User32.WindowStyle.WS_EX_RTLREADING);
+                    User32.SetWindowLong(new HandleRef(this, handle), User32.WindowLong.GWL_EXSTYLE, new HandleRef(this, (IntPtr)style));
                 }
             }
             OnDropDown(EventArgs.Empty);

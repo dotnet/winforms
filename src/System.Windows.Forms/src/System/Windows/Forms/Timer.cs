@@ -225,7 +225,7 @@ namespace System.Windows.Forms
 
                         // Message only windows are cheaper and have fewer issues than
                         // full blown invisible windows.
-                        Parent = (IntPtr)NativeMethods.HWND_MESSAGE
+                        Parent = User32.HWND_MESSAGE
                     };
 
                     CreateHandle(cp);
@@ -242,8 +242,8 @@ namespace System.Windows.Forms
             {
                 if (hWnd != IntPtr.Zero)
                 {
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, hWnd), out int pid);
-                    return hwndThread != SafeNativeMethods.GetCurrentThreadId();
+                    int hwndThread = User32.GetWindowThreadProcessId(new HandleRef(this, hWnd), out int pid);
+                    return hwndThread != Kernel32.GetCurrentThreadId();
                 }
 
                 return false;
@@ -291,7 +291,7 @@ namespace System.Windows.Forms
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (_stoppingTimer || hWnd == IntPtr.Zero || !UnsafeNativeMethods.IsWindow(new HandleRef(this, hWnd)))
+                    if (_stoppingTimer || hWnd == IntPtr.Zero || !User32.IsWindow(new HandleRef(this, hWnd)))
                     {
                         return;
                     }

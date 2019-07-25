@@ -78,12 +78,23 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHBrowseForFolder.cs" Link="Interop\Shell32\Interop.SHBrowseForFolder.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" Link="Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.AreDpiAwarenessContextsEqual.cs" Link="Interop\User32\Interop.AreDpiAwarenessContextsEqual.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
-    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.EnableWindow.cs" Link="Interop\User32\Interop.EnableWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DpiAwarenessContext.cs" Link="Interop\User32\Interop.DpiAwarenessContext.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetThreadDpiAwarenessContext.cs" Link="Interop\User32\Interop.GetThreadDpiAwarenessContext.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessage.cs" Link="Interop\User32\Interop.RegisterWindowMessage.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetFocus.cs" Link="Interop\User32\Interop.SetFocus.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetThreadDpiAwarenessContext.cs" Link="Interop\User32\Interop.SetThreadDpiAwarenessContext.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.TextFormatFlags.cs" Link="Interop\User32\Interop.TextFormatFlags.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowPosition.cs" Link="Interop\User32\Interop.WindowPosition.cs" />
     <Compile Include="..\..\Common\src\Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" Link="Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" />
   </ItemGroup>
 

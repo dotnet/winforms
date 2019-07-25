@@ -321,16 +321,16 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                cp.Style &= (~NativeMethods.WS_BORDER);
+                cp.Style &= (~User32.WindowStyle.WS_BORDER);
                 if (!Application.RenderWithVisualStyles)
                 {
                     switch (borderStyle)
                     {
                         case BorderStyle.Fixed3D:
-                            cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                            cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                             break;
                         case BorderStyle.FixedSingle:
-                            cp.Style |= NativeMethods.WS_BORDER;
+                            cp.Style |= User32.WindowStyle.WS_BORDER;
                             break;
                     }
                 }
@@ -1182,8 +1182,9 @@ namespace System.Windows.Forms
                     {
                         if (TextBox.CanFocus)
                         {
-                            UnsafeNativeMethods.SetFocus(new HandleRef(TextBox, TextBox.Handle));
+                            User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
                         }
+
                         base.WndProc(ref m);
                     }
                     break;

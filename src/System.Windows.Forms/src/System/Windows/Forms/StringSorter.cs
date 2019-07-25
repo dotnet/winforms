@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Globalization;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -106,7 +107,7 @@ namespace System.Windows.Forms
             }
             this.keys = keys;
             this.items = items;
-            lcid = culture == null ? SafeNativeMethods.GetThreadLocale() : culture.LCID;
+            lcid = culture == null ? Kernel32.GetThreadLocale() : culture.LCID;
             this.options = options & CompareOptions;
             descending = (options & Descending) != 0;
         }
@@ -129,7 +130,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int Compare(string s1, string s2)
         {
-            return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, 0);
+            return Compare(Kernel32.GetThreadLocale(), s1, s2, 0);
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int Compare(string s1, string s2, int options)
         {
-            return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, options);
+            return Compare(Kernel32.GetThreadLocale(), s1, s2, options);
         }
 
         /// <summary>

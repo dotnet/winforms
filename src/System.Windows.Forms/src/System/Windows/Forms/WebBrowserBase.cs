@@ -350,7 +350,7 @@ namespace System.Windows.Forms
                             message = WindowMessages.WM_SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
-                            time = SafeNativeMethods.GetTickCount()
+                            time = Kernel32.GetTickCount()
                         };
 
                         UnsafeNativeMethods.GetCursorPos(out Point p);
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
 
         internal void AttachWindow(IntPtr hwnd)
         {
-            UnsafeNativeMethods.SetParent(new HandleRef(null, hwnd), new HandleRef(this, Handle));
+            User32.SetParent(hwnd, new HandleRef(this, Handle));
 
             if (axWindow != null)
             {
@@ -1270,7 +1270,7 @@ namespace System.Windows.Forms
 
             if (cc == null)
             {
-                cc = Control.FromHandle(UnsafeNativeMethods.GetParent(new HandleRef(this, Handle))) as ContainerControl;
+                cc = Control.FromHandle(User32.GetParent(new HandleRef(this, Handle))) as ContainerControl;
             }
 
             // Never use the parking window for this: its hwnd can be destroyed at any time.

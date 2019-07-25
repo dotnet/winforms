@@ -197,9 +197,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
                     //We want to turn on mirroring for Trackbar explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LAYOUTRTL | User32.WindowStyle.WS_EX_NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(User32.WindowStyle.WS_EX_RTLREADING | User32.WindowStyle.WS_EX_RIGHT | User32.WindowStyle.WS_EX_LEFTSCROLLBAR);
                 }
                 return cp;
             }

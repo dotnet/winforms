@@ -75,8 +75,8 @@ namespace System.Windows.Forms
 
         static CheckedListBox()
         {
-            LBC_GETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_GETCHECKSTATE");
-            LBC_SETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_SETCHECKSTATE");
+            LBC_GETCHECKSTATE = User32.RegisterWindowMessageW("LBC_GETCHECKSTATE");
+            LBC_SETCHECKSTATE = User32.RegisterWindowMessageW("LBC_SETCHECKSTATE");
         }
 
         /// <summary>

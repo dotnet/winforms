@@ -149,13 +149,6 @@ namespace System.Windows.Forms
 
         public const int cmb4 = 0x0473;
 
-        public enum ClassStyle : uint
-        {
-            CS_DBLCLKS = 0x0008,
-            CS_DROPSHADOW = 0x00020000,
-            CS_SAVEBITS = 0x0800
-        }
-
         public const int CF_TEXT = 1,
         CF_BITMAP = 2,
         CF_METAFILEPICT = 3,
@@ -391,26 +384,13 @@ namespace System.Windows.Forms
         GMEM_INVALID_HANDLE = 0x8000,
         GHND = (GMEM_MOVEABLE | GMEM_ZEROINIT),
         GPTR = (GMEM_FIXED | GMEM_ZEROINIT),
-        GCL_WNDPROC = (-24),
-        GWL_WNDPROC = (-4),
-        GWL_HWNDPARENT = (-8),
-        GWL_STYLE = (-16),
-        GWL_EXSTYLE = (-20),
-        GWL_ID = (-12),
-        GW_HWNDFIRST = 0,
-        GW_HWNDLAST = 1,
-        GW_HWNDNEXT = 2,
-        GW_HWNDPREV = 3,
-        GW_CHILD = 5,
         GMR_VISIBLE = 0,
         GMR_DAYSTATE = 1,
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
         GDTR_MIN = 0x0001,
         GDTR_MAX = 0x0002,
         GDT_VALID = 0,
-        GDT_NONE = 1,
-        GA_PARENT = 1,
-        GA_ROOT = 2;
+        GDT_NONE = 1;
 
         // ImmGetCompostionString index.
         public const int
@@ -481,12 +461,6 @@ namespace System.Windows.Forms
         HBMMENU_POPUP_RESTORE = 9,
         HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
-
-        public static HandleRef HWND_TOP = new HandleRef(null, (IntPtr)0);
-        public static HandleRef HWND_BOTTOM = new HandleRef(null, (IntPtr)1);
-        public static HandleRef HWND_TOPMOST = new HandleRef(null, new IntPtr(-1));
-        public static HandleRef HWND_NOTOPMOST = new HandleRef(null, new IntPtr(-2));
-        public static HandleRef HWND_MESSAGE = new HandleRef(null, new IntPtr(-3));
 
         public const int IME_CMODE_NATIVE = 0x0001,
         IME_CMODE_KATAKANA = 0x0002,
@@ -1098,27 +1072,7 @@ namespace System.Windows.Forms
         ESB_ENABLE_BOTH = 0x0000,
         ESB_DISABLE_BOTH = 0x0003,
         SORT_DEFAULT = 0x0,
-        SUBLANG_DEFAULT = 0x01,
-        SW_HIDE = 0,
-        SW_NORMAL = 1,
-        SW_SHOWMINIMIZED = 2,
-        SW_SHOWMAXIMIZED = 3,
-        SW_MAXIMIZE = 3,
-        SW_SHOWNOACTIVATE = 4,
-        SW_SHOW = 5,
-        SW_MINIMIZE = 6,
-        SW_SHOWMINNOACTIVE = 7,
-        SW_SHOWNA = 8,
-        SW_RESTORE = 9,
-        SW_MAX = 10,
-        SWP_NOSIZE = 0x0001,
-        SWP_NOMOVE = 0x0002,
-        SWP_NOZORDER = 0x0004,
-        SWP_NOACTIVATE = 0x0010,
-        SWP_SHOWWINDOW = 0x0040,
-        SWP_HIDEWINDOW = 0x0080,
-        SWP_DRAWFRAME = 0x0020,
-        SWP_NOOWNERZORDER = 0x0200;
+        SUBLANG_DEFAULT = 0x01;
 
         public const int HLP_FILE = 1,
         HLP_KEYWORD = 2,
@@ -1468,50 +1422,11 @@ namespace System.Windows.Forms
         VK_INSERT = 0x002D,
         VK_DELETE = 0x002E;
 
-        public const int WH_JOURNALPLAYBACK = 1;
-        public const int WH_GETMESSAGE = 3;
-        public const int WH_MOUSE = 7;
         public const int WSF_VISIBLE = 0x0001;
 
         public const int WA_INACTIVE = 0;
         public const int WA_ACTIVE = 1;
         public const int WA_CLICKACTIVE = 2;
-
-        public const int WS_OVERLAPPED = 0x00000000;
-        public const int WS_POPUP = unchecked((int)0x80000000);
-        public const int WS_CHILD = 0x40000000;
-        public const int WS_MINIMIZE = 0x20000000;
-        public const int WS_VISIBLE = 0x10000000;
-        public const int WS_DISABLED = 0x08000000;
-        public const int WS_CLIPSIBLINGS = 0x04000000;
-        public const int WS_CLIPCHILDREN = 0x02000000;
-        public const int WS_MAXIMIZE = 0x01000000;
-        public const int WS_CAPTION = 0x00C00000;
-        public const int WS_BORDER = 0x00800000;
-        public const int WS_DLGFRAME = 0x00400000;
-        public const int WS_VSCROLL = 0x00200000;
-        public const int WS_HSCROLL = 0x00100000;
-        public const int WS_SYSMENU = 0x00080000;
-        public const int WS_THICKFRAME = 0x00040000;
-        public const int WS_TABSTOP = 0x00010000;
-        public const int WS_MINIMIZEBOX = 0x00020000;
-        public const int WS_MAXIMIZEBOX = 0x00010000;
-        public const int WS_EX_DLGMODALFRAME = 0x00000001;
-        public const int WS_EX_MDICHILD = 0x00000040;
-        public const int WS_EX_TOOLWINDOW = 0x00000080;
-        public const int WS_EX_CLIENTEDGE = 0x00000200;
-        public const int WS_EX_CONTEXTHELP = 0x00000400;
-        public const int WS_EX_RIGHT = 0x00001000;
-        public const int WS_EX_LEFT = 0x00000000;
-        public const int WS_EX_RTLREADING = 0x00002000;
-        public const int WS_EX_LEFTSCROLLBAR = 0x00004000;
-        public const int WS_EX_CONTROLPARENT = 0x00010000;
-        public const int WS_EX_STATICEDGE = 0x00020000;
-        public const int WS_EX_APPWINDOW = 0x00040000;
-        public const int WS_EX_LAYERED = 0x00080000;
-        public const int WS_EX_TOPMOST = 0x00000008;
-        public const int WS_EX_LAYOUTRTL = 0x00400000;
-        public const int WS_EX_NOINHERITLAYOUT = 0x00100000;
         public const int WPF_SETMINPOSITION = 0x0001;
 
         public const int WHEEL_DELTA = 120;
@@ -1548,7 +1463,7 @@ namespace System.Windows.Forms
             {
                 if (wmMouseEnterMessage == -1)
                 {
-                    wmMouseEnterMessage = SafeNativeMethods.RegisterWindowMessage("WinFormsMouseEnter");
+                    wmMouseEnterMessage = Interop.User32.RegisterWindowMessageW("WinFormsMouseEnter");
                 }
                 return wmMouseEnterMessage;
             }
@@ -1561,7 +1476,7 @@ namespace System.Windows.Forms
             {
                 if (wmUnSubclass == -1)
                 {
-                    wmUnSubclass = SafeNativeMethods.RegisterWindowMessage("WinFormsUnSubclass");
+                    wmUnSubclass = Interop.User32.RegisterWindowMessageW("WinFormsUnSubclass");
                 }
                 return wmUnSubclass;
             }
@@ -2012,8 +1927,6 @@ namespace System.Windows.Forms
             public int dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
         }
 
-        public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
         [StructLayout(LayoutKind.Sequential)]
         public struct MARGINS
         {
@@ -2110,21 +2023,6 @@ namespace System.Windows.Forms
             public int rcExclude_bottom;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct WINDOWPLACEMENT
-        {
-            public int length;
-            public int flags;
-            public int showCmd;
-            public Point ptMinPosition;
-            public Point ptMaxPosition;
-            // rcNormalPosition was a by-value RECT structure
-            public int rcNormalPosition_left;
-            public int rcNormalPosition_top;
-            public int rcNormalPosition_right;
-            public int rcNormalPosition_bottom;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class STARTUPINFO_I
         {
@@ -2172,8 +2070,8 @@ namespace System.Windows.Forms
 
             public IntPtr hInstance = IntPtr.Zero;
             public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnPageSetupHook = null;
-            public WndProc lpfnPagePaintHook = null;
+            public Interop.User32.WndProc lpfnPageSetupHook = null;
+            public Interop.User32.WndProc lpfnPagePaintHook = null;
             public string lpPageSetupTemplateName = null;
             public IntPtr hPageSetupTemplate = IntPtr.Zero;
         }
@@ -2199,8 +2097,8 @@ namespace System.Windows.Forms
             IntPtr hInstance { get; set; }
             IntPtr lCustData { get; set; }
 
-            WndProc lpfnPrintHook { get; set; }
-            WndProc lpfnSetupHook { get; set; }
+            Interop.User32.WndProc lpfnPrintHook { get; set; }
+            Interop.User32.WndProc lpfnSetupHook { get; set; }
 
             string lpPrintTemplateName { get; set; }
             string lpSetupTemplateName { get; set; }
@@ -2232,8 +2130,8 @@ namespace System.Windows.Forms
             IntPtr m_hInstance;
             IntPtr m_lCustData;
 
-            WndProc m_lpfnPrintHook;
-            WndProc m_lpfnSetupHook;
+            Interop.User32.WndProc m_lpfnPrintHook;
+            Interop.User32.WndProc m_lpfnSetupHook;
 
             string m_lpPrintTemplateName;
             string m_lpSetupTemplateName;
@@ -2259,8 +2157,8 @@ namespace System.Windows.Forms
             public IntPtr hInstance { get { return m_hInstance; } set { m_hInstance = value; } }
             public IntPtr lCustData { get { return m_lCustData; } set { m_lCustData = value; } }
 
-            public WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
-            public WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
+            public Interop.User32.WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
+            public Interop.User32.WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
 
             public string lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
             public string lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
@@ -2292,8 +2190,8 @@ namespace System.Windows.Forms
             IntPtr m_hInstance;
             IntPtr m_lCustData;
 
-            WndProc m_lpfnPrintHook;
-            WndProc m_lpfnSetupHook;
+            Interop.User32.WndProc m_lpfnPrintHook;
+            Interop.User32.WndProc m_lpfnSetupHook;
 
             string m_lpPrintTemplateName;
             string m_lpSetupTemplateName;
@@ -2319,8 +2217,8 @@ namespace System.Windows.Forms
             public IntPtr hInstance { get { return m_hInstance; } set { m_hInstance = value; } }
             public IntPtr lCustData { get { return m_lCustData; } set { m_lCustData = value; } }
 
-            public WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
-            public WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
+            public Interop.User32.WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
+            public Interop.User32.WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
 
             public string lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
             public string lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
@@ -2357,7 +2255,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.LPStr)]
             public string lpPrintTemplateName;
 
-            public WndProc lpCallback = null;
+            public Interop.User32.WndProc lpCallback = null;
 
             public int nPropertyPages;
 
@@ -2447,11 +2345,9 @@ namespace System.Windows.Forms
             public IntPtr lpCustColors;
             public int Flags;
             public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
+            public Interop.User32.WndProc lpfnHook;
             public string lpTemplateName = null;
         }
-
-        public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential)]
         public class BITMAP
@@ -2628,8 +2524,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class OPENFILENAME_I
         {
@@ -2651,7 +2545,7 @@ namespace System.Windows.Forms
             public short nFileExtension = 0;
             public string lpstrDefExt;
             public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
+            public Interop.User32.WndProc lpfnHook;
             public string lpTemplateName = null;
             public IntPtr pvReserved = IntPtr.Zero;
             public int dwReserved = 0;
@@ -2669,7 +2563,7 @@ namespace System.Windows.Forms
             public int Flags;
             public int rgbColors;
             public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
+            public Interop.User32.WndProc lpfnHook;
             public string lpTemplateName = null;
             public IntPtr hInstance;
             public string lpszStyle = null;
@@ -3204,21 +3098,6 @@ namespace System.Windows.Forms
             VT_TYPEMASK = 4095
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public unsafe struct WNDCLASS
-        {
-            public ClassStyle style;
-            public IntPtr lpfnWndProc;
-            public int cbClsExtra;
-            public int cbWndExtra;
-            public IntPtr hInstance;
-            public IntPtr hIcon;
-            public IntPtr hCursor;
-            public IntPtr hbrBackground;
-            public char* lpszMenuName;
-            public char* lpszClassName;
-        }
-
         public class MSOCM
         {
             // MSO Component registration flags
@@ -3541,7 +3420,7 @@ namespace System.Windows.Forms
             public int y;
             public int cx;
             public int cy;
-            public int flags;
+            public Interop.User32.WindowPosition flags;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4868,8 +4747,6 @@ namespace System.Windows.Forms
         public const int PS_GEOMETRIC = 0x00010000;
         public const int PS_ENDCAP_SQUARE = 0x00000100;
 
-        public const int WS_EX_TRANSPARENT = 0x00000020;
-
         public const int NULL_BRUSH = 5;
         public const int MM_HIMETRIC = 3;
 
@@ -5214,10 +5091,5 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetCursorPos(out Point pt);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
     }
 }
-
-

@@ -1072,10 +1072,6 @@ namespace System.Windows.Forms
         [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.WebBrowserStatusTextChangedDescr))]
         public event EventHandler StatusTextChanged;
 
-        //
-        // public overrides:
-        //
-
         /// <summary>
         ///  Returns true if this control (or any of its child windows) has focus.
         /// </summary>
@@ -1087,17 +1083,12 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
-                return hwndFocus != IntPtr.Zero
-                    && SafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(null, hwndFocus));
+
+                IntPtr hwndFocus = User32.GetFocus();
+                return hwndFocus != IntPtr.Zero && User32.IsChild(new HandleRef(this, Handle), hwndFocus);
             }
         }
 
-        //
-        // protected overrides:
-        //
-        //
-        //
         protected override void Dispose(bool disposing)
         {
             if (disposing)

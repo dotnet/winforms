@@ -401,8 +401,8 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "COMBOBOX";
-                cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
-                cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                cp.Style |= User32.WindowStyle.WS_VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
+                cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                 if (!integralHeight)
                 {
                     cp.Style |= NativeMethods.CBS_NOINTEGRALHEIGHT;
@@ -668,7 +668,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr focus = UnsafeNativeMethods.GetFocus();
+                IntPtr focus = User32.GetFocus();
                 return focus != IntPtr.Zero && ((childEdit != null && focus == childEdit.Handle) || (childListBox != null && focus == childListBox.Handle));
             }
         }
@@ -1653,12 +1653,12 @@ namespace System.Windows.Forms
             // Get the Combox Rect ...
             //
             RECT comboRectMid = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref comboRectMid);
+            User32.GetWindowRect(new HandleRef(this, Handle), ref comboRectMid);
             //
             //Get the Edit Rectangle...
             //
             RECT editRectMid = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, childEdit.Handle), ref editRectMid);
+            User32.GetWindowRect(new HandleRef(this, childEdit.Handle), ref editRectMid);
 
             //get the delta
             int comboXMid = NativeMethods.Util.SignedLOWORD(m.LParam) + (editRectMid.left - comboRectMid.left);
@@ -1909,8 +1909,8 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    RECT r = new RECT();
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+                    var r = new RECT();
+                    User32.GetWindowRect(new HandleRef(this, Handle), ref r);
                     Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
                     // Get the mouse location
                     //
@@ -2070,7 +2070,7 @@ namespace System.Windows.Forms
         private void OnMouseLeaveInternal(EventArgs args)
         {
             RECT rect = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
+            User32.GetWindowRect(new HandleRef(this, Handle), ref rect);
             Rectangle Rect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
             Point p = MousePosition;
             if (!Rect.Contains(p))
@@ -2536,7 +2536,7 @@ namespace System.Windows.Forms
 
             if (ok && DropDownStyle != ComboBoxStyle.DropDownList)
             {
-                IntPtr hwnd = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+                IntPtr hwnd = User32.GetWindow(new HandleRef(this, Handle), User32.GetWindowOption.GW_CHILD);
                 if (hwnd != IntPtr.Zero)
                 {
 
@@ -2549,7 +2549,7 @@ namespace System.Windows.Forms
 
                         // get the edits hwnd...
                         //
-                        hwnd = UnsafeNativeMethods.GetWindow(new HandleRef(this, hwnd), NativeMethods.GW_HWNDNEXT);
+                        hwnd = User32.GetWindow(new HandleRef(this, hwnd), User32.GetWindowOption.GW_HWNDNEXT);
                     }
 
                     childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
@@ -3530,7 +3530,7 @@ namespace System.Windows.Forms
         {
             if (dropDownHandle != IntPtr.Zero)
             {
-                //Now use the DropDownHeight property instead of calculating the Height...
+                // Now use the DropDownHeight property instead of calculating the Height...
                 int height = DropDownHeight;
                 if (height == DefaultDropDownHeight)
                 {
@@ -3538,8 +3538,15 @@ namespace System.Windows.Forms
                     int count = Math.Min(Math.Max(itemCount, 1), maxDropDownItems);
                     height = (ItemHeight * count + 2);
                 }
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, dropDownHandle), NativeMethods.NullHandleRef, 0, 0, DropDownWidth, height,
-                                     NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOZORDER);
+
+                User32.SetWindowPos(
+                    new HandleRef(this, dropDownHandle),
+                    IntPtr.Zero,
+                    0,
+                    0,
+                    DropDownWidth,
+                    height,
+                    User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOZORDER);
             }
         }
 
@@ -3897,8 +3904,8 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    RECT r = new RECT();
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+                    var r = new RECT();
+                    User32.GetWindowRect(new HandleRef(this, Handle), ref r);
                     Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
 
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -6143,13 +6150,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            internal bool Visible
-            {
-                get
-                {
-                    return SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle));
-                }
-            }
+            internal bool Visible => User32.IsWindowVisible(new HandleRef(this, Handle));
 
             static internal bool AutoCompleteActive
             {
@@ -6238,7 +6239,6 @@ namespace System.Windows.Forms
         /// </summary>
         private class AutoCompleteDropDownFinder
         {
-            private const int MaxClassName = 256;
             private const string AutoCompleteClassName = "Auto-Suggest Dropdown";
             bool shouldSubClass = false; //nonstatic
 
@@ -6254,29 +6254,27 @@ namespace System.Windows.Forms
                     //generating a before snapshot -- lets lose the null handles
                     ACNativeWindow.ClearNullACWindows();
                 }
+
                 // Look for a popped up dropdown
                 shouldSubClass = subclass;
-                UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(), new NativeMethods.EnumThreadWindowsCallback(Callback), new HandleRef(null, IntPtr.Zero));
+                var callback = new User32.EnumThreadWindowsCallback(Callback);
+                User32.EnumThreadWindows(
+                    Kernel32.GetCurrentThreadId(),
+                    callback,
+                    IntPtr.Zero);
+
+                GC.KeepAlive(callback);
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lParam)
             {
-                HandleRef hRef = new HandleRef(null, hWnd);
-
                 // Check class name and see if it's visible
-                if (GetClassName(hRef) == AutoCompleteClassName)
+                if (User32.GetClassName(hWnd) == AutoCompleteClassName)
                 {
-                    ACNativeWindow.RegisterACWindow(hRef.Handle, shouldSubClass);
+                    ACNativeWindow.RegisterACWindow(hWnd, shouldSubClass);
                 }
 
                 return true;
-            }
-
-            static string GetClassName(HandleRef hRef)
-            {
-                StringBuilder sb = new StringBuilder(MaxClassName);
-                UnsafeNativeMethods.GetClassName(hRef, sb, MaxClassName);
-                return sb.ToString();
             }
         }
 

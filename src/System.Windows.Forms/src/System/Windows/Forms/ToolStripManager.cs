@@ -947,7 +947,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     _justEnteredMenuMode = true;
 #endif
-                    IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                    IntPtr hwndActive = User32.GetActiveWindow();
                     if (hwndActive != IntPtr.Zero)
                     {
                         ActiveHwndInternal = new HandleRef(this, hwndActive);
@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms
                     if (dropDown.AutoClose == false)
                     {
                         // store off the current active hwnd
-                        IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                        IntPtr hwndActive = User32.GetActiveWindow();
                         if (hwndActive != IntPtr.Zero)
                         {
                             ActiveHwndInternal = new HandleRef(this, hwndActive);
@@ -1355,7 +1355,7 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                if (UnsafeNativeMethods.IsChild(hwndParent, hwndChild))
+                if (User32.IsChild(hwndParent, hwndChild))
                 {
                     return true;
                 }
@@ -1403,7 +1403,7 @@ namespace System.Windows.Forms
                     return false;
                 }
                 HandleRef hwndActiveToolStrip = new HandleRef(activeToolStrip, activeToolStrip.Handle);
-                HandleRef hwndCurrentActiveWindow = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
+                HandleRef hwndCurrentActiveWindow = new HandleRef(null, User32.GetActiveWindow());
 
                 // if the active window has changed...
                 if (hwndCurrentActiveWindow.Handle != _lastActiveWindow.Handle)
@@ -1433,8 +1433,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                DpiAwarenessContext context = CommonUnsafeNativeMethods.GetDpiAwarenessContextForWindow(m.HWnd);
-
+                User32.DpiAwarenessContext context = User32.GetDpiAwarenessContextForWindow(m.HWnd);
                 using (DpiHelper.EnterDpiAwarenessScope(context))
                 {
                     switch (m.Msg)
@@ -1536,7 +1535,7 @@ namespace System.Windows.Forms
             {
                 private IntPtr messageHookHandle = IntPtr.Zero;
                 private bool isHooked = false;
-                private NativeMethods.HookProc hookProc;
+                private User32.HookProc hookProc;
 
                 public HostedWindowsFormsMessageHook()
                 {
@@ -1588,12 +1587,12 @@ namespace System.Windows.Forms
                             return;
                         }
 
-                        hookProc = new NativeMethods.HookProc(MessageHookProc);
-
-                        messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_GETMESSAGE,
-                                                                   hookProc,
-                                                                   new HandleRef(null, IntPtr.Zero),
-                                                                   SafeNativeMethods.GetCurrentThreadId());
+                        hookProc = new User32.HookProc(MessageHookProc);
+                        messageHookHandle = User32.SetWindowsHookExW(
+                            User32.WindowHookProcedure.WH_GETMESSAGE,
+                            hookProc,
+                            IntPtr.Zero,
+                            Kernel32.GetCurrentThreadId());
 
                         if (messageHookHandle != IntPtr.Zero)
                         {
@@ -1624,7 +1623,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, messageHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(new HandleRef(this, messageHookHandle), nCode, wparam, lparam);
                 }
 
                 private void UninstallMessageHook()
@@ -1633,7 +1632,7 @@ namespace System.Windows.Forms
                     {
                         if (messageHookHandle != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, messageHookHandle));
+                            User32.UnhookWindowsHookEx(new HandleRef(this, messageHookHandle));
                             hookProc = null;
                             messageHookHandle = IntPtr.Zero;
                             isHooked = false;
@@ -1969,8 +1968,7 @@ namespace System.Windows.Forms
 
                         // if we've alt-tabbed away dont snap/restore focus.
                         HandleRef topmostParentOfMenu = WindowsFormsUtils.GetRootHWnd(menuStripToActivate);
-                        IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
-
+                        IntPtr foregroundWindow = User32.GetForegroundWindow();
                         if (topmostParentOfMenu.Handle == foregroundWindow)
                         {
                             Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] ToolStripManager call MenuStrip.OnMenuKey");

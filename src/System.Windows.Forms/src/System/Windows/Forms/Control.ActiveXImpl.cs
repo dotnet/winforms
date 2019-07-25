@@ -908,7 +908,7 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    UnsafeNativeMethods.SetParent(new HandleRef(_control, _control.Handle), new HandleRef(null, hwndParent));
+                    User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent);
 
                     // Now create our handle if it hasn't already been done.
                     _control.CreateControl();
@@ -2193,7 +2193,7 @@ namespace System.Windows.Forms
                     {
                         // Offset the rectangle back to client coordinates
                         RECT rcIntersect = intersect;
-                        IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(_control, _control.Handle));
+                        IntPtr hWndParent = User32.GetParent(new HandleRef(_control, _control.Handle));
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Control Bounds: " + posRect);
@@ -2224,11 +2224,10 @@ namespace System.Windows.Forms
                         finalClipRegion = MergeRegion(rgn);
                     }
 
-                    UnsafeNativeMethods.SetWindowRgn(new HandleRef(_control, _control.Handle), new HandleRef(this, finalClipRegion), SafeNativeMethods.IsWindowVisible(new HandleRef(_control, _control.Handle)));
+                    User32.SetWindowRgn(new HandleRef(_control, _control.Handle), new HandleRef(this, finalClipRegion), User32.IsWindowVisible(new HandleRef(_control, _control.Handle)));
                 }
 
-                // Yuck.  Forms^3 uses transparent overlay windows that appear to cause
-                // painting artifacts.  Flicker like a banshee.
+                // Form uses transparent overlay windows that appear to cause painting artifacts and flicker.
                 _control.Invalidate();
             }
 
@@ -2296,7 +2295,7 @@ namespace System.Windows.Forms
 
                                 // Someone returned true from IsInputKey or IsInputChar
                                 UnsafeNativeMethods.TranslateMessage(ref lpmsg);
-                                if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg.hwnd)))
+                                if (User32.IsWindowUnicode(lpmsg.hwnd))
                                 {
                                     UnsafeNativeMethods.DispatchMessageW(ref lpmsg);
                                 }
@@ -2395,15 +2394,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Notifies our site that we have changed our size and location.
             /// </summary>
-            internal void UpdateBounds(ref int x, ref int y, ref int width, ref int height, int flags)
+            internal void UpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.WindowPosition flags)
             {
                 if (!_activeXState[s_adjustingRect] && _activeXState[s_inPlaceVisible])
                 {
                     if (_clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
                     {
-                        NativeMethods.COMRECT rc = new NativeMethods.COMRECT();
-
-                        if ((flags & NativeMethods.SWP_NOMOVE) != 0)
+                        var rc = new NativeMethods.COMRECT();
+                        if ((flags & User32.WindowPosition.SWP_NOMOVE) != 0)
                         {
                             rc.left = _control.Left;
                             rc.top = _control.Top;
@@ -2414,7 +2412,7 @@ namespace System.Windows.Forms
                             rc.top = y;
                         }
 
-                        if ((flags & NativeMethods.SWP_NOSIZE) != 0)
+                        if ((flags & User32.WindowPosition.SWP_NOSIZE) != 0)
                         {
                             rc.right = rc.left + _control.Width;
                             rc.bottom = rc.top + _control.Height;
@@ -2440,12 +2438,12 @@ namespace System.Windows.Forms
                         }
 
                         // On output, the new bounds will be reflected in  rc
-                        if ((flags & NativeMethods.SWP_NOMOVE) == 0)
+                        if ((flags & User32.WindowPosition.SWP_NOMOVE) == 0)
                         {
                             x = rc.left;
                             y = rc.top;
                         }
-                        if ((flags & NativeMethods.SWP_NOSIZE) == 0)
+                        if ((flags & User32.WindowPosition.SWP_NOSIZE) == 0)
                         {
                             width = rc.right - rc.left;
                             height = rc.bottom - rc.top;

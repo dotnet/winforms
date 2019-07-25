@@ -138,10 +138,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOPMOST,
-                                  0, 0, 0, 0,
-                                  NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                  NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOPMOST,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper info = GetTOOLINFO(control);
                 if (info.SendMessage(this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)

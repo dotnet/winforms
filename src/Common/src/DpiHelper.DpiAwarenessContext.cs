@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -16,7 +18,7 @@ namespace System.Windows.Forms
         /// <param name="awareness">The new DPI awareness for the current thread</param>
         /// <returns>An object that, when disposed, will reset the current thread's
         ///  DPI awareness to the value it had when the object was created.</returns>
-        public static IDisposable EnterDpiAwarenessScope(DpiAwarenessContext awareness)
+        public static IDisposable EnterDpiAwarenessScope(User32.DpiAwarenessContext awareness)
         {
             return new DpiAwarenessScope(awareness);
         }
@@ -30,13 +32,11 @@ namespace System.Windows.Forms
         /// <returns> returns object created in system aware mode</returns>
         public static T CreateInstanceInSystemAwareContext<T>(Func<T> createInstance)
         {
-            using (EnterDpiAwarenessScope(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            using (EnterDpiAwarenessScope(User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 return createInstance();
             }
         }
-
-        #region Scoping DpiAwareness context helper class
 
         /// <summary>
         ///  Class that help setting Dpi awareness context scope
@@ -44,24 +44,24 @@ namespace System.Windows.Forms
         private class DpiAwarenessScope : IDisposable
         {
             private bool dpiAwarenessScopeIsSet = false;
-            private readonly DpiAwarenessContext originalAwareness = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+            private readonly User32.DpiAwarenessContext originalAwareness = User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
             /// <summary>
             ///  Enters given Dpi awareness scope
             /// </summary>
-            public DpiAwarenessScope(DpiAwarenessContext awareness)
+            public DpiAwarenessScope(User32.DpiAwarenessContext awareness)
             {
                 try
                 {
-                    if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
+                    if (!User32.DpiAwarenessContextsEquals(awareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
                     {
-                        originalAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
+                        originalAwareness = User32.GetCurrentThreadDpiAwarenessContext();
 
                         // If current process dpiawareness is SYSTEM_UNAWARE or SYSTEM_AWARE (must be equal to awareness), calling this method will be a no-op.
-                        if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, awareness) &&
-                            !CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
+                        if (!User32.DpiAwarenessContextsEquals(originalAwareness, awareness) &&
+                            !User32.DpiAwarenessContextsEquals(originalAwareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
                         {
-                            originalAwareness = CommonUnsafeNativeMethods.SetThreadDpiAwarenessContext(awareness);
+                            originalAwareness = User32.SetCurrentThreadDpiAwarenessContext(awareness);
                             dpiAwarenessScopeIsSet = true;
                         }
                     }
@@ -75,10 +75,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Dispose object and resources
             /// </summary>
-            public void Dispose()
-            {
-                ResetDpiAwarenessContextChanges();
-            }
+            public void Dispose() => ResetDpiAwarenessContextChanges();
 
             /// <summary>
             ///  resetting dpiawareness of the thread.
@@ -87,11 +84,10 @@ namespace System.Windows.Forms
             {
                 if (dpiAwarenessScopeIsSet)
                 {
-                    CommonUnsafeNativeMethods.TrySetThreadDpiAwarenessContext(originalAwareness);
+                    User32.SetCurrentThreadDpiAwarenessContext(originalAwareness);
                     dpiAwarenessScopeIsSet = false;
                 }
             }
         }
-        #endregion
     }
 }

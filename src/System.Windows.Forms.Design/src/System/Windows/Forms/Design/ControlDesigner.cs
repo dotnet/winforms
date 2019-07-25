@@ -394,7 +394,10 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the control.  This is useful if you want to block this message from getting to the control, but you do not want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
-        protected void BaseWndProc(ref Message m) => m.Result = UnsafeNativeMethods.DefWindowProc(m.HWnd, m.Msg, m.WParam, m.LParam);
+        protected void BaseWndProc(ref Message m)
+        {
+            m.Result = User32.DefWindowProcW(m.HWnd, m.Msg, m.WParam, m.LParam);
+        }
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the control for this designer can be parented into the given ParentControlDesigner's designer.
@@ -2353,7 +2356,7 @@ namespace System.Windows.Forms.Design
         {
             bool doubleClick = false;
             int wait = SystemInformation.DoubleClickTime;
-            int elapsed = SafeNativeMethods.GetTickCount() - _lastClickMessageTime;
+            int elapsed = Kernel32.GetTickCount() - _lastClickMessageTime;
             if (elapsed <= wait)
             {
                 Size dblClick = SystemInformation.DoubleClickSize;
@@ -2370,7 +2373,7 @@ namespace System.Windows.Forms.Design
             {
                 _lastClickMessagePositionX = x;
                 _lastClickMessagePositionY = y;
-                _lastClickMessageTime = SafeNativeMethods.GetTickCount();
+                _lastClickMessageTime = Kernel32.GetTickCount();
             }
             else
             {
@@ -2656,15 +2659,15 @@ namespace System.Windows.Forms.Design
                 if (child == null || Control is UserControl)
                 {
                     // Now do the children of this window.
-                    HookChildHandles(UnsafeNativeMethods.GetWindow(hwndChild, NativeMethods.GW_CHILD));
+                    HookChildHandles(User32.GetWindow(hwndChild, User32.GetWindowOption.GW_CHILD));
                 }
-                hwndChild = UnsafeNativeMethods.GetWindow(hwndChild, NativeMethods.GW_HWNDNEXT);
+                hwndChild = User32.GetWindow(hwndChild, User32.GetWindowOption.GW_HWNDNEXT);
             }
         }
 
         private bool IsWindowInCurrentProcess(IntPtr hwnd)
         {
-            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hwnd), out int pid);
+            User32.GetWindowThreadProcessId(hwnd, out int pid);
             return pid == CurrentProcessId;
         }
 
@@ -2674,8 +2677,9 @@ namespace System.Windows.Forms.Design
             {
                 if (s_currentProcessId == 0)
                 {
-                    s_currentProcessId = SafeNativeMethods.GetCurrentProcessId();
+                    s_currentProcessId = Kernel32.GetCurrentProcessId();
                 }
+
                 return s_currentProcessId;
             }
         }
@@ -2686,7 +2690,7 @@ namespace System.Windows.Forms.Design
             // 1.  Child handles that do not have a Control associated  with them.  We must subclass these and prevent them from getting design-time events.
             // 2.   Child handles that do have a Control associated with them, but the control does not have a designer. We must hook the WindowTarget on these controls and prevent them from getting design-time events.
             // 3.   Child handles that do have a Control associated with them, and the control has a designer.  We ignore these and let the designer handle their messages.
-            HookChildHandles(UnsafeNativeMethods.GetWindow(Control.Handle, NativeMethods.GW_CHILD));
+            HookChildHandles(User32.GetWindow(Control.Handle, User32.GetWindowOption.GW_CHILD));
             HookChildControls(Control);
         }
 

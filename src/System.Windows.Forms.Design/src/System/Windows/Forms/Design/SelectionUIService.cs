@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style &= ~(NativeMethods.WS_CLIPSIBLINGS | NativeMethods.WS_CLIPCHILDREN);
+                cp.Style &= ~(User32.WindowStyle.WS_CLIPSIBLINGS | User32.WindowStyle.WS_CLIPCHILDREN);
                 return cp;
             }
         }

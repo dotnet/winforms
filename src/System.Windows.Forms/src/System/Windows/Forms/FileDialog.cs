@@ -477,7 +477,7 @@ namespace System.Windows.Forms
         {
             if (msg == WindowMessages.WM_NOTIFY)
             {
-                _dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
+                _dialogHWnd = User32.GetParent(hWnd);
                 try
                 {
                     UnsafeNativeMethods.OFNOTIFY notify = Marshal.PtrToStructure<UnsafeNativeMethods.OFNOTIFY>(lparam);
@@ -535,13 +535,13 @@ namespace System.Windows.Forms
                                 {
                                     // This is the second CDN_FILEOK, so we want to ignore it.
                                     _ignoreSecondFileOkNotification = false;
-                                    UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), 0, new HandleRef(null, NativeMethods.InvalidIntPtr));
+                                    User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
                             if (!DoFileOk(notify.lpOFN))
                             {
-                                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), 0, new HandleRef(null, NativeMethods.InvalidIntPtr));
+                                User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                 return NativeMethods.InvalidIntPtr;
                             }
                             break;
@@ -664,7 +664,7 @@ namespace System.Windows.Forms
         private protected bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            IntPtr focusHandle = UnsafeNativeMethods.GetFocus();
+            IntPtr focusHandle = User32.GetFocus();
             try
             {
                 return RTLAwareMessageBox.Show(null, message, caption, buttons, icon,
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, focusHandle));
+                User32.SetFocus(focusHandle);
             }
         }
 
@@ -744,7 +744,7 @@ namespace System.Windows.Forms
 
         private bool RunDialogOld(IntPtr hWndOwner)
         {
-            var hookProcPtr = new NativeMethods.WndProc(HookProc);
+            var hookProcPtr = new User32.WndProc(HookProc);
             var ofn = new NativeMethods.OPENFILENAME_I();
             try
             {

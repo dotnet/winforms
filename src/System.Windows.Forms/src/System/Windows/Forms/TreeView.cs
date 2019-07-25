@@ -339,16 +339,16 @@ namespace System.Windows.Forms
                 //
                 if (IsHandleCreated)
                 {
-                    int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                    cp.Style |= (currentStyle & (NativeMethods.WS_HSCROLL | NativeMethods.WS_VSCROLL));
+                    int currentStyle = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE)));
+                    cp.Style |= (currentStyle & (User32.WindowStyle.WS_HSCROLL | User32.WindowStyle.WS_VSCROLL));
                 }
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= User32.WindowStyle.WS_BORDER;
                         break;
                 }
 
@@ -418,9 +418,9 @@ namespace System.Windows.Forms
                     if (RightToLeftLayout == true)
                     {
                         //We want to turn on mirroring for TreeView explicitly.
-                        cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                        cp.ExStyle |= User32.WindowStyle.WS_EX_LAYOUTRTL;
                         //Don't need these styles when mirroring is turned on.
-                        cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                        cp.ExStyle &= ~(User32.WindowStyle.WS_EX_RTLREADING | User32.WindowStyle.WS_EX_RIGHT | User32.WindowStyle.WS_EX_LEFTSCROLLBAR);
                     }
                     else
                     {
@@ -2016,16 +2016,16 @@ namespace System.Windows.Forms
             // This seems to make the Treeview happy.
             if (CheckBoxes)
             {
-                int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)(User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE)));
                 style |= NativeMethods.TVS_CHECKBOXES;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE, (IntPtr)style);
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
-                int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)(User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE)));
                 style |= NativeMethods.TVS_INFOTIP;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE, (IntPtr)style);
             }
 
             Color c;
@@ -2079,14 +2079,27 @@ namespace System.Windows.Forms
 
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = Width;
-                int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, int.MaxValue, Height, flags);
+                User32.WindowPosition flags = User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOMOVE;
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    Left,
+                    Top,
+                    int.MaxValue,
+                    Height,
+                    flags);
 
                 root.Realize(false);
 
                 if (oldSize != 0)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, oldSize, Height, flags);
+                    User32.SetWindowPos(
+                        new HandleRef(this, Handle),
+                        User32.HWND_TOP,
+                        Left, Top,
+                        oldSize,
+                        Height,
+                        flags);
                 }
             }
             finally
@@ -2993,8 +3006,14 @@ namespace System.Windows.Forms
                         bounds.Location = PointToScreen(bounds.Location);
 
                         User32.SendMessageW(tooltipHandle, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), bounds);
-                        SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHandle),
-                                NativeMethods.HWND_TOPMOST, bounds.Left, bounds.Top, 0, 0, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER);
+                        User32.SetWindowPos(
+                            new HandleRef(this, tooltipHandle),
+                            User32.HWND_TOPMOST,
+                            bounds.Left,
+                            bounds.Top,
+                            0,
+                            0,
+                            User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOZORDER);
                         return true;
                     }
                 }

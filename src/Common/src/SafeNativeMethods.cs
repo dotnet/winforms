@@ -107,9 +107,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseColor([In, Out] NativeMethods.CHOOSECOLOR cc);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int RegisterWindowMessage(string msg);
-
         [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreateFontIndirect", ExactSpelling = true, PreserveSig = false)]
         public static extern IFontDisp OleCreateIFontDispIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
 
@@ -327,9 +324,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetSysColorBrush(int nIndex);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool EnableWindow(HandleRef hWnd, bool enable);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetClientRect(HandleRef hWnd, ref Interop.RECT rect);
 
@@ -385,46 +379,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int SetMapMode(HandleRef hDC, int nMapMode);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsWindowEnabled(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsWindowVisible(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ReleaseCapture();
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetCurrentThreadId();
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool EnumWindows(EnumThreadWindowsCallback callback, IntPtr extraData);
-
-        internal delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetWindowThreadProcessId(HandleRef hWnd, out int lpdwProcessId);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetExitCodeThread(HandleRef hWnd, out int lpdwExitCode);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ShowWindow(HandleRef hWnd, int nCmdShow);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(
-            HandleRef hWnd,
-            HandleRef hWndInsertAfter,
-            int x = 0,
-            int y = 0,
-            int cx = 0,
-            int cy = 0,
-            int flags = 0);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
-                                       int x, int y, int cx, int cy, int flags);
-
         // this is a wrapper that comctl exposes for the NT function since it doesn't exist natively on 95.
         [DllImport(ExternDll.Comctl32, ExactSpelling = true)]
 
@@ -457,23 +411,14 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool UpdateWindow(HandleRef hWnd);
 
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetCurrentProcessId();
-
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true)]
         public static extern int ScrollWindowEx(HandleRef hWnd, int nXAmount, int nYAmount, NativeMethods.COMRECT rectScrollRegion, ref Interop.RECT rectClip, HandleRef hrgnUpdate, ref Interop.RECT prcUpdate, int flags);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetThreadLocale();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool MessageBeep(int type);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool DrawMenuBar(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public extern static bool IsChild(HandleRef parent, HandleRef child);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetTimer(HandleRef hWnd, int nIDEvent, int uElapse, IntPtr lpTimerFunc);
@@ -484,23 +429,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int MessageBox(HandleRef hWnd, string text, string caption, int type);
 
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetTickCount();
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool ScrollWindow(HandleRef hWnd, int nXAmount, int nYAmount, ref Interop.RECT rectScrollRegion, ref Interop.RECT rectClip);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetCurrentProcess();
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetCurrentThread();
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public extern static bool SetThreadLocale(int Locale);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsWindowUnicode(HandleRef hWnd);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DrawEdge(HandleRef hDC, ref Interop.RECT rect, int edge, int flags);

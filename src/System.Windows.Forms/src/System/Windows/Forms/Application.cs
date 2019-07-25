@@ -709,10 +709,10 @@ namespace System.Windows.Forms
                 {
                     SafeNativeMethods.SetThemeAppProperties((int)value);
 
-                    //248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
-                    //We do it this way to ensure that we get all top level windows -- whether we created them or not.
-                    SafeNativeMethods.EnumThreadWindowsCallback callback = new SafeNativeMethods.EnumThreadWindowsCallback(Application.SendThemeChanged);
-                    SafeNativeMethods.EnumWindows(callback, IntPtr.Zero);
+                    // We need to send a WM_THEMECHANGED to the top level windows of this application.
+                    // We do it this way to ensure that we get all top level windows whether we created them or not.
+                    var callback = new User32.EnumWindowsCallback(Application.SendThemeChanged);
+                    User32.EnumWindows(callback, IntPtr.Zero);
 
                     GC.KeepAlive(callback);
                 }
@@ -724,9 +724,9 @@ namespace System.Windows.Forms
         /// </summary>
         private static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
         {
-            int thisPID = SafeNativeMethods.GetCurrentProcessId();
-            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out int processId);
-            if (processId == thisPID && SafeNativeMethods.IsWindowVisible(new HandleRef(null, handle)))
+            int thisPID = Kernel32.GetCurrentProcessId();
+            User32.GetWindowThreadProcessId(handle, out int processId);
+            if (processId == thisPID && User32.IsWindowVisible(handle))
             {
 
                 SendThemeChangedRecursive(handle, IntPtr.Zero);
@@ -1137,7 +1137,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static ThreadContext GetContextForHandle(HandleRef handle)
         {
-            int id = SafeNativeMethods.GetWindowThreadProcessId(handle, out int pid);
+            int id = User32.GetWindowThreadProcessId(handle, out int pid);
             ThreadContext cxt = ThreadContext.FromId(id);
             Debug.Assert(cxt != null, "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
             return cxt;
@@ -1201,10 +1201,10 @@ namespace System.Windows.Forms
         ///  "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+        internal static void ParkHandle(HandleRef handle, User32.DpiAwarenessContext dpiAwarenessContext = User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
         {
-            Debug.Assert(UnsafeNativeMethods.IsWindow(handle), "Handle being parked is not a valid window handle");
-            Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & NativeMethods.WS_CHILD) != 0, "Only WS_CHILD windows should be parked.");
+            Debug.Assert(User32.IsWindow(handle), "Handle being parked is not a valid window handle");
+            Debug.Assert(((int)User32.GetWindowLong(handle, User32.WindowLong.GWL_STYLE) & User32.WindowStyle.WS_CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null)
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiContext"> dpi awareness</param>
-        internal static void ParkHandle(CreateParams cp, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+        internal static void ParkHandle(CreateParams cp, User32.DpiAwarenessContext dpiAwarenessContext = User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
         {
             ThreadContext cxt = ThreadContext.FromCurrent();
             if (cxt != null)
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms
         ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void UnparkHandle(HandleRef handle, DpiAwarenessContext context)
+        internal static void UnparkHandle(HandleRef handle, User32.DpiAwarenessContext context)
         {
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null)
@@ -1899,13 +1899,12 @@ namespace System.Windows.Forms
                             rgmsg[0] = msg;
                             continueLoop = component.FContinueMessageLoop(reason, pvLoopData, rgmsg);
 
-                            // If the component wants us to process the message, do it.
-                            // The component manager hosts windows from many places.  We must be sensitive
-                            // to ansi / Unicode windows here.
+                            // If the component wants us to process the message, do it. The component manager
+                            // hosts windows from many places. We must be sensitive to ansi/Unicode windows here.
                             //
                             if (continueLoop)
                             {
-                                if (msg.hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, msg.hwnd)))
+                                if (msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd))
                                 {
                                     unicodeWindow = true;
                                     UnsafeNativeMethods.GetMessageW(ref msg, NativeMethods.NullHandleRef, 0, 0);
@@ -2210,13 +2209,18 @@ namespace System.Windows.Forms
             {
                 IntPtr address = IntPtr.Zero;
 
-                UnsafeNativeMethods.DuplicateHandle(new HandleRef(null, SafeNativeMethods.GetCurrentProcess()), new HandleRef(null, SafeNativeMethods.GetCurrentThread()),
-                                                    new HandleRef(null, SafeNativeMethods.GetCurrentProcess()), ref address, 0, false,
-                                                    NativeMethods.DUPLICATE_SAME_ACCESS);
+                UnsafeNativeMethods.DuplicateHandle(
+                    new HandleRef(null, Kernel32.GetCurrentProcess()),
+                    new HandleRef(null, Kernel32.GetCurrentThread()),
+                    new HandleRef(null, Kernel32.GetCurrentProcess()),
+                    ref address,
+                    0,
+                    false,
+                    NativeMethods.DUPLICATE_SAME_ACCESS);
 
                 handle = address;
 
-                id = SafeNativeMethods.GetCurrentThreadId();
+                id = Kernel32.GetCurrentThreadId();
                 messageLoopCount = 0;
                 currentThreadContext = this;
                 contextHash[id] = this;
@@ -2421,7 +2425,7 @@ namespace System.Windows.Forms
             ///  Retrieves the actual parking form.  This will demand create the parking window
             ///  if it needs to.
             /// </summary>
-            internal ParkingWindow GetParkingWindow(DpiAwarenessContext context)
+            internal ParkingWindow GetParkingWindow(User32.DpiAwarenessContext context)
             {
 
                 // Locking 'this' here is ok since this is an internal class.
@@ -2453,7 +2457,7 @@ namespace System.Windows.Forms
             ///  Returns parking window that matches dpi awareness context. return null if not found.
             /// </summary>
             /// <returns>return matching parking window from list. returns null if not found</returns>
-            internal ParkingWindow GetParkingWindowForContext(DpiAwarenessContext context)
+            internal ParkingWindow GetParkingWindowForContext(User32.DpiAwarenessContext context)
             {
 
                 if (parkingWindows.Count == 0)
@@ -2464,7 +2468,7 @@ namespace System.Windows.Forms
                 // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
                 // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
 
-                if (!DpiHelper.IsScalingRequirementMet || CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(context, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
+                if (!DpiHelper.IsScalingRequirementMet || User32.DpiAwarenessContextsEquals(context, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
                 {
 
                     Debug.Assert(parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
@@ -2474,7 +2478,7 @@ namespace System.Windows.Forms
                 // Supported OS scenario.
                 foreach (ParkingWindow p in parkingWindows)
                 {
-                    if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
+                    if (User32.DpiAwarenessContextsEquals(p.DpiAwarenessContext, context))
                     {
                         return p;
                     }
@@ -2636,24 +2640,19 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                bool ourThread = SafeNativeMethods.GetCurrentThreadId() == id;
+                                bool ourThread = Kernel32.GetCurrentThreadId() == id;
 
                                 try
                                 {
-                                    // We can only clean up if we're being called on our
-                                    // own thread.
-                                    //
+                                    // We can only clean up if we're being called on our own thread.
                                     if (ourThread)
                                     {
-
                                         // If we had a component manager, detach from it.
-                                        //
                                         if (componentManager != null)
                                         {
                                             RevokeComponent();
                                         }
 
-                                        // DisposeAssociatedComponents();
                                         DisposeThreadWindows();
 
                                         try
@@ -2673,10 +2672,9 @@ namespace System.Windows.Forms
                                 finally
                                 {
                                     // We can always clean up this handle, though
-                                    //
                                     if (handle != IntPtr.Zero)
                                     {
-                                        UnsafeNativeMethods.CloseHandle(new HandleRef(this, handle));
+                                        Kernel32.CloseHandle(new HandleRef(this, handle));
                                         handle = IntPtr.Zero;
                                     }
 
@@ -2728,9 +2726,8 @@ namespace System.Windows.Forms
                     // and do not call Dispose.  Otherwise we would destroy
                     // controls that are living on the parking window.
                     //
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(parkingWindows[0], parkingWindows[0].Handle), out int pid);
-                    int currentThread = SafeNativeMethods.GetCurrentThreadId();
-
+                    int hwndThread = User32.GetWindowThreadProcessId(new HandleRef(parkingWindows[0], parkingWindows[0].Handle), out int pid);
+                    int currentThread = Kernel32.GetCurrentThreadId();
                     for (int i = 0; i < parkingWindows.Count; i++)
                     {
                         if (hwndThread == currentThread)
@@ -2742,6 +2739,7 @@ namespace System.Windows.Forms
                             parkingWindows[i] = null;
                         }
                     }
+
                     parkingWindows.Clear();
                 }
             }
@@ -2873,21 +2871,17 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Our finalization.  Minimal stuff... this shouldn't be called... We should always be disposed.
+            ///  Our finalization. This shouldn't be called as we should always be disposed.
             /// </summary>
             ~ThreadContext()
             {
-
-                // We used to call OleUninitialize() here if we were
-                // still STATE_OLEINITIALIZED, but that's never the correct thing to do.
-                // At this point we're on the wrong thread and we should never have been
-                // called here in the first place.
-
+                // We used to call OleUninitialize() here if we were still STATE_OLEINITIALIZED, but that's
+                // never the correct thing to do. At this point we're on the wrong thread and we should never
+                // have been called here in the first place.
                 // We can always clean up this handle, though
-                //
                 if (handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.CloseHandle(new HandleRef(this, handle));
+                    Kernel32.CloseHandle(new HandleRef(this, handle));
                     handle = IntPtr.Zero;
                 }
             }
@@ -2943,7 +2937,7 @@ namespace System.Windows.Forms
             internal static ThreadContext FromId(int id)
             {
                 ThreadContext context = (ThreadContext)contextHash[(object)id];
-                if (context == null && id == SafeNativeMethods.GetCurrentThreadId())
+                if (context == null && id == Kernel32.GetCurrentThreadId())
                 {
                     context = new ThreadContext();
                 }
@@ -2977,13 +2971,13 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Retrieves the culture for this thread.
+            /// Retrieves the culture for this thread.
             /// </summary>
             internal CultureInfo GetCulture()
             {
-                if (culture == null || culture.LCID != SafeNativeMethods.GetThreadLocale())
+                if (culture == null || culture.LCID != Kernel32.GetThreadLocale())
                 {
-                    culture = new CultureInfo(SafeNativeMethods.GetThreadLocale());
+                    culture = new CultureInfo(Kernel32.GetThreadLocale());
                 }
 
                 return culture;
@@ -3288,7 +3282,7 @@ namespace System.Windows.Forms
 
                 bool fullModal = false;
                 bool localModal = false;
-                HandleRef hwndOwner = new HandleRef(null, IntPtr.Zero);
+                IntPtr hwndOwner = IntPtr.Zero;
 
                 if (reason == NativeMethods.MSOCM.msoloopDoEventsModal)
                 {
@@ -3313,18 +3307,17 @@ namespace System.Windows.Forms
                     // If the owner window of the dialog is still enabled, disable it now.
                     // This can happen if the owner window is from a different thread or
                     // process.
-                    hwndOwner = new HandleRef(null, UnsafeNativeMethods.GetWindowLong(new HandleRef(currentForm, currentForm.Handle), NativeMethods.GWL_HWNDPARENT));
-                    if (hwndOwner.Handle != IntPtr.Zero)
+                    hwndOwner = User32.GetWindowLong(new HandleRef(currentForm, currentForm.Handle), User32.WindowLong.GWL_HWNDPARENT);
+                    if (hwndOwner != IntPtr.Zero)
                     {
-                        if (SafeNativeMethods.IsWindowEnabled(hwndOwner))
+                        if (User32.IsWindowEnabled(hwndOwner))
                         {
-                            SafeNativeMethods.EnableWindow(hwndOwner, false);
+                            User32.EnableWindow(hwndOwner, false);
                         }
                         else
                         {
-                            // reset hwndOwner so we are not tempted to
-                            // fiddle with it
-                            hwndOwner = new HandleRef(null, IntPtr.Zero);
+                            // Reset hwndOwner so we are not tempted to fiddle with it
+                            hwndOwner = IntPtr.Zero;
                         }
                     }
 
@@ -3333,9 +3326,9 @@ namespace System.Windows.Forms
                     //
                     if (currentForm != null &&
                         currentForm.IsHandleCreated &&
-                        SafeNativeMethods.IsWindowEnabled(new HandleRef(currentForm, currentForm.Handle)) != modalEnabled)
+                        User32.IsWindowEnabled(new HandleRef(currentForm, currentForm.Handle)) != modalEnabled)
                     {
-                        SafeNativeMethods.EnableWindow(new HandleRef(currentForm, currentForm.Handle), modalEnabled);
+                        User32.EnableWindow(new HandleRef(currentForm, currentForm.Handle), modalEnabled);
                     }
                 }
 
@@ -3384,9 +3377,9 @@ namespace System.Windows.Forms
                         EndModalMessageLoop(context);
 
                         // Again, if the hwndOwner was valid and disabled above, re-enable it.
-                        if (hwndOwner.Handle != IntPtr.Zero)
+                        if (hwndOwner != IntPtr.Zero)
                         {
-                            SafeNativeMethods.EnableWindow(hwndOwner, true);
+                            User32.EnableWindow(hwndOwner, true);
                         }
                     }
 
@@ -3436,11 +3429,10 @@ namespace System.Windows.Forms
                         if (peeked)
                         {
 
-                            // If the component wants us to process the message, do it.
-                            // The component manager hosts windows from many places.  We must be sensitive
-                            // to ansi / Unicode windows here.
+                            // If the component wants us to process the message, do it. The component manager
+                            // hosts windows from many places. We must be sensitive to ansi/Unicode windows here.
                             //
-                            if (msg.hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, msg.hwnd)))
+                            if (msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd))
                             {
                                 unicodeWindow = true;
                                 if (!UnsafeNativeMethods.GetMessageW(ref msg, NativeMethods.NullHandleRef, 0, 0))
@@ -3622,11 +3614,9 @@ namespace System.Windows.Forms
                     {
                         // See if this is a dialog message -- this is for handling any native dialogs that are launched from
                         // winforms code.  This can happen with ActiveX controls that launch dialogs specificially
-                        //
 
-                        // first, get the first top-level window in the hierarchy.
-                        //
-                        IntPtr hwndRoot = UnsafeNativeMethods.GetAncestor(new HandleRef(null, msg.hwnd), NativeMethods.GA_ROOT);
+                        // First, get the first top-level window in the hierarchy.
+                        IntPtr hwndRoot = User32.GetAncestor(msg.hwnd, User32.GetAncestorFlag.GA_ROOT);
 
                         // if we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
                         // so we should return true to prevent Translate/Dispatch from being called.
@@ -3678,13 +3668,13 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Sets the culture for this thread.
+            /// Sets the culture for this thread.
             /// </summary>
             internal void SetCulture(CultureInfo culture)
             {
-                if (culture != null && culture.LCID != SafeNativeMethods.GetThreadLocale())
+                if (culture != null && culture.LCID != Kernel32.GetThreadLocale())
                 {
-                    SafeNativeMethods.SetThreadLocale(culture.LCID);
+                    Kernel32.SetThreadLocale(culture.LCID);
                 }
             }
 
@@ -3902,8 +3892,8 @@ namespace System.Windows.Forms
                             // For focus wait, check to see if we are now the active application.
                             //
                             int pid;
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, UnsafeNativeMethods.GetActiveWindow()), out pid);
-                            if (pid == SafeNativeMethods.GetCurrentProcessId())
+                            User32.GetWindowThreadProcessId(User32.GetActiveWindow(), out pid);
+                            if (pid == Kernel32.GetCurrentProcessId())
                             {
                                 continueLoop = false;
                             }
@@ -4005,7 +3995,7 @@ namespace System.Windows.Forms
                     CreateParams cp = base.CreateParams;
                     // Message only windows are cheaper and have fewer issues than
                     // full blown invisible windows.
-                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
+                    cp.Parent = User32.HWND_MESSAGE;
                     return cp;
                 }
             }
@@ -4052,7 +4042,7 @@ namespace System.Windows.Forms
 
                     // Message only windows are cheaper and have fewer issues than
                     // full blown invisible windows.
-                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
+                    cp.Parent = User32.HWND_MESSAGE;
                     return cp;
                 }
             }
@@ -4085,7 +4075,7 @@ namespace System.Windows.Forms
                         //messagepump is gone and then decide to clean them up.  We should clean
                         //up the parkingwindow in this case and a postmessage won't do it.
                         //unused
-                        int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, HandleInternal), out int lpdwProcessId);
+                        int id = User32.GetWindowThreadProcessId(new HandleRef(this, HandleInternal), out int lpdwProcessId);
                         ThreadContext ctx = Application.ThreadContext.FromId(id);
 
                         //We only do this if the ThreadContext tells us that we are currently
@@ -4107,7 +4097,7 @@ namespace System.Windows.Forms
             {
                 if (childCount == 0)
                 {
-                    IntPtr hwndChild = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+                    IntPtr hwndChild = User32.GetWindow(new HandleRef(this, Handle), User32.GetWindowOption.GW_CHILD);
                     if (hwndChild == IntPtr.Zero)
                     {
                         DestroyHandle();
@@ -4131,7 +4121,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                UnsafeNativeMethods.SetParent(handle, new HandleRef(this, Handle));
+                User32.SetParent(handle, new HandleRef(this, Handle));
             }
 
             /// <summary>
@@ -4142,7 +4132,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    Debug.Assert(UnsafeNativeMethods.GetParent(handle) != Handle, "Always set the handle's parent to someone else before calling UnparkHandle");
+                    Debug.Assert(User32.GetParent(handle) != Handle, "Always set the handle's parent to someone else before calling UnparkHandle");
                     // If there are no child windows in this handle any longer, destroy the parking window.
                     CheckDestroy();
                 }
@@ -4191,19 +4181,20 @@ namespace System.Windows.Forms
             {
                 windows = new IntPtr[16];
                 this.onlyWinForms = onlyWinForms;
-                UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(),
-                                                new NativeMethods.EnumThreadWindowsCallback(Callback),
-                                                NativeMethods.NullHandleRef);
+                var callback = new User32.EnumThreadWindowsCallback(Callback);
+                User32.EnumThreadWindows(
+                    Kernel32.GetCurrentThreadId(),
+                    callback,
+                    IntPtr.Zero);
+                GC.KeepAlive(callback);
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lparam)
             {
-
-                // We only do visible and enabled windows.  Also, we only do top level windows.
+                // We only do visible and enabled windows. Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
                 // will be responsible for disabling their own windows.
-                //
-                if (SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWnd)) && SafeNativeMethods.IsWindowEnabled(new HandleRef(null, hWnd)))
+                if (User32.IsWindowVisible(hWnd) && User32.IsWindowEnabled(hWnd))
                 {
                     bool add = true;
 
@@ -4236,7 +4227,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < windowCount; i++)
                 {
                     IntPtr hWnd = windows[i];
-                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                    if (User32.IsWindow(hWnd))
                     {
                         Control c = Control.FromHandle(hWnd);
                         if (c != null)
@@ -4253,7 +4244,7 @@ namespace System.Windows.Forms
 
                 if (!onlyWinForms && !state)
                 {
-                    activeHwnd = UnsafeNativeMethods.GetActiveWindow();
+                    activeHwnd = User32.GetActiveWindow();
                     Control activatingControl = Application.ThreadContext.FromCurrent().ActivatingControl;
                     if (activatingControl != null)
                     {
@@ -4261,7 +4252,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        focusedHwnd = UnsafeNativeMethods.GetFocus();
+                        focusedHwnd = User32.GetFocus();
                     }
                 }
 
@@ -4269,9 +4260,9 @@ namespace System.Windows.Forms
                 {
                     IntPtr hWnd = windows[i];
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Changing enabled on window: " + hWnd.ToString() + " : " + state.ToString());
-                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                    if (User32.IsWindow(hWnd))
                     {
-                        SafeNativeMethods.EnableWindow(new HandleRef(null, hWnd), state);
+                        User32.EnableWindow(hWnd, state);
                     }
                 }
 
@@ -4285,14 +4276,14 @@ namespace System.Windows.Forms
                 // we are created with a TRUE for onlyWinForms.
                 if (!onlyWinForms && state)
                 {
-                    if (activeHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, activeHwnd)))
+                    if (activeHwnd != IntPtr.Zero && User32.IsWindow(activeHwnd))
                     {
-                        UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, activeHwnd));
+                        User32.SetActiveWindow(activeHwnd);
                     }
 
-                    if (focusedHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, focusedHwnd)))
+                    if (focusedHwnd != IntPtr.Zero && User32.IsWindow(focusedHwnd))
                     {
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, focusedHwnd));
+                        User32.SetFocus(focusedHwnd);
                     }
                 }
             }
@@ -4322,7 +4313,7 @@ namespace System.Windows.Forms
 
                     // get ahold of the parenting control
                     //
-                    IntPtr parentHandle = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, MainForm.Handle), NativeMethods.GWL_HWNDPARENT);
+                    IntPtr parentHandle = User32.GetWindowLong(new HandleRef(this, MainForm.Handle), User32.WindowLong.GWL_HWNDPARENT);
 
                     parentControl = Control.FromHandle(parentHandle);
 

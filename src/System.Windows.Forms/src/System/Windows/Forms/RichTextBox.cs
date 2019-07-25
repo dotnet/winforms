@@ -369,7 +369,7 @@ namespace System.Windows.Forms
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_HORIZ) != 0 && !WordWrap)
                     {
                         // RichEd infers word wrap from the absence of horizontal scroll bars
-                        cp.Style |= NativeMethods.WS_HSCROLL;
+                        cp.Style |= User32.WindowStyle.WS_HSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
                             cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
 
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_VERT) != 0)
                     {
-                        cp.Style |= NativeMethods.WS_VSCROLL;
+                        cp.Style |= User32.WindowStyle.WS_VSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
                             cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
@@ -388,10 +388,10 @@ namespace System.Windows.Forms
 
                 // Remove the WS_BORDER style from the control, if we're trying to set it,
                 // to prevent the control from displaying the single point rectangle around the 3D border
-                if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & NativeMethods.WS_BORDER) != 0))
+                if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & User32.WindowStyle.WS_BORDER) != 0))
                 {
-                    cp.Style &= (~NativeMethods.WS_BORDER);
-                    cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                    cp.Style &= (~User32.WindowStyle.WS_BORDER);
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                 }
 
                 return cp;

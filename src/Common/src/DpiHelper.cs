@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 
 using CAPS = System.Windows.Forms.NativeMethods;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -55,7 +56,7 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows10_1607OrGreater)
             {
                 // We are on Windows 10/1603 or greater, but we could still be DpiUnaware or SystemAware, so let's find that out...
-                var currentProcessId = SafeNativeMethods.GetCurrentProcessId();
+                int currentProcessId = Kernel32.GetCurrentProcessId();
                 IntPtr hProcess = SafeNativeMethods.OpenProcess(SafeNativeMethods.PROCESS_QUERY_INFORMATION, false, currentProcessId);
                 SafeNativeMethods.GetProcessDpiAwareness(hProcess, out CAPS.PROCESS_DPI_AWARENESS processDpiAwareness);
 
@@ -90,8 +91,8 @@ namespace System.Windows.Forms
                 {
                     // We can't cache this value because different top level windows can have different DPI awareness context
                     // for mixed mode applications.
-                    DpiAwarenessContext dpiAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
-                    return CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                    User32.DpiAwarenessContext dpiAwareness = User32.GetCurrentThreadDpiAwarenessContext();
+                    return User32.DpiAwarenessContextsEquals(dpiAwareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 }
                 else
                 {
@@ -319,29 +320,29 @@ namespace System.Windows.Forms
             // For Windows 10 RS2 and above
             if (OsVersion.IsWindows10_1607OrGreater)
             {
-                DpiAwarenessContext dpiAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
+                User32.DpiAwarenessContext dpiAwareness = User32.GetCurrentThreadDpiAwarenessContext();
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                if (User32.DpiAwarenessContextsEquals(dpiAwareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                 {
                     return HighDpiMode.SystemAware;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
+                if (User32.DpiAwarenessContextsEquals(dpiAwareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
                 {
                     return HighDpiMode.DpiUnaware;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+                if (User32.DpiAwarenessContextsEquals(dpiAwareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
                 {
                     return HighDpiMode.PerMonitorV2;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
+                if (User32.DpiAwarenessContextsEquals(dpiAwareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
                 {
                     return HighDpiMode.PerMonitor;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED))
+                if (User32.DpiAwarenessContextsEquals(dpiAwareness, User32.DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED))
                 {
                     return HighDpiMode.DpiUnawareGdiScaled;
                 }
@@ -458,15 +459,5 @@ namespace System.Windows.Forms
             }
             return false;
         }
-    }
-
-    internal enum DpiAwarenessContext
-    {
-        DPI_AWARENESS_CONTEXT_UNSPECIFIED = 0,
-        DPI_AWARENESS_CONTEXT_UNAWARE = -1,
-        DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = -2,
-        DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = -3,
-        DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4,
-        DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED = -5
     }
 }

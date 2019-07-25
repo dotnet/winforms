@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static IntPtr hhook;
 
-        private static NativeMethods.HookProc hook;
+        private static User32.HookProc hook;
 
         /// <summary>
         ///  vector of events that we have yet to post to the journaling hook.
@@ -239,12 +239,13 @@ namespace System.Windows.Forms
         {
             if (hhook == IntPtr.Zero)
             {
-                hook = new NativeMethods.HookProc(new SendKeysHookProc().Callback);
+                hook = new User32.HookProc(new SendKeysHookProc().Callback);
                 stopHook = false;
-                hhook = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_JOURNALPLAYBACK,
-                                                 hook,
-                                                 new HandleRef(null, Kernel32.GetModuleHandleW(null)),
-                                                 0);
+                hhook = User32.SetWindowsHookExW(
+                    User32.WindowHookProcedure.WH_JOURNALPLAYBACK,
+                    hook,
+                    Kernel32.GetModuleHandleW(null),
+                    0);
                 if (hhook == IntPtr.Zero)
                 {
                     throw new Security.SecurityException(SR.SendKeysHookFailed);
@@ -257,18 +258,18 @@ namespace System.Windows.Forms
             hookSupported = false;
             try
             {
-
-                NativeMethods.HookProc hookProc = new NativeMethods.HookProc(EmptyHookCallback);
-                IntPtr hookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_JOURNALPLAYBACK,
-                                                 hookProc,
-                                                 new HandleRef(null, Kernel32.GetModuleHandleW(null)),
-                                                 0);
+                var hookProc = new User32.HookProc(EmptyHookCallback);
+                IntPtr hookHandle = User32.SetWindowsHookExW(
+                    User32.WindowHookProcedure.WH_JOURNALPLAYBACK,
+                    hookProc,
+                    Kernel32.GetModuleHandleW(null),
+                    0);
 
                 hookSupported = (hookHandle != IntPtr.Zero);
 
                 if (hookHandle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(null, hookHandle));
+                    User32.UnhookWindowsHookEx(hookHandle);
                 }
             }
             catch { } // ignore any exceptions to keep existing SendKeys behavior
@@ -1047,11 +1048,8 @@ namespace System.Windows.Forms
             if (hhook != IntPtr.Zero)
             {
                 stopHook = false;
-                if (events != null)
-                {
-                    events.Clear();
-                }
-                UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(null, hhook));
+                events?.Clear();
+                User32.UnhookWindowsHookEx(hhook);
                 hhook = IntPtr.Zero;
             }
         }
@@ -1178,14 +1176,14 @@ namespace System.Windows.Forms
                         eventmsg.paramL = evt.paramL;
                         eventmsg.paramH = evt.paramH;
                         eventmsg.hwnd = evt.hwnd;
-                        eventmsg.time = SafeNativeMethods.GetTickCount();
+                        eventmsg.time = Kernel32.GetTickCount();
                         Marshal.StructureToPtr(eventmsg, lparam, true);
                         break;
 
                     default:
                         if (code < 0)
                         {
-                            UnsafeNativeMethods.CallNextHookEx(new HandleRef(null, SendKeys.hhook), code, wparam, lparam);
+                            User32.CallNextHookEx(SendKeys.hhook, code, wparam, lparam);
                         }
 
                         break;

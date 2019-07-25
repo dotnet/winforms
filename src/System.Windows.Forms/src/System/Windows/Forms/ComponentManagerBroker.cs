@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Globalization;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -94,7 +95,7 @@ namespace System.Windows.Forms
         /// </summary>
         static ComponentManagerBroker()
         {
-            int pid = SafeNativeMethods.GetCurrentProcessId();
+            int pid = Kernel32.GetCurrentProcessId();
             _syncObject = new object();
             _remoteObjectName = string.Format(CultureInfo.CurrentCulture, "ComponentManagerBroker.{0}.{1:X}", Application.WindowsFormsVersion, pid);
         }
@@ -233,7 +234,7 @@ namespace System.Windows.Forms
         {
             _broker = broker;
             _original = original;
-            _creationThread = SafeNativeMethods.GetCurrentThreadId();
+            _creationThread = Kernel32.GetCurrentThreadId();
             _refCount = 0;
         }
 
@@ -493,7 +494,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            if (_refCount == 1 && SafeNativeMethods.GetCurrentThreadId() == _creationThread)
+            if (_refCount == 1 && Kernel32.GetCurrentThreadId() == _creationThread)
             {
                 if (!RevokeComponent())
                 {

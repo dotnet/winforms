@@ -4001,31 +4001,18 @@ namespace System.Windows.Forms
                             // if we're not hosted in a windows forms thing, just give the parent the focus
                             if (!result && Parent == null)
                             {
-                                IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
+                                IntPtr hWndParent = User32.GetParent(new HandleRef(this, Handle));
                                 if (hWndParent != IntPtr.Zero)
                                 {
-                                    UnsafeNativeMethods.SetFocus(new HandleRef(null, hWndParent));
+                                    User32.SetFocus(hWndParent);
                                 }
                             }
+
                             return result;
                         }
                     }
-                    return true;
-                    /* This conflicts with VS tab linking
-                    case Keys.Prior: // PAGE_UP
-                        if ((keyData & Keys.Control) != 0) {
-                            SelectPriorView();
-                            return true;
-                        }
-                        break;
-                    case Keys.Next: //PAGE_DOWN
-                        if ((keyData & Keys.Control) != 0) {
-                            SelectNextView();
-                            return true;
-                        }
-                        break;
-                    */
 
+                    return true;
             }
             return base.ProcessDialogKey(keyData);
         }

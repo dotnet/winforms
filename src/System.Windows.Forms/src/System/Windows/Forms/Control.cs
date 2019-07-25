@@ -134,8 +134,8 @@ namespace System.Windows.Forms
         private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
 #endif
 
-        private static readonly int WM_GETCONTROLNAME = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLNAME");
-        private static readonly int WM_GETCONTROLTYPE = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLTYPE");
+        private static readonly int WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
+        private static readonly int WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
 
         internal const int STATE_CREATED = 0x00000001;
         internal const int STATE_VISIBLE = 0x00000002;
@@ -536,16 +536,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets control Dpi awareness context value.
         /// </summary>
-        internal DpiAwarenessContext DpiAwarenessContext => _window.DpiAwarenessContext;
+        internal User32.DpiAwarenessContext DpiAwarenessContext => _window.DpiAwarenessContext;
 
         /// <summary>
         ///  The Accessibility Object for this Control
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlAccessibilityObjectDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlAccessibilityObjectDescr))]
         public AccessibleObject AccessibilityObject
         {
             get
@@ -1267,8 +1266,9 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-                bool visible = SafeNativeMethods.IsWindowVisible(new HandleRef(_window, Handle));
-                bool enabled = SafeNativeMethods.IsWindowEnabled(new HandleRef(_window, Handle));
+
+                bool visible = User32.IsWindowVisible(new HandleRef(_window, Handle));
+                bool enabled = User32.IsWindowEnabled(new HandleRef(_window, Handle));
                 return (visible && enabled);
             }
         }
@@ -1309,18 +1309,18 @@ namespace System.Windows.Forms
 
         internal bool CaptureInternal
         {
-            get => IsHandleCreated && UnsafeNativeMethods.GetCapture() == Handle;
+            get => IsHandleCreated && User32.GetCapture() == Handle;
             set
             {
                 if (CaptureInternal != value)
                 {
                     if (value)
                     {
-                        UnsafeNativeMethods.SetCapture(new HandleRef(this, Handle));
+                        User32.SetCapture(new HandleRef(this, Handle));
                     }
                     else
                     {
-                        SafeNativeMethods.ReleaseCapture();
+                        User32.ReleaseCapture();
                     }
                 }
             }
@@ -1481,7 +1481,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                IntPtr focusHwnd = UnsafeNativeMethods.GetFocus();
+                IntPtr focusHwnd = User32.GetFocus();
 
                 if (focusHwnd == IntPtr.Zero)
                 {
@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (UnsafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(this, focusHwnd)))
+                if (User32.IsChild(new HandleRef(this, Handle), new HandleRef(this, focusHwnd)))
                 {
                     return true;
                 }
@@ -1675,12 +1675,12 @@ namespace System.Windows.Forms
                 cp.Width = _width;
                 cp.Height = _height;
 
-                cp.Style = NativeMethods.WS_CLIPCHILDREN;
+                cp.Style = User32.WindowStyle.WS_CLIPCHILDREN;
                 if (GetStyle(ControlStyles.ContainerControl))
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_CONTROLPARENT;
                 }
-                cp.ClassStyle = (int)NativeMethods.ClassStyle.CS_DBLCLKS;
+                cp.ClassStyle = (int)User32.ClassStyle.CS_DBLCLKS;
 
                 if ((_state & STATE_TOPLEVEL) == 0)
                 {
@@ -1688,7 +1688,7 @@ namespace System.Windows.Forms
                     // parking form if cp.parent == 0.
                     //
                     cp.Parent = _parent == null ? IntPtr.Zero : _parent.InternalHandle;
-                    cp.Style |= NativeMethods.WS_CHILD | NativeMethods.WS_CLIPSIBLINGS;
+                    cp.Style |= User32.WindowStyle.WS_CHILD | User32.WindowStyle.WS_CLIPSIBLINGS;
                 }
                 else
                 {
@@ -1697,19 +1697,19 @@ namespace System.Windows.Forms
 
                 if ((_state & STATE_TABSTOP) != 0)
                 {
-                    cp.Style |= NativeMethods.WS_TABSTOP;
+                    cp.Style |= User32.WindowStyle.WS_TABSTOP;
                 }
 
                 if ((_state & STATE_VISIBLE) != 0)
                 {
-                    cp.Style |= NativeMethods.WS_VISIBLE;
+                    cp.Style |= User32.WindowStyle.WS_VISIBLE;
                 }
 
                 // Unlike Visible, Windows doesn't correctly inherit disabledness from its parent -- an enabled child
                 // of a disabled parent will look enabled but not get mouse events
                 if (!Enabled)
                 {
-                    cp.Style |= NativeMethods.WS_DISABLED;
+                    cp.Style |= User32.WindowStyle.WS_DISABLED;
                 }
 
                 // If we are being hosted as an Ax control, try to prevent the parking window
@@ -1722,9 +1722,9 @@ namespace System.Windows.Forms
                 // Set Rtl bits
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_RTLREADING;
-                    cp.ExStyle |= NativeMethods.WS_EX_RIGHT;
-                    cp.ExStyle |= NativeMethods.WS_EX_LEFTSCROLLBAR;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_RTLREADING;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_RIGHT;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LEFTSCROLLBAR;
                 }
 
                 return cp;
@@ -1834,8 +1834,8 @@ namespace System.Windows.Forms
         ///  created yet, this method will return the current thread's ID.
         /// </summary>
         internal int CreateThreadId => IsHandleCreated 
-            ? SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out int _)
-            : SafeNativeMethods.GetCurrentThreadId();
+            ? User32.GetWindowThreadProcessId(new HandleRef(this, Handle), out int _)
+            : Kernel32.GetCurrentThreadId();
 
         /// <summary>
         ///  Retrieves the cursor that will be displayed when the mouse is over this
@@ -1900,9 +1900,9 @@ namespace System.Windows.Forms
                     // This includes the case where the mouse is over one of our children
                     var r = new RECT();
                     UnsafeNativeMethods.GetCursorPos(out Point p);
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+                    User32.GetWindowRect(new HandleRef(this, Handle), ref r);
 
-                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                     {
                         SendMessage(WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                     }
@@ -2231,7 +2231,7 @@ namespace System.Windows.Forms
             SRDescription(nameof(SR.ControlFocusedDescr))
         ]
         public virtual bool Focused
-            => IsHandleCreated && UnsafeNativeMethods.GetFocus() == Handle;
+            => IsHandleCreated && User32.GetFocus() == Handle;
 
         /// <summary>
         ///  Retrieves the current font for this control. This will be the font used
@@ -2695,30 +2695,21 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
+                        IntPtr parentHandle = User32.GetParent(new HandleRef(this, Handle));
                         IntPtr lastParentHandle = parentHandle;
-
-                        StringBuilder sb = new StringBuilder(32);
 
                         SetState(STATE_HOSTEDINDIALOG, false);
 
                         while (parentHandle != IntPtr.Zero)
                         {
-                            int len = UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), null, 0);
-                            if (len > sb.Capacity)
-                            {
-                                sb.Capacity = len + 5;
-                            }
-                            UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), sb, sb.Capacity);
-
-                            if (sb.ToString() == "#32770")
+                            if (User32.GetClassName(lastParentHandle) == "#32770")
                             {
                                 SetState(STATE_HOSTEDINDIALOG, true);
                                 break;
                             }
 
                             lastParentHandle = parentHandle;
-                            parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(null, parentHandle));
+                            parentHandle = User32.GetParent(parentHandle);
                         }
                     }
 
@@ -2766,7 +2757,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref temp);
+                User32.GetWindowRect(new HandleRef(this, Handle), ref temp);
                 working = new Region(Rectangle.FromLTRB(temp.left, temp.top, temp.right, temp.bottom));
 
                 try
@@ -2784,14 +2775,14 @@ namespace System.Windows.Forms
                     }
 
                     for (prev = start;
-                         (next = UnsafeNativeMethods.GetWindow(new HandleRef(null, prev), NativeMethods.GW_HWNDPREV)) != IntPtr.Zero;
+                         (next = User32.GetWindow(new HandleRef(null, prev), User32.GetWindowOption.GW_HWNDPREV)) != IntPtr.Zero;
                          prev = next)
                     {
 
-                        UnsafeNativeMethods.GetWindowRect(new HandleRef(null, next), ref temp);
+                        User32.GetWindowRect(next, ref temp);
                         Rectangle current = Rectangle.FromLTRB(temp.left, temp.top, temp.right, temp.bottom);
 
-                        if (SafeNativeMethods.IsWindowVisible(new HandleRef(null, next)))
+                        if (User32.IsWindowVisible(next))
                         {
                             working.Exclude(current);
                         }
@@ -2864,9 +2855,8 @@ namespace System.Windows.Forms
                         hwnd = new HandleRef(marshalingControl, marshalingControl.Handle);
                     }
 
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(hwnd, out int pid);
-                    int currentThread = SafeNativeMethods.GetCurrentThreadId();
-                    return (hwndThread != currentThread);
+                    int hwndThread = User32.GetWindowThreadProcessId(hwnd, out int pid);
+                    return hwndThread != Kernel32.GetCurrentThreadId();
                 }
             }
         }
@@ -2923,7 +2913,7 @@ namespace System.Windows.Forms
                 if (!IsHandleCreated)
                 {
                     CreateParams cp = CreateParams;
-                    SetState(STATE_MIRRORED, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                    SetState(STATE_MIRRORED, (cp.ExStyle & User32.WindowStyle.WS_EX_LAYOUTRTL) != 0);
                 }
                 return GetState(STATE_MIRRORED);
             }
@@ -3318,7 +3308,7 @@ namespace System.Windows.Forms
                                 regionHandle = ActiveXMergeRegion(regionHandle);
                             }
 
-                            if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle))) != 0)
+                            if (User32.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), User32.IsWindowVisible(new HandleRef(this, Handle))) != 0)
                             {
                                 //The Hwnd owns the region.
                                 regionHandle = IntPtr.Zero;
@@ -3656,7 +3646,7 @@ namespace System.Windows.Forms
                     TabStopInternal = value;
                     if (IsHandleCreated)
                     {
-                        SetWindowStyle(NativeMethods.WS_TABSTOP, value);
+                        SetWindowStyle(User32.WindowStyle.WS_TABSTOP, value);
                     }
 
                     OnTabStopChanged(EventArgs.Empty);
@@ -3923,8 +3913,10 @@ namespace System.Windows.Forms
             }
         }
 
-        // The parameter used in the call to ShowWindow for this control
-        internal virtual int ShowParams => NativeMethods.SW_SHOW;
+        /// <summary>
+        /// The parameter used in the call to ShowWindow for this control
+        /// </summary>
+        internal virtual User32.ShowWindowCommand ShowParams => User32.ShowWindowCommand.SW_SHOW;
 
         /// <summary>
         ///  When this property in true the Cursor Property is set to WaitCursor as well as the Cursor Property
@@ -4059,13 +4051,14 @@ namespace System.Windows.Forms
             bool returnValue = false;
             while (!processed)
             {
-                //Get the thread's exit code, if we found the thread as expected
+                // Get the thread's exit code, if we found the thread as expected
                 if (threadHandle != null)
                 {
-                    returnValue = UnsafeNativeMethods.GetExitCodeThread(threadHandle, out exitCode);
+                    returnValue = Kernel32.GetExitCodeThread(threadHandle, out exitCode);
                 }
-                //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
-                //if we don't know, we shouldn't throw.
+
+                // If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
+                // if we don't know, we shouldn't throw.
                 if ((returnValue && exitCode != NativeMethods.STILL_ACTIVE) ||
                     (!returnValue && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload())
@@ -4115,14 +4108,8 @@ namespace System.Windows.Forms
         /// </summary>
         private int WindowExStyle
         {
-            get
-            {
-                return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
-            }
-            set
-            {
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE, new HandleRef(null, (IntPtr)value));
-            }
+            get => unchecked((int)(long)User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_EXSTYLE));
+            set => User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_EXSTYLE, (IntPtr)value);
         }
 
         /// <summary>
@@ -4130,14 +4117,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal int WindowStyle
         {
-            get
-            {
-                return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
-            }
-            set
-            {
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)value));
-            }
+            get => unchecked((int)(long)User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE));
+            set => User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE, (IntPtr)value);
         }
 
         /// <summary>
@@ -4716,7 +4697,7 @@ namespace System.Windows.Forms
         ///  Helper method for retrieving an ActiveX property.  We abstract these
         ///  to another method so we do not force JIT the ActiveX codebase.
         /// </summary>
-        private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, int flags)
+        private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.WindowPosition flags)
         {
             ActiveXInstance.UpdateBounds(ref x, ref y, ref width, ref height, flags);
         }
@@ -4884,12 +4865,12 @@ namespace System.Windows.Forms
             {
                 _parent.Controls.SetChildIndex(this, 0);
             }
-            else if (IsHandleCreated && GetTopLevel() && SafeNativeMethods.IsWindowEnabled(new HandleRef(_window, Handle)))
+            else if (IsHandleCreated && GetTopLevel() && User32.IsWindowEnabled(new HandleRef(_window, Handle)))
             {
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(_window, Handle),
-                    NativeMethods.HWND_TOP,
-                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                    User32.HWND_TOP,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
             }
         }
 
@@ -5087,7 +5068,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = CreateParams;
-                SetState(STATE_MIRRORED, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                SetState(STATE_MIRRORED, (cp.ExStyle & User32.WindowStyle.WS_EX_LAYOUTRTL) != 0);
 
                 // Adjust for scrolling of parent...
                 if (_parent != null)
@@ -5108,9 +5089,9 @@ namespace System.Windows.Forms
                 }
 
                 // And if we are WS_CHILD, ensure we have a parent handle.
-                if (cp.Parent == IntPtr.Zero && (cp.Style & NativeMethods.WS_CHILD) != 0)
+                if (cp.Parent == IntPtr.Zero && (cp.Style & User32.WindowStyle.WS_CHILD) != 0)
                 {
-                    Debug.Assert((cp.ExStyle & NativeMethods.WS_EX_MDICHILD) == 0, "Can't put MDI child forms on the parking form");
+                    Debug.Assert((cp.ExStyle & User32.WindowStyle.WS_EX_MDICHILD) == 0, "Can't put MDI child forms on the parking form");
                     Application.ParkHandle(cp);
                 }
 
@@ -5277,9 +5258,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (0 != (NativeMethods.WS_EX_MDICHILD & (int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(_window, InternalHandle), NativeMethods.GWL_EXSTYLE)))
+            if ((User32.WindowStyle.WS_EX_MDICHILD & (int)(long)User32.GetWindowLong(new HandleRef(_window, InternalHandle), User32.WindowLong.GWL_EXSTYLE)) != 0)
             {
-                UnsafeNativeMethods.DefMDIChildProc(InternalHandle, WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                User32.DefMDIChildProcW(InternalHandle, WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
             else
             {
@@ -5537,7 +5518,7 @@ namespace System.Windows.Forms
                 {
                     // ignored
                     Control marshaler = FindMarshalingControl();
-                    if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(marshaler, marshaler.Handle), out int pid) == SafeNativeMethods.GetCurrentThreadId())
+                    if (User32.GetWindowThreadProcessId(new HandleRef(marshaler, marshaler.Handle), out int pid) == Kernel32.GetCurrentThreadId())
                     {
                         marshaler.InvokeMarshaledCallbacks();
                     }
@@ -5690,7 +5671,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
+                User32.SetFocus(new HandleRef(this, Handle));
             }
             if (Focused && ParentInternal != null)
             {
@@ -5730,7 +5711,7 @@ namespace System.Windows.Forms
                     return ctl;
                 }
 
-                handle = UnsafeNativeMethods.GetAncestor(new HandleRef(null, handle), NativeMethods.GA_PARENT);
+                handle = User32.GetAncestor(handle, User32.GetAncestorFlag.GA_PARENT);
             }
             return null;
         }
@@ -6103,9 +6084,9 @@ namespace System.Windows.Forms
         {
             ArrayList windows = new ArrayList();
 
-            for (IntPtr hWndChild = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWndParent), NativeMethods.GW_CHILD);
+            for (IntPtr hWndChild = User32.GetWindow(new HandleRef(null, hWndParent), User32.GetWindowOption.GW_CHILD);
                  hWndChild != IntPtr.Zero;
-                 hWndChild = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWndChild), NativeMethods.GW_HWNDNEXT))
+                 hWndChild = User32.GetWindow(new HandleRef(null, hWndChild), User32.GetWindowOption.GW_HWNDNEXT))
             {
                 windows.Add(hWndChild);
             }
@@ -6364,7 +6345,7 @@ namespace System.Windows.Forms
             else
             {
                 IntPtr hWnd = window.Handle;
-                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                if (hWnd == IntPtr.Zero || User32.IsWindow(hWnd))
                 {
                     return hWnd;
                 }
@@ -7131,7 +7112,7 @@ namespace System.Windows.Forms
             bool syncSameThread = false;
 
             // ignored
-            if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out int pid) == SafeNativeMethods.GetCurrentThreadId())
+            if (User32.GetWindowThreadProcessId(new HandleRef(this, Handle), out int pid) == Kernel32.GetCurrentThreadId())
             {
                 if (synchronous)
                 {
@@ -7161,7 +7142,7 @@ namespace System.Windows.Forms
             {
                 if (s_threadCallbackMessage == 0)
                 {
-                    s_threadCallbackMessage = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_ThreadCallbackMessage");
+                    s_threadCallbackMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_ThreadCallbackMessage");
                 }
                 _threadCallbackList.Enqueue(tme);
             }
@@ -7484,7 +7465,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SafeNativeMethods.EnableWindow(new HandleRef(this, Handle), Enabled);
+                User32.EnableWindow(new HandleRef(this, Handle), Enabled);
 
                 // User-paint controls should repaint when their enabled state changes
                 if (GetStyle(ControlStyles.UserPaint))
@@ -7700,7 +7681,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    UnsafeNativeMethods.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle));
+                    User32.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle));
                     UpdateZOrder();
                 }
             }
@@ -8035,7 +8016,7 @@ namespace System.Windows.Forms
                             regionHandle = ActiveXMergeRegion(regionHandle);
                         }
 
-                        if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle))) != 0)
+                        if (User32.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), User32.IsWindowVisible(new HandleRef(this, Handle))) != 0)
                         {
                             //The HWnd owns the region.
                             regionHandle = IntPtr.Zero;
@@ -9498,8 +9479,8 @@ namespace System.Windows.Forms
                 PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_CLIENT));
 
                 // figure out mapping for the client area
-                RECT windowRect = new RECT();
-                bool success = UnsafeNativeMethods.GetWindowRect(new HandleRef(null, Handle), ref windowRect);
+                var windowRect = new RECT();
+                bool success = User32.GetWindowRect(Handle, ref windowRect);
                 Debug.Assert(success, "GetWindowRect() failed.");
                 Point clientOffset = PointToScreen(Point.Empty);
                 clientOffset = new Point(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
@@ -9831,7 +9812,7 @@ namespace System.Windows.Forms
                 //           (we're in charge here, we've got to change the state of the root window)
                 UnsafeNativeMethods.SendMessage(
                     new HandleRef(topMostParent, topMostParent.Handle),
-                    UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? WindowMessages.WM_CHANGEUISTATE : WindowMessages.WM_UPDATEUISTATE,
+                    User32.GetParent(topMostParent.Handle) == IntPtr.Zero ? WindowMessages.WM_CHANGEUISTATE : WindowMessages.WM_UPDATEUISTATE,
                     (IntPtr)(NativeMethods.UIS_CLEAR | (toClear << 16)),
                     IntPtr.Zero);
             }
@@ -9982,7 +9963,7 @@ namespace System.Windows.Forms
                         UnhookMouseEvent();
                     }
 
-                    HandleRef parentHandle = new HandleRef(this, UnsafeNativeMethods.GetParent(new HandleRef(this, Handle)));
+                    HandleRef parentHandle = new HandleRef(this, User32.GetParent(new HandleRef(this, Handle)));
 
                     try
                     {
@@ -10053,12 +10034,12 @@ namespace System.Windows.Forms
                     {
                         if (parentHandle.Handle != IntPtr.Zero                               // the parent was not null
                             && (FromHandle(parentHandle.Handle) == null || _parent == null) // but wasnt a windows forms window
-                            && UnsafeNativeMethods.IsWindow(parentHandle))
+                            && User32.IsWindow(parentHandle))
                         {                 // and still is a window
                             // correctly parent back up to where we were before.
                             // if we were parented to a proper windows forms control, CreateControl would have properly parented
                             // us back.
-                            UnsafeNativeMethods.SetParent(new HandleRef(this, Handle), parentHandle);
+                            User32.SetParent(new HandleRef(this, Handle), parentHandle);
                         }
                     }
 
@@ -10860,10 +10841,10 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel())
             {
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(_window, Handle),
-                    NativeMethods.HWND_BOTTOM,
-                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                    User32.HWND_BOTTOM,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
             }
         }
 
@@ -10981,24 +10962,22 @@ namespace System.Windows.Forms
                     {
                         if (!GetState(STATE_SIZELOCKEDBYOS))
                         {
-                            int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE;
-
+                            User32.WindowPosition flags = User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE;
                             if (_x == x && _y == y)
                             {
-                                flags |= NativeMethods.SWP_NOMOVE;
+                                flags |= User32.WindowPosition.SWP_NOMOVE;
                             }
                             if (_width == width && _height == height)
                             {
-                                flags |= NativeMethods.SWP_NOSIZE;
+                                flags |= User32.WindowPosition.SWP_NOSIZE;
                             }
 
-                            //
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
 
-                            SafeNativeMethods.SetWindowPos(
+                            User32.SetWindowPos(
                                 new HandleRef(_window, Handle),
-                                NativeMethods.NullHandleRef,
+                                IntPtr.Zero,
                                 x,
                                 y,
                                 width,
@@ -11008,8 +10987,6 @@ namespace System.Windows.Forms
                             // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
                             // synchonously so we effectively end up in UpdateBounds immediately following
                             // SetWindowPos.
-                            //
-                            //UpdateBounds(x, y, width, height);
                         }
                     }
                 }
@@ -11082,7 +11059,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(_window, Handle));
+                IntPtr parentHandle = User32.GetParent(new HandleRef(_window, Handle));
                 bool topLevel = GetTopLevel();
                 if (parentHandle != value || (parentHandle == IntPtr.Zero && !topLevel))
                 {
@@ -11120,7 +11097,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            UnsafeNativeMethods.SetParent(new HandleRef(_window, Handle), new HandleRef(null, value));
+                            User32.SetParent(new HandleRef(_window, Handle), value);
                             if (_parent != null)
                             {
                                 _parent.UpdateChildZOrder(this);
@@ -11134,7 +11111,7 @@ namespace System.Windows.Forms
                     // The handle was previously parented to the parking window. Its TopLevel property was
                     // then changed to true so the above call to GetParent returns null even though the parent of the control is
                     // not null. We need to explicitly set the parent to null.
-                    UnsafeNativeMethods.SetParent(new HandleRef(_window, Handle), new HandleRef(null, IntPtr.Zero));
+                    User32.SetParent(new HandleRef(_window, Handle), IntPtr.Zero);
                     Application.UnparkHandle(new HandleRef(_window, Handle), _window.DpiAwarenessContext);
                 }
             }
@@ -11231,12 +11208,10 @@ namespace System.Windows.Forms
 
                 if (GetTopLevel())
                 {
-                    // The processing of WmShowWindow will set the visibility
-                    // bit and call CreateControl()
-
+                    // The processing of WmShowWindow will set the visibility bit and call CreateControl()
                     if (IsHandleCreated || value)
                     {
-                        SafeNativeMethods.ShowWindow(new HandleRef(this, Handle), value ? ShowParams : NativeMethods.SW_HIDE);
+                        User32.ShowWindow(new HandleRef(this, Handle), value ? ShowParams : User32.ShowWindowCommand.SW_HIDE);
                     }
                 }
                 else if (IsHandleCreated || value && _parent != null && _parent.Created)
@@ -11254,14 +11229,14 @@ namespace System.Windows.Forms
                             CreateControl();
                         }
 
-                        SafeNativeMethods.SetWindowPos(
+                        User32.SetWindowPos(
                             new HandleRef(_window, Handle),
-                            NativeMethods.NullHandleRef,
-                            flags: NativeMethods.SWP_NOSIZE
-                                | NativeMethods.SWP_NOMOVE
-                                | NativeMethods.SWP_NOZORDER
-                                | NativeMethods.SWP_NOACTIVATE
-                                | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                            IntPtr.Zero,
+                            flags: User32.WindowPosition.SWP_NOSIZE
+                                | User32.WindowPosition.SWP_NOMOVE
+                                | User32.WindowPosition.SWP_NOZORDER
+                                | User32.WindowPosition.SWP_NOACTIVATE
+                                | (value ? User32.WindowPosition.SWP_SHOWWINDOW : User32.WindowPosition.SWP_HIDEWINDOW));
                     }
                     catch
                     {
@@ -11299,7 +11274,7 @@ namespace System.Windows.Forms
                     // PERF - setting Visible=false twice can get us into this else block
                     // which makes us process WM_WINDOWPOS* messages - make sure we've already 
                     // visible=false - if not, make it so.
-                    if (!SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle)))
+                    if (!User32.IsWindowVisible(new HandleRef(this, Handle)))
                     {
                         // we're already invisible - bail.
                         return;
@@ -11313,14 +11288,14 @@ namespace System.Windows.Forms
                 // but the child control has already been created.
                 if (IsHandleCreated)
                 {
-                    SafeNativeMethods.SetWindowPos(
+                    User32.SetWindowPos(
                         new HandleRef(_window, Handle),
-                        NativeMethods.NullHandleRef,
-                        flags: NativeMethods.SWP_NOSIZE
-                            | NativeMethods.SWP_NOMOVE
-                            | NativeMethods.SWP_NOZORDER
-                            | NativeMethods.SWP_NOACTIVATE
-                            | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                        IntPtr.Zero,
+                        flags: User32.WindowPosition.SWP_NOSIZE
+                            | User32.WindowPosition.SWP_NOMOVE
+                            | User32.WindowPosition.SWP_NOZORDER
+                            | User32.WindowPosition.SWP_NOACTIVATE
+                            | (value ? User32.WindowPosition.SWP_SHOWWINDOW : User32.WindowPosition.SWP_HIDEWINDOW));
                 }
             }
         }
@@ -11528,8 +11503,8 @@ namespace System.Windows.Forms
 
         private void SetWindowStyle(int flag, bool value)
         {
-            int styleFlags = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)(value ? styleFlags | flag : styleFlags & ~flag)));
+            int styleFlags = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE)));
+            User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE, (IntPtr)(value ? styleFlags | flag : styleFlags & ~flag));
         }
 
         /// <summary>
@@ -11633,10 +11608,10 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
             int clientWidth = rect.right;
             int clientHeight = rect.bottom;
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
+            User32.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
             if (!GetTopLevel())
             {
-                UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(null, UnsafeNativeMethods.GetParent(new HandleRef(_window, InternalHandle))), ref rect, 2);
+                UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(null, User32.GetParent(new HandleRef(_window, InternalHandle))), ref rect, 2);
             }
 
             UpdateBounds(rect.left, rect.top, rect.right - rect.left,
@@ -11763,7 +11738,7 @@ namespace System.Windows.Forms
             int newIndex = 0;
             int curIndex = Controls.GetChildIndex(ctl);
             IntPtr hWnd = ctl.InternalHandle;
-            while ((hWnd = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWnd), NativeMethods.GW_HWNDPREV)) != IntPtr.Zero)
+            while ((hWnd = User32.GetWindow(new HandleRef(null, hWnd), User32.GetWindowOption.GW_HWNDPREV)) != IntPtr.Zero)
             {
                 Control c = FromHandle(hWnd);
                 if (c != null)
@@ -11793,7 +11768,7 @@ namespace System.Windows.Forms
         {
             if (!Disposing && findNewParent && IsHandleCreated)
             {
-                IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
+                IntPtr parentHandle = User32.GetParent(new HandleRef(this, Handle));
                 if (parentHandle != IntPtr.Zero)
                 {
                     ReflectParent = FromHandle(parentHandle);
@@ -11825,7 +11800,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr prevHandle = (IntPtr)NativeMethods.HWND_TOP;
+            IntPtr prevHandle = (IntPtr)User32.HWND_TOP;
             for (int i = Controls.GetChildIndex(ctl); --i >= 0;)
             {
                 Control c = Controls[i];
@@ -11835,15 +11810,15 @@ namespace System.Windows.Forms
                     break;
                 }
             }
-            if (UnsafeNativeMethods.GetWindow(new HandleRef(ctl._window, ctl.Handle), NativeMethods.GW_HWNDPREV) != prevHandle)
+            if (User32.GetWindow(new HandleRef(ctl._window, ctl.Handle), User32.GetWindowOption.GW_HWNDPREV) != prevHandle)
             {
                 _state |= STATE_NOZORDER;
                 try
                 {
-                    SafeNativeMethods.SetWindowPos(
+                    User32.SetWindowPos(
                         new HandleRef(ctl._window, ctl.Handle),
-                        new HandleRef(null, prevHandle),
-                        flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                        prevHandle,
+                        flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
                 }
                 finally
                 {
@@ -11884,7 +11859,7 @@ namespace System.Windows.Forms
                 // resolve the Form's lazy visibility.
                 if ((_state & STATE_VISIBLE) != 0)
                 {
-                    cp.Style |= NativeMethods.WS_VISIBLE;
+                    cp.Style |= User32.WindowStyle.WS_VISIBLE;
                 }
                 if (winStyle != cp.Style)
                 {
@@ -11893,17 +11868,17 @@ namespace System.Windows.Forms
                 if (exStyle != cp.ExStyle)
                 {
                     WindowExStyle = cp.ExStyle;
-                    SetState(STATE_MIRRORED, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                    SetState(STATE_MIRRORED, (cp.ExStyle & User32.WindowStyle.WS_EX_LAYOUTRTL) != 0);
                 }
 
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    NativeMethods.NullHandleRef,
-                    flags: NativeMethods.SWP_DRAWFRAME
-                        | NativeMethods.SWP_NOACTIVATE
-                        | NativeMethods.SWP_NOMOVE
-                        | NativeMethods.SWP_NOSIZE
-                        | NativeMethods.SWP_NOZORDER);
+                    IntPtr.Zero,
+                    flags: User32.WindowPosition.SWP_DRAWFRAME
+                        | User32.WindowPosition.SWP_NOACTIVATE
+                        | User32.WindowPosition.SWP_NOMOVE
+                        | User32.WindowPosition.SWP_NOSIZE
+                        | User32.WindowPosition.SWP_NOZORDER);
 
                 Invalidate(true);
             }
@@ -11946,11 +11921,11 @@ namespace System.Windows.Forms
                 while (parentHandle != IntPtr.Zero)
                 {
                     lastParentHandle = parentHandle;
-                    parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(null, parentHandle));
+                    parentHandle = User32.GetParent(parentHandle);
 
-                    int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(null, lastParentHandle), NativeMethods.GWL_STYLE)));
+                    int style = unchecked((int)((long)User32.GetWindowLong(lastParentHandle, User32.WindowLong.GWL_STYLE)));
 
-                    if ((style & NativeMethods.WS_CHILD) == 0)
+                    if ((style & User32.WindowStyle.WS_CHILD) == 0)
                     {
                         break;
                     }
@@ -13079,11 +13054,11 @@ namespace System.Windows.Forms
                 //
                 bool different = false;
 
-                if ((wp->flags & NativeMethods.SWP_NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
+                if ((wp->flags & User32.WindowPosition.SWP_NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
                 {
                     different = true;
                 }
-                if ((wp->flags & NativeMethods.SWP_NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
+                if ((wp->flags & User32.WindowPosition.SWP_NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
                 {
                     different = true;
                 }
@@ -13328,12 +13303,12 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
             // Update new size / position
             UpdateBounds();
-            if (_parent != null && UnsafeNativeMethods.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
+            if (_parent != null && User32.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
                 (_state & STATE_NOZORDER) == 0)
             {
 
                 NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
-                if ((wp->flags & NativeMethods.SWP_NOZORDER) == 0)
+                if ((wp->flags & User32.WindowPosition.SWP_NOZORDER) == 0)
                 {
                     _parent.UpdateChildControlIndex(this);
                 }
@@ -14630,8 +14605,8 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle GetToolNativeScreenRectangle()
         {
-            RECT rectangle = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rectangle);
+            var rectangle = new RECT();
+            User32.GetWindowRect(new HandleRef(this, Handle), ref rectangle);
             return Rectangle.FromLTRB(rectangle.left, rectangle.top, rectangle.right, rectangle.bottom);
         }
 

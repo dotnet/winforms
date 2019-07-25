@@ -102,8 +102,8 @@ namespace System.Windows.Forms.Design.Behavior
             _queriedSnapLines = false;
 
             //test hooks
-            WM_GETALLSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETALLSNAPLINES");
-            WM_GETRECENTSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
+            WM_GETALLSNAPLINES = User32.RegisterWindowMessageW("WM_GETALLSNAPLINES");
+            WM_GETRECENTSNAPLINES = User32.RegisterWindowMessageW("WM_GETRECENTSNAPLINES");
 
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
@@ -543,9 +543,9 @@ namespace System.Windows.Forms.Design.Behavior
             if (uiService != null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != UnsafeNativeMethods.GetActiveWindow())
+                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
                 {
-                    UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, hwnd.Handle));
+                    User32.SetActiveWindow(new HandleRef(this, hwnd.Handle));
                 }
             }
         }
@@ -608,8 +608,8 @@ namespace System.Windows.Forms.Design.Behavior
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(NativeMethods.WS_CLIPCHILDREN | NativeMethods.WS_CLIPSIBLINGS);
-                    cp.ExStyle |= NativeMethods.WS_EX_TRANSPARENT;
+                    cp.Style &= ~(User32.WindowStyle.WS_CLIPCHILDREN | User32.WindowStyle.WS_CLIPSIBLINGS);
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_TRANSPARENT;
                     return cp;
                 }
             }
@@ -1075,17 +1075,18 @@ namespace System.Windows.Forms.Design.Behavior
                         if (_thisProcessID == 0)
                         {
                             AdornerWindow adornerWindow = AdornerWindow.s_adornerWindowList[0];
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(adornerWindow, adornerWindow.Handle), out _thisProcessID);
+                            User32.GetWindowThreadProcessId(new HandleRef(adornerWindow, adornerWindow.Handle), out _thisProcessID);
                         }
 
-                        NativeMethods.HookProc hook = new NativeMethods.HookProc(MouseHookProc);
+                        var hook = new User32.HookProc(MouseHookProc);
                         _mouseHookRoot = GCHandle.Alloc(hook);
 
 #pragma warning disable 618
-                        _mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE,
-                                                                   hook,
-                                                                   new HandleRef(null, IntPtr.Zero),
-                                                                   AppDomain.GetCurrentThreadId());
+                        _mouseHookHandle = User32.SetWindowsHookExW(
+                            User32.WindowHookProcedure.WH_MOUSE,
+                            hook,
+                            IntPtr.Zero,
+                            AppDomain.GetCurrentThreadId());
 #pragma warning restore 618
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
@@ -1129,7 +1130,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     Debug.Assert(_isHooked, "How did we get here when we are diposed?");
-                    return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
                 }
 
                 private void UnhookMouse()
@@ -1138,7 +1139,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
+                            User32.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
                             _mouseHookRoot.Free();
                             _mouseHookHandle = IntPtr.Zero;
                             _isHooked = false;
@@ -1164,11 +1165,11 @@ namespace System.Windows.Forms.Design.Behavior
                         IntPtr handle = adornerWindow.DesignerFrame.Handle;
 
                         // if it's us or one of our children, just process as normal
-                        if (adornerWindow.ProcessingDrag || (hWnd != handle && SafeNativeMethods.IsChild(new HandleRef(this, handle), new HandleRef(this, hWnd))))
+                        if (adornerWindow.ProcessingDrag || (hWnd != handle && User32.IsChild(new HandleRef(this, handle), new HandleRef(this, hWnd))))
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
                             // make sure the window is in our process
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWnd), out int pid);
+                            User32.GetWindowThreadProcessId(hWnd, out int pid);
                             // if this isn't our process, bail
                             if (pid != _thisProcessID)
                             {

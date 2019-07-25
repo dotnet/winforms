@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         internal static Guid maskEdit_Clsid = new Guid("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
         // Window message to check if we have already sub-classed
-        internal static readonly int REGMSG_MSG = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_subclassCheck");
+        internal static readonly int REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
         internal const int REGMSG_RETVAL = 123;
 
         //

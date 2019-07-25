@@ -96,22 +96,22 @@ namespace System.Windows.Forms
                 // Add the style MDIS_ALLCHILDSTYLES
                 // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
                 // to make them not visible but still present.
-                cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.WS_HSCROLL;
-                cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                cp.Style |= User32.WindowStyle.WS_VSCROLL | User32.WindowStyle.WS_HSCROLL;
+                cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                 cp.Param = new NativeMethods.CLIENTCREATESTRUCT(IntPtr.Zero, 1);
                 ISite site = ParentInternal?.Site;
                 if (site != null && site.DesignMode)
                 {
-                    cp.Style |= NativeMethods.WS_DISABLED;
+                    cp.Style |= User32.WindowStyle.WS_DISABLED;
                     SetState(STATE_ENABLED, false);
                 }
 
                 if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LAYOUTRTL | User32.WindowStyle.WS_EX_NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(User32.WindowStyle.WS_EX_RTLREADING | User32.WindowStyle.WS_EX_RIGHT | User32.WindowStyle.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -226,12 +226,6 @@ namespace System.Windows.Forms
                     // NOTE: This logic is to keep minimized MDI children anchored to
                     // the bottom left of the client area, normally they are anchored
                     // to the top right which just looks wierd!
-                    //
-                    NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT
-                    {
-                        length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>()
-                    };
-
                     for (int i = 0; i < Controls.Count; i++)
                     {
                         Control ctl = Controls[i];
@@ -242,7 +236,7 @@ namespace System.Windows.Forms
                             // them from being re-displayed.
                             if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
                             {
-                                UnsafeNativeMethods.GetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
+                                User32.GetWindowPlacement(new HandleRef(child, child.Handle), out User32.WINDOWPLACEMENT wp);
                                 wp.ptMinPosition.Y -= yDelta;
                                 if (wp.ptMinPosition.Y == -1)
                                 {
@@ -256,7 +250,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                                 wp.flags = NativeMethods.WPF_SETMINPOSITION;
-                                UnsafeNativeMethods.SetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
+                                User32.SetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
                                 wp.flags = 0;
                             }
                         }
@@ -305,7 +299,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
 
-                    if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(null, rgn1), true) == 0)
+                    if (User32.SetWindowRgn(new HandleRef(this, Handle), rgn1, true) == 0)
                     {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }

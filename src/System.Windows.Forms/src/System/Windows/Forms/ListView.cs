@@ -716,8 +716,8 @@ namespace System.Windows.Forms
                 //
                 if (IsHandleCreated)
                 {
-                    int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                    cp.Style |= (currentStyle & (NativeMethods.WS_HSCROLL | NativeMethods.WS_VSCROLL));
+                    int currentStyle = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE)));
+                    cp.Style |= (currentStyle & (User32.WindowStyle.WS_HSCROLL | User32.WindowStyle.WS_VSCROLL));
                 }
 
                 cp.Style |= NativeMethods.LVS_SHAREIMAGELISTS;
@@ -740,10 +740,10 @@ namespace System.Windows.Forms
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= User32.WindowStyle.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= User32.WindowStyle.WS_BORDER;
                         break;
                 }
 
@@ -806,9 +806,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(User32.WindowStyle.WS_EX_RTLREADING | User32.WindowStyle.WS_EX_RIGHT | User32.WindowStyle.WS_EX_LEFTSCROLLBAR);
                 }
                 return cp;
             }
@@ -4540,9 +4540,9 @@ namespace System.Windows.Forms
             //
             if (!Scrollable)
             {
-                int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE)));
                 style |= NativeMethods.LVS_NOSCROLL;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(new HandleRef(this, Handle), User32.WindowLong.GWL_STYLE, (IntPtr)style);
             }
 
             // in VirtualMode we have to tell the list view to ask for the list view item's state image index
@@ -4827,7 +4827,7 @@ namespace System.Windows.Forms
 
         private unsafe void PositionHeader()
         {
-            IntPtr hdrHWND = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+            IntPtr hdrHWND = User32.GetWindow(new HandleRef(this, Handle), User32.GetWindowOption.GW_CHILD);
             if (hdrHWND != IntPtr.Zero)
             {
 
@@ -4866,13 +4866,14 @@ namespace System.Windows.Forms
                     NativeMethods.WINDOWPOS wpos = Marshal.PtrToStructure<NativeMethods.WINDOWPOS>(pwpos);
 
                     // position the header control
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, hdrHWND),
-                                                   new HandleRef(this, wpos.hwndInsertAfter),
-                                                   wpos.x,
-                                                   wpos.y,
-                                                   wpos.cx,
-                                                   wpos.cy,
-                                                   wpos.flags | NativeMethods.SWP_SHOWWINDOW);
+                    User32.SetWindowPos(
+                        new HandleRef(this, hdrHWND),
+                        new HandleRef(this, wpos.hwndInsertAfter),
+                        wpos.x,
+                        wpos.y,
+                        wpos.cx,
+                        wpos.cy,
+                        wpos.flags | User32.WindowPosition.SWP_SHOWWINDOW);
                 }
                 finally
                 {
@@ -5337,7 +5338,7 @@ namespace System.Windows.Forms
             this.toolTipCaption = toolTipCaption;
             //native ListView expects tooltip HWND as a wParam and ignores lParam
             IntPtr oldHandle = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
-            UnsafeNativeMethods.DestroyWindow(new HandleRef(null, oldHandle));
+            User32.DestroyWindow(oldHandle);
         }
 
         internal void SetItemImage(int index, int image)

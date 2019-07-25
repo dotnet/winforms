@@ -131,7 +131,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "SCROLLBAR";
-                cp.Style &= (~NativeMethods.WS_BORDER);
+                cp.Style &= (~User32.WindowStyle.WS_BORDER);
                 return cp;
             }
         }
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_SIZE:
                     // Fixes the scrollbar focus rect
-                    if (UnsafeNativeMethods.GetFocus() == Handle)
+                    if (User32.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);

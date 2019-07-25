@@ -442,8 +442,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (edit != null && edit.IsHandleCreated)
                 {
-                    int exStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(edit, edit.Handle), NativeMethods.GWL_EXSTYLE)));
-                    return ((exStyle & NativeMethods.WS_EX_RTLREADING) != 0);
+                    int exStyle = unchecked((int)((long)User32.GetWindowLong(new HandleRef(edit, edit.Handle), User32.WindowLong.GWL_EXSTYLE)));
+                    return ((exStyle & User32.WindowStyle.WS_EX_RTLREADING) != 0);
                 }
                 else
                 {
@@ -1116,8 +1116,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (IsHandleCreated && Visible && Enabled)
                 {
-
-                    gotfocus = IntPtr.Zero != UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
+                    gotfocus = IntPtr.Zero != User32.SetFocus(new HandleRef(this, Handle));
                 }
             }
 
@@ -1935,9 +1934,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             // control is a top=level window. standard way of setparent on the control is prohibited for top-level controls.
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
             // We are not touching this for this relase. We may revisit it in next release.
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(this, Handle));
+            User32.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), User32.WindowLong.GWL_HWNDPARENT, new HandleRef(this, Handle));
             dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
-            SafeNativeMethods.ShowWindow(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.SW_SHOWNA);
+            User32.ShowWindow(new HandleRef(dropDownHolder, dropDownHolder.Handle), User32.ShowWindowCommand.SW_SHOWNA);
             Edit.Filter = true;
             dropDownHolder.Visible = true;
             dropDownHolder.FocusComponent();
@@ -3147,8 +3146,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (dropDownHolder != null && dropDownHolder.Visible)
             {
                 bool found = false;
-                for (IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
-                    hwnd != IntPtr.Zero; hwnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hwnd)))
+                for (IntPtr hwnd = User32.GetForegroundWindow();
+                    hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
                 {
                     if (hwnd == dropDownHolder.Handle)
                     {
@@ -3749,8 +3748,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
-                IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
-                if (UnsafeNativeMethods.IsChild(new HandleRef(null, foregroundWindow), new HandleRef(null, Handle)))
+                IntPtr foregroundWindow = User32.GetForegroundWindow();
+                if (User32.IsChild(foregroundWindow, Handle))
                 {
                     // Don't show the tips if a dropdown is showing
                     if ((dropDownHolder == null || dropDownHolder.Component == null) || rowMoveCur == selectedRow)
@@ -4570,14 +4569,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
+                        Control focusedControl = Control.FromHandle(User32.GetFocus());
 
                         if (focusedControl == null || !IsMyChild(focusedControl))
                         {
                             if (forward)
                             {
                                 TabSelection();
-                                focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
+                                focusedControl = Control.FromHandle(User32.GetFocus());
                                 // make sure the value actually took the focus
                                 if (IsMyChild(focusedControl))
                                 {
@@ -5697,7 +5696,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            IntPtr priorFocus = UnsafeNativeMethods.GetFocus();
+            IntPtr priorFocus = User32.GetFocus();
 
             IUIService service = (IUIService)GetService(typeof(IUIService));
             DialogResult result;
@@ -5712,7 +5711,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (priorFocus != IntPtr.Zero)
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, priorFocus));
+                User32.SetFocus(priorFocus);
             }
 
             return result;
@@ -6347,11 +6346,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
-                    cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
+                    cp.ExStyle |= User32.WindowStyle.WS_EX_TOOLWINDOW;
+                    cp.Style |= User32.WindowStyle.WS_POPUP | User32.WindowStyle.WS_BORDER;
                     if (OSFeature.IsPresent(SystemParameter.DropShadow))
                     {
-                        cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_DROPSHADOW;
+                        cp.ClassStyle |= (int)User32.ClassStyle.CS_DROPSHADOW;
                     }
                     if (gridView != null)
                     {
@@ -6562,7 +6561,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 while (hWnd != IntPtr.Zero)
                 {
-                    hWnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_HWNDPARENT);
+                    hWnd = User32.GetWindowLong(hWnd, User32.WindowLong.GWL_HWNDPARENT);
                     if (hWnd == IntPtr.Zero)
                     {
                         return false;
@@ -7041,8 +7040,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~NativeMethods.WS_BORDER;
-                    cp.ExStyle &= ~NativeMethods.WS_EX_CLIENTEDGE;
+                    cp.Style &= ~User32.WindowStyle.WS_BORDER;
+                    cp.ExStyle &= ~User32.WindowStyle.WS_EX_CLIENTEDGE;
                     return cp;
                 }
             }
@@ -7841,19 +7840,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void WndProc(ref Message m)
             {
-
-                if (filter)
+                if (filter && psheet.FilterEditWndProc(ref m))
                 {
-                    if (psheet.FilterEditWndProc(ref m))
-                    {
                         return;
-                    }
                 }
 
                 switch (m.Msg)
                 {
                     case WindowMessages.WM_STYLECHANGED:
-                        if ((unchecked((int)(long)m.WParam) & NativeMethods.GWL_EXSTYLE) != 0)
+                        if ((unchecked((User32.WindowLong)(long)m.WParam) & User32.WindowLong.GWL_EXSTYLE) != 0)
                         {
                             psheet.Invalidate();
                         }
@@ -8158,16 +8153,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (thisProcessID == 0)
                     {
-                        SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(control, control.Handle), out thisProcessID);
+                        User32.GetWindowThreadProcessId(new HandleRef(control, control.Handle), out thisProcessID);
                     }
 
-                    NativeMethods.HookProc hook = new NativeMethods.HookProc(new MouseHookObject(this).Callback);
+                    var hook = new User32.HookProc(new MouseHookObject(this).Callback);
                     mouseHookRoot = GCHandle.Alloc(hook);
 
-                    mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE,
-                                                               hook,
-                                                               NativeMethods.NullHandleRef,
-                                                               SafeNativeMethods.GetCurrentThreadId());
+                    mouseHookHandle = User32.SetWindowsHookExW(
+                        User32.WindowHookProcedure.WH_MOUSE,
+                        hook,
+                        IntPtr.Zero,
+                        Kernel32.GetCurrentThreadId());
                     Debug.Assert(mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }
@@ -8203,7 +8199,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
+                return User32.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
             }
 
             /// <summary>
@@ -8217,7 +8213,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (mouseHookHandle != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, mouseHookHandle));
+                        User32.UnhookWindowsHookEx(new HandleRef(this, mouseHookHandle));
                         mouseHookRoot.Free();
                         mouseHookHandle = IntPtr.Zero;
                         Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:UnhookMouse()");
@@ -8251,7 +8247,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Debug.Assert(thisProcessID != 0, "Didn't get our process id!");
 
                     // make sure the window is in our process
-                    SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWndAtPoint), out int pid);
+                    User32.GetWindowThreadProcessId(hWndAtPoint, out int pid);
 
                     // if this isn't our process, unhook the mouse.
                     if (pid != thisProcessID)

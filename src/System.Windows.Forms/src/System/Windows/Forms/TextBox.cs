@@ -312,7 +312,7 @@ namespace System.Windows.Forms
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~User32.WindowStyle.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
@@ -333,11 +333,11 @@ namespace System.Windows.Forms
                         && textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
-                        cp.Style |= NativeMethods.WS_HSCROLL;
+                        cp.Style |= User32.WindowStyle.WS_HSCROLL;
                     }
                     if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
-                        cp.Style |= NativeMethods.WS_VSCROLL;
+                        cp.Style |= User32.WindowStyle.WS_VSCROLL;
                     }
                 }
 

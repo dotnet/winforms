@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -352,7 +353,7 @@ namespace System.Windows.Forms
 
         protected override bool RunDialog(IntPtr hwndOwner)
         {
-            var hookProcPtr = new NativeMethods.WndProc(HookProc);
+            var hookProcPtr = new User32.WndProc(HookProc);
 
             if (!UseEXDialog)
             {
@@ -366,7 +367,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data)
+        private bool ShowPrintDialog(IntPtr hwndOwner, User32.WndProc hookProcPtr, NativeMethods.PRINTDLG data)
         {
             data.Flags = GetFlags();
             data.nCopies = (short)PrinterSettings.Copies;
