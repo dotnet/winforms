@@ -2019,7 +2019,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return $"{s}InitialDelay: {InitialDelay}, ShowAlways: {ShowAlways}";
+            return $"{s} InitialDelay: {InitialDelay}, ShowAlways: {ShowAlways}";
         }
 
         private void Reposition(Point tipPosition, Size tipSize)

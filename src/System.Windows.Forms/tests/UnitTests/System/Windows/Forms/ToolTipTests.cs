@@ -684,6 +684,13 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("duration", () => toolTip.Show("text", mockWindow.Object, -1));
         }
 
+        [Fact]
+        public void ToolTip_ToString_Invoke_ReturnsExpected()
+        {
+            var toolTip = new ToolTip();
+            Assert.Equal("System.Windows.Forms.ToolTip InitialDelay: 500, ShowAlways: False", toolTip.ToString());
+        }
+
         private class SubToolTip : ToolTip
         {
             public SubToolTip() : base()
