@@ -39,6 +39,11 @@ namespace System.Windows.Forms
 
                 internal override object GetPropertyValue(int propertyID)
                 {
+                    if (propertyID == NativeMethods.UIA_NamePropertyId)
+                    {
+                        return Name;
+                    }
+
                     if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
                     {
                         return NativeMethods.UIA_SpinnerControlTypeId;
