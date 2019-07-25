@@ -30,9 +30,6 @@ namespace System.ComponentModel.Design
             /// global native method imports
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
             public static extern ushort FindAtom([MarshalAs(UnmanagedType.LPWStr)] string lpString);
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-            public static extern IntPtr GetModuleHandle([MarshalAs(UnmanagedType.LPWStr)] string lpModuleName);
         }
 
         // Atom name. This ATOM will be set by the host application when code markers are enabled in the registry.
@@ -97,7 +94,7 @@ namespace System.ComponentModel.Design
                         // in the AttachPerf context we should see which module is already loaded
                         if (_regroot == null)
                         {
-                            _shouldUseTestDll = NativeMethods.GetModuleHandle(ProductDllName) == IntPtr.Zero;
+                            _shouldUseTestDll = Interop.Kernel32.GetModuleHandleW(ProductDllName) == IntPtr.Zero;
                         }
                         else
                         {

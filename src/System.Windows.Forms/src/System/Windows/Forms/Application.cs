@@ -117,42 +117,33 @@ namespace System.Windows.Forms
 
         private static bool InitializeComCtlSupportsVisualStyles()
         {
-            if (s_useVisualStyles && OSFeature.Feature.IsPresent(OSFeature.Themes))
+            if (s_useVisualStyles)
             {
-                //NOTE: At this point, we may not have loaded ComCtl6 yet, but it will eventually
-                //      be loaded, so we return true here. This works because UseVisualStyles, once
-                //      set, cannot be turned off. If that changes (unlikely), this may not work.
+                // At this point, we may not have loaded ComCtl6 yet, but it will eventually be loaded,
+                // so we return true here. This works because UseVisualStyles, once set, cannot be
+                // turned off.
                 return true;
             }
 
-            //to see if we are comctl6, we look for a function that is exposed only from comctl6
+            // To see if we are comctl6, we look for a function that is exposed only from comctl6
             // we do not call DllGetVersion or any direct p/invoke, because the binding will be
             // cached.
-            // The GetModuleHandle function returns a handle to a mapped module without incrementing its reference count.
-
-            IntPtr hModule = UnsafeNativeMethods.GetModuleHandle(ExternDll.Comctl32);
+            // GetModuleHandle  returns a handle to a mapped module without incrementing its
+            // reference count.
+            IntPtr hModule = Interop.Kernel32.GetModuleHandleW(Interop.Libraries.Comctl32);
             if (hModule != IntPtr.Zero)
             {
-                try
-                {
-                    IntPtr pFunc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, hModule), "ImageList_WriteEx");
-                    return (pFunc != IntPtr.Zero);
-                }
-                catch
-                {
-                }
+                return Interop.Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
             }
-            else
+
+            // Load comctl since GetModuleHandle failed to find it
+            hModule = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable(Interop.Libraries.Comctl32);
+            if (hModule == IntPtr.Zero)
             {
-                // Load comctl since GetModuleHandle failed to find it
-                hModule = UnsafeNativeMethods.LoadLibraryFromSystemPathIfAvailable(ExternDll.Comctl32);
-                if (hModule != IntPtr.Zero)
-                {
-                    IntPtr pFunc = UnsafeNativeMethods.GetProcAddress(new HandleRef(null, hModule), "ImageList_WriteEx");
-                    return (pFunc != IntPtr.Zero);
-                }
+                return false;
             }
-            return false;
+
+            return Interop.Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
         }
 
         /// <summary>

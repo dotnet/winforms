@@ -4,8 +4,8 @@
 
 internal partial class Interop
 {
-    internal partial class Kernel32
+    internal static class Errors
     {
-        public const int MAX_UNICODESTRING_LEN = short.MaxValue;
+        public const int ERROR_INVALID_PARAMETER = 0x57;
     }
 }

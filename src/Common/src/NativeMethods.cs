@@ -5684,11 +5684,6 @@ namespace System.Windows.Forms
         internal const int UIA_SemanticZoomControlTypeId = 50039;
         internal const int UIA_AppBarControlTypeId = 50040;
 
-        // If this value is used, %windows%\system32 is searched for the DLL
-        // and its dependencies. Directories in the standard search path are not searched.
-        // Windows 7: this value requires KB2533623 to be installed.
-        internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] ref RECT rect, int cPoints);
 
