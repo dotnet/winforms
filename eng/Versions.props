@@ -46,7 +46,7 @@
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
-    <CoverletMSBuildPackageVersion>2.6.0</CoverletMSBuildPackageVersion>
+    <CoverletMSBuildPackageVersion>2.6.3</CoverletMSBuildPackageVersion>
     <CodecovVersion>1.1.1</CodecovVersion>
     <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
   </PropertyGroup>
