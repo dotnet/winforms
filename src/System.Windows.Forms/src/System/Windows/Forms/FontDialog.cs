@@ -542,7 +542,7 @@ namespace System.Windows.Forms
                 lpLogFont = new IntPtr(&logFont),
                 Flags = Options | NativeMethods.CF_INITTOLOGFONTSTRUCT | NativeMethods.CF_ENABLEHOOK,
                 lpfnHook = hookProcPtr,
-                hInstance = UnsafeNativeMethods.GetModuleHandle(null),
+                hInstance = Interop.Kernel32.GetModuleHandleW(null),
                 nSizeMin = minSize,
                 nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
                 rgbColors = ShowColor || ShowEffects

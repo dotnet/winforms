@@ -187,12 +187,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual object GetData(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format.FullName);
-            Debug.Assert(format != null, "Must specify a format type");
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format?.FullName ?? "(null)");
             if (format == null)
             {
                 return null;
             }
+
             return GetData(format.FullName);
         }
 
@@ -203,12 +203,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual bool GetDataPresent(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format.FullName);
-            Debug.Assert(format != null, "Must specify a format type");
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format?.FullName ?? "(null)");
             if (format == null)
             {
                 return false;
             }
+
             bool b = GetDataPresent(format.FullName);
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "  ret: " + b.ToString());
             return b;
@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(string format, bool autoConvert, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, autoConvert, data);
         }
@@ -1072,7 +1072,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(string format, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(Type format, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format.FullName + ", " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(data);
         }
@@ -1929,6 +1929,11 @@ namespace System.Windows.Forms
             public virtual object GetData(string format, bool autoConvert)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetData: " + format + ", " + autoConvert.ToString());
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    return null;
+                }
+
                 DataStoreEntry dse = (DataStoreEntry)data[format];
                 object baseVar = null;
                 if (dse != null)
@@ -1988,7 +1993,16 @@ namespace System.Windows.Forms
 
             public virtual void SetData(string format, bool autoConvert, object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    if (format == null)
+                    {
+                        throw new ArgumentNullException(nameof(format));
+                    }
+
+                    throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
+                }
 
                 // We do not have proper support for Dibs, so if the user explicitly asked
                 // for Dib and provided a Bitmap object we can't convert.  Instead, publish as an HBITMAP
@@ -2010,19 +2024,29 @@ namespace System.Windows.Forms
             }
             public virtual void SetData(string format, object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + data?.ToString() ?? "(null)");
                 SetData(format, true, data);
             }
 
             public virtual void SetData(Type format, object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format.FullName + ", " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
+                if (format == null)
+                {
+                    throw new ArgumentNullException(nameof(format));
+                }
+
                 SetData(format.FullName, data);
             }
 
             public virtual void SetData(object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data?.ToString() ?? "(null)");
+                if (data == null)
+                {
+                    throw new ArgumentNullException(nameof(data));
+                }
+    
                 if (data is ISerializable
                     && !this.data.ContainsKey(DataFormats.Serializable))
                 {
@@ -2041,8 +2065,11 @@ namespace System.Windows.Forms
 
             public virtual bool GetDataPresent(string format, bool autoConvert)
             {
-                Debug.Assert(format != null, "Null format passed in");
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetDataPresent: " + format + ", " + autoConvert.ToString());
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    return false;
+                }
 
                 if (!autoConvert)
                 {

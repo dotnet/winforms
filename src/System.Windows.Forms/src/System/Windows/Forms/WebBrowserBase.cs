@@ -606,15 +606,6 @@ namespace System.Windows.Forms
         // Internal helper methods:
         //
 
-#if false
-        // FxCop: Currently not used
-        internal Guid ClassId {
-            get {
-                return clsid;
-            }
-        }
-#endif
-
         internal WebBrowserHelper.AXState ActiveXState
         {
             get
@@ -1333,65 +1324,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-#if false
-        // FxCop: Currently not used
-        private Object GetAmbientProperty(int dispid) {
-
-            Control richParent = ParentInternal;
-
-            switch (dispid) {
-                case NativeMethods.ActiveX.DISPID_AMBIENT_USERMODE:
-                    return !DesignMode;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_AUTOCLIP:
-                    return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_MESSAGEREFLECT:
-                    return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FONT:
-                    if (richParent != null) {
-                        return WebBrowserHelper.GetIFontFromFont(richParent.Font);
-                    }
-                    return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWGRABHANDLES:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWHATCHING:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR:
-                    if (richParent != null) {
-                        return WebBrowserHelper.GetOleColorFromColor(richParent.BackColor);
-                    }
-                    return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR:
-                    if (richParent != null) {
-                        return WebBrowserHelper.GetOleColorFromColor(richParent.ForeColor);
-                    }
-                    return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
-                    string rval = this.GetParentContainer().GetNameForControl(this);
-                    if (rval == null) rval = string.Empty;
-                    return rval;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
-                    return Thread.CurrentThread.CurrentCulture.LCID;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_RIGHTTOLEFT:
-                    Control ctl = this;
-                    while (ctl != null) {
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.No)
-                            return false;
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Yes)
-                            return true;
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Inherit)
-                            ctl = ctl.Parent;
-                    }
-                    return null;
-                default:
-                    return null;
-            }
-        }
-#endif
 
         internal UnsafeNativeMethods.IOleInPlaceObject AXInPlaceObject
         {

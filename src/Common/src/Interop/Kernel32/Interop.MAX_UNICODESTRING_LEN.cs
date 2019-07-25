@@ -6,6 +6,6 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        internal const int MAX_UNICODESTRING_LEN = short.MaxValue;
+        public const int MAX_UNICODESTRING_LEN = short.MaxValue;
     }
 }

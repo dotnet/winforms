@@ -584,7 +584,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            using (Brush b = new SolidBrush(ColorTable.MenuItemSelected))
+                            using (Brush b = new LinearGradientBrush(bounds, ColorTable.MenuItemSelectedGradientBegin, ColorTable.MenuItemSelectedGradientEnd, LinearGradientMode.Vertical))
                             {
                                 g.FillRectangle(b, bounds);
                             }

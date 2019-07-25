@@ -207,10 +207,9 @@ namespace System.Windows.Forms
                 if (_defaultWindowProc == IntPtr.Zero)
                 {
                     // Cache the default windows procedure address
-                    _defaultWindowProc = UnsafeNativeMethods.GetProcAddress(
-                        new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(ExternDll.User32)),
+                    _defaultWindowProc = Interop.Kernel32.GetProcAddress(
+                        Interop.Kernel32.GetModuleHandleW(Interop.Libraries.User32),
                         "DefWindowProcW");
-
                     if (_defaultWindowProc == IntPtr.Zero)
                     {
                         throw new Win32Exception();
@@ -558,7 +557,7 @@ namespace System.Windows.Forms
                     // parented to this parkign window. Otherwise, reparenting of control will fail.
                     using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
                     {
-                        IntPtr modHandle = UnsafeNativeMethods.GetModuleHandle(null);
+                        IntPtr modHandle = Interop.Kernel32.GetModuleHandleW(null);
 
                         // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
                         // Catch this and then we re-throw an out of memory error.
@@ -1444,7 +1443,7 @@ namespace System.Windows.Forms
                 _windowClassName = GetFullClassName(localClassName);
                 _windowProc = new NativeMethods.WndProc(Callback);
                 windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windowProc);
-                windowClass.hInstance = UnsafeNativeMethods.GetModuleHandle(null);
+                windowClass.hInstance = Interop.Kernel32.GetModuleHandleW(null);
 
                 fixed (char* c = _windowClassName)
                 {

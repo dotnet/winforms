@@ -1871,19 +1871,18 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 // CLR4.0 or later, comctl32.dll needs to be loaded explicitly.
                 if (needToLoadComCtl)
                 {
-                    if ((UnsafeNativeMethods.GetModuleHandle(ExternDll.Comctl32) != IntPtr.Zero)
-                        || (UnsafeNativeMethods.LoadLibraryFromSystemPathIfAvailable(ExternDll.Comctl32) != IntPtr.Zero))
+                    if ((Interop.Kernel32.GetModuleHandleW(Interop.Libraries.Comctl32) != IntPtr.Zero)
+                        || (Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable(Interop.Libraries.Comctl32) != IntPtr.Zero))
                     {
                         needToLoadComCtl = false;
                     }
                     else
                     {
                         int lastWin32Error = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, ExternDll.Comctl32));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Interop.Libraries.Comctl32));
                     }
                 }
 
@@ -19921,7 +19920,7 @@ namespace System.Windows.Forms
 
                         if (oleAccAvailable == NativeMethods.InvalidIntPtr)
                         {
-                            oleAccAvailable = UnsafeNativeMethods.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
+                            oleAccAvailable = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
                             freeLib = (oleAccAvailable != IntPtr.Zero);
                         }
 
@@ -19936,7 +19935,7 @@ namespace System.Windows.Forms
 
                         if (freeLib)
                         {
-                            CommonUnsafeNativeMethods.FreeLibrary(new HandleRef(null, oleAccAvailable));
+                            Interop.Kernel32.FreeLibrary(oleAccAvailable);
                         }
 
                     }

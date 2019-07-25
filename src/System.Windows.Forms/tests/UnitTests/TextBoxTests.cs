@@ -29,6 +29,96 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void TextBox_PlaceholderText_DefaultValue()
+        {
+            var tb = new TextBox();
+            Assert.Equal(string.Empty, tb.PlaceholderText);
+        }
+
+        [Fact]
+        public void TextBox_PlaceholderText_When_InAccessibility_Doesnot_Raise_TextChanged()
+        {
+            var tb = new SubTextBox();
+            bool eventRaised = false;
+            EventHandler handler = (o, e) => eventRaised = true;
+            tb.TextChanged += handler;
+            tb.CreateAccessibility();
+            Assert.False(eventRaised);
+            tb.TextChanged -= handler;
+        }
+
+        public static IEnumerable<object[]> TextBox_ShouldRenderPlaceHolderText_TestData()
+        {
+            // Test PlaceholderText
+            var tb = new SubTextBox() { PlaceholderText = "", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            var msg = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
+            yield return new object[] { tb, msg, false };
+
+            // Test PlaceholderText
+            tb = new SubTextBox() { PlaceholderText = null, IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            msg = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
+            yield return new object[] { tb, msg, false };
+
+            // Test Message
+            msg.Msg = Interop.WindowMessages.WM_USER;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            yield return new object[] { tb, msg, false };
+
+            // Test UserPaint
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = true, IsFocused = false, TextCount = 0 };
+            yield return new object[] { tb, msg, false };
+
+            // Test Focused
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = true, TextCount = 0 };
+            yield return new object[] { tb, msg, false };
+
+            // Test TextLength
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 1 };
+            yield return new object[] { tb, msg, false };
+
+            // Test WM_PAINT
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            yield return new object[] { tb, msg, true };
+
+            // Test WM_KILLFOCUS
+            tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
+            msg.Msg = Interop.WindowMessages.WM_KILLFOCUS;
+            yield return new object[] { tb, msg, true };
+        }
+
+        [Theory]
+        [MemberData(nameof(TextBox_ShouldRenderPlaceHolderText_TestData))]
+        public void TextBox_ShouldRenderPlaceHolderText(TextBox textBox, Message m, bool expected)
+        {
+            var result = textBox.GetTestAccessor().ShouldRenderPlaceHolderText(m);
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void TextBox_PlaceholderText_NullValue_CoercedTo_StringEmpty()
+        {
+            var tb = new TextBox()
+            {
+                PlaceholderText = "Text"
+            };
+
+            tb.PlaceholderText = null;
+            Assert.Equal(string.Empty, tb.PlaceholderText);
+        }
+
+        [Fact]
+        public void TextBox_PlaceholderText_Overriden()
+        {
+            var tb = new SubTextBox();
+
+            Assert.NotNull(tb);
+        }
+
+        [Fact]
         public void TextBox_PlaceholderTextAlignments()
         {
             var tb = new TextBox
@@ -139,6 +229,40 @@ namespace System.Windows.Forms.Tests
         private class SubTextBoxBase : TextBoxBase
         {
             public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private class SubTextBox : TextBox
+        {
+            public int TextCount;
+            public bool IsFocused;
+            public bool TextAccessed;
+
+            public override string PlaceholderText { get => base.PlaceholderText; set => base.PlaceholderText = value; }
+
+            // used to test that PlaceholderText won't raise TextChanged event.
+            public void CreateAccessibility()
+            {
+                this.CreateAccessibilityInstance();
+            }
+
+            public override bool Focused => IsFocused;
+            public override int TextLength => TextCount;
+
+            public override string Text
+            {
+                get
+                {
+                    TextAccessed = true;
+                    return base.Text;
+                }
+                set => base.Text = value;
+            }
+
+            public bool IsUserPaint
+            {
+                get => GetStyle(ControlStyles.UserPaint);
+                set => SetStyle(ControlStyles.UserPaint, value);
+            }
         }
     }
 }

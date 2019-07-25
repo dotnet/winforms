@@ -271,18 +271,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Constructs the new instance of the accessibility object for this ToolStripProgressBar ToolStrip item.
-        /// </summary>
-        /// <returns>
-        ///  The new instance of the accessibility object for this ToolStripProgressBar ToolStrip item
-        /// </returns>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ToolStripProgressBarAccessibleObject(this);
-        }
-
         private static Control CreateControlInstance()
         {
             ProgressBar progressBar = new ToolStripProgressBarControl
@@ -443,43 +431,6 @@ namespace System.Windows.Forms
         public void PerformStep()
         {
             ProgressBar.PerformStep();
-        }
-
-        [Runtime.InteropServices.ComVisible(true)]
-        internal class ToolStripProgressBarAccessibleObject : ToolStripItemAccessibleObject
-        {
-            private readonly ToolStripProgressBar ownerItem = null;
-
-            public ToolStripProgressBarAccessibleObject(ToolStripProgressBar ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.ProgressBar;
-                }
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
-            {
-                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
-                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
-                {
-                    return ownerItem.ProgressBar.AccessibilityObject;
-                }
-
-                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
-                return base.FragmentNavigate(direction);
-            }
         }
 
         internal class ToolStripProgressBarControl : ProgressBar

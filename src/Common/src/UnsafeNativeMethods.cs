@@ -663,9 +663,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetModuleHandle(string modName);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
@@ -675,9 +672,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr CallWindowProc(IntPtr wndProc, IntPtr hWnd, int msg,
                                                 IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Ansi)]
-        public static extern IntPtr GetProcAddress(HandleRef hModule, string lpProcName);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern bool GetClassInfoW(HandleRef hInstance, string lpClassName, ref NativeMethods.WNDCLASS lpWndClass);
@@ -908,12 +902,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetActiveWindow();
-
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr LoadLibrary(string libname);
-
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
-        private static extern IntPtr LoadLibraryEx(string lpModuleName, IntPtr hFile, uint dwFlags);
 
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
         //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should
@@ -7668,7 +7656,7 @@ namespace System.Windows.Forms
             ToggleState_On = 1,
             ToggleState_Indeterminate = 2
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [ComImport()]
         [ComVisible(true)]
@@ -7693,7 +7681,7 @@ namespace System.Windows.Forms
             RowOrColumnMajor_ColumnMajor = 1,
             RowOrColumnMajor_Indeterminate = 2
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [ComImport()]
         [ComVisible(true)]
@@ -7826,30 +7814,6 @@ namespace System.Windows.Forms
             /// no guarantees about where the item will be in the scrolled window.
             /// </summary>
             void ScrollIntoView();
-        }
-
-        public static IntPtr LoadLibraryFromSystemPathIfAvailable(string libraryName)
-        {
-            IntPtr module = IntPtr.Zero;
-
-            // introduced the LOAD_LIBRARY_SEARCH_SYSTEM32 flag. It also introduced
-            // the AddDllDirectory function. We test for presence of AddDllDirectory as an
-            // indirect evidence for the support of LOAD_LIBRARY_SEARCH_SYSTEM32 flag.
-            IntPtr kernel32 = GetModuleHandle(ExternDll.Kernel32);
-            if (kernel32 != IntPtr.Zero)
-            {
-                if (GetProcAddress(new HandleRef(null, kernel32), "AddDllDirectory") != IntPtr.Zero)
-                {
-                    module = LoadLibraryEx(libraryName, IntPtr.Zero, NativeMethods.LOAD_LIBRARY_SEARCH_SYSTEM32);
-                }
-                else
-                {
-                    // LOAD_LIBRARY_SEARCH_SYSTEM32 is not supported on this OS.
-                    // Fall back to using plain ol' LoadLibrary
-                    module = LoadLibrary(libraryName);
-                }
-            }
-            return module;
         }
     }
 }

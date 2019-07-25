@@ -4544,6 +4544,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Bitmap 개체는 장치 독립적 비트맵 형식을 직접 지원하지 않습니다. 자동 변환을 지정하거나 Bitmap 데이터 형식으로 SetData를 수행하십시오.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">DataMember 속성 '{0}'을(를) DataSource에서 찾을 수 없습니다.</target>

@@ -242,7 +242,7 @@ namespace System.Windows.Forms
                 stopHook = false;
                 hhook = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_JOURNALPLAYBACK,
                                                  hook,
-                                                 new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null)),
+                                                 new HandleRef(null, Interop.Kernel32.GetModuleHandleW(null)),
                                                  0);
                 if (hhook == IntPtr.Zero)
                 {
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
                 NativeMethods.HookProc hookProc = new NativeMethods.HookProc(EmptyHookCallback);
                 IntPtr hookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_JOURNALPLAYBACK,
                                                  hookProc,
-                                                 new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null)),
+                                                 new HandleRef(null, Interop.Kernel32.GetModuleHandleW(null)),
                                                  0);
 
                 hookSupported = (hookHandle != IntPtr.Zero);

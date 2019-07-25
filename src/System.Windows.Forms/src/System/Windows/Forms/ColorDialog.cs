@@ -154,10 +154,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Our HINSTANCE from Windows.
         /// </summary>
-        protected virtual IntPtr Instance
-        {
-            get { return UnsafeNativeMethods.GetModuleHandle(null); }
-        }
+        protected virtual IntPtr Instance => Interop.Kernel32.GetModuleHandleW(null);
 
         /// <summary>
         ///  Returns our CHOOSECOLOR options.

@@ -1340,7 +1340,6 @@ namespace System.Windows.Forms
             }
         }
 
-        // Does not seem to be a valid fxcop violation report. Contacting fxcop team to double-check.
         public bool AreAllCellsSelected(bool includeInvisibleCells)
         {
             if (Columns.Count == 0 && Rows.Count == 0)
@@ -26049,7 +26048,6 @@ namespace System.Windows.Forms
             FlushDisplayedChanged();
         }
 
-        // Does not seem to be a valid fxcop violation report. Contacting fxcop team to double-check.
         public void SelectAll()
         {
             if (!MultiSelect)
