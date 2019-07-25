@@ -687,7 +687,7 @@ namespace System.Windows.Forms
             if (GetTopLevel())
             {
                 // Get window's client rectangle (i.e. without chrome) expressed in screen coordinates
-                NativeMethods.RECT clientRectangle = new NativeMethods.RECT();
+                Interop.RECT clientRectangle = new Interop.RECT();
                 UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
                 NativeMethods.POINT topLeftPoint = new NativeMethods.POINT(0, 0);
                 UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), topLeftPoint);
@@ -698,15 +698,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This method calcuates the auto scale dimensions based on the control's current font.
+        ///  This method calcuates the auto scale dimensions based on the control's current font.
         /// </summary>
         private SizeF GetFontAutoScaleDimensions()
         {
             SizeF retval = SizeF.Empty;
 
-            // Windows uses CreateCompatibleDC(NULL) to get a memory DC for the monitor th
-            // application is currently on.
-            IntPtr dc = UnsafeNativeMethods.CreateCompatibleDC(NativeMethods.NullHandleRef);
+            // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
+            // the monitor the application is currently on.
+            IntPtr dc = Interop.Gdi32.CreateCompatibleDC(IntPtr.Zero);
             if (dc == IntPtr.Zero)
             {
                 throw new Win32Exception();
@@ -724,7 +724,7 @@ namespace System.Windows.Forms
                 // similar fashion.
 
                 HandleRef hfont = new HandleRef(this, FontHandle);
-                HandleRef hfontOld = new HandleRef(this, SafeNativeMethods.SelectObject(hdc, hfont));
+                IntPtr hfontOld = Interop.Gdi32.SelectObject(hdc, hfont);
 
                 try
                 {
@@ -748,12 +748,12 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    SafeNativeMethods.SelectObject(hdc, hfontOld);
+                    Interop.Gdi32.SelectObject(dc, hfontOld);
                 }
             }
             finally
             {
-                UnsafeNativeMethods.DeleteDC(hdc);
+                Interop.Gdi32.DeleteDC(dc);
             }
 
             return retval;

@@ -2038,9 +2038,9 @@ namespace System.Windows.Forms.Design
                     {
                         break;
                     }
-                    NativeMethods.RECT clip = new NativeMethods.RECT();
-                    IntPtr hrgn = NativeMethods.CreateRectRgn(0, 0, 0, 0);
-                    NativeMethods.GetUpdateRgn(m.HWnd, hrgn, false);
+                    Interop.RECT clip = new Interop.RECT();
+                    IntPtr hrgn = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
+                    Interop.User32.GetUpdateRgn(m.HWnd, hrgn, Interop.BOOL.FALSE);
                     NativeMethods.GetUpdateRect(m.HWnd, ref clip, false);
                     Region r = Region.FromHrgn(hrgn);
                     Rectangle paintRect = Rectangle.Empty;
@@ -2099,7 +2099,7 @@ namespace System.Windows.Forms.Design
                     finally
                     {
                         r.Dispose();
-                        NativeMethods.DeleteObject(hrgn);
+                        Interop.Gdi32.DeleteObject(hrgn);
                     }
 
                     if (OverlayService != null)

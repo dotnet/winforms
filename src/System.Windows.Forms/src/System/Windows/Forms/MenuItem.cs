@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms
             NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
 
             // The OnMeasureItem handler now determines the height and width of the item
-            IntPtr screendc = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
+            IntPtr screendc = Interop.User32.GetDC(IntPtr.Zero);
             Graphics graphics = Graphics.FromHdcInternal(screendc);
             MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, Index);
             try
@@ -1468,7 +1468,7 @@ namespace System.Windows.Forms
                 graphics.Dispose();
             }
 
-            UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, screendc));
+            Interop.Gdi32.ReleaseDC(IntPtr.Zero, screendc);
 
             // Update the measure item struct with the new width and height
             mis.itemHeight = mie.ItemHeight;

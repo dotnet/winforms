@@ -3987,9 +3987,9 @@ namespace System.Windows.Forms
                     {
                         // get the cached item HDC.
                         HandleRef toolStripHDC = new HandleRef(this, toolStripWindowsGraphics.GetHdc());
-                        HandleRef itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
+                        IntPtr itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
-                        Graphics itemGraphics = Graphics.FromHdcInternal(itemHDC.Handle);
+                        Graphics itemGraphics = Graphics.FromHdcInternal(itemHDC);
                         try
                         {
                             // Painting the individual items...
@@ -4037,9 +4037,9 @@ namespace System.Windows.Forms
                                         itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
                                         // allocate a new graphics.
-                                        itemGraphics = Graphics.FromHdcInternal(itemHDC.Handle);
-
+                                        itemGraphics = Graphics.FromHdcInternal(itemHDC);
                                     }
+
                                     // since the item graphics object will have 0,0 at the
                                     // corner we need to actually shift the origin of the rect over
                                     // so it will be 0,0 too.
@@ -4047,7 +4047,16 @@ namespace System.Windows.Forms
 
                                     // PERF - consider - we only actually need to copy the clipping rect.
                                     // copy the background from the toolstrip onto the offscreen bitmap
-                                    SafeNativeMethods.BitBlt(itemHDC, 0, 0, item.Size.Width, item.Size.Height, toolStripHDC, item.Bounds.X, item.Bounds.Y, NativeMethods.SRCCOPY);
+                                    SafeNativeMethods.BitBlt(
+                                        new HandleRef(ItemHdcInfo, itemHDC),
+                                        0,
+                                        0,
+                                        item.Size.Width,
+                                        item.Size.Height,
+                                        toolStripHDC,
+                                        item.Bounds.X,
+                                        item.Bounds.Y,
+                                        NativeMethods.SRCCOPY);
 
                                     // paint the item into the offscreen bitmap
                                     using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
@@ -4056,8 +4065,18 @@ namespace System.Windows.Forms
                                     }
 
                                     // copy the item back onto the toolstrip
-                                    SafeNativeMethods.BitBlt(toolStripHDC, item.Bounds.X, item.Bounds.Y, item.Size.Width, item.Size.Height, itemHDC, 0, 0, NativeMethods.SRCCOPY);
+                                    SafeNativeMethods.BitBlt(
+                                        toolStripHDC,
+                                        item.Bounds.X,
+                                        item.Bounds.Y,
+                                        item.Size.Width,
+                                        item.Size.Height,
+                                        new HandleRef(ItemHdcInfo, itemHDC),
+                                        0,
+                                        0,
+                                        NativeMethods.SRCCOPY);
 
+                                    GC.KeepAlive(ItemHdcInfo);
                                 }
                             }
                         }
@@ -5681,71 +5700,66 @@ namespace System.Windows.Forms
         {
         }
 
-        ~CachedItemHdcInfo()
-        {
-            Dispose();
-        }
+        private IntPtr _cachedItemHDC = IntPtr.Zero;
+        private Size _cachedHDCSize = Size.Empty;
+        private IntPtr _cachedItemBitmap = IntPtr.Zero;
 
-        private HandleRef cachedItemHDC = NativeMethods.NullHandleRef;
-        private Size cachedHDCSize = Size.Empty;
-        private HandleRef cachedItemBitmap = NativeMethods.NullHandleRef;
         // this DC is cached and should only be deleted on Dispose or when the size changes.
 
-        public HandleRef GetCachedItemDC(HandleRef toolStripHDC, Size bitmapSize)
+        public IntPtr GetCachedItemDC(HandleRef toolStripHDC, Size bitmapSize)
         {
-            if ((cachedHDCSize.Width < bitmapSize.Width)
-                 || (cachedHDCSize.Height < bitmapSize.Height))
+            if (_cachedHDCSize.Width < bitmapSize.Width
+                 || _cachedHDCSize.Height < bitmapSize.Height)
             {
-
-                if (cachedItemHDC.Handle == IntPtr.Zero)
+                if (_cachedItemHDC == IntPtr.Zero)
                 {
                     // create a new DC - we dont have one yet.
-                    IntPtr compatibleHDC = UnsafeNativeMethods.CreateCompatibleDC(toolStripHDC);
-                    cachedItemHDC = new HandleRef(this, compatibleHDC);
+                    IntPtr compatibleHDC = Interop.Gdi32.CreateCompatibleDC(toolStripHDC.Handle);
+                    _cachedItemHDC = compatibleHDC;
                 }
 
                 // create compatible bitmap with the correct size.
-                cachedItemBitmap = new HandleRef(this, SafeNativeMethods.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height));
-                IntPtr oldBitmap = SafeNativeMethods.SelectObject(cachedItemHDC, cachedItemBitmap);
+                _cachedItemBitmap = SafeNativeMethods.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
+                IntPtr oldBitmap = Interop.Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // delete the old bitmap
                 if (oldBitmap != IntPtr.Zero)
                 {
-                    // ExternalDelete to prevent Handle underflow
-                    SafeNativeMethods.ExternalDeleteObject(new HandleRef(null, oldBitmap));
-                    oldBitmap = IntPtr.Zero;
+                    Interop.Gdi32.DeleteObject(oldBitmap);
                 }
 
                 // remember what size we created.
-                cachedHDCSize = bitmapSize;
-
-            }
-            return cachedItemHDC;
-        }
-
-        private void DeleteCachedItemHDC()
-        {
-            if (cachedItemHDC.Handle != IntPtr.Zero)
-            {
-                // delete the bitmap
-                if (cachedItemBitmap.Handle != IntPtr.Zero)
-                {
-                    SafeNativeMethods.DeleteObject(cachedItemBitmap);
-                    cachedItemBitmap = NativeMethods.NullHandleRef;
-                }
-                // delete the DC itself.
-                UnsafeNativeMethods.DeleteDC(cachedItemHDC);
+                _cachedHDCSize = bitmapSize;
             }
 
-            cachedItemHDC = NativeMethods.NullHandleRef;
-            cachedItemBitmap = NativeMethods.NullHandleRef;
-            cachedHDCSize = Size.Empty;
+            return _cachedItemHDC;
         }
 
         public void Dispose()
         {
-            DeleteCachedItemHDC();
+            if (_cachedItemHDC != IntPtr.Zero)
+            {
+                // delete the bitmap
+                if (_cachedItemBitmap != IntPtr.Zero)
+                {
+                    Interop.Gdi32.DeleteObject(_cachedItemBitmap);
+                    _cachedItemBitmap = IntPtr.Zero;
+                }
+
+                // delete the DC itself.
+                Interop.Gdi32.DeleteDC(_cachedItemHDC);
+            }
+
+            _cachedItemHDC = IntPtr.Zero;
+            _cachedItemBitmap = IntPtr.Zero;
+            _cachedHDCSize = Size.Empty;
+
             GC.SuppressFinalize(this);
+        }
+
+        ~CachedItemHdcInfo()
+        {
+            Dispose();
         }
     }
 

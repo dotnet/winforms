@@ -352,7 +352,7 @@ namespace System.Windows.Forms
             {
                 if (parent != null)
                 {
-                    NativeMethods.RECT rc = new NativeMethods.RECT();
+                    Interop.RECT rc = new Interop.RECT();
                     UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.TB_GETRECT, FindButtonIndex(), ref rc);
                     return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
                 }

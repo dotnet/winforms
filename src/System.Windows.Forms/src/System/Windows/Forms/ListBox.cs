@@ -1562,7 +1562,7 @@ namespace System.Windows.Forms
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
             int result = SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect).ToInt32();
 
             if (result == 0)
@@ -1633,7 +1633,7 @@ namespace System.Windows.Forms
             //NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
             //call Sendmessage.
             //
-            NativeMethods.RECT r = new NativeMethods.RECT();
+            Interop.RECT r = new Interop.RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {

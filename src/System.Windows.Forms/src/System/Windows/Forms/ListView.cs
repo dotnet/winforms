@@ -2623,7 +2623,7 @@ namespace System.Windows.Forms
                             odCacheFont = new Font(odCacheFont, FontStyle.Bold);
                             odCacheFontHandleWrapper = new FontHandleWrapper(odCacheFont);
                             odCacheFontHandle = odCacheFontHandleWrapper.Handle;
-                            SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Interop.Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                             m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
                         }
                         return;
@@ -2944,7 +2944,7 @@ namespace System.Windows.Forms
                             // safety net code just in case
                             if (odCacheFont != null)
                             {
-                                SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(null, odCacheFontHandle));
+                                Interop.Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), odCacheFontHandle);
                             }
                         }
                         else
@@ -2954,7 +2954,7 @@ namespace System.Windows.Forms
                                 odCacheFontHandleWrapper.Dispose();
                             }
                             odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
-                            SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Interop.Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                         }
 
                         if (!dontmess)
@@ -3600,7 +3600,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            Interop.RECT itemrect = new Interop.RECT
             {
                 left = (int)portion
             };
@@ -3628,7 +3628,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            Interop.RECT itemrect = new Interop.RECT
             {
                 left = 0
             };
@@ -3710,7 +3710,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            Interop.RECT itemrect = new Interop.RECT
             {
                 left = (int)portion,
                 top = subItemIndex
@@ -4835,7 +4835,7 @@ namespace System.Windows.Forms
                 IntPtr prc = IntPtr.Zero;
                 IntPtr pwpos = IntPtr.Zero;
 
-                prc = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.RECT>());
+                prc = Marshal.AllocHGlobal(Marshal.SizeOf<Interop.RECT>());
                 if (prc == IntPtr.Zero)
                 {
                     return;

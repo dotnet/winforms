@@ -1651,12 +1651,12 @@ namespace System.Windows.Forms
             }
             // Get the Combox Rect ...
             //
-            NativeMethods.RECT comboRectMid = new NativeMethods.RECT();
+            Interop.RECT comboRectMid = new Interop.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref comboRectMid);
             //
             //Get the Edit Rectangle...
             //
-            NativeMethods.RECT editRectMid = new NativeMethods.RECT();
+            Interop.RECT editRectMid = new Interop.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, childEdit.Handle), ref editRectMid);
 
             //get the delta
@@ -1908,7 +1908,7 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    NativeMethods.RECT r = new NativeMethods.RECT();
+                    Interop.RECT r = new Interop.RECT();
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                     Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
                     // Get the mouse location
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
         /// <param name="args"></param>
         private void OnMouseLeaveInternal(EventArgs args)
         {
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
             Rectangle Rect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
             Point p = MousePosition;
@@ -3621,7 +3621,7 @@ namespace System.Windows.Forms
         {
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
             {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
+                Interop.RECT rect = new Interop.RECT();
                 SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
                 Control p = ParentInternal;
                 Graphics graphics = Graphics.FromHdcInternal(m.WParam);
@@ -3896,7 +3896,7 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    NativeMethods.RECT r = new NativeMethods.RECT();
+                    Interop.RECT r = new Interop.RECT();
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                     Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
 
@@ -3935,14 +3935,12 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
-
                         using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
                         {
                             using (WindowsRegion wr = new WindowsRegion(Bounds))
                             {
-
                                 // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                                NativeMethods.RegionFlags updateRegionFlags = (NativeMethods.RegionFlags)SafeNativeMethods.GetUpdateRgn(new HandleRef(this, Handle), new HandleRef(this, wr.HRegion), true);
+                                Interop.RegionType updateRegionFlags = Interop.User32.GetUpdateRgn(Handle, wr.HRegion, Interop.BOOL.TRUE);
 
                                 dr.CombineRegion(wr, dr, RegionCombineMode.DIFF);
 
@@ -3967,13 +3965,13 @@ namespace System.Windows.Forms
                                 {
                                     using (WindowsGraphics wg = new WindowsGraphics(mDC))
                                     {
-                                        if (updateRegionFlags != NativeMethods.RegionFlags.ERROR)
+                                        if (updateRegionFlags != Interop.RegionType.ERROR)
                                         {
                                             wg.DeviceContext.SetClip(dr);
                                         }
                                         m.WParam = dc;
                                         DefWndProc(ref m);
-                                        if (updateRegionFlags != NativeMethods.RegionFlags.ERROR)
+                                        if (updateRegionFlags != Interop.RegionType.ERROR)
                                         {
                                             wg.DeviceContext.SetClip(wr);
                                         }
@@ -6507,7 +6505,7 @@ namespace System.Windows.Forms
             // this is just here so we can quickly eliminate rectangles that arent in the update region.
             public void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
-                NativeMethods.RECT validRect;
+                Interop.RECT validRect;
                 if (comboBox != null)
                 { return; }
                 Rectangle topOwnerDrawArea = new Rectangle(0, 0, comboBox.Width, innerBorder.Top);
@@ -6517,25 +6515,25 @@ namespace System.Windows.Forms
 
                 if (topOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new NativeMethods.RECT(topOwnerDrawArea);
+                    validRect = new Interop.RECT(topOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 
                 if (bottomOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new NativeMethods.RECT(bottomOwnerDrawArea);
+                    validRect = new Interop.RECT(bottomOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 
                 if (leftOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new NativeMethods.RECT(leftOwnerDrawArea);
+                    validRect = new Interop.RECT(leftOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 
                 if (rightOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new NativeMethods.RECT(rightOwnerDrawArea);
+                    validRect = new Interop.RECT(rightOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 

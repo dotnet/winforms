@@ -514,7 +514,7 @@ namespace System.Windows.Forms
 
             if (width != 0 && height != 0)
             {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
+                Interop.RECT rect = new Interop.RECT();
                 rect.left = rect.right = rect.top = rect.bottom = 0;
 
                 CreateParams cp = CreateParams;
@@ -2159,7 +2159,7 @@ namespace System.Windows.Forms
                     // We want to instantly change the cursor if the mouse is within our bounds.
                     // This includes the case where the mouse is over one of our children
                     NativeMethods.POINT p = new NativeMethods.POINT();
-                    NativeMethods.RECT r = new NativeMethods.RECT();
+                    Interop.RECT r = new Interop.RECT();
                     UnsafeNativeMethods.GetCursorPos(p);
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
@@ -3146,7 +3146,7 @@ namespace System.Windows.Forms
 
                 bool emptyRegion = false;
 
-                NativeMethods.RECT temp = new NativeMethods.RECT();
+                Interop.RECT temp = new Interop.RECT();
                 Region working;
                 Control parent = ParentInternal;
                 if (parent != null)
@@ -3826,7 +3826,7 @@ namespace System.Windows.Forms
                         {
                             if (regionHandle != IntPtr.Zero)
                             {
-                                SafeNativeMethods.DeleteObject(new HandleRef(null, regionHandle));
+                                Interop.Gdi32.DeleteObject(regionHandle);
                             }
                         }
                     }
@@ -6064,7 +6064,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Disposes of the resources (other than memory) used by the
         ///  <see cref='Control'/>
-        ///  .
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -6076,7 +6075,7 @@ namespace System.Windows.Forms
                     IntPtr p = (IntPtr)backBrush;
                     if (p != IntPtr.Zero)
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(this, p));
+                        Interop.Gdi32.DeleteObject(p);
                     }
                     Properties.SetObject(PropBackBrush, null);
                 }
@@ -6664,7 +6663,7 @@ namespace System.Windows.Forms
         {
             // We should not include the window adornments in our calculation,
             // because windows scales them for us.
-            NativeMethods.RECT adornments = new NativeMethods.RECT(0, 0, 0, 0);
+            Interop.RECT adornments = new Interop.RECT(0, 0, 0, 0);
             CreateParams cp = CreateParams;
             AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
 
@@ -7361,7 +7360,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    SafeNativeMethods.DeleteObject(new HandleRef(region, regionHandle));
+                    Interop.Gdi32.DeleteObject(regionHandle);
                 }
 
                 Rectangle bounds = Rectangle.Empty;
@@ -7445,25 +7444,24 @@ namespace System.Windows.Forms
             {
                 if (invalidateChildren)
                 {
-                    NativeMethods.RECT rcArea = NativeMethods.RECT.FromXYWH(rc.X, rc.Y, rc.Width, rc.Height);
-                    SafeNativeMethods.RedrawWindow(new HandleRef(window, Handle),
-                                                   ref rcArea, NativeMethods.NullHandleRef,
-                                                   NativeMethods.RDW_INVALIDATE |
-                                                   NativeMethods.RDW_ERASE |
-                                                   NativeMethods.RDW_ALLCHILDREN);
+                    Interop.RECT rcArea = rc;
+                    SafeNativeMethods.RedrawWindow(
+                        new HandleRef(window, Handle),
+                        ref rcArea,
+                        IntPtr.Zero,
+                        NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_ERASE | NativeMethods.RDW_ALLCHILDREN);
                 }
                 else
                 {
-                    NativeMethods.RECT rcArea =
-                        NativeMethods.RECT.FromXYWH(rc.X, rc.Y, rc.Width,
-                                                    rc.Height);
+                    Interop.RECT rcArea = new Interop.RECT(rc);
 
                     // It's safe to invoke InvalidateRect from a separate thread.
                     using (new MultithreadSafeCallScope())
                     {
-                        SafeNativeMethods.InvalidateRect(new HandleRef(window, Handle),
-                                                         ref rcArea,
-                                                         (controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque);
+                        SafeNativeMethods.InvalidateRect(
+                            new HandleRef(window, Handle),
+                            ref rcArea,
+                            (controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque);
                     }
                 }
                 NotifyInvalidate(rc);
@@ -7936,7 +7934,7 @@ namespace System.Windows.Forms
             DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, DeviceDpi);
         }
 
-        internal void AdjustWindowRectEx(ref NativeMethods.RECT rect, int style, bool bMenu, int exStyle)
+        internal void AdjustWindowRectEx(ref Interop.RECT rect, int style, bool bMenu, int exStyle)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
@@ -8154,7 +8152,7 @@ namespace System.Windows.Forms
                     IntPtr p = (IntPtr)backBrush;
                     if (p != IntPtr.Zero)
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(this, p));
+                        Interop.Gdi32.DeleteObject(p);
                     }
                 }
                 Properties.SetObject(PropBackBrush, null);
@@ -8897,7 +8895,7 @@ namespace System.Windows.Forms
                     {
                         if (regionHandle != IntPtr.Zero)
                         {
-                            SafeNativeMethods.DeleteObject(new HandleRef(null, regionHandle));
+                            Interop.Gdi32.DeleteObject(regionHandle);
                         }
                     }
                 }
@@ -9002,12 +9000,12 @@ namespace System.Windows.Forms
                     object backBrush = Properties.GetObject(PropBackBrush);
                     if (backBrush != null)
                     {
+                        Properties.SetObject(PropBackBrush, null);
                         IntPtr p = (IntPtr)backBrush;
                         if (p != IntPtr.Zero)
                         {
-                            SafeNativeMethods.DeleteObject(new HandleRef(this, p));
+                            Interop.Gdi32.DeleteObject(p);
                         }
-                        Properties.SetObject(PropBackBrush, null);
                     }
                 }
                 ListenToUserPreferenceChanged(false /*listen*/);
@@ -9464,7 +9462,7 @@ namespace System.Windows.Forms
         {
             // We need the true client rectangle as clip rectangle causes
             // problems on "Windows Classic" theme.
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(window, InternalHandle), ref rect);
 
             PaintBackground(pevent, new Rectangle(rect.left, rect.top, rect.right, rect.bottom));
@@ -10411,22 +10409,22 @@ namespace System.Windows.Forms
             bool success = SafeNativeMethods.GetViewportOrgEx(hDC, viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-            HandleRef hClippingRegion = new HandleRef(null, SafeNativeMethods.CreateRectRgn(viewportOrg.x, viewportOrg.y, viewportOrg.x + Width, viewportOrg.y + Height));
-            Debug.Assert(hClippingRegion.Handle != IntPtr.Zero, "CreateRectRgn() failed.");
+            IntPtr hClippingRegion = Interop.Gdi32.CreateRectRgn(viewportOrg.x, viewportOrg.y, viewportOrg.x + Width, viewportOrg.y + Height);
+            Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
             try
             {
                 // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                NativeMethods.RegionFlags selectResult = (NativeMethods.RegionFlags)SafeNativeMethods.SelectClipRgn(hDC, hClippingRegion);
-                Debug.Assert((selectResult == NativeMethods.RegionFlags.SIMPLEREGION ||
-                              selectResult == NativeMethods.RegionFlags.NULLREGION),
+                Interop.RegionType selectResult = Interop.Gdi32.SelectClipRgn(hDC, hClippingRegion);
+                Debug.Assert((selectResult == Interop.RegionType.SIMPLEREGION ||
+                              selectResult == Interop.RegionType.NULLREGION),
                               "SIMPLEREGION or NULLLREGION expected.");
 
                 PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
             }
             finally
             {
-                success = SafeNativeMethods.DeleteObject(hClippingRegion);
+                success = Interop.Gdi32.DeleteObject(hClippingRegion) != Interop.BOOL.FALSE;
                 Debug.Assert(success, "DeleteObject() failed.");
             }
         }
@@ -10441,7 +10439,7 @@ namespace System.Windows.Forms
                 PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_CLIENT));
 
                 // figure out mapping for the client area
-                NativeMethods.RECT windowRect = new NativeMethods.RECT();
+                Interop.RECT windowRect = new Interop.RECT();
                 bool success = UnsafeNativeMethods.GetWindowRect(new HandleRef(null, Handle), ref windowRect);
                 Debug.Assert(success, "GetWindowRect() failed.");
                 Point clientOffset = PointToScreen(Point.Empty);
@@ -11019,7 +11017,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle RectangleToClient(Rectangle r)
         {
-            NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(r.X, r.Y, r.Width, r.Height);
+            Interop.RECT rect = r;
             UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
@@ -11029,7 +11027,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle RectangleToScreen(Rectangle r)
         {
-            NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(r.X, r.Y, r.Width, r.Height);
+            Interop.RECT rect = r;
             UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
@@ -11461,7 +11459,7 @@ namespace System.Windows.Forms
         protected virtual void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             CreateParams cp = CreateParams;
-            NativeMethods.RECT adornments = new NativeMethods.RECT(0, 0, 0, 0);
+            Interop.RECT adornments = new Interop.RECT(0, 0, 0, 0);
             AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
             Size minSize = MinimumSize;
             Size maxSize = MaximumSize;
@@ -11765,7 +11763,7 @@ namespace System.Windows.Forms
         ///  Sends a Win32 message to this control.  If the control does not yet
         ///  have a handle, it will be created.
         /// </summary>
-        internal IntPtr SendMessage(int msg, int wparam, ref NativeMethods.RECT lparam)
+        internal IntPtr SendMessage(int msg, int wparam, ref Interop.RECT lparam)
         {
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, ref lparam);
         }
@@ -12002,7 +12000,7 @@ namespace System.Windows.Forms
 
         internal Size SizeFromClientSize(int width, int height)
         {
-            NativeMethods.RECT rect = new NativeMethods.RECT(0, 0, width, height);
+            Interop.RECT rect = new Interop.RECT(0, 0, width, height);
             CreateParams cp = CreateParams;
             AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
             return rect.Size;
@@ -12570,7 +12568,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void UpdateBounds()
         {
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(window, InternalHandle), ref rect);
             int clientWidth = rect.right;
             int clientHeight = rect.bottom;
@@ -12594,7 +12592,7 @@ namespace System.Windows.Forms
 
             // reverse-engineer the AdjustWindowRectEx call to figure out
             // the appropriate clientWidth and clientHeight
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
             rect.left = rect.right = rect.top = rect.bottom = 0;
 
             CreateParams cp = CreateParams;
@@ -13082,7 +13080,7 @@ namespace System.Windows.Forms
                         m.Result = (IntPtr)0;
                         return;
                     }
-                    NativeMethods.RECT rc = new NativeMethods.RECT();
+                    Interop.RECT rc = new Interop.RECT();
                     UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rc);
                     using (PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom)))
                     {
@@ -13990,8 +13988,8 @@ namespace System.Windows.Forms
 
         private void WmQueryNewPalette(ref Message m)
         {
-            Debug.WriteLineIf(Control.PaletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
-            IntPtr dc = UnsafeNativeMethods.GetDC(new HandleRef(this, Handle));
+            Debug.WriteLineIf(PaletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
+            IntPtr dc = Interop.User32.GetDC(new HandleRef(this, Handle));
             try
             {
                 SetUpPalette(dc, true /*force*/, true/*realize*/);
@@ -13999,7 +13997,7 @@ namespace System.Windows.Forms
             finally
             {
                 // Let WmPaletteChanged do any necessary invalidation
-                UnsafeNativeMethods.ReleaseDC(new HandleRef(this, Handle), new HandleRef(null, dc));
+                Interop.Gdi32.ReleaseDC(new HandleRef(this, Handle), dc);
             }
             Invalidate(true);
             m.Result = (IntPtr)1;
@@ -16298,7 +16296,7 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle GetToolNativeScreenRectangle()
         {
-            NativeMethods.RECT rectangle = new NativeMethods.RECT();
+            Interop.RECT rectangle = new Interop.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rectangle);
             return Rectangle.FromLTRB(rectangle.left, rectangle.top, rectangle.right, rectangle.bottom);
         }
@@ -16649,10 +16647,9 @@ namespace System.Windows.Forms
                     if (logPixels.IsEmpty)
                     {
                         logPixels = new Point();
-                        IntPtr dc = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-                        logPixels.X = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, dc), NativeMethods.LOGPIXELSX);
-                        logPixels.Y = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, dc), NativeMethods.LOGPIXELSY);
-                        UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, dc));
+                        using ScreenDC dc = ScreenDC.Create();
+                        logPixels.X = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+                        logPixels.Y = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
                     }
                     return logPixels;
                 }
@@ -16826,7 +16823,7 @@ namespace System.Windows.Forms
                     ThrowHr(NativeMethods.VIEW_E_DRAW);
                 }
 
-                NativeMethods.RECT rc;
+                Interop.RECT rc;
                 NativeMethods.POINT pVp = new NativeMethods.POINT();
                 NativeMethods.POINT pW = new NativeMethods.POINT();
                 NativeMethods.SIZE sWindowExt = new NativeMethods.SIZE();
@@ -16842,7 +16839,7 @@ namespace System.Windows.Forms
                 //
                 if (prcBounds != null)
                 {
-                    rc = new NativeMethods.RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
+                    rc = new Interop.RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
 
                     // To draw to a given rect, we scale the DC in such a way as to
                     // make the values it takes match our own happy MM_TEXT.  Then,
@@ -17675,31 +17672,10 @@ namespace System.Windows.Forms
                     return clipRegion;
                 }
 
-                try
-                {
-                    IntPtr newRegion = SafeNativeMethods.CreateRectRgn(0, 0, 0, 0);
-                    try
-                    {
-                        SafeNativeMethods.CombineRgn(new HandleRef(null, newRegion), new HandleRef(null, region), new HandleRef(this, clipRegion), NativeMethods.RGN_DIFF);
-                        SafeNativeMethods.DeleteObject(new HandleRef(null, region));
-                    }
-                    catch
-                    {
-                        SafeNativeMethods.DeleteObject(new HandleRef(null, newRegion));
-                        throw;
-                    }
-                    return newRegion;
-                }
-                catch (Exception e)
-                {
-                    if (ClientUtils.IsSecurityOrCriticalException(e))
-                    {
-                        throw;
-                    }
-
-                    // If something goes wrong, use the original region.
-                    return region;
-                }
+                IntPtr newRegion = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
+                Interop.Gdi32.CombineRgn(newRegion, region, clipRegion, Interop.Gdi32.CombineMode.RGN_DIFF);
+                Interop.Gdi32.DeleteObject(region);
+                return newRegion;
             }
 
             private void CallParentPropertyChanged(Control control, string propName)
@@ -18648,25 +18624,21 @@ namespace System.Windows.Forms
 
                 if (clipRegion != IntPtr.Zero)
                 {
-                    // Bad -- after calling SetWindowReg, windows owns the region.
-                    //SafeNativeMethods.DeleteObject(clipRegion);
+                    // Don't delete clipRegion -- after calling SetWindowReg, Windows owns the region.
                     clipRegion = IntPtr.Zero;
                     setRegion = true;
                 }
 
                 if (lprcClipRect != null)
                 {
-
                     // The container wants us to clip, so figure out if we really
                     // need to.
-                    //
                     Rectangle clipRect = Rectangle.FromLTRB(lprcClipRect.left, lprcClipRect.top, lprcClipRect.right, lprcClipRect.bottom);
 
                     Rectangle intersect;
 
                     // Trident always sends an empty ClipRect... and so, we check for that and not do an
                     // intersect in that case.
-                    //
                     if (!clipRect.IsEmpty)
                     {
                         intersect = Rectangle.Intersect(posRect, clipRect);
@@ -18678,10 +18650,8 @@ namespace System.Windows.Forms
 
                     if (!intersect.Equals(posRect))
                     {
-
                         // Offset the rectangle back to client coordinates
-                        //
-                        NativeMethods.RECT rcIntersect = NativeMethods.RECT.FromXYWH(intersect.X, intersect.Y, intersect.Width, intersect.Height);
+                        Interop.RECT rcIntersect = intersect;
                         IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(control, control.Handle));
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
@@ -18692,9 +18662,12 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
 
                         // Create a Win32 region for it
-                        //
-                        clipRegion = SafeNativeMethods.CreateRectRgn(rcIntersect.left, rcIntersect.top,
-                                                                 rcIntersect.right, rcIntersect.bottom);
+                        clipRegion = Interop.Gdi32.CreateRectRgn(
+                            rcIntersect.left,
+                            rcIntersect.top,
+                            rcIntersect.right,
+                            rcIntersect.bottom);
+
                         setRegion = true;
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Created clipping region");
                     }
@@ -18703,7 +18676,6 @@ namespace System.Windows.Forms
                 // If our region has changed, set the new value.  We only do this if
                 // the handle has been created, since otherwise the control will
                 // merge our region automatically.
-                //
                 if (setRegion && control.IsHandleCreated)
                 {
                     IntPtr finalClipRegion = clipRegion;
@@ -19529,11 +19501,10 @@ namespace System.Windows.Forms
         /// </summary>
         private class MetafileDCWrapper : IDisposable
         {
-            HandleRef hBitmapDC = NativeMethods.NullHandleRef;
-            HandleRef hBitmap = NativeMethods.NullHandleRef;
-            HandleRef hOriginalBmp = NativeMethods.NullHandleRef;
-            readonly HandleRef hMetafileDC = NativeMethods.NullHandleRef;
-            NativeMethods.RECT destRect;
+            private IntPtr _hBitmap = IntPtr.Zero;
+            private IntPtr _hOriginalBmp = IntPtr.Zero;
+            private readonly HandleRef _hMetafileDC;
+            private Interop.RECT _destRect;
 
             internal MetafileDCWrapper(HandleRef hOriginalDC, Size size)
             {
@@ -19546,15 +19517,14 @@ namespace System.Windows.Forms
                     throw new ArgumentException(nameof(size), SR.ControlMetaFileDCWrapperSizeInvalid);
                 }
 
-                hMetafileDC = hOriginalDC;
-                destRect = new NativeMethods.RECT(0, 0, size.Width, size.Height);
-                hBitmapDC = new HandleRef(this, UnsafeNativeMethods.CreateCompatibleDC(NativeMethods.NullHandleRef));
+                _hMetafileDC = hOriginalDC;
+                _destRect = new Interop.RECT(0, 0, size.Width, size.Height);
+                HDC = Interop.Gdi32.CreateCompatibleDC(IntPtr.Zero);
 
-                int planes = UnsafeNativeMethods.GetDeviceCaps(hBitmapDC, NativeMethods.PLANES);
-                int bitsPixel = UnsafeNativeMethods.GetDeviceCaps(hBitmapDC, NativeMethods.BITSPIXEL);
-                hBitmap = new HandleRef(this, SafeNativeMethods.CreateBitmap(size.Width, size.Height, planes, bitsPixel, IntPtr.Zero));
-
-                hOriginalBmp = new HandleRef(this, SafeNativeMethods.SelectObject(hBitmapDC, hBitmap));
+                int planes = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.DeviceCapability.PLANES);
+                int bitsPixel = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.DeviceCapability.BITSPIXEL);
+                _hBitmap = SafeNativeMethods.CreateBitmap(size.Width, size.Height, planes, bitsPixel, IntPtr.Zero);
+                _hOriginalBmp = Interop.Gdi32.SelectObject(HDC, _hBitmap);
             }
 
             ~MetafileDCWrapper()
@@ -19564,7 +19534,7 @@ namespace System.Windows.Forms
 
             void IDisposable.Dispose()
             {
-                if (hBitmapDC.Handle == IntPtr.Zero || hMetafileDC.Handle == IntPtr.Zero || hBitmap.Handle == IntPtr.Zero)
+                if (HDC == IntPtr.Zero || _hMetafileDC.Handle == IntPtr.Zero || _hBitmap == IntPtr.Zero)
                 {
                     return;
                 }
@@ -19573,62 +19543,54 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    success = DICopy(hMetafileDC, hBitmapDC, destRect, true);
+                    success = DICopy(_hMetafileDC, HDC, _destRect, true);
                     Debug.Assert(success, "DICopy() failed.");
-                    SafeNativeMethods.SelectObject(hBitmapDC, hOriginalBmp);
-                    success = SafeNativeMethods.DeleteObject(hBitmap);
+                    Interop.Gdi32.SelectObject(HDC, _hOriginalBmp);
+                    success = Interop.Gdi32.DeleteObject(_hBitmap) != Interop.BOOL.FALSE;
                     Debug.Assert(success, "DeleteObject() failed.");
-                    success = UnsafeNativeMethods.DeleteDC(hBitmapDC);
+                    success = Interop.Gdi32.DeleteDC(HDC);
                     Debug.Assert(success, "DeleteObject() failed.");
                 }
                 finally
                 {
-
                     // Dispose is done. Set all the handles to IntPtr.Zero so this way the Dispose method executes only once.
-                    hBitmapDC = NativeMethods.NullHandleRef;
-                    hBitmap = NativeMethods.NullHandleRef;
-                    hOriginalBmp = NativeMethods.NullHandleRef;
+                    HDC = IntPtr.Zero;
+                    _hBitmap = IntPtr.Zero;
+                    _hOriginalBmp = IntPtr.Zero;
 
                     GC.SuppressFinalize(this);
                 }
             }
 
-            internal IntPtr HDC
-            {
-                get { return hBitmapDC.Handle; }
-            }
+            internal IntPtr HDC { get; private set; } = IntPtr.Zero;
 
             // ported form VB6 (Ctls\PortUtil\StdCtl.cpp:6176)
-            private unsafe bool DICopy(HandleRef hdcDest, HandleRef hdcSrc, NativeMethods.RECT rect, bool bStretch)
+            private unsafe bool DICopy(HandleRef hdcDest, IntPtr hdcSrc, Interop.RECT rect, bool bStretch)
             {
                 long i;
 
-                bool fSuccess = false;  // Assume failure
-
-                //
                 // Get the bitmap from the DC by selecting in a 1x1 pixel temp bitmap
-                HandleRef hNullBitmap = new HandleRef(this, SafeNativeMethods.CreateBitmap(1, 1, 1, 1, IntPtr.Zero));
-                if (hNullBitmap.Handle == IntPtr.Zero)
+                IntPtr hNullBitmap = SafeNativeMethods.CreateBitmap(1, 1, 1, 1, IntPtr.Zero);
+                if (hNullBitmap == IntPtr.Zero)
                 {
-                    return fSuccess;
+                    return false;
                 }
 
                 try
                 {
-                    HandleRef hBitmap = new HandleRef(this, SafeNativeMethods.SelectObject(hdcSrc, hNullBitmap));
-                    if (hBitmap.Handle == IntPtr.Zero)
+                    IntPtr hBitmap = Interop.Gdi32.SelectObject(hdcSrc, hNullBitmap);
+                    if (hBitmap == IntPtr.Zero)
                     {
-                        return fSuccess;
+                        return false;
                     }
 
-                    //
                     // Restore original bitmap
-                    SafeNativeMethods.SelectObject(hdcSrc, hBitmap);
+                    Interop.Gdi32.SelectObject(hdcSrc, hBitmap);
 
                     NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
-                    if (UnsafeNativeMethods.GetObject(hBitmap, Marshal.SizeOf(bmp), bmp) == 0)
+                    if (UnsafeNativeMethods.GetObject(new HandleRef(null, hBitmap), Marshal.SizeOf(bmp), bmp) == 0)
                     {
-                        return fSuccess;
+                        return false;
                     }
 
                     NativeMethods.BITMAPINFO_FLAT lpbmi = new NativeMethods.BITMAPINFO_FLAT
@@ -19647,7 +19609,6 @@ namespace System.Windows.Forms
                         bmiColors = new byte[NativeMethods.BITMAPINFO_MAX_COLORSIZE * 4]
                     };
 
-                    //
                     // Include the palette for 256 color bitmaps
                     long iColors = 1 << (bmp.bmBitsPixel * bmp.bmPlanes);
                     if (iColors <= 256)
@@ -19661,7 +19622,7 @@ namespace System.Windows.Forms
                             {
                                 NativeMethods.RGBQUAD* prgb = (NativeMethods.RGBQUAD*)pcolors;
                                 NativeMethods.PALETTEENTRY* lppe = (NativeMethods.PALETTEENTRY*)ppal;
-                                //
+
                                 // Convert the palette entries to RGB quad entries
                                 for (i = 0; i < (int)iColors; i++)
                                 {
@@ -19673,23 +19634,20 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    //
                     // Allocate memory to hold the bitmap bits
                     long bitsPerScanLine = bmp.bmBitsPixel * (long)bmp.bmWidth;
                     long bytesPerScanLine = (bitsPerScanLine + 7) / 8;
                     long totalBytesReqd = bytesPerScanLine * bmp.bmHeight;
                     byte[] lpBits = new byte[totalBytesReqd];
 
-                    //
                     // Get the bitmap bits
                     int diRet = SafeNativeMethods.GetDIBits(hdcSrc, hBitmap, 0, bmp.bmHeight, lpBits,
                             ref lpbmi, NativeMethods.DIB_RGB_COLORS);
                     if (diRet == 0)
                     {
-                        return fSuccess;
+                        return false;
                     }
 
-                    //
                     // Set the destination coordiates depending on whether stretch-to-fit was chosen
                     int xDest, yDest, cxDest, cyDest;
                     if (bStretch)
@@ -19711,18 +19669,18 @@ namespace System.Windows.Forms
                     int iRet = SafeNativeMethods.StretchDIBits(hdcDest,
                             xDest, yDest, cxDest, cyDest, 0, 0, bmp.bmWidth, bmp.bmHeight,
                             lpBits, ref lpbmi, NativeMethods.DIB_RGB_COLORS, NativeMethods.SRCCOPY);
+
                     if (iRet == NativeMethods.GDI_ERROR)
                     {
-                        return fSuccess;
+                        return false;
                     }
-
-                    fSuccess = true;
                 }
                 finally
                 {
-                    SafeNativeMethods.DeleteObject(hNullBitmap);
+                    Interop.Gdi32.DeleteObject(hNullBitmap);
                 }
-                return fSuccess;
+
+                return true;
             }
         }
 
@@ -20347,7 +20305,7 @@ namespace System.Windows.Forms
                         stackOnDispose = new StackTrace().ToString();
                     }
 #endif
-                    SafeNativeMethods.DeleteObject(new HandleRef(this, handle));
+                    Interop.Gdi32.DeleteObject(handle);
                     handle = IntPtr.Zero;
                 }
 

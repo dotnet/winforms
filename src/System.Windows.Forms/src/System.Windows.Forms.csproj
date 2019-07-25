@@ -37,15 +37,30 @@
     <Compile Include="..\..\Common\src\OsVersion.cs" Link="Common\OsVersion.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
     <Compile Include="..\..\Common\src\SafeNativeMethods.cs" Link="System\Windows\Forms\SafeNativeMethods.cs" />
+    <Compile Include="..\..\Common\src\ScreenDC.cs" Link="Common\ScreenDC.cs" />
     <Compile Include="..\..\Common\src\SpanHelpers.cs" Link="Common\SpanHelpers.cs" />
     <Compile Include="..\..\Common\src\UnsafeNativeMethods.cs" Link="System\Windows\Forms\UnsafeNativeMethods.cs" />
-    <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
-    <Compile Include="..\..\Common\src\Interop\Interop.HRESULT.cs" Link="Interop\Interop.HRESULT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.BOOL.cs" Link="Interop\Interop.BOOL.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.Errors.cs" Link="Interop\Interop.Errors.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.EditMessages.cs" Link="Interop\Interop.EditMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.HRESULT.cs" Link="Interop\Interop.HRESULT.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.RegionType.cs" Link="Interop\Interop.RegionType.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.RichEditMessages.cs" Link="Interop\Interop.RichEditMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.RECT.cs" Link="Interop\Interop.RECT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CombineRgn.cs" Link="Interop\Gdi32\Interop.CombineRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateCompatibleDC.cs" Link="Interop\Gdi32\Interop.CreateCompatibleDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateDC.cs" Link="Interop\Gdi32\Interop.CreateDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateRectRgn.cs" Link="Interop\Gdi32\Interop.CreateRectRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteDC.cs" Link="Interop\Gdi32\Interop.DeleteDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetClipRgn.cs" Link="Interop\Gdi32\Interop.GetClipRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetRgnBox.cs" Link="Interop\Gdi32\Interop.GetRgnBox.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.ReleaseDC.cs" Link="Interop\Gdi32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectClipRgn.cs" Link="Interop\Gdi32\Interop.SelectClipRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetModuleHandle.cs" Link="Interop\Kernel32\Interop.GetModuleHandle.cs" />
@@ -58,6 +73,8 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetKnownFolderPath.cs" Link="Interop\Shell32\Interop.SHGetKnownFolderPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" Link="Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.GetCurrentThemeName.cs" Link="Interop\UxTheme\Interop.GetCurrentThemeName.cs" />

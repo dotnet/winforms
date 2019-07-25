@@ -579,8 +579,7 @@ namespace System.Windows.Forms
 
                 bool success;
                 NativeMethods.POINT viewportOrg = new NativeMethods.POINT();
-                HandleRef hOriginalClippingRegion = NativeMethods.NullHandleRef;
-                NativeMethods.RegionFlags originalRegionType = NativeMethods.RegionFlags.NULLREGION;
+                IntPtr hOriginalClippingRegion = IntPtr.Zero;
 
                 _translatedBounds = bounds;
                 _graphics = null;
@@ -592,17 +591,17 @@ namespace System.Windows.Forms
                 Debug.Assert(success, "GetViewportOrgEx() failed.");
 
                 // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
-                HandleRef hClippingRegion = new HandleRef(null, SafeNativeMethods.CreateRectRgn(viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, viewportOrg.x + bounds.Right, viewportOrg.y + bounds.Bottom));
-                Debug.Assert(hClippingRegion.Handle != IntPtr.Zero, "CreateRectRgn() failed.");
+                IntPtr hClippingRegion = Interop.Gdi32.CreateRectRgn(viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, viewportOrg.x + bounds.Right, viewportOrg.y + bounds.Bottom);
+                Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
                 try
                 {
                     // Create an empty region oriented at 0,0 so we can populate it with the original clipping region of the hDC passed in.
-                    hOriginalClippingRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(0, 0, 0, 0));
-                    Debug.Assert(hOriginalClippingRegion.Handle != IntPtr.Zero, "CreateRectRgn() failed.");
+                    hOriginalClippingRegion = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
+                    Debug.Assert(hOriginalClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
                     // Get the clipping region from the hDC: result = {-1 = error, 0 = no region, 1 = success} per MSDN
-                    int result = SafeNativeMethods.GetClipRgn(hDC, hOriginalClippingRegion);
+                    int result = Interop.Gdi32.GetClipRgn(hDC, hOriginalClippingRegion);
                     Debug.Assert(result != -1, "GetClipRgn() failed.");
 
                     // Shift the viewpoint origint by coordinates specified in "bounds".
@@ -610,22 +609,23 @@ namespace System.Windows.Forms
                     success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, lastViewPort);
                     Debug.Assert(success, "SetViewportOrgEx() failed.");
 
+                    Interop.RegionType originalRegionType;
                     if (result != 0)
                     {
                         // Get the origninal clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
-                        NativeMethods.RECT originalClipRect = new NativeMethods.RECT();
-                        originalRegionType = (NativeMethods.RegionFlags)SafeNativeMethods.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
-                        Debug.Assert(originalRegionType != NativeMethods.RegionFlags.ERROR, "ERROR returned from SelectClipRgn while selecting the original clipping region..");
+                        Interop.RECT originalClipRect = new Interop.RECT();
+                        originalRegionType = Interop.Gdi32.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
+                        Debug.Assert(originalRegionType != Interop.RegionType.ERROR, "ERROR returned from SelectClipRgn while selecting the original clipping region..");
 
-                        if (originalRegionType == NativeMethods.RegionFlags.SIMPLEREGION)
+                        if (originalRegionType == Interop.RegionType.SIMPLEREGION)
                         {
                             // Find the intersection of our clipping region and the current clipping region (our parent's)
                             //      Returns a NULLREGION, the two didn't intersect.
                             //      Returns a SIMPLEREGION, the two intersected
                             //      Resulting region (stuff that was in hOriginalClippingRegion AND hClippingRegion is placed in hClippingRegion
-                            NativeMethods.RegionFlags combineResult = (NativeMethods.RegionFlags)SafeNativeMethods.CombineRgn(hClippingRegion, hClippingRegion, hOriginalClippingRegion, NativeMethods.RGN_AND);
-                            Debug.Assert((combineResult == NativeMethods.RegionFlags.SIMPLEREGION) ||
-                                            (combineResult == NativeMethods.RegionFlags.NULLREGION),
+                            Interop.RegionType combineResult = Interop.Gdi32.CombineRgn(hClippingRegion, hClippingRegion, hOriginalClippingRegion, Interop.Gdi32.CombineMode.RGN_AND);
+                            Debug.Assert((combineResult == Interop.RegionType.SIMPLEREGION) ||
+                                            (combineResult == Interop.RegionType.NULLREGION),
                                             "SIMPLEREGION or NULLREGION expected.");
                         }
                     }
@@ -633,15 +633,15 @@ namespace System.Windows.Forms
                     {
                         // If there was no clipping region, then the result is a simple region.
                         // We don't need to keep track of the original now, since it is empty.
-                        SafeNativeMethods.DeleteObject(hOriginalClippingRegion);
-                        hOriginalClippingRegion = new HandleRef(null, IntPtr.Zero);
-                        originalRegionType = NativeMethods.RegionFlags.SIMPLEREGION;
+                        Interop.Gdi32.DeleteObject(hOriginalClippingRegion);
+                        hOriginalClippingRegion = IntPtr.Zero;
+                        originalRegionType = Interop.RegionType.SIMPLEREGION;
                     }
 
                     // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                    NativeMethods.RegionFlags selectResult = (NativeMethods.RegionFlags)SafeNativeMethods.SelectClipRgn(hDC, hClippingRegion);
-                    Debug.Assert((selectResult == NativeMethods.RegionFlags.SIMPLEREGION ||
-                                  selectResult == NativeMethods.RegionFlags.NULLREGION),
+                    Interop.RegionType selectResult = Interop.Gdi32.SelectClipRgn(hDC, hClippingRegion);
+                    Debug.Assert((selectResult == Interop.RegionType.SIMPLEREGION ||
+                                  selectResult == Interop.RegionType.NULLREGION),
                                   "SIMPLEREGION or NULLLREGION expected.");
 
                 }
@@ -655,12 +655,12 @@ namespace System.Windows.Forms
                     // Delete the new clipping region, as the clipping region for the HDC is now set
                     // to this rectangle. Hold on to hOriginalClippingRegion, as we'll need to restore
                     // it when this object is disposed.
-                    success = SafeNativeMethods.DeleteObject(hClippingRegion);
+                    success = Interop.Gdi32.DeleteObject(hClippingRegion) != Interop.BOOL.FALSE;
                     Debug.Assert(success, "DeleteObject(hClippingRegion) failed.");
 
-                    if (hOriginalClippingRegion.Handle != IntPtr.Zero)
+                    if (hOriginalClippingRegion != IntPtr.Zero)
                     {
-                        success = SafeNativeMethods.DeleteObject(hOriginalClippingRegion);
+                        success = Interop.Gdi32.DeleteObject(hOriginalClippingRegion) != Interop.BOOL.FALSE;
                         Debug.Assert(success, "DeleteObject(hOriginalClippingRegion) failed.");
                     }
                 }

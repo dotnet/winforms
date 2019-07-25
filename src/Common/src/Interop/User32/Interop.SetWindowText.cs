@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
-    public static partial class User32
+    internal static partial class User32
     {
         [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
         public static extern int SetWindowTextW(HandleRef hWnd, string text);

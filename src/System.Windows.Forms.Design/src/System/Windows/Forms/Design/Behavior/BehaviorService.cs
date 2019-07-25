@@ -921,10 +921,10 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     case Interop.WindowMessages.WM_PAINT:
                         // Stash off the region we have to update
-                        IntPtr hrgn = NativeMethods.CreateRectRgn(0, 0, 0, 0);
-                        NativeMethods.GetUpdateRgn(m.HWnd, hrgn, true);
+                        IntPtr hrgn = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
+                        Interop.User32.GetUpdateRgn(m.HWnd, hrgn, Interop.BOOL.TRUE);
                         // The region we have to update in terms of the smallest rectangle that completely encloses the update region of the window gives us the clip rectangle
-                        NativeMethods.RECT clip = new NativeMethods.RECT();
+                        Interop.RECT clip = new Interop.RECT();
                         NativeMethods.GetUpdateRect(m.HWnd, ref clip, true);
                         Rectangle paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
 
@@ -947,7 +947,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         finally
                         {
-                            NativeMethods.DeleteObject(hrgn);
+                            Interop.Gdi32.DeleteObject(hrgn);
                         }
                         break;
 

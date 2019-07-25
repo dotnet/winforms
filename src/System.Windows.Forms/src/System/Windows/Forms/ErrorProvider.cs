@@ -1183,7 +1183,7 @@ namespace System.Windows.Forms
                             toolInfo.hwnd = Handle;
                             toolInfo.uId = item.Id;
                             toolInfo.lpszText = item.Error;
-                            toolInfo.rect = NativeMethods.RECT.FromXYWH(iconBounds.X, iconBounds.Y, iconBounds.Width, iconBounds.Height);
+                            toolInfo.rect = iconBounds;
                             toolInfo.uFlags = NativeMethods.TTF_SUBCLASS;
                             if (_provider.RightToLeft)
                             {
@@ -1240,7 +1240,7 @@ namespace System.Windows.Forms
                     windowRegion.Dispose();
                     if (windowRegionHandle != IntPtr.Zero)
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(null, windowRegionHandle));
+                        Interop.Gdi32.DeleteObject(windowRegionHandle);
                     }
                 }
 
@@ -1621,7 +1621,7 @@ namespace System.Windows.Forms
                             // and GetBitmapBits method allocate bytes in multiple of 16 bits for each row. Following calculation is to get right width in bytes.
                             int bitmapBitsAllocationSize = 16;
 
-                            //if width is not multiple of 16, we need to allocate BitmapBitsAllocationSize for remaining bits.
+                            // If width is not multiple of 16, we need to allocate BitmapBitsAllocationSize for remaining bits.
                             int widthInBytes = 2 * ((size.Width + 15) / bitmapBitsAllocationSize); // its in bytes.
                             byte[] bits = new byte[widthInBytes * size.Height];
                             SafeNativeMethods.GetBitmapBits(new HandleRef(null, mask), bits.Length, bits);
@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms
                         {
                             if (mask != IntPtr.Zero)
                             {
-                                SafeNativeMethods.DeleteObject(new HandleRef(null, mask));
+                                Interop.Gdi32.DeleteObject(mask);
                             }
                         }
                     }

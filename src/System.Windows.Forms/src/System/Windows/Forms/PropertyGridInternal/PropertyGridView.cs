@@ -148,8 +148,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         private readonly GridEntryRecreateChildrenEventHandler ehRecreateChildren;
 
         private int cachedRowHeight = -1;
-        IntPtr baseHfont;
-        IntPtr boldHfont;
+        IntPtr _baseHfont;
+        IntPtr _boldHfont;
 
         public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
         : base()
@@ -1274,6 +1274,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void Dispose(bool disposing)
         {
+            // Make sure we close any dangling font handles
+            ClearCachedFontInfo();
+
             if (disposing)
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Dispose");
@@ -1320,7 +1323,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     fontBold.Dispose();
                     fontBold = null;
-
                 }
 
                 if (btnDropDown != null)
@@ -1694,11 +1696,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal IntPtr GetBaseHfont()
         {
-            if (baseHfont == IntPtr.Zero)
+            if (_baseHfont == IntPtr.Zero)
             {
-                baseHfont = GetBaseFont().ToHfont();
+                _baseHfont = GetBaseFont().ToHfont();
             }
-            return baseHfont;
+            return _baseHfont;
         }
 
         /// <summary>
@@ -1734,11 +1736,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal IntPtr GetBoldHfont()
         {
-            if (boldHfont == IntPtr.Zero)
+            if (_boldHfont == IntPtr.Zero)
             {
-                boldHfont = GetBoldFont().ToHfont();
+                _boldHfont = GetBoldFont().ToHfont();
             }
-            return boldHfont;
+            return _boldHfont;
         }
 
         private bool GetFlag(short flag)
@@ -3952,7 +3954,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // give ourselves a little breathing room to account for lines, etc., as well
             // as the entries themselves.
-            //
             clipRect.Inflate(0, 2);
 
             try
@@ -3991,8 +3992,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 SetFlag(FlagNeedsRefresh, false);
 
-                //SetConstants();
-
                 Size size = GetOurSize();
                 Point loc = ptOurLocation;
 
@@ -4002,10 +4001,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // if we actually have some properties, then start drawing the grid
-                //
                 if (totalProps > 0)
                 {
-
                     // draw splitter
                     cPropsVisible = Math.Min(cPropsVisible, endRow + 1);
 
@@ -4027,7 +4024,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // draw values.
                     int totalWidth = GetTotalWidth() + 1;
-                    //g.TextColor = ownerGrid.TextColor;
 
                     // draw labels. set clip rect.
                     for (int i = startRow; i < cPropsVisible; i++)
@@ -4050,7 +4046,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 Edit.Invalidate();
                             }
-
                         }
                         catch
                         {
@@ -4184,15 +4179,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void ClearCachedFontInfo()
         {
-            if (baseHfont != IntPtr.Zero)
+            if (_baseHfont != IntPtr.Zero)
             {
-                SafeNativeMethods.ExternalDeleteObject(new HandleRef(this, baseHfont));
-                baseHfont = IntPtr.Zero;
+                Interop.Gdi32.DeleteObject(_baseHfont);
+                _baseHfont = IntPtr.Zero;
             }
-            if (boldHfont != IntPtr.Zero)
+            if (_boldHfont != IntPtr.Zero)
             {
-                SafeNativeMethods.ExternalDeleteObject(new HandleRef(this, boldHfont));
-                boldHfont = IntPtr.Zero;
+                Interop.Gdi32.DeleteObject(_boldHfont);
+                _boldHfont = IntPtr.Zero;
             }
         }
 
@@ -4427,14 +4422,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // The listbox draws with GDI, not GDI+.  So, we
                     // use a normal DC here.
-                    //
-                    IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
+
+                    IntPtr hdc = Interop.User32.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
+
+                    // This creates a copy of the given Font, and as such we need to 
                     IntPtr hFont = Font.ToHfont();
+
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     int iSel = -1;
                     try
                     {
-                        hFont = SafeNativeMethods.SelectObject(new HandleRef(DropDownListBox, hdc), new HandleRef(Font, hFont));
+                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
 
                         iSel = GetCurrentValueIndex(gridEntry);
                         if (rgItems != null && rgItems.Length > 0)
@@ -4455,12 +4453,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
 
-                        hFont = SafeNativeMethods.SelectObject(new HandleRef(DropDownListBox, hdc), new HandleRef(Font, hFont));
+                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
                     }
                     finally
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(Font, hFont));
-                        UnsafeNativeMethods.ReleaseDC(new HandleRef(DropDownListBox, DropDownListBox.Handle), new HandleRef(DropDownListBox, hdc));
+                        Interop.Gdi32.DeleteObject(hFont);
+                        Interop.Gdi32.ReleaseDC(new HandleRef(DropDownListBox, DropDownListBox.Handle), hdc);
                     }
 
                     // Microsoft, 4/25/1998 - must check for -1 and not call the set...
@@ -4528,7 +4526,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             ToolTip.Visible = false;
 
-            NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(itemRect.X, itemRect.Y, itemRect.Width, itemRect.Height);
+            Interop.RECT rect = itemRect;
 
             ToolTip.SendMessage(NativeMethods.TTM_ADJUSTRECT, 1, ref rect);
 

@@ -402,7 +402,6 @@ namespace System.Windows.Forms
         }
 
         // This function computes everything in terms of physical size (millimeters), not pixels
-        //
         private void ComputeLayout()
         {
             Debug.Assert(pageInfo != null, "Must call ComputePreview first");
@@ -415,8 +414,8 @@ namespace System.Windows.Forms
 
             Graphics tempGraphics = CreateGraphicsInternal();
             IntPtr dc = tempGraphics.GetHdc();
-            screendpi = new Point(UnsafeNativeMethods.GetDeviceCaps(new HandleRef(tempGraphics, dc), NativeMethods.LOGPIXELSX),
-                                  UnsafeNativeMethods.GetDeviceCaps(new HandleRef(tempGraphics, dc), NativeMethods.LOGPIXELSY));
+            screendpi = new Point(Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX),
+                                  Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY));
             tempGraphics.ReleaseHdcInternal(dc);
             tempGraphics.Dispose();
 
@@ -775,8 +774,7 @@ namespace System.Windows.Forms
                 position.Y = 0;
             }
 
-            Rectangle rect = ClientRectangle;
-            NativeMethods.RECT scroll = NativeMethods.RECT.FromXYWH(rect.X, rect.Y, rect.Width, rect.Height);
+            Interop.RECT scroll = ClientRectangle;
             SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
                                  current.X - position.X,
                                  current.Y - position.Y,

@@ -269,25 +269,29 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This code is required to set the correct window region during the resize of the Form at design time.
-        /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to
-        /// resize and hence draw the correct backcolor.
+        ///  This code is required to set the correct window region during the resize of the Form at design time.
+        ///  There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to
+        ///  resize and hence draw the correct backcolor.
         /// </summary>
         private void SetWindowRgn()
         {
             IntPtr rgn1 = IntPtr.Zero;
             IntPtr rgn2 = IntPtr.Zero;
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            Interop.RECT rect = new Interop.RECT();
             CreateParams cp = CreateParams;
 
             AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
 
             Rectangle bounds = Bounds;
-            rgn1 = SafeNativeMethods.CreateRectRgn(0, 0, bounds.Width, bounds.Height);
+            rgn1 = Interop.Gdi32.CreateRectRgn(0, 0, bounds.Width, bounds.Height);
             try
             {
-                rgn2 = SafeNativeMethods.CreateRectRgn(-rect.left, -rect.top,
-                                             bounds.Width - rect.right, bounds.Height - rect.bottom);
+                rgn2 = Interop.Gdi32.CreateRectRgn(
+                    -rect.left,
+                    -rect.top,
+                    bounds.Width - rect.right,
+                    bounds.Height - rect.bottom);
+
                 try
                 {
                     if (rgn1 == IntPtr.Zero || rgn2 == IntPtr.Zero)
@@ -295,7 +299,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
 
-                    if (SafeNativeMethods.CombineRgn(new HandleRef(null, rgn1), new HandleRef(null, rgn1), new HandleRef(null, rgn2), NativeMethods.RGN_DIFF) == 0)
+                    if (Interop.Gdi32.CombineRgn(rgn1, rgn1, rgn2, Interop.Gdi32.CombineMode.RGN_DIFF) == 0)
                     {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
@@ -314,7 +318,7 @@ namespace System.Windows.Forms
                 {
                     if (rgn2 != IntPtr.Zero)
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(null, rgn2));
+                        Interop.Gdi32.DeleteObject(rgn2);
                     }
                 }
             }
@@ -322,7 +326,7 @@ namespace System.Windows.Forms
             {
                 if (rgn1 != IntPtr.Zero)
                 {
-                    SafeNativeMethods.DeleteObject(new HandleRef(null, rgn1));
+                    Interop.Gdi32.DeleteObject(rgn1);
                 }
             }
         }

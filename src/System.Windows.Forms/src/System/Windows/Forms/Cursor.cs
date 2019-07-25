@@ -164,9 +164,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.RECT r = new NativeMethods.RECT();
+                Interop.RECT r = new Interop.RECT();
                 SafeNativeMethods.GetClipCursor(ref r);
-                return Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
+                return r;
             }
             set
             {
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    NativeMethods.RECT rcClip = NativeMethods.RECT.FromXYWH(value.X, value.Y, value.Width, value.Height);
+                    Interop.RECT rcClip = value;
                     UnsafeNativeMethods.ClipCursor(ref rcClip);
                 }
             }
@@ -238,38 +238,25 @@ namespace System.Windows.Forms
         {
             get
             {
-                Point hotSpot = Point.Empty;
-                NativeMethods.ICONINFO info = new NativeMethods.ICONINFO();
-                Icon currentIcon = null;
+                NativeMethods.ICONINFO info = default;
+                SafeNativeMethods.GetIconInfo(new HandleRef(this, Handle), ref info);
 
-                currentIcon = Icon.FromHandle(Handle);
+                // GetIconInfo creates bitmaps for the hbmMask and hbmColor members of ICONINFO.
+                // The calling application must manage these bitmaps and delete them when they are no longer necessary.
 
-                try
+                if (info.hbmMask != IntPtr.Zero)
                 {
-                    SafeNativeMethods.GetIconInfo(new HandleRef(this, currentIcon.Handle), info);
-                    hotSpot = new Point(info.xHotspot, info.yHotspot);
+                    Interop.Gdi32.DeleteObject(info.hbmMask);
+                    info.hbmMask = IntPtr.Zero;
                 }
-                finally
+
+                if (info.hbmColor != IntPtr.Zero)
                 {
-                    // GetIconInfo creates bitmaps for the hbmMask and hbmColor members of ICONINFO.
-                    // The calling application must manage these bitmaps and delete them when they are no longer necessary.
-
-                    if (info.hbmMask != IntPtr.Zero)
-                    {
-                        // ExternalDelete to prevent Handle underflow
-                        SafeNativeMethods.ExternalDeleteObject(new HandleRef(null, info.hbmMask));
-                        info.hbmMask = IntPtr.Zero;
-                    }
-                    if (info.hbmColor != IntPtr.Zero)
-                    {
-                        // ExternalDelete to prevent Handle underflow
-                        SafeNativeMethods.ExternalDeleteObject(new HandleRef(null, info.hbmColor));
-                        info.hbmColor = IntPtr.Zero;
-                    }
-                    currentIcon.Dispose();
-
+                    Interop.Gdi32.DeleteObject(info.hbmColor);
+                    info.hbmColor = IntPtr.Zero;
                 }
-                return hotSpot;
+
+                return new Point(info.xHotspot, info.yHotspot);
             }
         }
 
@@ -578,14 +565,14 @@ namespace System.Windows.Forms
         {
             Size iconSize = Size;
 
-            NativeMethods.ICONINFO info = new NativeMethods.ICONINFO();
-            SafeNativeMethods.GetIconInfo(new HandleRef(this, iconHandle), info);
+            NativeMethods.ICONINFO info = default;
+            SafeNativeMethods.GetIconInfo(new HandleRef(this, iconHandle), ref info);
             NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
 
             if (info.hbmColor != IntPtr.Zero)
             {
                 UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmColor), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
-                SafeNativeMethods.DeleteObject(new HandleRef(null, info.hbmColor));
+                Interop.Gdi32.DeleteObject(info.hbmColor);
                 iconSize = new Size(bmp.bmWidth, bmp.bmHeight);
             }
             else if (info.hbmMask != IntPtr.Zero)
@@ -596,7 +583,7 @@ namespace System.Windows.Forms
 
             if (info.hbmMask != IntPtr.Zero)
             {
-                SafeNativeMethods.DeleteObject(new HandleRef(null, info.hbmMask));
+                Interop.Gdi32.DeleteObject(info.hbmMask);
             }
             return iconSize;
         }

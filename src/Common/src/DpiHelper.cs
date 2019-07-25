@@ -35,17 +35,10 @@ namespace System.Windows.Forms
         private static void Initialize()
         {
             if (s_isInitialized)
-            {
                 return;
-            }
 
-            IntPtr hDC = UnsafeNativeMethods.GetDC(CAPS.NullHandleRef);
-            if (hDC != IntPtr.Zero)
-            {
-                s_deviceDpi = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), CAPS.LOGPIXELSX);
-
-                UnsafeNativeMethods.ReleaseDC(CAPS.NullHandleRef, new HandleRef(null, hDC));
-            }
+            using ScreenDC dc = ScreenDC.Create();
+            s_deviceDpi = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
             s_isInitialized = true;
         }
 

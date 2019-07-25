@@ -85,17 +85,17 @@ namespace System.Windows.Forms
 
                 if (hdc == IntPtr.Zero)
                 {
-                    screenDC = UnsafeNativeMethods.CreateDC(deviceName, null, null, NativeMethods.NullHandleRef);
+                    screenDC = Interop.Gdi32.CreateDC(deviceName, null, null, IntPtr.Zero);
                 }
             }
             hmonitor = monitor;
 
-            bitDepth = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, screenDC), NativeMethods.BITSPIXEL);
-            bitDepth *= UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, screenDC), NativeMethods.PLANES);
+            bitDepth = Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.DeviceCapability.BITSPIXEL);
+            bitDepth *= Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.DeviceCapability.PLANES);
 
             if (hdc != screenDC)
             {
-                UnsafeNativeMethods.DeleteDC(new HandleRef(null, screenDC));
+                Interop.Gdi32.DeleteDC(screenDC);
             }
         }
 
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
         {
             if (multiMonitorSupport)
             {
-                NativeMethods.RECT rc = NativeMethods.RECT.FromXYWH(rect.X, rect.Y, rect.Width, rect.Height);
+                Interop.RECT rc = rect;
                 return new Screen(SafeNativeMethods.MonitorFromRect(ref rc, MONITOR_DEFAULTTONEAREST));
             }
             else

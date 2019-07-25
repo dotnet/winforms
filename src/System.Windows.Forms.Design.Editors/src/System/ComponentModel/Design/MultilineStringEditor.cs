@@ -228,10 +228,10 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    NativeMethods.RECT rect = new NativeMethods.RECT();
+                    Interop.RECT rect = new Interop.RECT();
                     HandleRef hdc = new HandleRef(null, UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef));
-                    HandleRef hRtbFont = new HandleRef(null, Font.ToHfont());
-                    HandleRef hOldFont = new HandleRef(null, NativeMethods.SelectObject(hdc, hRtbFont));
+                    IntPtr hRtbFont = Font.ToHfont();
+                    IntPtr hOldFont = NativeMethods.SelectObject(hdc, hRtbFont);
 
                     try
                     {
@@ -239,7 +239,7 @@ namespace System.ComponentModel.Design
                     }
                     finally
                     {
-                        NativeMethods.ExternalDeleteObject(hRtbFont);
+                        Interop.Gdi32.DeleteObject(hRtbFont);
                         NativeMethods.SelectObject(hdc, hOldFont);
                         UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, hdc);
                     }

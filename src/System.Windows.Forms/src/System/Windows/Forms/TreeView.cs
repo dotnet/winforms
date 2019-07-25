@@ -2619,7 +2619,7 @@ namespace System.Windows.Forms
             // TreeView doesn't properly revert back to the unselected image
             // if the unselected image is blank.
             //
-            NativeMethods.RECT rc = new NativeMethods.RECT();
+            Interop.RECT rc = new Interop.RECT();
             *((IntPtr*)&rc.left) = nmtv->itemOld.hItem;
             if (nmtv->itemOld.hItem != IntPtr.Zero)
             {
@@ -2862,7 +2862,7 @@ namespace System.Windows.Forms
                     if (renderinfo != null && renderinfo.Font != null)
                     {
                         // Mess with the DC directly...
-                        SafeNativeMethods.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
+                        Interop.Gdi32.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.
                         m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;

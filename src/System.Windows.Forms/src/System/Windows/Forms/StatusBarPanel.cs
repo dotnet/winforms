@@ -667,7 +667,7 @@ namespace System.Windows.Forms
 
                 if (style == StatusBarPanelStyle.OwnerDraw)
                 {
-                    NativeMethods.RECT rect = new NativeMethods.RECT();
+                    Interop.RECT rect = new Interop.RECT();
                     result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_GETRECT, (IntPtr)GetIndex(), ref rect);
 
                     if (result != 0)

@@ -5355,7 +5355,7 @@ namespace System.Windows.Forms
             return new DataGridViewRowCollection(this);
         }
 
-        private NativeMethods.RECT[] CreateScrollableRegion(Rectangle scroll)
+        private Interop.RECT[] CreateScrollableRegion(Rectangle scroll)
         {
             if (cachedScrollableRegion != null)
             {
@@ -5682,16 +5682,16 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, halftone));
+            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
 
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
 
-            SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, saveBrush));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, halftone));
-            UnsafeNativeMethods.ReleaseDC(new HandleRef(this, parentHandle), new HandleRef(this, dc));
+            Interop.Gdi32.SelectObject(dc, saveBrush);
+            Interop.Gdi32.DeleteObject(halftone);
+            Interop.Gdi32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -5703,11 +5703,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, halftone));
+            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, saveBrush));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, halftone));
-            UnsafeNativeMethods.ReleaseDC(new HandleRef(this, parentHandle), new HandleRef(this, dc));
+            Interop.Gdi32.SelectObject(dc, saveBrush);
+            Interop.Gdi32.DeleteObject(halftone);
+            Interop.Gdi32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
@@ -25761,7 +25761,7 @@ namespace System.Windows.Forms
             return ScrollRowIntoView(columnIndex, rowIndex, committed, forCurrentCellChange);
         }
 
-        private void ScrollRectangles(NativeMethods.RECT[] rects, int change)
+        private void ScrollRectangles(Interop.RECT[] rects, int change)
         {
             if (rects != null)
             {
@@ -25770,7 +25770,7 @@ namespace System.Windows.Forms
                     dataGridViewState1[DATAGRIDVIEWSTATE1_scrolledSinceMouseDown] = true;
                 }
 
-                NativeMethods.RECT scroll;
+                Interop.RECT scroll;
                 for (int r = 0; r < rects.Length; r++)
                 {
                     scroll = rects[r];
@@ -25884,7 +25884,7 @@ namespace System.Windows.Forms
             // The mouse probably is not over the same cell after the scroll.
             UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
 
-            NativeMethods.RECT scrollArea = NativeMethods.RECT.FromXYWH(rowsRect.X, rowsRect.Y, rowsRect.Width, rowsRect.Height);
+            Interop.RECT scrollArea = rowsRect;
             SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, deltaY, ref scrollArea, ref scrollArea);
             if (invalidateTopOfRowHeaders)
             {

@@ -3184,7 +3184,7 @@ namespace System.Windows.Forms
             }
 
             IntPtr h = Handle;
-            NativeMethods.RECT rc = new NativeMethods.RECT();
+            Interop.RECT rc = new Interop.RECT();
             SafeNativeMethods.GetClientRect(new HandleRef(this, h), ref rc);
             Rectangle currentClient = Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
 
@@ -3355,7 +3355,7 @@ namespace System.Windows.Forms
         /// </summary>
         private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
         {
-            NativeMethods.RECT result = new NativeMethods.RECT(0, 0, clientSize.Width, clientSize.Height);
+            Interop.RECT result = new Interop.RECT(0, 0, clientSize.Width, clientSize.Height);
             AdjustWindowRectEx(ref result, style, HasMenu, exStyle);
             return new Size(result.right - result.left, result.bottom - result.top);
         }
@@ -4070,7 +4070,7 @@ namespace System.Windows.Forms
                 {
                     Screen desktop = Screen.FromHandle(ownerHandle);
                     Rectangle screenRect = desktop.WorkingArea;
-                    NativeMethods.RECT ownerRect = new NativeMethods.RECT();
+                    Interop.RECT ownerRect = new Interop.RECT();
 
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(null, ownerHandle), ref ownerRect);
 

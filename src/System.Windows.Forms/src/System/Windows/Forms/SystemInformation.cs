@@ -258,7 +258,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                var rect = new NativeMethods.RECT();
+                var rect = new Interop.RECT();
                 UnsafeNativeMethods.SystemParametersInfoW(NativeMethods.SPI_GETWORKAREA, ref rect);
                 return rect;
             }

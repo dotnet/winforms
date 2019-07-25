@@ -585,7 +585,7 @@ namespace System.Windows.Forms
                     {
                         // We want to instantly change the cursor if the mouse is within our bounds.
                         NativeMethods.POINT p = new NativeMethods.POINT();
-                        NativeMethods.RECT r = new NativeMethods.RECT();
+                        Interop.RECT r = new Interop.RECT();
                         UnsafeNativeMethods.GetCursorPos(p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
@@ -1702,11 +1702,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, halftone));
+            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            SafeNativeMethods.SelectObject(new HandleRef(this, dc), new HandleRef(null, saveBrush));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, halftone));
-            UnsafeNativeMethods.ReleaseDC(new HandleRef(this, parentHandle), new HandleRef(null, dc));
+            Interop.Gdi32.SelectObject(dc, saveBrush);
+            Interop.Gdi32.DeleteObject(halftone);
+            Interop.Gdi32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>

@@ -729,7 +729,7 @@ namespace System.Windows.Forms
                         {
                             if (hDC != IntPtr.Zero)
                             {
-                                UnsafeNativeMethods.DeleteDC(new HandleRef(null, hDC));
+                                Interop.Gdi32.DeleteDC(hDC);
                             }
                         }
                     }
@@ -3046,23 +3046,9 @@ namespace System.Windows.Forms
 
         private static void SetupLogPixels(IntPtr hDC)
         {
-            bool release = false;
-            if (hDC == IntPtr.Zero)
-            {
-                hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-                release = true;
-            }
-            if (hDC == IntPtr.Zero)
-            {
-                return;
-            }
-
-            logPixelsX = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSX);
-            logPixelsY = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSY);
-            if (release)
-            {
-                UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
-            }
+            using ScreenDC dc = ScreenDC.Create();
+            logPixelsX = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+            logPixelsY = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
         }
 
         private static int Pixel2Twip(IntPtr hDC, int v, bool xDirection)

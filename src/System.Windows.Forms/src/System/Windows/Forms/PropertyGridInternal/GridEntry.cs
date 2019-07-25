@@ -2487,7 +2487,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     oldTextColor = SafeNativeMethods.SetTextColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(textColor.ToArgb()));
                     oldBkColor = SafeNativeMethods.SetBkColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(bkColor.ToArgb()));
-                    hfont = SafeNativeMethods.SelectObject(new HandleRef(g, hdc), new HandleRef(null, hfont));
+                    hfont = Interop.Gdi32.SelectObject(hdc, hfont);
                     int format = IntNativeMethods.DT_EDITCONTROL | IntNativeMethods.DT_EXPANDTABS | IntNativeMethods.DT_NOCLIP | IntNativeMethods.DT_SINGLELINE | IntNativeMethods.DT_NOPREFIX;
                     if (gridHost.DrawValuesRightToLeft)
                     {
@@ -2512,7 +2512,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     SafeNativeMethods.SetTextColor(new HandleRef(g, hdc), oldTextColor);
                     SafeNativeMethods.SetBkColor(new HandleRef(g, hdc), oldBkColor);
-                    hfont = SafeNativeMethods.SelectObject(new HandleRef(g, hdc), new HandleRef(null, hfont));
+                    hfont = Interop.Gdi32.SelectObject(hdc, hfont);
                     g.ReleaseHdcInternal(hdc);
                 }
 

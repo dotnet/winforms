@@ -285,7 +285,7 @@ namespace System.Windows.Forms
                 {
                     return Rectangle.Empty;
                 }
-                NativeMethods.RECT rc = new NativeMethods.RECT();
+                Interop.RECT rc = new Interop.RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
@@ -308,7 +308,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                NativeMethods.RECT rc = new NativeMethods.RECT();
+                Interop.RECT rc = new Interop.RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
@@ -714,7 +714,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                NativeMethods.RECT rc = new NativeMethods.RECT();
+                Interop.RECT rc = new Interop.RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 

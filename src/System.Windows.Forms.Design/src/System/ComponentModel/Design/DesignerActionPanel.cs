@@ -1978,7 +1978,7 @@ namespace System.ComponentModel.Design
                     }
                     finally
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(listBox.Font, hFont));
+                        Interop.Gdi32.DeleteObject(hFont);
                         UnsafeNativeMethods.ReleaseDC(new HandleRef(listBox, listBox.Handle), new HandleRef(listBox, hdc));
                     }
 
@@ -2594,9 +2594,6 @@ namespace System.ComponentModel.Design
 
             private static class SafeNativeMethods
             {
-                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-                public static extern bool DeleteObject(HandleRef hObject);
-
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern bool ReleaseCapture();
 
