@@ -289,11 +289,10 @@ namespace System.Windows.Forms
                 if (cursorSize.IsEmpty)
                 {
                     cursorSize = new Size(
-                                        UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXCURSOR),
-                                        UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCURSOR)
-                                        );
-
+                        Interop.User32.GetSystemMetrics(Interop.User32.SystemMetric.SM_CXCURSOR),
+                        Interop.User32.GetSystemMetrics(Interop.User32.SystemMetric.SM_CYCURSOR));
                 }
+
                 return cursorSize;
             }
         }

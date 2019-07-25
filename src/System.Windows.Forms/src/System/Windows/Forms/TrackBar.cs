@@ -476,7 +476,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int cyhscroll = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
+                int cyhscroll = Interop.User32.GetSystemMetrics(Interop.User32.SystemMetric.SM_CYHSCROLL);
 
                 // this is our preferred size
                 //

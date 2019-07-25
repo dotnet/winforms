@@ -676,34 +676,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern bool GetClassInfoW(HandleRef hInstance, string lpClassName, ref NativeMethods.WNDCLASS lpWndClass);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetSystemMetrics(int nIndex);
-
-        // This API is available starting Windows10 RS1
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetSystemMetricsForDpi(int nIndex, uint dpi);
-
         [DllImport(ExternDll.Gdi32, CharSet = CharSet.Auto)]
         public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
-
-        /// <summary>
-        /// Tries to get system metrics for the dpi. dpi is ignored if "GetSystemMetricsForDpi" is not available on the OS that this application is running.
-        /// </summary>
-        /// <param name="nIndex">index</param>
-        /// <param name="dpi">dpi requested</param>
-        /// <returns>returns system metrics for dpi</returns>
-        public static int TryGetSystemMetricsForDpi(int nIndex, uint dpi)
-        {
-            if (OsVersion.IsWindows10_1607OrGreater)
-            {
-                return GetSystemMetricsForDpi(nIndex, dpi);
-            }
-            else
-            {
-                Debug.Assert(false, "GetSystemMetricsForDpi() is not available on this OS");
-                return GetSystemMetrics(nIndex);
-            }
-        }
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
         private unsafe static extern bool SystemParametersInfoW(uint uiAction, uint uiParam, void* pvParam, uint fWinIni);

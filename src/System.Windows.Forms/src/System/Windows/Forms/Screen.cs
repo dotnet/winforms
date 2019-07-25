@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         private const int MONITOR_DEFAULTTONEAREST = 0x00000002;
         private const int MONITORINFOF_PRIMARY = 0x00000001;
 
-        private static readonly bool multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
+        private static readonly bool multiMonitorSupport = (Interop.User32.GetSystemMetrics(Interop.User32.SystemMetric.SM_CMONITORS) != 0);
         private static Screen[] screens;
 
         internal Screen(IntPtr monitor) : this(monitor, IntPtr.Zero)
