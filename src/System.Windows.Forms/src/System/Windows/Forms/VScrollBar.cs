@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             {
                 if (DpiHelper.IsScalingRequirementMet)
                 {
-                    return new Size(SystemInformation.GetVerticalScrollBarWidthForDpi(deviceDpi), LogicalToDeviceUnits(DefaultHeight));
+                    return new Size(SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi), LogicalToDeviceUnits(DefaultHeight));
                 }
                 else
                 {

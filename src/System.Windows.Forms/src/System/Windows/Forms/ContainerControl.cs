@@ -319,7 +319,7 @@ namespace System.Windows.Forms
                             // Screen Dpi
                             if (DpiHelper.IsPerMonitorV2Awareness)
                             {
-                                _currentAutoScaleDimensions = new SizeF((float)deviceDpi, (float)deviceDpi);
+                                _currentAutoScaleDimensions = new SizeF((float)_deviceDpi, (float)_deviceDpi);
                             }
                             else
                             {
