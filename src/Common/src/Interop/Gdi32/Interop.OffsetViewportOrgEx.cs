@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -10,20 +11,12 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int GetClipRgn(IntPtr hdc, IntPtr hrgn);
+        public static extern bool OffsetViewportOrgEx(IntPtr hdc, int x, int y, ref Point lppt);
 
-        public static int GetClipRgn(HandleRef hdc, IntPtr hrgn)
+        public static bool OffsetViewportOrgEx(HandleRef hdc, int x, int y, ref Point lppt)
         {
-            int result = GetClipRgn(hdc.Handle, hrgn);
+            bool result = OffsetViewportOrgEx(hdc.Handle, x, y, ref lppt);
             GC.KeepAlive(hdc.Wrapper);
-            return result;
-        }
-
-        public static int GetClipRgn(HandleRef hdc, HandleRef hrgn)
-        {
-            int result = GetClipRgn(hdc.Handle, hrgn.Handle);
-            GC.KeepAlive(hdc.Wrapper);
-            GC.KeepAlive(hrgn.Wrapper);
             return result;
         }
     }

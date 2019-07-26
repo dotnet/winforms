@@ -7,7 +7,7 @@ using System.Windows.Forms.Internal;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Note: This is a public enum wrapping the internal IntTextFormatFlags
+    /// Note: This is a public enum wrapping the internal Interop.User32.TextFormatFlags
     /// defined in the System.Windows.Forms.Internal namespace, we need to do this to
     /// be able to compile the internal one into different assemblies w/o
     /// creating any conflict/dependency on public namespaces.
@@ -16,36 +16,32 @@ namespace System.Windows.Forms
     [Flags]
     public enum TextFormatFlags
     {
-        Bottom = IntTextFormatFlags.Bottom,
-
-        // NOTE: This flag is used for measuring text and TextRenderer has methods for doing that
-        // so we don't expose it to avoid confusion.
-        // CalculateRectangle          = IntTextFormatFlags.CalculateRectangle,
-        EndEllipsis = IntTextFormatFlags.EndEllipsis,
-        ExpandTabs = IntTextFormatFlags.ExpandTabs,
-        ExternalLeading = IntTextFormatFlags.ExternalLeading,
-        Default = IntTextFormatFlags.Default,
-        HidePrefix = IntTextFormatFlags.HidePrefix,
-        HorizontalCenter = IntTextFormatFlags.HorizontalCenter,
-        Internal = IntTextFormatFlags.Internal,
-        Left = IntTextFormatFlags.Left,  // default
-        ModifyString = IntTextFormatFlags.ModifyString,
-        NoClipping = IntTextFormatFlags.NoClipping,
-        NoPrefix = IntTextFormatFlags.NoPrefix,
-        NoFullWidthCharacterBreak = IntTextFormatFlags.NoFullWidthCharacterBreak,
-        PathEllipsis = IntTextFormatFlags.PathEllipsis,
-        PrefixOnly = IntTextFormatFlags.PrefixOnly,
-        Right = IntTextFormatFlags.Right,
-        RightToLeft = IntTextFormatFlags.RightToLeft,
-        SingleLine = IntTextFormatFlags.SingleLine,
+        Bottom = Interop.User32.TextFormatFlags.DT_BOTTOM,
+        EndEllipsis = Interop.User32.TextFormatFlags.DT_END_ELLIPSIS,
+        ExpandTabs = Interop.User32.TextFormatFlags.DT_EXPANDTABS,
+        ExternalLeading = Interop.User32.TextFormatFlags.DT_EXTERNALLEADING,
+        Default = Interop.User32.TextFormatFlags.DT_DEFAULT,
+        HidePrefix = Interop.User32.TextFormatFlags.DT_HIDEPREFIX,
+        HorizontalCenter = Interop.User32.TextFormatFlags.DT_CENTER,
+        Internal = Interop.User32.TextFormatFlags.DT_INTERNAL,
+        Left = Interop.User32.TextFormatFlags.DT_LEFT,  // default
+        ModifyString = Interop.User32.TextFormatFlags.DT_MODIFYSTRING,
+        NoClipping = Interop.User32.TextFormatFlags.DT_NOCLIP,
+        NoPrefix = Interop.User32.TextFormatFlags.DT_NOPREFIX,
+        NoFullWidthCharacterBreak = Interop.User32.TextFormatFlags.DT_NOFULLWIDTHCHARBREAK,
+        PathEllipsis = Interop.User32.TextFormatFlags.DT_PATH_ELLIPSIS,
+        PrefixOnly = Interop.User32.TextFormatFlags.DT_PREFIXONLY,
+        Right = Interop.User32.TextFormatFlags.DT_RIGHT,
+        RightToLeft = Interop.User32.TextFormatFlags.DT_RTLREADING,
+        SingleLine = Interop.User32.TextFormatFlags.DT_SINGLELINE,
         // NOTE: TextRenderer does not expose a way to set the tab stops. Observe that ExapandTabs is available.
-        // TabStop                     = IntTextFormatFlags.TabStop,
-        TextBoxControl = IntTextFormatFlags.TextBoxControl,
-        Top = IntTextFormatFlags.Top, // default
-        VerticalCenter = IntTextFormatFlags.VerticalCenter,
+        // TabStop                     = Interop.User32.TextFormatFlags.TabStop,
+        TextBoxControl = Interop.User32.TextFormatFlags.DT_EDITCONTROL,
+        Top = Interop.User32.TextFormatFlags.DT_TOP, // default
+        VerticalCenter = Interop.User32.TextFormatFlags.DT_VCENTER,
 
-        WordBreak = IntTextFormatFlags.WordBreak,
-        WordEllipsis = IntTextFormatFlags.WordEllipsis,
+        WordBreak = Interop.User32.TextFormatFlags.DT_WORDBREAK,
+        WordEllipsis = Interop.User32.TextFormatFlags.DT_WORD_ELLIPSIS,
 
         /// <summary>
         /// The following flags are exclusive of TextRenderer (no Windows native flags)

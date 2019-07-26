@@ -1000,7 +1000,7 @@ namespace System.ComponentModel.Design
                 return string.Empty;
             }
 
-            string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
+            string windowText = Interop.User32.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
             string nameOfControl = string.Empty;
             Control c = Control.FromHandle(hwnd);

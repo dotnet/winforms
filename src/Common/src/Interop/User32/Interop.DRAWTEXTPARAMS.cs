@@ -9,14 +9,14 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
-        public static extern int SetWindowTextW(IntPtr hWnd, string text);
-
-        public static int SetWindowTextW(HandleRef hWnd, string text)
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DRAWTEXTPARAMS
         {
-            int result = SetWindowTextW(hWnd.Handle, text);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
+            public int cbSize;
+            public int iTabLength;
+            public int iLeftMargin;
+            public int iRightMargin;
+            public int uiLengthDrawn;
         }
     }
 }

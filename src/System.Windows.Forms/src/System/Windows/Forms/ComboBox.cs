@@ -3942,7 +3942,7 @@ namespace System.Windows.Forms
                                 // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
                                 Interop.RegionType updateRegionFlags = Interop.User32.GetUpdateRgn(Handle, wr.HRegion, Interop.BOOL.TRUE);
 
-                                dr.CombineRegion(wr, dr, RegionCombineMode.DIFF);
+                                dr.CombineRegion(wr, dr, Interop.Gdi32.CombineMode.RGN_DIFF);
 
                                 Rectangle updateRegionBoundingRect = wr.ToRectangle();
                                 FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);

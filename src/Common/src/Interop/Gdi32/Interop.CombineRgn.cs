@@ -18,5 +18,14 @@ internal static partial class Interop
 
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern RegionType CombineRgn(IntPtr hRgn, IntPtr hRgn1, IntPtr hRgn2, CombineMode nCombineMode);
+
+        public static RegionType CombineRgn(HandleRef hRgn, HandleRef hRgn1, HandleRef hRgn2, CombineMode nCombineMode)
+        {
+            RegionType result = CombineRgn(hRgn.Handle, hRgn1.Handle, hRgn2.Handle, nCombineMode);
+            GC.KeepAlive(hRgn.Wrapper);
+            GC.KeepAlive(hRgn1.Wrapper);
+            GC.KeepAlive(hRgn2.Wrapper);
+            return result;
+        }
     }
 }

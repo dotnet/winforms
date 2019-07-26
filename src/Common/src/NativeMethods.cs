@@ -15,7 +15,6 @@ namespace System.Windows.Forms
         public static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
         public const int BITMAPINFO_MAX_COLORSIZE = 256;
-        public const int BI_BITFIELDS = 3;
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
@@ -23,65 +22,7 @@ namespace System.Windows.Forms
             DESKTOP_SWITCHDESKTOP = 0x0100,
             ERROR_ACCESS_DENIED = 0x0005;
 
-        public const int
-        /* FONT WEIGHT (BOLD) VALUES */
-        FW_DONTCARE = 0,
-        FW_NORMAL = 400,
-        FW_BOLD = 700,
-        // some others...
-
-        /* FONT CHARACTER SET */
-        ANSI_CHARSET = 0,
-        DEFAULT_CHARSET = 1,
-        // plus others ....
-
-        /* Font OutPrecision */
-        OUT_DEFAULT_PRECIS = 0,
-        OUT_TT_PRECIS = 4,
-        OUT_TT_ONLY_PRECIS = 7,
-
-        /* polygon fill mode */
-        ALTERNATE = 1,
-        WINDING = 2,
-
-        // text align
-        TA_DEFAULT = 0,
-
-        // brush
-        BS_SOLID = 0,
-        HOLLOW_BRUSH = 5,
-
-        // Binary raster operations.
-        R2_BLACK = 1,  /*  0       */
-        R2_NOTMERGEPEN = 2,  /* DPon     */
-        R2_MASKNOTPEN = 3,  /* DPna     */
-        R2_NOTCOPYPEN = 4,  /* PN       */
-        R2_MASKPENNOT = 5,  /* PDna     */
-        R2_NOT = 6,  /* Dn       */
-        R2_XORPEN = 7,  /* DPx      */
-        R2_NOTMASKPEN = 8,  /* DPan     */
-        R2_MASKPEN = 9,  /* DPa      */
-        R2_NOTXORPEN = 10, /* DPxn     */
-        R2_NOP = 11, /* D        */
-        R2_MERGENOTPEN = 12, /* DPno     */
-        R2_COPYPEN = 13, /* P        */
-        R2_MERGEPENNOT = 14, /* PDno     */
-        R2_MERGEPEN = 15, /* DPo      */
-        R2_WHITE = 16 /*  1       */;
-
-        public const int
-        /* SetGraphicsMode(hdc, iMode ) */
-        GM_COMPATIBLE = 1,
-        GM_ADVANCED = 2,
-        MWT_IDENTITY = 1;
-
-        public const int
-        PAGE_READONLY = 0x02,
-        PAGE_READWRITE = 0x04,
-        PAGE_WRITECOPY = 0x08,
-        FILE_MAP_COPY = 0x0001,
-        FILE_MAP_WRITE = 0x0002,
-        FILE_MAP_READ = 0x0004;
+        public const int BS_SOLID = 0;
 
         public const int SHGFI_ICON = 0x000000100,   // get icon
         SHGFI_DISPLAYNAME = 0x000000200,     // get display name
@@ -320,7 +261,6 @@ namespace System.Windows.Forms
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DISP_E_EXCEPTION = unchecked((int)0x80020009),
-        DEFAULT_GUI_FONT = 17,
         DIB_RGB_COLORS = 0,
         DRAGDROP_E_NOTREGISTERED = unchecked((int)0x80040100),
         DRAGDROP_E_ALREADYREGISTERED = unchecked((int)0x80040101),
@@ -995,8 +935,7 @@ namespace System.Windows.Forms
         NM_RCLICK = ((0 - 0) - 5),
         NM_RDBLCLK = ((0 - 0) - 6),
         NM_CUSTOMDRAW = ((0 - 0) - 12),
-        NM_RELEASEDCAPTURE = ((0 - 0) - 16),
-        NONANTIALIASED_QUALITY = 3;
+        NM_RELEASEDCAPTURE = ((0 - 0) - 16);
 
         public const int OFN_READONLY = 0x00000001,
         OFN_OVERWRITEPROMPT = 0x00000002,
@@ -1028,18 +967,6 @@ namespace System.Windows.Forms
         OLEMISC_ACTIVATEWHENVISIBLE = 0x0000100,
         OLEMISC_ACTSLIKEBUTTON = 0x00001000,
         OLEMISC_SETCLIENTSITEFIRST = 0x00020000,
-        OBJ_PEN = 1,
-        OBJ_BRUSH = 2,
-        OBJ_DC = 3,
-        OBJ_METADC = 4,
-        OBJ_PAL = 5,
-        OBJ_FONT = 6,
-        OBJ_BITMAP = 7,
-        OBJ_REGION = 8,
-        OBJ_METAFILE = 9,
-        OBJ_MEMDC = 10,
-        OBJ_EXTPEN = 11,
-        OBJ_ENHMETADC = 12,
         ODS_CHECKED = 0x0008,
         ODS_COMBOBOXEDIT = 0x1000,
         ODS_DEFAULT = 0x0020,
@@ -1259,7 +1186,6 @@ namespace System.Windows.Forms
         SPI_ICONVERTICALSPACING = 0x0018,
         // SPI_GETICONMETRICS =        0x002D,
         SPI_GETICONTITLEWRAP = 0x0019,
-        SPI_GETICONTITLELOGFONT = 0x001F,
         SPI_GETKEYBOARDCUES = 0x100A,
         SPI_GETKEYBOARDDELAY = 0x0016,
         SPI_GETKEYBOARDPREF = 0x0044,
@@ -1306,9 +1232,6 @@ namespace System.Windows.Forms
         SBT_POPOUT = 0x0200,
         SBT_RTLREADING = 0x0400,
         SRCCOPY = 0x00CC0020,
-        SRCAND = 0x008800C6, /* dest = source AND dest          */
-        SRCPAINT = 0x00EE0086, /* dest = source OR dest           */
-        NOTSRCCOPY = 0x00330008, /* dest = (NOT source)             */
         STATFLAG_DEFAULT = 0x0,
         STATFLAG_NONAME = 0x1,
         STATFLAG_NOOPEN = 0x2,

@@ -56,9 +56,16 @@
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteDC.cs" Link="Interop\Gdi32\Interop.DeleteDC.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetClipRgn.cs" Link="Interop\Gdi32\Interop.GetClipRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetCurrentObject.cs" Link="Interop\Gdi32\Interop.GetCurrentObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetObjectType.cs" Link="Interop\Gdi32\Interop.GetObjectType.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetRgnBox.cs" Link="Interop\Gdi32\Interop.GetRgnBox.cs" />
-    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.ReleaseDC.cs" Link="Interop\Gdi32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetStockObject.cs" Link="Interop\Gdi32\Interop.GetStockObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextExtentPoint32.cs" Link="Interop\Gdi32\Interop.GetTextExtentPoint32.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.ObjectType.cs" Link="Interop\Gdi32\Interop.ObjectType.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.OffsetViewportOrgEx.cs" Link="Interop\Gdi32\Interop.OffsetViewportOrgEx.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.RestoreDC.cs" Link="Interop\Gdi32\Interop.RestoreDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SaveDC.cs" Link="Interop\Gdi32\Interop.SaveDC.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectClipRgn.cs" Link="Interop\Gdi32\Interop.SelectClipRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
@@ -74,12 +81,18 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetKnownFolderPath.cs" Link="Interop\Shell32\Interop.SHGetKnownFolderPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" Link="Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawTextEx.cs" Link="Interop\User32\Interop.DrawTextEx.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DRAWTEXTPARAMS.cs" Link="Interop\User32\Interop.DRAWTEXTPARAMS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetSystemMetrics.cs" Link="Interop\User32\Interop.GetSystemMetrics.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.LoadCursorW.cs" Link="Interop\User32\Interop.LoadCursorW.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.TextFormatFlags.cs" Link="Interop\User32\Interop.TextFormatFlags.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowFromDC.cs" Link="Interop\User32\Interop.WindowFromDC.cs" />
     <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.GetCurrentThemeName.cs" Link="Interop\UxTheme\Interop.GetCurrentThemeName.cs" />
     <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.GetThemeDocumentationProperty.cs" Link="Interop\UxTheme\Interop.GetCurrentThemeName.cs" />
     <Compile Include="..\..\Common\src\Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" Link="Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" />

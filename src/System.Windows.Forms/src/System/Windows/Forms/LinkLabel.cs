@@ -742,8 +742,7 @@ namespace System.Windows.Forms
 
                             using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                             {
-                                IntNativeMethods.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
-
+                                Interop.User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
                                 iLeftMargin = dtParams.iLeftMargin;
                                 iRightMargin = dtParams.iRightMargin;
                             }

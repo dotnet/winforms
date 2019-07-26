@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             }
 
 #if DEBUG
-            string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
+            string windowText = Interop.User32.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
             string nameOfControl = "Name: ";
             Control c = Control.FromHandle(hwnd);

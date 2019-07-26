@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Internal
             if (pen != null)
             {
                 // 1. Select the pen in the DC
-                IntUnsafeNativeMethods.SelectObject(hdc, new HandleRef(pen, pen.HPen));
+                Interop.Gdi32.SelectObject(hdc, new HandleRef(pen, pen.HPen));
             }
 
             // 2. call the functions
@@ -84,12 +84,12 @@ namespace System.Windows.Forms.Internal
             if (pen != null)
             {
                 // 1. Select the pen in the DC
-                IntUnsafeNativeMethods.SelectObject(hdc, new HandleRef(pen, pen.HPen));
+                Interop.Gdi32.SelectObject(hdc, new HandleRef(pen, pen.HPen));
             }
 
             if (brush != null)
             {
-                IntUnsafeNativeMethods.SelectObject(hdc, new HandleRef(brush, brush.HBrush));
+                Interop.Gdi32.SelectObject(hdc, new HandleRef(brush, brush.HBrush));
             }
 
             // 2. call the function
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor)
         {
-            DrawText(text, font, pt, foreColor, Color.Empty, IntTextFormatFlags.Default);
+            DrawText(text, font, pt, foreColor, Color.Empty, Interop.User32.TextFormatFlags.DT_DEFAULT);
         }
 
         /// <summary>
@@ -119,14 +119,14 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor)
         {
-            DrawText(text, font, pt, foreColor, backColor, IntTextFormatFlags.Default);
+            DrawText(text, font, pt, foreColor, backColor, Interop.User32.TextFormatFlags.DT_DEFAULT);
         }
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font and foreColor, and according to the
         ///  specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, IntTextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Interop.User32.TextFormatFlags flags)
         {
             DrawText(text, font, pt, foreColor, Color.Empty, flags);
         }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.Internal
         ///  Draws the text at the specified point, using the given Font, foreColor and backColor, and according
         ///  to the specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, IntTextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, Interop.User32.TextFormatFlags flags)
         {
             Rectangle bounds = new Rectangle(pt.X, pt.Y, int.MaxValue, int.MaxValue);
             DrawText(text, font, bounds, foreColor, backColor, flags);
@@ -154,13 +154,13 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor)
         {
-            DrawText(text, font, bounds, foreColor, backColor, IntTextFormatFlags.HorizontalCenter | IntTextFormatFlags.VerticalCenter);
+            DrawText(text, font, bounds, foreColor, backColor, Interop.User32.TextFormatFlags.DT_CENTER | Interop.User32.TextFormatFlags.DT_VCENTER);
         }
 
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color color, IntTextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color color, Interop.User32.TextFormatFlags flags)
         {
             DrawText(text, font, bounds, color, Color.Empty, flags);
         }
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Internal
         ///  If font is null, the font currently selected in the hdc is used.
         ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, IntTextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, Interop.User32.TextFormatFlags flags)
         {
             if (string.IsNullOrEmpty(text) || foreColor == Color.Transparent)
             {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.Internal
             }
 
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
-            Debug.Assert((flags & IntTextFormatFlags.CalculateRectangle) == 0, "CalculateRectangle flag is set, text won't be drawn");
+            Debug.Assert((flags & Interop.User32.TextFormatFlags.DT_CALCRECT) == 0, "DT_CALCRECT flag is set, text won't be drawn");
 
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
@@ -215,9 +215,9 @@ namespace System.Windows.Forms.Internal
                 dc.SetBackgroundColor(backColor);
             }
 
-            IntNativeMethods.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
+            Interop.User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
 
-            bounds = AdjustForVerticalAlignment(hdc, text, bounds, flags, dtparams);
+            bounds = AdjustForVerticalAlignment(hdc, text, bounds, flags, ref dtparams);
 
             // Adjust unbounded rect to avoid overflow since Rectangle ctr does not do param validation.
             if (bounds.Width == MaxSize.Width)
@@ -229,9 +229,8 @@ namespace System.Windows.Forms.Internal
                 bounds.Height -= bounds.Y;
             }
 
-            IntNativeMethods.RECT rect = new IntNativeMethods.RECT(bounds);
-
-            IntUnsafeNativeMethods.DrawTextEx(hdc, text, ref rect, (int)flags, dtparams);
+            var rect = new Interop.RECT(bounds);
+            Interop.User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
 
             // No need to restore previous objects into the dc (see comments on top of the class).
         }
@@ -271,7 +270,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Get the bounding box internal text padding to be used when drawing text.
         /// </summary>
-        public IntNativeMethods.DRAWTEXTPARAMS GetTextMargins(WindowsFont font)
+        public Interop.User32.DRAWTEXTPARAMS GetTextMargins(WindowsFont font)
         {
             // DrawText(Ex) adds a small space at the beginning of the text bounding box but not at the end,
             // this is more noticeable when the font has the italic style.  We compensate with this factor.
@@ -302,7 +301,11 @@ namespace System.Windows.Forms.Internal
 
             }
 
-            return new IntNativeMethods.DRAWTEXTPARAMS(leftMargin, rightMargin);
+            return new Interop.User32.DRAWTEXTPARAMS
+            {
+                iLeftMargin = leftMargin,
+                iRightMargin = rightMargin
+            };
         }
 
         /// <summary>
@@ -320,14 +323,12 @@ namespace System.Windows.Forms.Internal
             }
 
             Size size = new Size();
-            HandleRef hdc = new HandleRef(null, dc.Hdc);
-
             if (font != null)
             {
                 dc.SelectFont(font);
             }
 
-            IntUnsafeNativeMethods.GetTextExtentPoint32W(hdc, text, text.Length, ref size);
+            Interop.Gdi32.GetTextExtentPoint32W(dc.Hdc, text, text.Length, ref size);
 
             // Unselect, but not from Measurement DC as it keeps the same
             // font selected for perf reasons.
@@ -345,7 +346,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Size MeasureText(string text, WindowsFont font)
         {
-            return MeasureText(text, font, MaxSize, IntTextFormatFlags.Default);
+            return MeasureText(text, font, MaxSize, Interop.User32.TextFormatFlags.DT_BOTTOM);
         }
 
         /// <summary>
@@ -355,7 +356,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Size MeasureText(string text, WindowsFont font, Size proposedSize)
         {
-            return MeasureText(text, font, proposedSize, IntTextFormatFlags.Default);
+            return MeasureText(text, font, proposedSize, Interop.User32.TextFormatFlags.DT_BOTTOM);
         }
 
         /// <summary>
@@ -374,7 +375,7 @@ namespace System.Windows.Forms.Internal
         ///  - This function assumes that the text is horizontal, that is, that the escapement is always 0. This is true for both
         ///  the horizontal and vertical measurements of the text.  The application must convert it explicitly.
         /// </summary>
-        public Size MeasureText(string text, WindowsFont font, Size proposedSize, IntTextFormatFlags flags)
+        public Size MeasureText(string text, WindowsFont font, Size proposedSize, Interop.User32.TextFormatFlags flags)
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
 
@@ -383,31 +384,27 @@ namespace System.Windows.Forms.Internal
                 return Size.Empty;
             }
 
-            //
             // DrawText returns a rectangle useful for aligning, but not guaranteed to encompass all
             // pixels (its not a FitBlackBox, if the text is italicized, it will overhang on the right.)
             // So we need to account for this.
-            //
-            IntNativeMethods.DRAWTEXTPARAMS dtparams = null;
-
 #if OPTIMIZED_MEASUREMENTDC
+            Interop.User32.DRAWTEXTPARAMS dtparams;
             // use the cache if we've got it
             if (MeasurementDCInfo.IsMeasurementDC(DeviceContext))
             {
                 dtparams = MeasurementDCInfo.GetTextMargins(this, font);
             }
-#endif
-
-            if (dtparams == null)
+            else
             {
                 dtparams = GetTextMargins(font);
             }
+#else
 
-            //
+            Interop.User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
+#endif
+
             // If Width / Height are < 0, we need to make them larger or DrawText will return
             // an unbounded measurement when we actually trying to make it very narrow.
-            //
-
             int minWidth = 1 + dtparams.iLeftMargin + dtparams.iRightMargin;
 
             if (proposedSize.Width <= minWidth)
@@ -419,48 +416,37 @@ namespace System.Windows.Forms.Internal
                 proposedSize.Height = 1;
             }
 
-            IntNativeMethods.RECT rect = IntNativeMethods.RECT.FromXYWH(0, 0, proposedSize.Width, proposedSize.Height);
-
-            HandleRef hdc = new HandleRef(null, dc.Hdc);
-
+            var rect = new Interop.RECT(0, 0, proposedSize.Width, proposedSize.Height);
             if (font != null)
             {
                 dc.SelectFont(font);
             }
 
-            // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SingleLine and
-            // VerticalCenter or Bottom options, DrawTextEx does not bind the rectangle to the actual text height since
-            // it assumes the text is to be vertically aligned; we need to clear the VerticalCenter and Bottom flags to
+            // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain DT_SINGLELINE and
+            // DT_VCENTER or DT_BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
+            // it assumes the text is to be vertically aligned; we need to clear the DT_VCENTER and DT_BOTTOM flags to
             // get the actual text bounds.
-            if (proposedSize.Height >= MaxSize.Height && (flags & IntTextFormatFlags.SingleLine) != 0)
+            if (proposedSize.Height >= MaxSize.Height && (flags & Interop.User32.TextFormatFlags.DT_SINGLELINE) != 0)
             {
                 // Clear vertical-alignment flags.
-                flags &= ~(IntTextFormatFlags.Bottom | IntTextFormatFlags.VerticalCenter);
+                flags &= ~(Interop.User32.TextFormatFlags.DT_BOTTOM | Interop.User32.TextFormatFlags.DT_VCENTER);
             }
 
             if (proposedSize.Width == MaxSize.Width)
             {
                 // PERF: No constraining width means no word break.
                 // in this case, we dont care about word wrapping - there should be enough room to fit it all
-                flags &= ~(IntTextFormatFlags.WordBreak);
+                flags &= ~(Interop.User32.TextFormatFlags.DT_WORDBREAK);
             }
 
-            flags |= IntTextFormatFlags.CalculateRectangle;
-            IntUnsafeNativeMethods.DrawTextEx(hdc, text, ref rect, (int)flags, dtparams);
-
-            /* No need to restore previous objects into the dc (see comments on top of the class).
-             *
-            if( hOldFont != IntPtr.Zero )
-            {
-                this.dc.SelectObject(hOldFont);
-            }
-            */
+            flags |= Interop.User32.TextFormatFlags.DT_CALCRECT;
+            Interop.User32.DrawTextExW(dc.Hdc, text, text.Length, ref rect, flags, ref dtparams);
 
             return rect.Size;
         }
 
         /// <summary>
-        ///  The GDI DrawText does not do multiline alignment when IntTextFormatFlags.SingleLine is not set. This
+        ///  The GDI DrawText does not do multiline alignment when Interop.User32.TextFormatFlags.DT_SINGLELINE is not set. This
         ///  adjustment is to workaround that limitation. We don't want to duplicate SelectObject calls here,
         ///  so put your Font in the dc before calling this.
         ///
@@ -470,22 +456,22 @@ namespace System.Windows.Forms.Internal
         ///  If the text is multiline and it does not fit inside the bounds passed in, then return the bounds that were passed in.
         ///  This way we paint the top of the text at the top of the bounds passed in.
         /// </summary>
-        public static Rectangle AdjustForVerticalAlignment(HandleRef hdc, string text, Rectangle bounds, IntTextFormatFlags flags, IntNativeMethods.DRAWTEXTPARAMS dtparams)
+        public static Rectangle AdjustForVerticalAlignment(HandleRef hdc, string text, Rectangle bounds, Interop.User32.TextFormatFlags flags, ref Interop.User32.DRAWTEXTPARAMS dtparams)
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
 
-            // Ok if any Top (Cannot test IntTextFormatFlags.Top because it is 0), single line text or measuring text.
-            bool isTop = (flags & IntTextFormatFlags.Bottom) == 0 && (flags & IntTextFormatFlags.VerticalCenter) == 0;
-            if (isTop || ((flags & IntTextFormatFlags.SingleLine) != 0) || ((flags & IntTextFormatFlags.CalculateRectangle) != 0))
+            // Ok if any Top (Cannot test Interop.User32.TextFormatFlags.Top because it is 0), single line text or measuring text.
+            bool isTop = (flags & Interop.User32.TextFormatFlags.DT_BOTTOM) == 0 && (flags & Interop.User32.TextFormatFlags.DT_VCENTER) == 0;
+            if (isTop || ((flags & Interop.User32.TextFormatFlags.DT_SINGLELINE) != 0) || ((flags & Interop.User32.TextFormatFlags.DT_CALCRECT) != 0))
             {
                 return bounds;
             }
 
-            IntNativeMethods.RECT rect = new IntNativeMethods.RECT(bounds);
+            Interop.RECT rect = new Interop.RECT(bounds);
 
             // Get the text bounds.
-            flags |= IntTextFormatFlags.CalculateRectangle;
-            int textHeight = IntUnsafeNativeMethods.DrawTextEx(hdc, text, ref rect, (int)flags, dtparams);
+            flags |= Interop.User32.TextFormatFlags.DT_CALCRECT;
+            int textHeight = Interop.User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
 
             // if the text does not fit inside the bounds then return the bounds that were passed in
             if (textHeight > bounds.Height)
@@ -495,7 +481,7 @@ namespace System.Windows.Forms.Internal
 
             Rectangle adjustedBounds = bounds;
 
-            if ((flags & IntTextFormatFlags.VerticalCenter) != 0)  // Middle
+            if ((flags & Interop.User32.TextFormatFlags.DT_VCENTER) != 0)  // Middle
             {
                 adjustedBounds.Y = adjustedBounds.Top + adjustedBounds.Height / 2 - textHeight / 2;
             }
@@ -532,7 +518,7 @@ namespace System.Windows.Forms.Internal
                 rasterOp = dc.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
             }
 
-            IntUnsafeNativeMethods.SelectObject(hdc, new HandleRef(null, IntUnsafeNativeMethods.GetStockObject(IntNativeMethods.HOLLOW_BRUSH)));
+            Interop.Gdi32.SelectObject(hdc, Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH));
             // Add 1 to widht and height to create the 'bounding box' (convert from point to size).
             IntUnsafeNativeMethods.Rectangle(hdc, x, y, x + width, y + height);
 
@@ -555,7 +541,7 @@ namespace System.Windows.Forms.Internal
 
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
             IntPtr hBrush = brush.HBrush;  // We don't delete this handle since we didn't create it.
-            IntNativeMethods.RECT rect = new IntNativeMethods.RECT(x, y, x + width, y + height);
+            Interop.RECT rect = new Interop.RECT(x, y, x + width, y + height);
 
             IntUnsafeNativeMethods.FillRect(hdc, ref rect, new HandleRef(brush, hBrush));
         }

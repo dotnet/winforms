@@ -69,8 +69,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Common\src\Interop\Interop.Libraries.cs">
+      <Link>Interop.Libraries.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs">
       <Link>Interop.WindowMessages.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs">
+      <Link>Gdi32\Interop.GetDeviceCaps.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Common\src\Interop\User32\Interop.GetDC.cs">
+      <Link>User32\Interop.GetDC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs">
+      <Link>User32\Interop.ReleaseDC.cs</Link>
     </Compile>
     <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\ExternalTestHelpers.cs">
       <Link>ExternalTestHelpers.cs</Link>

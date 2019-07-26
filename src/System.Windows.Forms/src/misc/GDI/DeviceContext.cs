@@ -149,10 +149,10 @@ namespace System.Windows.Forms.Internal
         private void CacheInitialState()
         {
             Debug.Assert(hDC != IntPtr.Zero, "Cannot get initial state without a valid HDC");
-            hCurrentPen = hInitialPen = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(this, hDC), IntNativeMethods.OBJ_PEN);
-            hCurrentBrush = hInitialBrush = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(this, hDC), IntNativeMethods.OBJ_BRUSH);
-            hCurrentBmp = hInitialBmp = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(this, hDC), IntNativeMethods.OBJ_BITMAP);
-            hCurrentFont = hInitialFont = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(this, hDC), IntNativeMethods.OBJ_FONT);
+            hCurrentPen = hInitialPen = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_PEN);
+            hCurrentBrush = hInitialBrush = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_BRUSH);
+            hCurrentBmp = hInitialBmp = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_BITMAP);
+            hCurrentFont = hInitialFont = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_FONT);
         }
 
         public void DeleteObject(IntPtr handle, GdiObjectType type)
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Pen:
                     if (handle == hCurrentPen)
                     {
-                        IntPtr currentPen = IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialPen));
+                        IntPtr currentPen = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialPen));
                         Debug.Assert(currentPen == hCurrentPen, "DeviceContext thinks a different pen is selected than the HDC");
                         hCurrentPen = IntPtr.Zero;
                     }
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Brush:
                     if (handle == hCurrentBrush)
                     {
-                        IntPtr currentBrush = IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialBrush));
+                        IntPtr currentBrush = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialBrush));
                         Debug.Assert(currentBrush == hCurrentBrush, "DeviceContext thinks a different brush is selected than the HDC");
                         hCurrentBrush = IntPtr.Zero;
                     }
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Bitmap:
                     if (handle == hCurrentBmp)
                     {
-                        IntPtr currentBmp = IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialBmp));
+                        IntPtr currentBmp = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialBmp));
                         Debug.Assert(currentBmp == hCurrentBmp, "DeviceContext thinks a different brush is selected than the HDC");
                         hCurrentBmp = IntPtr.Zero;
                     }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.Internal
 
             if (dcType == DeviceContextType.Display)
             {
-                hWnd = IntUnsafeNativeMethods.WindowFromDC(new HandleRef(this, this.hDC));
+                hWnd = Interop.User32.WindowFromDC(new HandleRef(this, this.hDC));
             }
 #if TRACK_HDC
             Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DeviceContext( hDC=0x{0:X8}, Type={1} )", unchecked((int) hDC), dcType) ));
@@ -363,33 +363,13 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                 int retVal =
 #endif
-                Interop.Gdi32.ReleaseDC(new HandleRef(this, hWnd), new HandleRef(this, hDC));
+                Interop.User32.ReleaseDC(new HandleRef(this, hWnd), new HandleRef(this, hDC));
                 // Note: retVal == 0 means it was not released but doesn't necessarily means an error; class or private DCs are never released.
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("[ret={0}]=DC.ReleaseDC(hDc=0x{1:x8}, hWnd=0x{2:x8})", retVal, unchecked((int) this.hDC), unchecked((int) this.hWnd))));
 #endif
                 hDC = IntPtr.Zero;
             }
-        }
-
-        /// <summary>
-        ///  Specifies whether the DC is in GM_ADVANCE mode (supported only in NT platforms).
-        ///  If false, it is in GM_COMPATIBLE mode.
-        /// </summary>
-        public DeviceContextGraphicsMode GraphicsMode
-        {
-            get
-            {
-                return (DeviceContextGraphicsMode)IntUnsafeNativeMethods.GetGraphicsMode(new HandleRef(this, Hdc));
-            }
-        }
-
-        /// <summary>
-        ///  Sets the dc graphics mode and returns the old value.
-        /// </summary>
-        public DeviceContextGraphicsMode SetGraphicsMode(DeviceContextGraphicsMode newMode)
-        {
-            return (DeviceContextGraphicsMode)IntUnsafeNativeMethods.SetGraphicsMode(new HandleRef(this, Hdc), unchecked((int)newMode));
         }
 
         /// <summary>
@@ -409,7 +389,7 @@ namespace System.Windows.Forms.Internal
             bool result =
 #endif
             // Note: Don't use the Hdc property here, it would force handle creation.
-            IntUnsafeNativeMethods.RestoreDC(new HandleRef(this, hDC), -1);
+            Interop.Gdi32.RestoreDC(new HandleRef(this, hDC), -1);
 #if TRACK_HDC
             // Note: Winforms may call this method during app exit at which point the DC may have been finalized already causing this assert to popup.
             Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("ret[0]=DC.RestoreHdc(hDc=0x{1:x8})", result, unchecked((int) this.hDC)) ));
@@ -460,7 +440,7 @@ namespace System.Windows.Forms.Internal
         public int SaveHdc()
         {
             HandleRef hdc = new HandleRef(this, Hdc);
-            int state = IntUnsafeNativeMethods.SaveDC(hdc);
+            int state = Interop.Gdi32.SaveDC(hdc);
 
             if (contextStack == null)
             {
@@ -494,8 +474,7 @@ namespace System.Windows.Forms.Internal
         {
             HandleRef hdc = new HandleRef(this, Hdc);
             HandleRef hRegion = new HandleRef(region, region.HRegion);
-
-            IntUnsafeNativeMethods.SelectClipRgn(hdc, hRegion);
+            Interop.Gdi32.SelectClipRgn(hdc, hRegion);
         }
 
         ///<summary>
@@ -513,13 +492,13 @@ namespace System.Windows.Forms.Internal
             WindowsRegion clip = new WindowsRegion(0, 0, 0, 0);
             try
             {
-                int result = IntUnsafeNativeMethods.GetClipRgn(new HandleRef(this, Hdc), new HandleRef(clip, clip.HRegion));
+                int result = Interop.Gdi32.GetClipRgn(new HandleRef(this, Hdc), new HandleRef(clip, clip.HRegion));
 
                 // If the function succeeds and there is a clipping region for the given device context, the return value is 1.
                 if (result == 1)
                 {
                     Debug.Assert(clip.HRegion != IntPtr.Zero);
-                    wr.CombineRegion(clip, wr, RegionCombineMode.AND); //1 = AND (or Intersect)
+                    wr.CombineRegion(clip, wr, Interop.Gdi32.CombineMode.RGN_AND);
                 }
 
                 SetClip(wr);
@@ -535,8 +514,8 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public void TranslateTransform(int dx, int dy)
         {
-            Point origin = new Point();
-            IntUnsafeNativeMethods.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, ref origin);
+            var origin = new Point();
+            Interop.Gdi32.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, ref origin);
         }
 
         public override bool Equals(object obj)

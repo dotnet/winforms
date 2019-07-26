@@ -4444,7 +4444,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 s = gridEntry.GetPropertyTextValue(rgItems[i]);
                                 DropDownListBox.Items.Add(s);
-                                IntUnsafeNativeMethods.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), s, s.Length, ref textSize);
+                                Interop.Gdi32.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), s, s.Length, ref textSize);
                                 maxWidth = Math.Max(textSize.Width, maxWidth);
                             }
                         }
@@ -4458,7 +4458,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     finally
                     {
                         Interop.Gdi32.DeleteObject(hFont);
-                        Interop.Gdi32.ReleaseDC(new HandleRef(DropDownListBox, DropDownListBox.Handle), hdc);
+                        Interop.User32.ReleaseDC(new HandleRef(DropDownListBox, DropDownListBox.Handle), hdc);
                     }
 
                     // Microsoft, 4/25/1998 - must check for -1 and not call the set...

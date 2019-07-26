@@ -128,13 +128,12 @@ namespace System.Windows.Forms
 
         private IntPtr GetCompatibleBitmap(Bitmap bm)
         {
+            using ScreenDC hDC = ScreenDC.Create();
+
             // GDI+ returns a DIBSECTION based HBITMAP. The clipboard deals well
             // only with bitmaps created using CreateCompatibleBitmap(). So, we
             // convert the DIBSECTION into a compatible bitmap.
             IntPtr hBitmap = bm.GetHbitmap();
-
-            // Get the screen DC.
-            IntPtr hDC = Interop.User32.GetDC(IntPtr.Zero);
 
             // Create a compatible DC to render the source bitmap.
             IntPtr dcSrc = Interop.Gdi32.CreateCompatibleDC(hDC);
@@ -154,7 +153,6 @@ namespace System.Windows.Forms
 
             Interop.Gdi32.DeleteDC(dcSrc);
             Interop.Gdi32.DeleteDC(dcDest);
-            Interop.Gdi32.ReleaseDC(IntPtr.Zero, hDC);
 
             return hBitmapNew;
         }

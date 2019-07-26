@@ -6467,10 +6467,8 @@ namespace System.Windows.Forms
                 SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(BackColor));
                 return BackColorBrush;
             }
-            else
-            {
-                return UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH);
-            }
+            
+            return Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH);
         }
 
         /// <summary>
@@ -9463,7 +9461,7 @@ namespace System.Windows.Forms
 
         private void PrintToMetaFile(HandleRef hDC, IntPtr lParam)
         {
-            Debug.Assert(UnsafeNativeMethods.GetObjectType(hDC) == NativeMethods.OBJ_ENHMETADC,
+            Debug.Assert(Interop.Gdi32.GetObjectType(hDC) == Interop.Gdi32.ObjectType.OBJ_ENHMETADC,
                 "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
             Debug.Assert(((long)lParam & NativeMethods.PRF_CHILDREN) != 0,
                 "PrintToMetaFile() called without PRF_CHILDREN.");
@@ -13047,7 +13045,7 @@ namespace System.Windows.Forms
             finally
             {
                 // Let WmPaletteChanged do any necessary invalidation
-                Interop.Gdi32.ReleaseDC(new HandleRef(this, Handle), dc);
+                Interop.User32.ReleaseDC(new HandleRef(this, Handle), dc);
             }
             Invalidate(true);
             m.Result = (IntPtr)1;

@@ -93,9 +93,9 @@ namespace System.Windows.Forms.Internal
         ///  Combines region1 & region2 into this region.   The regions cannot be null.
         ///  The three regions need not be distinct. For example, the sourceRgn1 can equal this region.
         /// </summary>
-        public IntNativeMethods.RegionFlags CombineRegion(WindowsRegion region1, WindowsRegion region2, RegionCombineMode mode)
+        public Interop.RegionType CombineRegion(WindowsRegion region1, WindowsRegion region2, Interop.Gdi32.CombineMode mode)
         {
-            return IntUnsafeNativeMethods.CombineRgn(new HandleRef(this, HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
+            return Interop.Gdi32.CombineRgn(new HandleRef(this, HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
         }
 
         private void CreateRegion(Rectangle rect)
@@ -164,10 +164,9 @@ namespace System.Windows.Forms.Internal
                 return new Rectangle(-int.MaxValue, -int.MaxValue, int.MaxValue, int.MaxValue);
             }
 
-            IntNativeMethods.RECT rect = new IntNativeMethods.RECT();
-            IntUnsafeNativeMethods.GetRgnBox(new HandleRef(this, nativeHandle), ref rect);
+            var rect = new Interop.RECT();
+            Interop.Gdi32.GetRgnBox(new HandleRef(this, nativeHandle), ref rect);
             return new Rectangle(new Point(rect.left, rect.top), rect.Size);
         }
     }
 }
-

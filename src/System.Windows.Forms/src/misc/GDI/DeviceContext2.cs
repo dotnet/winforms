@@ -92,41 +92,23 @@ namespace System.Windows.Forms.Internal
             return (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.SetROP2(new HandleRef(this, Hdc), (int)rasterOperation);
         }
 
-        ///<summary>
-        ///  Get the number of pixels per logical inch along the device axes.
-        ///  In a system with multiple display monitors, this value is the same for all monitors.
-        ///</summary>
-        public Size Dpi
-        {
-            get
-            {
-                return new Size(GetDeviceCapabilities(DeviceCapabilities.LogicalPixelsX), GetDeviceCapabilities(DeviceCapabilities.LogicalPixelsY));
-            }
-        }
+        /// <summary>
+        /// Get the number of pixels per logical inch along the device axes. In a system with multiple display
+        /// monitors, this value is the same for all monitors.
+        /// </summary>
+        public Size Dpi => new Size(DpiX, DpiY);
 
-        ///<summary>
-        ///  Get the number of pixels per logical inch along the device width.
-        ///  In a system with multiple display monitors, this value is the same for all monitors.
-        ///</summary>
-        public int DpiX
-        {
-            get
-            {
-                return GetDeviceCapabilities(DeviceCapabilities.LogicalPixelsX);
-            }
-        }
+        /// <summary>
+        /// Get the number of pixels per logical inch along the device width. In a system with multiple display
+        /// monitors, this value is the same for all monitors.
+        /// </summary>
+        public int DpiX => Interop.Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSX);
 
-        ///<summary>
-        ///  Get the number of pixels per logical inch along the device (screen) height.
-        ///  In a system with multiple display monitors, this value is the same for all monitors.
-        ///</summary>
-        public int DpiY
-        {
-            get
-            {
-                return GetDeviceCapabilities(DeviceCapabilities.LogicalPixelsY);
-            }
-        }
+        /// <summary>
+        /// Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
+        /// display monitors, this value is the same for all monitors.
+        /// </summary>
+        public int DpiY => Interop.Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSY);
 
         /// <summary>
         ///  The font selected into the device context.
@@ -187,11 +169,11 @@ namespace System.Windows.Forms.Internal
 
             if (selectedFont != null && selectedFont.Hfont != IntPtr.Zero)
             {
-                IntPtr hCurrentFont = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(this, hDC), IntNativeMethods.OBJ_FONT);
+                IntPtr hCurrentFont = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_FONT);
                 if (hCurrentFont == selectedFont.Hfont)
                 {
                     // select initial font back in
-                    IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(null, hInitialFont));
+                    Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
                     hCurrentFont = hInitialFont;
                 }
 
@@ -258,17 +240,9 @@ namespace System.Windows.Forms.Internal
             // we need to clear it off.
             MeasurementDCInfo.ResetIfIsMeasurementDC(Hdc);
 #endif
-            IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(null, hInitialFont));
+            Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
             selectedFont = null;
             hCurrentFont = hInitialFont;
-        }
-
-        /// <summary>
-        ///  Retrieves device-specific information for this device.
-        /// </summary>
-        public int GetDeviceCapabilities(DeviceCapabilities capabilityIndex)
-        {
-            return IntUnsafeNativeMethods.GetDeviceCaps(new HandleRef(this, Hdc), (int)capabilityIndex);
         }
 
         /// <summary>
@@ -326,7 +300,7 @@ namespace System.Windows.Forms.Internal
                     hCurrentBmp = hObj;
                     break;
             }
-            return IntUnsafeNativeMethods.SelectObject(new HandleRef(this, Hdc), new HandleRef(null, hObj));
+            return Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hObj);
         }
 
         /// <summary>

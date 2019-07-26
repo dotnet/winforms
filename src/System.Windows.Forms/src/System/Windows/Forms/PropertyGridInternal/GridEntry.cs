@@ -2475,7 +2475,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Matrix m = g.Transform;
                 IntPtr hdc = g.GetHdc();
-                IntNativeMethods.RECT lpRect = IntNativeMethods.RECT.FromXYWH(rect.X + (int)m.OffsetX + 2, rect.Y + (int)m.OffsetY - 1, rect.Width - 4, rect.Height);
+                Interop.RECT lpRect = new Rectangle(rect.X + (int)m.OffsetX + 2, rect.Y + (int)m.OffsetY - 1, rect.Width - 4, rect.Height);
                 IntPtr hfont = GetHfont(valueModified);
 
                 int oldTextColor = 0;
@@ -2488,10 +2488,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     oldTextColor = SafeNativeMethods.SetTextColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(textColor.ToArgb()));
                     oldBkColor = SafeNativeMethods.SetBkColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(bkColor.ToArgb()));
                     hfont = Interop.Gdi32.SelectObject(hdc, hfont);
-                    int format = IntNativeMethods.DT_EDITCONTROL | IntNativeMethods.DT_EXPANDTABS | IntNativeMethods.DT_NOCLIP | IntNativeMethods.DT_SINGLELINE | IntNativeMethods.DT_NOPREFIX;
+                    Interop.User32.TextFormatFlags format = Interop.User32.TextFormatFlags.DT_EDITCONTROL | Interop.User32.TextFormatFlags.DT_EXPANDTABS | Interop.User32.TextFormatFlags.DT_NOCLIP | Interop.User32.TextFormatFlags.DT_SINGLELINE | Interop.User32.TextFormatFlags.DT_NOPREFIX;
                     if (gridHost.DrawValuesRightToLeft)
                     {
-                        format |= IntNativeMethods.DT_RIGHT | IntNativeMethods.DT_RTLREADING;
+                        format |= Interop.User32.TextFormatFlags.DT_RIGHT | Interop.User32.TextFormatFlags.DT_RTLREADING;
                     }
 
                     // For password mode, replace the string value with a bullet.
@@ -2506,7 +2506,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         strValue = new string(passwordReplaceChar, strValue.Length);
                     }
 
-                    IntUnsafeNativeMethods.DrawText(new HandleRef(g, hdc), strValue, ref lpRect, format);
+                    Interop.User32.DrawTextW(new HandleRef(g, hdc), strValue, strValue.Length, ref lpRect, format);
                 }
                 finally
                 {

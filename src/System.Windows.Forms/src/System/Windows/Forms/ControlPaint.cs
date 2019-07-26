@@ -305,7 +305,7 @@ namespace System.Windows.Forms
             IntPtr hdcS = Interop.User32.GetDC(IntPtr.Zero);
             IntPtr source = Interop.Gdi32.CreateCompatibleDC(hdcS);
             IntPtr target = Interop.Gdi32.CreateCompatibleDC(hdcS);
-            Interop.Gdi32.ReleaseDC(IntPtr.Zero, hdcS);
+            Interop.User32.ReleaseDC(IntPtr.Zero, hdcS);
             IntPtr previousSourceBitmap = Interop.Gdi32.SelectObject(source, monochromeMask);
             IntPtr previousTargetBitmap = Interop.Gdi32.SelectObject(target, colorMask);
 
@@ -1994,7 +1994,7 @@ namespace System.Windows.Forms
             }
 
             int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
-            IntPtr oldBrush = Interop.Gdi32.SelectObject(dc, UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH));
+            IntPtr oldBrush = Interop.Gdi32.SelectObject(dc, Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Interop.Gdi32.SelectObject(dc, pen);
             SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(graphicsColor));
             SafeNativeMethods.Rectangle(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
@@ -2008,7 +2008,7 @@ namespace System.Windows.Forms
                 Interop.Gdi32.DeleteObject(pen);
             }
 
-            Interop.Gdi32.ReleaseDC(IntPtr.Zero, dc);
+            Interop.User32.ReleaseDC(IntPtr.Zero, dc);
         }
 
         /// <summary>
@@ -2025,7 +2025,7 @@ namespace System.Windows.Forms
             IntPtr pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(backColor));
 
             int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
-            IntPtr oldBrush = Interop.Gdi32.SelectObject(dc, UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH));
+            IntPtr oldBrush = Interop.Gdi32.SelectObject(dc, Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Interop.Gdi32.SelectObject(dc, pen);
 
             SafeNativeMethods.MoveToEx(new HandleRef(null, dc), start.X, start.Y, null);
@@ -2035,7 +2035,7 @@ namespace System.Windows.Forms
             Interop.Gdi32.SelectObject(dc, oldBrush);
             Interop.Gdi32.SelectObject(dc, oldPen);
             Interop.Gdi32.DeleteObject(pen);
-            Interop.Gdi32.ReleaseDC(IntPtr.Zero, dc);
+            Interop.User32.ReleaseDC(IntPtr.Zero, dc);
         }
 
         /// <summary>
@@ -2226,7 +2226,7 @@ namespace System.Windows.Forms
             SafeNativeMethods.SetROP2(dc, prevRop2);
             Interop.Gdi32.SelectObject(dc, oldBrush);
             Interop.Gdi32.DeleteObject(brush);
-            Interop.Gdi32.ReleaseDC(IntPtr.Zero, dc);
+            Interop.User32.ReleaseDC(IntPtr.Zero, dc);
         }
 
         // Converts the font into one where Font.Unit = Point.

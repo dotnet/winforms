@@ -20,14 +20,6 @@ namespace WinformsControlsTest
         {
             InitializeComponent();
         }
-        [DllImport("gdi32", ExactSpelling = true)]
-        internal static extern int GetDeviceCaps(HandleRef hDC, int index);
-
-        [DllImport("user32", ExactSpelling = true)]
-        internal static extern IntPtr GetDC(HandleRef hWnd);
-
-        [DllImport("user32", ExactSpelling = true)]
-        internal static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
 
         [DllImport("User32", ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
@@ -47,13 +39,13 @@ namespace WinformsControlsTest
         {
             x = LogicalDpi;
             y = LogicalDpi;
-            IntPtr hDC = GetDC(handleRef);
+            IntPtr hDC = Interop.User32.GetDC(handleRef);
             if (hDC != IntPtr.Zero)
             {
-                x = GetDeviceCaps(new HandleRef(null, hDC), LOGPIXELSX);
-                y = GetDeviceCaps(new HandleRef(null, hDC), LOGPIXELSY);
+                x = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+                y = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
 
-                ReleaseDC(handleRef, new HandleRef(null, hDC));
+                Interop.User32.ReleaseDC(handleRef, new HandleRef(null, hDC));
             }
         }
 

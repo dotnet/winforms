@@ -11,5 +11,12 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern RegionType GetRgnBox(IntPtr hRegion, ref RECT clipRect);
+
+        public static RegionType GetRgnBox(HandleRef hRegion, ref RECT clipRect)
+        {
+            RegionType result = GetRgnBox(hRegion.Handle, ref clipRect);
+            GC.KeepAlive(hRegion.Wrapper);
+            return result;
+        }
     }
 }

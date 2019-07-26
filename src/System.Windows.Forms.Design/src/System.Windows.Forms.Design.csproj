@@ -50,7 +50,6 @@
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateRectRgn.cs" Link="Interop\Gdi32\Interop.CreateRectRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
-    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.ReleaseDC.cs" Link="Interop\Gdi32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
@@ -60,6 +59,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">
