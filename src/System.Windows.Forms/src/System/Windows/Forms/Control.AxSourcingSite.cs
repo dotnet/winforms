@@ -33,31 +33,27 @@ namespace System.Windows.Forms
 
             public object GetService(Type service)
             {
-                object retVal = null;
-
                 if (service == typeof(HtmlDocument))
                 {
-
                     int hr = _clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer iOlecontainer);
 
                     if (NativeMethods.Succeeded(hr)
-                            && (iOlecontainer is UnsafeNativeMethods.IHTMLDocument))
+                        && (iOlecontainer is UnsafeNativeMethods.IHTMLDocument))
                     {
                         if (_shimManager == null)
                         {
                             _shimManager = new HtmlShimManager();
                         }
 
-                        retVal = new HtmlDocument(_shimManager, iOlecontainer as UnsafeNativeMethods.IHTMLDocument);
+                        return new HtmlDocument(_shimManager, iOlecontainer as UnsafeNativeMethods.IHTMLDocument);
                     }
-
                 }
                 else if (_clientSite.GetType().IsAssignableFrom(service))
                 {
-                    retVal = _clientSite;
+                    return _clientSite;
                 }
 
-                return retVal;
+                return null;
             }
 
             /// <summary>
@@ -70,7 +66,7 @@ namespace System.Windows.Forms
             /// </summary>
             public string Name
             {
-                get { return _name; }
+                get => _name;
                 set
                 {
                     if (value == null || _name == null)

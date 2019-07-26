@@ -20,12 +20,8 @@ namespace System.Windows.Forms
         {
             private static IntPtr s_oleAccAvailable = NativeMethods.InvalidIntPtr;
 
-            // Member variables
-
             private IntPtr _handle = IntPtr.Zero; // Associated window handle (if any)
-            private int[] _runtimeId = null; // Used by UIAutomation
-
-            // constructors
+            private int[] _runtimeId = null;      // Used by UIAutomation
 
             public ControlAccessibleObject(Control ownerControl)
             {
@@ -54,14 +50,8 @@ namespace System.Windows.Forms
             ///  that is usually the reverse of tab order!
             /// </summary>
             internal override int[] GetSysChildOrder()
-            {
-                if (Owner.GetStyle(ControlStyles.ContainerControl))
-                {
-                    return Owner.GetChildWindowsInTabOrder();
-                }
-
-                return base.GetSysChildOrder();
-            }
+                => Owner.GetStyle(ControlStyles.ContainerControl)
+                    ? Owner.GetChildWindowsInTabOrder() : base.GetSysChildOrder();
 
             /// <summary>
             ///  Perform custom navigation between parent/child/sibling accessible objects,
@@ -166,20 +156,7 @@ namespace System.Windows.Forms
             }
 
             public override string DefaultAction
-            {
-                get
-                {
-                    string defaultAction = Owner.AccessibleDefaultActionDescription;
-                    if (defaultAction != null)
-                    {
-                        return defaultAction;
-                    }
-                    else
-                    {
-                        return base.DefaultAction;
-                    }
-                }
-            }
+                => Owner.AccessibleDefaultActionDescription ?? base.DefaultAction;
 
             // This is used only if control supports IAccessibleEx
             internal override int[] RuntimeId
@@ -188,9 +165,7 @@ namespace System.Windows.Forms
                 {
                     if (_runtimeId == null)
                     {
-                        _runtimeId = new int[2];
-                        _runtimeId[0] = 0x2a;
-                        _runtimeId[1] = (int)(long)Handle;
+                        _runtimeId = new int[] { 0x2a, (int)(long)Handle };
                     }
 
                     return _runtimeId;
@@ -198,59 +173,46 @@ namespace System.Windows.Forms
             }
 
             public override string Description
-            {
-                get
-                {
-                    string description = Owner.AccessibleDescription;
-                    if (description != null)
-                    {
-                        return description;
-                    }
-                    else
-                    {
-                        return base.Description;
-                    }
-                }
-            }
+                => Owner.AccessibleDescription ?? base.Description;
 
             public IntPtr Handle
             {
-                get
-                {
-                    return _handle;
-                }
+                get => _handle;
                 set
                 {
-                    if (_handle != value)
+                    if (_handle == value)
                     {
-                        _handle = value;
+                        return;
+                    }
 
-                        if (s_oleAccAvailable == IntPtr.Zero)
-                        {
-                            return;
-                        }
+                    _handle = value;
 
-                        bool freeLib = false;
+                    if (s_oleAccAvailable == IntPtr.Zero)
+                    {
+                        return;
+                    }
 
-                        if (s_oleAccAvailable == NativeMethods.InvalidIntPtr)
-                        {
-                            s_oleAccAvailable = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
-                            freeLib = (s_oleAccAvailable != IntPtr.Zero);
-                        }
+                    bool freeLib = false;
 
-                        // Update systemIAccessible
-                        // We need to store internally the system provided
-                        // IAccessible, because some windows forms controls use it
-                        // as the default IAccessible implementation.
-                        if (_handle != IntPtr.Zero && s_oleAccAvailable != IntPtr.Zero)
-                        {
-                            UseStdAccessibleObjects(_handle);
-                        }
+                    if (s_oleAccAvailable == NativeMethods.InvalidIntPtr)
+                    {
+                        s_oleAccAvailable = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
+                        freeLib = (s_oleAccAvailable != IntPtr.Zero);
+                    }
 
-                        if (freeLib)
-                        {
-                            Interop.Kernel32.FreeLibrary(s_oleAccAvailable);
-                        }
+                    // Update systemIAccessible
+                    //
+                    // We need to store internally the system provided
+                    // IAccessible, because some windows forms controls use it
+                    // as the default IAccessible implementation.
+                    if (_handle != IntPtr.Zero && s_oleAccAvailable != IntPtr.Zero)
+                    {
+                        UseStdAccessibleObjects(_handle);
+                    }
+
+                    if (freeLib)
+                    {
+                        Interop.Kernel32.FreeLibrary(s_oleAccAvailable);
                     }
                 }
             }
@@ -310,13 +272,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return base.Parent;
-                }
-            }
+            public override AccessibleObject Parent => base.Parent;
 
             // Determine the text that should be used to 'label' this control for accessibility purposes.
             //
@@ -386,9 +342,9 @@ namespace System.Windows.Forms
                     {
 
                         // Stop when we hit a Label (whether visible or invisible)
-                        if (previous is Label)
+                        if (previous is Label label)
                         {
-                            return previous as Label;
+                            return label;
                         }
 
                         // Stop at any *visible* tab stop
@@ -407,15 +363,8 @@ namespace System.Windows.Forms
                 get
                 {
                     AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    else
-                    {
-                        return base.Role;
-                    }
-
+                    return role != AccessibleRole.Default
+                        ? role : base.Role;
                 }
             }
 
@@ -436,12 +385,8 @@ namespace System.Windows.Forms
                     {
                         topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
                     }
-                    catch (Exception e)
+                    catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                     {
-                        if (ClientUtils.IsSecurityOrCriticalException(e))
-                        {
-                            throw;
-                        }
                     }
 
                     return topic;
@@ -454,30 +399,24 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  ToString() + ", accEvent = " + accEvent.ToString() + ", childID = self");
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
+                    $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = self");
 
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, 0);
             }
 
             public void NotifyClients(AccessibleEvents accEvent, int childID)
             {
-
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  ToString() +
-                                  ", accEvent = " + accEvent.ToString() +
-                                  ", childID = " + childID.ToString(CultureInfo.InvariantCulture));
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
+                    $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, childID + 1);
             }
 
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID)
             {
-
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  ToString() +
-                                  ", accEvent = " + accEvent.ToString() +
-                                  ", childID = " + childID.ToString(CultureInfo.InvariantCulture));
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
+                    $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
             }
@@ -499,14 +438,7 @@ namespace System.Windows.Forms
             }
 
             internal override bool IsIAccessibleExSupported()
-            {
-                if (Owner is IAutomationLiveRegion)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+                => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
             internal override object GetPropertyValue(int propertyID)
             {
@@ -544,16 +476,7 @@ namespace System.Windows.Forms
             }
 
             public override string ToString()
-            {
-                if (Owner != null)
-                {
-                    return "ControlAccessibleObject: Owner = " + Owner.ToString();
-                }
-                else
-                {
-                    return "ControlAccessibleObject: Owner = null";
-                }
-            }
+                => $"ControlAccessibleObject: Owner = {Owner?.ToString() ?? "null"}";
         }
     }
 }
