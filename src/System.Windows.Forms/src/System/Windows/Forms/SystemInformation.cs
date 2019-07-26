@@ -71,6 +71,30 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN),
                 UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN));
 
+        [DllImport("gdi32.dll")]
+        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        public enum DeviceCap
+        {
+            VERTRES = 10,
+            DESKTOPVERTRES = 117,
+        }
+        /// <summary>
+        ///  Gets the scale of the primary display monitor.
+        /// </summary>
+        public static int Scale
+        {
+            get
+            {
+                var graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero);
+                var desktop = graphics.GetHdc();
+                var logicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.VERTRES);
+                var physicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.DESKTOPVERTRES);
+                var screenScalingFactor = (float)physicalScreenHeight / (float)logicalScreenHeight;
+                var roundedScreenScalingFactor = Math.Round(screenScalingFactor, 2) * 100;
+                return (int)roundedScreenScalingFactor;
+            }
+        }
+
         /// <summary>
         /// Gets the width of the vertical scroll bar in pixels.
         /// </summary>
