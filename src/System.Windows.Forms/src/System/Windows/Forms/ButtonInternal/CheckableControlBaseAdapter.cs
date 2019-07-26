@@ -89,8 +89,7 @@ namespace System.Windows.Forms.ButtonInternal
             if (DpiHelper.IsPerMonitorV2Awareness
                 && control != null && control.IsHandleCreated)
             {
-
-                return control.deviceDpi / DpiHelper.LogicalDpi;
+                return control._deviceDpi / DpiHelper.LogicalDpi;
             }
 
             if (g == null)

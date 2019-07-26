@@ -730,7 +730,7 @@ namespace System.Windows.Forms
                 {
                     // The following does not get set, since dropDown has no parent/is not part of the
                     // controls collection, so this gets never called through the normal inheritance chain.
-                    item.dropDown.deviceDpi = newDpi;
+                    item.dropDown._deviceDpi = newDpi;
                     item.dropDown.ResetScaling(newDpi);
 
                     foreach (ToolStripItem childItem in item.DropDown.Items)

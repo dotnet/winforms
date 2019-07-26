@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.True(control.Enabled);

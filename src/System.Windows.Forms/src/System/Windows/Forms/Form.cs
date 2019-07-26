@@ -4746,8 +4746,8 @@ namespace System.Windows.Forms
         {
             DefWndProc(ref m);
 
-            DpiChangedEventArgs e = new DpiChangedEventArgs(deviceDpi, m);
-            deviceDpi = e.DeviceDpiNew;
+            DpiChangedEventArgs e = new DpiChangedEventArgs(_deviceDpi, m);
+            _deviceDpi = e.DeviceDpiNew;
 
             OnDpiChanged(e);
         }
@@ -4777,7 +4777,7 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            if (OnGetDpiScaledSize(deviceDpi, NativeMethods.Util.SignedLOWORD(m.WParam), ref desiredSize))
+            if (OnGetDpiScaledSize(_deviceDpi, NativeMethods.Util.SignedLOWORD(m.WParam), ref desiredSize))
             {
                 m.Result = (IntPtr)(unchecked((Size.Height & 0xFFFF) << 16) | (Size.Width & 0xFFFF));
             }

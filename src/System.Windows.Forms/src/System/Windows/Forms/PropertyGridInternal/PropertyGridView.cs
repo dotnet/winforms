@@ -286,7 +286,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     btnDropDown.LostFocus += new EventHandler(OnChildLostFocus);
                     btnDropDown.TabIndex = 2;
                     CommonEditorSetup(btnDropDown);
-                    btnDropDown.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+                    btnDropDown.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                 }
                 return btnDropDown;
             }
@@ -316,7 +316,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     btnDialog.KeyDown += new KeyEventHandler(OnBtnKeyDown);
                     btnDialog.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
                     btnDialog.LostFocus += new EventHandler(OnChildLostFocus);
-                    btnDialog.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+                    btnDialog.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                     CommonEditorSetup(btnDialog);
                 }
                 return btnDialog;
@@ -5109,7 +5109,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if ((fBtnDialog || fBtnDropDown) && !gridEntry.ShouldRenderReadOnly && FocusInside)
             {
                 Control btn = fBtnDropDown ? (Control)DropDownButton : (Control)DialogButton;
-                Size sizeBtn = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight) :
+                Size sizeBtn = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) :
                                                                                new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                 Rectangle rectTarget = new Rectangle(rect.X + rect.Width - sizeBtn.Width,
                                                       rect.Y,
@@ -5988,7 +5988,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         var isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
                         if (isScalingRequirementMet)
                         {
-                            btnDropDown.Size = new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(deviceDpi), RowHeight);
+                            btnDropDown.Size = new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight);
                         }
                         else
                         {

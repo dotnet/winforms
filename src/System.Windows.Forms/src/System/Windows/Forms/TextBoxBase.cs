@@ -922,7 +922,7 @@ namespace System.Windows.Forms
                 int height = FontHeight;
                 if (borderStyle != BorderStyle.None)
                 {
-                    height += SystemInformation.GetBorderSizeForDpi(deviceDpi).Height * 4 + 3;
+                    height += SystemInformation.GetBorderSizeForDpi(_deviceDpi).Height * 4 + 3;
                 }
                 return height;
             }

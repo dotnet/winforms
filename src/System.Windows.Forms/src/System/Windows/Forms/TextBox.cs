@@ -432,11 +432,11 @@ namespace System.Windows.Forms
 
             if (Multiline && !WordWrap && (ScrollBars & ScrollBars.Horizontal) != 0)
             {
-                scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(deviceDpi);
+                scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(_deviceDpi);
             }
             if (Multiline && (ScrollBars & ScrollBars.Vertical) != 0)
             {
-                scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(deviceDpi);
+                scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi);
             }
 
             // Subtract the scroll bar padding before measuring
