@@ -128,33 +128,21 @@ namespace System.Windows.Forms
 
         private static TaskDialogButtons GetButtonFlagForResult(TaskDialogResult result)
         {
-            switch (result)
+            return result switch
             {
-                case TaskDialogResult.OK:
-                    return TaskDialogButtons.OK;
-                case TaskDialogResult.Cancel:
-                    return TaskDialogButtons.Cancel;
-                case TaskDialogResult.Abort:
-                    return TaskDialogButtons.Abort;
-                case TaskDialogResult.Retry:
-                    return TaskDialogButtons.Retry;
-                case TaskDialogResult.Ignore:
-                    return TaskDialogButtons.Ignore;
-                case TaskDialogResult.Yes:
-                    return TaskDialogButtons.Yes;
-                case TaskDialogResult.No:
-                    return TaskDialogButtons.No;
-                case TaskDialogResult.Close:
-                    return TaskDialogButtons.Close;
-                case TaskDialogResult.Help:
-                    return TaskDialogButtons.Help;
-                case TaskDialogResult.TryAgain:
-                    return TaskDialogButtons.TryAgain;
-                case TaskDialogResult.Continue:
-                    return TaskDialogButtons.Continue;
-                default:
-                    return default;
-            }
+                TaskDialogResult.OK => TaskDialogButtons.OK,
+                TaskDialogResult.Cancel => TaskDialogButtons.Cancel,
+                TaskDialogResult.Abort => TaskDialogButtons.Abort,
+                TaskDialogResult.Retry => TaskDialogButtons.Retry,
+                TaskDialogResult.Ignore => TaskDialogButtons.Ignore,
+                TaskDialogResult.Yes => TaskDialogButtons.Yes,
+                TaskDialogResult.No => TaskDialogButtons.No,
+                TaskDialogResult.Close => TaskDialogButtons.Close,
+                TaskDialogResult.Help => TaskDialogButtons.Help,
+                TaskDialogResult.TryAgain => TaskDialogButtons.TryAgain,
+                TaskDialogResult.Continue => TaskDialogButtons.Continue,
+                _ => default,
+            };
         }
 
         private static bool IsValidStandardButtonResult(TaskDialogResult result)
