@@ -108,9 +108,9 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogCustomButton"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string? ToString()
+        public override string ToString()
         {
-            return _text ?? base.ToString();
+            return _text ?? base.ToString() ?? string.Empty;
         }
 
         internal TaskDialogFlags Bind(TaskDialogPage page, int buttonID)

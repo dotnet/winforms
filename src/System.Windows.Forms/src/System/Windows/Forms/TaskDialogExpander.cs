@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
-                // Using the null forgiving operator ("!") here would conflict with the safe navigation operator ("?").
+                // Using the null forgiving operator ("!") here would conflict with the null-conditional operator ("?").
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 BoundPage?.BoundTaskDialog.UpdateTextElement(
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -184,9 +184,9 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogExpander"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string? ToString()
+        public override string ToString()
         {
-            return _text ?? base.ToString();
+            return _text ?? base.ToString() ?? string.Empty;
         }
 
         internal void HandleExpandoButtonClicked(bool expanded)
