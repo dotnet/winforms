@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
         <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
-        <target state="translated">Formant ActiveX jest formantem bez okien. Formant nie jest obsługiwany w tej wersji platformy .NET.</target>
+        <target state="translated">Kontrolka ActiveX jest kontrolką bez okien. Ta kontrolka nie jest obsługiwana w tej wersji platformy .NET.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -4546,7 +4546,7 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">Odstęp lub pusty ciąg jest nieprawidłową wartością dla parametru „format”.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5201,9 +5201,9 @@ zamiast tego okna dialogowego znajdują się na końcu tego komunikatu.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET.
+        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia konfiguracyjnego platformy Microsoft .NET Framework.
 
-Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę.
+Jeśli klikniesz pozycję Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę.
 
 {1}.</target>
         <note />
@@ -5214,9 +5214,9 @@ Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie pr
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Configuration.
+        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia konfiguracyjnego platformy Microsoft .NET Framework.
 
-Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę. Jeśli klikniesz przycisk Zamknij, aplikacja zostanie natychmiast zamknięta.
+Jeśli klikniesz pozycję Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę. Jeśli klikniesz pozycję Zakończ, aplikacja zostanie natychmiast zamknięta.
 
 {1}.</target>
         <note />

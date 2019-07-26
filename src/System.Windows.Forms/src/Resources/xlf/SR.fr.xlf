@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
         <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
-        <target state="translated">Le contrôle ActiveX est un contrôle sans fenêtre. Ce contrôle n'est pas pris en charge dans cette version du .NET.</target>
+        <target state="translated">Le contrôle ActiveX est un contrôle sans fenêtre. Le contrôle n'est pas pris en charge dans cette version de .NET.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -4546,7 +4546,7 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">Un espace ou une chaîne vide ne sont pas des valeurs valides pour le paramètre 'format'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5201,9 +5201,9 @@ juste-à-temps (JIT) à la place de cette boîte de dialogue.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Configuration.
+        <target state="translated">L'application a tenté d'effectuer une opération non autorisée par la stratégie de sécurité. Pour accorder l'autorisation nécessaire à cette application, contactez votre administrateur système ou utilisez l'outil de configuration Microsoft .NET.
 
-Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer de continuer.
+Si vous cliquez sur Continuer, l'application va ignorer cette erreur et tenter de poursuivre son exécution.
 
 {1}.</target>
         <note />
@@ -5214,9 +5214,9 @@ Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">L'application a essayé d'effectuer une opération qui est interdite par la stratégie de sécurité. Pour accorder à cette application les autorisations requises, contactez votre administrateur système ou utilisez l'outil Microsoft .NET Configuration.
+        <target state="translated">L'application a tenté d'effectuer une opération non autorisée par la stratégie de sécurité. Pour accorder l'autorisation nécessaire à cette application, contactez votre administrateur système ou utilisez l'outil de configuration Microsoft .NET.
 
-Si vous cliquez sur Continuer, l'application va ignorer cette erreur et essayer de continuer. Si vous cliquez sur Quitter, l'application va s'arrêter immédiatement.
+Si vous cliquez sur Continuer, l'application va ignorer cette erreur et tenter de poursuivre son exécution. Si vous cliquez sur Quitter, l'application va se fermer immédiatement.
 
 {1}.</target>
         <note />

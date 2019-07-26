@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="ImageCollectionEditorFormText">
         <source>Images Collection Editor</source>
-        <target state="new">Images Collection Editor</target>
+        <target state="translated">图像集合编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
