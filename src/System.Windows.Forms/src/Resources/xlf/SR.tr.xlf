@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
         <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
-        <target state="translated">ActiveX denetimi penceresiz bir denetim. Denetim .NET'un bu sürümünde desteklenmiyor.</target>
+        <target state="translated">Bilinmeyen Temizleyici Özel Durumu</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -4546,7 +4546,7 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">Boş dize veya boşluk, 'format' parametresi için geçerli bir değer değil.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5203,7 +5203,7 @@ If you click Continue, the application will ignore this error and attempt to con
 {1}.</source>
         <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Yapılandırma aracını kullanın.
 
-Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır.
+Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye çalışır.
 
 {1}.</target>
         <note />
@@ -5216,7 +5216,7 @@ If you click Continue, the application will ignore this error and attempt to con
 {1}.</source>
         <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Yapılandırma aracını kullanın.
 
-Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'ı tıklatırsanız, uygulama hemen kapatılır.
+Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye çalışır. Çıkış'a tıkladığınızda ise uygulama hemen kapanır.
 
 {1}.</target>
         <note />

@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
         <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
-        <target state="translated">ActiveX 컨트롤은 창 없는 컨트롤입니다. 이번 버전의 .NET 에서는 이러한 컨트롤을 지원하지 않습니다.</target>
+        <target state="translated">ActiveX 컨트롤은 창 없는 컨트롤입니다. 이번 버전의 .NET에서는 이 컨트롤을 지원하지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -4546,7 +4546,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">공백 또는 빈 문자열은 매개 변수 'format'의 유효한 값이 아닙니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5201,11 +5201,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET 구성 도구를 사용하십시오.
+        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 애플리케이션에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET 구성 도구를 사용하세요.
 
-[계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다.
+[계속]을 클릭하면 애플리케이션에서 이 오류를 무시하고 계속합니다.
 
-{1}</target>
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5214,11 +5214,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 응용 프로그램에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET 구성 도구를 사용하십시오.
+        <target state="translated">보안 정책에서 허용하지 않는 작업을 수행하려고 했습니다. 이 애플리케이션에 필요한 권한을 부여하려면 시스템 관리자에게 문의하거나 Microsoft .NET 구성 도구를 사용하세요.
 
-[계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 응용 프로그램이 즉시 닫힙니다.
+[계속]을 클릭하면 애플리케이션에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 애플리케이션이 즉시 닫힙니다.
 
-{1}</target>
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">

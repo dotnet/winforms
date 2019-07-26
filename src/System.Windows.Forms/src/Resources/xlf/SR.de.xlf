@@ -4546,7 +4546,7 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">Leerraum oder leere Zeichenfolgen sind kein gültiger Wert für den format-Parameter.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5201,7 +5201,7 @@ anstelle dieses Dialogfelds finden Sie am Ende dieser Meldung.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Die Anwendung hat einen Vorgang versucht, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET-Konfigurationstool.
+        <target state="translated">Die Anwendung hat versucht, einen Vorgang auszuführen, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET-Konfigurationstool.
 
 Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den Vorgang fort.
 
@@ -5214,7 +5214,7 @@ Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Die Anwendung hat einen Vorgang versucht, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET-Konfigurationstool.
+        <target state="translated">Die Anwendung hat versucht, einen Vorgang auszuführen, der von der Sicherheitsrichtlinie nicht zugelassen ist. Wenden Sie sich an den Systemadministrator, um der Anwendung die erforderliche Berechtigung zu gewähren, oder verwenden Sie das Microsoft .NET-Konfigurationstool.
 
 Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den Vorgang fort. Wenn Sie auf "Beenden" klicken, wird die Anwendung sofort beendet.
 

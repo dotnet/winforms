@@ -4546,7 +4546,7 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">Una stringa composta da spazi vuoti o vuota non rappresenta un valore valido per il parametro 'format'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5201,9 +5201,9 @@ sono riportate in fondo al messaggio.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Configuration.
+        <target state="translated">L'applicazione ha provato a eseguire un'operazione non consentita dai criteri di sicurezza. Per concedere a questa applicazione l'autorizzazione necessaria, contattare l'amministratore del sistema oppure usare lo strumento Configurazione di .NET Microsoft.
 
-Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.
+Se si sceglie Continua, l'errore verrà ignorato e l'applicazione proverà a continuare.
 
 {1}.</target>
         <note />
@@ -5214,9 +5214,9 @@ Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di co
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">L'applicazione ha tentato di eseguire un'operazione non consentita dai criteri di sicurezza. Per attribuire all'applicazione l'autorizzazione necessaria, rivolgersi all'amministratore del sistema oppure utilizzare lo strumento .NET Configuration.
+        <target state="translated">L'applicazione ha provato a eseguire un'operazione non consentita dai criteri di sicurezza. Per concedere a questa applicazione l'autorizzazione necessaria, contattare l'amministratore del sistema oppure usare lo strumento Configurazione di .NET Microsoft.
 
-Se si sceglie Continua, l'errore verrà ignorato e l'applicazione tenterà di continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.
+Se si sceglie Continua, l'errore verrà ignorato e l'applicazione proverà a continuare. Se si sceglie Chiudi, l'applicazione verrà chiusa immediatamente.
 
 {1}.</target>
         <note />

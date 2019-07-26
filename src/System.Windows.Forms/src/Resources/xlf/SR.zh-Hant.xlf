@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
         <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
-        <target state="translated">ActiveX 控制項是無視窗的控制項。這個版本的 .Net 不支援這個控制項。</target>
+        <target state="translated">ActiveX 控制項是無視窗的控制項。這個版本的 .Net 不支援此控制項。</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -4546,7 +4546,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">空白或空字串不是參數 'format' 的有效值。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5201,9 +5201,9 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET 組態工具進行相關的設定。
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請連絡您的系統管理員，或使用 Microsoft .NET 組態工具。
 
-如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。
+如果您按一下 [繼續]，應用程式將會略過此錯誤，然後嘗試繼續執行。
 
 {1}。</target>
         <note />
@@ -5214,9 +5214,9 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET 組態工具進行相關的設定。
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請連絡您的系統管理員，或使用 Microsoft .NET 組態工具。
 
-如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。如果您按下 [結束]，應用程式將立即關閉。
+如果您按一下 [繼續]，應用程式將會略過此錯誤，然後嘗試繼續執行。如果您按一下 [結束]，應用程式將立即關閉。
 
 {1}。</target>
         <note />

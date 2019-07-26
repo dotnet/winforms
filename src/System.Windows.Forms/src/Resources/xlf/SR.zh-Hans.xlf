@@ -4546,7 +4546,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
         <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="new">Whitespace or empty string is not a valid value for parameter 'format'.</target>
+        <target state="translated">空格或空字符串不是参数 "format" 的有效值。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
@@ -5201,7 +5201,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">应用程序尝试执行安全策略不允许的操作。若要授予该应用程序所需的权限，请与系统管理员联系，或使用 Microsoft .NET 配置工具。
+        <target state="translated">应用程序尝试执行安全策略不允许的操作。若要授予该应用程序所需的权限，请与系统管理员联系或使用 Microsoft .NET 配置工具。
 
 如果单击“继续”，应用程序将忽略此错误并尝试继续运行。
 
