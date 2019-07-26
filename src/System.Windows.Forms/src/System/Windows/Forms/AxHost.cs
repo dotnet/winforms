@@ -198,9 +198,9 @@ namespace System.Windows.Forms
         private NativeMethods.IPerPropertyBrowsing iPerPropertyBrowsing;
         private NativeMethods.ICategorizeProperties iCategorizeProperties;
         private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
-        private UnsafeNativeMethods.IPersistStream iPersistStream;
-        private UnsafeNativeMethods.IPersistStreamInit iPersistStreamInit;
-        private UnsafeNativeMethods.IPersistStorage iPersistStorage;
+        private Interop.Ole32.IPersistStream iPersistStream;
+        private Interop.Ole32.IPersistStreamInit iPersistStreamInit;
+        private Interop.Ole32.IPersistStorage iPersistStorage;
 
         private AboutBoxDelegate aboutBoxDelegate = null;
         private readonly EventHandler selectionChangeHandler;
@@ -2173,11 +2173,11 @@ namespace System.Windows.Forms
                             ms = new MemoryStream();
                             if (storageType == STG_STREAM)
                             {
-                                iPersistStream.Save(new UnsafeNativeMethods.ComStreamFromDataStream(ms), true);
+                                iPersistStream.Save(new Interop.Ole32.GPStream(ms), true);
                             }
                             else
                             {
-                                iPersistStreamInit.Save(new UnsafeNativeMethods.ComStreamFromDataStream(ms), true);
+                                iPersistStreamInit.Save(new Interop.Ole32.GPStream(ms), true);
                             }
                             break;
                         case STG_STORAGE:
@@ -3094,19 +3094,19 @@ namespace System.Windows.Forms
             iPersistPropBag.Load(propBag, null);
         }
 
-        private void DepersistFromIStream(UnsafeNativeMethods.IStream istream)
+        private void DepersistFromIStream(Interop.Ole32.IStream istream)
         {
             storageType = STG_STREAM;
             iPersistStream.Load(istream);
         }
 
-        private void DepersistFromIStreamInit(UnsafeNativeMethods.IStream istream)
+        private void DepersistFromIStreamInit(Interop.Ole32.IStream istream)
         {
             storageType = STG_STREAMINIT;
             iPersistStreamInit.Load(istream);
         }
 
-        private void DepersistFromIStorage(UnsafeNativeMethods.IStorage storage)
+        private void DepersistFromIStorage(Interop.Ole32.IStorage storage)
         {
             storageType = STG_STORAGE;
 
@@ -3133,9 +3133,9 @@ namespace System.Windows.Forms
             {
                 // must init new:
                 //
-                if (instance is UnsafeNativeMethods.IPersistStreamInit)
+                if (instance is Interop.Ole32.IPersistStreamInit)
                 {
-                    iPersistStreamInit = (UnsafeNativeMethods.IPersistStreamInit)instance;
+                    iPersistStreamInit = (Interop.Ole32.IPersistStreamInit)instance;
                     try
                     {
                         storageType = STG_STREAMINIT;
@@ -3147,17 +3147,17 @@ namespace System.Windows.Forms
                     }
                     return;
                 }
-                if (instance is UnsafeNativeMethods.IPersistStream)
+                if (instance is Interop.Ole32.IPersistStream)
                 {
                     storageType = STG_STREAM;
-                    iPersistStream = (UnsafeNativeMethods.IPersistStream)instance;
+                    iPersistStream = (Interop.Ole32.IPersistStream)instance;
                     return;
                 }
-                if (instance is UnsafeNativeMethods.IPersistStorage)
+                if (instance is Interop.Ole32.IPersistStorage)
                 {
                     storageType = STG_STORAGE;
                     ocxState = new State(this);
-                    iPersistStorage = (UnsafeNativeMethods.IPersistStorage)instance;
+                    iPersistStorage = (Interop.Ole32.IPersistStorage)instance;
                     try
                     {
                         iPersistStorage.InitNew(ocxState.GetStorage());
@@ -3192,7 +3192,7 @@ namespace System.Windows.Forms
                 case STG_STREAM:
                     try
                     {
-                        iPersistStream = (UnsafeNativeMethods.IPersistStream)instance;
+                        iPersistStream = (Interop.Ole32.IPersistStream)instance;
                         DepersistFromIStream(ocxState.GetStream());
                     }
                     catch (Exception e)
@@ -3201,11 +3201,11 @@ namespace System.Windows.Forms
                     }
                     break;
                 case STG_STREAMINIT:
-                    if (instance is UnsafeNativeMethods.IPersistStreamInit)
+                    if (instance is Interop.Ole32.IPersistStreamInit)
                     {
                         try
                         {
-                            iPersistStreamInit = (UnsafeNativeMethods.IPersistStreamInit)instance;
+                            iPersistStreamInit = (Interop.Ole32.IPersistStreamInit)instance;
                             DepersistFromIStreamInit(ocxState.GetStream());
                         }
                         catch (Exception e)
@@ -3224,7 +3224,7 @@ namespace System.Windows.Forms
                 case STG_STORAGE:
                     try
                     {
-                        iPersistStorage = (UnsafeNativeMethods.IPersistStorage)instance;
+                        iPersistStorage = (Interop.Ole32.IPersistStorage)instance;
                         DepersistFromIStorage(ocxState.GetStorage());
                     }
                     catch (Exception e)
@@ -6968,8 +6968,8 @@ namespace System.Windows.Forms
             private byte[] buffer;
             internal int type;
             private MemoryStream ms;
-            private UnsafeNativeMethods.IStorage storage;
-            private UnsafeNativeMethods.ILockBytes iLockBytes;
+            private Interop.Ole32.IStorage storage;
+            private Interop.Ole32.ILockBytes iLockBytes;
             private bool manualUpdate = false;
             private string licenseKey = null;
 #pragma warning disable IDE1006
@@ -7114,16 +7114,22 @@ namespace System.Windows.Forms
                 bool failed = false;
                 try
                 {
-                    iLockBytes = UnsafeNativeMethods.CreateILockBytesOnHGlobal(new HandleRef(null, hglobal), true);
+                    iLockBytes = Interop.Ole32.CreateILockBytesOnHGlobal(hglobal, true);
                     if (buffer == null)
                     {
-                        storage = UnsafeNativeMethods.StgCreateDocfileOnILockBytes(iLockBytes,
-                                                                                   NativeMethods.STGM_CREATE | NativeMethods.STGM_READWRITE | NativeMethods.STGM_SHARE_EXCLUSIVE, 0);
+                        storage = Interop.Ole32.StgCreateDocfileOnILockBytes(
+                            iLockBytes,
+                            Interop.Ole32.STGM.STGM_CREATE | Interop.Ole32.STGM.STGM_READWRITE | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                            0);
                     }
                     else
                     {
-                        storage = UnsafeNativeMethods.StgOpenStorageOnILockBytes(iLockBytes,
-                                                                                 null, NativeMethods.STGM_READWRITE | NativeMethods.STGM_SHARE_EXCLUSIVE, 0, 0);
+                        storage = Interop.Ole32.StgOpenStorageOnILockBytes(
+                            iLockBytes,
+                            null,
+                            Interop.Ole32.STGM.STGM_READWRITE | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                            0,
+                            0);
                     }
                 }
                 catch (Exception t)
@@ -7150,7 +7156,7 @@ namespace System.Windows.Forms
                 return PropertyBagBinary;
             }
 
-            internal UnsafeNativeMethods.IStorage GetStorage()
+            internal Interop.Ole32.IStorage GetStorage()
             {
                 if (storage == null)
                 {
@@ -7160,7 +7166,7 @@ namespace System.Windows.Forms
                 return storage;
             }
 
-            internal UnsafeNativeMethods.IStream GetStream()
+            internal Interop.Ole32.IStream GetStream()
             {
                 if (ms == null)
                 {
@@ -7176,7 +7182,7 @@ namespace System.Windows.Forms
                 {
                     ms.Seek(0, SeekOrigin.Begin);
                 }
-                return new UnsafeNativeMethods.ComStreamFromDataStream(ms);
+                return new Interop.Ole32.GPStream(ms);
             }
 
             private void InitializeFromStream(Stream ids)
@@ -7215,7 +7221,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal State RefreshStorage(UnsafeNativeMethods.IPersistStorage iPersistStorage)
+            internal State RefreshStorage(Interop.Ole32.IPersistStorage iPersistStorage)
             {
                 Debug.Assert(storage != null, "how can we not have a storage object?");
                 Debug.Assert(iLockBytes != null, "how can we have a storage w/o ILockBytes?");
@@ -7231,11 +7237,10 @@ namespace System.Windows.Forms
                 {
                     buffer = null;
                     ms = null;
-                    NativeMethods.STATSTG stat = new NativeMethods.STATSTG();
-                    iLockBytes.Stat(stat, NativeMethods.Ole.STATFLAG_NONAME);
+                    iLockBytes.Stat(out Interop.Ole32.STATSTG stat, Interop.Ole32.STATFLAG.STATFLAG_NONAME);
                     length = (int)stat.cbSize;
                     buffer = new byte[length];
-                    IntPtr hglobal = UnsafeNativeMethods.GetHGlobalFromILockBytes(iLockBytes);
+                    IntPtr hglobal = Interop.Ole32.GetHGlobalFromILockBytes(iLockBytes);
                     IntPtr pointer = UnsafeNativeMethods.GlobalLock(new HandleRef(null, hglobal));
                     try
                     {

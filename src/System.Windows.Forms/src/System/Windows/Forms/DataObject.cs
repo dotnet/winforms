@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Uses IStream and retrieves the specified format from the bound IComDataObject.
             /// </summary>
-            private object GetDataFromOleIStream(string format)
+            private unsafe object GetDataFromOleIStream(string format)
             {
 
                 FORMATETC formatetc = new FORMATETC();
@@ -1321,18 +1321,16 @@ namespace System.Windows.Forms
 
                 if (medium.unionmember != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.IStream pStream = (UnsafeNativeMethods.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
+                    Interop.Ole32.IStream pStream = (Interop.Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
                     Marshal.Release(medium.unionmember);
-                    NativeMethods.STATSTG sstg = new NativeMethods.STATSTG();
-                    pStream.Stat(sstg, NativeMethods.STATFLAG_DEFAULT);
-                    int size = (int)sstg.cbSize;
+                    pStream.Stat(out Interop.Ole32.STATSTG sstg, Interop.Ole32.STATFLAG.STATFLAG_DEFAULT);
 
                     IntPtr hglobal = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE
                                                       | NativeMethods.GMEM_DDESHARE
                                                       | NativeMethods.GMEM_ZEROINIT,
-                                                      size);
+                                                      (int)sstg.cbSize);
                     IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(innerData, hglobal));
-                    pStream.Read(ptr, size);
+                    pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
                     UnsafeNativeMethods.GlobalUnlock(new HandleRef(innerData, hglobal));
 
                     return GetDataFromHGLOBAL(format, hglobal);

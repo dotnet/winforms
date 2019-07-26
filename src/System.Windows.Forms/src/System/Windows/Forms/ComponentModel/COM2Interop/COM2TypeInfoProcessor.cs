@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using Hashtable = System.Collections.Hashtable;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -1038,7 +1039,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return typeof(Guid);
 
                 case NativeMethods.tagVT.VT_FILETIME:
-                    return typeof(NativeMethods.FILETIME);
+                    return typeof(FILETIME);
 
                 case NativeMethods.tagVT.VT_USERDEFINED:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));

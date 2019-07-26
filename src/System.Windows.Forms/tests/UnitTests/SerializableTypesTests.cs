@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Tests.Serialization
             Assert.Equal(1, result.Type);
             Assert.True(result._GetManualUpdate());
             Assert.Equal("licenseKey", result._GetLicenseKey());
-            var streamOut = result.GetStream() as UnsafeNativeMethods.ComStreamFromDataStream;
+            var streamOut = result.GetStream() as Interop.Ole32.GPStream;
             Assert.NotNull(streamOut);
             Stream bufferStream = streamOut.GetDataStream();
             byte[] buffer = new byte[3];
