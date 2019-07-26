@@ -1734,22 +1734,10 @@ namespace System.Windows.Forms
 
                         // Align the pointer to the next align size. If not specified,
                         // we will use the pointer (register) size.
-                        uint add = (uint)(alignment ?? IntPtr.Size) - 1;
-                        // TODO: Use nuint (System.UIntN) once available to avoid the
-                        // separate code for 32-bit and 64-bit pointer sizes.
-                        if (IntPtr.Size == 8)
-                        {
-                            // Disable incorrect IDE warning as the latter cast is
-                            // actually not redundant.
-                            // See: https://github.com/dotnet/roslyn/issues/20617
-#pragma warning disable IDE0004 // Remove Unnecessary Cast
-                            currentPtr = (byte*)(((ulong)currentPtr + add) & ~(ulong)add);
-#pragma warning restore IDE0004 // Remove Unnecessary Cast
-                        }
-                        else
-                        {
-                            currentPtr = (byte*)(((uint)currentPtr + add) & ~add);
-                        }
+                        // TODO: Use nuint (System.UIntN) once available instead of
+                        // ulong to avoid the overhead for 32-bit platforms.
+                        ulong add = (ulong)(alignment ?? IntPtr.Size) - 1;
+                        currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
                     }
 
                     static long SizeOfString(string str)
