@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Generic;
 
 namespace System.Windows.Forms
@@ -57,7 +59,7 @@ namespace System.Windows.Forms
                 // Check if we can update the button.
                 if (CanUpdate())
                 {
-                    BoundPage.BoundTaskDialog.SetButtonEnabled(ButtonID, value);
+                    BoundPage!.BoundTaskDialog!.SetButtonEnabled(ButtonID, value);
                 }
 
                 _enabled = value;
@@ -84,7 +86,7 @@ namespace System.Windows.Forms
 
                 if (CanUpdate())
                 {
-                    BoundPage.BoundTaskDialog.SetButtonElevationRequiredState(ButtonID, value);
+                    BoundPage!.BoundTaskDialog!.SetButtonElevationRequiredState(ButtonID, value);
                 }
 
                 _elevationRequired = value;
@@ -137,7 +139,7 @@ namespace System.Windows.Forms
         // (e.g. if we ever need to add actions in the setter, it normally would
         // be the same for all subclasses). Instead, the subclass can declare
         // a new (internal) Collection property which has a more specific type.
-        private protected IReadOnlyList<TaskDialogButton> Collection { get; set; }
+        private protected IReadOnlyList<TaskDialogButton>? Collection { get; set; }
 
         /// <summary>
         /// Simulates a click on this button.
@@ -147,7 +149,7 @@ namespace System.Windows.Forms
             // Note: We allow a click even if the button is not visible/created.
             DenyIfNotBoundOrWaitingForInitialization();
 
-            BoundPage.BoundTaskDialog.ClickButton(ButtonID);
+            BoundPage!.BoundTaskDialog!.ClickButton(ButtonID);
         }
 
         internal bool HandleButtonClicked()

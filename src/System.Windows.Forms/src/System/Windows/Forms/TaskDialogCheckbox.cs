@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 
 namespace System.Windows.Forms
@@ -11,7 +13,7 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class TaskDialogCheckBox : TaskDialogControl
     {
-        private string _text;
+        private string? _text;
 
         private bool _checked;
 
@@ -33,7 +35,7 @@ namespace System.Windows.Forms
         /// the given <paramref name="text"/>.
         /// </summary>
         /// <param name="text"></param>
-        public TaskDialogCheckBox(string text)
+        public TaskDialogCheckBox(string? text)
             : this()
         {
             _text = text;
@@ -49,7 +51,7 @@ namespace System.Windows.Forms
         /// This control will only be shown if this property is not <c>null</c> or an empty string.
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
-        public string Text
+        public string? Text
         {
             get => _text;
 
@@ -90,7 +92,7 @@ namespace System.Windows.Forms
                     // Click the checkbox which should cause a call to
                     // HandleCheckBoxClicked(), where we will update the checked
                     // state.
-                    BoundPage.BoundTaskDialog.ClickCheckBox(value);
+                    BoundPage.BoundTaskDialog!.ClickCheckBox(value);
                 }
             }
         }
@@ -109,14 +111,14 @@ namespace System.Windows.Forms
             DenyIfNotBoundOrWaitingForInitialization();
             DenyIfBoundAndNotCreated();
 
-            BoundPage.BoundTaskDialog.ClickCheckBox(_checked, true);
+            BoundPage!.BoundTaskDialog!.ClickCheckBox(_checked, true);
         }
 
         /// <summary>
         /// Returns a string that represents the current <see cref="TaskDialogCheckBox"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return _text ?? base.ToString();
         }

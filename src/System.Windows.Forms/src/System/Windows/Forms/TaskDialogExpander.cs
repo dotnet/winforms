@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
 
@@ -13,11 +15,11 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class TaskDialogExpander : TaskDialogControl
     {
-        private string _text;
+        private string? _text;
 
-        private string _expandedButtonText;
+        private string? _expandedButtonText;
 
-        private string _collapsedButtonText;
+        private string? _collapsedButtonText;
 
         private bool _expandFooterArea;
 
@@ -46,7 +48,7 @@ namespace System.Windows.Forms
         /// using the given <paramref name="text"/>.
         /// </summary>
         /// <param name="text">The text to be displayed in the dialog's expanded area.</param>
-        public TaskDialogExpander(string text)
+        public TaskDialogExpander(string? text)
             : this()
         {
             _text = text;
@@ -64,7 +66,7 @@ namespace System.Windows.Forms
         /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
-        public string Text
+        public string? Text
         {
             get => _text;
 
@@ -74,9 +76,11 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
+                // Using the null forgiving operator ("!") here would conflict with the safe navigation operator ("?").
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 BoundPage?.BoundTaskDialog.UpdateTextElement(
-                    TaskDialogTextElement.TDE_EXPANDED_INFORMATION,
-                    value);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    TaskDialogTextElement.TDE_EXPANDED_INFORMATION, value);
 
                 _text = value;
             }
@@ -91,7 +95,7 @@ namespace System.Windows.Forms
         /// is in the expanded state, or <c>null</c> or an empty string to use a
         /// text provided by the operating system. The default value is <c>null</c>.
         /// </value>
-        public string ExpandedButtonText
+        public string? ExpandedButtonText
         {
             get => _expandedButtonText;
 
@@ -112,7 +116,7 @@ namespace System.Windows.Forms
         /// is in the collapsed state, or <c>null</c> or an empty string to use a
         /// text provided by the operating system. The default value is <c>null</c>.
         /// </value>
-        public string CollapsedButtonText
+        public string? CollapsedButtonText
         {
             get => _collapsedButtonText;
 
@@ -180,7 +184,7 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogExpander"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return _text ?? base.ToString();
         }

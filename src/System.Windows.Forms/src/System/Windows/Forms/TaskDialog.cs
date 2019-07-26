@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -85,7 +87,7 @@ namespace System.Windows.Forms
         private TaskDialogStartupLocation _startupLocation;
         private bool _setToForeground;
         private TaskDialogPage _page;
-        private TaskDialogPage _boundPage;
+        private TaskDialogPage? _boundPage;
 
         /// <summary>
         /// A qeueue of <see cref="TaskDialogPage"/>s that have been bound by
@@ -102,7 +104,7 @@ namespace System.Windows.Forms
         /// </summary>
         private IntPtr _instanceHandlePtr;
 
-        private WindowSubclassHandler _windowSubclassHandler;
+        private WindowSubclassHandler? _windowSubclassHandler;
 
         /// <summary>
         /// Stores a value that indicates if the
@@ -255,7 +257,7 @@ namespace System.Windows.Forms
             // function, and then identify the actual TaskDialog instance by using a
             // GCHandle in the reference data field (like an object pointer).
             s_callbackProcDelegate = (hWnd, notification, wParam, lParam, referenceData) =>
-                ((TaskDialog)GCHandle.FromIntPtr(referenceData).Target).HandleTaskDialogCallback(hWnd, notification, wParam, lParam);
+                ((TaskDialog)GCHandle.FromIntPtr(referenceData).Target!).HandleTaskDialogCallback(hWnd, notification, wParam, lParam);
 
             s_callbackProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate);
         }
@@ -264,24 +266,19 @@ namespace System.Windows.Forms
         /// Initializes a new instance of the <see cref='TaskDialog'/> class.
         /// </summary>
         public TaskDialog()
+            : this(new TaskDialogPage())
         {
-            // TaskDialog is only supported on Windows.
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                throw new PlatformNotSupportedException();
-            }
-
-            // Set default properties.
-            _startupLocation = TaskDialogStartupLocation.CenterParent;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref='TaskDialog'/> class using the specified task dialog page.
         /// </summary>
         public TaskDialog(TaskDialogPage page)
-            : this()
         {
             _page = page ?? throw new ArgumentNullException(nameof(page));
+
+            // Set default properties.
+            _startupLocation = TaskDialogStartupLocation.CenterParent;
         }
 
         /// <summary>
@@ -325,7 +322,7 @@ namespace System.Windows.Forms
         /// </remarks>
         public TaskDialogPage Page
         {
-            get => _page ??= new TaskDialogPage();
+            get => _page;
 
             set
             {
@@ -463,9 +460,9 @@ namespace System.Windows.Forms
         /// icon to display in the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult Show(
-            string text,
-            string instruction = null,
-            string title = null,
+            string? text,
+            string? instruction = null,
+            string? title = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
@@ -487,13 +484,15 @@ namespace System.Windows.Forms
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult Show(
             IWin32Window owner,
-            string text,
-            string instruction = null,
-            string title = null,
+            string? text,
+            string? instruction = null,
+            string? title = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
-            return Show(owner.Handle, text, instruction, title, buttons, icon);
+            return Show(
+                owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
+                text, instruction, title, buttons, icon);
         }
 
         /// <summary>
@@ -514,9 +513,9 @@ namespace System.Windows.Forms
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult Show(
             IntPtr hwndOwner,
-            string text,
-            string instruction = null,
-            string title = null,
+            string? text,
+            string? instruction = null,
+            string? title = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
@@ -537,7 +536,7 @@ namespace System.Windows.Forms
             Marshal.FreeHGlobal(ptrToFree);
         }
 
-        private static bool IsTaskDialogButtonCommitting(TaskDialogButton button)
+        private static bool IsTaskDialogButtonCommitting(TaskDialogButton? button)
         {
             // All custom button as well as all standard buttons except for the
             // "Help" button (if it is shown in the dialog) will close the
@@ -587,7 +586,7 @@ namespace System.Windows.Forms
         /// user to close the dialog.</returns>
         public TaskDialogButton Show(IWin32Window owner)
         {
-            return Show(owner.Handle);
+            return Show(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)));
         }
 
         /// <summary>
@@ -612,7 +611,7 @@ namespace System.Windows.Forms
                     SR.TaskDialogInstanceAlreadyShown,
                     nameof(TaskDialog)));
 
-            Page.Validate();
+            _page.Validate();
 
             // Allocate a GCHandle which we will use for the callback data.
             var instanceHandle = GCHandle.Alloc(this);
@@ -971,7 +970,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero);
         }
 
-        internal void UpdateTextElement(TaskDialogTextElement element, string text)
+        internal void UpdateTextElement(TaskDialogTextElement element, string? text)
         {
             DenyIfDialogNotUpdatable();
 
@@ -1008,7 +1007,7 @@ namespace System.Windows.Forms
             UpdateWindowSize();
         }
 
-        internal void UpdateTitle(string title)
+        internal void UpdateTitle(string? title)
         {
             // Note: We must not allow to change the title if we are currently
             // waiting for a TDN_NAVIGATED notification, because in that case
@@ -1072,6 +1071,8 @@ namespace System.Windows.Forms
             IntPtr wParam,
             IntPtr lParam)
         {
+            Debug.Assert(_boundPage != null);
+
             // Set the hWnd as this may be the first time that we get it.
             bool isFirstNotification = Handle == IntPtr.Zero;
             Handle = hWnd;
@@ -1179,7 +1180,10 @@ namespace System.Windows.Forms
                         break;
 
                     case TaskDialogNotification.TDN_HYPERLINK_CLICKED:
-                        string link = Marshal.PtrToStringUni(lParam);
+                        // The link parameter should never be null.
+                        Debug.Assert(lParam != null);
+
+                        string link = Marshal.PtrToStringUni(lParam)!;
 
                         var eventArgs = new TaskDialogHyperlinkClickedEventArgs(link);
                         _boundPage.OnHyperlinkClicked(eventArgs);
@@ -1213,7 +1217,7 @@ namespace System.Windows.Forms
                         _ignoreButtonClickedNotifications = true;
 
                         int buttonID = (int)wParam;
-                        TaskDialogButton button = _boundPage.GetBoundButtonByID(buttonID);
+                        TaskDialogButton? button = _boundPage.GetBoundButtonByID(buttonID);
 
                         bool handlerResult = true;
                         if (button != null && !_suppressButtonClickedEvent)
@@ -1310,8 +1314,8 @@ namespace System.Windows.Forms
 
                     case TaskDialogNotification.TDN_RADIO_BUTTON_CLICKED:
                         int radioButtonID = (int)wParam;
-                        TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID);
-
+                        TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID)!;
+                        
                         checked
                         {
                             RadioButtonClickedStackCount++;
@@ -1328,11 +1332,11 @@ namespace System.Windows.Forms
                         break;
 
                     case TaskDialogNotification.TDN_EXPANDO_BUTTON_CLICKED:
-                        _boundPage.Expander.HandleExpandoButtonClicked(wParam != IntPtr.Zero);
+                        _boundPage.Expander!.HandleExpandoButtonClicked(wParam != IntPtr.Zero);
                         break;
 
                     case TaskDialogNotification.TDN_VERIFICATION_CLICKED:
-                        _boundPage.CheckBox.HandleCheckBoxClicked(wParam != IntPtr.Zero);
+                        _boundPage.CheckBox!.HandleCheckBoxClicked(wParam != IntPtr.Zero);
                         break;
 
                     case TaskDialogNotification.TDN_HELP:
@@ -1420,7 +1424,7 @@ namespace System.Windows.Forms
                 if (_raisedPageCreated)
                 {
                     _raisedPageCreated = false;
-                    _boundPage.OnDestroyed(EventArgs.Empty);
+                    _boundPage!.OnDestroyed(EventArgs.Empty);
 
                     // Need to check again if the dialog has not already been closed,
                     // since the Destroyed event handler could have performed a
@@ -1696,7 +1700,7 @@ namespace System.Windows.Forms
 
                         Debug.Assert(currentPtr == (long)ptrTaskDialogConfig + sizeToAllocate);
 
-                        IntPtr MarshalString(string str)
+                        IntPtr MarshalString(string? str)
                         {
                             if (str == null)
                             {
@@ -1740,7 +1744,7 @@ namespace System.Windows.Forms
                         currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
                     }
 
-                    static long SizeOfString(string str)
+                    static long SizeOfString(string? str)
                     {
                         return str == null ? 0 : ((long)str.Length + 1) * sizeof(char);
                     }
@@ -1862,12 +1866,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void UpdateWindowSize()
         {
+            DenyIfDialogNotUpdatable();
+
             // Force the task dialog to update its size by doing an arbitrary
             // update of one of its text elements (as the TDM_SET_ELEMENT_TEXT
             // causes the size/layout to be updated).
             // We use the MainInstruction because it cannot contain hyperlinks
             // (and therefore there is no risk that one of the links loses focus).
-            UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, _boundPage.Instruction);
+            UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, _boundPage!.Instruction);
         }
     }
 }

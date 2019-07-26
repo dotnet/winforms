@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -27,7 +29,7 @@ namespace System.Windows.Forms
         /// from the specified icon.
         /// </summary>
         /// <param name="icon"></param>
-        public TaskDialogIconHandle(Icon icon)
+        public TaskDialogIconHandle(Icon? icon)
             : this(icon?.Handle ?? default)
         {
         }

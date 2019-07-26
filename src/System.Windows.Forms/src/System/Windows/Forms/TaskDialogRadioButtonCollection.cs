@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -15,8 +17,6 @@ namespace System.Windows.Forms
         // HashSet to detect duplicate items.
         private readonly HashSet<TaskDialogRadioButton> _itemSet = new HashSet<TaskDialogRadioButton>();
 
-        private TaskDialogPage _boundPage;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.
         /// </summary>
@@ -24,10 +24,10 @@ namespace System.Windows.Forms
         {
         }
 
-        internal TaskDialogPage BoundPage
+        internal TaskDialogPage? BoundPage
         {
-            get => _boundPage;
-            set => _boundPage = value;
+            get;
+            set;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="text">The text of the radio button.</param>
         /// <returns>The created <see cref="TaskDialogRadioButton"/>.</returns>
-        public TaskDialogRadioButton Add(string text)
+        public TaskDialogRadioButton Add(string? text)
         {
             var button = new TaskDialogRadioButton()
             {
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
             DenyIfHasOtherCollection(item);
 
             TaskDialogRadioButton oldItem = this[index];
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
             DenyIfHasOtherCollection(item);
 
             if (!_itemSet.Add(item))
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
 
             TaskDialogRadioButton oldItem = this[index];
             oldItem.Collection = null;
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
 
             foreach (TaskDialogRadioButton button in this)
             {

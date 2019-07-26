@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -39,7 +41,7 @@ namespace System.Windows.Forms
         /// <param name="icon"></param>
         public static implicit operator TaskDialogIcon(TaskDialogStandardIcon icon)
         {
-            if (!s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer result))
+            if (!s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer? result))
             {
                 throw new InvalidCastException(); // TODO: Is this the correct exception type?
             }
@@ -64,7 +66,7 @@ namespace System.Windows.Forms
         /// <returns></returns>
         public static TaskDialogIcon Get(TaskDialogStandardIcon icon)
         {
-            if (!s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer result))
+            if (!s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer? result))
             {
                 throw new ArgumentOutOfRangeException(nameof(icon));
             }

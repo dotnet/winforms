@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.ComponentModel;
 
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
@@ -96,7 +98,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    TaskDialog taskDialog = BoundPage.BoundTaskDialog;
+                    TaskDialog taskDialog = BoundPage.BoundTaskDialog!;
 
                     // Check if we need to switch between a marquee and a
                     // non-marquee bar.
@@ -189,7 +191,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog.SetProgressBarRange(value, _maximum);
+                    BoundPage.BoundTaskDialog!.SetProgressBarRange(value, _maximum);
                 }
 
                 _minimum = value;
@@ -226,7 +228,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog.SetProgressBarRange(_minimum, value);
+                    BoundPage.BoundTaskDialog!.SetProgressBarRange(_minimum, value);
                 }
 
                 _maximum = value;
@@ -263,7 +265,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog.SetProgressBarPosition(value);
+                    BoundPage.BoundTaskDialog!.SetProgressBarPosition(value);
                 }
 
                 _value = value;
@@ -363,7 +365,7 @@ namespace System.Windows.Forms
             else if (_state != TaskDialogProgressBarState.MarqueePaused)
             {
                 State = _state;
-                BoundPage.BoundTaskDialog.SetProgressBarRange(_minimum, _maximum);
+                BoundPage!.BoundTaskDialog!.SetProgressBarRange(_minimum, _maximum);
                 BoundPage.BoundTaskDialog.SetProgressBarPosition(_value);
 
                 // See comment in property "State" for why we need to set

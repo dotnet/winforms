@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -12,8 +14,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class TaskDialogStandardButtonCollection : KeyedCollection<TaskDialogResult, TaskDialogStandardButton>
     {
-        private TaskDialogPage _boundPage;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskDialogStandardButtonCollection"/> class.
         /// </summary>
@@ -39,10 +39,10 @@ namespace System.Windows.Forms
             return collection;
         }
 
-        internal TaskDialogPage BoundPage
+        internal TaskDialogPage? BoundPage
         {
-            get => _boundPage;
-            set => _boundPage = value;
+            get;
+            set;
         }
 
         internal static IEnumerable<TaskDialogResult> GetResultsForButtonFlags(TaskDialogButtons buttons)
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
             DenyIfHasOtherCollection(item);
 
             TaskDialogStandardButton oldItem = this[index];
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
             DenyIfHasOtherCollection(item);
 
             // Call the base method first, as it will throw if we would insert a
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
 
             TaskDialogStandardButton oldItem = this[index];
             oldItem.Collection = null;
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
         {
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
-            _boundPage?.DenyIfBound();
+            BoundPage?.DenyIfBound();
 
             foreach (TaskDialogStandardButton button in this)
             {

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 
 namespace System.Windows.Forms
@@ -11,7 +13,7 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class TaskDialogRadioButton : TaskDialogControl
     {
-        private string _text;
+        private string? _text;
 
         private int _radioButtonID;
 
@@ -19,7 +21,7 @@ namespace System.Windows.Forms
 
         private bool _checked;
 
-        private TaskDialogRadioButtonCollection _collection;
+        private TaskDialogRadioButtonCollection? _collection;
 
         private bool _ignoreRadioButtonClickedNotification;
 
@@ -40,7 +42,7 @@ namespace System.Windows.Forms
         /// Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class
         /// using the given <paramref name="text"/> and optionally a <paramref name="descriptionText"/>.
         /// </summary>
-        public TaskDialogRadioButton(string text)
+        public TaskDialogRadioButton(string? text)
             : this()
         {
             _text = text;
@@ -69,7 +71,7 @@ namespace System.Windows.Forms
                 // Check if we can update the button.
                 if (CanUpdate())
                 {
-                    BoundPage.BoundTaskDialog.SetRadioButtonEnabled(_radioButtonID, value);
+                    BoundPage!.BoundTaskDialog!.SetRadioButtonEnabled(_radioButtonID, value);
                 }
 
                 _enabled = value;
@@ -87,7 +89,7 @@ namespace System.Windows.Forms
         /// the dialog; otherwise the operation will fail.
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
-        public string Text
+        public string? Text
         {
             get => _text;
 
@@ -193,7 +195,7 @@ namespace System.Windows.Forms
                 //
                 // See also:
                 // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_WeirdBehavior.md
-                if (BoundPage.BoundTaskDialog.RadioButtonClickedStackCount > 0)
+                if (BoundPage.BoundTaskDialog!.RadioButtonClickedStackCount > 0)
                 {
                     throw new InvalidOperationException(string.Format(
                         SR.TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent,
@@ -245,7 +247,7 @@ namespace System.Windows.Forms
             get => _radioButtonID;
         }
 
-        internal TaskDialogRadioButtonCollection Collection
+        internal TaskDialogRadioButtonCollection? Collection
         {
             get => _collection;
             set => _collection = value;
@@ -260,7 +262,7 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return _text ?? base.ToString();
         }
@@ -292,7 +294,7 @@ namespace System.Windows.Forms
             // Before raising the CheckedChanged event for the current button,
             // uncheck the other radio buttons and call their events (there
             // should be no more than one other button that is already checked).
-            foreach (TaskDialogRadioButton radioButton in BoundPage.RadioButtons)
+            foreach (TaskDialogRadioButton radioButton in BoundPage!.RadioButtons)
             {
                 if (radioButton != this && radioButton._checked)
                 {

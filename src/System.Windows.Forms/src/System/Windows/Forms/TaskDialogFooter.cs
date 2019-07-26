@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 using TaskDialogIconElement = Interop.TaskDialog.TASKDIALOG_ICON_ELEMENTS;
 using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
@@ -13,9 +15,9 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class TaskDialogFooter : TaskDialogControl
     {
-        private string _text;
+        private string? _text;
 
-        private TaskDialogIcon _icon;
+        private TaskDialogIcon? _icon;
 
         private bool _boundIconIsFromHandle;
 
@@ -31,7 +33,7 @@ namespace System.Windows.Forms
         /// using the given <paramref name="text"/>.
         /// </summary>
         /// <param name="text">The text to be displayed in the dialog's footer area.</param>
-        public TaskDialogFooter(string text)
+        public TaskDialogFooter(string? text)
             : this()
         {
             _text = text;
@@ -48,7 +50,7 @@ namespace System.Windows.Forms
         /// 
         /// This property can be set while the dialog is shown.
         /// </remarks>
-        public string Text
+        public string? Text
         {
             get => _text;
 
@@ -58,7 +60,11 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
-                BoundPage?.BoundTaskDialog.UpdateTextElement(TaskDialogTextElement.TDE_FOOTER, value);
+                // Using the null forgiving operator ("!") here would conflict with the safe navigation operator ("?").
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                BoundPage?.BoundTaskDialog.UpdateTextElement(
+                    TaskDialogTextElement.TDE_FOOTER, value);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                 _text = value;
             }
@@ -72,7 +78,7 @@ namespace System.Windows.Forms
         /// cannot be switched between instances of <see cref="TaskDialogIconHandle"/>
         /// and instances of other icon types).
         /// </remarks>
-        public TaskDialogIcon Icon
+        public TaskDialogIcon? Icon
         {
             get => _icon;
 
@@ -91,7 +97,11 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
-                BoundPage?.BoundTaskDialog.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_FOOTER, iconValue);
+                // Using the null forgiving operator ("!") here would conflict with the safe navigation operator ("?").
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                BoundPage?.BoundTaskDialog.UpdateIconElement(
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    TaskDialogIconElement.TDIE_ICON_FOOTER, iconValue);
 
                 _icon = value;
             }
@@ -106,7 +116,7 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogFooter"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return _text ?? base.ToString();
         }

@@ -2,6 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
+using System.Diagnostics;
+
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
 
 namespace System.Windows.Forms
@@ -15,8 +19,8 @@ namespace System.Windows.Forms
     /// </remarks>
     public sealed class TaskDialogCustomButton : TaskDialogButton
     {
-        private string _text;
-        private string _descriptionText;
+        private string? _text;
+        private string? _descriptionText;
         private int _buttonID;
 
         /// <summary>
@@ -34,7 +38,7 @@ namespace System.Windows.Forms
         /// <param name="descriptionText">An additional description text that will be displayed in
         /// a separate line when the <see cref="TaskDialogCustomButton"/>s of the task dialog are
         /// shown as command links (see <see cref="DescriptionText"/>).</param>
-        public TaskDialogCustomButton(string text, string descriptionText = null)
+        public TaskDialogCustomButton(string? text, string? descriptionText = null)
             : this()
         {
             _text = text;
@@ -52,7 +56,7 @@ namespace System.Windows.Forms
         /// the dialog; otherwise the operation will fail.
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
-        public string Text
+        public string? Text
         {
             get => _text;
 
@@ -72,7 +76,7 @@ namespace System.Windows.Forms
         /// <see cref="TaskDialogCustomButtonStyle.CommandLinks"/> or
         /// <see cref="TaskDialogCustomButtonStyle.CommandLinksNoIcon"/>).
         /// </summary>
-        public string DescriptionText
+        public string? DescriptionText
         {
             get => _descriptionText;
 
@@ -94,9 +98,9 @@ namespace System.Windows.Forms
             get => _buttonID;
         }
 
-        internal new TaskDialogCustomButtonCollection Collection
+        internal new TaskDialogCustomButtonCollection? Collection
         {
-            get => (TaskDialogCustomButtonCollection)base.Collection;
+            get => (TaskDialogCustomButtonCollection?)base.Collection;
             set => base.Collection = value;
         }
 
@@ -104,7 +108,7 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogCustomButton"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return _text ?? base.ToString();
         }
@@ -117,9 +121,9 @@ namespace System.Windows.Forms
             return result;
         }
 
-        internal string GetResultingText()
+        internal string? GetResultingText()
         {
-            TaskDialogPage page = BoundPage;
+            Debug.Assert(BoundPage != null);
 
             // Remove LFs from the text. Otherwise, the dialog would display the
             // part of the text after the LF in the command link note, but for
@@ -128,10 +132,11 @@ namespace System.Windows.Forms
             // property are not displayed in the command link note.
             // Therefore, we replace a combined CR+LF with CR, and then also single
             // LFs with CR, because CR is treated as a line break.
-            string text = _text?.Replace("\r\n", "\r").Replace("\n", "\r");
+            string? text = _text?.Replace("\r\n", "\r").Replace("\n", "\r");
 
-            if ((page?.CustomButtonStyle == TaskDialogCustomButtonStyle.CommandLinks ||
-                page?.CustomButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon) &&
+            TaskDialogCustomButtonStyle customButtonStyle = BoundPage.CustomButtonStyle;
+            if ((customButtonStyle == TaskDialogCustomButtonStyle.CommandLinks ||
+                customButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon) &&
                 text != null && _descriptionText != null)
             {
                 text += '\n' + _descriptionText;

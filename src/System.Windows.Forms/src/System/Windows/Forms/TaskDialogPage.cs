@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Linq;
 
 using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
@@ -42,17 +44,17 @@ namespace System.Windows.Forms
         private TaskDialogStandardButtonCollection _standardButtons;
         private TaskDialogCustomButtonCollection _customButtons;
         private TaskDialogRadioButtonCollection _radioButtons;
-        private TaskDialogCheckBox _checkBox;
-        private TaskDialogExpander _expander;
-        private TaskDialogFooter _footer;
-        private TaskDialogProgressBar _progressBar;
+        private TaskDialogCheckBox? _checkBox;
+        private TaskDialogExpander? _expander;
+        private TaskDialogFooter? _footer;
+        private TaskDialogProgressBar? _progressBar;
 
         private TaskDialogFlags _flags;
         private TaskDialogCustomButtonStyle _customButtonStyle;
-        private TaskDialogIcon _icon;
-        private string _title;
-        private string _instruction;
-        private string _text;
+        private TaskDialogIcon? _icon;
+        private string? _title;
+        private string? _instruction;
+        private string? _text;
         private int _width;
         private bool _boundIconIsFromHandle;
         private bool _appliedInitialization;
@@ -95,11 +97,15 @@ namespace System.Windows.Forms
         /// </summary>
         public TaskDialogPage()
         {
+            _customButtons = new TaskDialogCustomButtonCollection();
+            _standardButtons = new TaskDialogStandardButtonCollection();
+            _radioButtons = new TaskDialogRadioButtonCollection();
+            
             // Create empty (hidden) controls.
             _checkBox = new TaskDialogCheckBox();
             _expander = new TaskDialogExpander();
             _footer = new TaskDialogFooter();
-            _progressBar = new TaskDialogProgressBar(TaskDialogProgressBarState.None);
+            _progressBar = new TaskDialogProgressBar(TaskDialogProgressBarState.None);            
         }
 
         /// <summary>
@@ -112,7 +118,7 @@ namespace System.Windows.Forms
         /// </value>
         public TaskDialogStandardButtonCollection StandardButtons
         {
-            get => _standardButtons ??= new TaskDialogStandardButtonCollection();
+            get => _standardButtons;
 
             set
             {
@@ -134,7 +140,7 @@ namespace System.Windows.Forms
         /// </value>
         public TaskDialogCustomButtonCollection CustomButtons
         {
-            get => _customButtons ??= new TaskDialogCustomButtonCollection();
+            get => _customButtons;
 
             set
             {
@@ -156,7 +162,7 @@ namespace System.Windows.Forms
         /// </value>
         public TaskDialogRadioButtonCollection RadioButtons
         {
-            get => _radioButtons ??= new TaskDialogRadioButtonCollection();
+            get => _radioButtons;
 
             set
             {
@@ -175,7 +181,7 @@ namespace System.Windows.Forms
         /// The checkbox will only be shown if its <see cref="TaskDialogCheckBox.Text"/> property
         /// is not <c>null</c> or an empty string.
         /// </remarks>
-        public TaskDialogCheckBox CheckBox
+        public TaskDialogCheckBox? CheckBox
         {
             get => _checkBox;
 
@@ -196,7 +202,7 @@ namespace System.Windows.Forms
         /// The expander button (and the expanded area) will only be shown if its
         /// <see cref="TaskDialogExpander.Text"/> property is not <c>null</c> or an empty string.
         /// </remarks>
-        public TaskDialogExpander Expander
+        public TaskDialogExpander? Expander
         {
             get => _expander;
 
@@ -217,7 +223,7 @@ namespace System.Windows.Forms
         /// The footer will only be shown if its <see cref="TaskDialogFooter.Text"/> property
         /// is not <c>null</c> or an empty string.
         /// </remarks>
-        public TaskDialogFooter Footer
+        public TaskDialogFooter? Footer
         {
             get => _footer;
 
@@ -238,7 +244,7 @@ namespace System.Windows.Forms
         /// The progress bar will only be shown if its <see cref="TaskDialogProgressBar.State"/>
         /// property is not <see cref="TaskDialogProgressBarState.None"/>.
         /// </remarks>
-        public TaskDialogProgressBar ProgressBar
+        public TaskDialogProgressBar? ProgressBar
         {
             get => _progressBar;
 
@@ -258,7 +264,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
-        public string Title
+        public string? Title
         {
             get => _title;
 
@@ -280,7 +286,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
-        public string Instruction
+        public string? Instruction
         {
             get => _instruction;
 
@@ -300,7 +306,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
-        public string Text
+        public string? Text
         {
             get => _text;
 
@@ -322,7 +328,7 @@ namespace System.Windows.Forms
         /// cannot be switched between instances of <see cref="TaskDialogIconHandle"/>
         /// and instances of other icon types).
         /// </remarks>
-        public TaskDialogIcon Icon
+        public TaskDialogIcon? Icon
         {
             get => _icon;
 
@@ -511,7 +517,7 @@ namespace System.Windows.Forms
             set => SetFlag(TaskDialogFlags.TDF_SIZE_TO_CONTENT, value);
         }
 
-        internal TaskDialog BoundTaskDialog { get; private set; }
+        internal TaskDialog? BoundTaskDialog { get; private set; }
 
         /// <summary>
         /// Gets a value that indicates if the <see cref="BoundTaskDialog"/>
@@ -523,14 +529,14 @@ namespace System.Windows.Forms
             get => BoundTaskDialog != null && !_appliedInitialization;
         }
 
-        internal static bool IsNativeStringNullOrEmpty(string str)
+        internal static bool IsNativeStringNullOrEmpty(string? str)
         {
             // From a native point of view, the string is empty if its first
             // character is a NUL char.
             return string.IsNullOrEmpty(str) || str[0] == '\0';
         }
 
-        internal static (IntPtr iconValue, bool? iconIsFromHandle) GetIconValue(TaskDialogIcon icon)
+        internal static (IntPtr iconValue, bool? iconIsFromHandle) GetIconValue(TaskDialogIcon? icon)
         {
             IntPtr iconValue = default;
             bool? iconIsFromHandle = null;
@@ -570,7 +576,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal TaskDialogButton GetBoundButtonByID(int buttonID)
+        internal TaskDialogButton? GetBoundButtonByID(int buttonID)
         {
             if (BoundTaskDialog == null)
             {
@@ -603,7 +609,7 @@ namespace System.Windows.Forms
             return button;
         }
 
-        internal TaskDialogRadioButton GetBoundRadioButtonByID(int buttonID)
+        internal TaskDialogRadioButton? GetBoundRadioButtonByID(int buttonID)
         {
             if (BoundTaskDialog == null)
             {
@@ -626,10 +632,9 @@ namespace System.Windows.Forms
 
             // We also need to check the controls (and collections) since they could also be
             // bound to a TaskDialogPage at the same time.
-            // Access the collections using the property to ensure they exist.
-            if (StandardButtons.BoundPage != null ||
-                CustomButtons.BoundPage != null ||
-                RadioButtons.BoundPage != null)
+            if (_standardButtons.BoundPage != null ||
+                _customButtons.BoundPage != null ||
+                _radioButtons.BoundPage != null)
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogCollectionAlreadyBound,
@@ -637,7 +642,7 @@ namespace System.Windows.Forms
                     nameof(TaskDialog)));
             }
 
-            if (StandardButtons.Concat<TaskDialogControl>(CustomButtons).Concat(RadioButtons)
+            if (StandardButtons.Concat<TaskDialogControl>(_customButtons).Concat(_radioButtons)
                 .Append(_checkBox)
                 .Append(_expander)
                 .Append(_footer)
@@ -650,13 +655,13 @@ namespace System.Windows.Forms
                     nameof(TaskDialog)));
             }
 
-            if (CustomButtons.Count > int.MaxValue - CustomButtonStartID + 1 ||
-                RadioButtons.Count > int.MaxValue - RadioButtonStartID + 1)
+            if (_customButtons.Count > int.MaxValue - CustomButtonStartID + 1 ||
+                _radioButtons.Count > int.MaxValue - RadioButtonStartID + 1)
             {
                 throw new InvalidOperationException(SR.TaskDialogTooManyButtonsAdded);
             }
 
-            if (StandardButtons.Concat<TaskDialogButton>(CustomButtons).Count(e => e.DefaultButton) > 1)
+            if (_standardButtons.Concat<TaskDialogButton>(_customButtons).Count(e => e.DefaultButton) > 1)
             {
                 throw new InvalidOperationException(SR.TaskDialogOnlySingleButtonCanBeDefault);
             }
@@ -720,9 +725,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            TaskDialogStandardButtonCollection standardButtons = StandardButtons;
-            TaskDialogCustomButtonCollection customButtons = CustomButtons;
-            TaskDialogRadioButtonCollection radioButtons = RadioButtons;
+            TaskDialogStandardButtonCollection standardButtons = _standardButtons;
+            TaskDialogCustomButtonCollection customButtons = _customButtons;
+            TaskDialogRadioButtonCollection radioButtons = _radioButtons;
 
             standardButtons.BoundPage = this;
             customButtons.BoundPage = this;
@@ -818,9 +823,9 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException();
             }
 
-            TaskDialogStandardButtonCollection standardButtons = StandardButtons;
-            TaskDialogCustomButtonCollection customButtons = CustomButtons;
-            TaskDialogRadioButtonCollection radioButtons = RadioButtons;
+            TaskDialogStandardButtonCollection standardButtons = _standardButtons;
+            TaskDialogCustomButtonCollection customButtons = _customButtons;
+            TaskDialogRadioButtonCollection radioButtons = _radioButtons;
 
             foreach (TaskDialogStandardButton standardButton in standardButtons)
             {
@@ -859,9 +864,9 @@ namespace System.Windows.Forms
 
             _appliedInitialization = true;
 
-            TaskDialogStandardButtonCollection standardButtons = StandardButtons;
-            TaskDialogCustomButtonCollection customButtons = CustomButtons;
-            TaskDialogRadioButtonCollection radioButtons = RadioButtons;
+            TaskDialogStandardButtonCollection standardButtons = _standardButtons;
+            TaskDialogCustomButtonCollection customButtons = _customButtons;
+            TaskDialogRadioButtonCollection radioButtons = _radioButtons;
 
             foreach (TaskDialogStandardButton button in standardButtons)
             {
