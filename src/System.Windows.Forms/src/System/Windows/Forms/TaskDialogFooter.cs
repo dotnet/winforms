@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
-                // Using the null forgiving operator ("!") here would conflict with the safe navigation operator ("?").
+                // Using the null-forgiving operator ("!") here would conflict with the null-conditional operator ("?").
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 BoundPage?.BoundTaskDialog.UpdateTextElement(
                     TaskDialogTextElement.TDE_FOOTER, value);
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
-                // Using the null forgiving operator ("!") here would conflict with the safe navigation operator ("?").
+                // Using the null-forgiving operator ("!") here would conflict with the null-conditional operator ("?").
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 BoundPage?.BoundTaskDialog.UpdateIconElement(
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
