@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         /// <param name="icon"></param>
-        public static implicit operator TaskDialogIcon(Icon icon)
+        public static implicit operator TaskDialogIcon(Icon? icon)
         {
             return new TaskDialogIconHandle(icon);
         }
