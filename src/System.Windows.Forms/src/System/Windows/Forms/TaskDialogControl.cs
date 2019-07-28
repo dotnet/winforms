@@ -37,6 +37,12 @@ namespace System.Windows.Forms
             private set;
         }
 
+        internal TaskDialog? BoundTaskDialog
+        {
+            // Note: When BoundPage is not null, BoundTaskDialog is also not null.
+            get => BoundPage?.BoundTaskDialog;
+        }
+
         /// <summary>
         /// Gets a value that indicates if the current state of this control
         /// allows it to be created in a task dialog when binding it.

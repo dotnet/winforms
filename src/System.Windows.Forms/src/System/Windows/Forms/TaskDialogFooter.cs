@@ -60,11 +60,8 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
-                // Using the null-forgiving operator ("!") here would conflict with the null-conditional operator ("?").
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                BoundPage?.BoundTaskDialog.UpdateTextElement(
+                BoundTaskDialog?.UpdateTextElement(
                     TaskDialogTextElement.TDE_FOOTER, value);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                 _text = value;
             }
@@ -97,10 +94,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
-                // Using the null-forgiving operator ("!") here would conflict with the null-conditional operator ("?").
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                BoundPage?.BoundTaskDialog.UpdateIconElement(
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                BoundTaskDialog?.UpdateIconElement(
                     TaskDialogIconElement.TDIE_ICON_FOOTER, iconValue);
 
                 _icon = value;
