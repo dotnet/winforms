@@ -811,7 +811,7 @@ namespace System.ComponentModel.Design
                 {
                     options = (MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
                 }
-                MessageBox.Show(this, errorMessage, string.Format(SR.UIServiceHelper_ErrorCaption), MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, options);
+                MessageBox.Show(this, errorMessage, SR.UIServiceHelper_ErrorCaption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, options);
             }
         }
 

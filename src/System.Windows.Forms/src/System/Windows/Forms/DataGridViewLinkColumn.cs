@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewLinkCell)CellTemplate).ActiveLinkColor;
             }
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewLinkCell)CellTemplate).LinkBehavior;
             }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewLinkCell)CellTemplate).LinkColor;
             }
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewLinkCell)CellTemplate).TrackVisitedState;
             }
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewLinkCell)CellTemplate).UseColumnTextForLinkValue;
             }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewLinkCell)CellTemplate).VisitedLinkColor;
             }

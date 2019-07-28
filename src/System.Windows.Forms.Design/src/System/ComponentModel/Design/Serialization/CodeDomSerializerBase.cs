@@ -906,7 +906,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (result == null)
                         {
                             TraceError("CodeThisReferenceExpression not handled because there is no root context or the root context did not contain an instance.");
-                            Error(manager, string.Format(SR.SerializerNoRootExpression), SR.SerializerNoRootExpression);
+                            Error(manager, SR.SerializerNoRootExpression, SR.SerializerNoRootExpression);
                         }
 
                         break;

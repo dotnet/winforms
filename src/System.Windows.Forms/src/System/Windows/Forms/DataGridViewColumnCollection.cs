@@ -224,12 +224,12 @@ namespace System.Windows.Forms
             Debug.Assert(DataGridView != null);
             if (DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
             if (DataGridView.InDisplayIndexAdjustments)
             {
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
 
             DataGridView.OnAddingColumn(dataGridViewColumn);   // will throw an exception if the addition is illegal
@@ -257,12 +257,12 @@ namespace System.Windows.Forms
             Debug.Assert(DataGridView != null);
             if (DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
             if (DataGridView.InDisplayIndexAdjustments)
             {
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
 
             // Order the columns by ascending DisplayIndex so that their display indexes are not altered by the operation.
@@ -343,12 +343,12 @@ namespace System.Windows.Forms
             {
                 if (DataGridView.NoDimensionChangeAllowed)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
+                    throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
                 }
                 if (DataGridView.InDisplayIndexAdjustments)
                 {
                     // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
                 }
 
                 for (int columnIndex = 0; columnIndex < Count; columnIndex++)
@@ -895,12 +895,12 @@ namespace System.Windows.Forms
             Debug.Assert(DataGridView != null);
             if (DataGridView.NoDimensionChangeAllowed)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_ForbiddenOperationInEventHandler));
+                throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
             if (DataGridView.InDisplayIndexAdjustments)
             {
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
             if (dataGridViewColumn == null)
             {
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewColumn.DataGridView != DataGridView)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView), "dataGridViewColumn");
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView, "dataGridViewColumn");
             }
 
             int itemsCount = items.Count;

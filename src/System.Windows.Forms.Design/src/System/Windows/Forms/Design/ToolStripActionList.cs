@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
             _toolStrip = (ToolStrip)designer.Component;
             _designer = designer;
 
-            _changeParentVerb = new ChangeToolStripParentVerb(string.Format(SR.ToolStripDesignerEmbedVerb), designer);
+            _changeParentVerb = new ChangeToolStripParentVerb(SR.ToolStripDesignerEmbedVerb, designer);
             if (!(_toolStrip is StatusStrip))
             {
                 _standardItemsVerb = new StandardMenuStripVerb(designer);

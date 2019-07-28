@@ -1662,17 +1662,17 @@ namespace System.Windows.Forms
             switch (actionID)
             {
                 case 0:
-                    return string.Format(SR.RichTextBox_IDUnknown);
+                    return SR.RichTextBox_IDUnknown;
                 case 1:
-                    return string.Format(SR.RichTextBox_IDTyping);
+                    return SR.RichTextBox_IDTyping;
                 case 2:
-                    return string.Format(SR.RichTextBox_IDDelete);
+                    return SR.RichTextBox_IDDelete;
                 case 3:
-                    return string.Format(SR.RichTextBox_IDDragDrop);
+                    return SR.RichTextBox_IDDragDrop;
                 case 4:
-                    return string.Format(SR.RichTextBox_IDCut);
+                    return SR.RichTextBox_IDCut;
                 case 5:
-                    return string.Format(SR.RichTextBox_IDPaste);
+                    return SR.RichTextBox_IDPaste;
                 default:
                     goto
                 case 0;

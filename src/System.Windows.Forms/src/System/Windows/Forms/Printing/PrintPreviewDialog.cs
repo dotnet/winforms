@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeText()
         {
-            return !Text.Equals(string.Format(SR.PrintPreviewDialog_PrintPreview));
+            return !Text.Equals(SR.PrintPreviewDialog_PrintPreview);
         }
 
         void OncloseToolStripButtonClick(object sender, EventArgs e)

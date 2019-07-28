@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return string.Format(SR.DataGridView_AccLinkCellDefaultAction);
+                    return SR.DataGridView_AccLinkCellDefaultAction;
                 }
             }
 
@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms
 
                 if (dataGridView != null && dataGridViewCell.RowIndex == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
+                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
                 }
 
                 if (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)

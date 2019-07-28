@@ -479,7 +479,7 @@ namespace System.Windows.Forms
             scrollBars = ScrollBars.Both;
 
             horizScrollBar.RightToLeft = RightToLeft.Inherit;
-            horizScrollBar.AccessibleName = string.Format(SR.DataGridView_AccHorizontalScrollBarAccName);
+            horizScrollBar.AccessibleName = SR.DataGridView_AccHorizontalScrollBarAccName;
             horizScrollBar.Top = ClientRectangle.Height - horizScrollBar.Height;
             horizScrollBar.Left = 0;
             horizScrollBar.Visible = false;
@@ -487,7 +487,7 @@ namespace System.Windows.Forms
             Controls.Add(horizScrollBar);
 
             vertScrollBar.Top = 0;
-            vertScrollBar.AccessibleName = string.Format(SR.DataGridView_AccVerticalScrollBarAccName);
+            vertScrollBar.AccessibleName = SR.DataGridView_AccVerticalScrollBarAccName;
             vertScrollBar.Left = ClientRectangle.Width - vertScrollBar.Width;
             vertScrollBar.Visible = false;
             vertScrollBar.Scroll += new ScrollEventHandler(DataGridViewVScrolled);
@@ -1038,12 +1038,12 @@ namespace System.Windows.Forms
                             // Make sure there is no visible column which would have an inherited autosize mode based on the header only.
                             if (value == DataGridViewAutoSizeColumnsMode.ColumnHeader && !ColumnHeadersVisible)
                             {
-                                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeColumnsInvisibleColumnHeaders));
+                                throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeColumnsInvisibleColumnHeaders);
                             }
                             // Make sure there is no visible frozen column which would have a Fill inherited autosize mode.
                             if (value == DataGridViewAutoSizeColumnsMode.Fill && dataGridViewColumn.Frozen)
                             {
-                                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoFillFrozenColumns));
+                                throw new InvalidOperationException(SR.DataGridView_CannotAutoFillFrozenColumns);
                             }
                         }
                     }
@@ -1105,7 +1105,7 @@ namespace System.Windows.Forms
                 if ((value == DataGridViewAutoSizeRowsMode.AllHeaders || value == DataGridViewAutoSizeRowsMode.DisplayedHeaders) &&
                     !RowHeadersVisible)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader);
                 }
                 if (autoSizeRowsMode != value)
                 {
@@ -1618,7 +1618,7 @@ namespace System.Windows.Forms
                 }
                 if (DataSource != null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSetColumnCountOnDataBoundDataGridView));
+                    throw new InvalidOperationException(SR.DataGridView_CannotSetColumnCountOnDataBoundDataGridView);
                 }
                 if (value != Columns.Count)
                 {
@@ -1938,7 +1938,7 @@ namespace System.Windows.Forms
                         {
                             if (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader)
                             {
-                                throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnHeadersCannotBeInvisible));
+                                throw new InvalidOperationException(SR.DataGridView_ColumnHeadersCannotBeInvisible);
                             }
                             dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                                 DataGridViewElementStates.Visible,
@@ -2007,23 +2007,23 @@ namespace System.Windows.Forms
                         if (!SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*throughMouseClick*/))
                         {
                             // Edited value couldn't be committed or aborted
-                            throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                            throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                         }
                     }
                     else
                     {
                         if (value.DataGridView != this)
                         {
-                            throw new ArgumentException(string.Format(SR.DataGridView_CellDoesNotBelongToDataGridView));
+                            throw new ArgumentException(SR.DataGridView_CellDoesNotBelongToDataGridView);
                         }
                         if (!Columns[value.ColumnIndex].Visible ||
                             (Rows.GetRowState(value.RowIndex) & DataGridViewElementStates.Visible) == 0)
                         {
-                            throw new InvalidOperationException(string.Format(SR.DataGridView_CurrentCellCannotBeInvisible));
+                            throw new InvalidOperationException(SR.DataGridView_CurrentCellCannotBeInvisible);
                         }
                         if (!ScrollIntoView(value.ColumnIndex, value.RowIndex, true))
                         {
-                            throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                            throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                         }
                         if (IsInnerCellOutOfBounds(value.ColumnIndex, value.RowIndex))
                         {
@@ -2032,7 +2032,7 @@ namespace System.Windows.Forms
                         ClearSelection(value.ColumnIndex, value.RowIndex, true /*selectExceptionElement*/);
                         if (!SetCurrentCellAddressCore(value.ColumnIndex, value.RowIndex, true, false, false))
                         {
-                            throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                            throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                         }
                     }
                 }
@@ -2617,7 +2617,7 @@ namespace System.Windows.Forms
                 {
                     editingPanel = new DataGridViewEditingPanel(this)
                     {
-                        AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName)
+                        AccessibleName = SR.DataGridView_AccEditingPanelAccName
                     };
                 }
                 return editingPanel;
@@ -2686,11 +2686,11 @@ namespace System.Windows.Forms
                     DataGridViewCell firstDisplayedCell = value;
                     if (firstDisplayedCell.DataGridView != this)
                     {
-                        throw new ArgumentException(string.Format(SR.DataGridView_CellDoesNotBelongToDataGridView));
+                        throw new ArgumentException(SR.DataGridView_CellDoesNotBelongToDataGridView);
                     }
                     if (firstDisplayedCell.RowIndex == -1 || firstDisplayedCell.ColumnIndex == -1)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell));
+                        throw new InvalidOperationException(SR.DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell);
                     }
 
                     Debug.Assert(firstDisplayedCell.RowIndex >= 0 &&
@@ -2700,7 +2700,7 @@ namespace System.Windows.Forms
 
                     if (!firstDisplayedCell.Visible)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedCellCannotBeInvisible));
+                        throw new InvalidOperationException(SR.DataGridView_FirstDisplayedCellCannotBeInvisible);
                     }
 
                     if (!firstDisplayedCell.Frozen)
@@ -2866,11 +2866,11 @@ namespace System.Windows.Forms
                 }
                 if (!Columns[value].Visible)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeInvisible));
+                    throw new InvalidOperationException(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeInvisible);
                 }
                 if (Columns[value].Frozen)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeFrozen));
+                    throw new InvalidOperationException(SR.DataGridView_FirstDisplayedScrollingColumnCannotBeFrozen);
                 }
 
                 if (!IsHandleCreated)
@@ -2881,14 +2881,14 @@ namespace System.Windows.Forms
                 int displayWidth = layout.Data.Width;
                 if (displayWidth <= 0)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_NoRoomForDisplayedColumns));
+                    throw new InvalidOperationException(SR.DataGridView_NoRoomForDisplayedColumns);
                 }
 
                 int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 if (totalVisibleFrozenWidth >= displayWidth)
                 {
                     Debug.Assert(totalVisibleFrozenWidth > 0);
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_FrozenColumnsPreventFirstDisplayedScrollingColumn));
+                    throw new InvalidOperationException(SR.DataGridView_FrozenColumnsPreventFirstDisplayedScrollingColumn);
                 }
 
                 if (value == displayedBandsInfo.FirstDisplayedScrollingCol)
@@ -2941,11 +2941,11 @@ namespace System.Windows.Forms
                 }
                 if ((Rows.GetRowState(value) & DataGridViewElementStates.Visible) == 0)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingRowCannotBeInvisible));
+                    throw new InvalidOperationException(SR.DataGridView_FirstDisplayedScrollingRowCannotBeInvisible);
                 }
                 if ((Rows.GetRowState(value) & DataGridViewElementStates.Frozen) != 0)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_FirstDisplayedScrollingRowCannotBeFrozen));
+                    throw new InvalidOperationException(SR.DataGridView_FirstDisplayedScrollingRowCannotBeFrozen);
                 }
 
                 if (!IsHandleCreated)
@@ -2956,14 +2956,14 @@ namespace System.Windows.Forms
                 int displayHeight = layout.Data.Height;
                 if (displayHeight <= 0)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_NoRoomForDisplayedRows));
+                    throw new InvalidOperationException(SR.DataGridView_NoRoomForDisplayedRows);
                 }
 
                 int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 if (totalVisibleFrozenHeight >= displayHeight)
                 {
                     Debug.Assert(totalVisibleFrozenHeight > 0);
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_FrozenRowsPreventFirstDisplayedScrollingRow));
+                    throw new InvalidOperationException(SR.DataGridView_FrozenRowsPreventFirstDisplayedScrollingRow);
                 }
 
                 if (value == displayedBandsInfo.FirstDisplayedScrollingRow)
@@ -3267,7 +3267,7 @@ namespace System.Windows.Forms
                 else if (value > 0 && (Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - layout.Data.Width) <= 0)
                 {
                     // Intentionally ignoring the case where dev tries to set value while there is no horizontal scrolling possible.
-                    // throw new ArgumentOutOfRangeException(nameof(HorizontalScrollingOffset), string.Format(SR.DataGridView_PropertyMustBeZero));
+                    // throw new ArgumentOutOfRangeException(nameof(HorizontalScrollingOffset), SR.DataGridView_PropertyMustBeZero);
                     Debug.Assert(horizontalOffset == 0);
                     return;
                 }
@@ -3637,7 +3637,7 @@ namespace System.Windows.Forms
                                      false /*resetCurrentCell*/,
                                      false /*resetAnchorCell*/))
                         {
-                            throw new InvalidOperationException(string.Format(SR.DataGridView_CommitFailedCannotCompleteOperation));
+                            throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                         }
                     }
 
@@ -3699,7 +3699,7 @@ namespace System.Windows.Forms
                 !SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*throughMouseClick*/))
             {
                 // Edited value couldn't be committed or aborted
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
             }
         }
 
@@ -3755,7 +3755,7 @@ namespace System.Windows.Forms
                 }
                 if (DataSource != null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSetRowCountOnDataBoundDataGridView));
+                    throw new InvalidOperationException(SR.DataGridView_CannotSetRowCountOnDataBoundDataGridView);
                 }
                 if (value != Rows.Count)
                 {
@@ -3948,7 +3948,7 @@ namespace System.Windows.Forms
                     if (!value &&
                         (autoSizeRowsMode == DataGridViewAutoSizeRowsMode.AllHeaders || autoSizeRowsMode == DataGridViewAutoSizeRowsMode.DisplayedHeaders))
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_RowHeadersCannotBeInvisible));
+                        throw new InvalidOperationException(SR.DataGridView_RowHeadersCannotBeInvisible);
                     }
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.RowHeadersVisible))
                     {
@@ -4171,11 +4171,11 @@ namespace System.Windows.Forms
                 {
                     if (dataGridViewRow.DataGridView != null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
+                        throw new InvalidOperationException(SR.DataGridView_RowAlreadyBelongsToDataGridView);
                     }
                     //if (dataGridViewRow.Selected)
                     //{
-                    //    throw new InvalidOperationException(string.Format(SR.DataGridView_RowTemplateCannotBeSelected));
+                    //    throw new InvalidOperationException(SR.DataGridView_RowTemplateCannotBeSelected);
                     //}
                 }
                 rowTemplate = dataGridViewRow;
@@ -4233,7 +4233,7 @@ namespace System.Windows.Forms
                         {
                             if (!ScrollIntoView(dataGridViewColumn.Index, firstVisibleRowIndex, false))
                             {
-                                throw new InvalidOperationException(string.Format(SR.DataGridView_CellChangeCannotBeCommittedOrAborted));
+                                throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                             }
                         }
                         Debug.Assert(HorizontalOffset == 0);

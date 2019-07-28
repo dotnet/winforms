@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             {
                 if (value && Exception == null)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridView_CannotThrowNullException));
+                    throw new ArgumentException(SR.DataGridView_CannotThrowNullException);
                 }
 
                 _throwException = value;

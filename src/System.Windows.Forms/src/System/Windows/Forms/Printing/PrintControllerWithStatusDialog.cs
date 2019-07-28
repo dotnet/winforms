@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         private readonly string dialogTitle;
 
         public PrintControllerWithStatusDialog(PrintController underlyingController)
-        : this(underlyingController, string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePrint))
+        : this(underlyingController, SR.PrintControllerWithStatusDialog_DialogTitlePrint)
         {
         }
 
@@ -274,7 +274,7 @@ namespace System.Windows.Forms
                 button1.AutoSize = true;
                 button1.Size = new Size(75, 23);
                 button1.TabIndex = 0;
-                button1.Text = string.Format(SR.PrintControllerWithStatusDialog_Cancel);
+                button1.Text = SR.PrintControllerWithStatusDialog_Cancel;
                 button1.Location = new Point(88, 88);
                 button1.Anchor = AnchorStyles.None;
                 button1.Click += new EventHandler(button1_Click);
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
             private void button1_Click(object sender, EventArgs e)
             {
                 button1.Enabled = false;
-                label1.Text = string.Format(SR.PrintControllerWithStatusDialog_Canceling);
+                label1.Text = SR.PrintControllerWithStatusDialog_Canceling;
                 backgroundThread.canceled = true;
             }
         }

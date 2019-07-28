@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ImageCellTemplate.Description;
             }
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 ImageCellTemplate.Description = value;
                 if (DataGridView != null)
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 DataGridViewImageCellLayout imageLayout = ImageCellTemplate.ImageLayout;
                 if (imageLayout == DataGridViewImageCellLayout.NotSet)
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
             {
                 if (ImageCellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ImageCellTemplate.ValueIsIcon;
             }

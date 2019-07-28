@@ -174,7 +174,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (session != null)
             {
-                throw new InvalidOperationException(string.Format(SR.SerializationManagerWithinSession));
+                throw new InvalidOperationException(SR.SerializationManagerWithinSession);
             }
         }
 
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (session == null)
             {
-                throw new InvalidOperationException(string.Format(SR.SerializationManagerNoSession));
+                throw new InvalidOperationException(SR.SerializationManagerNoSession);
             }
         }
 
@@ -386,7 +386,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (session != null)
             {
-                throw new InvalidOperationException(string.Format(SR.SerializationManagerAreadyInSession));
+                throw new InvalidOperationException(SR.SerializationManagerAreadyInSession);
             }
 
             session = new SerializationSession(this);

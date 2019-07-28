@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return string.Format(SR.DataGridView_AccSelectedCellsName);
+                    return SR.DataGridView_AccSelectedCellsName;
                 }
             }
 

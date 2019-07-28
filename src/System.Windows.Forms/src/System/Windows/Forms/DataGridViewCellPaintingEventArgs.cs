@@ -80,11 +80,11 @@ namespace System.Windows.Forms
         {
             if (RowIndex < -1 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
             }
 
             _dataGridView.GetCellInternal(ColumnIndex, RowIndex).PaintInternal(Graphics,
@@ -104,11 +104,11 @@ namespace System.Windows.Forms
         {
             if (RowIndex < -1 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
             }
 
             DataGridViewPaintParts paintParts = DataGridViewPaintParts.Background | DataGridViewPaintParts.Border;
@@ -133,11 +133,11 @@ namespace System.Windows.Forms
         {
             if (RowIndex < -1 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
             }
 
             _dataGridView.GetCellInternal(ColumnIndex, RowIndex).PaintInternal(Graphics,

@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).DrawFocus(Graphics,
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).PaintCells(Graphics,
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             DataGridViewPaintParts paintParts = DataGridViewPaintParts.Background | DataGridViewPaintParts.Border;
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).PaintCells(Graphics,
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).PaintHeader(Graphics,

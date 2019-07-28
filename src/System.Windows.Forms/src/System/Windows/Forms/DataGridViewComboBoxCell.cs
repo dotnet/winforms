@@ -756,14 +756,6 @@ namespace System.Windows.Forms
             }
         }
 
-        //private void CheckNoSharedCell()
-        //{
-        //    if (this.DataGridView != null && this.RowIndex == -1)
-        //    {
-        //        throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
-        //    }
-        //}
-
         private void ComboBox_DropDown(object sender, EventArgs e)
         {
             Debug.Assert(DataGridView != null);
@@ -1095,7 +1087,7 @@ namespace System.Windows.Forms
                 if (DataGridView != null)
                 {
                     DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                        new FormatException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), ColumnIndex,
+                        new FormatException(SR.DataGridViewComboBoxCell_InvalidValue), ColumnIndex,
                         rowIndex, context);
                     RaiseDataError(dgvdee);
                     if (dgvdee.ThrowException)
@@ -1123,7 +1115,7 @@ namespace System.Windows.Forms
                     else if (DataGridView != null)
                     {
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), ColumnIndex,
+                            new ArgumentException(SR.DataGridViewComboBoxCell_InvalidValue), ColumnIndex,
                             rowIndex, context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
@@ -1149,7 +1141,7 @@ namespace System.Windows.Forms
                     if (DataGridView != null)
                     {
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
-                            new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_InvalidValue)), ColumnIndex,
+                            new ArgumentException(SR.DataGridViewComboBoxCell_InvalidValue), ColumnIndex,
                             rowIndex, context);
                         RaiseDataError(dgvdee);
                         if (dgvdee.ThrowException)
@@ -2610,7 +2602,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new FormatException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.Formatter_CantConvert), value, DisplayType));
+                        throw new FormatException(string.Format(CultureInfo.CurrentCulture, SR.Formatter_CantConvert, value, DisplayType));
                     }
                 }
                 return value;

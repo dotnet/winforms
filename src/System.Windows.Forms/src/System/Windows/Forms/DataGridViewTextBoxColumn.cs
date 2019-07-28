@@ -50,7 +50,7 @@ namespace System.Windows.Forms
             {
                 if (TextBoxCellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return TextBoxCellTemplate.MaxInputLength;
             }

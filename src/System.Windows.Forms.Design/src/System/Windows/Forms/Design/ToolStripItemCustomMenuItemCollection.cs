@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (_designerHost.GetDesigner(currentItem) is ToolStripItemDesigner itemDesigner)
                     {
-                        verbManager = new CollectionEditVerbManager(string.Format(SR.ToolStripDropDownItemCollectionEditorVerb), itemDesigner, TypeDescriptor.GetProperties(currentItem)["DropDownItems"], false);
+                        verbManager = new CollectionEditVerbManager(SR.ToolStripDropDownItemCollectionEditorVerb, itemDesigner, TypeDescriptor.GetProperties(currentItem)["DropDownItems"], false);
                         editItemsToolStripMenuItem = new ToolStripMenuItem
                         {
                             Text = SR.ToolStripDropDownItemCollectionEditorVerb

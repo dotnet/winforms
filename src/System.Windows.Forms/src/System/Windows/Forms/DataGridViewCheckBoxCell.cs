@@ -66,13 +66,13 @@ namespace System.Windows.Forms
             {
                 if (FormattedValueType == null)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridViewCell_FormattedValueTypeNull));
+                    throw new ArgumentException(SR.DataGridViewCell_FormattedValueTypeNull);
                 }
                 if (value == null || !FormattedValueType.IsAssignableFrom(value.GetType()))
                 {
                     // Assigned formatted value may not be of the good type, in cases where the app
                     // is feeding wrong values to the cell in virtual / databound mode.
-                    throw new ArgumentException(string.Format(SR.DataGridViewCheckBoxCell_InvalidValueType));
+                    throw new ArgumentException(SR.DataGridViewCheckBoxCell_InvalidValueType);
                 }
                 if (value is CheckState)
                 {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridViewCheckBoxCell_InvalidValueType));
+                    throw new ArgumentException(SR.DataGridViewCheckBoxCell_InvalidValueType);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
         {
             if (FormattedValueType == null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewCell_FormattedValueTypeNull));
+                throw new InvalidOperationException(SR.DataGridViewCell_FormattedValueTypeNull);
             }
             if (FormattedValueType.IsAssignableFrom(defaultCheckStateType))
             {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
                 {
                     if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                     {
-                        return string.Format(SR.DataGridViewCheckBoxCell_ClipboardChecked);
+                        return SR.DataGridViewCheckBoxCell_ClipboardChecked;
                     }
                     return System.Windows.Forms.CheckState.Checked;
                 }
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
                 {
                     if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                     {
-                        return string.Format(SR.DataGridViewCheckBoxCell_ClipboardIndeterminate);
+                        return SR.DataGridViewCheckBoxCell_ClipboardIndeterminate;
                     }
                     return System.Windows.Forms.CheckState.Indeterminate;
                 }
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
                 {
                     if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                     {
-                        return string.Format(SR.DataGridViewCheckBoxCell_ClipboardUnchecked);
+                        return SR.DataGridViewCheckBoxCell_ClipboardUnchecked;
                     }
                     return System.Windows.Forms.CheckState.Unchecked;
                 }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                 bool ret = (bool)((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00);
                 if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                 {
-                    return string.Format(ret ? SR.DataGridViewCheckBoxCell_ClipboardTrue : SR.DataGridViewCheckBoxCell_ClipboardFalse);
+                    return ret ? SR.DataGridViewCheckBoxCell_ClipboardTrue : SR.DataGridViewCheckBoxCell_ClipboardFalse;
                 }
                 return ret;
             }
@@ -643,27 +643,27 @@ namespace System.Windows.Forms
                 {
                     if (retBool)
                     {
-                        return string.Format(ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardChecked : SR.DataGridViewCheckBoxCell_ClipboardTrue);
+                        return ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardChecked : SR.DataGridViewCheckBoxCell_ClipboardTrue;
                     }
                     else
                     {
-                        return string.Format(ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardUnchecked : SR.DataGridViewCheckBoxCell_ClipboardFalse);
+                        return ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardUnchecked : SR.DataGridViewCheckBoxCell_ClipboardFalse;
                     }
                 }
                 else if (ret is CheckState retCheckState)
                 {
                     if (retCheckState == CheckState.Checked)
                     {
-                        return string.Format(ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardChecked : SR.DataGridViewCheckBoxCell_ClipboardTrue);
+                        return ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardChecked : SR.DataGridViewCheckBoxCell_ClipboardTrue;
                     }
                     else if (retCheckState == CheckState.Unchecked)
                     {
-                        return string.Format(ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardUnchecked : SR.DataGridViewCheckBoxCell_ClipboardFalse);
+                        return ThreeState ? SR.DataGridViewCheckBoxCell_ClipboardUnchecked : SR.DataGridViewCheckBoxCell_ClipboardFalse;
                     }
                     else
                     {
                         Debug.Assert(retCheckState == CheckState.Indeterminate);
-                        return string.Format(SR.DataGridViewCheckBoxCell_ClipboardIndeterminate);
+                        return SR.DataGridViewCheckBoxCell_ClipboardIndeterminate;
                     }
                 }
             }
@@ -1751,11 +1751,11 @@ namespace System.Windows.Forms
 
                         if (switchToCheckedState)
                         {
-                            return string.Format(SR.DataGridView_AccCheckBoxCellDefaultActionCheck);
+                            return SR.DataGridView_AccCheckBoxCellDefaultActionCheck;
                         }
                         else
                         {
-                            return string.Format(SR.DataGridView_AccCheckBoxCellDefaultActionUncheck);
+                            return SR.DataGridView_AccCheckBoxCellDefaultActionUncheck;
                         }
                     }
                     else
@@ -1772,7 +1772,7 @@ namespace System.Windows.Forms
 
                 if (dataGridView != null && dataGridViewCell.RowIndex == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
+                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
                 }
 
                 if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)

@@ -1332,13 +1332,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             lastValue = value;
                             return;
                         default:
-
-                            //Debug.Fail(String.Format("IDispatch::Invoke(INVOKE_PROPPUT) returned hr=0x{0:X}", hr));
-
-                            if (pDisp is UnsafeNativeMethods.ISupportErrorInfo)
+                            if (pDisp is UnsafeNativeMethods.ISupportErrorInfo iSupportErrorInfo)
                             {
                                 g = typeof(UnsafeNativeMethods.IDispatch).GUID;
-                                if (NativeMethods.Succeeded(((UnsafeNativeMethods.ISupportErrorInfo)pDisp).InterfaceSupportsErrorInfo(ref g)))
+                                if (NativeMethods.Succeeded(iSupportErrorInfo.InterfaceSupportsErrorInfo(ref g)))
                                 {
                                     UnsafeNativeMethods.IErrorInfo pErrorInfo = null;
                                     UnsafeNativeMethods.GetErrorInfo(0, ref pErrorInfo);

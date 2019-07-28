@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewButtonCell)CellTemplate).FlatStyle;
             }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
             {
                 if (CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
+                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 return ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValue;
             }
