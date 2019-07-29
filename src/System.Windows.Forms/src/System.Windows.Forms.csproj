@@ -77,6 +77,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetSystemMetrics.cs" Link="Interop\User32\Interop.GetSystemMetrics.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.LoadCursorW.cs" Link="Interop\User32\Interop.LoadCursorW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.GetCurrentThemeName.cs" Link="Interop\UxTheme\Interop.GetCurrentThemeName.cs" />
     <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.GetThemeDocumentationProperty.cs" Link="Interop\UxTheme\Interop.GetCurrentThemeName.cs" />

@@ -191,22 +191,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return CurrentInternal;
-            }
-
-            set
-            {
-                CurrentInternal = value;
-            }
-        }
-
-        internal static Cursor CurrentInternal
-        {
-            get
-            {
                 IntPtr curHandle = SafeNativeMethods.GetCursor();
+                if (curHandle == IntPtr.Zero)
+                {
+                    return null;
+                }
 
-                return Cursors.KnownCursorFromHCursor(curHandle);
+                return new Cursor(curHandle);
             }
             set
             {
@@ -550,7 +541,7 @@ namespace System.Windows.Forms
             try
             {
                 resourceId = nResourceId;
-                handle = SafeNativeMethods.LoadCursor(NativeMethods.NullHandleRef, nResourceId);
+                handle = Interop.User32.LoadCursorW(IntPtr.Zero, nResourceId);
             }
             catch (Exception e)
             {

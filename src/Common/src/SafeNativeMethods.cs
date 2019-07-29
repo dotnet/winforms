@@ -298,9 +298,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetViewportExtEx(HandleRef hDC, int x, int y, NativeMethods.SIZE size);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr LoadCursor(HandleRef hInst, int iconId);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public extern static bool GetClipCursor(ref Interop.RECT lpRect);
 
