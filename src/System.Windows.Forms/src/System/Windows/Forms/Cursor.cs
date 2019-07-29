@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Security;
 
 namespace System.Windows.Forms
 {
@@ -50,12 +51,12 @@ namespace System.Windows.Forms
                     cursorData = (byte[])sie.Value;
                     if (cursorData != null)
                     {
-                        LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
+                        LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(info));
                     }
                 }
                 else if (string.Compare(sie.Name, "CursorResourceId", true, CultureInfo.InvariantCulture) == 0)
                 {
-                    LoadFromResourceId((int)sie.Value);
+                    LoadFromResourceId((int)sie.Value, nameof(info));
                 }
             }
         }
@@ -67,7 +68,7 @@ namespace System.Windows.Forms
         //
         internal Cursor(int nResourceId, int dummy)
         {
-            LoadFromResourceId(nResourceId);
+            LoadFromResourceId(nResourceId, nameof(nResourceId));
         }
 
         // Private constructor.  We have a private constructor here for
@@ -83,7 +84,7 @@ namespace System.Windows.Forms
             Debug.Assert(stream != null, "couldn't get stream for resource " + resource);
             cursorData = new byte[stream.Length];
             stream.Read(cursorData, 0, Convert.ToInt32(stream.Length)); // we assume that a cursor is less than 4gig big
-            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
+            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(resource));
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace System.Windows.Forms
         {
             if (handle == IntPtr.Zero)
             {
-                throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name));
+                throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name), nameof(handle));
             }
 
             this.handle = handle;
@@ -119,13 +120,13 @@ namespace System.Windows.Forms
             {
                 f.Close();
             }
-            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
+            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(fileName));
         }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
         /// </summary>
-        public Cursor(Type type, string resource) : this(type.Module.Assembly.GetManifestResourceStream(type, resource))
+        public Cursor(Type type, string resource) : this((type?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource))
         {
         }
 
@@ -135,9 +136,14 @@ namespace System.Windows.Forms
         /// </summary>
         public Cursor(Stream stream)
         {
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             cursorData = new byte[stream.Length];
             stream.Read(cursorData, 0, Convert.ToInt32(stream.Length));// assume that a cursor is less than 4gig...
-            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
+            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(stream));
         }
 
         /// <summary>
@@ -340,18 +346,8 @@ namespace System.Windows.Forms
             GC.SuppressFinalize(this);
         }
 
-        void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
-            /*if (picture != null) {
-                picture = null;
-
-                // If we have no message loop, OLE may block on this call.
-                // Let pent up SendMessage calls go through here.
-                //
-                NativeMethods.MSG msg = new NativeMethods.MSG();
-                UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE | NativeMethods.PM_NOYIELD);
-            }*/ // do we still keep that?
-
             if (handle != IntPtr.Zero)
             {
                 DestroyHandle();
@@ -368,6 +364,11 @@ namespace System.Windows.Forms
         // This method is way more powerful than what we expose, but I'll leave it in place.
         private void DrawImageCore(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)
         {
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
             // Support GDI+ Translate method
             targetRect.X += (int)graphics.Transform.OffsetX;
             targetRect.Y += (int)graphics.Transform.OffsetY;
@@ -530,23 +531,21 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.ShowCursor(false);
         }
 
-        private void LoadFromResourceId(int nResourceId)
+        private void LoadFromResourceId(int nResourceId, string paramName)
         {
-            ownHandle = false;  // we don't delete stock cursors.
+            // We don't delete stock cursors.
+            ownHandle = false;
 
-            // We assert here on exception -- this constructor is used during clinit,
-            // and it would be a shame if we failed to initialize all of windows forms just
-            // just because a cursor couldn't load.
-            //
+            // This constructor is used during class initialization. By catching this
+            // exception we prevent WinForms from failing to initialize if an error occurs.
             try
             {
                 resourceId = nResourceId;
                 handle = Interop.User32.LoadCursorW(IntPtr.Zero, nResourceId);
             }
-            catch (Exception e)
+            catch
             {
                 handle = IntPtr.Zero;
-                Debug.Fail(e.ToString());
             }
         }
 
@@ -581,12 +580,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Loads a picture from the requested stream.
         /// </summary>
-        private void LoadPicture(UnsafeNativeMethods.IStream stream)
+        private void LoadPicture(UnsafeNativeMethods.IStream stream, string paramName)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
+            Debug.Assert(stream != null, "Stream should be validated before this method is called.");
+
             try
             {
                 Guid g = typeof(UnsafeNativeMethods.IPicture).GUID;
@@ -618,9 +615,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new ArgumentException(string.Format(SR.InvalidPictureType,
-                                                          "picture",
-                                                          "Cursor"), "picture");
+                        throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
                     }
                 }
                 finally
@@ -634,38 +629,25 @@ namespace System.Windows.Forms
             }
             catch (COMException e)
             {
-                Debug.Fail(e.ToString());
-                throw new ArgumentException(SR.InvalidPictureFormat, "stream", e);
+                throw new ArgumentException(SR.InvalidPictureFormat, paramName, e);
             }
         }
 
         /// <summary>
         ///  Saves a picture from the requested stream.
         /// </summary>
-        internal void SavePicture(Stream stream)
+        internal byte[] GetData()
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
             if (resourceId != 0)
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
-            try
+            if (cursorData == null)
             {
-                stream.Write(cursorData, 0, cursorData.Length);
-            }
-            catch (Security.SecurityException)
-            {
-                // dont eat security exceptions.
-                throw;
-            }
-            catch (Exception e)
-            {
-                Debug.Fail(e.ToString());
                 throw new InvalidOperationException(SR.InvalidPictureFormat);
             }
+
+            return (byte[])cursorData.Clone();
         }
 
         /// <summary>
