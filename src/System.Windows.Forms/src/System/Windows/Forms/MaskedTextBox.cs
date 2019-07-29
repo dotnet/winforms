@@ -739,7 +739,7 @@ namespace System.Windows.Forms
                         if (!MaskedTextProvider.IsValidMaskChar(c))
                         {
                             // Same message as in SR.MaskedTextProviderMaskInvalidChar in System.txt
-                            throw new ArgumentException(string.Format(SR.MaskedTextBoxMaskInvalidChar));
+                            throw new ArgumentException(SR.MaskedTextBoxMaskInvalidChar);
                         }
                     }
 

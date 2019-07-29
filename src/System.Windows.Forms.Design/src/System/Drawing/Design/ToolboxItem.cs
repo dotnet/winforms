@@ -1054,7 +1054,7 @@ namespace System.Drawing.Design
 
                 if (!(key is string propertyName) || propertyName.Length == 0)
                 {
-                    throw new ArgumentException(string.Format(SR.ToolboxItemInvalidKey), nameof(key));
+                    throw new ArgumentException(SR.ToolboxItemInvalidKey, nameof(key));
                 }
 
                 return propertyName;

@@ -453,7 +453,7 @@ namespace System.Windows.Forms
                     UseAntiAlias = UseAntiAlias
                 };
                 document.PrintController = new PrintControllerWithStatusDialog(previewController,
-                                                                               string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
+                                                                               SR.PrintControllerWithStatusDialog_DialogTitlePreview);
 
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();

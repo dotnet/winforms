@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 {
                     if (value != null && value.Length > 63)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(Text), value, string.Format(SR.TrayIcon_TextTooLong));
+                        throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }
                     text = value;
                     if (added)

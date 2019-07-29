@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms
             }
             if (DataGridView != null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
+                throw new InvalidOperationException(SR.DataGridView_RowAlreadyBelongsToDataGridView);
             }
 
             DataGridViewCellCollection cells = Cells;
@@ -1730,7 +1730,7 @@ namespace System.Windows.Forms
             {
                 if (DataGridView.VirtualMode)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationInVirtualMode));
+                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationInVirtualMode);
                 }
                 if (Index == -1)
                 {
@@ -1854,7 +1854,7 @@ namespace System.Windows.Forms
                 {
                     if (owner != null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerAlreadySet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerAlreadySet);
                     }
 
                     owner = value;

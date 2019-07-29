@@ -773,7 +773,7 @@ namespace System.Windows.Forms
             {
                 if (value is TabPage)
                 {
-                    throw new ArgumentException(string.Format(SR.TABCONTROLTabPageOnTabPage));
+                    throw new ArgumentException(SR.TABCONTROLTabPageOnTabPage);
                 }
 
                 base.Add(value);

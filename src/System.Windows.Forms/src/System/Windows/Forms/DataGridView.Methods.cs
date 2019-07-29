@@ -516,7 +516,7 @@ namespace System.Windows.Forms
         {
             if (InAdjustFillingColumns)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterAutoFillColumnParameter));
+                throw new InvalidOperationException(SR.DataGridView_CannotAlterAutoFillColumnParameter);
             }
 
             dataGridViewOper[DATAGRIDVIEWOPER_inAdjustFillingColumn] = true;
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms
 
             if (autoSizeColumnMode == DataGridViewAutoSizeColumnMode.ColumnHeader && !ColumnHeadersVisible)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeInvisibleColumnHeader));
+                throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeInvisibleColumnHeader);
             }
 
             AutoResizeColumnInternal(columnIndex, (DataGridViewAutoSizeColumnCriteriaInternal)autoSizeColumnMode, fixedHeight);
@@ -1921,7 +1921,7 @@ namespace System.Windows.Forms
             }
             if (autoSizeRowMode == DataGridViewAutoSizeRowMode.RowHeader && !RowHeadersVisible)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeRowInvisibleRowHeader));
+                throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeRowInvisibleRowHeader);
             }
             AutoResizeRowInternal(rowIndex, autoSizeRowMode, fixedWidth, false /*internalAutosizing*/);
         }
@@ -2342,7 +2342,7 @@ namespace System.Windows.Forms
             if ((autoSizeRowsMode == DataGridViewAutoSizeRowsMode.AllHeaders || autoSizeRowsMode == DataGridViewAutoSizeRowsMode.DisplayedHeaders) &&
                 !RowHeadersVisible)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader));
+                throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader);
             }
 
             AdjustShrinkingRows(autoSizeRowsMode, fixedWidth, false /*internalAutosizing*/);
@@ -2358,7 +2358,7 @@ namespace System.Windows.Forms
 
             if (autoSizeRowMode == DataGridViewAutoSizeRowMode.RowHeader && !RowHeadersVisible)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader));
+                throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader);
             }
 
             if (rowsCount < 0)
@@ -2542,7 +2542,7 @@ namespace System.Windows.Forms
         {
             if (ptCurrentCell.X == -1)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_NoCurrentCell));
+                throw new InvalidOperationException(SR.DataGridView_NoCurrentCell);
             }
 
             if (IsCurrentCellInEditMode)
@@ -2557,7 +2557,7 @@ namespace System.Windows.Forms
         {
             if (dataGridViewOper[DATAGRIDVIEWOPER_inBeginEdit])
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_BeginEditNotReentrant));
+                throw new InvalidOperationException(SR.DataGridView_BeginEditNotReentrant);
             }
             try
             {
@@ -2639,7 +2639,7 @@ namespace System.Windows.Forms
                 if (!editControlType.IsSubclassOf(Type.GetType("System.Windows.Forms.Control")) ||
                     editingCtrlInterface == null)
                 {
-                    throw new InvalidCastException(string.Format(SR.DataGridView_InvalidEditingControl));
+                    throw new InvalidCastException(SR.DataGridView_InvalidEditingControl);
                 }
                 if (latestEditingControl != null &&
                     editControlType.IsInstanceOfType(latestEditingControl) &&
@@ -2665,7 +2665,7 @@ namespace System.Windows.Forms
                 Debug.Assert(editingControl != null);
                 if (string.IsNullOrEmpty(editingControl.AccessibleName))
                 {
-                    editingControl.AccessibleName = string.Format(SR.DataGridView_AccEditingControlAccName);
+                    editingControl.AccessibleName = SR.DataGridView_AccEditingControlAccName;
                 }
                 editingControl.ImeMode = ImeMode;
 
@@ -4106,7 +4106,7 @@ namespace System.Windows.Forms
                 {
                     if (Columns[columnIndex].CellTemplate == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_AColumnHasNoCellTemplate));
+                        throw new InvalidOperationException(SR.DataGridView_AColumnHasNoCellTemplate);
                     }
                     DataGridViewCell dgvcNew = (DataGridViewCell)Columns[columnIndex].CellTemplate.Clone();
                     cells[cellCount] = dgvcNew;
@@ -4964,7 +4964,7 @@ namespace System.Windows.Forms
             while (displayIndex >= 0 && (dataGridViewColumnPrev == null || !dataGridViewColumnPrev.Visible));
             if (dataGridViewColumnPrev != null && !dataGridViewColumnPrev.Frozen && dataGridViewColumn.Frozen)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddFrozenColumn));
+                throw new InvalidOperationException(SR.DataGridView_CannotAddFrozenColumn);
             }
             else
             {
@@ -4978,7 +4978,7 @@ namespace System.Windows.Forms
                 while (displayIndex < Columns.Count && (dataGridViewColumnNext == null || !dataGridViewColumnNext.Visible));
                 if (dataGridViewColumnNext != null && dataGridViewColumnNext.Frozen && !dataGridViewColumn.Frozen)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddNonFrozenColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddNonFrozenColumn);
                 }
             }
         }
@@ -5100,7 +5100,7 @@ namespace System.Windows.Forms
 
                 if (dataGridViewColumnNext != null && dataGridViewColumnNext.Frozen)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotMoveNonFrozenColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotMoveNonFrozenColumn);
                 }
             }
             else
@@ -5119,7 +5119,7 @@ namespace System.Windows.Forms
 
                 if (dataGridViewColumnPrev != null && !dataGridViewColumnPrev.Frozen)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotMoveFrozenColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotMoveFrozenColumn);
                 }
             }
         }
@@ -5166,7 +5166,7 @@ namespace System.Windows.Forms
                 (Rows.GetRowState(previousRowIndex) & DataGridViewElementStates.Frozen) == 0 &&
                 (rowState & DataGridViewElementStates.Frozen) != 0)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddFrozenRow));
+                throw new InvalidOperationException(SR.DataGridView_CannotAddFrozenRow);
             }
             else
             {
@@ -5177,7 +5177,7 @@ namespace System.Windows.Forms
                     (Rows.GetRowState(nextRowIndex) & DataGridViewElementStates.Frozen) != 0 &&
                     (rowState & DataGridViewElementStates.Frozen) == 0)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddNonFrozenRow));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddNonFrozenRow);
                 }
             }
         }
@@ -5206,7 +5206,7 @@ namespace System.Windows.Forms
                 currentRowFrozen = ((DataGridViewRow)dataGridViewRows[arrayIndex]).Frozen;
                 if (!previousRowFrozen && currentRowFrozen)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddFrozenRow));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddFrozenRow);
                 }
                 previousRowFrozen = currentRowFrozen;
                 if (arrayIndex == dataGridViewRows.Length - 1 &&
@@ -5214,7 +5214,7 @@ namespace System.Windows.Forms
                     nextVisibleRowPresent &&
                     nextRowFrozen)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddNonFrozenRow));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddNonFrozenRow);
                 }
             }
         }
@@ -7110,7 +7110,7 @@ namespace System.Windows.Forms
         {
             if (ClipboardCopyMode == DataGridViewClipboardCopyMode.Disable)
             {
-                throw new NotSupportedException(string.Format(SR.DataGridView_DisabledClipboardCopy));
+                throw new NotSupportedException(SR.DataGridView_DisabledClipboardCopy);
             }
 
             if (CurrentCellIsEditedAndOnlySelectedCell)
@@ -9820,7 +9820,7 @@ namespace System.Windows.Forms
             }
             if (dataGridViewCell.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_CellDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_CellDoesNotBelongToDataGridView);
             }
             InvalidateCellPrivate(dataGridViewCell);
         }
@@ -10772,7 +10772,7 @@ namespace System.Windows.Forms
             }
             if (dataGridViewColumn.DataGridView != null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnAlreadyBelongsToDataGridView));
+                throw new InvalidOperationException(SR.DataGridView_ColumnAlreadyBelongsToDataGridView);
             }
 
             if (!InInitialization &&
@@ -10791,14 +10791,14 @@ namespace System.Windows.Forms
                 if (!ColumnHeadersVisible &&
                     (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader || (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet && AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.ColumnHeader)))
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddAutoSizedColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddAutoSizedColumn);
                 }
 
                 // Make sure the column is not frozen and auto fills
                 if (dataGridViewColumn.Frozen &&
                     (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.Fill || (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet && AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddAutoFillColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddAutoFillColumn);
                 }
 
                 // UsedFillWeight values need to be updated
@@ -10821,7 +10821,7 @@ namespace System.Windows.Forms
                 // Only require a default cell type when there are rows to fill
                 if (dataGridViewColumn.CellType == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddUntypedColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddUntypedColumn);
                 }
 
                 if (dataGridViewColumn.CellTemplate.DefaultNewRowValue != null && newRowIndex != -1)
@@ -10883,16 +10883,16 @@ namespace System.Windows.Forms
             {
                 if (dataGridViewColumn == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_AtLeastOneColumnIsNull));
+                    throw new InvalidOperationException(SR.DataGridView_AtLeastOneColumnIsNull);
                 }
                 if (dataGridViewColumn.DataGridView != null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnAlreadyBelongsToDataGridView));
+                    throw new InvalidOperationException(SR.DataGridView_ColumnAlreadyBelongsToDataGridView);
                 }
                 // Only require a default cell type when there are rows to fill
                 if (Rows.Count > 0 && dataGridViewColumn.CellType == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddUntypedColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddUntypedColumn);
                 }
 
                 if (!InInitialization &&
@@ -10911,14 +10911,14 @@ namespace System.Windows.Forms
                     if (!ColumnHeadersVisible &&
                         (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader || (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet && AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.ColumnHeader)))
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddAutoSizedColumn));
+                        throw new InvalidOperationException(SR.DataGridView_CannotAddAutoSizedColumn);
                     }
 
                     // Make sure the column is not frozen and auto fills
                     if (dataGridViewColumn.Frozen &&
                         (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.Fill || (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet && AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddAutoFillColumn));
+                        throw new InvalidOperationException(SR.DataGridView_CannotAddAutoFillColumn);
                     }
 
                     // UsedFillWeight values need to be updated
@@ -10942,7 +10942,7 @@ namespace System.Windows.Forms
                 {
                     if (dataGridViewColumns[column1] == dataGridViewColumns[column2])
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddIdenticalColumns));
+                        throw new InvalidOperationException(SR.DataGridView_CannotAddIdenticalColumns);
                     }
                 }
             }
@@ -11053,22 +11053,22 @@ namespace System.Windows.Forms
             {
                 if (dataGridViewRow == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_AtLeastOneRowIsNull));
+                    throw new InvalidOperationException(SR.DataGridView_AtLeastOneRowIsNull);
                 }
 
                 if (dataGridViewRow.DataGridView != null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
+                    throw new InvalidOperationException(SR.DataGridView_RowAlreadyBelongsToDataGridView);
                 }
 
                 if (dataGridViewRow.Selected)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_CannotAddOrInsertSelectedRow));
+                    throw new InvalidOperationException(SR.DataGridViewRowCollection_CannotAddOrInsertSelectedRow);
                 }
 
                 if (dataGridViewRow.Cells.Count > Columns.Count)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowCollection_TooManyCells));
+                    throw new InvalidOperationException(SR.DataGridViewRowCollection_TooManyCells);
                 }
             }
 
@@ -11080,7 +11080,7 @@ namespace System.Windows.Forms
                 {
                     if (dataGridViewRows[row1] == dataGridViewRows[row2])
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddIdenticalRows));
+                        throw new InvalidOperationException(SR.DataGridView_CannotAddIdenticalRows);
                     }
                 }
             }
@@ -11280,7 +11280,7 @@ namespace System.Windows.Forms
             }
             if (previousModes.Length != Columns.Count)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_PreviousModesHasWrongLength));
+                throw new ArgumentException(SR.DataGridView_PreviousModesHasWrongLength);
             }
 
             foreach (DataGridViewColumn dataGridViewColumn in Columns)
@@ -11484,7 +11484,7 @@ namespace System.Windows.Forms
         {
             if (InAdjustFillingColumns)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterAutoFillColumnParameter));
+                throw new InvalidOperationException(SR.DataGridView_CannotAlterAutoFillColumnParameter);
             }
         }
 
@@ -13433,7 +13433,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             if (Events[EVENT_DATAGRIDVIEWCOLUMNADDED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -13498,7 +13498,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             if (Events[EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -13515,7 +13515,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             // map the dataGridView column to some data field
             if (DataSource != null && e.Column.DataPropertyName.Length != 0 && !dataGridViewOper[DATAGRIDVIEWOPER_inRefreshColumns])
@@ -13543,7 +13543,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             OnColumnGlobalAutoSize(e.Column.Index);
 
@@ -13568,7 +13568,7 @@ namespace System.Windows.Forms
             if (dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments])
             {
                 // We are within columns display indexes adjustments. We do not allow changing display indexes while adjusting them.
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments));
+                throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
 
             // Throws an exception if the requested move is illegal
@@ -13618,7 +13618,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
 
             Debug.Assert(dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments]);
@@ -13687,7 +13687,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             OnColumnGlobalAutoSize(e.Column.Index);
 
@@ -13712,7 +13712,7 @@ namespace System.Windows.Forms
         {
             if (InAdjustFillingColumns)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterAutoFillColumnParameter));
+                throw new InvalidOperationException(SR.DataGridView_CannotAlterAutoFillColumnParameter);
             }
 
             // Make sure the sum of the column weights does not exceed ushort.MaxValue
@@ -13770,7 +13770,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
 
             OnColumnHeaderGlobalAutoSize(e.Column.Index);
@@ -14214,7 +14214,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             if (e.Column.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
             {
@@ -14239,7 +14239,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             // Check if the column name is used as is in the column header
             DataGridViewColumn dataGridViewColumn = e.Column;
@@ -14433,7 +14433,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             DataGridViewColumn dataGridViewColumn = e.Column;
 
@@ -14623,7 +14623,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             if (Events[EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED] is DataGridViewColumnEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -14635,7 +14635,7 @@ namespace System.Windows.Forms
         {
             if (e.Column.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
             Columns.InvalidateCachedColumnsWidths();
 
@@ -14783,7 +14783,7 @@ namespace System.Windows.Forms
                         string errorText;
                         if (e.Exception == null)
                         {
-                            errorText = string.Format(SR.DataGridView_ErrorMessageText_NoException);
+                            errorText = SR.DataGridView_ErrorMessageText_NoException;
                         }
                         else
                         {
@@ -14791,11 +14791,11 @@ namespace System.Windows.Forms
                         }
                         if (RightToLeftInternal)
                         {
-                            MessageBox.Show(errorText, string.Format(SR.DataGridView_ErrorMessageCaption), MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
+                            MessageBox.Show(errorText, SR.DataGridView_ErrorMessageCaption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
                         }
                         else
                         {
-                            MessageBox.Show(errorText, string.Format(SR.DataGridView_ErrorMessageCaption), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(errorText, SR.DataGridView_ErrorMessageCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         CorrectFocus(true /*onlyIfGridHasFocus*/);
                     }
@@ -14873,13 +14873,13 @@ namespace System.Windows.Forms
                                 dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader &&
                                 !ColumnHeadersVisible)
                             {
-                                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotMakeAutoSizedColumnVisible));
+                                throw new InvalidOperationException(SR.DataGridView_CannotMakeAutoSizedColumnVisible);
                             }
                             else if (!dataGridViewColumn.Visible &&
                                 dataGridViewColumn.Frozen &&
                                 dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
                             {
-                                // alternative: throw new InvalidOperationException(string.Format(SR.DataGridView_CannotMakeAutoFillColumnVisible));
+                                // alternative: throw new InvalidOperationException(SR.DataGridView_CannotMakeAutoFillColumnVisible);
                                 //              DataGridView_CannotMakeAutoFillColumnVisible=The column cannot be made visible because its autosizing mode is Fill and it is frozen.
                                 // Removing the Fill auto size mode when frozen column becomes visible (instead of throwing an exception)
                                 dataGridViewColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
@@ -14921,7 +14921,7 @@ namespace System.Windows.Forms
                                         false /*resetCurrentCell*/,
                                         false /*resetAnchorCell*/))
                             {
-                                throw new InvalidOperationException(string.Format(SR.DataGridView_CommitFailedCannotCompleteOperation));
+                                throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                             }
                         }
                         break;
@@ -14951,7 +14951,7 @@ namespace System.Windows.Forms
                                     Debug.Assert(dataConnection.CurrencyManager != null);
                                     Debug.Assert(dataConnection.CurrencyManager.Position == ptCurrentCell.Y);
                                     // the row associated with the currency manager's position cannot be made invisble.
-                                    throw new InvalidOperationException(string.Format(SR.DataGridView_CurrencyManagerRowCannotBeInvisible));
+                                    throw new InvalidOperationException(SR.DataGridView_CurrencyManagerRowCannotBeInvisible);
                                 }
                                 // Trying to reset the current cell. May throw an exception.
                                 ResetCurrentCell();
@@ -14979,7 +14979,7 @@ namespace System.Windows.Forms
                                             false /*resetCurrentCell*/,
                                             false /*resetAnchorCell*/))
                                 {
-                                    throw new InvalidOperationException(string.Format(SR.DataGridView_CommitFailedCannotCompleteOperation));
+                                    throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                                 }
                             }
                             break;
@@ -15018,7 +15018,7 @@ namespace System.Windows.Forms
                                                 false /*resetCurrentCell*/,
                                                 false /*resetAnchorCell*/))
                                     {
-                                        throw new InvalidOperationException(string.Format(SR.DataGridView_CommitFailedCannotCompleteOperation));
+                                        throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                                     }
                                 }
                                 break;
@@ -15509,7 +15509,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewColumn.DataGridView != null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnAlreadyBelongsToDataGridView));
+                throw new InvalidOperationException(SR.DataGridView_ColumnAlreadyBelongsToDataGridView);
             }
 
             if (!InInitialization &&
@@ -15528,14 +15528,14 @@ namespace System.Windows.Forms
                 if (!ColumnHeadersVisible &&
                     (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader || (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet && AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.ColumnHeader)))
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddAutoSizedColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddAutoSizedColumn);
                 }
 
                 // Make sure the column is not frozen and auto fills
                 if (dataGridViewColumn.Frozen &&
                     (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.Fill || (dataGridViewColumn.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet && AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddAutoFillColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddAutoFillColumn);
                 }
             }
 
@@ -15560,7 +15560,7 @@ namespace System.Windows.Forms
                 // Only require a default cell type when there are rows to fill
                 if (dataGridViewColumn.CellType == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAddUntypedColumn));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAddUntypedColumn);
                 }
 
                 if (dataGridViewColumn.CellTemplate.DefaultNewRowValue != null && newRowIndex != -1)
@@ -16714,7 +16714,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
             if (Events[EVENT_DATAGRIDVIEWNEWROWNEEDED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -17623,7 +17623,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
             if (Events[EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -17650,7 +17650,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
 
             OnRowGlobalAutoSize(e.Row.Index);
@@ -17700,7 +17700,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
 
             OnRowGlobalAutoSize(e.Row.Index);
@@ -17822,7 +17822,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
             UpdateRowErrorText(e.Row.Index);
 
@@ -17912,7 +17912,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
 
             OnRowHeaderGlobalAutoSize(e.Row.Index);
@@ -18339,7 +18339,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
             UpdateRowHeightInfoPrivate(e.Row.Index, false, false /*invalidInAdjustFillingColumns*/);
 
@@ -18437,7 +18437,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
             if (Events[EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -18801,7 +18801,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
             if (Events[EVENT_DATAGRIDVIEWROWUNSHARED] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -19091,7 +19091,7 @@ namespace System.Windows.Forms
         {
             if (e.Row.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_RowDoesNotBelongToDataGridView), "e.Row");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
             if (Events[EVENT_DATAGRIDVIEWUSERADDEDROW] is DataGridViewRowEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
@@ -19787,7 +19787,7 @@ namespace System.Windows.Forms
             {
                 if (invalidInAdjustFillingColumns && InAdjustFillingColumns)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CannotAlterAutoFillColumnParameter));
+                    throw new InvalidOperationException(SR.DataGridView_CannotAlterAutoFillColumnParameter);
                 }
 
                 if (IsHandleCreated)
@@ -26257,13 +26257,13 @@ namespace System.Windows.Forms
                 rowIndex > -1 &&
                 !IsSharedCellVisible(Rows.SharedRow(rowIndex).Cells[columnIndex], rowIndex))
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CurrentCellCannotBeInvisible));
+                throw new InvalidOperationException(SR.DataGridView_CurrentCellCannotBeInvisible);
             }
 
             if (dataGridViewOper[DATAGRIDVIEWOPER_inCurrentCellChange] &&                      // Allow the code to be re-entrant only as a result of
                 (dataConnection == null || !dataConnection.ProcessingListChangedEvent))   // underlying data changing.
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_SetCurrentCellAddressCoreNotReentrant));
+                throw new InvalidOperationException(SR.DataGridView_SetCurrentCellAddressCoreNotReentrant);
             }
 
             dataGridViewOper[DATAGRIDVIEWOPER_inCurrentCellChange] = true;
@@ -27151,7 +27151,7 @@ namespace System.Windows.Forms
                 if (!Columns[columnIndex].Visible ||
                     (Rows.GetRowState(rowIndex) & DataGridViewElementStates.Visible) == 0)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CurrentCellCannotBeInvisible));
+                    throw new InvalidOperationException(SR.DataGridView_CurrentCellCannotBeInvisible);
                 }
 
                 if (!ScrollIntoView(columnIndex, rowIndex, true))
@@ -27573,12 +27573,12 @@ namespace System.Windows.Forms
 
             if (dataGridViewColumn.DataGridView != this)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnDoesNotBelongToDataGridView));
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
 
             if (VirtualMode && !dataGridViewColumn.IsDataBound)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_OperationDisabledInVirtualMode));
+                throw new InvalidOperationException(SR.DataGridView_OperationDisabledInVirtualMode);
             }
 
             SortInternal(null, dataGridViewColumn, direction);
@@ -27593,13 +27593,13 @@ namespace System.Windows.Forms
 
             if (VirtualMode)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_OperationDisabledInVirtualMode));
+                throw new InvalidOperationException(SR.DataGridView_OperationDisabledInVirtualMode);
             }
 
             // can't sort a data bound dataGridView control using a comparer
             if (DataSource != null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotUseAComparerToSortDataGridViewWhenDataBound));
+                throw new InvalidOperationException(SR.DataGridView_CannotUseAComparerToSortDataGridViewWhenDataBound);
             }
 
             SortInternal(comparer, null, ListSortDirection.Ascending);
@@ -27609,17 +27609,17 @@ namespace System.Windows.Forms
         {
             if (!(dataConnection.List is IBindingList ibl))
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_CannotSortDataBoundDataGridViewBoundToNonIBindingList));
+                throw new InvalidOperationException(SR.DataGridView_CannotSortDataBoundDataGridViewBoundToNonIBindingList);
             }
 
             if (!ibl.SupportsSorting)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_IBindingListNeedsToSupportSorting));
+                throw new InvalidOperationException(SR.DataGridView_IBindingListNeedsToSupportSorting);
             }
 
             if (!dataGridViewColumn.IsDataBound)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_ColumnNeedsToBeDataBoundWhenSortingDataBoundDataGridView), "dataGridViewColumn");
+                throw new ArgumentException(SR.DataGridView_ColumnNeedsToBeDataBoundWhenSortingDataBoundDataGridView, "dataGridViewColumn");
             }
         }
 

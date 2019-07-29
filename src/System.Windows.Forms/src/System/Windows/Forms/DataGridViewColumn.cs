@@ -107,14 +107,14 @@ namespace System.Windows.Forms
                             (value == DataGridViewAutoSizeColumnMode.ColumnHeader ||
                              (value == DataGridViewAutoSizeColumnMode.NotSet && DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.ColumnHeader)))
                         {
-                            throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_AutoSizeCriteriaCannotUseInvisibleHeaders));
+                            throw new InvalidOperationException(SR.DataGridViewColumn_AutoSizeCriteriaCannotUseInvisibleHeaders);
                         }
                         if (Frozen &&
                             (value == DataGridViewAutoSizeColumnMode.Fill ||
                              (value == DataGridViewAutoSizeColumnMode.NotSet && DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
                         {
                             // Cannot set the inherited auto size mode to Fill when the column is frozen
-                            throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_FrozenColumnCannotAutoFill));
+                            throw new InvalidOperationException(SR.DataGridViewColumn_FrozenColumnCannotAutoFill);
                         }
                     }
                     DataGridViewAutoSizeColumnMode previousInheritedMode = InheritedAutoSizeMode;
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
                     {
                         if (value < -1)
                         {
-                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooNegative));
+                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, SR.DataGridViewColumn_DisplayIndexTooNegative);
                         }
                         displayIndex = value;
                     }
@@ -789,7 +789,7 @@ namespace System.Windows.Forms
                     DataGridView.DataConnection.DataFieldIsReadOnly(BoundColumnIndex) &&
                     !value)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly));
+                    throw new InvalidOperationException(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly);
                 }
                 base.ReadOnly = value;
             }
