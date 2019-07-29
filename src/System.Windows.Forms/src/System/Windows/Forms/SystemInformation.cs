@@ -7,15 +7,15 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides information about the operating system.
+    ///  Provides information about the operating system.
     /// </summary>
     public static class SystemInformation
     {
-        // Figure out if all the multimon stuff is supported on the OS
         private static bool s_checkMultiMonitorSupport;
         private static bool s_multiMonitorSupport;
         private static bool s_highContrast;
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
             => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETDRAGFULLWINDOWS);
 
         /// <summary>
-        /// Gets a value indicating whether the user has selected to run in high contrast.
+        ///  Gets a value indicating whether the user has selected to run in high contrast.
         /// </summary>
         public static bool HighContrast
         {
@@ -67,140 +67,123 @@ namespace System.Windows.Forms
         ///  Gets the dimensions of the primary display monitor in pixels.
         /// </summary>
         public static Size PrimaryMonitorSize
-            => new Size(
-                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN),
-                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN));
+            => new Size(GetSystemMetrics(SystemMetric.SM_CXSCREEN),
+                        GetSystemMetrics(SystemMetric.SM_CYSCREEN));
 
         /// <summary>
-        /// Gets the width of the vertical scroll bar in pixels.
+        ///  Gets the width of the vertical scroll bar in pixels.
         /// </summary>
         public static int VerticalScrollBarWidth
         {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVSCROLL);
+            get => GetSystemMetrics(SystemMetric.SM_CXVSCROLL);
         }
 
         /// <summary>
-        /// Gets the width of the vertical scroll bar in pixels.
+        ///  Gets the width of the vertical scroll bar in pixels.
         /// </summary>
         public static int GetVerticalScrollBarWidthForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
-                return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXVSCROLL, (uint)dpi);
+                return GetCurrentSystemMetrics(SystemMetric.SM_CXVSCROLL, (uint)dpi);
             }
-            else
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVSCROLL);
-            }
+            
+            return GetSystemMetrics(SystemMetric.SM_CXVSCROLL);
         }
 
         /// <summary>
-        /// Gets the height of the horizontal scroll bar in pixels.
+        ///  Gets the height of the horizontal scroll bar in pixels.
         /// </summary>
-        public static int HorizontalScrollBarHeight
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
-        }
+        public static int HorizontalScrollBarHeight => GetSystemMetrics(SystemMetric.SM_CYHSCROLL);
 
         /// <summary>
-        /// Gets the height of the horizontal scroll bar in pixels.
+        ///  Gets the height of the horizontal scroll bar in pixels.
         /// </summary>
         public static int GetHorizontalScrollBarHeightForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
-                return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYHSCROLL, (uint)dpi);
+                return GetCurrentSystemMetrics(SystemMetric.SM_CYHSCROLL, (uint)dpi);
             }
-            else
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
-            }
+            
+            return GetSystemMetrics(SystemMetric.SM_CYHSCROLL);
         }
 
         /// <summary>
-        /// Gets the height of the normal caption area of a window in pixels.
+        ///  Gets the height of the normal caption area of a window in pixels.
         /// </summary>
         public static int CaptionHeight
         {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCAPTION);
+            get => GetSystemMetrics(SystemMetric.SM_CYCAPTION);
         }
 
         /// <summary>
-        /// Gets the width and height of a window border in pixels.
+        ///  Gets the width and height of a window border in pixels.
         /// </summary>
         public static Size BorderSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXBORDER),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYBORDER));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXBORDER),
+                            GetSystemMetrics(SystemMetric.SM_CYBORDER));
         }
 
         /// <summary>
-        /// Gets the width andheight of a window border in pixels.
+        ///  Gets the width andheight of a window border in pixels.
         /// </summary>
         public static Size GetBorderSizeForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
-                return new Size(UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXBORDER, (uint)dpi),
-                                UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYBORDER, (uint)dpi));
+                return new Size(GetCurrentSystemMetrics(SystemMetric.SM_CXBORDER, (uint)dpi),
+                                GetCurrentSystemMetrics(SystemMetric.SM_CYBORDER, (uint)dpi));
             }
-            else
-            {
-                return BorderSize;
-            }
+            
+            return BorderSize;
         }
 
         /// <summary>
-        /// Gets the thickness in pixels, of the border for a window that has a caption
-        /// and is not resizable.
+        ///  Gets the thickness in pixels, of the border for a window that has a caption and is not resizable.
         /// </summary>
         public static Size FixedFrameBorderSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFIXEDFRAME),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFIXEDFRAME));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXFIXEDFRAME),
+                            GetSystemMetrics(SystemMetric.SM_CYFIXEDFRAME));
         }
 
         /// <summary>
-        /// Gets the height of the scroll box in a vertical scroll bar in pixels.
+        ///  Gets the height of the scroll box in a vertical scroll bar in pixels.
         /// </summary>
-        public static int VerticalScrollBarThumbHeight
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVTHUMB);
-        }
+        public static int VerticalScrollBarThumbHeight => GetSystemMetrics(SystemMetric.SM_CYVTHUMB);
 
         /// <summary>
-        /// Gets the width of the scroll box in a horizontal scroll bar in pixels.
+        ///  Gets the width of the scroll box in a horizontal scroll bar in pixels.
         /// </summary>
-        public static int HorizontalScrollBarThumbWidth
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHTHUMB);
-        }
+        public static int HorizontalScrollBarThumbWidth => GetSystemMetrics(SystemMetric.SM_CXHTHUMB);
 
         /// <summary>
-        /// Gets the default dimensions of an icon in pixels.
+        ///  Gets the default dimensions of an icon in pixels.
         /// </summary>
         public static Size IconSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICON),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICON));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXICON),
+                            GetSystemMetrics(SystemMetric.SM_CYICON));
         }
 
         /// <summary>
-        /// Gets the dimensions of a cursor in pixels.
+        ///  Gets the dimensions of a cursor in pixels.
         /// </summary>
         public static Size CursorSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXCURSOR),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCURSOR));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXCURSOR),
+                            GetSystemMetrics(SystemMetric.SM_CYCURSOR));
         }
 
         /// <summary>
-        /// Gets the system's font for menus.
+        ///  Gets the system's font for menus.
         /// </summary>
         public static Font MenuFont => GetMenuFontHelper(0, useDpi: false);
 
         /// <summary>
-        /// Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
+        ///  Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
         /// </summary>
         public static Font GetMenuFontForDpi(int dpi)
         {
@@ -236,23 +219,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the height of a one line of a menu in pixels.
+        ///  Gets the height of a one line of a menu in pixels.
         /// </summary>
-        public static int MenuHeight
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENU);
-        }
+        public static int MenuHeight => GetSystemMetrics(SystemMetric.SM_CYMENU);
 
         /// <summary>
-        /// Returns the current system power status.
+        ///  Returns the current system power status.
         /// </summary>
-        public static PowerStatus PowerStatus
-        {
-            get => s_powerStatus ?? (s_powerStatus = new PowerStatus());
-        }
+        public static PowerStatus PowerStatus => s_powerStatus ??= new PowerStatus();
 
         /// <summary>
-        /// Gets the size of the working area in pixels.
+        ///  Gets the size of the working area in pixels.
         /// </summary>
         public static Rectangle WorkingArea
         {
@@ -265,352 +242,297 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the height, in pixels, of the Kanji window at the bottom of the screen
-        /// for double-byte (DBCS) character set versions of Windows.
+        ///  Gets the height, in pixels, of the Kanji window at the bottom of the screen
+        ///  for double-byte (DBCS) character set versions of Windows.
         /// </summary>
-        public static int KanjiWindowHeight
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYKANJIWINDOW);
-        }
+        public static int KanjiWindowHeight => GetSystemMetrics(SystemMetric.SM_CYKANJIWINDOW);
 
         /// <summary>
-        /// Gets a value indicating whether the system has a mouse installed.
+        ///  Gets a value indicating whether the system has a mouse installed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool MousePresent
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEPRESENT) != 0;
-        }
+        public static bool MousePresent => GetSystemMetrics(SystemMetric.SM_MOUSEPRESENT) != 0;
 
         /// <summary>
-        /// Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
+        ///  Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
         /// </summary>
-        public static int VerticalScrollBarArrowHeight
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVSCROLL);
-        }
+        public static int VerticalScrollBarArrowHeight => GetSystemMetrics(SystemMetric.SM_CYVSCROLL);
 
         /// <summary>
-        /// Gets the height of the vertical scroll bar arrow bitmap in pixels.
+        ///  Gets the height of the vertical scroll bar arrow bitmap in pixels.
         /// </summary>
         public static int VerticalScrollBarArrowHeightForDpi(int dpi)
         {
-            return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYVSCROLL, (uint)dpi);
+            return GetCurrentSystemMetrics(SystemMetric.SM_CYVSCROLL, (uint)dpi);
         }
 
         /// <summary>
-        /// Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
+        ///  Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
         /// </summary>
-        public static int HorizontalScrollBarArrowWidth
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHSCROLL);
-        }
+        public static int HorizontalScrollBarArrowWidth =>GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
 
         /// <summary>
-        /// Gets the width of the horizontal scroll bar arrow bitmap in pixels.
+        ///  Gets the width of the horizontal scroll bar arrow bitmap in pixels.
         /// </summary>
         public static int GetHorizontalScrollBarArrowWidthForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
-                return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXHSCROLL, (uint)dpi);
+                return GetCurrentSystemMetrics(SystemMetric.SM_CXHSCROLL, (uint)dpi);
             }
-            else
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHSCROLL);
-            }
+            
+            return GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
         }
 
         /// <summary>
-        /// Gets a value indicating whether this is a debug version of the operating system.
+        ///  Gets a value indicating whether this is a debug version of the operating system.
         /// </summary>
-        public static bool DebugOS
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DEBUG) != 0;
-        }
+        public static bool DebugOS => GetSystemMetrics(SystemMetric.SM_DEBUG) != 0;
 
         /// <summary>
-        /// Gets a value indicating whether the functions of the left and right mouse
-        /// buttons have been swapped.
+        ///  Gets a value indicating whether the functions of the left and right mouse
+        ///  buttons have been swapped.
         /// </summary>
-        public static bool MouseButtonsSwapped
-        {
-            get => (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SWAPBUTTON) != 0);
-        }
+        public static bool MouseButtonsSwapped => (GetSystemMetrics(SystemMetric.SM_SWAPBUTTON) != 0);
 
         /// <summary>
-        /// Gets the minimum allowable dimensions of a window in pixels.
+        ///  Gets the minimum allowable dimensions of a window in pixels.
         /// </summary>
         public static Size MinimumWindowSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMIN),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMIN));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMIN),
+                            GetSystemMetrics(SystemMetric.SM_CYMIN));
         }
 
         /// <summary>
-        /// Gets the dimensions in pixels, of a caption bar or title bar button.
+        ///  Gets the dimensions in pixels, of a caption bar or title bar button.
         /// </summary>
         public static Size CaptionButtonSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZE),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZE));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXSIZE),
+                            GetSystemMetrics(SystemMetric.SM_CYSIZE));
         }
 
         /// <summary>
-        /// Gets the thickness in pixels, of the border for a window that can be resized.
+        ///  Gets the thickness in pixels, of the border for a window that can be resized.
         /// </summary>
         public static Size FrameBorderSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFRAME),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFRAME));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXFRAME),
+                            GetSystemMetrics(SystemMetric.SM_CYFRAME));
         }
 
         /// <summary>
-        /// Gets the system's default minimum tracking dimensions of a window in pixels.
+        ///  Gets the system's default minimum tracking dimensions of a window in pixels.
         /// </summary>
         public static Size MinWindowTrackSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINTRACK),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINTRACK));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMINTRACK),
+                            GetSystemMetrics(SystemMetric.SM_CYMINTRACK));
         }
 
         /// <summary>
-        /// Gets the dimensions in pixels, of the area that the user must click within
-        /// for the system to consider the two clicks a double-click. The rectangle is
-        /// centered around the first click.
+        ///  Gets the dimensions in pixels, of the area that the user must click within
+        ///  for the system to consider the two clicks a double-click. The rectangle is
+        ///  centered around the first click.
         /// </summary>
         public static Size DoubleClickSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDOUBLECLK),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDOUBLECLK));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXDOUBLECLK),
+                            GetSystemMetrics(SystemMetric.SM_CYDOUBLECLK));
         }
 
         /// <summary>
-        /// Gets the maximum number of milliseconds allowed between mouse clicks for a
-        /// double-click.
+        ///  Gets the maximum number of milliseconds allowed between mouse clicks for a
+        ///  double-click.
         /// </summary>
         public static int DoubleClickTime => SafeNativeMethods.GetDoubleClickTime();
 
         /// <summary>
-        /// Gets the dimensions in pixels, of the grid used to arrange icons in a large
-        /// icon view.
+        ///  Gets the dimensions in pixels, of the grid used to arrange icons in a large
+        ///  icon view.
         /// </summary>
         public static Size IconSpacingSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICONSPACING),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICONSPACING));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXICONSPACING),
+                            GetSystemMetrics(SystemMetric.SM_CYICONSPACING));
         }
 
         /// <summary>
-        /// Gets a value indicating whether drop down menus should be right-aligned with
-        /// the corresponding menu bar item.
+        ///  Gets a value indicating whether drop down menus should be right-aligned with the corresponding menu
+        ///  bar item.
         /// </summary>
-        public static bool RightAlignedMenus
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MENUDROPALIGNMENT) != 0;
-        }
+        public static bool RightAlignedMenus => GetSystemMetrics(SystemMetric.SM_MENUDROPALIGNMENT) != 0;
 
         /// <summary>
-        /// Gets a value indicating whether the Microsoft Windows for Pen computing
-        /// extensions are installed.
+        ///  Gets a value indicating whether the Microsoft Windows for Pen computing extensions are installed.
         /// </summary>
-        public static bool PenWindows
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_PENWINDOWS) != 0;
-        }
+        public static bool PenWindows => GetSystemMetrics(SystemMetric.SM_PENWINDOWS) != 0;
 
         /// <summary>
-        /// Gets a value indicating whether the operating system is capable of handling
-        /// double-byte (DBCS) characters.
+        ///  Gets a value indicating whether the operating system is capable of handling
+        ///  double-byte (DBCS) characters.
         /// </summary>
-        public static bool DbcsEnabled
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DBCSENABLED) != 0;
-        }
+        public static bool DbcsEnabled => GetSystemMetrics(SystemMetric.SM_DBCSENABLED) != 0;
 
         /// <summary>
-        /// Gets the number of buttons on mouse.
+        ///  Gets the number of buttons on mouse.
         /// </summary>
-        public static int MouseButtons
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMOUSEBUTTONS);
-        }
+        public static int MouseButtons => GetSystemMetrics(SystemMetric.SM_CMOUSEBUTTONS);
 
         /// <summary>
-        /// Gets a value indicating whether security is present on this operating system.
+        ///  Gets a value indicating whether security is present on this operating system.
         /// </summary>
-        public static bool Secure
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SECURE) != 0;
-        }
+        public static bool Secure => GetSystemMetrics(SystemMetric.SM_SECURE) != 0;
 
         /// <summary>
-        /// Gets the dimensions in pixels, of a 3-D border.
+        ///  Gets the dimensions in pixels, of a 3-D border.
         /// </summary>
         public static Size Border3DSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXEDGE),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYEDGE));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXEDGE),
+                            GetSystemMetrics(SystemMetric.SM_CYEDGE));
         }
 
         /// <summary>
-        /// Gets the dimensions in pixels, of the grid into which minimized windows will
-        /// be placed.
+        ///  Gets the dimensions in pixels, of the grid into which minimized windows will
+        ///  be placed.
         /// </summary>
         public static Size MinimizedWindowSpacingSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINSPACING),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINSPACING));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMINSPACING),
+                            GetSystemMetrics(SystemMetric.SM_CYMINSPACING));
         }
 
         /// <summary>
-        /// Gets the recommended dimensions of a small icon in pixels.
+        ///  Gets the recommended dimensions of a small icon in pixels.
         /// </summary>
         public static Size SmallIconSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMICON),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMICON));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXSMICON),
+                            GetSystemMetrics(SystemMetric.SM_CYSMICON));
         }
 
         /// <summary>
-        /// Gets the height of a small caption in pixels.
+        ///  Gets the height of a small caption in pixels.
         /// </summary>
-        public static int ToolWindowCaptionHeight
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMCAPTION);
-        }
+        public static int ToolWindowCaptionHeight => GetSystemMetrics(SystemMetric.SM_CYSMCAPTION);
 
         /// <summary>
-        /// Gets the dimensions of small caption buttons in pixels.
+        ///  Gets the dimensions of small caption buttons in pixels.
         /// </summary>
         public static Size ToolWindowCaptionButtonSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMSIZE),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMSIZE));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXSMSIZE),
+                            GetSystemMetrics(SystemMetric.SM_CYSMSIZE));
         }
 
         /// <summary>
-        /// Gets the dimensions in pixels, of menu bar buttons.
+        ///  Gets the dimensions in pixels, of menu bar buttons.
         /// </summary>
         public static Size MenuButtonSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUSIZE),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUSIZE));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMENUSIZE),
+                            GetSystemMetrics(SystemMetric.SM_CYMENUSIZE));
         }
 
         /// <summary>
-        /// Gets flags specifying how the system arranges minimized windows.
+        ///  Gets flags specifying how the system arranges minimized windows.
         /// </summary>
         public static ArrangeStartingPosition ArrangeStartingPosition
         {
             get
             {
                 ArrangeStartingPosition mask = ArrangeStartingPosition.BottomLeft | ArrangeStartingPosition.BottomRight | ArrangeStartingPosition.Hide | ArrangeStartingPosition.TopLeft | ArrangeStartingPosition.TopRight;
-                int compoundValue = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_ARRANGE);
+                int compoundValue = GetSystemMetrics(SystemMetric.SM_ARRANGE);
                 return mask & (ArrangeStartingPosition)compoundValue;
             }
         }
 
         /// <summary>
-        /// Gets flags specifying how the system arranges minimized windows.
+        ///  Gets flags specifying how the system arranges minimized windows.
         /// </summary>
         public static ArrangeDirection ArrangeDirection
         {
             get
             {
                 ArrangeDirection mask = ArrangeDirection.Down | ArrangeDirection.Left | ArrangeDirection.Right | ArrangeDirection.Up;
-                int compoundValue = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_ARRANGE);
+                int compoundValue = GetSystemMetrics(SystemMetric.SM_ARRANGE);
                 return mask & (ArrangeDirection)compoundValue;
             }
         }
 
         /// <summary>
-        /// Gets the dimensions in pixels, of a normal minimized window.
+        ///  Gets the dimensions in pixels, of a normal minimized window.
         /// </summary>
         public static Size MinimizedWindowSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINIMIZED),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINIMIZED));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMINIMIZED),
+                            GetSystemMetrics(SystemMetric.SM_CYMINIMIZED));
         }
 
         /// <summary>
-        /// Gets the default maximum dimensions in pixels, of a window that has a
-        /// caption and sizing borders.
+        ///  Gets the default maximum dimensions in pixels, of a window that has a
+        ///  caption and sizing borders.
         /// </summary>
         public static Size MaxWindowTrackSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXTRACK),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXTRACK));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMAXTRACK),
+                            GetSystemMetrics(SystemMetric.SM_CYMAXTRACK));
         }
 
         /// <summary>
-        /// Gets the default dimensions, in pixels, of a maximized top-left window on the
-        /// primary monitor.
+        ///  Gets the default dimensions, in pixels, of a maximized top-left window on the
+        ///  primary monitor.
         /// </summary>
         public static Size PrimaryMonitorMaximizedWindowSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXIMIZED),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXIMIZED));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMAXIMIZED),
+                            GetSystemMetrics(SystemMetric.SM_CYMAXIMIZED));
         }
 
         /// <summary>
-        /// Gets a value indicating whether this computer is connected to a network.
+        ///  Gets a value indicating whether this computer is connected to a network.
         /// </summary>
-        public static bool Network
-        {
-            get => (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_NETWORK) & 0x00000001) != 0;
-        }
+        public static bool Network => (GetSystemMetrics(SystemMetric.SM_NETWORK) & 0x00000001) != 0;
 
-        public static bool TerminalServerSession
-        {
-            get => (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0;
-        }
+        public static bool TerminalServerSession => (GetSystemMetrics(SystemMetric.SM_REMOTESESSION) & 0x00000001) != 0;
 
         /// <summary>
-        /// Gets a value that specifies how the system was started.
+        ///  Gets a value that specifies how the system was started.
         /// </summary>
-        public static BootMode BootMode
-        {
-            get => (BootMode)UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CLEANBOOT);
-        }
+        public static BootMode BootMode => (BootMode)GetSystemMetrics(SystemMetric.SM_CLEANBOOT);
 
         /// <summary>
-        /// Gets the dimensions in pixels, of the rectangle that a drag operation must
-        /// extend to be considered a drag. The rectangle is centered on a drag point.
+        ///  Gets the dimensions in pixels, of the rectangle that a drag operation must
+        ///  extend to be considered a drag. The rectangle is centered on a drag point.
         /// </summary>
         public static Size DragSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDRAG),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDRAG));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXDRAG),
+                            GetSystemMetrics(SystemMetric.SM_CYDRAG));
         }
 
         /// <summary>
-        /// Gets a value indicating whether the user requires an application to present
-        /// information visually in situations where it would otherwise present the
-        /// information in audible form.
+        ///  Gets a value indicating whether the user requires an application to present
+        ///  information visually in situations where it would otherwise present the
+        ///  information in audible form.
         /// </summary>
-        public static bool ShowSounds
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SHOWSOUNDS) != 0;
-        }
+        public static bool ShowSounds => GetSystemMetrics(SystemMetric.SM_SHOWSOUNDS) != 0;
 
         /// <summary>
-        /// Gets the dimensions of the default size of a menu checkmark in pixels.
+        ///  Gets the dimensions of the default size of a menu checkmark in pixels.
         /// </summary>
         public static Size MenuCheckSize
         {
-            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUCHECK),
-                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUCHECK));
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMENUCHECK),
+                            GetSystemMetrics(SystemMetric.SM_CYMENUCHECK));
         }
 
         /// <summary>
-        /// Gets a value indicating whether the system is enabled for Hebrew and Arabic
-        /// languages.
+        ///  Gets a value indicating whether the system is enabled for Hebrew and Arabic languages.
         /// </summary>
-        public static bool MidEastEnabled
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MIDEASTENABLED) != 0;
-        }
+        public static bool MidEastEnabled => GetSystemMetrics(SystemMetric.SM_MIDEASTENABLED) != 0;
 
         private static bool MultiMonitorSupport
         {
@@ -618,7 +540,7 @@ namespace System.Windows.Forms
             {
                 if (!s_checkMultiMonitorSupport)
                 {
-                    s_multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
+                    s_multiMonitorSupport = (GetSystemMetrics(SystemMetric.SM_CMONITORS) != 0);
                     s_checkMultiMonitorSupport = true;
                 }
 
@@ -630,19 +552,16 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
         /// </summary>
         /// <remarks>
-        ///  This was never really correct. All versions of Windows NT from 4.0 onward
-        ///  supported the mouse wheel directly. This should have been a version check.
-        ///  Rather than change it and risk breaking apps we'll keep it equivalent to
-        ///  <see cref="MouseWheelPresent" />
+        ///  This was never really correct. All versions of Windows NT from 4.0 onward supported the mouse wheel
+        ///  directly. This should have been a version check. Rather than change it and risk breaking apps we'll
+        ///  keep it equivalent to <see cref="MouseWheelPresent" />
         /// </remarks>
-        public static bool NativeMouseWheelSupport
-            => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0;
+        public static bool NativeMouseWheelSupport => GetSystemMetrics(SystemMetric.SM_MOUSEWHEELPRESENT) != 0;
 
         /// <summary>
         ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
         /// </summary>
-        public static bool MouseWheelPresent
-            => NativeMouseWheelSupport;
+        public static bool MouseWheelPresent => NativeMouseWheelSupport;
 
         /// <summary>
         ///  Gets the bounds of the virtual screen.
@@ -653,10 +572,10 @@ namespace System.Windows.Forms
             {
                 if (MultiMonitorSupport)
                 {
-                    return new Rectangle(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_XVIRTUALSCREEN),
-                                         UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_YVIRTUALSCREEN),
-                                         UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVIRTUALSCREEN),
-                                         UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVIRTUALSCREEN));
+                    return new Rectangle(GetSystemMetrics(SystemMetric.SM_XVIRTUALSCREEN),
+                                         GetSystemMetrics(SystemMetric.SM_YVIRTUALSCREEN),
+                                         GetSystemMetrics(SystemMetric.SM_CXVIRTUALSCREEN),
+                                         GetSystemMetrics(SystemMetric.SM_CYVIRTUALSCREEN));
                 }
 
                 Size size = PrimaryMonitorSize;
@@ -665,7 +584,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the number of display monitors on the desktop.
+        ///  Gets the number of display monitors on the desktop.
         /// </summary>
         public static int MonitorCount
         {
@@ -673,7 +592,7 @@ namespace System.Windows.Forms
             {
                 if (MultiMonitorSupport)
                 {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS);
+                    return GetSystemMetrics(SystemMetric.SM_CMONITORS);
                 }
 
                 return 1;
@@ -681,7 +600,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether all the display monitors have the same color format.
+        ///  Gets a value indicating whether all the display monitors have the same color format.
         /// </summary>
         public static bool MonitorsSameDisplayFormat
         {
@@ -689,7 +608,7 @@ namespace System.Windows.Forms
             {
                 if (MultiMonitorSupport)
                 {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SAMEDISPLAYFORMAT) != 0;
+                    return GetSystemMetrics(SystemMetric.SM_SAMEDISPLAYFORMAT) != 0;
                 }
 
                 return true;
@@ -697,7 +616,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the computer name of the current system.
+        ///  Gets the computer name of the current system.
         /// </summary>
         public static string ComputerName
         {
@@ -710,13 +629,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the user's domain name.
+        ///  Gets the user's domain name.
         /// </summary>
         public static string UserDomainName => Environment.UserDomainName;
 
         /// <summary>
-        /// Gets a value indicating whether the current process is running in user
-        /// interactive mode.
+        ///  Gets a value indicating whether the current process is running in user
+        ///  interactive mode.
         /// </summary>
         public unsafe static bool UserInteractive
         {
@@ -746,8 +665,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the user name for the current thread, that is, the name of the user
-        /// currently logged onto the system.
+        ///  Gets the user name for the current thread, that is, the name of the user currently logged onto
+        ///  the system.
         /// </summary>
         public static string UserName
         {
@@ -970,7 +889,7 @@ namespace System.Windows.Forms
             => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETBORDER);
 
         /// <summary>
-        /// Indicates the caret blink time.
+        ///  Indicates the caret blink time.
         /// </summary>
         public static int CaretBlinkTime
         {
@@ -983,43 +902,30 @@ namespace System.Windows.Forms
         public static int CaretWidth
             => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETCARETWIDTH);
 
-
         public static int MouseWheelScrollDelta => NativeMethods.WHEEL_DELTA;
 
         /// <summary>
-        /// The width of the left and right edges of the focus rectangle.
+        ///  The width of the left and right edges of the focus rectangle.
         /// </summary>
-        public static int VerticalFocusThickness
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFOCUSBORDER);
-        }
+        public static int VerticalFocusThickness => GetSystemMetrics(SystemMetric.SM_CYFOCUSBORDER);
 
         /// <summary>
-        /// The width of the top and bottom edges of the focus rectangle.
+        ///  The width of the top and bottom edges of the focus rectangle.
         /// </summary>
-        public static int HorizontalFocusThickness
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFOCUSBORDER);
-        }
+        public static int HorizontalFocusThickness => GetSystemMetrics(SystemMetric.SM_CXFOCUSBORDER);
 
         /// <summary>
-        /// The height of the vertical sizing border around the perimeter of the window that can be resized.
+        ///  The height of the vertical sizing border around the perimeter of the window that can be resized.
         /// </summary>
-        public static int VerticalResizeBorderThickness
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZEFRAME);
-        }
+        public static int VerticalResizeBorderThickness => GetSystemMetrics(SystemMetric.SM_CYSIZEFRAME);
 
         /// <summary>
-        /// The width of the horizontal sizing border around the perimeter of the window that can be resized.
+        ///  The width of the horizontal sizing border around the perimeter of the window that can be resized.
         /// </summary>
-        public static int HorizontalResizeBorderThickness
-        {
-            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZEFRAME);
-        }
+        public static int HorizontalResizeBorderThickness => GetSystemMetrics(SystemMetric.SM_CXSIZEFRAME);
 
         /// <summary>
-        /// The orientation of the screen in degrees.
+        ///  The orientation of the screen in degrees.
         /// </summary>
         public static ScreenOrientation ScreenOrientation
         {
@@ -1092,10 +998,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Checks whether the current Winforms app is running on a secure desktop under a terminal
-        /// server session. This is the case when the TS session has been locked.
-        /// This method is useful when calling into GDI+ Graphics methods that modify the object's
-        /// state, these methods fail under a locked terminal session.
+        ///  Checks whether the current Winforms app is running on a secure desktop under a terminal
+        ///  server session. This is the case when the TS session has been locked.
+        ///  This method is useful when calling into GDI+ Graphics methods that modify the object's
+        ///  state, these methods fail under a locked terminal session.
         /// </summary>
         internal static bool InLockedTerminalSession()
         {
