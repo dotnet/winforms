@@ -862,7 +862,7 @@ namespace System.ComponentModel.Design.Tests
             mockTypeDescriptionProviderService.Verify(s => s.GetProvider(component), Times.Never());
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_DuringUnload_ThrowsException()
         {
             var surface = new SubDesignSurface();
@@ -1797,7 +1797,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1151")]
         public void DesignerHost_Add_ComponentDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
