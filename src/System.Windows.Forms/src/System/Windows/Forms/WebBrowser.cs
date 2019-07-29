@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
@@ -237,24 +238,24 @@ namespace System.Windows.Forms
                 if (objDoc != null)
                 {
                     // Document is not necessarily an IHTMLDocument, it might be an office document as well.
-                    UnsafeNativeMethods.IHTMLDocument2 iHTMLDocument2 = null;
+                    IHTMLDocument2 iHTMLDocument2 = null;
                     try
                     {
-                        iHTMLDocument2 = objDoc as UnsafeNativeMethods.IHTMLDocument2;
+                        iHTMLDocument2 = objDoc as IHTMLDocument2;
                     }
                     catch (InvalidCastException)
                     {
                     }
                     if (iHTMLDocument2 != null)
                     {
-                        UnsafeNativeMethods.IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
+                        IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
                         if (iHTMLLocation != null)
                         {
                             string href = iHTMLLocation.GetHref();
                             if (!string.IsNullOrEmpty(href))
                             {
                                 Uri url = new Uri(href);
-                                return new HtmlDocument(ShimManager, iHTMLDocument2 as UnsafeNativeMethods.IHTMLDocument);
+                                return new HtmlDocument(ShimManager, iHTMLDocument2 as IHTMLDocument);
                             }
                         }
                     }
@@ -362,7 +363,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    UnsafeNativeMethods.IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as UnsafeNativeMethods.IHTMLDocument2;
+                    IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
                     Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
@@ -390,7 +391,7 @@ namespace System.Windows.Forms
                 HtmlDocument htmlDocument = Document;
                 if (htmlDocument != null)
                 {
-                    UnsafeNativeMethods.IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as UnsafeNativeMethods.IHTMLDocument2;
+                    IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
                     Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {

@@ -38,14 +38,14 @@ namespace System.Windows.Forms
                     int hr = _clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer iOlecontainer);
 
                     if (NativeMethods.Succeeded(hr)
-                        && (iOlecontainer is UnsafeNativeMethods.IHTMLDocument))
+                        && (iOlecontainer is Interop.Mshtml.IHTMLDocument))
                     {
                         if (_shimManager == null)
                         {
                             _shimManager = new HtmlShimManager();
                         }
 
-                        return new HtmlDocument(_shimManager, iOlecontainer as UnsafeNativeMethods.IHTMLDocument);
+                        return new HtmlDocument(_shimManager, iOlecontainer as Interop.Mshtml.IHTMLDocument);
                     }
                 }
                 else if (_clientSite.GetType().IsAssignableFrom(service))

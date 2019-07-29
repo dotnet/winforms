@@ -3218,15 +3218,6 @@ namespace System.Windows.Forms
             public int code;
         }
 
-        [ComVisible(true)]
-        [Guid("626FC520-A41E-11CF-A731-00A0C9082637")]
-        [InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLDocument
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object GetScript();
-        }
-
         [ComImport]
         [Guid("376BD3AA-3845-101B-84ED-08002B2EC713")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
