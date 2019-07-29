@@ -395,7 +395,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     Hashtable state = new Hashtable(_objects.Count);
                     DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
-                    if (_provider.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
+                    if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
                     {
                         foreach (IDesignerSerializationProvider provider in hostManager.SerializationProviders)
                         {
@@ -672,16 +672,15 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
             {
-                Hashtable resources = null;
-                if (_resources != null)
+                if (info == null)
                 {
-                    resources = _resources.Data;
+                    throw new ArgumentNullException(nameof(info));
                 }
 
                 info.AddValue(StateKey, _objectState);
                 info.AddValue(NameKey, _objectNames);
                 info.AddValue(AssembliesKey, _assemblies);
-                info.AddValue(ResourcesKey, resources);
+                info.AddValue(ResourcesKey, _resources?.Data);
                 info.AddValue(ShimKey, _shimObjectNames);
             }
 
@@ -1290,7 +1289,6 @@ namespace System.ComponentModel.Design.Serialization
                             ArrayList defaultPropList = null;
                             List<string> defaultEventList = null;
                             IEventBindingService ebs = manager.GetService(typeof(IEventBindingService)) as IEventBindingService;
-                            Debug.Assert(ebs != null, "No IEventBindingService is available.  Events will not be serialized correctly");
                             if (data.EntireObject)
                             {
                                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(data._value);
@@ -1384,7 +1382,6 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     finally
                     {
-                        Debug.Assert(manager.Context.Current == statementCxt, "Context stack corrupted");
                         manager.Context.Pop();
                     }
                 }

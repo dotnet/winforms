@@ -19,8 +19,7 @@ namespace System.ComponentModel.Design.Serialization
         internal ComponentCache(IDesignerSerializationManager manager)
         {
             _serManager = manager;
-            IComponentChangeService cs = (IComponentChangeService)manager.GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (manager.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
                 cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
                 cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
