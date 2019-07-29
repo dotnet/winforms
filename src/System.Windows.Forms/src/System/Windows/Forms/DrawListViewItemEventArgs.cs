@@ -16,8 +16,8 @@ namespace System.Windows.Forms
         /// </summary>
         public DrawListViewItemEventArgs(Graphics graphics, ListViewItem item, Rectangle bounds, int itemIndex, ListViewItemStates state)
         {
-            Graphics = graphics;
-            Item = item;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Item = item ?? throw new ArgumentNullException(nameof(item));
             Bounds = bounds;
             ItemIndex = itemIndex;
             State = state;
@@ -79,10 +79,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details
         /// </summary>
-        public void DrawText()
-        {
-            DrawText(TextFormatFlags.Left);
-        }
+        public void DrawText() => DrawText(TextFormatFlags.Left);
 
         /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details - takes a TextFormatFlags argument.
@@ -95,7 +92,7 @@ namespace System.Windows.Forms
         private Rectangle UpdateBounds(Rectangle originalBounds, bool drawText)
         {
             Rectangle resultBounds = originalBounds;
-            if (Item.ListView.View == View.Details)
+            if (Item.ListView != null && Item.ListView.View == View.Details)
             {
                 // Note: this logic will compute the bounds so they align w/ the system drawn bounds only
                 // for the default font.

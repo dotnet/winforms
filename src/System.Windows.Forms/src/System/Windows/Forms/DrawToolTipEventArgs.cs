@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         public DrawToolTipEventArgs(Graphics graphics, IWin32Window associatedWindow, Control associatedControl, Rectangle bounds,
                                     string toolTipText, Color backColor, Color foreColor, Font font)
         {
-            Graphics = graphics;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             AssociatedWindow = associatedWindow;
             AssociatedControl = associatedControl;
             Bounds = bounds;

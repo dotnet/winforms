@@ -18,6 +18,22 @@ namespace System.Windows.Forms
                         ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex,
                         ColumnHeader header, ListViewItemStates itemState)
         {
+            if (graphics == null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+            if (itemIndex == -1)
+            {
+                if (item == null)
+                {
+                    throw new ArgumentNullException(nameof(item));
+                }
+            }
+            else if (subItem == null)
+            {
+                throw new ArgumentNullException(nameof(subItem));
+            }
+
             Graphics = graphics;
             Bounds = bounds;
             Item = item;
@@ -90,6 +106,11 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawFocusRectangle(Rectangle bounds)
         {
+            if (Item == null)
+            {
+                return;
+            }
+
             if ((ItemState & ListViewItemStates.Focused) == ListViewItemStates.Focused)
             {
                 ControlPaint.DrawFocusRectangle(Graphics, Rectangle.Inflate(bounds, -1, -1), Item.ForeColor, Item.BackColor);
@@ -101,8 +122,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawText()
         {
-            // Map the ColumnHeader::TextAlign to the TextFormatFlags.
-            HorizontalAlignment hAlign = Header.TextAlign;
+            // Map the ColumnHeader.TextAlign to the TextFormatFlags.
+            HorizontalAlignment hAlign = Header?.TextAlign ?? HorizontalAlignment.Left;
             TextFormatFlags flags = (hAlign == HorizontalAlignment.Left) ? TextFormatFlags.Left :
                                                    ((hAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter :
                                                    TextFormatFlags.Right);

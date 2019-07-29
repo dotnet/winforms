@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         public DrawItemEventArgs(Graphics graphics, Font font, Rectangle rect,
                                  int index, DrawItemState state)
         {
-            Graphics = graphics;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             Font = font;
             Bounds = rect;
             Index = index;
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         public DrawItemEventArgs(Graphics graphics, Font font, Rectangle rect,
                                  int index, DrawItemState state, Color foreColor, Color backColor)
         {
-            Graphics = graphics;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             Font = font;
             Bounds = rect;
             Index = index;
@@ -95,6 +95,7 @@ namespace System.Windows.Forms
                 {
                     return SystemColors.HighlightText;
                 }
+
                 return _foreColor;
             }
         }
@@ -107,6 +108,7 @@ namespace System.Windows.Forms
                 {
                     return SystemColors.Highlight;
                 }
+
                 return _backColor;
             }
         }
@@ -116,9 +118,10 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void DrawBackground()
         {
-            Brush backBrush = new SolidBrush(BackColor);
-            Graphics.FillRectangle(backBrush, Bounds);
-            backBrush.Dispose();
+            using (Brush backBrush = new SolidBrush(BackColor))
+            {
+                Graphics.FillRectangle(backBrush, Bounds);
+            }
         }
 
         /// <summary>
@@ -126,8 +129,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void DrawFocusRectangle()
         {
-            if ((State & DrawItemState.Focus) == DrawItemState.Focus &&
-                (State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
+            if ((State & DrawItemState.Focus) == DrawItemState.Focus && (State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
             {
                 ControlPaint.DrawFocusRectangle(Graphics, Bounds, ForeColor, BackColor);
             }
