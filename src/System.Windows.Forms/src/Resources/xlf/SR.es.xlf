@@ -9511,12 +9511,12 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Este sistema operativo no admite esta característica.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">No se puede agregar TabPage a '{0}'. Sólo se pueden agregar TabPages a TabControls.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">No se puede agregar una TabPage a otra TabPage. Sólo se pueden agregar TabPages a TabControls.</target>
         <note />

@@ -8128,8 +8128,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLocationChanged(EventArgs e)
         {
-            OnMove(EventArgs.Empty);
-
+            OnMove(e);
             if (Events[EventLocation] is EventHandler eh)
             {
                 eh(this, e);

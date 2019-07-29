@@ -9511,12 +9511,12 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Fonctionnalité non prise en charge par ce système d'exploitation.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Un TabPage ne peut pas être ajouté à un '{0}'. Les TabPages ne peuvent être ajoutés qu'aux TabControls.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">Un TabPage ne peut pas être ajouté à un autre TabPage. Les TabPages ne peuvent être ajoutés qu'aux TabControls.</target>
         <note />
