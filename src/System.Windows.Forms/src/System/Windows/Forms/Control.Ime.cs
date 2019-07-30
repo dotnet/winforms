@@ -329,8 +329,8 @@ namespace System.Windows.Forms
         [WinCategory("Behavior"), SRDescription(nameof(SR.ControlOnImeModeChangedDescr))]
         public event EventHandler ImeModeChanged
         {
-            add => Events.AddHandler(EventImeModeChanged, value);
-            remove => Events.RemoveHandler(EventImeModeChanged, value);
+            add => Events.AddHandler(s_imeModeChangedEvent, value);
+            remove => Events.RemoveHandler(s_imeModeChangedEvent, value);
         }
 
         /// <summary>
@@ -667,7 +667,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(ImeSupported, "ImeModeChanged should not be raised on an Ime-Unaware control.");
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside OnImeModeChanged(), this = " + this);
-            ((EventHandler)Events[EventImeModeChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_imeModeChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>

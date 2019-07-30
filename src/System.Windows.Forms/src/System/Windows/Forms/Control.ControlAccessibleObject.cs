@@ -221,7 +221,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[EventQueryAccessibilityHelp];
+                    QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[s_queryAccessibilityHelpEvent];
 
                     if (handler != null)
                     {
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
             {
                 int topic = 0;
 
-                QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[EventQueryAccessibilityHelp];
+                QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[s_queryAccessibilityHelpEvent];
 
                 if (handler != null)
                 {
