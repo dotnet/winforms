@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
@@ -62,7 +63,7 @@ namespace System.Windows.Forms
             return proxy;
         }
 
-        public abstract UnsafeNativeMethods.IHTMLWindow2 AssociatedWindow
+        public abstract IHTMLWindow2 AssociatedWindow
         {
             get;
         }

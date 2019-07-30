@@ -67,6 +67,7 @@
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetProcAddress.cs" Link="Interop\Kernel32\Interop.GetProcAddress.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.FreeLibrary.cs" Link="Interop\Kernel32\Interop.FreeLibrary.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.LoadLibrary.cs" Link="Interop\Kernel32\Interop.LoadLibrary.cs" />
+    <Compile Include="..\..\Common\src\Interop\Mshtml\**.cs" Link="Interop\Mshtml\**.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHBrowseForFolder.cs" Link="Interop\Shell32\Interop.SHBrowseForFolder.cs" />

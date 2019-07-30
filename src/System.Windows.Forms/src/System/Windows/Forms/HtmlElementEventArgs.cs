@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
@@ -12,7 +13,7 @@ namespace System.Windows.Forms
     {
         private readonly HtmlShimManager _shimManager;
 
-        internal HtmlElementEventArgs(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLEventObj eventObj)
+        internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
         {
             NativeHTMLEventObj = eventObj;
             Debug.Assert(NativeHTMLEventObj != null, "The event object should implement IHTMLEventObj");
@@ -20,7 +21,7 @@ namespace System.Windows.Forms
             _shimManager = shimManager;
         }
 
-        private UnsafeNativeMethods.IHTMLEventObj NativeHTMLEventObj { get; }
+        private IHTMLEventObj NativeHTMLEventObj { get; }
 
         public MouseButtons MouseButtonsPressed
         {
@@ -103,7 +104,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
+                IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
                 return htmlElement == null ? null : new HtmlElement(_shimManager, htmlElement);
             }
         }
@@ -114,7 +115,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
+                IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
                 return htmlElement == null ? null : new HtmlElement(_shimManager, htmlElement);
             }
         }

@@ -8,16 +8,16 @@ namespace System.Windows.Forms
 {
     public sealed class HtmlHistory : IDisposable
     {
-        private UnsafeNativeMethods.IOmHistory htmlHistory;
+        private Interop.Mshtml.IOmHistory htmlHistory;
         private bool disposed;
 
-        internal HtmlHistory(UnsafeNativeMethods.IOmHistory history)
+        internal HtmlHistory(Interop.Mshtml.IOmHistory history)
         {
             htmlHistory = history;
             Debug.Assert(NativeOmHistory != null, "The history object should implement IOmHistory");
         }
 
-        private UnsafeNativeMethods.IOmHistory NativeOmHistory
+        private Interop.Mshtml.IOmHistory NativeOmHistory
         {
             get
             {
