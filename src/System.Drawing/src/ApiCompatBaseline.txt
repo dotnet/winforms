@@ -1,0 +1,47 @@
+Compat issues with assembly System.Drawing:
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Bitmap' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Bitmap' in the contract but not the implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.BitmapSuffixInSameAssemblyAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the implementation but it does in the contract.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.BitmapSuffixInSatelliteAssemblyAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the implementation but it does in the contract.
+CannotMakeTypeAbstract : Type 'System.Drawing.Brushes' is abstract in the implementation but is not abstract in the contract.
+CannotMakeTypeAbstract : Type 'System.Drawing.BufferedGraphicsManager' is abstract in the implementation but is not abstract in the contract.
+CannotRemoveAttribute : Attribute 'System.Diagnostics.DebuggerDisplayAttribute' exists on 'System.Drawing.Color' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Color' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Color' in the contract but not the implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.ColorTranslator' is abstract in the implementation but is not abstract in the contract.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.ContentAlignment' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.CopyPixelOperation' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Font' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Font' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Font' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Icon' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Icon' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Image' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Image' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Image' in the contract but not the implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.Pens' is abstract in the implementation but is not abstract in the contract.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Point' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Point' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.PointF' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Rectangle' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Rectangle' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Size' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Size' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.SizeF' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.SizeF' in the contract but not the implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemBrushes' is abstract in the implementation but is not abstract in the contract.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemColors' is abstract in the implementation but is not abstract in the contract.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemFonts' is abstract in the implementation but is not abstract in the contract.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemIcons' is abstract in the implementation but is not abstract in the contract.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemPens' is abstract in the implementation but is not abstract in the contract.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.ToolboxBitmapAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the implementation but it does in the contract.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Imaging.ImageFormat' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Imaging.Metafile' in the contract but not the implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.Printing.InvalidPrinterException' does not implement interface 'System.Runtime.InteropServices._Exception' in the implementation but it does in the contract.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Printing.Margins' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.DefaultEventAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.DefaultPropertyAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.Drawing.SRDescriptionAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the contract but not the implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.ToolboxItemFilterAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the contract but not the implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.Printing.PrintingPermissionAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the implementation but it does in the contract.
+Total Issues: 45
