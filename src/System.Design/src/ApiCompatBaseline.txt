@@ -1,43 +1,28 @@
 Compat issues with assembly System.Design:
 TypesMustExist : Type 'System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.ArrayEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.BinaryEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ByteViewer' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ComponentActionsType' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DateTimeEditor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventArgs' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventHandler' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedType' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeEventHandler' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeType' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerCommandSet' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignSurface' does not exist in the implementation but it does exist in the contract.
+MembersMustExist : Member 'System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent, System.ComponentModel.Design.ComponentActionsType)' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignSurfaceCollection' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignSurfaceEventArgs' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignSurfaceEventHandler' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignSurfaceManager' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DisplayMode' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.EventBindingService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.ExceptionCollection' does not exist in the implementation but it does exist in the contract.
+CannotRemoveBaseTypeOrInterface : Type 'System.ComponentModel.Design.ExceptionCollection' does not implement interface 'System.Runtime.InteropServices._Exception' in the implementation but it does in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.IComponentDesignerDebugService' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.IComponentDesignerStateService' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.IDesignTimeAssemblyLoader' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.IMultitargetHelperService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.InheritanceService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.LoadedEventArgs' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.LoadedEventHandler' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.LocalizationExtenderProvider' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedEventArgs' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedEventHandler' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedType' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.MultilineStringEditor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.ProjectTargetFrameworkAttribute' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.UndoEngine' does not exist in the implementation but it does exist in the contract.
+CannotMakeMoreVisible : Visibility of member 'System.ComponentModel.Design.ObjectSelectorEditor.EqualsToValue(System.Object)' is 'FamilyOrAssembly' in the implementation but 'Public' in the contract.
+CannotRemoveBaseTypeOrInterface : Type 'System.ComponentModel.Design.ProjectTargetFrameworkAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the implementation but it does in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Data.DataSourceDescriptor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Data.DataSourceDescriptorCollection' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Data.DataSourceGroup' does not exist in the implementation but it does exist in the contract.
@@ -56,22 +41,12 @@ TypesMustExist : Type 'System.ComponentModel.Design.Data.IDataEnvironment' does 
 TypesMustExist : Type 'System.ComponentModel.Design.Data.IDesignerDataSchema' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Data.QueryBuilderMode' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Serialization.BasicDesignerLoader' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Serialization.CodeDomDesignerLoader' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Serialization.CodeDomLocalizationModel' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider' does not exist in the implementation but it does exist in the contract.
-MembersMustExist : Member 'System.ComponentModel.Design.Serialization.CodeDomSerializerBase.DeserializeExpression(System.ComponentModel.Design.Serialization.IDesignerSerializationManager, System.String, System.CodeDom.CodeExpression)' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.CodeDomSerializerException' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.DesignerSerializationManager' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.ExpressionContext' does not exist in the implementation but it does exist in the contract.
+CannotRemoveBaseTypeOrInterface : Type 'System.ComponentModel.Design.Serialization.CodeDomSerializerException' does not implement interface 'System.Runtime.InteropServices._Exception' in the implementation but it does in the contract.
+MembersMustExist : Member 'System.ComponentModel.Design.Serialization.CodeDomSerializerException..ctor(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.Serialization.ICodeDomDesignerReload' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.MemberCodeDomSerializer' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.ObjectStatementCollection' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.RootContext' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.SerializeAbsoluteContext' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.StatementContext' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.Serialization.TypeCodeDomSerializer' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Data.Design.MethodSignatureGenerator' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Data.Design.ParameterGenerationOption' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Data.Design.TypedDataSetGenerator' does not exist in the implementation but it does exist in the contract.
@@ -315,7 +290,6 @@ TypesMustExist : Type 'System.Web.UI.Design.WebControls.WebParts.WebPartManagerD
 TypesMustExist : Type 'System.Web.UI.Design.WebControls.WebParts.WebPartZoneBaseDesigner' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Web.UI.Design.WebControls.WebParts.WebPartZoneDesigner' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Web.UI.Design.WebControls.WebParts.WebZoneDesigner' does not exist in the implementation but it does exist in the contract.
-MembersMustExist : Member 'System.Windows.Forms.Design.AxImporter..ctor(System.Windows.Forms.Design.AxImporter.Options)' does not exist in the implementation but it does exist in the contract.
 MembersMustExist : Member 'System.Windows.Forms.Design.AxImporter.GeneratedAssemblies.get()' does not exist in the implementation but it does exist in the contract.
 MembersMustExist : Member 'System.Windows.Forms.Design.AxImporter.GeneratedSources.get()' does not exist in the implementation but it does exist in the contract.
 MembersMustExist : Member 'System.Windows.Forms.Design.AxImporter.GeneratedTypeLibAttributes.get()' does not exist in the implementation but it does exist in the contract.
@@ -325,10 +299,5 @@ MembersMustExist : Member 'System.Windows.Forms.Design.AxImporter.GenerateFromTy
 MembersMustExist : Member 'System.Windows.Forms.Design.AxImporter.GetFileOfTypeLib(System.Runtime.InteropServices.TYPELIBATTR)' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Windows.Forms.Design.AxParameterData' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Windows.Forms.Design.AxWrapperGen' does not exist in the implementation but it does exist in the contract.
-MembersMustExist : Member 'System.Drawing.Point System.Windows.Forms.Design.ControlDesigner.InvalidPoint' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Windows.Forms.Design.IContainsThemedScrollbarWindows' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Windows.Forms.Design.ImageListImageEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.Windows.Forms.Design.MaskDescriptor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Windows.Forms.Design.ThemedScrollbarMode' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Windows.Forms.Design.ThemedScrollbarWindow' does not exist in the implementation but it does exist in the contract.
-Total Issues: 338
+Total Issues: 301
