@@ -1659,7 +1659,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ToolStripDropDown.ProcessDialogChar [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ToolStripDropDown.ProcessDialogChar [" + charCode.ToString() + "]");
 
             // Since we're toplevel and arent a container control, we've got to do our own mnemonic handling.
             if ((OwnerItem == null || OwnerItem.Pressed) && charCode != ' ' && ProcessMnemonic(charCode))

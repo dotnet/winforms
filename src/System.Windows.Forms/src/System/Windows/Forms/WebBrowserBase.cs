@@ -269,7 +269,7 @@ namespace System.Windows.Forms
 
                         if (hr == NativeMethods.S_OK)
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
                             return true;
                         }
                         else
@@ -300,12 +300,12 @@ namespace System.Windows.Forms
                             }
                             else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
                             {
-                                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
+                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
                                 return base.PreProcessMessage(ref msg);
                             }
                             else
                             {
-                                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
+                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
                                 return false;
                             }
                         }

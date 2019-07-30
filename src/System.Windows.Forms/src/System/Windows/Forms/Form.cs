@@ -299,7 +299,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::set_Active - " + Name);
+                Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::set_Active - " + Name);
                 if ((formState[FormStateIsActive] != 0) != value)
                 {
                     if (value)
@@ -2505,7 +2505,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetVisibleCore(bool value)
         {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
             // If DialogResult.OK and the value == GetVisibleCore() then this code has been called either through
             // ShowDialog( ) or explicit Hide( ) by the user. So dont go through this function again.
@@ -4957,7 +4957,7 @@ namespace System.Windows.Forms
         protected override bool ProcessDialogChar(char charCode)
         {
 #if DEBUG
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Form.ProcessDialogChar [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Form.ProcessDialogChar [" + charCode.ToString() + "]");
 #endif
             // If we're the top-level form or control, we need to do the mnemonic handling
             //

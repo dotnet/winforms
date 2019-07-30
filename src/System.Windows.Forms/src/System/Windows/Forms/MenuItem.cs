@@ -1423,7 +1423,7 @@ namespace System.Windows.Forms
         {
             // Handles the OnDrawItem message sent from ContainerControl
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-            Debug.WriteLineIf(Control.PaletteTracing.TraceVerbose, Handle + ": Force set palette in MenuItem drawitem");
+            Debug.WriteLineIf(Control.s_paletteTracing.TraceVerbose, Handle + ": Force set palette in MenuItem drawitem");
             IntPtr oldPal = Control.SetUpPalette(dis.hDC, false /*force*/, false);
             try
             {

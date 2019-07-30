@@ -77,15 +77,15 @@ namespace System.Windows.Forms
 #endif
 
 #if DEBUG
-        internal static readonly TraceSwitch PaletteTracing = new TraceSwitch("PaletteTracing", "Debug Palette code");
-        internal static readonly TraceSwitch ControlKeyboardRouting = new TraceSwitch("ControlKeyboardRouting", "Debug Keyboard routing for controls");
-        internal static readonly TraceSwitch FocusTracing = new TraceSwitch("FocusTracing", "Debug focus/active control/enter/leave");
-        private static readonly BooleanSwitch AssertOnControlCreateSwitch = new BooleanSwitch("AssertOnControlCreate", "Assert when anything directly deriving from control is created.");
-        internal static readonly BooleanSwitch TraceMnemonicProcessing = new BooleanSwitch("TraceCanProcessMnemonic", "Trace mnemonic processing calls to assure right child-parent call ordering.");
+        internal static readonly TraceSwitch s_paletteTracing = new TraceSwitch("PaletteTracing", "Debug Palette code");
+        internal static readonly TraceSwitch s_controlKeyboardRouting = new TraceSwitch("ControlKeyboardRouting", "Debug Keyboard routing for controls");
+        private protected static readonly TraceSwitch s_focusTracing = new TraceSwitch("FocusTracing", "Debug focus/active control/enter/leave");
+        private static readonly BooleanSwitch s_assertOnControlCreateSwitch = new BooleanSwitch("AssertOnControlCreate", "Assert when anything directly deriving from control is created.");
+        private protected static readonly BooleanSwitch s_traceMnemonicProcessing = new BooleanSwitch("TraceCanProcessMnemonic", "Trace mnemonic processing calls to assure right child-parent call ordering.");
 
-        internal void TraceCanProcessMnemonic()
+        private protected void TraceCanProcessMnemonic()
         {
-            if (TraceMnemonicProcessing.Enabled)
+            if (s_traceMnemonicProcessing.Enabled)
             {
                 string str;
                 try
@@ -122,16 +122,14 @@ namespace System.Windows.Forms
             }
         }
 #else
-        internal static readonly TraceSwitch ControlKeyboardRouting;
-        internal static readonly TraceSwitch PaletteTracing;
-        internal static readonly TraceSwitch FocusTracing;
+        internal static readonly TraceSwitch s_paletteTracing;
+        internal static readonly TraceSwitch s_controlKeyboardRouting;
+        private protected readonly TraceSwitch s_focusTracing;
 #endif
 
 #if DEBUG
-        internal static readonly BooleanSwitch BufferPinkRect = new BooleanSwitch("BufferPinkRect", "Renders a pink rectangle with painting double buffered controls");
-        internal static readonly BooleanSwitch BufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
-#else
-        internal static readonly BooleanSwitch BufferPinkRect;
+        private static readonly BooleanSwitch s_bufferPinkRect = new BooleanSwitch("BufferPinkRect", "Renders a pink rectangle with painting double buffered controls");
+        private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
 #endif
 
         private static readonly int WM_GETCONTROLNAME = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLNAME");
@@ -295,60 +293,60 @@ namespace System.Windows.Forms
         // Property store keys for properties.  The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
         // likely they are going to be used in a group.
-        private static readonly int PropName = PropertyStore.CreateKey();
-        private static readonly int PropBackBrush = PropertyStore.CreateKey();
-        private static readonly int PropFontHeight = PropertyStore.CreateKey();
-        private static readonly int PropCurrentAmbientFont = PropertyStore.CreateKey();
+        private static readonly int s_namePropertyProperty = PropertyStore.CreateKey();
+        private static readonly int s_backBrushProperty = PropertyStore.CreateKey();
+        private static readonly int s_fontHeightProperty = PropertyStore.CreateKey();
+        private static readonly int s_currentAmbientFontProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropControlsCollection = PropertyStore.CreateKey();
-        private static readonly int PropBackColor = PropertyStore.CreateKey();
-        private static readonly int PropForeColor = PropertyStore.CreateKey();
-        private static readonly int PropFont = PropertyStore.CreateKey();
+        private static readonly int s_controlsCollectionProperty = PropertyStore.CreateKey();
+        private static readonly int s_backColorProperty = PropertyStore.CreateKey();
+        private static readonly int s_foreColorProperty = PropertyStore.CreateKey();
+        private static readonly int s_fontProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropBackgroundImage = PropertyStore.CreateKey();
-        private static readonly int PropFontHandleWrapper = PropertyStore.CreateKey();
-        private static readonly int PropUserData = PropertyStore.CreateKey();
-        private static readonly int PropContextMenu = PropertyStore.CreateKey();
+        private static readonly int s_backgroundImageProperty = PropertyStore.CreateKey();
+        private static readonly int s_fontHandleWrapperProperty = PropertyStore.CreateKey();
+        private static readonly int s_userDataProperty = PropertyStore.CreateKey();
+        private static readonly int s_contextMenuProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropCursor = PropertyStore.CreateKey();
-        private static readonly int PropRegion = PropertyStore.CreateKey();
-        private static readonly int PropRightToLeft = PropertyStore.CreateKey();
+        private static readonly int s_cursorProperty = PropertyStore.CreateKey();
+        private static readonly int s_regionProperty = PropertyStore.CreateKey();
+        private static readonly int s_rightToLeftProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropBindings = PropertyStore.CreateKey();
-        private static readonly int PropBindingManager = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleDefaultActionDescription = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleDescription = PropertyStore.CreateKey();
+        private static readonly int s_bindingsProperty = PropertyStore.CreateKey();
+        private static readonly int s_bindingManagerProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessbileDefaultActionProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleDescriptionProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropAccessibility = PropertyStore.CreateKey();
-        private static readonly int PropNcAccessibility = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleName = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleRole = PropertyStore.CreateKey();
+        private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
+        private static readonly int s_ncAccessibilityProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleNameProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleRoleProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropPaintingException = PropertyStore.CreateKey();
-        private static readonly int PropActiveXImpl = PropertyStore.CreateKey();
-        private static readonly int PropControlVersionInfo = PropertyStore.CreateKey();
-        private static readonly int PropBackgroundImageLayout = PropertyStore.CreateKey();
+        private static readonly int s_paintingExceptionProperty = PropertyStore.CreateKey();
+        private static readonly int s_activeXImplProperty = PropertyStore.CreateKey();
+        private static readonly int s_controlVersionInfoProperty = PropertyStore.CreateKey();
+        private static readonly int s_backgroundImageLayoutProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropAccessibleHelpProvider = PropertyStore.CreateKey();
-        private static readonly int PropContextMenuStrip = PropertyStore.CreateKey();
-        private static readonly int PropAutoScrollOffset = PropertyStore.CreateKey();
-        private static readonly int PropUseCompatibleTextRendering = PropertyStore.CreateKey();
+        private static readonly int s_accessibleHelpProviderProperty = PropertyStore.CreateKey();
+        private static readonly int s_contextMenuStripProperty = PropertyStore.CreateKey();
+        private static readonly int s_autoScrollOffsetProperty = PropertyStore.CreateKey();
+        private static readonly int s_useCompatibleTextRenderingProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropImeWmCharsToIgnore = PropertyStore.CreateKey();
-        private static readonly int PropImeMode = PropertyStore.CreateKey();
-        private static readonly int PropDisableImeModeChangedCount = PropertyStore.CreateKey();
-        private static readonly int PropLastCanEnableIme = PropertyStore.CreateKey();
+        private static readonly int s_imeWmCharsToIgnoreProperty = PropertyStore.CreateKey();
+        private static readonly int s_imeModeProperty = PropertyStore.CreateKey();
+        private static readonly int s_disableImeModeChangedCountProperty = PropertyStore.CreateKey();
+        private static readonly int s_lastCanEnableImeProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropCacheTextCount = PropertyStore.CreateKey();
-        private static readonly int PropCacheTextField = PropertyStore.CreateKey();
-        private static readonly int PropAmbientPropertiesService = PropertyStore.CreateKey();
+        private static readonly int s_cacheTextCountProperty = PropertyStore.CreateKey();
+        private static readonly int s_acheTextFieldProperty = PropertyStore.CreateKey();
+        private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
 
         private static bool s_needToLoadComCtl = true;
 
         // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
         // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
         // True means use GDI+, false means use GDI (TextRenderer).
-        internal static bool UseCompatibleTextRenderingDefault = true;
+        internal static bool UseCompatibleTextRenderingDefault { get; set; } = true;
 
         // Control instance members
         //
@@ -427,7 +425,7 @@ namespace System.Windows.Forms
         internal Control(bool autoInstallSyncContext) : base()
         {
 #if DEBUG
-            if (AssertOnControlCreateSwitch.Enabled)
+            if (s_assertOnControlCreateSwitch.Enabled)
             {
                 Debug.Assert(GetType().BaseType != typeof(Control), "Direct derivative of Control Created: " + GetType().FullName);
                 Debug.Assert(GetType() != typeof(Control), "Control Created!");
@@ -550,7 +548,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(PropAccessibility);
+                AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
                 if (accessibleObject == null)
                 {
                     accessibleObject = CreateAccessibilityInstance();
@@ -561,7 +559,7 @@ namespace System.Windows.Forms
                         Debug.Fail("Accessible objects for controls must be derived from ControlAccessibleObject.");
                         return null;
                     }
-                    Properties.SetObject(PropAccessibility, accessibleObject);
+                    Properties.SetObject(s_accessibilityProperty, accessibleObject);
                 }
 
                 Debug.Assert(accessibleObject != null, "Failed to create accessibility object");
@@ -577,11 +575,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(PropNcAccessibility);
+                AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(s_ncAccessibilityProperty);
                 if (ncAccessibleObject == null)
                 {
                     ncAccessibleObject = new ControlAccessibleObject(this, NativeMethods.OBJID_WINDOW);
-                    Properties.SetObject(PropNcAccessibility, ncAccessibleObject);
+                    Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
                 }
 
                 Debug.Assert(ncAccessibleObject != null, "Failed to create NON-CLIENT accessibility object");
@@ -644,8 +642,8 @@ namespace System.Windows.Forms
         ]
         public string AccessibleDefaultActionDescription
         {
-            get => (string)Properties.GetObject(PropAccessibleDefaultActionDescription);
-            set => Properties.SetObject(PropAccessibleDefaultActionDescription, value);
+            get => (string)Properties.GetObject(s_accessbileDefaultActionProperty);
+            set => Properties.SetObject(s_accessbileDefaultActionProperty, value);
         }
 
         /// <summary>
@@ -659,8 +657,8 @@ namespace System.Windows.Forms
         ]
         public string AccessibleDescription
         {
-            get => (string)Properties.GetObject(PropAccessibleDescription);
-            set => Properties.SetObject(PropAccessibleDescription, value);
+            get => (string)Properties.GetObject(s_accessibleDescriptionProperty);
+            set => Properties.SetObject(s_accessibleDescriptionProperty, value);
         }
 
         /// <summary>
@@ -674,8 +672,8 @@ namespace System.Windows.Forms
         ]
         public string AccessibleName
         {
-            get => (string)Properties.GetObject(PropAccessibleName);
-            set => Properties.SetObject(PropAccessibleName, value);
+            get => (string)Properties.GetObject(s_accessibleNameProperty);
+            set => Properties.SetObject(s_accessibleNameProperty, value);
         }
 
         /// <summary>
@@ -690,7 +688,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int role = Properties.GetInteger(PropAccessibleRole, out bool found);
+                int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
                 if (found)
                 {
                     return (AccessibleRole)role;
@@ -707,7 +705,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
                 }
-                Properties.SetInteger(PropAccessibleRole, (int)value);
+                Properties.SetInteger(s_accessibleRoleProperty, (int)value);
             }
         }
 
@@ -729,7 +727,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(PropActiveXImpl);
+                ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(s_activeXImplProperty);
                 if (activeXImpl == null)
                 {
                     // Don't allow top level objects to be hosted
@@ -744,7 +742,7 @@ namespace System.Windows.Forms
                     // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising.  Using a state
                     // bit to track PropActiveXImpl instead of fetching from the property store.
                     SetState2(STATE2_ISACTIVEX, true);
-                    Properties.SetObject(PropActiveXImpl, activeXImpl);
+                    Properties.SetObject(s_activeXImplProperty, activeXImpl);
                 }
 
                 return activeXImpl;
@@ -797,7 +795,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                AmbientProperties props = (AmbientProperties)Properties.GetObject(PropAmbientPropertiesService, out bool contains);
+                AmbientProperties props = (AmbientProperties)Properties.GetObject(s_ambientPropertiesServiceProperty, out bool contains);
                 if (!contains)
                 {
                     if (Site != null)
@@ -811,7 +809,7 @@ namespace System.Windows.Forms
 
                     if (props != null)
                     {
-                        Properties.SetObject(PropAmbientPropertiesService, props);
+                        Properties.SetObject(s_ambientPropertiesServiceProperty, props);
                     }
                 }
                 return props;
@@ -889,9 +887,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(PropAutoScrollOffset))
+                if (Properties.ContainsObject(s_autoScrollOffsetProperty))
                 {
-                    return (Point)Properties.GetObject(PropAutoScrollOffset);
+                    return (Point)Properties.GetObject(s_autoScrollOffsetProperty);
                 }
                 return Point.Empty;
             }
@@ -899,7 +897,7 @@ namespace System.Windows.Forms
             {
                 if (AutoScrollOffset != value)
                 {
-                    Properties.SetObject(PropAutoScrollOffset, value);
+                    Properties.SetObject(s_autoScrollOffsetProperty, value);
                 }
             }
         }
@@ -921,14 +919,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                object customBackBrush = Properties.GetObject(PropBackBrush);
+                object customBackBrush = Properties.GetObject(s_backBrushProperty);
                 if (customBackBrush != null)
                 {
                     // We already have a valid brush.  Unbox, and return.
                     return (IntPtr)customBackBrush;
                 }
 
-                if (!Properties.ContainsObject(PropBackColor))
+                if (!Properties.ContainsObject(s_backColorProperty))
                 {
                     // No custom back color.  See if we can get to our parent.
                     // The color check here is to account for parents and children who
@@ -956,7 +954,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(backBrush != IntPtr.Zero, "Failed to create brushHandle");
-                Properties.SetObject(PropBackBrush, backBrush);
+                Properties.SetObject(s_backBrushProperty, backBrush);
 
                 return backBrush;
             }
@@ -1023,9 +1021,9 @@ namespace System.Windows.Forms
                 }
 
                 Color c = BackColor;
-                if (!value.IsEmpty || Properties.ContainsObject(PropBackColor))
+                if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
                 {
-                    Properties.SetColor(PropBackColor, value);
+                    Properties.SetColor(s_backColorProperty, value);
                 }
 
                 if (!c.Equals(BackColor))
@@ -1055,13 +1053,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Image)Properties.GetObject(PropBackgroundImage);
+                return (Image)Properties.GetObject(s_backgroundImageProperty);
             }
             set
             {
                 if (BackgroundImage != value)
                 {
-                    Properties.SetObject(PropBackgroundImage, value);
+                    Properties.SetObject(s_backgroundImageProperty, value);
                     OnBackgroundImageChanged(EventArgs.Empty);
                 }
             }
@@ -1087,14 +1085,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found = Properties.ContainsObject(PropBackgroundImageLayout);
+                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
                 if (!found)
                 {
                     return ImageLayout.Tile;
                 }
                 else
                 {
-                    return ((ImageLayout)Properties.GetObject(PropBackgroundImageLayout));
+                    return ((ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty));
                 }
             }
             set
@@ -1118,7 +1116,7 @@ namespace System.Windows.Forms
                             DoubleBuffered = true;
                         }
                     }
-                    Properties.SetObject(PropBackgroundImageLayout, value);
+                    Properties.SetObject(s_backgroundImageLayoutProperty, value);
                     OnBackgroundImageLayoutChanged(EventArgs.Empty);
                 }
             }
@@ -1153,7 +1151,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings()
         {
-            ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
+            ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
             if (bindings != null)
             {
                 bindings.Clear();
@@ -1170,7 +1168,7 @@ namespace System.Windows.Forms
             get
             {
                 // See if we have locally overridden the binding manager.
-                BindingContext context = (BindingContext)Properties.GetObject(PropBindingManager);
+                BindingContext context = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
                 if (context != null)
                 {
                     return context;
@@ -1188,12 +1186,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                BindingContext oldContext = (BindingContext)Properties.GetObject(PropBindingManager);
+                BindingContext oldContext = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
                 BindingContext newContext = value;
 
                 if (oldContext != newContext)
                 {
-                    Properties.SetObject(PropBindingManager, newContext);
+                    Properties.SetObject(s_bindingManagerProperty, newContext);
 
                     // the property change will wire up the bindings.
                     //
@@ -1364,7 +1362,7 @@ namespace System.Windows.Forms
             get
             {
                 // check if we're caching text.
-                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out bool _);
+                int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool _);
 
                 return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
             }
@@ -1378,13 +1376,13 @@ namespace System.Windows.Forms
                 }
 
                 // otherwise, get the state and update the cache if necessary.
-                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out bool found);
+                int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool found);
 
                 if (value)
                 {
                     if (cacheTextCounter == 0)
                     {
-                        Properties.SetObject(PropCacheTextField, _text);
+                        Properties.SetObject(s_acheTextFieldProperty, _text);
                         if (_text == null)
                         {
                             _text = WindowText;
@@ -1397,10 +1395,10 @@ namespace System.Windows.Forms
                     cacheTextCounter--;
                     if (cacheTextCounter == 0)
                     {
-                        _text = (string)Properties.GetObject(PropCacheTextField, out found);
+                        _text = (string)Properties.GetObject(s_acheTextFieldProperty, out found);
                     }
                 }
-                Properties.SetInteger(PropCacheTextCount, cacheTextCounter);
+                Properties.SetInteger(s_cacheTextCountProperty, cacheTextCounter);
             }
         }
 
@@ -1517,10 +1515,10 @@ namespace System.Windows.Forms
         ]
         public virtual ContextMenu ContextMenu
         {
-            get => (ContextMenu)Properties.GetObject(PropContextMenu);
+            get => (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             set
             {
-                ContextMenu oldValue = (ContextMenu)Properties.GetObject(PropContextMenu);
+                ContextMenu oldValue = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
 
                 if (oldValue != value)
                 {
@@ -1531,7 +1529,7 @@ namespace System.Windows.Forms
                         oldValue.Disposed -= disposedHandler;
                     }
 
-                    Properties.SetObject(PropContextMenu, value);
+                    Properties.SetObject(s_contextMenuProperty, value);
 
                     if (value != null)
                     {
@@ -1566,10 +1564,10 @@ namespace System.Windows.Forms
         ]
         public virtual ContextMenuStrip ContextMenuStrip
         {
-            get => (ContextMenuStrip)Properties.GetObject(PropContextMenuStrip);
+            get => (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
             set
             {
-                ContextMenuStrip oldValue = Properties.GetObject(PropContextMenuStrip) as ContextMenuStrip;
+                ContextMenuStrip oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
                 if (oldValue != value)
                 {
@@ -1580,7 +1578,7 @@ namespace System.Windows.Forms
                         oldValue.Disposed -= disposedHandler;
                     }
 
-                    Properties.SetObject(PropContextMenuStrip, value);
+                    Properties.SetObject(s_contextMenuStripProperty, value);
 
                     if (value != null)
                     {
@@ -1612,12 +1610,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection == null)
                 {
                     controlsCollection = CreateControlsInstance();
-                    Properties.SetObject(PropControlsCollection, controlsCollection);
+                    Properties.SetObject(s_controlsCollectionProperty, controlsCollection);
                 }
                 return controlsCollection;
             }
@@ -1855,7 +1853,7 @@ namespace System.Windows.Forms
                     return Cursors.WaitCursor;
                 }
 
-                Cursor cursor = (Cursor)Properties.GetObject(PropCursor);
+                Cursor cursor = (Cursor)Properties.GetObject(s_cursorProperty);
                 if (cursor != null)
                 {
                     return cursor;
@@ -1885,11 +1883,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                Cursor localCursor = (Cursor)Properties.GetObject(PropCursor);
+                Cursor localCursor = (Cursor)Properties.GetObject(s_cursorProperty);
                 Cursor resolvedCursor = Cursor;
                 if (localCursor != value)
                 {
-                    Properties.SetObject(PropCursor, value);
+                    Properties.SetObject(s_cursorProperty, value);
                 }
 
                 // Other things can change the cursor... we
@@ -1937,11 +1935,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
+                ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
                 if (bindings == null)
                 {
                     bindings = new ControlBindingsCollection(this);
-                    Properties.SetObject(PropBindings, bindings);
+                    Properties.SetObject(s_bindingsProperty, bindings);
                 }
                 return bindings;
             }
@@ -2073,13 +2071,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void DisposeFontHandle()
         {
-            if (Properties.ContainsObject(PropFontHandleWrapper))
+            if (Properties.ContainsObject(s_fontHandleWrapperProperty))
             {
-                if (Properties.GetObject(PropFontHandleWrapper) is FontHandleWrapper fontHandle)
+                if (Properties.GetObject(s_fontHandleWrapperProperty) is FontHandleWrapper fontHandle)
                 {
                     fontHandle.Dispose();
                 }
-                Properties.SetObject(PropFontHandleWrapper, null);
+                Properties.SetObject(s_fontHandleWrapperProperty, null);
             }
         }
 
@@ -2250,7 +2248,7 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             get
             {
-                Font font = (Font)Properties.GetObject(PropFont);
+                Font font = (Font)Properties.GetObject(s_fontProperty);
                 if (font != null)
                 {
                     return font;
@@ -2282,7 +2280,7 @@ namespace System.Windows.Forms
             [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             set
             {
-                Font local = (Font)Properties.GetObject(PropFont);
+                Font local = (Font)Properties.GetObject(s_fontProperty);
                 Font resolved = Font;
 
                 bool localChanged = false;
@@ -2308,7 +2306,7 @@ namespace System.Windows.Forms
                 if (localChanged)
                 {
                     // Store new local value
-                    Properties.SetObject(PropFont, value);
+                    Properties.SetObject(s_fontProperty, value);
 
                     // We only fire the Changed event if the "resolved" value
                     // changed, however we must update the font if the local
@@ -2318,9 +2316,9 @@ namespace System.Windows.Forms
                         // Cleanup any font handle wrapper...
                         DisposeFontHandle();
 
-                        if (Properties.ContainsInteger(PropFontHeight))
+                        if (Properties.ContainsInteger(s_fontHeightProperty))
                         {
-                            Properties.SetInteger(PropFontHeight, (value == null) ? -1 : value.Height);
+                            Properties.SetInteger(s_fontHeightProperty, (value == null) ? -1 : value.Height);
                         }
 
                         // Font is an ambient property.  We need to layout our parent because Font may
@@ -2345,21 +2343,21 @@ namespace System.Windows.Forms
 
         internal void ScaleFont(float factor)
         {
-            Font local = (Font)Properties.GetObject(PropFont);
+            Font local = (Font)Properties.GetObject(s_fontProperty);
             Font resolved = Font;
             Font newFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
 
             if ((local == null) || !local.Equals(newFont))
             {
-                Properties.SetObject(PropFont, newFont);
+                Properties.SetObject(s_fontProperty, newFont);
 
                 if (!resolved.Equals(newFont))
                 {
                     DisposeFontHandle();
 
-                    if (Properties.ContainsInteger(PropFontHeight))
+                    if (Properties.ContainsInteger(s_fontHeightProperty))
                     {
-                        Properties.SetInteger(PropFontHeight, newFont.Height);
+                        Properties.SetInteger(s_fontHeightProperty, newFont.Height);
                     }
                 }
             }
@@ -2376,16 +2374,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                Font font = (Font)Properties.GetObject(PropFont);
+                Font font = (Font)Properties.GetObject(s_fontProperty);
 
                 if (font != null)
                 {
-                    FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(PropFontHandleWrapper);
+                    FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle == null)
                     {
                         fontHandle = new FontHandleWrapper(font);
 
-                        Properties.SetObject(PropFontHandleWrapper, fontHandle);
+                        Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
                     }
 
                     return fontHandle.Handle;
@@ -2403,15 +2401,15 @@ namespace System.Windows.Forms
 
                     FontHandleWrapper fontHandle = null;
 
-                    Font currentAmbient = (Font)Properties.GetObject(PropCurrentAmbientFont);
+                    Font currentAmbient = (Font)Properties.GetObject(s_currentAmbientFontProperty);
 
                     if (currentAmbient != null && currentAmbient == ambient.Font)
                     {
-                        fontHandle = (FontHandleWrapper)Properties.GetObject(PropFontHandleWrapper);
+                        fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     }
                     else
                     {
-                        Properties.SetObject(PropCurrentAmbientFont, ambient.Font);
+                        Properties.SetObject(s_currentAmbientFontProperty, ambient.Font);
                     }
 
                     if (fontHandle == null)
@@ -2419,7 +2417,7 @@ namespace System.Windows.Forms
                         font = ambient.Font;
                         fontHandle = new FontHandleWrapper(font);
 
-                        Properties.SetObject(PropFontHandleWrapper, fontHandle);
+                        Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
                     }
 
                     return fontHandle.Handle;
@@ -2433,18 +2431,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                int fontHeight = Properties.GetInteger(PropFontHeight, out bool found);
+                int fontHeight = Properties.GetInteger(s_fontHeightProperty, out bool found);
                 if (found && fontHeight != -1)
                 {
                     return fontHeight;
                 }
                 else
                 {
-                    Font font = (Font)Properties.GetObject(PropFont);
+                    Font font = (Font)Properties.GetObject(s_fontProperty);
                     if (font != null)
                     {
                         fontHeight = font.Height;
-                        Properties.SetInteger(PropFontHeight, fontHeight);
+                        Properties.SetInteger(s_fontHeightProperty, fontHeight);
                         return fontHeight;
                     }
                 }
@@ -2461,14 +2459,14 @@ namespace System.Windows.Forms
                 if (localFontHeight == -1)
                 {
                     localFontHeight = Font.Height;
-                    Properties.SetInteger(PropFontHeight, localFontHeight);
+                    Properties.SetInteger(s_fontHeightProperty, localFontHeight);
                 }
 
                 return localFontHeight;
             }
             set
             {
-                Properties.SetInteger(PropFontHeight, value);
+                Properties.SetInteger(s_fontHeightProperty, value);
             }
         }
 
@@ -2484,7 +2482,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Color color = Properties.GetColor(PropForeColor);
+                Color color = Properties.GetColor(s_foreColorProperty);
                 if (!color.IsEmpty)
                 {
                     return color;
@@ -2525,9 +2523,9 @@ namespace System.Windows.Forms
             set
             {
                 Color c = ForeColor;
-                if (!value.IsEmpty || Properties.ContainsObject(PropForeColor))
+                if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
                 {
-                    Properties.SetColor(PropForeColor, value);
+                    Properties.SetColor(s_foreColorProperty, value);
                 }
                 if (!c.Equals(ForeColor))
                 {
@@ -2661,7 +2659,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controls = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                 return controls != null && controls.Count > 0;
             }
         }
@@ -3150,7 +3148,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                string name = (string)Properties.GetObject(PropName);
+                string name = (string)Properties.GetObject(s_namePropertyProperty);
                 if (string.IsNullOrEmpty(name))
                 {
                     if (Site != null)
@@ -3170,11 +3168,11 @@ namespace System.Windows.Forms
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    Properties.SetObject(PropName, null);
+                    Properties.SetObject(s_namePropertyProperty, null);
                 }
                 else
                 {
-                    Properties.SetObject(PropName, value);
+                    Properties.SetObject(s_namePropertyProperty, value);
                 }
             }
         }
@@ -3241,7 +3239,7 @@ namespace System.Windows.Forms
         internal PropertyStore Properties { get; }
 
         // Returns the value of the backColor field -- no asking the parent with its color is, etc.
-        internal Color RawBackColor => Properties.GetColor(PropBackColor);
+        internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
 
         /// <summary>
         ///  Indicates whether the control is currently recreating its handle. This
@@ -3293,13 +3291,13 @@ namespace System.Windows.Forms
         ]
         public Region Region
         {
-            get => (Region)Properties.GetObject(PropRegion);
+            get => (Region)Properties.GetObject(s_regionProperty);
             set
             {
                 Region oldRegion = Region;
                 if (oldRegion != value)
                 {
-                    Properties.SetObject(PropRegion, value);
+                    Properties.SetObject(s_regionProperty, value);
 
                     if (oldRegion != null)
                     {
@@ -3447,7 +3445,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
+                int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
                 if (!found)
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
@@ -3477,9 +3475,9 @@ namespace System.Windows.Forms
 
                 RightToLeft oldValue = RightToLeft;
 
-                if (Properties.ContainsInteger(PropRightToLeft) || value != RightToLeft.Inherit)
+                if (Properties.ContainsInteger(s_rightToLeftProperty) || value != RightToLeft.Inherit)
                 {
-                    Properties.SetInteger(PropRightToLeft, (int)value);
+                    Properties.SetInteger(s_rightToLeftProperty, (int)value);
                 }
 
                 if (oldValue != RightToLeft)
@@ -3527,10 +3525,10 @@ namespace System.Windows.Forms
                 // If the ambients changed, compare each property.
                 if (oldAmbients != newAmbients)
                 {
-                    bool checkFont = !Properties.ContainsObject(PropFont);
-                    bool checkBackColor = !Properties.ContainsObject(PropBackColor);
-                    bool checkForeColor = !Properties.ContainsObject(PropForeColor);
-                    bool checkCursor = !Properties.ContainsObject(PropCursor);
+                    bool checkFont = !Properties.ContainsObject(s_fontProperty);
+                    bool checkBackColor = !Properties.ContainsObject(s_backColorProperty);
+                    bool checkForeColor = !Properties.ContainsObject(s_foreColorProperty);
+                    bool checkCursor = !Properties.ContainsObject(s_cursorProperty);
 
                     Font oldFont = null;
                     Color oldBackColor = Color.Empty;
@@ -3557,7 +3555,7 @@ namespace System.Windows.Forms
                         oldCursor = Cursor;
                     }
 
-                    Properties.SetObject(PropAmbientPropertiesService, newAmbients);
+                    Properties.SetObject(s_ambientPropertiesServiceProperty, newAmbients);
                     base.Site = value;
 
                     if (checkFont && !oldFont.Equals(Font))
@@ -3698,8 +3696,8 @@ namespace System.Windows.Forms
         ]
         public object Tag
         {
-            get => Properties.GetObject(PropUserData);
-            set => Properties.SetObject(PropUserData, value);
+            get => Properties.GetObject(s_userDataProperty);
+            set => Properties.SetObject(s_userDataProperty, value);
         }
 
         /// <summary>
@@ -3739,7 +3737,7 @@ namespace System.Windows.Forms
                 {
                     for (Control ctl = this; ctl != null; ctl = ctl.ParentInternal)
                     {
-                        ActiveXImpl activeXImpl = (ActiveXImpl)ctl.Properties.GetObject(PropActiveXImpl);
+                        ActiveXImpl activeXImpl = (ActiveXImpl)ctl.Properties.GetObject(s_activeXImplProperty);
                         if (activeXImpl != null)
                         {
                             activeXImpl.UpdateAccelTable();
@@ -3949,7 +3947,7 @@ namespace System.Windows.Forms
                 if (GetState(STATE_USEWAITCURSOR) != value)
                 {
                     SetState(STATE_USEWAITCURSOR, value);
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection != null)
                     {
@@ -3976,9 +3974,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsInteger(PropUseCompatibleTextRendering))
+                if (Properties.ContainsInteger(s_useCompatibleTextRenderingProperty))
                 {
-                    int value = Properties.GetInteger(PropUseCompatibleTextRendering, out bool found);
+                    int value = Properties.GetInteger(s_useCompatibleTextRenderingProperty, out bool found);
                     if (found)
                     {
                         return value == 1;
@@ -3991,7 +3989,7 @@ namespace System.Windows.Forms
             {
                 if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInt != value)
                 {
-                    Properties.SetInteger(PropUseCompatibleTextRendering, value ? 1 : 0);
+                    Properties.SetInteger(s_useCompatibleTextRenderingProperty, value ? 1 : 0);
                     // Update the preferred size cache since we will be rendering text using a different engine.
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.UseCompatibleTextRendering);
                     Invalidate();
@@ -4010,11 +4008,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlVersionInfo info = (ControlVersionInfo)Properties.GetObject(PropControlVersionInfo);
+                ControlVersionInfo info = (ControlVersionInfo)Properties.GetObject(s_controlVersionInfoProperty);
                 if (info == null)
                 {
                     info = new ControlVersionInfo(this);
-                    Properties.SetObject(PropControlVersionInfo, info);
+                    Properties.SetObject(s_controlVersionInfoProperty, info);
                 }
                 return info;
             }
@@ -4786,7 +4784,7 @@ namespace System.Windows.Forms
                 {
                     OnRightToLeftChanged(EventArgs.Empty);
                 }
-                if (Properties.GetObject(PropBindingManager) == null && Created)
+                if (Properties.GetObject(s_bindingManagerProperty) == null && Created)
                 {
                     // We do not want to call our parent's BindingContext property here.
                     // We have no idea if us or any of our children are using data binding,
@@ -5147,7 +5145,7 @@ namespace System.Windows.Forms
             bool controlIsAlreadyCreated = Created;
             CreateControl(false);
 
-            if (Properties.GetObject(PropBindingManager) == null && ParentInternal != null && !controlIsAlreadyCreated)
+            if (Properties.GetObject(s_bindingManagerProperty) == null && ParentInternal != null && !controlIsAlreadyCreated)
             {
                 // We do not want to call our parent's BindingContext property here.
                 // We have no idea if us or any of our children are using data binding,
@@ -5188,7 +5186,7 @@ namespace System.Windows.Forms
 
                     // must snapshot this array because
                     // z-order updates from Windows may rearrange it!
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection != null)
                     {
@@ -5301,7 +5299,7 @@ namespace System.Windows.Forms
         {
             if (GetState(STATE_OWNCTLBRUSH))
             {
-                object backBrush = Properties.GetObject(PropBackBrush);
+                object backBrush = Properties.GetObject(s_backBrushProperty);
                 if (backBrush != null)
                 {
                     IntPtr p = (IntPtr)backBrush;
@@ -5309,7 +5307,7 @@ namespace System.Windows.Forms
                     {
                         Interop.Gdi32.DeleteObject(p);
                     }
-                    Properties.SetObject(PropBackBrush, null);
+                    Properties.SetObject(s_backBrushProperty, null);
                 }
             }
 
@@ -5336,7 +5334,7 @@ namespace System.Windows.Forms
                 {
                     DisposeAxControls();
 
-                    ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+                    ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
                     if (contextMenu != null)
                     {
                         contextMenu.Disposed -= new EventHandler(DetachContextMenu);
@@ -5354,7 +5352,7 @@ namespace System.Windows.Forms
                         _parent.Controls.Remove(this);
                     }
 
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection != null)
                     {
@@ -5368,7 +5366,7 @@ namespace System.Windows.Forms
                             ctl._parent = null;
                             ctl.Dispose();
                         }
-                        Properties.SetObject(PropControlsCollection, null);
+                        Properties.SetObject(s_controlsCollectionProperty, null);
                     }
 
                     base.Dispose(disposing);
@@ -5401,7 +5399,7 @@ namespace System.Windows.Forms
         // Package scope to allow AxHost to override.
         internal virtual void DisposeAxControls()
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
             if (controlsCollection != null)
             {
@@ -5678,7 +5676,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::Focus - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::Focus - " + Name);
 
             // Call the internal method (which form overrides)
             return FocusInternal();
@@ -5691,7 +5689,7 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool FocusInternal()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
                 UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
@@ -6143,7 +6141,7 @@ namespace System.Windows.Forms
 
         internal virtual Control GetFirstChildControlInTabOrder(bool forward)
         {
-            ControlCollection ctlControls = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection ctlControls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
             Control found = null;
             if (ctlControls != null)
@@ -6187,7 +6185,7 @@ namespace System.Windows.Forms
 
             if (forward)
             {
-                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(PropControlsCollection);
+                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
                 if (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
@@ -6211,7 +6209,7 @@ namespace System.Windows.Forms
                     //
                     int parentControlCount = 0;
 
-                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(PropControlsCollection);
+                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
 
                     if (parentControls != null)
                     {
@@ -6273,7 +6271,7 @@ namespace System.Windows.Forms
                     // start with the same tab index as ctl, because there can be dups.
                     int parentControlCount = 0;
 
-                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(PropControlsCollection);
+                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
 
                     if (parentControls != null)
                     {
@@ -6334,7 +6332,7 @@ namespace System.Windows.Forms
                 }
 
                 // We found a control.  Walk into this control to find the proper sub control within it to select.
-                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(PropControlsCollection);
+                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
                 while (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
@@ -6342,7 +6340,7 @@ namespace System.Windows.Forms
                     if (found != null)
                     {
                         ctl = found;
-                        ctlControls = (ControlCollection)ctl.Properties.GetObject(PropControlsCollection);
+                        ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
                     }
                     else
                     {
@@ -6859,7 +6857,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsFontSet()
         {
-            Font font = (Font)Properties.GetObject(PropFont);
+            Font font = (Font)Properties.GetObject(s_fontProperty);
             if (font != null)
             {
                 return true;
@@ -6929,7 +6927,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool IsInputChar(char charCode)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
 
             int mask = 0;
             if (charCode == (char)(int)Keys.Tab)
@@ -6955,7 +6953,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool IsInputKey(Keys keyData)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
 
             if ((keyData & Keys.Alt) == Keys.Alt)
             {
@@ -6994,7 +6992,7 @@ namespace System.Windows.Forms
         public static bool IsMnemonic(char charCode, string text)
         {
 #if DEBUG
-            if (ControlKeyboardRouting.TraceVerbose)
+            if (s_controlKeyboardRouting.TraceVerbose)
             {
                 Debug.Write("Control.IsMnemonic(" + charCode.ToString() + ", ");
 
@@ -7013,7 +7011,7 @@ namespace System.Windows.Forms
             //Special case handling:
             if (charCode == '&')
             {
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning false");
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
                 return false;
             }
 
@@ -7035,16 +7033,16 @@ namespace System.Windows.Forms
                     }
 
                     char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                    Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...& found... char=" + c1.ToString());
+                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...& found... char=" + c1.ToString());
                     if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                     {
-                        Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning true");
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning true");
                         return true;
                     }
                 }
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose && pos == 0, "   ...no & found");
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose && pos == 0, "   ...no & found");
             }
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning false");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
             return false;
         }
 
@@ -7130,7 +7128,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
             }
 
-            ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(PropActiveXImpl);
+            ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(s_activeXImplProperty);
 
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
@@ -7237,14 +7235,14 @@ namespace System.Windows.Forms
         // Used by form to notify the control that it has been "entered"
         internal void NotifyEnter()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::NotifyEnter() - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::NotifyEnter() - " + Name);
             OnEnter(EventArgs.Empty);
         }
 
         // Used by form to notify the control that it has been "left"
         internal void NotifyLeave()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::NotifyLeave() - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::NotifyLeave() - " + Name);
             OnLeave(EventArgs.Empty);
         }
 
@@ -7301,7 +7299,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            object backBrush = Properties.GetObject(PropBackBrush);
+            object backBrush = Properties.GetObject(s_backBrushProperty);
             if (backBrush != null)
             {
                 if (GetState(STATE_OWNCTLBRUSH))
@@ -7312,7 +7310,7 @@ namespace System.Windows.Forms
                         Interop.Gdi32.DeleteObject(p);
                     }
                 }
-                Properties.SetObject(PropBackBrush, null);
+                Properties.SetObject(s_backBrushProperty, null);
             }
 
             Invalidate();
@@ -7322,7 +7320,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7350,7 +7348,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7382,7 +7380,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropBindings) != null)
+            if (Properties.GetObject(s_bindingsProperty) != null)
             {
                 UpdateBindings();
             }
@@ -7392,7 +7390,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7452,7 +7450,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7505,7 +7503,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7534,9 +7532,9 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            if (Properties.ContainsInteger(PropFontHeight))
+            if (Properties.ContainsInteger(s_fontHeightProperty))
             {
-                Properties.SetInteger(PropFontHeight, -1);
+                Properties.SetInteger(s_fontHeightProperty, -1);
             }
 
             // Cleanup any font handle wrapper...
@@ -7552,7 +7550,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             using (new LayoutTransaction(this, this, PropertyNames.Font, false))
             {
                 if (controlsCollection != null)
@@ -7586,7 +7584,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7618,7 +7616,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7644,7 +7642,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e)
         {
-            Color backColor = Properties.GetColor(PropBackColor);
+            Color backColor = Properties.GetColor(s_backColorProperty);
             if (backColor.IsEmpty)
             {
                 OnBackColorChanged(e);
@@ -7660,7 +7658,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropBindingManager) == null)
+            if (Properties.GetObject(s_bindingManagerProperty) == null)
             {
                 OnBindingContextChanged(e);
             }
@@ -7669,7 +7667,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropCursor) == null)
+            if (Properties.GetObject(s_cursorProperty) == null)
             {
                 OnCursorChanged(e);
             }
@@ -7687,7 +7685,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropFont) == null)
+            if (Properties.GetObject(s_fontProperty) == null)
             {
                 OnFontChanged(e);
             }
@@ -7745,7 +7743,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e)
         {
-            Color foreColor = Properties.GetColor(PropForeColor);
+            Color foreColor = Properties.GetColor(s_foreColorProperty);
             if (foreColor.IsEmpty)
             {
                 OnForeColorChanged(e);
@@ -7755,7 +7753,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentRightToLeftChanged(EventArgs e)
         {
-            if (!Properties.ContainsInteger(PropRightToLeft) || ((RightToLeft)Properties.GetInteger(PropRightToLeft)) == RightToLeft.Inherit)
+            if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
             {
                 OnRightToLeftChanged(e);
             }
@@ -7776,7 +7774,7 @@ namespace System.Windows.Forms
             if (GetState(STATE_VISIBLE))
             {
                 // This control became invisible too - notify its children
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection != null)
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
@@ -7902,7 +7900,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7925,7 +7923,7 @@ namespace System.Windows.Forms
 
         internal virtual void OnTopMostActiveXParentChanged(EventArgs e)
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -8029,7 +8027,7 @@ namespace System.Windows.Forms
                 // when the ThreadContext in Application is created
                 SetAcceptDrops(AllowDrop);
 
-                Region region = (Region)Properties.GetObject(PropRegion);
+                Region region = (Region)Properties.GetObject(s_regionProperty);
                 if (region != null)
                 {
                     IntPtr regionHandle = GetHRgn(region);
@@ -8059,11 +8057,11 @@ namespace System.Windows.Forms
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
                 IntPtr handle = Handle;
 
-                if (Properties.GetObject(PropAccessibility) is ControlAccessibleObject accObj)
+                if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject accObj)
                 {
                     accObj.Handle = handle;
                 }
-                if (Properties.GetObject(PropNcAccessibility) is ControlAccessibleObject ncAccObj)
+                if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject ncAccObj)
                 {
                     ncAccObj.Handle = handle;
                 }
@@ -8152,10 +8150,10 @@ namespace System.Windows.Forms
             {
                 if (GetState(STATE_OWNCTLBRUSH))
                 {
-                    object backBrush = Properties.GetObject(PropBackBrush);
+                    object backBrush = Properties.GetObject(s_backBrushProperty);
                     if (backBrush != null)
                     {
-                        Properties.SetObject(PropBackBrush, null);
+                        Properties.SetObject(s_backBrushProperty, null);
                         IntPtr p = (IntPtr)backBrush;
                         if (p != IntPtr.Zero)
                         {
@@ -8337,7 +8335,7 @@ namespace System.Windows.Forms
             }
 
             // Transparent control support
-            ControlCollection controls = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controls != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -8731,7 +8729,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSystemColorsChanged(EventArgs e)
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -9368,7 +9366,7 @@ namespace System.Windows.Forms
             target.SetState2(STATE2_INPUTCHAR, false);
             target.SetState2(STATE2_UICUES, true);
 
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.PreProcessControlMessageInternal " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.PreProcessControlMessageInternal " + msg.ToString());
 
             try
             {
@@ -9384,7 +9382,7 @@ namespace System.Windows.Forms
 
                     if (args.IsInputKey)
                     {
-                        Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "PreviewKeyDown indicated this is an input key.");
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "PreviewKeyDown indicated this is an input key.");
                         // Control wants this message - indicate it should be dispatched.
                         return PreProcessControlState.MessageNeeded;
                     }
@@ -9400,7 +9398,7 @@ namespace System.Windows.Forms
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetState2(STATE2_INPUTKEY) || target.IsInputKey(keyData))
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
@@ -9410,7 +9408,7 @@ namespace System.Windows.Forms
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetState2(STATE2_INPUTCHAR) || target.IsInputChar((char)msg.WParam))
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
@@ -9447,8 +9445,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
-            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
+            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             if (contextMenu != null && contextMenu.ProcessCmdKey(ref msg, keyData, this))
             {
                 return true;
@@ -9578,7 +9576,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
             return _parent == null ? false : _parent.ProcessDialogChar(charCode);
         }
 
@@ -9599,7 +9597,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
             return _parent == null ? false : _parent.ProcessDialogKey(keyData);
         }
 
@@ -9618,7 +9616,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyEventArgs(ref Message m)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyEventArgs " + m.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessKeyEventArgs " + m.ToString());
             KeyEventArgs ke = null;
             KeyPressEventArgs kpe = null;
             IntPtr newWParam = IntPtr.Zero;
@@ -9679,13 +9677,13 @@ namespace System.Windows.Forms
 
             if (kpe != null)
             {
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + kpe.Handled);
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + kpe.Handled);
                 m.WParam = newWParam;
                 return kpe.Handled;
             }
             else
             {
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress)
                 {
                     RemovePendingMessages(Interop.WindowMessages.WM_CHAR, Interop.WindowMessages.WM_CHAR);
@@ -9713,7 +9711,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual bool ProcessKeyMessage(ref Message m)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
             if (_parent != null && _parent.ProcessKeyPreview(ref m))
             {
                 return true;
@@ -9742,7 +9740,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyPreview(ref Message m)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyPreview " + m.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessKeyPreview " + m.ToString());
             return _parent == null ? false : _parent.ProcessKeyPreview(ref m);
         }
 
@@ -9767,7 +9765,7 @@ namespace System.Windows.Forms
         protected internal virtual bool ProcessMnemonic(char charCode)
         {
 #if DEBUG
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessMnemonic [0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture) + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessMnemonic [0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture) + "]");
 #endif
             return false;
         }
@@ -10007,7 +10005,7 @@ namespace System.Windows.Forms
                             // This behavior can be overridden in OnParentHandleRecreat* and is in ListView.
 
                             //fish out control collection w/o demand creating one.
-                            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                             if (controlsCollection != null && controlsCollection.Count > 0)
                             {
                                 controlSnapshot = new Control[controlsCollection.Count];
@@ -10233,7 +10231,7 @@ namespace System.Windows.Forms
             {
 
                 CommonProperties.xClearPreferredSizeCache(this);
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -10343,7 +10341,7 @@ namespace System.Windows.Forms
                 ScaleControl(factor, factor, this);
                 if (ScaleChildren)
                 {
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                     if (controlsCollection != null)
                     {
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -10415,7 +10413,7 @@ namespace System.Windows.Forms
         {
             if (ScaleChildren)
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection != null)
                 {
@@ -10444,7 +10442,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateWindowFontIfNeeded()
         {
-            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && (Properties.GetObject(PropFont) == null))
+            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && (Properties.GetObject(s_fontProperty) == null))
             {
                 SetWindowFont();
             }
@@ -10650,7 +10648,7 @@ namespace System.Windows.Forms
 
                 SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
 
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection != null)
                 {
@@ -11173,11 +11171,11 @@ namespace System.Windows.Forms
 
         internal static IntPtr SetUpPalette(IntPtr dc, bool force, bool realizePalette)
         {
-            Debug.WriteLineIf(PaletteTracing.TraceVerbose, "SetUpPalette(force:=" + force + ", ralizePalette:=" + realizePalette + ")");
+            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, "SetUpPalette(force:=" + force + ", ralizePalette:=" + realizePalette + ")");
 
             IntPtr halftonePalette = Graphics.GetHalftonePalette();
 
-            Debug.WriteLineIf(PaletteTracing.TraceVerbose, "select palette " + !force);
+            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, "select palette " + !force);
             IntPtr result = SafeNativeMethods.SelectPalette(new HandleRef(null, dc), new HandleRef(null, halftonePalette), (force ? 0 : 1));
 
             if (result != IntPtr.Zero && realizePalette)
@@ -11369,7 +11367,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeBackColor()
         {
-            Color backColor = Properties.GetColor(PropBackColor);
+            Color backColor = Properties.GetColor(s_backColorProperty);
             return !backColor.IsEmpty;
         }
 
@@ -11379,7 +11377,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor()
         {
-            object cursor = Properties.GetObject(PropCursor, out bool found);
+            object cursor = Properties.GetObject(s_cursorProperty, out bool found);
             return (found && cursor != null);
         }
 
@@ -11398,7 +11396,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeForeColor()
         {
-            Color foreColor = Properties.GetColor(PropForeColor);
+            Color foreColor = Properties.GetColor(s_foreColorProperty);
             return !foreColor.IsEmpty;
         }
 
@@ -11408,7 +11406,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            object font = Properties.GetObject(PropFont, out bool found);
+            object font = Properties.GetObject(s_fontProperty, out bool found);
             return (found && font != null);
         }
 
@@ -11418,7 +11416,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeRightToLeft()
         {
-            int rtl = Properties.GetInteger(PropRightToLeft, out bool found);
+            int rtl = Properties.GetInteger(s_rightToLeftProperty, out bool found);
             return (found && rtl != (int)RightToLeft.Inherit);
         }
 
@@ -12019,9 +12017,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal void WmContextMenu(ref Message m, Control sourceControl)
         {
-            ContextMenu contextMenu = Properties.GetObject(PropContextMenu) as ContextMenu;
+            ContextMenu contextMenu = Properties.GetObject(s_contextMenuProperty) as ContextMenu;
             ContextMenuStrip contextMenuStrip = (contextMenu != null) ? null /*save ourselves a property fetch*/
-                                                                        : Properties.GetObject(PropContextMenuStrip) as ContextMenuStrip;
+                                                                        : Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
             if (contextMenu != null || contextMenuStrip != null)
             {
@@ -12171,7 +12169,7 @@ namespace System.Windows.Forms
 
             if (isContextMenu)
             {
-                ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+                ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
                 if (contextMenu != null)
                 {
                     contextMenu.OnCollapse(EventArgs.Empty);
@@ -12344,7 +12342,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmInitMenuPopup(ref Message m)
         {
-            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             if (contextMenu != null)
             {
 
@@ -12530,7 +12528,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKillFocus(ref Message m)
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::WmKillFocus - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::WmKillFocus - " + Name);
             WmImeKillFocus();
             DefWndProc(ref m);
             InvokeLostFocus(this, EventArgs.Empty);
@@ -12629,7 +12627,7 @@ namespace System.Windows.Forms
                 if (deviceDpiOld != _deviceDpi)
                 {
                     // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
-                    Font local = (Font)Properties.GetObject(PropFont);
+                    Font local = (Font)Properties.GetObject(s_fontProperty);
                     if (local != null)
                     {
                         var factor = (float)_deviceDpi / deviceDpiOld;
@@ -12867,7 +12865,7 @@ namespace System.Windows.Forms
         {
             bool doubleBuffered = DoubleBuffered || (GetStyle(ControlStyles.AllPaintingInWmPaint) && DoubleBufferingEnabled);
 #if DEBUG
-            if (BufferDisabled.Enabled)
+            if (s_bufferDisabled.Enabled)
             {
                 doubleBuffered = false;
             }
@@ -12923,7 +12921,7 @@ namespace System.Windows.Forms
                             {
                                 bufferedGraphics = BufferContext.Allocate(dc, ClientRectangle);
 #if DEBUG
-                                if (BufferPinkRect.Enabled)
+                                if (s_bufferPinkRect.Enabled)
                                 {
                                     Rectangle band = ClientRectangle;
                                     using (BufferedGraphics bufferedGraphics2 = BufferContext.Allocate(dc, band))
@@ -12951,7 +12949,7 @@ namespace System.Windows.Forms
                                     throw;
                                 }
 #if DEBUG
-                                if (BufferPinkRect.Enabled)
+                                if (s_bufferPinkRect.Enabled)
                                 {
                                     Debug.WriteLine("Could not create buffered graphics, will paint in the surface directly");
                                 }
@@ -13038,7 +13036,7 @@ namespace System.Windows.Forms
 
         private void WmQueryNewPalette(ref Message m)
         {
-            Debug.WriteLineIf(PaletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
+            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
             IntPtr dc = Interop.User32.GetDC(new HandleRef(this, Handle));
             try
             {
@@ -13136,7 +13134,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::WmSetFocus - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::WmSetFocus - " + Name);
             WmImeSetFocus();
 
             if (!HostedInWin32DialogManager)
@@ -13444,11 +13442,11 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_SYSCOMMAND:
                     if ((unchecked((int)(long)m.WParam) & 0xFFF0) == NativeMethods.SC_KEYMENU)
                     {
-                        Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
 
                         if (ToolStripManager.ProcessMenuKey(ref m))
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc ToolStripManager.ProcessMenuKey returned true" + m.ToString());
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.WndProc ToolStripManager.ProcessMenuKey returned true" + m.ToString());
                             m.Result = IntPtr.Zero;
                             return;
                         }
@@ -13730,7 +13728,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection == null)
                 {
                     return ArrangedElementCollection.Empty;

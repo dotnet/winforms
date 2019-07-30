@@ -1936,7 +1936,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool PreProcessMessage(ref Message msg)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "AxHost.PreProcessMessage " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "AxHost.PreProcessMessage " + msg.ToString());
 
             if (IsUserMode())
             {
@@ -1975,7 +1975,7 @@ namespace System.Windows.Forms
 
                         if (hr == NativeMethods.S_OK)
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message translated by control to " + msg);
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated by control to " + msg);
                             return true;
                         }
                         else if (hr == NativeMethods.S_FALSE)
@@ -1995,12 +1995,12 @@ namespace System.Windows.Forms
                         }
                         else if (axState[siteProcessedInputKey])
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
                             return base.PreProcessMessage(ref msg);
                         }
                         else
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
                             return false;
                         }
                     }
@@ -2021,7 +2021,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
             if (CanSelect)
             {
                 try
@@ -2050,7 +2050,7 @@ namespace System.Windows.Forms
                     if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
                         GetOleControl().OnMnemonic(ref msg);
-                        Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Processed mnemonic " + msg);
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Processed mnemonic " + msg);
                         Focus();
                         return true;
                     }
