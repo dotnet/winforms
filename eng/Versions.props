@@ -33,6 +33,7 @@
   <!-- Arcade -->
   <PropertyGroup>
     <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.19480.3</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetApiCompatPackageVersion>5.0.0-beta.19480.3</MicrosoftDotNetApiCompatPackageVersion>
     <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.19480.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->

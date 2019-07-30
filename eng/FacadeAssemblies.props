@@ -8,6 +8,7 @@
   <PropertyGroup Condition="'$(IsFacadeAssembly)'=='true'"> 
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
+    <ApiCompatExcludeAttributeList>$(RepositoryEngineeringDir)DefaultGenApiDocIds.txt</ApiCompatExcludeAttributeList>
 
     <!-- Produce a full PDB for facade assemblies -->
     <DebugType>full</DebugType>
@@ -19,6 +20,7 @@
     <!-- PrivateAssets="All": don't flow package references to callers -->
     <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7.2" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.DotNet.ApiCompat" Version="$(MicrosoftDotNetApiCompatPackageVersion)" PrivateAssets="All" />
   </ItemGroup>
   
   <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
