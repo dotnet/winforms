@@ -31,6 +31,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Defines the base class for controls, which are components with visual representation.
     /// </summary>
+    /// <remarks>
+    /// Do not add instance variables to Control absolutely neccessary. Every control on a form has the overhead of
+    /// all of these variables.
+    /// </remarks>
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -136,62 +140,6 @@ namespace System.Windows.Forms
 
         private static readonly int WM_GETCONTROLNAME = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLNAME");
         private static readonly int WM_GETCONTROLTYPE = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLTYPE");
-
-        internal const int STATE_CREATED = 0x00000001;
-        internal const int STATE_VISIBLE = 0x00000002;
-        internal const int STATE_ENABLED = 0x00000004;
-        internal const int STATE_TABSTOP = 0x00000008;
-        internal const int STATE_RECREATE = 0x00000010;
-        internal const int STATE_MODAL = 0x00000020;
-        internal const int STATE_ALLOWDROP = 0x00000040;
-        internal const int STATE_DROPTARGET = 0x00000080;
-        internal const int STATE_NOZORDER = 0x00000100;
-        internal const int STATE_LAYOUTDEFERRED = 0x00000200;
-        internal const int STATE_USEWAITCURSOR = 0x00000400;
-        internal const int STATE_DISPOSED = 0x00000800;
-        internal const int STATE_DISPOSING = 0x00001000;
-        internal const int STATE_MOUSEENTERPENDING = 0x00002000;
-        internal const int STATE_TRACKINGMOUSEEVENT = 0x00004000;
-        internal const int STATE_THREADMARSHALLPENDING = 0x00008000;
-        internal const int STATE_SIZELOCKEDBYOS = 0x00010000;
-        internal const int STATE_CAUSESVALIDATION = 0x00020000;
-        internal const int STATE_CREATINGHANDLE = 0x00040000;
-        internal const int STATE_TOPLEVEL = 0x00080000;
-        internal const int STATE_ISACCESSIBLE = 0x00100000;
-        internal const int STATE_OWNCTLBRUSH = 0x00200000;
-        internal const int STATE_EXCEPTIONWHILEPAINTING = 0x00400000;
-        internal const int STATE_LAYOUTISDIRTY = 0x00800000;
-        internal const int STATE_CHECKEDHOST = 0x01000000;
-        internal const int STATE_HOSTEDINDIALOG = 0x02000000;
-        internal const int STATE_DOUBLECLICKFIRED = 0x04000000;
-        internal const int STATE_MOUSEPRESSED = 0x08000000;
-        internal const int STATE_VALIDATIONCANCELLED = 0x10000000;
-        internal const int STATE_PARENTRECREATING = 0x20000000;
-        internal const int STATE_MIRRORED = 0x40000000;
-
-        // When we change RightToLeft, we need to change the scrollbar thumb.
-        // We can't do that until after the control has been created, and all the items added
-        // back. This is because the system control won't know the nMin and nMax of the scroll
-        // bar until the items are added. So in RightToLeftChanged, we set a flag that indicates
-        // that we want to set the scroll position. In OnHandleCreated we check this flag,
-        // and if set, we BeginInvoke. We have to BeginInvoke since we have to wait until the items
-        // are added. We only want to do this when RightToLeft changes thus the flags
-        // STATE2_HAVEINVOKED and STATE2_SETSCROLLPOS. Otherwise we would do this on each HandleCreated.
-        private const int STATE2_HAVEINVOKED = 0x00000001;
-        private const int STATE2_SETSCROLLPOS = 0x00000002;
-        private const int STATE2_LISTENINGTOUSERPREFERENCECHANGED = 0x00000004;   // set when the control is listening to SystemEvents.UserPreferenceChanged.
-        internal const int STATE2_INTERESTEDINUSERPREFERENCECHANGED = 0x00000008;   // if set, the control will listen to SystemEvents.UserPreferenceChanged when TopLevel is true and handle is created.
-        internal const int STATE2_MAINTAINSOWNCAPTUREMODE = 0x00000010;   // if set, the control DOES NOT necessarily take capture on MouseDown
-        private const int STATE2_BECOMINGACTIVECONTROL = 0x00000020;   // set to true by ContainerControl when this control is becoming its active control
-
-        private const int STATE2_CLEARLAYOUTARGS = 0x00000040;   // if set, the next time PerformLayout is called, cachedLayoutEventArg will be cleared.
-        private const int STATE2_INPUTKEY = 0x00000080;
-        private const int STATE2_INPUTCHAR = 0x00000100;
-        private const int STATE2_UICUES = 0x00000200;
-        private const int STATE2_ISACTIVEX = 0x00000400;
-        internal const int STATE2_USEPREFERREDSIZECACHE = 0x00000800;
-        internal const int STATE2_TOPMDIWINDOWCLOSING = 0x00001000;
-        internal const int STATE2_CURRENTLYBEINGSCALED = 0x00002000;   // if set, the control is being scaled, currently
 
         private static readonly object s_autoSizeChangedEvent = new object();
         private static readonly object s_keyDownEvent = new object();
@@ -370,9 +318,13 @@ namespace System.Windows.Forms
         private int _height;
         private int _clientWidth;
         private int _clientHeight;
-        private int _state;                         // See STATE_ constants above
-        private int _state2;                        // See STATE2_ constants above
-        private ControlStyles _controlStyle;        // User supplied control style
+        private States _state;
+        private ExtendedStates _extendedState;
+
+        /// <summary>
+        /// User supplied control style
+        /// </summary>
+        private ControlStyles _controlStyle;
         private int _tabIndex;
         private string _text;                       // See ControlStyles.CacheText for usage notes
         private byte _layoutSuspendCount;
@@ -383,16 +335,9 @@ namespace System.Windows.Forms
         private Queue _threadCallbackList;
         internal int _deviceDpi;
 
-        // for keeping track of our ui state for focus and keyboard cues.  using a member variable
-        // here because we hit this a lot
-        private int _uiCuesState;
-
-        private const int UISTATE_FOCUS_CUES_MASK = 0x000F;
-        private const int UISTATE_FOCUS_CUES_HIDDEN = 0x0001;
-        private const int UISTATE_FOCUS_CUES_SHOW = 0x0002;
-        private const int UISTATE_KEYBOARD_CUES_MASK = 0x00F0;
-        private const int UISTATE_KEYBOARD_CUES_HIDDEN = 0x0010;
-        private const int UISTATE_KEYBOARD_CUES_SHOW = 0x0020;
+        // For keeping track of our ui state for focus and keyboard cues. Using a member
+        // variable here because we hit this a lot
+        private UICuesStates _uiCuesState;
 
 #if DEBUG
         internal int LayoutSuspendCount
@@ -444,8 +389,8 @@ namespace System.Windows.Forms
             RequiredScaling = BoundsSpecified.All;
             _tabIndex = -1;
 
-            _state = STATE_VISIBLE | STATE_ENABLED | STATE_TABSTOP | STATE_CAUSESVALIDATION;
-            _state2 = STATE2_INTERESTEDINUSERPREFERENCECHANGED;
+            _state = States.Visible | States.Enabled | States.TabStop | States.CausesValidation;
+            _extendedState = ExtendedStates.InterestedInUserPreferenceChanged;
             SetStyle(ControlStyles.AllPaintingInWmPaint |
                      ControlStyles.UserPaint |
                      ControlStyles.StandardClick |
@@ -734,7 +679,7 @@ namespace System.Windows.Forms
                 {
                     // Don't allow top level objects to be hosted
                     // as activeX controls.
-                    if (GetState(STATE_TOPLEVEL))
+                    if (GetState(States.TopLevel))
                     {
                         throw new NotSupportedException(SR.AXTopLevelSource);
                     }
@@ -743,7 +688,7 @@ namespace System.Windows.Forms
 
                     // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising.  Using a state
                     // bit to track PropActiveXImpl instead of fetching from the property store.
-                    SetState2(STATE2_ISACTIVEX, true);
+                    SetExtendedState(ExtendedStates.IsActiveX, true);
                     Properties.SetObject(s_activeXImplProperty, activeXImpl);
                 }
 
@@ -764,13 +709,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetState(STATE_ALLOWDROP);
+                return GetState(States.AllowDrop);
             }
             set
             {
-                if (GetState(STATE_ALLOWDROP) != value)
+                if (GetState(States.AllowDrop) != value)
                 {
-                    SetState(STATE_ALLOWDROP, value);
+                    SetState(States.AllowDrop, value);
 
                     if (IsHandleCreated)
                     {
@@ -782,7 +727,7 @@ namespace System.Windows.Forms
                         {
                             // If there is an error, back out the AllowDrop state...
                             //
-                            SetState(STATE_ALLOWDROP, !value);
+                            SetState(States.AllowDrop, !value);
                             throw;
                         }
                     }
@@ -947,12 +892,12 @@ namespace System.Windows.Forms
                 if (ColorTranslator.ToOle(color) < 0)
                 {
                     backBrush = SafeNativeMethods.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF);
-                    SetState(STATE_OWNCTLBRUSH, false);
+                    SetState(States.OwnCtlBrush, false);
                 }
                 else
                 {
                     backBrush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(color));
-                    SetState(STATE_OWNCTLBRUSH, true);
+                    SetState(States.OwnCtlBrush, true);
                 }
 
                 Debug.Assert(backBrush != IntPtr.Zero, "Failed to create brushHandle");
@@ -1136,14 +1081,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetState2(STATE2_BECOMINGACTIVECONTROL);
+                return GetExtendedState(ExtendedStates.BecomingActiveControl);
             }
             set
             {
                 if (value != BecomingActiveControl)
                 {
                     Application.ThreadContext.FromCurrent().ActivatingControl = (value) ? this : null;
-                    SetState2(STATE2_BECOMINGACTIVECONTROL, value);
+                    SetExtendedState(ExtendedStates.BecomingActiveControl, value);
                 }
             }
         }
@@ -1336,12 +1281,12 @@ namespace System.Windows.Forms
         ]
         public bool CausesValidation
         {
-            get => GetState(STATE_CAUSESVALIDATION);
+            get => GetState(States.CausesValidation);
             set
             {
                 if (value != CausesValidation)
                 {
-                    SetState(STATE_CAUSESVALIDATION, value);
+                    SetState(States.CausesValidation, value);
                     OnCausesValidationChanged(EventArgs.Empty);
                 }
             }
@@ -1631,7 +1576,7 @@ namespace System.Windows.Forms
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
             SRDescription(nameof(SR.ControlCreatedDescr))
         ]
-        public bool Created => (_state & STATE_CREATED) != 0;
+        public bool Created => (_state & States.Created) != 0;
 
         /// <summary>
         ///  Returns the CreateParams used to create the handle for this control.
@@ -1682,7 +1627,7 @@ namespace System.Windows.Forms
                 }
                 cp.ClassStyle = (int)NativeMethods.ClassStyle.CS_DBLCLKS;
 
-                if ((_state & STATE_TOPLEVEL) == 0)
+                if ((_state & States.TopLevel) == 0)
                 {
                     // When the window is actually created, we will parent WS_CHILD windows to the
                     // parking form if cp.parent == 0.
@@ -1695,12 +1640,12 @@ namespace System.Windows.Forms
                     cp.Parent = IntPtr.Zero;
                 }
 
-                if ((_state & STATE_TABSTOP) != 0)
+                if ((_state & States.TabStop) != 0)
                 {
                     cp.Style |= NativeMethods.WS_TABSTOP;
                 }
 
-                if ((_state & STATE_VISIBLE) != 0)
+                if ((_state & States.Visible) != 0)
                 {
                     cp.Style |= NativeMethods.WS_VISIBLE;
                 }
@@ -1787,10 +1732,10 @@ namespace System.Windows.Forms
 
         internal bool ValidationCancelled
         {
-            set => SetState(STATE_VALIDATIONCANCELLED, value);
+            set => SetState(States.ValidationCancelled, value);
             get
             {
-                if (GetState(STATE_VALIDATIONCANCELLED))
+                if (GetState(States.ValidationCancelled))
                 {
                     return true;
                 }
@@ -1814,8 +1759,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsTopMdiWindowClosing
         {
-            get => GetState2(STATE2_TOPMDIWINDOWCLOSING);
-            set => SetState2(STATE2_TOPMDIWINDOWCLOSING, value);
+            get => GetExtendedState(ExtendedStates.TopMDIWindowClosing);
+            set => SetExtendedState(ExtendedStates.TopMDIWindowClosing, value);
         }
 
         /// <summary>
@@ -1824,8 +1769,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsCurrentlyBeingScaled
         {
-            get => GetState2(STATE2_CURRENTLYBEINGSCALED);
-            private set => SetState2(STATE2_CURRENTLYBEINGSCALED, value);
+            get => GetExtendedState(ExtendedStates.CurrentlyBeingScaled);
+            private set => SetExtendedState(ExtendedStates.CurrentlyBeingScaled, value);
         }
 
         /// <summary>
@@ -1850,7 +1795,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (GetState(STATE_USEWAITCURSOR))
+                if (GetState(States.UseWaitCursor))
                 {
                     return Cursors.WaitCursor;
                 }
@@ -2065,7 +2010,7 @@ namespace System.Windows.Forms
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
             SRDescription(nameof(SR.ControlDisposedDescr))
         ]
-        public bool IsDisposed => GetState(STATE_DISPOSED);
+        public bool IsDisposed => GetState(States.Disposed);
 
         /// <summary>
         ///  Disposes of the currently selected font handle (if cached).
@@ -2091,7 +2036,7 @@ namespace System.Windows.Forms
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
             SRDescription(nameof(SR.ControlDisposingDescr))
         ]
-        public bool Disposing => GetState(STATE_DISPOSING);
+        public bool Disposing => GetState(States.Disposing);
 
         /// <summary>
         ///  The dock property. The dock property controls to which edge
@@ -2182,7 +2127,7 @@ namespace System.Windows.Forms
             get
             {
                 // We are only enabled if our parent is enabled
-                if (!GetState(STATE_ENABLED))
+                if (!GetState(States.Enabled))
                 {
                     return false;
                 }
@@ -2198,7 +2143,7 @@ namespace System.Windows.Forms
             set
             {
                 bool oldValue = Enabled;
-                SetState(STATE_ENABLED, value);
+                SetState(States.Enabled, value);
 
                 if (oldValue != value)
                 {
@@ -2559,7 +2504,7 @@ namespace System.Windows.Forms
         {
             Size prefSize;
 
-            if (GetState(STATE_DISPOSING | STATE_DISPOSED))
+            if (GetState(States.Disposing | States.Disposed))
             {
                 // if someone's asking when we're disposing just return what we last had.
                 prefSize = CommonProperties.xGetPreferredSizeCache(this);
@@ -2572,7 +2517,7 @@ namespace System.Windows.Forms
                 // Force proposedSize to be within the elements constraints.  (This applies
                 // minimumSize, maximumSize, etc.)
                 proposedSize = ApplySizeConstraints(proposedSize);
-                if (GetState2(STATE2_USEPREFERREDSIZECACHE))
+                if (GetExtendedState(ExtendedStates.UserPreferredSizeCache))
                 {
                     Size cachedSize = CommonProperties.xGetPreferredSizeCache(this);
 
@@ -2598,7 +2543,7 @@ namespace System.Windows.Forms
                 prefSize = ApplySizeConstraints(prefSize);
 
                 // If the "default" preferred size was requested, cache the computed value.
-                if (GetState2(STATE2_USEPREFERREDSIZECACHE) && proposedSize == LayoutUtils.MaxSize)
+                if (GetExtendedState(ExtendedStates.UserPreferredSizeCache) && proposedSize == LayoutUtils.MaxSize)
                 {
                     CommonProperties.xSetPreferredSizeCache(this, prefSize);
                 }
@@ -2686,12 +2631,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!GetState(STATE_CHECKEDHOST))
+                if (!GetState(States.CheckedHost))
                 {
                     Control topMost = TopMostParent;
                     if (this != topMost)
                     {
-                        SetState(STATE_HOSTEDINDIALOG, topMost.HostedInWin32DialogManager);
+                        SetState(States.HostedInDialog, topMost.HostedInWin32DialogManager);
                     }
                     else
                     {
@@ -2700,7 +2645,7 @@ namespace System.Windows.Forms
 
                         StringBuilder sb = new StringBuilder(32);
 
-                        SetState(STATE_HOSTEDINDIALOG, false);
+                        SetState(States.HostedInDialog, false);
 
                         while (parentHandle != IntPtr.Zero)
                         {
@@ -2713,7 +2658,7 @@ namespace System.Windows.Forms
 
                             if (sb.ToString() == "#32770")
                             {
-                                SetState(STATE_HOSTEDINDIALOG, true);
+                                SetState(States.HostedInDialog, true);
                                 break;
                             }
 
@@ -2722,10 +2667,10 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    SetState(STATE_CHECKEDHOST, true);
+                    SetState(States.CheckedHost, true);
                 }
 
-                return GetState(STATE_HOSTEDINDIALOG);
+                return GetState(States.HostedInDialog);
             }
         }
 
@@ -2883,14 +2828,14 @@ namespace System.Windows.Forms
         ]
         public bool IsAccessible
         {
-            get => GetState(STATE_ISACCESSIBLE);
-            set => SetState(STATE_ISACCESSIBLE, value);
+            get => GetState(States.IsAccessible);
+            set => SetState(States.IsAccessible, value);
         }
 
         /// <summary>
         ///  Used to tell if this control is being hosted as an ActiveX control.
         /// </summary>
-        internal bool IsActiveX => GetState2(STATE2_ISACTIVEX);
+        internal bool IsActiveX => GetExtendedState(ExtendedStates.IsActiveX);
 
         // If the control on which GetContainerControl( ) is called is a ContainerControl, then we dont return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
@@ -2923,9 +2868,9 @@ namespace System.Windows.Forms
                 if (!IsHandleCreated)
                 {
                     CreateParams cp = CreateParams;
-                    SetState(STATE_MIRRORED, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                    SetState(States.Mirrored, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
                 }
-                return GetState(STATE_MIRRORED);
+                return GetState(States.Mirrored);
             }
         }
 
@@ -3251,7 +3196,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ControlRecreatingHandleDescr))
         ]
-        public bool RecreatingHandle => (_state & STATE_RECREATE) != 0;
+        public bool RecreatingHandle => (_state & States.Recreate) != 0;
 
         internal virtual void AddReflectChild()
         {
@@ -3667,12 +3612,12 @@ namespace System.Windows.Forms
         // Grab out the logical of setting TABSTOP state, so that derived class could use this.
         internal bool TabStopInternal
         {
-            get => (_state & STATE_TABSTOP) != 0;
+            get => (_state & States.TabStop) != 0;
             set
             {
                 if (TabStopInternal != value)
                 {
-                    SetState(STATE_TABSTOP, value);
+                    SetState(States.TabStop, value);
                 }
             }
         }
@@ -3832,8 +3777,8 @@ namespace System.Windows.Forms
 
                 // uiCuesState contains this control's cached state of whether or not it thinks
                 // accelerators/focus cues are turned on. the first 16 bits represent focus cues
-                // the second represent keyboard cues.  "F" is the UISTATE_FOCUS_CUES_MASK,
-                // "F0" is the UISTATE_KEYBOARD_CUES_MASK
+                // the second represent keyboard cues.  "F" is the UICuesStates.FocusMask,
+                // "F0" is the UICuesStates.KeyboardMask
 
                 // We check here if we have cached state.  If we dont, we need to initialize ourself.
                 // We do this by checking "MenuAccessKeysUnderlined" - we show if this returns true.
@@ -3842,7 +3787,7 @@ namespace System.Windows.Forms
                 // Why? Well the way the API seems to work is that it stores in a bit flag for the the hidden
                 // state.
 
-                // Details from the Menu keydown to changed value of uiCuesState...
+                // Details from the Menu keydown to changed value of _uiCuesState.
 
                 // When someone does press the ALT (Menu)/F10 key we will
                 //   Call ProcessUICues on the control that had focus at the time
@@ -3853,18 +3798,18 @@ namespace System.Windows.Forms
                 //   In WmUpdateUIState, we will update our uiCuesState cached value, which
                 //   changes the public value of what we return here for ShowKeyboardCues/ShowFocusCues.
 
-                if ((_uiCuesState & UISTATE_KEYBOARD_CUES_MASK) == 0)
+                if ((_uiCuesState & UICuesStates.KeyboardMask) == 0)
                 {
                     if (SystemInformation.MenuAccessKeysUnderlined)
                     {
-                        _uiCuesState |= UISTATE_KEYBOARD_CUES_SHOW;
+                        _uiCuesState |= UICuesStates.KeyboardShow;
                     }
                     else
                     {
                         // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
                         //
                         int actionMask = NativeMethods.UISF_HIDEACCEL << 16;
-                        _uiCuesState |= UISTATE_KEYBOARD_CUES_HIDDEN;
+                        _uiCuesState |= UICuesStates.KeyboardHidden;
 
                         // The side effect of this initial state is that adding new controls may clear the accelerator
                         // state (has been this way forever)
@@ -3874,7 +3819,7 @@ namespace System.Windows.Forms
                                 IntPtr.Zero);
                     }
                 }
-                return (_uiCuesState & UISTATE_KEYBOARD_CUES_MASK) == UISTATE_KEYBOARD_CUES_SHOW;
+                return (_uiCuesState & UICuesStates.KeyboardMask) == UICuesStates.KeyboardShow;
             }
         }
 
@@ -3897,15 +3842,15 @@ namespace System.Windows.Forms
 
                 // See "How this all works" in ShowKeyboardCues
 
-                if ((_uiCuesState & UISTATE_FOCUS_CUES_MASK) == 0)
+                if ((_uiCuesState & UICuesStates.FocusMask) == 0)
                 {
                     if (SystemInformation.MenuAccessKeysUnderlined)
                     {
-                        _uiCuesState |= UISTATE_FOCUS_CUES_SHOW;
+                        _uiCuesState |= UICuesStates.FocusShow;
                     }
                     else
                     {
-                        _uiCuesState |= UISTATE_FOCUS_CUES_HIDDEN;
+                        _uiCuesState |= UICuesStates.FocusHidden;
 
                         // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
                         int actionMask = (NativeMethods.UISF_HIDEACCEL | NativeMethods.UISF_HIDEFOCUS) << 16;
@@ -3919,7 +3864,7 @@ namespace System.Windows.Forms
 
                     }
                 }
-                return (_uiCuesState & UISTATE_FOCUS_CUES_MASK) == UISTATE_FOCUS_CUES_SHOW;
+                return (_uiCuesState & UICuesStates.FocusMask) == UICuesStates.FocusShow;
             }
         }
 
@@ -3939,12 +3884,12 @@ namespace System.Windows.Forms
         ]
         public bool UseWaitCursor
         {
-            get => GetState(STATE_USEWAITCURSOR);
+            get => GetState(States.UseWaitCursor);
             set
             {
-                if (GetState(STATE_USEWAITCURSOR) != value)
+                if (GetState(States.UseWaitCursor) != value)
                 {
-                    SetState(STATE_USEWAITCURSOR, value);
+                    SetState(States.UseWaitCursor, value);
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection != null)
@@ -4341,13 +4286,13 @@ namespace System.Windows.Forms
                     CommonProperties.SetPadding(this, value);
                     // Ideally we are being laid out by a LayoutEngine that cares about our preferred size.
                     // We set our LAYOUTISDIRTY bit and ask our parent to refresh us.
-                    SetState(STATE_LAYOUTISDIRTY, true);
+                    SetState(States.LayoutIsDirty, true);
                     using (new LayoutTransaction(ParentInternal, this, PropertyNames.Padding))
                     {
                         OnPaddingChanged(EventArgs.Empty);
                     }
 
-                    if (GetState(STATE_LAYOUTISDIRTY))
+                    if (GetState(States.LayoutIsDirty))
                     {
                         // The above did not cause our layout to be refreshed.  We explicitly refresh our
                         // layout to ensure that any children are repositioned to account for the change
@@ -4799,7 +4744,7 @@ namespace System.Windows.Forms
                 OnParentChanged(EventArgs.Empty);
             }
 
-            SetState(STATE_CHECKEDHOST, false);
+            SetState(States.CheckedHost, false);
             if (ParentInternal != null)
             {
                 ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.All);
@@ -5061,12 +5006,12 @@ namespace System.Windows.Forms
         {
             IntPtr userCookie = IntPtr.Zero;
 
-            if (GetState(STATE_DISPOSED))
+            if (GetState(States.Disposed))
             {
                 throw new ObjectDisposedException(GetType().Name);
             }
 
-            if (GetState(STATE_CREATINGHANDLE))
+            if (GetState(States.CreatingHandle))
             {
                 return;
             }
@@ -5075,7 +5020,7 @@ namespace System.Windows.Forms
 
             try
             {
-                SetState(STATE_CREATINGHANDLE, true);
+                SetState(States.CreatingHandle, true);
 
                 originalBounds = Bounds;
 
@@ -5087,7 +5032,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = CreateParams;
-                SetState(STATE_MIRRORED, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                SetState(States.Mirrored, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
 
                 // Adjust for scrolling of parent...
                 if (_parent != null)
@@ -5121,7 +5066,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                SetState(STATE_CREATINGHANDLE, false);
+                SetState(States.CreatingHandle, false);
                 UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
             }
 
@@ -5164,7 +5109,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void CreateControl(bool fIgnoreVisible)
         {
-            bool ready = (_state & STATE_CREATED) == 0;
+            bool ready = (_state & States.Created) == 0;
 
             // PERF: Only "create" the control if it is
             //     : visible. This has the effect of delayed handle creation of
@@ -5173,7 +5118,7 @@ namespace System.Windows.Forms
 
             if (ready || fIgnoreVisible)
             {
-                _state |= STATE_CREATED;
+                _state |= States.Created;
                 bool createdOK = false;
                 try
                 {
@@ -5207,7 +5152,7 @@ namespace System.Windows.Forms
                 {
                     if (!createdOK)
                     {
-                        _state &= (~STATE_CREATED);
+                        _state &= (~States.Created);
                     }
                 }
                 OnCreateControl();
@@ -5247,7 +5192,7 @@ namespace System.Windows.Forms
                                                           s_threadCallbackMessage, NativeMethods.PM_NOREMOVE))
                             {
 
-                                SetState(STATE_THREADMARSHALLPENDING, true);
+                                SetState(States.ThreadMarshalPending, true);
                             }
                         }
                     }
@@ -5295,7 +5240,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void Dispose(bool disposing)
         {
-            if (GetState(STATE_OWNCTLBRUSH))
+            if (GetState(States.OwnCtlBrush))
             {
                 object backBrush = Properties.GetObject(s_backBrushProperty);
                 if (backBrush != null)
@@ -5313,12 +5258,12 @@ namespace System.Windows.Forms
             UpdateReflectParent(false);
             if (disposing)
             {
-                if (GetState(STATE_DISPOSING))
+                if (GetState(States.Disposing))
                 {
                     return;
                 }
 
-                if (GetState(STATE_CREATINGHANDLE))
+                if (GetState(States.CreatingHandle))
                 {
                     throw new InvalidOperationException(string.Format(SR.ClosingWhileCreatingHandle, "Dispose"));
                     // I imagine most subclasses will get themselves in a half disposed state
@@ -5326,7 +5271,7 @@ namespace System.Windows.Forms
                     // and this way at least the user knows what they did wrong.
                 }
 
-                SetState(STATE_DISPOSING, true);
+                SetState(States.Disposing, true);
                 SuspendLayout();
                 try
                 {
@@ -5372,15 +5317,15 @@ namespace System.Windows.Forms
                 finally
                 {
                     ResumeLayout(false);
-                    SetState(STATE_DISPOSING, false);
-                    SetState(STATE_DISPOSED, true);
+                    SetState(States.Disposing, false);
+                    SetState(States.Disposed, true);
                 }
             }
             else
             {
 
 #if FINALIZATION_WATCH
-                if (!GetState(STATE_DISPOSED)) {
+                if (!GetState(States.DISPOSED)) {
                     Debug.Fail("Control of type '" + GetType().FullName +"' is being finalized that wasn't disposed\n" + allocationSite);
                 }
 #endif
@@ -5637,7 +5582,7 @@ namespace System.Windows.Forms
 
         protected bool GetTopLevel()
         {
-            return (_state & STATE_TOPLEVEL) != 0;
+            return (_state & States.TopLevel) != 0;
         }
 
         /// <summary>
@@ -5898,7 +5843,7 @@ namespace System.Windows.Forms
 
             // Don't reposition top level controls.  Also, if we're in
             // design mode, don't reposition the root component.
-            bool scaleLoc = !GetState(STATE_TOPLEVEL);
+            bool scaleLoc = !GetState(States.TopLevel);
             if (scaleLoc)
             {
                 ISite site = Site;
@@ -5961,7 +5906,7 @@ namespace System.Windows.Forms
         internal virtual bool GetVisibleCore()
         {
             // We are only visible if our parent is visible
-            if (!GetState(STATE_VISIBLE))
+            if (!GetState(States.Visible))
             {
                 return false;
             }
@@ -6378,27 +6323,18 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the current value of the specified bit in the control's state.
         /// </summary>
-        internal bool GetState(int flag)
-        {
-            return (_state & flag) != 0;
-        }
+        internal bool GetState(States flag) => (_state & flag) != 0;
 
         /// <summary>
         ///  Retrieves the current value of the specified bit in the control's state2.
         /// </summary>
-        private bool GetState2(int flag)
-        {
-            return (_state2 & flag) != 0;
-        }
+        private protected bool GetExtendedState(ExtendedStates flag) => (_extendedState & flag) != 0;
 
         /// <summary>
         ///  Retrieves the current value of the specified bit in the control's style.
-        ///  NOTE: This is control style, not the Win32 style of the hWnd.
+        ///  This is control style, not the Win32 style of the hWnd.
         /// </summary>
-        protected bool GetStyle(ControlStyles flag)
-        {
-            return (_controlStyle & flag) == flag;
-        }
+        protected bool GetStyle(ControlStyles flag) => (_controlStyle & flag) == flag;
 
         /// <summary>
         ///  Hides the control by setting the visible property to false;
@@ -6414,9 +6350,9 @@ namespace System.Windows.Forms
         /// </summary>
         private void HookMouseEvent()
         {
-            if (!GetState(STATE_TRACKINGMOUSEEVENT))
+            if (!GetState(States.TrackingMouseEvent))
             {
-                SetState(STATE_TRACKINGMOUSEEVENT, true);
+                SetState(States.TrackingMouseEvent, true);
 
                 if (_trackMouseEvent == null)
                 {
@@ -7044,17 +6980,17 @@ namespace System.Windows.Forms
 
         private void ListenToUserPreferenceChanged(bool listen)
         {
-            if (GetState2(STATE2_LISTENINGTOUSERPREFERENCECHANGED))
+            if (GetExtendedState(ExtendedStates.ListeningToUserPreferenceChanged))
             {
                 if (!listen)
                 {
-                    SetState2(STATE2_LISTENINGTOUSERPREFERENCECHANGED, false);
+                    SetExtendedState(ExtendedStates.ListeningToUserPreferenceChanged, false);
                     SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChanged);
                 }
             }
             else if (listen)
             {
-                SetState2(STATE2_LISTENINGTOUSERPREFERENCECHANGED, true);
+                SetExtendedState(ExtendedStates.ListeningToUserPreferenceChanged, true);
                 SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
             }
         }
@@ -7298,7 +7234,7 @@ namespace System.Windows.Forms
             object backBrush = Properties.GetObject(s_backBrushProperty);
             if (backBrush != null)
             {
-                if (GetState(STATE_OWNCTLBRUSH))
+                if (GetState(States.OwnCtlBrush))
                 {
                     IntPtr p = (IntPtr)backBrush;
                     if (p != IntPtr.Zero)
@@ -7603,7 +7539,7 @@ namespace System.Windows.Forms
 
             // update the scroll position when the handle has been created
             // MUST SET THIS BEFORE CALLING RecreateHandle!!!
-            SetState2(STATE2_SETSCROLLPOS, true);
+            SetExtendedState(ExtendedStates.SetScrollPosition, true);
 
             RecreateHandle();
 
@@ -7672,7 +7608,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentEnabledChanged(EventArgs e)
         {
-            if (GetState(STATE_ENABLED))
+            if (GetState(States.Enabled))
             {
                 OnEnabledChanged(e);
             }
@@ -7704,7 +7640,7 @@ namespace System.Windows.Forms
                     UpdateZOrder();
                 }
             }
-            SetState(STATE_PARENTRECREATING, false);
+            SetState(States.ParentRecreating, false);
 
             // if our parent was initially the the parent who's handle just got recreated, we need
             // to recreate ourselves so that we get notification.  See UpdateReflectParent for more details.
@@ -7720,7 +7656,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal virtual void OnParentHandleRecreating()
         {
-            SetState(STATE_PARENTRECREATING, true);
+            SetState(States.ParentRecreating, true);
 
             // swoop this control over to the parking window.
 
@@ -7758,7 +7694,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentVisibleChanged(EventArgs e)
         {
-            if (GetState(STATE_VISIBLE))
+            if (GetState(States.Visible))
             {
                 OnVisibleChanged(e);
             }
@@ -7767,7 +7703,7 @@ namespace System.Windows.Forms
         // OnVisibleChanged/OnParentVisibleChanged is not called when a parent becomes invisible
         internal virtual void OnParentBecameInvisible()
         {
-            if (GetState(STATE_VISIBLE))
+            if (GetState(States.Visible))
             {
                 // This control became invisible too - notify its children
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
@@ -8068,15 +8004,15 @@ namespace System.Windows.Forms
                     User32.SetWindowTextW(new HandleRef(this, Handle), _text);
                 }
 
-                if (!(this is ScrollableControl) && !IsMirrored && GetState2(STATE2_SETSCROLLPOS) && !GetState2(STATE2_HAVEINVOKED))
+                if (!(this is ScrollableControl) && !IsMirrored && GetExtendedState(ExtendedStates.SetScrollPosition) && !GetExtendedState(ExtendedStates.HaveInvoked))
                 {
                     BeginInvoke(new EventHandler(OnSetScrollPosition));
-                    SetState2(STATE2_HAVEINVOKED, true);
-                    SetState2(STATE2_SETSCROLLPOS, false);
+                    SetExtendedState(ExtendedStates.HaveInvoked, true);
+                    SetExtendedState(ExtendedStates.SetScrollPosition, false);
                 }
 
                 // Listen to UserPreferenceChanged if the control is top level and interested in the notification.
-                if (GetState2(STATE2_INTERESTEDINUSERPREFERENCECHANGED))
+                if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged))
                 {
                     ListenToUserPreferenceChanged(GetTopLevel());
                 }
@@ -8088,17 +8024,17 @@ namespace System.Windows.Forms
                 // this last, so we're as close to the same state as when the message
                 // was placed.
                 //
-                if (GetState(STATE_THREADMARSHALLPENDING))
+                if (GetState(States.ThreadMarshalPending))
                 {
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), s_threadCallbackMessage, IntPtr.Zero, IntPtr.Zero);
-                    SetState(STATE_THREADMARSHALLPENDING, false);
+                    SetState(States.ThreadMarshalPending, false);
                 }
             }
         }
 
         private void OnSetScrollPosition(object sender, EventArgs e)
         {
-            SetState2(STATE2_HAVEINVOKED, false);
+            SetExtendedState(ExtendedStates.HaveInvoked, false);
             OnInvokedSetScrollPosition(sender, e);
         }
 
@@ -8144,7 +8080,7 @@ namespace System.Windows.Forms
 
             if (!RecreatingHandle)
             {
-                if (GetState(STATE_OWNCTLBRUSH))
+                if (GetState(States.OwnCtlBrush))
                 {
                     object backBrush = Properties.GetObject(s_backBrushProperty);
                     if (backBrush != null)
@@ -8395,7 +8331,7 @@ namespace System.Windows.Forms
                 // we did not have enough room for our contents. We can not just call PerformLayout
                 // because this container is currently suspended. PerformLayout will check this state
                 // flag and PerformLayout on our parent.
-                ParentInternal.SetState(STATE_LAYOUTISDIRTY, true);
+                ParentInternal.SetState(States.LayoutIsDirty, true);
             }
         }
 
@@ -8673,7 +8609,7 @@ namespace System.Windows.Forms
         protected virtual void OnResize(EventArgs e)
         {
             if ((_controlStyle & ControlStyles.ResizeRedraw) == ControlStyles.ResizeRedraw
-                || GetState(STATE_EXCEPTIONWHILEPAINTING))
+                || GetState(States.ExceptionWhilePainting))
             {
                 Invalidate();
             }
@@ -8991,7 +8927,7 @@ namespace System.Windows.Forms
             try
             {
                 CacheTextInternal = true;
-                if (GetState(STATE_EXCEPTIONWHILEPAINTING))
+                if (GetState(States.ExceptionWhilePainting))
                 {
                     if (layer == PaintLayerBackground)
                     {
@@ -9024,7 +8960,7 @@ namespace System.Windows.Forms
                     {
                         if (exceptionThrown)
                         {
-                            SetState(STATE_EXCEPTIONWHILEPAINTING, true);
+                            SetState(States.ExceptionWhilePainting, true);
                             Invalidate();
                         }
                     }
@@ -9069,7 +9005,7 @@ namespace System.Windows.Forms
                 // we need to be careful
                 // about which LayoutEventArgs are used in
                 // SuspendLayout, PerformLayout, ResumeLayout() sequences.
-                SetState2(STATE2_CLEARLAYOUTARGS, false);
+                SetExtendedState(ExtendedStates.ClearLayoutArgs, false);
             }
             else
             {
@@ -9095,13 +9031,13 @@ namespace System.Windows.Forms
 
             if (_layoutSuspendCount > 0)
             {
-                SetState(STATE_LAYOUTDEFERRED, true);
-                if (_cachedLayoutEventArgs == null || (GetState2(STATE2_CLEARLAYOUTARGS) && args != null))
+                SetState(States.LayoutDeferred, true);
+                if (_cachedLayoutEventArgs == null || (GetExtendedState(ExtendedStates.ClearLayoutArgs) && args != null))
                 {
                     _cachedLayoutEventArgs = args;
-                    if (GetState2(STATE2_CLEARLAYOUTARGS))
+                    if (GetExtendedState(ExtendedStates.ClearLayoutArgs))
                     {
-                        SetState2(STATE2_CLEARLAYOUTARGS, false);
+                        SetExtendedState(ExtendedStates.ClearLayoutArgs, false);
                     }
                 }
 
@@ -9124,13 +9060,13 @@ namespace System.Windows.Forms
                 // Rather than resume layout (which will could allow a deferred layout to layout the
                 // the container we just finished laying out) we set layoutSuspendCount back to zero
                 // and clear the deferred and dirty flags.
-                SetState(STATE_LAYOUTDEFERRED | STATE_LAYOUTISDIRTY, false);
+                SetState(States.LayoutDeferred | States.LayoutIsDirty, false);
                 _layoutSuspendCount = 0;
 
                 // LayoutEngine.Layout can return true to request that our parent resize us because
                 // we did not have enough room for our contents.  Now that we are unsuspended,
                 // see if this happened and layout parent if necessary.  (See also OnLayout)
-                if (ParentInternal != null && ParentInternal.GetState(STATE_LAYOUTISDIRTY))
+                if (ParentInternal != null && ParentInternal.GetState(States.LayoutIsDirty))
                 {
                     LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.PreferredSize);
                 }
@@ -9280,7 +9216,7 @@ namespace System.Windows.Forms
 
             if (msg.Msg == WindowMessages.WM_KEYDOWN || msg.Msg == WindowMessages.WM_SYSKEYDOWN)
             {
-                if (!GetState2(STATE2_UICUES))
+                if (!GetExtendedState(ExtendedStates.UiCues))
                 {
                     ProcessUICues(ref msg);
                 }
@@ -9292,7 +9228,7 @@ namespace System.Windows.Forms
                 }
                 else if (IsInputKey(keyData))
                 {
-                    SetState2(STATE2_INPUTKEY, true);
+                    SetExtendedState(ExtendedStates.InputKey, true);
                     ret = false;
                 }
                 else
@@ -9304,7 +9240,7 @@ namespace System.Windows.Forms
             {
                 if (msg.Msg == WindowMessages.WM_CHAR && IsInputChar((char)msg.WParam))
                 {
-                    SetState2(STATE2_INPUTCHAR, true);
+                    SetExtendedState(ExtendedStates.InputChar, true);
                     ret = false;
                 }
                 else
@@ -9356,9 +9292,9 @@ namespace System.Windows.Forms
             // reset state that is used to make sure IsInputChar, IsInputKey and
             // ProcessUICues are not called multiple times.
             // ISSUE: Which control should these state bits be set on? probably the target.
-            target.SetState2(STATE2_INPUTKEY, false);
-            target.SetState2(STATE2_INPUTCHAR, false);
-            target.SetState2(STATE2_UICUES, true);
+            target.SetExtendedState(ExtendedStates.InputKey, false);
+            target.SetExtendedState(ExtendedStates.InputChar, false);
+            target.SetExtendedState(ExtendedStates.UiCues, true);
 
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.PreProcessControlMessageInternal " + msg.ToString());
 
@@ -9390,7 +9326,7 @@ namespace System.Windows.Forms
                     {
                         // check if IsInputKey has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
-                        if (target.GetState2(STATE2_INPUTKEY) || target.IsInputKey(keyData))
+                        if (target.GetExtendedState(ExtendedStates.InputKey) || target.IsInputKey(keyData))
                         {
                             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
@@ -9400,7 +9336,7 @@ namespace System.Windows.Forms
                     {
                         // check if IsInputChar has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
-                        if (target.GetState2(STATE2_INPUTCHAR) || target.IsInputChar((char)msg.WParam))
+                        if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)msg.WParam))
                         {
                             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
@@ -9416,7 +9352,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                target.SetState2(STATE2_UICUES, false);
+                target.SetExtendedState(ExtendedStates.UiCues, false);
             }
         }
 
@@ -9975,10 +9911,10 @@ namespace System.Windows.Forms
                         Debug.WriteLine("");
                     }
 #endif
-                    bool created = (_state & STATE_CREATED) != 0;
-                    if (GetState(STATE_TRACKINGMOUSEEVENT))
+                    bool created = (_state & States.Created) != 0;
+                    if (GetState(States.TrackingMouseEvent))
                     {
-                        SetState(STATE_MOUSEENTERPENDING, true);
+                        SetState(States.MouseEnterPending, true);
                         UnhookMouseEvent();
                     }
 
@@ -9987,7 +9923,7 @@ namespace System.Windows.Forms
                     try
                     {
                         Control[] controlSnapshot = null;
-                        _state |= STATE_RECREATE;
+                        _state |= States.Recreate;
 
                         try
                         {
@@ -10028,7 +9964,7 @@ namespace System.Windows.Forms
                         }
                         finally
                         {
-                            _state &= ~STATE_RECREATE;
+                            _state &= ~States.Recreate;
 
                             // inform children that their parent's handle has recreated
                             if (controlSnapshot != null)
@@ -10136,7 +10072,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void ResetMouseEventArgs()
         {
-            if (GetState(STATE_TRACKINGMOUSEEVENT))
+            if (GetState(States.TrackingMouseEvent))
             {
                 UnhookMouseEvent();
                 HookMouseEvent();
@@ -10198,7 +10134,7 @@ namespace System.Windows.Forms
 
                 _layoutSuspendCount--;
                 if (_layoutSuspendCount == 0
-                    && GetState(STATE_LAYOUTDEFERRED)
+                    && GetState(States.LayoutDeferred)
                     && performLayout)
                 {
                     PerformLayout();
@@ -10208,7 +10144,7 @@ namespace System.Windows.Forms
 
             if (!performedLayout)
             {
-                SetState2(STATE2_CLEARLAYOUTARGS, true);
+                SetExtendedState(ExtendedStates.ClearLayoutArgs, true);
             }
 
             /*
@@ -10246,7 +10182,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetAcceptDrops(bool accept)
         {
-            if (accept != GetState(STATE_DROPTARGET) && IsHandleCreated)
+            if (accept != GetState(States.DropTarget) && IsHandleCreated)
             {
                 try
                 {
@@ -10279,7 +10215,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    SetState(STATE_DROPTARGET, accept);
+                    SetState(States.DropTarget, accept);
                 }
                 catch (Exception e)
                 {
@@ -10979,7 +10915,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (!GetState(STATE_SIZELOCKEDBYOS))
+                        if (!GetState(States.SizeLockedByOS))
                         {
                             int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE;
 
@@ -11071,7 +11007,7 @@ namespace System.Windows.Forms
         {
             if (value == IntPtr.Zero)
             {
-                SetState(STATE_CREATED, false);
+                SetState(States.Created, false);
             }
             UpdateRoot();
         }
@@ -11140,16 +11076,14 @@ namespace System.Windows.Forms
             }
         }
 
-        // Form, UserControl, AxHost usage
-        internal void SetState(int flag, bool value)
+        private protected void SetState(States flag, bool value)
         {
             _state = value ? _state | flag : _state & ~flag;
         }
 
-        // Application, SKWindow usage
-        internal void SetState2(int flag, bool value)
+        private protected void SetExtendedState(ExtendedStates flag, bool value)
         {
-            _state2 = value ? _state2 | flag : _state2 & ~flag;
+            _extendedState = value ? _extendedState | flag : _extendedState & ~flag;
         }
 
         /// <summary>
@@ -11201,10 +11135,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.TopLevelParentedControl, "value");
                 }
-                SetState(STATE_TOPLEVEL, value);
+                SetState(States.TopLevel, value);
                 // make sure the handle is created before hooking, otherwise a toplevel control that never
                 // creates its handle will leak.
-                if (IsHandleCreated && GetState2(STATE2_INTERESTEDINUSERPREFERENCECHANGED))
+                if (IsHandleCreated && GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged))
                 {
                     ListenToUserPreferenceChanged(value);
                 }
@@ -11245,7 +11179,7 @@ namespace System.Windows.Forms
                     // knows that we are going to be displayed... however in case
                     // an exception is thrown, we need to back the change out.
 
-                    SetState(STATE_VISIBLE, value);
+                    SetState(States.Visible, value);
                     fireChange = true;
                     try
                     {
@@ -11265,14 +11199,14 @@ namespace System.Windows.Forms
                     }
                     catch
                     {
-                        SetState(STATE_VISIBLE, !value);
+                        SetState(States.Visible, !value);
                         throw;
                     }
                 }
 
                 if (GetVisibleCore() != value)
                 {
-                    SetState(STATE_VISIBLE, value);
+                    SetState(States.Visible, value);
                     fireChange = true;
                 }
 
@@ -11294,7 +11228,7 @@ namespace System.Windows.Forms
             {
                 // value of Visible property not changed, but raw bit may have
 
-                if (!GetState(STATE_VISIBLE) && !value && IsHandleCreated)
+                if (!GetState(States.Visible) && !value && IsHandleCreated)
                 {
                     // PERF - setting Visible=false twice can get us into this else block
                     // which makes us process WM_WINDOWPOS* messages - make sure we've already 
@@ -11306,7 +11240,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                SetState(STATE_VISIBLE, value);
+                SetState(States.Visible, value);
 
                 // If the handle is already created, we need to update the window style.
                 // This situation occurs when the parent control is not currently visible,
@@ -11382,7 +11316,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeEnabled()
         {
-            return (!GetState(STATE_ENABLED));
+            return (!GetState(States.Enabled));
         }
 
         /// <summary>
@@ -11421,7 +11355,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeVisible()
         {
-            return (!GetState(STATE_VISIBLE));
+            return (!GetState(States.Visible));
         }
 
         // Helper function - translates text alignment for Rtl controls
@@ -11610,7 +11544,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UnhookMouseEvent()
         {
-            SetState(STATE_TRACKINGMOUSEEVENT, false);
+            SetState(States.TrackingMouseEvent, false);
         }
 
         /// <summary>
@@ -11837,7 +11771,7 @@ namespace System.Windows.Forms
             }
             if (UnsafeNativeMethods.GetWindow(new HandleRef(ctl._window, ctl.Handle), NativeMethods.GW_HWNDPREV) != prevHandle)
             {
-                _state |= STATE_NOZORDER;
+                _state |= States.NoZOrder;
                 try
                 {
                     SafeNativeMethods.SetWindowPos(
@@ -11847,7 +11781,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    _state &= ~STATE_NOZORDER;
+                    _state &= ~States.NoZOrder;
                 }
             }
         }
@@ -11882,7 +11816,7 @@ namespace System.Windows.Forms
                 int exStyle = WindowExStyle;
 
                 // resolve the Form's lazy visibility.
-                if ((_state & STATE_VISIBLE) != 0)
+                if ((_state & States.Visible) != 0)
                 {
                     cp.Style |= NativeMethods.WS_VISIBLE;
                 }
@@ -11893,7 +11827,7 @@ namespace System.Windows.Forms
                 if (exStyle != cp.ExStyle)
                 {
                     WindowExStyle = cp.ExStyle;
-                    SetState(STATE_MIRRORED, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                    SetState(States.Mirrored, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
                 }
 
                 SafeNativeMethods.SetWindowPos(
@@ -12469,7 +12403,7 @@ namespace System.Windows.Forms
         {
             // Let any interested sites know that we're destroying our handle
 
-            if (!RecreatingHandle && !Disposing && !IsDisposed && GetState(STATE_TRACKINGMOUSEEVENT))
+            if (!RecreatingHandle && !Disposing && !IsDisposed && GetState(States.TrackingMouseEvent))
             {
                 // Raise the MouseLeave event for the control below the mouse
                 // when a modal dialog is discarded.
@@ -12490,12 +12424,12 @@ namespace System.Windows.Forms
                 // back to false so we can be rebuilt if we need to be.
                 if (!RecreatingHandle)
                 {
-                    SetState(STATE_CREATED, false);
+                    SetState(States.Created, false);
                 }
             }
             else
             {
-                SetState(STATE_VISIBLE, false);
+                SetState(States.Visible, false);
             }
 
             DefWndProc(ref m);
@@ -12536,7 +12470,7 @@ namespace System.Windows.Forms
             // user code that changed the state of the buttons (i.e. bringing up
             // a dialog) to keep the control in a consistent state...
             MouseButtons realState = MouseButtons;
-            SetState(STATE_MOUSEPRESSED, true);
+            SetState(States.MousePressed, true);
 
             // If the UserMouse style is set, the control does its own processing
             // of mouse messages
@@ -12564,7 +12498,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (!GetState2(STATE2_MAINTAINSOWNCAPTUREMODE))
+            if (!GetExtendedState(ExtendedStates.MaintainsOwnCaptureMode))
             {
                 //CaptureInternal is set usually in MouseDown (ToolStrip main exception)
                 CaptureInternal = true;
@@ -12701,7 +12635,7 @@ namespace System.Windows.Forms
 
                 if ((_controlStyle & ControlStyles.StandardClick) == ControlStyles.StandardClick)
                 {
-                    if (GetState(STATE_MOUSEPRESSED) && !IsDisposed && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (GetState(States.MousePressed) && !IsDisposed && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                     {
                         fireClick = true;
                     }
@@ -12709,7 +12643,7 @@ namespace System.Windows.Forms
 
                 if (fireClick && !ValidationCancelled)
                 {
-                    if (!GetState(STATE_DOUBLECLICKFIRED))
+                    if (!GetState(States.DoubleClickFired))
                     {
                         //OnClick(EventArgs.Empty);
                         //In Whidbey .. if the click in by MOUSE then pass the MouseEventArgs...
@@ -12732,11 +12666,11 @@ namespace System.Windows.Forms
             }
             finally
             {
-                //Always Reset the STATE_DOUBLECLICKFIRED in UP.. Since we get UP - DOWN - DBLCLK - UP sequqnce
+                //Always Reset the States.DOUBLECLICKFIRED in UP.. Since we get UP - DOWN - DBLCLK - UP sequqnce
                 //The Flag is set in L_BUTTONDBLCLK in the controls WndProc() ...
-                SetState(STATE_DOUBLECLICKFIRED, false);
-                SetState(STATE_MOUSEPRESSED, false);
-                SetState(STATE_VALIDATIONCANCELLED, false);
+                SetState(States.DoubleClickFired, false);
+                SetState(States.MousePressed, false);
+                SetState(States.ValidationCancelled, false);
                 //CaptureInternal is Resetted while exiting the MouseUp
                 CaptureInternal = false;
             }
@@ -13168,7 +13102,7 @@ namespace System.Windows.Forms
 
             DefWndProc(ref m);
 
-            if ((_state & STATE_RECREATE) == 0)
+            if ((_state & States.Recreate) == 0)
             {
 
                 bool visible = m.WParam != IntPtr.Zero;
@@ -13176,8 +13110,8 @@ namespace System.Windows.Forms
 
                 if (visible)
                 {
-                    bool oldVisibleBit = GetState(STATE_VISIBLE);
-                    SetState(STATE_VISIBLE, true);
+                    bool oldVisibleBit = GetState(States.Visible);
+                    SetState(States.Visible, true);
                     bool executedOk = false;
                     try
                     {
@@ -13191,7 +13125,7 @@ namespace System.Windows.Forms
                         {
                             // We do it this way instead of a try/catch because catching and rethrowing
                             // an exception loses call stack information
-                            SetState(STATE_VISIBLE, oldVisibleBit);
+                            SetState(States.Visible, oldVisibleBit);
                         }
                     }
                 }
@@ -13212,11 +13146,11 @@ namespace System.Windows.Forms
 
                     if (parentVisible)
                     {
-                        SetState(STATE_VISIBLE, false);
+                        SetState(States.Visible, false);
                     }
                 }
 
-                if (!GetState(STATE_PARENTRECREATING) && (oldVisibleProperty != visible))
+                if (!GetState(States.ParentRecreating) && (oldVisibleProperty != visible))
                 {
                     OnVisibleChanged(EventArgs.Empty);
                 }
@@ -13234,8 +13168,8 @@ namespace System.Windows.Forms
             bool focus = false;
 
             // check the cached values in uiCuesState to see if we've ever set in the UI state
-            bool keyboardInitialized = (_uiCuesState & UISTATE_KEYBOARD_CUES_MASK) != 0;
-            bool focusInitialized = (_uiCuesState & UISTATE_FOCUS_CUES_MASK) != 0;
+            bool keyboardInitialized = (_uiCuesState & UICuesStates.KeyboardMask) != 0;
+            bool focusInitialized = (_uiCuesState & UICuesStates.FocusMask) != 0;
 
             if (keyboardInitialized)
             {
@@ -13258,7 +13192,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Set in the cached value for uiCuesState...
+            // Set in the cached value for uiCuesStates...
 
             // Windows stores the opposite of what you would think, it has bit
             // flags for the "Hidden" state, the presence of this flag means its
@@ -13281,8 +13215,8 @@ namespace System.Windows.Forms
 
                     // clear the old state.
                     //
-                    _uiCuesState &= ~UISTATE_KEYBOARD_CUES_MASK;
-                    _uiCuesState |= (showKeyboard ? UISTATE_KEYBOARD_CUES_SHOW : UISTATE_KEYBOARD_CUES_HIDDEN);
+                    _uiCuesState &= ~UICuesStates.KeyboardMask;
+                    _uiCuesState |= (showKeyboard ? UICuesStates.KeyboardShow : UICuesStates.KeyboardHidden);
                 }
 
                 if (showKeyboard)
@@ -13302,8 +13236,8 @@ namespace System.Windows.Forms
                     UIcues |= UICues.ChangeFocus;
 
                     // clear the old state.
-                    _uiCuesState &= ~UISTATE_FOCUS_CUES_MASK;
-                    _uiCuesState |= (showFocus ? UISTATE_FOCUS_CUES_SHOW : UISTATE_FOCUS_CUES_HIDDEN);
+                    _uiCuesState &= ~UICuesStates.FocusMask;
+                    _uiCuesState |= (showFocus ? UICuesStates.FocusShow : UICuesStates.FocusHidden);
                 }
 
                 if (showFocus)
@@ -13329,7 +13263,7 @@ namespace System.Windows.Forms
             // Update new size / position
             UpdateBounds();
             if (_parent != null && UnsafeNativeMethods.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
-                (_state & STATE_NOZORDER) == 0)
+                (_state & States.NoZOrder) == 0)
             {
 
                 NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
@@ -13551,7 +13485,7 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
-                        SetState(STATE_DOUBLECLICKFIRED, true);
+                        SetState(States.DoubleClickFired, true);
                     }
                     break;
 
@@ -13567,7 +13501,7 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
-                        SetState(STATE_DOUBLECLICKFIRED, true);
+                        SetState(States.DoubleClickFired, true);
                     }
                     break;
 
@@ -13591,7 +13525,7 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
-                        SetState(STATE_DOUBLECLICKFIRED, true);
+                        SetState(States.DoubleClickFired, true);
                     }
                     break;
 
@@ -13641,7 +13575,7 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
-                        SetState(STATE_DOUBLECLICKFIRED, true);
+                        SetState(States.DoubleClickFired, true);
                     }
                     break;
 
@@ -13740,7 +13674,7 @@ namespace System.Windows.Forms
 
         bool IArrangedElement.ParticipatesInLayout
         {
-            get { return GetState(STATE_VISIBLE); }
+            get { return GetState(States.Visible); }
         }
 
         void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty)

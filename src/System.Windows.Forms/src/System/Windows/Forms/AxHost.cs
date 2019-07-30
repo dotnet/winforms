@@ -584,7 +584,7 @@ namespace System.Windows.Forms
                 {
                     HideAxControl();
                 }
-                else if (f.Visible && !GetState(STATE_VISIBLE) && IsHandleCreated && GetOcState() >= OC_INPLACE)
+                else if (f.Visible && !GetState(States.Visible) && IsHandleCreated && GetOcState() >= OC_INPLACE)
                 {
                     HideAxControl();
                 }
@@ -1263,7 +1263,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                SetState(STATE_VISIBLE, false);
+                SetState(States.Visible, false);
                 base.CreateHandle();
             }
 
@@ -1762,7 +1762,7 @@ namespace System.Windows.Forms
 
         protected override void SetVisibleCore(bool value)
         {
-            if (GetState(STATE_VISIBLE) != value)
+            if (GetState(States.Visible) != value)
             {
                 bool oldVisible = Visible;
                 if ((IsHandleCreated || value) && ParentInternal != null && ParentInternal.Created)
@@ -1815,7 +1815,7 @@ namespace System.Windows.Forms
                 }
                 if (!axState[fOwnWindow])
                 {
-                    SetState(STATE_VISIBLE, value);
+                    SetState(States.Visible, value);
                     if (Visible != oldVisible)
                     {
                         OnVisibleChanged(EventArgs.Empty);
@@ -3574,14 +3574,14 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    bool visible = GetState(STATE_VISIBLE);
+                    bool visible = GetState(States.Visible);
 
                     TransitionDownTo(OC_RUNNING);
                     DetachAndForward(ref m);
 
-                    if (visible != GetState(STATE_VISIBLE))
+                    if (visible != GetState(States.Visible))
                     {
-                        SetState(STATE_VISIBLE, visible);
+                        SetState(States.Visible, visible);
                     }
 
                     break;
@@ -3651,15 +3651,6 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 OnHandleDestroyed(EventArgs.Empty);
-                for (Control c = this; c != null; c = c.ParentInternal)
-                {
-                    /* NOT NEEDED
-                    if (c.GetAxState(STATE_HANDLEHOOK)) {
-                        ((IHandleHook)c.Site.GetService(IHandleHook.class)).OnDestroyHandle(GetHandle());
-                        break;
-                    }
-                    */
-                }
                 WindowReleaseHandle();
             }
         }
@@ -3667,19 +3658,7 @@ namespace System.Windows.Forms
         private void InformOfNewHandle()
         {
             Debug.Assert(IsHandleCreated, "we got to have a handle to be here...");
-            for (Control c = this; c != null; c = c.ParentInternal)
-            {
-                /* NOT NEEDED
-                if (c.GetAxState(STATE_HANDLEHOOK)) {
-                    ((IHandleHook)c.Site.GetService(IHandleHook.class)).OnCreateHandle(GetHandle());
-                    break;
-                }
-                */
-            }
             wndprocAddr = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_WNDPROC);
-            /* NOT NEEDED
-            SetAxState(STATE_CREATENOTIFIED, true);
-            */
         }
 
         private void AttachWindow(IntPtr hwnd)

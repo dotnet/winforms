@@ -1088,11 +1088,11 @@ namespace System.Windows.Forms
                 {
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
                     // the buttons.
-                    bool currentDisposing = GetState(STATE_DISPOSING);
+                    bool currentDisposing = GetState(States.Disposing);
 
                     try
                     {
-                        SetState(STATE_DISPOSING, true);
+                        SetState(States.Disposing, true);
 
                         if (imageList != null)
                         {
@@ -1114,7 +1114,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        SetState(STATE_DISPOSING, currentDisposing);
+                        SetState(States.Disposing, currentDisposing);
                     }
                 }
             }

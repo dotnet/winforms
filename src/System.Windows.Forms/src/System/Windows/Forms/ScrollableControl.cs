@@ -376,7 +376,7 @@ namespace System.Windows.Forms
                     // In addition, this is the more correct thing, because
                     // we want to layout the children with respect to their
                     // "local" visibility, not the hierarchy.
-                    if (current != null && current.GetState(STATE_VISIBLE))
+                    if (current != null && current.GetState(States.Visible))
                     {
                         switch (((Control)current).Dock)
                         {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
 
                     // Same logic as the margin calc - you need to see if the
                     // control *will* be visible...
-                    if (current != null && current.GetState(STATE_VISIBLE))
+                    if (current != null && current.GetState(States.Visible))
                     {
                         if (defaultLayoutEngine)
                         {

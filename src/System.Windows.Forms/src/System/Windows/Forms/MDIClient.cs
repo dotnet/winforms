@@ -103,7 +103,7 @@ namespace System.Windows.Forms
                 if (site != null && site.DesignMode)
                 {
                     cp.Style |= NativeMethods.WS_DISABLED;
-                    SetState(STATE_ENABLED, false);
+                    SetState(States.Enabled, false);
                 }
 
                 if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)

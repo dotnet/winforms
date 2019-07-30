@@ -3534,7 +3534,7 @@ namespace System.Windows.Forms
             // We check if we're in the middle of handle creation because
             // the rich edit control fires spurious events during this time.
             //
-            if (m.LParam == Handle && !GetState(STATE_CREATINGHANDLE))
+            if (m.LParam == Handle && !GetState(States.CreatingHandle))
             {
                 switch (Util.HIWORD(m.WParam))
                 {

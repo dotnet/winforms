@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         public Panel() : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
             TabStop = false;
             SetStyle(ControlStyles.Selectable | ControlStyles.AllPaintingInWmPaint, false);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);

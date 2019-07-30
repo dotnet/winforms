@@ -112,7 +112,7 @@ namespace System.Windows.Forms
         : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             SetStyle(ControlStyles.FixedHeight, true);
 

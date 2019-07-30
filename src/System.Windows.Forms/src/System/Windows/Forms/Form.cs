@@ -233,8 +233,8 @@ namespace System.Windows.Forms
 
             formStateEx[FormStateExShowIcon] = 1;
 
-            SetState(STATE_VISIBLE, false);
-            SetState(STATE_TOPLEVEL, true);
+            SetState(States.Visible, false);
+            SetState(States.TopLevel, true);
 
 #if EVERETTROLLBACK
             // (MDI: Roll back feature to Everett + QFE source base).  Code left here for ref.
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
             // identical to WS_MAXIMIZEBOX. Otherwise, our test suite won't be able to
             // determine whether or not the window utilizes the Maximize Box in the
             // window caption.
-            SetState(STATE_TABSTOP, false);
+            SetState(States.TABSTOP, false);
 #endif
         }
 
@@ -944,7 +944,7 @@ namespace System.Windows.Forms
                         {
                             cp.Style |= NativeMethods.WS_MAXIMIZE;
                             formState[FormStateWindowState] = (int)FormWindowState.Maximized;
-                            SetState(STATE_SIZELOCKEDBYOS, true);
+                            SetState(States.SizeLockedByOS, true);
                         }
                     }
 
@@ -1757,7 +1757,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
                 }
 
-                bool oldVisibleBit = GetState(STATE_VISIBLE);
+                bool oldVisibleBit = GetState(States.Visible);
                 Visible = false;
 
                 try
@@ -1786,7 +1786,7 @@ namespace System.Windows.Forms
                         Dock = DockStyle.None;
                         Properties.SetObject(PropFormMdiParent, value);
 
-                        SetState(STATE_TOPLEVEL, false);
+                        SetState(States.TopLevel, false);
                         ParentInternal = value.MdiClient;
 
                         // If it is an MDIChild, and it is not yet visible, we'll
@@ -1925,7 +1925,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetState(STATE_MODAL);
+                return GetState(States.Modal);
             }
         }
 
@@ -2578,7 +2578,7 @@ namespace System.Windows.Forms
                 if (!value)
                 {
                     InvalidateMergedMenu();
-                    SetState(STATE_VISIBLE, false);
+                    SetState(States.Visible, false);
                 }
                 else
                 {
@@ -2587,7 +2587,7 @@ namespace System.Windows.Forms
                     // (getHandle) then show the window (ShowWindow) then finish
                     // creating children using createControl...
                     //
-                    SetState(STATE_VISIBLE, true);
+                    SetState(States.Visible, true);
 
                     // Ask the mdiClient to re-layout the controls so that any docking or
                     // anchor settings for this mdi child window will be honored.
@@ -2649,11 +2649,11 @@ namespace System.Windows.Forms
                 switch (value)
                 {
                     case FormWindowState.Normal:
-                        SetState(STATE_SIZELOCKEDBYOS, false);
+                        SetState(States.SizeLockedByOS, false);
                         break;
                     case FormWindowState.Maximized:
                     case FormWindowState.Minimized:
-                        SetState(STATE_SIZELOCKEDBYOS, true);
+                        SetState(States.SizeLockedByOS, true);
                         break;
                 }
 
@@ -3322,7 +3322,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Close()
         {
-            if (GetState(STATE_CREATINGHANDLE))
+            if (GetState(States.CreatingHandle))
             {
                 throw new InvalidOperationException(string.Format(SR.ClosingWhileCreatingHandle, "Close"));
             }
@@ -3993,7 +3993,7 @@ namespace System.Windows.Forms
             {
                 // During changing visibility, it is possible that the style returns true for visible but the handle has
                 // not yet been created, add a check for both.
-                return GetState(STATE_VISIBLE) && IsHandleCreated;
+                return GetState(States.Visible) && IsHandleCreated;
             }
             return true;
         }
@@ -4487,7 +4487,7 @@ namespace System.Windows.Forms
             // area of the screen.  We must do this after applying any
             // autoscaling.
             //
-            if (GetState(STATE_MODAL))
+            if (GetState(States.Modal))
             {
                 FormStartPosition startPos = (FormStartPosition)formState[FormStateStartPos];
                 if (startPos == FormStartPosition.CenterParent)
@@ -5732,7 +5732,7 @@ namespace System.Windows.Forms
 
             try
             {
-                SetState(STATE_MODAL, true);
+                SetState(States.Modal, true);
 
                 // It's possible that while in the process of creating the control,
                 // (i.e. inside the CreateControl() call) the dialog can be closed.
@@ -5811,7 +5811,7 @@ namespace System.Windows.Forms
                         // Everett/RTM used to wrap this in an assert for AWP.
                         DestroyHandle();
                     }
-                    SetState(STATE_MODAL, false);
+                    SetState(States.Modal, false);
                 }
             }
             finally
@@ -5937,7 +5937,7 @@ namespace System.Windows.Forms
                             formState[FormStateRenderSizeGrip] = 0;
                             break;
                         case SizeGripStyle.Auto:
-                            if (GetState(STATE_MODAL))
+                            if (GetState(States.Modal))
                             {
                                 formState[FormStateRenderSizeGrip] = 1;
                             }
@@ -6542,11 +6542,11 @@ namespace System.Windows.Forms
                 switch (WindowState)
                 {
                     case FormWindowState.Normal:
-                        SetState(STATE_SIZELOCKEDBYOS, false);
+                        SetState(States.SizeLockedByOS, false);
                         break;
                     case FormWindowState.Maximized:
                     case FormWindowState.Minimized:
-                        SetState(STATE_SIZELOCKEDBYOS, true);
+                        SetState(States.SizeLockedByOS, true);
                         break;
                 }
 
