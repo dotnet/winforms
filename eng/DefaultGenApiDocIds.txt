@@ -1,0 +1,13 @@
+﻿// These attributes should be excluded from reference assemblies.
+
+T:System.Security.Permissions.EnvironmentPermissionAttribute
+T:System.Security.Permissions.FileIOPermissionAttribute
+T:System.Security.Permissions.HostProtectionAttribute
+T:System.Security.Permissions.IsolatedStorageFilePermissionAttribute
+T:System.Security.Permissions.PermissionSetAttribute
+T:System.Security.Permissions.ReflectionPermissionAttribute
+T:System.Security.Permissions.SecurityPermissionAttribute
+T:System.Security.Permissions.StrongNameIdentityPermissionAttribute
+T:System.Security.SecurityCriticalAttribute
+T:System.Security.SecuritySafeCriticalAttribute
+T:System.Security.SuppressUnmanagedCodeSecurityAttribute
