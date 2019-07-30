@@ -7,7 +7,7 @@ namespace System.Windows.Forms
     public partial class Control
     {
         [Flags]
-        internal enum States
+        private protected enum States
         {
             Created = 0x00000001,
             Visible = 0x00000002,

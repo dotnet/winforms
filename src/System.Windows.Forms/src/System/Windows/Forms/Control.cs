@@ -5903,10 +5903,12 @@ namespace System.Windows.Forms
             return MouseButtons.None;
         }
 
+        internal bool DesiredVisibility => GetState(States.Visible);
+
         internal virtual bool GetVisibleCore()
         {
             // We are only visible if our parent is visible
-            if (!GetState(States.Visible))
+            if (!DesiredVisibility)
             {
                 return false;
             }
@@ -6323,7 +6325,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the current value of the specified bit in the control's state.
         /// </summary>
-        internal bool GetState(States flag) => (_state & flag) != 0;
+        private protected bool GetState(States flag) => (_state & flag) != 0;
 
         /// <summary>
         ///  Retrieves the current value of the specified bit in the control's state2.
@@ -7694,7 +7696,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentVisibleChanged(EventArgs e)
         {
-            if (GetState(States.Visible))
+            if (DesiredVisibility)
             {
                 OnVisibleChanged(e);
             }
@@ -7703,7 +7705,7 @@ namespace System.Windows.Forms
         // OnVisibleChanged/OnParentVisibleChanged is not called when a parent becomes invisible
         internal virtual void OnParentBecameInvisible()
         {
-            if (GetState(States.Visible))
+            if (DesiredVisibility)
             {
                 // This control became invisible too - notify its children
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
@@ -11228,7 +11230,7 @@ namespace System.Windows.Forms
             {
                 // value of Visible property not changed, but raw bit may have
 
-                if (!GetState(States.Visible) && !value && IsHandleCreated)
+                if (!DesiredVisibility && !value && IsHandleCreated)
                 {
                     // PERF - setting Visible=false twice can get us into this else block
                     // which makes us process WM_WINDOWPOS* messages - make sure we've already 
@@ -11353,10 +11355,7 @@ namespace System.Windows.Forms
         ///  Returns true if the visible property should be persisted in code gen.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private bool ShouldSerializeVisible()
-        {
-            return (!GetState(States.Visible));
-        }
+        private bool ShouldSerializeVisible() => !DesiredVisibility;
 
         // Helper function - translates text alignment for Rtl controls
         // Read TextAlign as Left == Near, Right == Far
