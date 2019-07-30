@@ -1782,7 +1782,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => disposable.Dispose());
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_DesignerDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1812,7 +1812,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_RootDesignerDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1825,7 +1825,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_RootComponentDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
