@@ -64,21 +64,20 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
-        // [Fact]
-        // Commenting out until this gets fixed
-        // public void WinformsControlsTest_TreeViewAndImageListTest()
-        // {
-        //     var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-        //     TestHelpers.PressTabsOnProcess(process, 2);
-        //     TestHelpers.PressEnterOnProcess(process);
+        [Fact]
+        public void WinformsControlsTest_TreeViewAndImageListTest()
+        {
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.PressTabsOnProcess(process, 2);
+            TestHelpers.PressEnterOnProcess(process);
 
-        //     Assert.False(process.HasExited);
+            Assert.False(process.HasExited);
 
-        //     process.Kill();
-        //     process.WaitForExit();
+            process.Kill();
+            process.WaitForExit();
 
-        //     Assert.True(process.HasExited);
-        // }
+            Assert.True(process.HasExited);
+        }
 
         [Fact]
         public void WinformsControlsTest_ContentAlignmentTest()
