@@ -1180,10 +1180,10 @@ namespace System.Windows.Forms
                         break;
 
                     case TaskDialogNotification.TDN_HYPERLINK_CLICKED:
-                        // The link parameter should never be null.
-                        Debug.Assert(lParam != null);
+                        string? link = Marshal.PtrToStringUni(lParam);
 
-                        string link = Marshal.PtrToStringUni(lParam)!;
+                        // The link parameter should never be null.
+                        Debug.Assert(link != null);
 
                         var eventArgs = new TaskDialogHyperlinkClickedEventArgs(link);
                         _boundPage.OnHyperlinkClicked(eventArgs);
