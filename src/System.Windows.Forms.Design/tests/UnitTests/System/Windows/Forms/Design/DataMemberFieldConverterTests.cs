@@ -34,7 +34,6 @@ namespace System.Windows.Forms.Design.Tests
         [InlineData("", typeof(string), "(none)")]
         [InlineData(null, typeof(string), "(none)")]
         [InlineData("FirstName", typeof(string), "FirstName")]
-        [InlineData(1, typeof(int), 1)]
         public static void ConvertTo(object actual, Type expectedType, object expected)
         {
             Assert.Equal(expected, s_converter.ConvertTo(s_context, CultureInfo.CurrentCulture, actual, expectedType));
@@ -43,7 +42,6 @@ namespace System.Windows.Forms.Design.Tests
         [Theory]
         [InlineData("", typeof(int))]
         [InlineData("FirstName", typeof(int))]
-        [InlineData(null, typeof(string))]
         public static void ConvertTo_ThrowsNotSupportedException(object actual, Type expectedType)
         {
             Assert.Throws<NotSupportedException>(
