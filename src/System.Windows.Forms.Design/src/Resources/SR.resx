@@ -171,6 +171,12 @@
   <data name="DesignerOptions_SnapToGridDesc" xml:space="preserve">
     <value>Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</value>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>(None)</value>
+  </data>
+  <data name="None_lc" xml:space="preserve">
+    <value>(none)</value>
+  </data>
   <data name="NotImplementedByDesign" xml:space="preserve">
     <value>This method/object is not implemented by design.</value>
   </data>

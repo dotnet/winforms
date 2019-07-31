@@ -513,6 +513,16 @@
         <target state="translated">'{1}'은(는) '{0}'에 사용할 수 없는 값입니다. '{0}'은(는) {2}에서 {3} 사이에 있어야 합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="new">(None)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="new">(none)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
         <target state="translated">이 메서드/개체는 의도적으로 구현되지 않습니다.</target>

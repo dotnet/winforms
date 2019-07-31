@@ -513,6 +513,16 @@
         <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 應該介於 {2} 與 {3} 之間。</target>
         <note />
       </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="new">(None)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="new">(none)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
         <target state="translated">此方法/物件並非由設計實作。</target>
