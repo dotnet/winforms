@@ -83,14 +83,14 @@ stages:
 
         strategy:
           matrix:
-            Build_Debug:
+            Debug:
               _BuildConfig: Debug
               # override some variables for debug
               _PublishType: none
               _SignType: test
               _DotNetPublishToBlobFeed : false
               _Coverage: true
-            Build_Release:
+            Release:
               _BuildConfig: Release
               _Coverage: false
 
