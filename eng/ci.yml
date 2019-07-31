@@ -22,7 +22,7 @@ stages:
       helixRepo: ${{ parameters.repoName }}
 
       jobs:
-      - job: Windows_NT
+      - job: Windows
         pool: 
           name: ${{ parameters.agentPoolName }}
           queue: ${{ parameters.agentPool }}
