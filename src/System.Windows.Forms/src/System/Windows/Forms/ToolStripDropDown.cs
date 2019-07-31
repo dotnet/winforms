@@ -1320,8 +1320,7 @@ namespace System.Windows.Forms
         internal override void HandleItemClicked(ToolStripItem dismissingItem)
         {
             // Only clear the SourceControl if this is the last click.
-            if (!LocalAppContextSwitches.UseLegacyContextMenuStripSourceControlValue &&
-                ActiveDropDowns.Count == 0)
+            if (ActiveDropDowns.Count == 0)
             {
                 // post processing after the click has happened.
                 SourceControlInternal = null;
@@ -2238,12 +2237,10 @@ namespace System.Windows.Forms
             ToolStripDropDown toplevel = GetFirstDropDown();
             toplevel.closeReason = closeReason;
             toplevel.DismissActiveDropDowns();
-            if (!LocalAppContextSwitches.UseLegacyContextMenuStripSourceControlValue)
-            {
-                toplevel.saveSourceControl = saveSourceControl;
-            }
+            toplevel.saveSourceControl = saveSourceControl;
             toplevel.Visible = false;
         }
+
         private void DismissActiveDropDowns()
         {
             Debug.WriteLineIf((DropDownActivateDebug.TraceVerbose && ActiveDropDowns.Count > 0), "Dismiss children called - COUNT " + ActiveDropDowns.Count + " \r\n" + new StackTrace().ToString());
