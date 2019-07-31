@@ -745,7 +745,7 @@ namespace System.Windows.Forms.Tests
         {
             var dataObject = new DataObject();
             dataObject.SetData(DataFormats.UnicodeText, result);
-            Assert.Same(expected, dataObject.GetText());
+            Assert.Equal(expected, dataObject.GetText());
         }
 
         [Theory]
@@ -1473,19 +1473,19 @@ namespace System.Windows.Forms.Tests
         {
             var dataObject = new DataObject();
             dataObject.SetText(textData, format);
-            Assert.Same(textData, dataObject.GetText(format));
-            Assert.Same(expectedUnicodeText, dataObject.GetData(DataFormats.UnicodeText, autoConvert: true));
-            Assert.Same(expectedUnicodeText, dataObject.GetData(DataFormats.UnicodeText, autoConvert: false));
-            Assert.Same(expectedUnicodeText, dataObject.GetData(DataFormats.Text, autoConvert: true));
+            Assert.Equal(textData, dataObject.GetText(format));
+            Assert.Equal(expectedUnicodeText, dataObject.GetData(DataFormats.UnicodeText, autoConvert: true));
+            Assert.Equal(expectedUnicodeText, dataObject.GetData(DataFormats.UnicodeText, autoConvert: false));
+            Assert.Equal(expectedUnicodeText, dataObject.GetData(DataFormats.Text, autoConvert: true));
             Assert.Null(dataObject.GetData(DataFormats.Text, autoConvert: false));
-            Assert.Same(expectedUnicodeText, dataObject.GetData(DataFormats.StringFormat, autoConvert: true));
+            Assert.Equal(expectedUnicodeText, dataObject.GetData(DataFormats.StringFormat, autoConvert: true));
             Assert.Null(dataObject.GetData(DataFormats.StringFormat, autoConvert: false));
-            Assert.Same(expectedRtfText, dataObject.GetData(DataFormats.Rtf, autoConvert: true));
-            Assert.Same(expectedRtfText, dataObject.GetData(DataFormats.Rtf, autoConvert: false));
-            Assert.Same(expectedHtmlText, dataObject.GetData(DataFormats.Html, autoConvert: true));
-            Assert.Same(expectedHtmlText, dataObject.GetData(DataFormats.Html, autoConvert: false));
-            Assert.Same(expectedCsvText, dataObject.GetData(DataFormats.CommaSeparatedValue, autoConvert: true));
-            Assert.Same(expectedCsvText, dataObject.GetData(DataFormats.CommaSeparatedValue, autoConvert: false));
+            Assert.Equal(expectedRtfText, dataObject.GetData(DataFormats.Rtf, autoConvert: true));
+            Assert.Equal(expectedRtfText, dataObject.GetData(DataFormats.Rtf, autoConvert: false));
+            Assert.Equal(expectedHtmlText, dataObject.GetData(DataFormats.Html, autoConvert: true));
+            Assert.Equal(expectedHtmlText, dataObject.GetData(DataFormats.Html, autoConvert: false));
+            Assert.Equal(expectedCsvText, dataObject.GetData(DataFormats.CommaSeparatedValue, autoConvert: true));
+            Assert.Equal(expectedCsvText, dataObject.GetData(DataFormats.CommaSeparatedValue, autoConvert: false));
 
             Assert.True(dataObject.ContainsText(format));
             Assert.Equal(expectedUnicodeText != null, dataObject.GetDataPresent(DataFormats.UnicodeText, autoConvert: true));

@@ -1458,11 +1458,11 @@ namespace System.Windows.Forms.Tests
             {
                 Text = value
             };
-            Assert.Same(expected, control.Text);
+            Assert.Equal(expected, control.Text);
 
             // Set same.
             control.Text = value;
-            Assert.Same(expected, control.Text);
+            Assert.Equal(expected, control.Text);
         }
 
         [Theory]
