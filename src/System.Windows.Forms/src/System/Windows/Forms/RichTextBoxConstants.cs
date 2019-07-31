@@ -12,11 +12,6 @@ namespace System.Windows.Forms
         internal const int RTB_VERT = 0x0002;
         internal const int RTB_FORCE = 0x0010;
 
-        internal const string RICHEDIT_CLASS10A = "RICHEDIT";
-
-        /* Richedit3.0 Window Class */
-        internal const string WC_RICHEDITW = "RichEdit20W";
-
         /* Richedit4.1 Window Class */
         internal const string WC_RICHEDITW_41 = "RICHEDIT50W";
 
