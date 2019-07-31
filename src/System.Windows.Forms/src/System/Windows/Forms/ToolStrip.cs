@@ -5030,7 +5030,7 @@ namespace System.Windows.Forms
 
                     if (currentlyActiveTooltipItem != null && !GetToolStripState(STATE_DRAGGING))
                     {
-                        Cursor currentCursor = Cursor.CurrentInternal;
+                        Cursor currentCursor = Cursor.Current;
 
                         if (currentCursor != null)
                         {

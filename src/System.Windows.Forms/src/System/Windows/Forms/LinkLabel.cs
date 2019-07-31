@@ -2078,11 +2078,11 @@ namespace System.Windows.Forms
             {
                 if (OverrideCursor != null)
                 {
-                    Cursor.CurrentInternal = OverrideCursor;
+                    Cursor.Current = OverrideCursor;
                 }
                 else
                 {
-                    Cursor.CurrentInternal = Cursor;
+                    Cursor.Current = Cursor;
                 }
             }
             else
