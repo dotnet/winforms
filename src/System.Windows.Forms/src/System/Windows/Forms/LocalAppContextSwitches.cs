@@ -12,13 +12,11 @@ namespace System.Windows.Forms
         internal const string UseLegacyContextMenuStripSourceControlValueSwitchName = @"Switch.System.Windows.Forms.UseLegacyContextMenuStripSourceControlValue";
         internal const string DomainUpDownUseLegacyScrollingSwitchName = @"Switch.System.Windows.Forms.DomainUpDown.UseLegacyScrolling";
         internal const string AllowUpdateChildControlIndexForTabControlsSwitchName = @"Switch.System.Windows.Forms.AllowUpdateChildControlIndexForTabControls";
-        internal const string UseLegacyImagesSwitchName = @"Switch.System.Windows.Forms.UseLegacyImages";
         internal const string EnableVisualStyleValidationSwitchName = @"Switch.System.Windows.Forms.EnableVisualStyleValidation";
         private static int _dontSupportReentrantFilterMessage;
         private static int _useLegacyContextMenuStripSourceControlValue;
         private static int _useLegacyDomainUpDownScrolling;
         private static int _allowUpdateChildControlIndexForTabControls;
-        private static int _useLegacyImages;
         private static int _enableVisualStyleValidation;
 
         public static bool DontSupportReentrantFilterMessage
@@ -54,15 +52,6 @@ namespace System.Windows.Forms
             get
             {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.AllowUpdateChildControlIndexForTabControlsSwitchName, ref _allowUpdateChildControlIndexForTabControls);
-            }
-        }
-
-        public static bool UseLegacyImages
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.UseLegacyImagesSwitchName, ref _useLegacyImages);
             }
         }
 
