@@ -8,16 +8,5 @@ namespace System.Windows.Forms
 
     internal static class LocalAppContextSwitches
     {
-        internal const string EnableVisualStyleValidationSwitchName = @"Switch.System.Windows.Forms.EnableVisualStyleValidation";
-        private static int _enableVisualStyleValidation;
-
-        public static bool EnableVisualStyleValidation
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.EnableVisualStyleValidationSwitchName, ref _enableVisualStyleValidation);
-            }
-        }
     }
 }

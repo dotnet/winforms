@@ -707,12 +707,6 @@ namespace System.Windows.Forms
             {
                 if (VisualStyleInformation.IsSupportedByOS)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)VisualStyleState.NoneEnabled, (int)VisualStyleState.ClientAndNonClientAreasEnabled)
-                        && LocalAppContextSwitches.EnableVisualStyleValidation)
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStyleState));
-                    }
-
                     SafeNativeMethods.SetThemeAppProperties((int)value);
 
                     //248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
