@@ -17,10 +17,9 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements a node of a <see cref='Forms.TreeView'/>.
     /// </summary>
-    [
-    TypeConverter(typeof(TreeNodeConverter)), Serializable,
-    DefaultProperty(nameof(Text)),
-    ]
+    [TypeConverterAttribute(typeof(TreeNodeConverter))]
+    [Serializable]  // This class participates in resx serialization.
+    [DefaultProperty(nameof(Text))]
     public class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         private const int SHIFTVAL = 12;
@@ -1296,7 +1295,6 @@ namespace System.Windows.Forms
 
         private void SortChildren(TreeView parentTreeView)
         {
-            //
             if (childCount > 0)
             {
                 TreeNode[] newOrder = new TreeNode[childCount];
@@ -1604,13 +1602,13 @@ namespace System.Windows.Forms
                         // this would throw a InvalidaCastException if improper cast, thus validating the serializationInfo for OwnerDrawPropertyBag
                         propBag = (OwnerDrawPropertyBag)serializationInfo.GetValue(entry.Name, typeof(OwnerDrawPropertyBag));
                         break;
-                    case "Text":
+                    case nameof(Text):
                         Text = serializationInfo.GetString(entry.Name);
                         break;
-                    case "ToolTipText":
+                    case nameof(ToolTipText):
                         ToolTipText = serializationInfo.GetString(entry.Name);
                         break;
-                    case "Name":
+                    case nameof(Name):
                         Name = serializationInfo.GetString(entry.Name);
                         break;
                     case "IsChecked":
@@ -1619,16 +1617,16 @@ namespace System.Windows.Forms
                     case nameof(ImageIndex):
                         imageIndex = serializationInfo.GetInt32(entry.Name);
                         break;
-                    case "SelectedImageIndex":
+                    case nameof(SelectedImageIndex):
                         selectedImageIndex = serializationInfo.GetInt32(entry.Name);
                         break;
-                    case "ImageKey":
+                    case nameof(ImageKey):
                         imageKey = serializationInfo.GetString(entry.Name);
                         break;
-                    case "SelectedImageKey":
+                    case nameof(SelectedImageKey):
                         selectedImageKey = serializationInfo.GetString(entry.Name);
                         break;
-                    case "StateImageKey":
+                    case nameof(StateImageKey):
                         stateImageKey = serializationInfo.GetString(entry.Name);
                         break;
                     case "StateImageIndex":
@@ -2133,14 +2131,14 @@ namespace System.Windows.Forms
                 si.AddValue("PropBag", propBag, typeof(OwnerDrawPropertyBag));
             }
 
-            si.AddValue("Text", text);
-            si.AddValue("ToolTipText", toolTipText);
-            si.AddValue("Name", Name);
+            si.AddValue(nameof(Text), text);
+            si.AddValue(nameof(ToolTipText), toolTipText);
+            si.AddValue(nameof(Name), Name);
             si.AddValue("IsChecked", treeNodeState[TREENODESTATE_isChecked]);
             si.AddValue(nameof(ImageIndex), ImageIndexer.Index);
-            si.AddValue("ImageKey", ImageIndexer.Key);
-            si.AddValue("SelectedImageIndex", SelectedImageIndexer.Index);
-            si.AddValue("SelectedImageKey", SelectedImageIndexer.Key);
+            si.AddValue(nameof(ImageKey), ImageIndexer.Key);
+            si.AddValue(nameof(SelectedImageIndex), SelectedImageIndexer.Index);
+            si.AddValue(nameof(SelectedImageKey), SelectedImageIndexer.Key);
 
             if (treeView != null && treeView.StateImageList != null)
             {
@@ -2149,7 +2147,7 @@ namespace System.Windows.Forms
 
             if (treeView != null && treeView.StateImageList != null)
             {
-                si.AddValue("StateImageKey", StateImageIndexer.Key);
+                si.AddValue(nameof(StateImageKey), StateImageIndexer.Key);
             }
 
             si.AddValue("ChildCount", childCount);

@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 
 namespace System.Windows.Forms
 {
-    [Serializable]
+    [Serializable] // This type is participating in resx serialization scenarios.
     public sealed class ImageListStreamer : ISerializable, IDisposable
     {
         // compressed magic header.  If we see this, the image stream is compressed.

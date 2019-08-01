@@ -226,19 +226,18 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// The SerializationStore class is an implementation-specific class that stores  serialization data for the component serialization service.  The  service adds state to this serialization store.  Once the store is  closed it can be saved to a stream.  A serialization store can be  deserialized at a later date by the same type of serialization service.   SerializationStore implements the IDisposable interface such that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.  The IDisposable pattern is provided  for languages that support a "using" syntax like C# and VB .NET.
+        /// The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.  
+        /// The service adds state to this serialization store.  Once the store is closed it can be saved to a stream.  A serialization store can
+        /// be deserialized at a later date by the same type of serialization service. SerializationStore implements the IDisposable interface such
+        /// that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
+        /// The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
         /// </summary>
-        [Serializable]
+        [Serializable] // This class is stored in binary serialized format during CodeDOM serialization scenarios.
         private sealed class CodeDomSerializationStore : SerializationStore, ISerializable
         {
 #if DEBUG
             private static readonly TraceSwitch s_trace = new TraceSwitch("ComponentSerializationService", "Trace component serialization");
 #endif
-            private const string StateKey = "State";
-            private const string NameKey = "Names";
-            private const string AssembliesKey = "Assemblies";
-            private const string ResourcesKey = "Resources";
-            private const string ShimKey = "Shim";
             private const int StateCode = 0;
             private const int StateCtx = 1;
             private const int StateProperties = 2;
@@ -252,12 +251,13 @@ namespace System.ComponentModel.Design.Serialization
             private Hashtable _objects;
             private readonly IServiceProvider _provider;
 
-            // These fields persist across the store
-            private readonly ArrayList _objectNames;
-            private Hashtable _objectState;
+#pragma warning disable IDE1006
+            private readonly ArrayList Names; // Do NOT rename (binary serialization).
+            private Hashtable State; // Do NOT rename (binary serialization).
+            private AssemblyName[] Assemblies;  // Do NOT rename (binary serialization).
+            private readonly List<string> Shim;  // Do NOT rename (binary serialization).
+#pragma warning restore IDE1006
             private LocalResourceManager _resources;
-            private AssemblyName[] _assemblies;
-            private readonly List<string> _shimObjectNames;
 
             // These fields are available after serialization or deserialization
             private ICollection _errors;
@@ -269,8 +269,8 @@ namespace System.ComponentModel.Design.Serialization
             {
                 _provider = provider;
                 _objects = new Hashtable();
-                _objectNames = new ArrayList();
-                _shimObjectNames = new List<string>();
+                Names = new ArrayList();
+                Shim = new List<string>();
             }
 
             /// <summary>
@@ -278,11 +278,11 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private CodeDomSerializationStore(SerializationInfo info, StreamingContext context)
             {
-                _objectState = (Hashtable)info.GetValue(StateKey, typeof(Hashtable));
-                _objectNames = (ArrayList)info.GetValue(NameKey, typeof(ArrayList));
-                _assemblies = (AssemblyName[])info.GetValue(AssembliesKey, typeof(AssemblyName[]));
-                _shimObjectNames = (List<string>)info.GetValue(ShimKey, typeof(List<string>));
-                Hashtable h = (Hashtable)info.GetValue(ResourcesKey, typeof(Hashtable));
+                State = (Hashtable)info.GetValue(nameof(State), typeof(Hashtable));
+                Names = (ArrayList)info.GetValue(nameof(Names), typeof(ArrayList));
+                Assemblies = (AssemblyName[])info.GetValue(nameof(Assemblies), typeof(AssemblyName[]));
+                Shim = (List<string>)info.GetValue(nameof(Shim), typeof(List<string>));
+                Hashtable h = (Hashtable)info.GetValue(nameof(Resources), typeof(Hashtable));
 
                 if (h != null)
                 {
@@ -295,7 +295,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private AssemblyName[] AssemblyNames
             {
-                get => _assemblies;
+                get => Assemblies;
             }
 
             /// <summary>
@@ -336,7 +336,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             internal void AddMember(object value, MemberDescriptor member, bool absolute)
             {
-                if (_objectState != null)
+                if (State != null)
                 {
                     throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
                 }
@@ -351,7 +351,7 @@ namespace System.ComponentModel.Design.Serialization
                     };
 
                     _objects[value] = data;
-                    _objectNames.Add(data._name);
+                    Names.Add(data._name);
                 }
 
                 Trace("Adding object '{0}' ({1}:{2}) {3}", data._name, data._value.GetType().FullName, member.Name, (absolute ? "NORMAL" : "ABSOLUTE"));
@@ -363,7 +363,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             internal void AddObject(object value, bool absolute)
             {
-                if (_objectState != null)
+                if (State != null)
                 {
                     throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
                 }
@@ -378,7 +378,7 @@ namespace System.ComponentModel.Design.Serialization
                     };
 
                     _objects[value] = data;
-                    _objectNames.Add(data._name);
+                    Names.Add(data._name);
                 }
 
                 Trace("Adding object '{0}' ({1}) {2}", data._name, data._value.GetType().FullName, (absolute ? "NORMAL" : "ABSOLUTE"));
@@ -391,7 +391,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override void Close()
             {
-                if (_objectState == null)
+                if (State == null)
                 {
                     Hashtable state = new Hashtable(_objects.Count);
                     DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
@@ -412,7 +412,7 @@ namespace System.ComponentModel.Design.Serialization
                             ((IDesignerSerializationManager)manager).SetName(data._value, data._name);
                         }
 
-                        ComponentListCodeDomSerializer.s_instance.Serialize(manager, _objects, state, _shimObjectNames);
+                        ComponentListCodeDomSerializer.s_instance.Serialize(manager, _objects, state, Shim);
                         _errors = manager.Errors;
                     }
 
@@ -437,12 +437,12 @@ namespace System.ComponentModel.Design.Serialization
                         assemblies[a] = null;
                     }
 
-                    _assemblies = new AssemblyName[assemblies.Count];
+                    Assemblies = new AssemblyName[assemblies.Count];
                     int idx = 0;
 
                     foreach (Assembly a in assemblies.Keys)
                     {
-                        _assemblies[idx++] = a.GetName(true);
+                        Assemblies[idx++] = a.GetName(true);
                     }
 #if DEBUG
                     foreach (DictionaryEntry de in state)
@@ -450,7 +450,7 @@ namespace System.ComponentModel.Design.Serialization
                         TraceCode((string)de.Key, de.Value);
                     }
 #endif
-                    _objectState = state;
+                    State = state;
                     _objects = null;
                 }
             }
@@ -503,16 +503,16 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (!recycleInstances)
                 {
-                    objects = new ArrayList(_objectNames.Count);
+                    objects = new ArrayList(Names.Count);
                 }
 
-                Trace("Deserializing {0} objects, recycling instances: {1}", _objectState.Count, recycleInstances);
+                Trace("Deserializing {0} objects, recycling instances: {1}", State.Count, recycleInstances);
                 using (delegator.Manager.CreateSession())
                 {
                     // before we deserialize, setup any references to components we faked during serialization
-                    if (_shimObjectNames.Count > 0)
+                    if (Shim.Count > 0)
                     {
-                        List<string> names = _shimObjectNames;
+                        List<string> names = Shim;
                         if (delegator is IDesignerSerializationManager dsm && container != null)
                         {
                             foreach (string compName in names)
@@ -526,10 +526,10 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    ComponentListCodeDomSerializer.s_instance.Deserialize(delegator, _objectState, _objectNames, applyDefaults);
+                    ComponentListCodeDomSerializer.s_instance.Deserialize(delegator, State, Names, applyDefaults);
                     if (!recycleInstances)
                     {
-                        foreach (string name in _objectNames)
+                        foreach (string name in Names)
                         {
                             object instance = ((IDesignerSerializationManager)delegator.Manager).GetInstance(name);
                             Debug.Assert(instance != null, "Failed to deserialize object " + name);
@@ -677,11 +677,11 @@ namespace System.ComponentModel.Design.Serialization
                     throw new ArgumentNullException(nameof(info));
                 }
 
-                info.AddValue(StateKey, _objectState);
-                info.AddValue(NameKey, _objectNames);
-                info.AddValue(AssembliesKey, _assemblies);
-                info.AddValue(ResourcesKey, _resources?.Data);
-                info.AddValue(ShimKey, _shimObjectNames);
+                info.AddValue(nameof(State), State);
+                info.AddValue(nameof(Names), Names);
+                info.AddValue(nameof(Assemblies), Assemblies);
+                info.AddValue(nameof(Resources), _resources?.Data);
+                info.AddValue(nameof(Shim), Shim);
             }
 
             /// <summary>

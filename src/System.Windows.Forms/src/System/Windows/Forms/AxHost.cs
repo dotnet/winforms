@@ -6959,10 +6959,8 @@ namespace System.Windows.Forms
         ///  An instance of this class my be obtained either by calling getOcxState on an
         ///  AxHost object, or by reading in from a stream.
         /// </summary>
-        [
-            TypeConverter(typeof(TypeConverter)),
-            Serializable
-        ]
+        [TypeConverterAttribute(typeof(TypeConverter))]
+        [Serializable] // This exchanges with the native code.
         public class State : ISerializable
         {
             private readonly int VERSION = 1;
@@ -6974,13 +6972,15 @@ namespace System.Windows.Forms
             private UnsafeNativeMethods.ILockBytes iLockBytes;
             private bool manualUpdate = false;
             private string licenseKey = null;
-            private readonly PropertyBagStream propBag;
+#pragma warning disable IDE1006
+            private readonly PropertyBagStream PropertyBagBinary; // Do NOT rename (binary serialization).
+#pragma warning restore IDE1006
 
             // create on save from ipersist stream
             internal State(MemoryStream ms, int storageType, AxHost ctl, PropertyBagStream propBag)
             {
                 type = storageType;
-                this.propBag = propBag;
+                PropertyBagBinary = propBag;
                 // dangerous?
                 length = (int)ms.Length;
                 this.ms = ms;
@@ -6990,7 +6990,7 @@ namespace System.Windows.Forms
 
             internal State(PropertyBagStream propBag)
             {
-                this.propBag = propBag;
+                PropertyBagBinary = propBag;
             }
 
             internal State(MemoryStream ms)
@@ -7048,7 +7048,7 @@ namespace System.Windows.Forms
                             Debug.Fail("failure: " + e.ToString());
                         }
                     }
-                    else if (string.Compare(sie.Name, "PropertyBagBinary", true, CultureInfo.InvariantCulture) == 0)
+                    else if (string.Compare(sie.Name, nameof(PropertyBagBinary), true, CultureInfo.InvariantCulture) == 0)
                     {
                         try
                         {
@@ -7056,8 +7056,8 @@ namespace System.Windows.Forms
                             byte[] dat = (byte[])sie.Value;
                             if (dat != null)
                             {
-                                propBag = new PropertyBagStream();
-                                propBag.Read(new MemoryStream(dat));
+                                PropertyBagBinary = new PropertyBagStream();
+                                PropertyBagBinary.Read(new MemoryStream(dat));
                             }
 
                         }
@@ -7147,7 +7147,7 @@ namespace System.Windows.Forms
 
             internal UnsafeNativeMethods.IPropertyBag GetPropBag()
             {
-                return propBag;
+                return PropertyBagBinary;
             }
 
             internal UnsafeNativeMethods.IStorage GetStorage()
@@ -7304,13 +7304,13 @@ namespace System.Windows.Forms
 
                 si.AddValue("Data", stream.ToArray());
 
-                if (propBag != null)
+                if (PropertyBagBinary != null)
                 {
                     try
                     {
                         stream = new MemoryStream();
-                        propBag.Write(stream);
-                        si.AddValue("PropertyBagBinary", stream.ToArray());
+                        PropertyBagBinary.Write(stream);
+                        si.AddValue(nameof(PropertyBagBinary), stream.ToArray());
                     }
                     catch (Exception e)
                     {

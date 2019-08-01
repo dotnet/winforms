@@ -89,37 +89,21 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CodeDomSerializerException_SerializeWithoutPragma_Deserialize_Success()
+        public void CodeDomSerializerException_Serialize_ThrowsSerializationException()
         {
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-                var exception = new CodeDomSerializerException("message", (CodeLinePragma)null);
-                formatter.Serialize(stream, exception);
-
-                stream.Position = 0;
-                CodeDomSerializerException deserialized = Assert.IsType<CodeDomSerializerException>(formatter.Deserialize(stream));
-                Assert.Equal(exception.Message, deserialized.Message);
-                Assert.Null(deserialized.LinePragma);
-            }
-        }
-
-        [Fact]
-        public void CodeDomSerializerException_SerializeWithPragma_Deserialize_Success()
-        {
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                var exception = new CodeDomSerializerException("message", new CodeLinePragma());
+                var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, exception));
             }
         }
 
         [Fact]
-        public void CodeDomSerializerException_GetObjectData_NullInfo_ThrowsArgumentNullException()
+        public void CodeDomSerializerException_GetObjectData_ThrowsNotSupportedException()
         {
-            var exception = new CodeDomSerializerException("message", new CodeLinePragma());
-            Assert.Throws<ArgumentNullException>("info", () => exception.GetObjectData(null, new StreamingContext()));
+            var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
+            Assert.Throws<NotSupportedException>(() => exception.GetObjectData(null, new StreamingContext()));
         }
     }
 }

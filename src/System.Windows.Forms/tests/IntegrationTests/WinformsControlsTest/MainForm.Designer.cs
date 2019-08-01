@@ -34,7 +34,7 @@ namespace WinformsControlsTest
         {
             this.buttonsButton = new System.Windows.Forms.Button();
             this.calendar = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.treeViewButton = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.multipleControls = new System.Windows.Forms.Button();
             this.dataGridViewButton = new System.Windows.Forms.Button();
@@ -74,15 +74,15 @@ namespace WinformsControlsTest
             this.calendar.UseVisualStyleBackColor = true;
             this.calendar.Click += new System.EventHandler(this.calendar_Click);
             //
-            // button3
+            // treeViewButton
             //
-            this.button3.Location = new System.Drawing.Point(3, 235);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(258, 23);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "TreeView, ImageList";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.treeViewButton.Location = new System.Drawing.Point(3, 235);
+            this.treeViewButton.Name = "treeViewButton";
+            this.treeViewButton.Size = new System.Drawing.Size(258, 23);
+            this.treeViewButton.TabIndex = 8;
+            this.treeViewButton.Text = "TreeView, ImageList";
+            this.treeViewButton.UseVisualStyleBackColor = true;
+            this.treeViewButton.Click += new System.EventHandler(this.treeViewButton_Click);
             //
             // button4
             //
@@ -167,7 +167,6 @@ namespace WinformsControlsTest
             // propertyGrid
             //
             this.propertyGrid.Location = new System.Drawing.Point(267, 147);
-            this.propertyGrid.Margin = new System.Windows.Forms.Padding(2);
             this.propertyGrid.Name = "propertyGrid";
             this.propertyGrid.Size = new System.Drawing.Size(258, 23);
             this.propertyGrid.TabIndex = 15;
@@ -178,7 +177,6 @@ namespace WinformsControlsTest
             // listViewButton
             //
             this.listViewButton.Location = new System.Drawing.Point(267, 174);
-            this.listViewButton.Margin = new System.Windows.Forms.Padding(2);
             this.listViewButton.Name = "listViewButton";
             this.listViewButton.Size = new System.Drawing.Size(258, 23);
             this.listViewButton.TabIndex = 16;
@@ -226,7 +224,7 @@ namespace WinformsControlsTest
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.FolderBrowserDialogButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.ShowExceptionDialogButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.dataGridViewButton);
-            this.flowLayoutPanelUITypeEditors.Controls.Add(this.button3);
+            this.flowLayoutPanelUITypeEditors.Controls.Add(this.treeViewButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.button4);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.menuesButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.panelsButton);
@@ -246,7 +244,6 @@ namespace WinformsControlsTest
             // fontNameEditor
             //
             this.fontNameEditor.Location = new System.Drawing.Point(267, 201);
-            this.fontNameEditor.Margin = new System.Windows.Forms.Padding(2);
             this.fontNameEditor.Name = "fontNameEditor";
             this.fontNameEditor.Size = new System.Drawing.Size(258, 23);
             this.fontNameEditor.TabIndex = 16;
@@ -257,7 +254,6 @@ namespace WinformsControlsTest
             // collectionEditors
             //
             this.collectionEditors.Location = new System.Drawing.Point(267, 228);
-            this.collectionEditors.Margin = new System.Windows.Forms.Padding(2);
             this.collectionEditors.Name = "collectionEditors";
             this.collectionEditors.Size = new System.Drawing.Size(258, 23);
             this.collectionEditors.TabIndex = 16;
@@ -284,7 +280,7 @@ namespace WinformsControlsTest
 
         private System.Windows.Forms.Button buttonsButton;
         private System.Windows.Forms.Button calendar;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button treeViewButton;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button multipleControls;
         private System.Windows.Forms.Button dataGridViewButton;

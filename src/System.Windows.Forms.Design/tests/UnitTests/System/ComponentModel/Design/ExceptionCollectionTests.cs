@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -38,27 +38,22 @@ namespace System.ComponentModel.Design.Tests
             }
         }
 
-        [Theory]
-        [MemberData(nameof(Ctor_ArrayList_TestData))]
-        public void ExceptionCollection_Serialize_Deserialize_Success(ArrayList exceptions)
+        [Fact]
+        public void ExceptionCollection_Serialize_ThrowsSerializationException()
         {
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-                var collection = new ExceptionCollection(exceptions);
-                formatter.Serialize(stream, collection);
-
-                stream.Position = 0;
-                ExceptionCollection deserialized = Assert.IsType<ExceptionCollection>(formatter.Deserialize(stream));
-                Assert.Equal(exceptions, deserialized.Exceptions);
+                var collection = new ExceptionCollection(new ArrayList());
+                Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
             }
         }
 
         [Fact]
-        public void ExceptionCollection_GetObjectData_NullInfo_ThrowsArgumentNullException()
+        public void ExceptionCollection_GetObjectData_ThrowsNotSupportedException()
         {
             var collection = new ExceptionCollection(new ArrayList());
-            Assert.Throws<ArgumentNullException>("info", () => collection.GetObjectData(null, new StreamingContext()));
+            Assert.Throws<NotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
         }
     }
 }

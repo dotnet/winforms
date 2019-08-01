@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Text))]
-    [Serializable]
+    [Serializable] // This type is participating in resx serialization scenarios.
     public class ListViewItem : ICloneable, ISerializable
     {
         private const int MaxSubItems = 4096;
@@ -730,7 +730,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Accessor for our state bit vector.
         /// </summary>
-        private int SubItemCount
+        private int SubItemCount // Do NOT rename (binary serialization).
         {
             get => state[s_subItemCountSection];
             set => state[s_subItemCountSection] = value;
@@ -1133,49 +1133,49 @@ namespace System.Windows.Forms
 
             foreach (SerializationEntry entry in info)
             {
-                if (entry.Name == "Text")
+                if (entry.Name == nameof(Text))
                 {
-                    Text = info.GetString(entry.Name);
+                    Text = info.GetString(nameof(Text));
                 }
                 else if (entry.Name == nameof(ImageIndex))
                 {
-                    imageIndex = info.GetInt32(entry.Name);
+                    imageIndex = info.GetInt32(nameof(ImageIndex));
                 }
-                else if (entry.Name == "ImageKey")
+                else if (entry.Name == nameof(ImageKey))
                 {
-                    imageKey = info.GetString(entry.Name);
+                    imageKey = info.GetString(nameof(ImageKey));
                 }
-                else if (entry.Name == "SubItemCount")
+                else if (entry.Name == nameof(SubItemCount))
                 {
-                    SubItemCount = info.GetInt32(entry.Name);
+                    SubItemCount = info.GetInt32(nameof(SubItemCount));
                     if (SubItemCount > 0)
                     {
                         foundSubItems = true;
                     }
                 }
-                else if (entry.Name == "BackColor")
+                else if (entry.Name == nameof(BackColor))
                 {
-                    BackColor = (Color)info.GetValue(entry.Name, typeof(Color));
+                    BackColor = (Color)info.GetValue(nameof(BackColor), typeof(Color));
                 }
-                else if (entry.Name == "Checked")
+                else if (entry.Name == nameof(Checked))
                 {
-                    Checked = info.GetBoolean(entry.Name);
+                    Checked = info.GetBoolean(nameof(Checked));
                 }
-                else if (entry.Name == "Font")
+                else if (entry.Name == nameof(Font))
                 {
-                    Font = (Font)info.GetValue(entry.Name, typeof(Font));
+                    Font = (Font)info.GetValue(nameof(Font), typeof(Font));
                 }
-                else if (entry.Name == "ForeColor")
+                else if (entry.Name == nameof(ForeColor))
                 {
-                    ForeColor = (Color)info.GetValue(entry.Name, typeof(Color));
+                    ForeColor = (Color)info.GetValue(nameof(ForeColor), typeof(Color));
                 }
-                else if (entry.Name == "UseItemStyleForSubItems")
+                else if (entry.Name == nameof(UseItemStyleForSubItems))
                 {
-                    UseItemStyleForSubItems = info.GetBoolean(entry.Name);
+                    UseItemStyleForSubItems = info.GetBoolean(nameof(UseItemStyleForSubItems));
                 }
-                else if (entry.Name == "Group")
+                else if (entry.Name == nameof(Group))
                 {
-                    ListViewGroup group = (ListViewGroup)info.GetValue(entry.Name, typeof(ListViewGroup));
+                    ListViewGroup group = (ListViewGroup)info.GetValue(nameof(Group), typeof(ListViewGroup));
                     groupName = group.Name;
                 }
             }
@@ -1209,28 +1209,28 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void Serialize(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Text", Text);
+            info.AddValue(nameof(Text), Text);
             info.AddValue(nameof(ImageIndex), ImageIndexer.Index);
             if (!string.IsNullOrEmpty(ImageIndexer.Key))
             {
-                info.AddValue("ImageKey", ImageIndexer.Key);
+                info.AddValue(nameof(ImageKey), ImageIndexer.Key);
             }
             if (SubItemCount > 1)
             {
-                info.AddValue("SubItemCount", SubItemCount);
+                info.AddValue(nameof(SubItemCount), SubItemCount);
                 for (int i = 1; i < SubItemCount; i++)
                 {
                     info.AddValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), subItems[i], typeof(ListViewSubItem));
                 }
             }
-            info.AddValue("BackColor", BackColor);
-            info.AddValue("Checked", Checked);
-            info.AddValue("Font", Font);
-            info.AddValue("ForeColor", ForeColor);
-            info.AddValue("UseItemStyleForSubItems", UseItemStyleForSubItems);
+            info.AddValue(nameof(BackColor), BackColor);
+            info.AddValue(nameof(Checked), Checked);
+            info.AddValue(nameof(Font), Font);
+            info.AddValue(nameof(ForeColor), ForeColor);
+            info.AddValue(nameof(UseItemStyleForSubItems), UseItemStyleForSubItems);
             if (Group != null)
             {
-                info.AddValue("Group", Group);
+                info.AddValue(nameof(Group), Group);
             }
         }
 
@@ -1295,21 +1295,22 @@ namespace System.Windows.Forms
         [ToolboxItem(false)]
         [DesignTimeVisible(false)]
         [DefaultProperty(nameof(Text))]
-        [Serializable]
+        [Serializable] // This type is participating in resx serialization scenarios.
         public class ListViewSubItem
         {
             [NonSerialized]
             internal ListViewItem owner;
-
-            private string text;
-
-            [OptionalField(VersionAdded = 2)]
-            private string name = null;
-
-            private SubItemStyle style;
+#pragma warning disable IDE1006
+            private string text;  // Do NOT rename (binary serialization).
 
             [OptionalField(VersionAdded = 2)]
-            private object userData;
+            private string name = null;  // Do NOT rename (binary serialization).
+
+            private SubItemStyle style;  // Do NOT rename (binary serialization).
+
+            [OptionalField(VersionAdded = 2)]
+            private object userData;  // Do NOT rename (binary serialization).
+#pragma warning restore IDE1006
 
             public ListViewSubItem()
             {
@@ -1538,12 +1539,14 @@ namespace System.Windows.Forms
 
             public override string ToString() => "ListViewSubItem: {" + Text + "}";
 
-            [Serializable]
+            [Serializable] // This type is participating in resx serialization scenarios.
             private class SubItemStyle
             {
-                public Color backColor = Color.Empty;
-                public Color foreColor = Color.Empty;
-                public Font font = null;
+#pragma warning disable IDE1006
+                public Color backColor = Color.Empty; // Do NOT rename (binary serialization).
+                public Color foreColor = Color.Empty; // Do NOT rename (binary serialization).
+                public Font font = null; // Do NOT rename (binary serialization).
+#pragma warning restore IDE1006
             }
         }
 

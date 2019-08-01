@@ -9,14 +9,14 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     [TypeConverter(typeof(PaddingConverter))]
-    [Serializable]
+    [Serializable] // This type is participating in resx serialization scenarios.
     public struct Padding
     {
-        private bool _all;
-        private int _top;
-        private int _left;
-        private int _right;
-        private int _bottom;
+        private bool _all; // Do NOT rename (binary serialization).
+        private int _top; // Do NOT rename (binary serialization).
+        private int _left; // Do NOT rename (binary serialization).
+        private int _right; // Do NOT rename (binary serialization).
+        private int _bottom; // Do NOT rename (binary serialization).
 
         public static readonly Padding Empty = new Padding(0);
 

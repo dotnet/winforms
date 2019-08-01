@@ -13,10 +13,8 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>this is a wrapper class to expose interesting properties of TableLayout</summary>
-    [
-     TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
-     Serializable
-    ]
+    [TypeConverter(typeof(TableLayoutSettingsTypeConverter))]
+    [Serializable]  // This class participates in resx serialization.
     public sealed class TableLayoutSettings : LayoutSettings, ISerializable
     {
         private static readonly int[] borderStyleToOffset = {
