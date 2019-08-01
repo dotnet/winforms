@@ -295,6 +295,13 @@ namespace System.Windows.Forms
                 return HorizontalAlignment.Left;
             }
         }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            dataGridView.SetAccessibleObjectParent(this.AccessibilityObject);
+        }
     }
 
     /// <summary>
