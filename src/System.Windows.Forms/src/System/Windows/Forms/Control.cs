@@ -11748,18 +11748,15 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Updates the child control's position in the control array to correctly
-        ///  reflect it's index.
+        ///  reflect its index.
         /// </summary>
         private void UpdateChildControlIndex(Control ctl)
         {
             // Don't reorder the child control array for tab controls. Implemented as a special case
             // in order to keep the method private.
-            if (!LocalAppContextSwitches.AllowUpdateChildControlIndexForTabControls)
+            if (GetType().IsAssignableFrom(typeof(TabControl)))
             {
-                if (GetType().IsAssignableFrom(typeof(TabControl)))
-                {
-                    return;
-                }
+                return;
             }
 
             int newIndex = 0;

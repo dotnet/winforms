@@ -9,10 +9,8 @@ namespace System.Windows.Forms
     internal static class LocalAppContextSwitches
     {
         internal const string DontSupportReentrantFilterMessageSwitchName = @"Switch.System.Windows.Forms.DontSupportReentrantFilterMessage";
-        internal const string AllowUpdateChildControlIndexForTabControlsSwitchName = @"Switch.System.Windows.Forms.AllowUpdateChildControlIndexForTabControls";
         internal const string EnableVisualStyleValidationSwitchName = @"Switch.System.Windows.Forms.EnableVisualStyleValidation";
         private static int _dontSupportReentrantFilterMessage;
-        private static int _allowUpdateChildControlIndexForTabControls;
         private static int _enableVisualStyleValidation;
 
         public static bool DontSupportReentrantFilterMessage
@@ -21,15 +19,6 @@ namespace System.Windows.Forms
             get
             {
                 return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.DontSupportReentrantFilterMessageSwitchName, ref _dontSupportReentrantFilterMessage);
-            }
-        }
-
-        public static bool AllowUpdateChildControlIndexForTabControls
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.AllowUpdateChildControlIndexForTabControlsSwitchName, ref _allowUpdateChildControlIndexForTabControls);
             }
         }
 
