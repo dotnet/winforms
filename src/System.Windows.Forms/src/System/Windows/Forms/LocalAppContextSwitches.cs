@@ -8,19 +8,8 @@ namespace System.Windows.Forms
 
     internal static class LocalAppContextSwitches
     {
-        internal const string DontSupportReentrantFilterMessageSwitchName = @"Switch.System.Windows.Forms.DontSupportReentrantFilterMessage";
         internal const string EnableVisualStyleValidationSwitchName = @"Switch.System.Windows.Forms.EnableVisualStyleValidation";
-        private static int _dontSupportReentrantFilterMessage;
         private static int _enableVisualStyleValidation;
-
-        public static bool DontSupportReentrantFilterMessage
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return LocalAppContext.GetCachedSwitchValue(LocalAppContextSwitches.DontSupportReentrantFilterMessageSwitchName, ref _dontSupportReentrantFilterMessage);
-            }
-        }
 
         public static bool EnableVisualStyleValidation
         {
