@@ -30,8 +30,6 @@ namespace System.Windows.Forms.Tests.Serialization
                     { typeof(Padding).FullName},
                     { typeof(TreeNode).FullName},
                     { typeof(TableLayoutSettings).FullName},
-                    // This class is defined by CoreFx, we own only a partial implementation of it.
-                    { "System.LocalAppContext+<>c"}
                 });
         }
     }
