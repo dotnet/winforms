@@ -976,7 +976,7 @@ namespace System.Drawing.Design
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotSupportedException();
+            throw new PlatformNotSupportedException();
         }
 
         private class LockableDictionary : Hashtable

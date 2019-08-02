@@ -100,10 +100,10 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CodeDomSerializerException_GetObjectData_ThrowsNotSupportedException()
+        public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException()
         {
             var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
-            Assert.Throws<NotSupportedException>(() => exception.GetObjectData(null, new StreamingContext()));
+            Assert.Throws<PlatformNotSupportedException>(() => exception.GetObjectData(null, new StreamingContext()));
         }
     }
 }

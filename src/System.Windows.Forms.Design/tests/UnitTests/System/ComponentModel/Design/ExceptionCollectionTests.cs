@@ -50,10 +50,10 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void ExceptionCollection_GetObjectData_ThrowsNotSupportedException()
+        public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
         {
             var collection = new ExceptionCollection(new ArrayList());
-            Assert.Throws<NotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
+            Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
         }
     }
 }

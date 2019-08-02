@@ -476,7 +476,7 @@ namespace System.Windows.Forms
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
-            throw new NotSupportedException();
+            throw new PlatformNotSupportedException();
         }
 
         /// <summary>

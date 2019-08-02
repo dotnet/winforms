@@ -50,7 +50,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override SerializationStore LoadStore(Stream stream)
         {
-                throw new NotSupportedException();
+            throw new PlatformNotSupportedException();
         }
 
         /// <summary>
@@ -574,7 +574,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override void Save(Stream stream)
             {
-                throw new NotSupportedException();
+                throw new PlatformNotSupportedException();
             }
 
             [Conditional("DEBUG")]

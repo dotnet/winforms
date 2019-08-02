@@ -45,7 +45,7 @@ namespace System.ComponentModel.Design.Serialization
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotSupportedException();
+            throw new PlatformNotSupportedException();
         }
     }
 }

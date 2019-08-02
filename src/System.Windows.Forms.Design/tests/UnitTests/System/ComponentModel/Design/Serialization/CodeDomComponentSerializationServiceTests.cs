@@ -809,10 +809,10 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Fact]
-        public void LoadStore_NullStream_ThrowsNotSupportedException()
+        public void LoadStore_NullStream_ThrowsPlatformNotSupportedException()
         {
             var service = new CodeDomComponentSerializationService();
-            Assert.Throws<NotSupportedException>(() => service.LoadStore(null));
+            Assert.Throws<PlatformNotSupportedException>(() => service.LoadStore(null));
         }
 
         [Fact]
