@@ -6,146 +6,174 @@ parameters:
   runAsPublic: true                      
   repoName: dotnet/winforms              
 
-jobs:
-- template: /eng/common/templates/jobs/jobs.yml
-  parameters:
-    runAsPublic: ${{ parameters.runAsPublic }}
-    enableMicrobuild: true
-    enablePublishBuildArtifacts: true
-    enablePublishTestResults: true
-    enablePublishBuildAssets: true
-    enablePublishUsingPipelines: $(_PublishUsingPipelines)
-    enableTelemetry: true
-    helixRepo: ${{ parameters.repoName }}
+stages:
+- stage: build
+  displayName: Build
+  jobs:
+  - template: /eng/common/templates/jobs/jobs.yml
+    parameters:
+      runAsPublic: ${{ parameters.runAsPublic }}
+      enableMicrobuild: true
+      enablePublishBuildArtifacts: true
+      enablePublishTestResults: true
+      enablePublishBuildAssets: true
+      enablePublishUsingPipelines: $(_PublishUsingPipelines)
+      enableTelemetry: true
+      helixRepo: ${{ parameters.repoName }}
 
-    jobs:
-    - job: Windows_NT
-      pool: 
-        name: ${{ parameters.agentPoolName }}
-        queue: ${{ parameters.agentPool }}
+      jobs:
+      - job: Windows
+        pool: 
+          name: ${{ parameters.agentPoolName }}
+          queue: ${{ parameters.agentPool }}
 
-      variables:
+        variables:
 
-        # needed for signing
-        - name: _TeamName
-          value: DotNetCore
-        - name: _SignType
-          value: test
-        - name: _SignArgs
-          value: ''
-        - name: _Sign
-          value: true
-
-        # needed for darc (dependency flow) publishing
-        - name: _PublishType
-          value: none
-        - name: _DotNetPublishToBlobFeed
-          value: false
-        - name: _PublishArgs
-          value: ''
-        - name: _OfficialBuildIdArgs
-          value: ''
-
-        # Override some values if we're building internally (not public)
-        - ${{ if eq(parameters.runAsPublic, 'false') }}:
-
-          # note: You have to use list syntax here (-name: value) or 
-          # you will get errors about declaring the same variable multiple times
-          - name: _PublishType
-            value: blob
+          # needed for signing
+          - name: _TeamName
+            value: DotNetCore
           - name: _SignType
-            value: real
-          - name: _DotNetPublishToBlobFeed
-            value: true
-          - group: DotNet-Blob-Feed
-          - group: DotNet-Symbol-Server-Pats
-          - name: _PublishBlobFeedUrl
-            value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
-
-          # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
-          # are not resolved until the agent is running on the machine. They can be overridden any 
-          # time before they are resolved, like in the job matrix below (see Build_Debug)
+            value: test
           - name: _SignArgs
-            value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
+            value: ''
+          - name: _Sign
+            value: true
+
+          # needed for darc (dependency flow) publishing
+          - name: _PublishType
+            value: none
+          - name: _DotNetPublishToBlobFeed
+            value: false
           - name: _PublishArgs
-            value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
-              /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
-              /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
-              /p:DotNetPublishUsingPipelines=$(_PublishUsingPipelines)
-              /p:DotNetArtifactsCategory=$(_DotNetArtifactsCategory)
-              /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
-              /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
+            value: ''
           - name: _OfficialBuildIdArgs
-            value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+            value: ''
 
-      strategy:
-        matrix:
-          Build_Debug:
-            _BuildConfig: Debug
-            # override some variables for debug
-            _PublishType: none
-            _SignType: test
-            _DotNetPublishToBlobFeed : false
-            _Coverage: true
-          Build_Release:
-            _BuildConfig: Release
-            _Coverage: false
+          # Override some values if we're building internally (not public)
+          - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
-      steps:
-      - checkout: self
-        clean: true
+            # note: You have to use list syntax here (-name: value) or 
+            # you will get errors about declaring the same variable multiple times
+            - name: _PublishType
+              value: blob
+            - name: _SignType
+              value: real
+            - name: _DotNetPublishToBlobFeed
+              value: true
+            - group: DotNet-Blob-Feed
+            - group: DotNet-Symbol-Server-Pats
+            - name: _PublishBlobFeedUrl
+              value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
-      # Build and rename binlog
-      # The /p:Coverage argument is passed here since some build properties change to accommodate running with
-      # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
-      # https://github.com/tonerdo/coverlet/issues/363.
-      - script: eng\cibuild.cmd
-          -restore
-          -build
-          -configuration $(_BuildConfig)
-          $(_OfficialBuildIdArgs)
-          /p:Coverage=$(_Coverage)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog          
-        displayName: Build
+            # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
+            # are not resolved until the agent is running on the machine. They can be overridden any 
+            # time before they are resolved, like in the job matrix below (see Build_Debug)
+            - name: _SignArgs
+              value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
+            - name: _PublishArgs
+              value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
+                /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
+                /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
+                /p:DotNetPublishUsingPipelines=$(_PublishUsingPipelines)
+                /p:DotNetArtifactsCategory=$(_DotNetArtifactsCategory)
+                /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
+                /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
+            - name: _OfficialBuildIdArgs
+              value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
-      # Run Unit Tests
-      # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
-      - script: eng\cibuild.cmd
-          -test
-          -configuration $(_BuildConfig)
-          $(_OfficialBuildIdArgs)
-          /p:Coverage=$(_Coverage)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
-          /m:1
-        displayName: Run Unit Tests
+        strategy:
+          matrix:
+            Debug:
+              _BuildConfig: Debug
+              # override some variables for debug
+              _PublishType: none
+              _SignType: test
+              _DotNetPublishToBlobFeed : false
+              _Coverage: true
+            Release:
+              _BuildConfig: Release
+              _Coverage: false
 
-      # Run Integration Tests
-      # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
-      # UI race conditions
-      - script: eng\cibuild.cmd
-          -integrationTest
-          -configuration $(_BuildConfig)
-          $(_OfficialBuildIdArgs)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
-          /m:1
-        displayName: Run Integration Tests
+        steps:
+        - checkout: self
+          clean: true
 
-      # Create Nuget package, sign, and publish
-      - script: eng\cibuild.cmd
-          -restore
-          -pack
-          -sign $(_SignArgs)
-          -publish $(_PublishArgs)
-          -configuration $(_BuildConfig)
-          $(_OfficialBuildIdArgs)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
-        displayName: Pack, Sign, and Publish
+        # Build and rename binlog
+        # The /p:Coverage argument is passed here since some build properties change to accommodate running with
+        # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
+        # https://github.com/tonerdo/coverlet/issues/363.
+        - script: eng\cibuild.cmd
+            -restore
+            -build
+            -configuration $(_BuildConfig)
+            $(_OfficialBuildIdArgs)
+            /p:Coverage=$(_Coverage)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog          
+          displayName: Build
 
-      # Upload code coverage data
-      - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild
-          eng/CodeCoverage.proj
-          /p:Configuration=$(_BuildConfig)
-          /p:CodeCovToken=$(CODECOV_TOKEN)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
-        displayName: Upload coverage to codecov.io (Debug)
-        condition: and(succeeded(), eq(variables._Coverage, 'true'))
+        # Run Unit Tests
+        # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
+        - script: eng\cibuild.cmd
+            -test
+            -configuration $(_BuildConfig)
+            $(_OfficialBuildIdArgs)
+            /p:Coverage=$(_Coverage)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+            /m:1
+          displayName: Run Unit Tests
+
+        # Run Integration Tests
+        # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
+        # UI race conditions
+        - script: eng\cibuild.cmd
+            -integrationTest
+            -configuration $(_BuildConfig)
+            $(_OfficialBuildIdArgs)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
+            /m:1
+          displayName: Run Integration Tests
+
+        # Create Nuget package, sign, and publish
+        - script: eng\cibuild.cmd
+            -restore
+            -pack
+            -sign $(_SignArgs)
+            -publish $(_PublishArgs)
+            -configuration $(_BuildConfig)
+            $(_OfficialBuildIdArgs)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
+          displayName: Pack, Sign, and Publish
+
+        # Upload code coverage data
+        - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild
+            eng/CodeCoverage.proj
+            /p:Configuration=$(_BuildConfig)
+            /p:CodeCovToken=$(CODECOV_TOKEN)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
+          displayName: Upload coverage to codecov.io (Debug)
+          condition: and(succeeded(), eq(variables._Coverage, 'true'))
+
+  # Copied from the arcade repo and modified for winforms
+  - ${{ if eq(parameters.runAsPublic, 'false') }}:
+    - template: eng\common\templates\post-build\post-build.yml
+      parameters:
+        # Symbol validation isn't being very reliable lately. This should be enabled back
+        # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
+        enableSymbolValidation: false
+        # Sourcelink validation isn't passing for Arcade due to some regressions. This should be
+        # enabled back once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
+        enableSourceLinkValidation: true
+        # This is to enable SDL runs part of Post-Build Validation Stage
+        # Disabled for now until winforms onboards to TSA
+        SDLValidationParameters:
+          enable: true
+          params: ' -SourceToolsList @("policheck","credscan")
+          -TsaInstanceURL "https://devdiv.visualstudio.com/"
+          -TsaProjectName "DEVDIV"
+          -TsaNotificationEmail "wffteam@microsoft.com"
+          -TsaCodebaseAdmin "REDMOND\\advolker"
+          -TsaBugAreaPath "DevDiv\\NET\\NET Core\\Winforms"
+          -TsaIterationPath "DevDiv"
+          -TsaRepositoryName "Winforms"
+          -TsaCodebaseName "Winforms"
+          -TsaPublish $True'
