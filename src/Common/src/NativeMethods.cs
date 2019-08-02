@@ -4397,6 +4397,7 @@ namespace System.Windows.Forms
             public IntPtr pItem = IntPtr.Zero;    // HDITEM*
         }
 
+        [StructLayout(LayoutKind.Sequential)]
         public class MOUSEHOOKSTRUCT
         {
             // pt was a by-value POINT structure
