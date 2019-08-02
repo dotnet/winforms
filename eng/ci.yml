@@ -166,14 +166,14 @@ stages:
         # This is to enable SDL runs part of Post-Build Validation Stage
         # Disabled for now until winforms onboards to TSA
         SDLValidationParameters:
-          enable: false
+          enable: true
           params: ' -SourceToolsList @("policheck","credscan")
           -TsaInstanceURL "https://devdiv.visualstudio.com/"
           -TsaProjectName "DEVDIV"
-          -TsaNotificationEmail "subal@microsoft.com"
+          -TsaNotificationEmail "wffteam@microsoft.com"
           -TsaCodebaseAdmin "REDMOND\\subal"
-          -TsaBugAreaPath "DevDiv\\NET\\NET Core "
+          -TsaBugAreaPath "DevDiv\\NET\\NET Core\\Winforms"
           -TsaIterationPath "DevDiv"
-          -TsaRepositoryName "Arcade"
-          -TsaCodebaseName "Arcade"
+          -TsaRepositoryName "Winforms"
+          -TsaCodebaseName "Winforms"
           -TsaPublish $True'
