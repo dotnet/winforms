@@ -1316,8 +1316,13 @@ namespace System.Windows.Forms
                 }
             }
 
+            if (systemIAccessible == null || systemIAccessible.accChildCount == 0)
+            {
+                return null;
+            }
+
             // Otherwise, return the default system child for this control (if any)
-            return systemIAccessible?.get_accChild(childID);
+            return systemIAccessible.get_accChild(childID);
         }
 
         /// <summary>
@@ -1691,7 +1696,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            return systemIAccessible?.get_accRole(childID);
+            if (systemIAccessible == null || systemIAccessible.accChildCount == 0)
+            {
+                return null;
+            }
+
+            return systemIAccessible.get_accRole(childID);
         }
 
         /// <summary>
