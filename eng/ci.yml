@@ -153,27 +153,27 @@ stages:
           displayName: Upload coverage to codecov.io (Debug)
           condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
-  # Copied from the arcade repo and modified for winforms
-  - ${{ if eq(parameters.runAsPublic, 'false') }}:
-    - template: /eng/common/templates/post-build/post-build.yml
-      parameters:
-        # Symbol validation isn't being very reliable lately. This should be enabled back
-        # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
-        enableSymbolValidation: false
-        # Sourcelink validation isn't passing for Arcade due to some regressions. This should be
-        # enabled back once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
-        enableSourceLinkValidation: true
-        # This is to enable SDL runs part of Post-Build Validation Stage
-        # Disabled for now until winforms onboards to TSA
-        SDLValidationParameters:
-          enable: true
-          params: ' -SourceToolsList @("policheck","credscan")
-          -TsaInstanceURL "https://devdiv.visualstudio.com/"
-          -TsaProjectName "DEVDIV"
-          -TsaNotificationEmail "wffteam@microsoft.com"
-          -TsaCodebaseAdmin "REDMOND\\advolker"
-          -TsaBugAreaPath "DevDiv\\NET\\NET Core\\Winforms"
-          -TsaIterationPath "DevDiv"
-          -TsaRepositoryName "Winforms"
-          -TsaCodebaseName "Winforms"
-          -TsaPublish $True'
+# Copied from the arcade repo and modified for winforms
+- ${{ if eq(parameters.runAsPublic, 'false') }}:
+  - template: /eng/common/templates/post-build/post-build.yml
+    parameters:
+      # Symbol validation isn't being very reliable lately. This should be enabled back
+      # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
+      enableSymbolValidation: false
+      # Sourcelink validation isn't passing for Arcade due to some regressions. This should be
+      # enabled back once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
+      enableSourceLinkValidation: true
+      # This is to enable SDL runs part of Post-Build Validation Stage
+      # Disabled for now until winforms onboards to TSA
+      SDLValidationParameters:
+        enable: true
+        params: ' -SourceToolsList @("policheck","credscan")
+        -TsaInstanceURL "https://devdiv.visualstudio.com/"
+        -TsaProjectName "DEVDIV"
+        -TsaNotificationEmail "wffteam@microsoft.com"
+        -TsaCodebaseAdmin "REDMOND\\advolker"
+        -TsaBugAreaPath "DevDiv\\NET\\NET Core\\Winforms"
+        -TsaIterationPath "DevDiv"
+        -TsaRepositoryName "Winforms"
+        -TsaCodebaseName "Winforms"
+        -TsaPublish $True'
