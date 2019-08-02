@@ -156,6 +156,13 @@ namespace System.Windows.Forms
                 NotifyDataGridViewOfValueChange();
             }
         }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            dataGridView.SetAccessibleObjectParent(this.AccessibilityObject);
+        }
     }
 
     /// <summary>

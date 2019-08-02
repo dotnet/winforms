@@ -2030,7 +2030,7 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_SETCURSOR:
                     if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && NativeMethods.Util.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
                     {
-                        Cursor.CurrentInternal = Cursor;
+                        Cursor.Current = Cursor;
                     }
                     else
                     {

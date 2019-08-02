@@ -1121,6 +1121,8 @@ namespace System.Windows.Forms.Tests
                 new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True },
                 "DataGridViewCellStyle { WrapMode=True }"
             };
+
+            Font font = SystemFonts.DefaultFont;
             yield return new object[]
             {
                 new DataGridViewCellStyle
@@ -1128,7 +1130,7 @@ namespace System.Windows.Forms.Tests
                     Alignment = DataGridViewContentAlignment.BottomCenter,
                     BackColor = Color.Red,
                     DataSourceNullValue = "dbNull",
-                    Font = SystemFonts.DefaultFont,
+                    Font = font,
                     ForeColor = Color.Blue,
                     Format = "format",
                     FormatProvider = new NumberFormatInfo(),
@@ -1139,7 +1141,7 @@ namespace System.Windows.Forms.Tests
                     Tag = "tag",
                     WrapMode = DataGridViewTriState.True
                 },
-                "DataGridViewCellStyle { BackColor=Color [Red], ForeColor=Color [Blue], SelectionBackColor=Color [Green], SelectionForeColor=Color [Yellow], Font=[Font: Name=Microsoft Sans Serif, Size=8.25, Units=3, GdiCharSet=1, GdiVerticalFont=False], NullValue=null, DataSourceNullValue=dbNull, Format=format, WrapMode=True, Alignment=BottomCenter, Padding={Left=1,Top=2,Right=3,Bottom=4}, Tag=tag }"
+                $"DataGridViewCellStyle {{ BackColor=Color [Red], ForeColor=Color [Blue], SelectionBackColor=Color [Green], SelectionForeColor=Color [Yellow], Font={font}, NullValue=null, DataSourceNullValue=dbNull, Format=format, WrapMode=True, Alignment=BottomCenter, Padding={{Left=1,Top=2,Right=3,Bottom=4}}, Tag=tag }}"
             };
         }
 
@@ -1147,10 +1149,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ToString_TestData))]
         public void DataGridViewCellStyle_ToString_Invoke_ReturnsExpected(DataGridViewCellStyle style, string expected)
         {
-            if (expected != style.ToString())
-            {
-                Console.WriteLine("\"" + style.ToString() + "\"");
-            }
+            Assert.Equal(expected, style.ToString());
         }
 
         private class AlwaysEqual

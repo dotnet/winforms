@@ -2580,10 +2580,6 @@ namespace System.Windows.Forms
                 dgv.ComboBoxControlWasDetached = false;
                 dgv.TextBoxControlWasDetached = false;
             }
-
-            dgv.EditingControlAccessibleObject.SetParent(AccessibilityObject);
-            AccessibilityObject.SetDetachableChild(dgv.EditingControl.AccessibilityObject);
-            AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, dgv.EditingControlAccessibleObject.RuntimeId);
         }
 
         protected virtual bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)

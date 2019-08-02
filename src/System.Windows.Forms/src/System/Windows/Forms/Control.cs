@@ -13064,7 +13064,7 @@ namespace System.Windows.Forms
             //
             if (m.WParam == InternalHandle && NativeMethods.Util.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
             {
-                Cursor.CurrentInternal = Cursor;
+                Cursor.Current = Cursor;
             }
             else
             {

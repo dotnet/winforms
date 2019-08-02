@@ -1384,7 +1384,7 @@ namespace System.Windows.Forms
                 var r = new Interop.RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
 
-                Cursor currentCursor = Cursor.CurrentInternal;
+                Cursor currentCursor = Cursor.Current;
                 Point cursorLocation = Cursor.Position;
                 Point p = cursorLocation;
 
@@ -2263,7 +2263,7 @@ namespace System.Windows.Forms
 
             NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
 
-            Cursor currentCursor = Cursor.CurrentInternal;
+            Cursor currentCursor = Cursor.Current;
             Point cursorPos = Cursor.Position;
 
             var ti = new NativeMethods.TOOLINFO_TOOLTIP
