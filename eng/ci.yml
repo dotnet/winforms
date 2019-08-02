@@ -155,7 +155,7 @@ stages:
 
   # Copied from the arcade repo and modified for winforms
   - ${{ if eq(parameters.runAsPublic, 'false') }}:
-    - template: /common/templates/post-build/post-build.yml
+    - template: /eng/common/templates/post-build/post-build.yml
       parameters:
         # Symbol validation isn't being very reliable lately. This should be enabled back
         # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
