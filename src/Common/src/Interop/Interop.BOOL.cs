@@ -26,4 +26,5 @@ internal static class BoolExtensions
 {
     public static bool IsTrue(this BOOL b) => b != BOOL.FALSE;
     public static bool IsFalse(this BOOL b) => b == BOOL.FALSE;
+    public static BOOL ToBOOL(this bool b) => b ? BOOL.TRUE : BOOL.FALSE;
 }

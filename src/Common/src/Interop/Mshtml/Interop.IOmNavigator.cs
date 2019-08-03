@@ -32,5 +32,6 @@ internal partial class Interop
             int GetConnectionSpeed();
             bool GetOnLine();
             object GetUserProfile();
-        }    }
+        }
+    }
 }

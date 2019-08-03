@@ -5,7 +5,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Globalization;
+using static Interop;
+using static Interop.Mso;
 
 namespace System.Windows.Forms
 {
@@ -71,10 +72,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal sealed class ComponentManagerBroker : MarshalByRefObject
     {
-        // These are constants per process and are initialized in
-        // a class cctor below.
-        private static readonly object _syncObject;
-        private static readonly string _remoteObjectName;
+        private static readonly object s_syncObject = new object();
 
         // We keep a static instance of ourself.  It will really be
         // per-domain, but we only have one domain.  The purpose
@@ -83,21 +81,11 @@ namespace System.Windows.Forms
         // domain, it keeps us alive.  In other domains it acts as
         // cache.
 
-        private static ComponentManagerBroker _broker;
+        private static ComponentManagerBroker s_broker;
 
         // Per-instance state
         [ThreadStatic]
-        private ComponentManagerProxy _proxy;
-
-        /// <summary>
-        ///  Static ctor.  We just set up a few per-process globals here
-        /// </summary>
-        static ComponentManagerBroker()
-        {
-            int pid = SafeNativeMethods.GetCurrentProcessId();
-            _syncObject = new object();
-            _remoteObjectName = string.Format(CultureInfo.CurrentCulture, "ComponentManagerBroker.{0}.{1:X}", Application.WindowsFormsVersion, pid);
-        }
+        private ComponentManagerProxy t_proxy;
 
         /// <summary>
         ///  Ctor.  Quite a bit happens here. Here, we register a channel so
@@ -117,9 +105,9 @@ namespace System.Windows.Forms
         {
             // Note that we only ever configure a single broker object.
             // We could be extremely transient here.
-            if (_broker == null)
+            if (s_broker == null)
             {
-                _broker = this;
+                s_broker = this;
             }
         }
 
@@ -128,35 +116,24 @@ namespace System.Windows.Forms
         ///  broker that was never remoted.  We try not to remote the broker
         ///  until we need to because it is very expensive.
         /// </summary>
-        internal ComponentManagerBroker Singleton
-        {
-            get
-            {
-                return _broker;
-            }
-        }
+        internal ComponentManagerBroker Singleton => s_broker;
 
-        internal void ClearComponentManager()
-        {
-            _proxy = null;
-        }
+        internal void ClearComponentManager() => t_proxy = null;
 
         #region Instance API only callable from a proxied object
 
-        public UnsafeNativeMethods.IMsoComponentManager GetProxy(long pCM)
+        public IMsoComponentManager GetProxy(long pCM)
         {
-            if (_proxy == null)
+            if (t_proxy == null)
             {
-                UnsafeNativeMethods.IMsoComponentManager original = (UnsafeNativeMethods.IMsoComponentManager)Marshal.GetObjectForIUnknown((IntPtr)pCM);
-                _proxy = new ComponentManagerProxy(this, original);
+                IMsoComponentManager original = (IMsoComponentManager)Marshal.GetObjectForIUnknown((IntPtr)pCM);
+                t_proxy = new ComponentManagerProxy(this, original);
             }
 
-            return _proxy;
+            return t_proxy;
         }
 
         #endregion
-
-        #region Static API callable from any domain
 
         /// <summary>
         ///  This method locates our per-process app domain and connects to a running
@@ -164,72 +141,42 @@ namespace System.Windows.Forms
         ///  creates an instance of ComponentManagerProxy for the calling thread
         ///  and returns it.
         /// </summary>
-        internal static UnsafeNativeMethods.IMsoComponentManager GetComponentManager(IntPtr pOriginal)
+        internal static IMsoComponentManager GetComponentManager(IntPtr pOriginal)
         {
-            lock (_syncObject)
+            lock (s_syncObject)
             {
-
-                if (_broker == null)
+                if (s_broker == null)
                 {
-
-                    // We need the default domain for the process. That's the domain we will use
-                    // for all component managers.  There is no managed way to get this domain, however,
-                    // so we use ICorRuntimeHost.
-                    UnsafeNativeMethods.ICorRuntimeHost host = (UnsafeNativeMethods.ICorRuntimeHost)RuntimeEnvironment.GetRuntimeInterfaceAsObject(typeof(UnsafeNativeMethods.CorRuntimeHost).GUID, typeof(UnsafeNativeMethods.ICorRuntimeHost).GUID);
-                    int hr = host.GetDefaultDomain(out object domainObj);
-                    Debug.Assert(NativeMethods.Succeeded(hr), "ICorRuntimeHost failed to return the default domain.  The only way that should happen is if it hasn't been started yet, but if it hasn't been started how are we running managed code?");
-                    AppDomain domain = domainObj as AppDomain;
-
-                    if (domain == null)
-                    {
-                        Debug.Assert(NativeMethods.Failed(hr) || domain != null, "ICorRuntimeHost::GetDefaultDomain succeeded but didn't retrn us an app domain.");
-                        domain = AppDomain.CurrentDomain;
-                    }
-
-                    // Ok, we have a domain.  Next, check to see if it is our current domain.
-                    // If it is, we bypass the CreateInstanceAndUnwrap logic because we
-                    // can directly go with the broker.  In this case we will create a broker
-                    // and  NOT remote it.  We will defer the remoting until we have a different
-                    // domain.  To detect this, the _broker static variable will be assigned
-                    // a broker in the primary app domain.  The CreateInstance code looks at this
-                    // and if it is aready set, simply remotes that broker.  That is why there
-                    // is a "Singleton" property on the broker -- just in case we had to create
-                    // a temporary broker during CreateInstanceAndUnwrap.
-
-                    if (domain == AppDomain.CurrentDomain)
-                    {
-                        _broker = new ComponentManagerBroker();
-                    }
+                    s_broker = new ComponentManagerBroker();
                 }
             }
 
-            // However we got here, we got here.  What's important is that we have a proxied instance to the broker object
-            // and we can now call on it.
-            return _broker.GetProxy((long)pOriginal);
+            return s_broker.GetProxy((long)pOriginal);
         }
-        #endregion
     }
 
     #region ComponentManagerProxy Class
     /// <summary>
-    ///  The proxy object. This acts as, well, a proxy between the unmanaged IMsoComponentManager and zero or more
+    ///  The proxy object. This acts as a proxy between the unmanaged IMsoComponentManager and zero or more
     ///  managed components.
     /// </summary>
-    internal class ComponentManagerProxy : MarshalByRefObject, UnsafeNativeMethods.IMsoComponentManager, UnsafeNativeMethods.IMsoComponent
+    internal class ComponentManagerProxy : MarshalByRefObject, IMsoComponentManager, IMsoComponent
     {
         private readonly ComponentManagerBroker _broker;
-        private UnsafeNativeMethods.IMsoComponentManager _original;
+        private IMsoComponentManager _original;
         private int _refCount;
         private readonly int _creationThread;
-        private IntPtr _componentId;
-        private int _nextComponentId;
-        private Dictionary<int, UnsafeNativeMethods.IMsoComponent> _components;
-        private UnsafeNativeMethods.IMsoComponent _activeComponent;
-        private int _activeComponentId;
-        private UnsafeNativeMethods.IMsoComponent _trackingComponent;
-        private int _trackingComponentId;
+        private UIntPtr _componentId;
+        private UIntPtr _nextComponentId;
+        private Dictionary<UIntPtr, IMsoComponent> _components;
+        private IMsoComponent _activeComponent;
+        private UIntPtr _activeComponentId;
+        private IMsoComponent _trackingComponent;
+        private UIntPtr _trackingComponentId;
 
-        internal ComponentManagerProxy(ComponentManagerBroker broker, UnsafeNativeMethods.IMsoComponentManager original)
+        private static UIntPtr s_maxUIntPtr = Environment.Is64BitProcess ? (UIntPtr)ulong.MaxValue : (UIntPtr)uint.MaxValue;
+
+        internal ComponentManagerProxy(ComponentManagerBroker broker, IMsoComponentManager original)
         {
             _broker = broker;
             _original = original;
@@ -244,152 +191,120 @@ namespace System.Windows.Forms
                 Marshal.ReleaseComObject(_original);
                 _original = null;
                 _components = null;
-                _componentId = (IntPtr)0;
+                _componentId = UIntPtr.Zero;
                 _refCount = 0;
                 _broker.ClearComponentManager();
             }
         }
 
-        private bool RevokeComponent()
-        {
-            return _original.FRevokeComponent(_componentId);
-        }
+        private unsafe bool RevokeComponent()
+            => _original.FRevokeComponent(_componentId).IsTrue();
 
-        private UnsafeNativeMethods.IMsoComponent Component
-        {
-            get
-            {
-                if (_trackingComponent != null)
-                {
-                    return _trackingComponent;
-                }
-
-                if (_activeComponent != null)
-                {
-                    return _activeComponent;
-                }
-
-                return null;
-            }
-        }
+        private IMsoComponent Component => _trackingComponent ?? _activeComponent;
 
         #region IMsoComponent Implementation
-        bool UnsafeNativeMethods.IMsoComponent.FDebugMessage(IntPtr hInst, int msg, IntPtr wparam, IntPtr lparam)
-        {
-            UnsafeNativeMethods.IMsoComponent c = Component;
+        BOOL IMsoComponent.FDebugMessage(
+            IntPtr hInst,
+            uint msg,
+            IntPtr wParam,
+            IntPtr lParam)
+            => Component?.FDebugMessage(hInst, msg, wParam, lParam) ?? BOOL.FALSE;
 
-            if (c != null)
-            {
-                return c.FDebugMessage(hInst, msg, wparam, lparam);
-            }
+        unsafe BOOL IMsoComponent.FPreTranslateMessage(User32.MSG* msg)
+            => Component?.FPreTranslateMessage(msg) ?? BOOL.FALSE;
 
-            return false;
-        }
-
-        bool UnsafeNativeMethods.IMsoComponent.FPreTranslateMessage(ref NativeMethods.MSG msg)
-        {
-            UnsafeNativeMethods.IMsoComponent c = Component;
-
-            if (c != null)
-            {
-                return c.FPreTranslateMessage(ref msg);
-            }
-
-            return false;
-        }
-
-        void UnsafeNativeMethods.IMsoComponent.OnEnterState(int uStateID, bool fEnter)
+        void IMsoComponent.OnEnterState(msocstate uStateID, BOOL fEnter)
         {
             if (_components != null)
             {
-                foreach (UnsafeNativeMethods.IMsoComponent c in _components.Values)
+                foreach (IMsoComponent c in _components.Values)
                 {
                     c.OnEnterState(uStateID, fEnter);
                 }
             }
         }
 
-        void UnsafeNativeMethods.IMsoComponent.OnAppActivate(bool fActive, int dwOtherThreadID)
+        void IMsoComponent.OnAppActivate(BOOL fActive, uint dwOtherThreadID)
         {
             if (_components != null)
             {
-                foreach (UnsafeNativeMethods.IMsoComponent c in _components.Values)
+                foreach (IMsoComponent c in _components.Values)
                 {
                     c.OnAppActivate(fActive, dwOtherThreadID);
                 }
             }
         }
 
-        void UnsafeNativeMethods.IMsoComponent.OnLoseActivation()
-        {
-            if (_activeComponent != null)
-            {
-                _activeComponent.OnLoseActivation();
-            }
-        }
+        void IMsoComponent.OnLoseActivation() => _activeComponent?.OnLoseActivation();
 
-        void UnsafeNativeMethods.IMsoComponent.OnActivationChange(UnsafeNativeMethods.IMsoComponent component, bool fSameComponent, int pcrinfo, bool fHostIsActivating, int pchostinfo, int dwReserved)
+        unsafe void IMsoComponent.OnActivationChange(
+            IMsoComponent component,
+            BOOL fSameComponent,
+            MSOCRINFO* pcrinfo,
+            BOOL fHostIsActivating,
+            IntPtr pchostinfo,
+            uint dwReserved)
         {
             if (_components != null)
             {
-                foreach (UnsafeNativeMethods.IMsoComponent c in _components.Values)
+                foreach (IMsoComponent c in _components.Values)
                 {
                     c.OnActivationChange(component, fSameComponent, pcrinfo, fHostIsActivating, pchostinfo, dwReserved);
                 }
             }
         }
 
-        bool UnsafeNativeMethods.IMsoComponent.FDoIdle(int grfidlef)
+        BOOL IMsoComponent.FDoIdle(msoidlef grfidlef)
         {
             bool cont = false;
 
             if (_components != null)
             {
-                foreach (UnsafeNativeMethods.IMsoComponent c in _components.Values)
+                foreach (IMsoComponent c in _components.Values)
                 {
-                    cont |= c.FDoIdle(grfidlef);
+                    cont |= c.FDoIdle(grfidlef).IsTrue();
                 }
             }
 
-            return cont;
+            return cont.ToBOOL();
         }
 
-        bool UnsafeNativeMethods.IMsoComponent.FContinueMessageLoop(int reason, int pvLoopData, NativeMethods.MSG[] msgPeeked)
+        unsafe BOOL IMsoComponent.FContinueMessageLoop(
+            msoloop uReason,
+            void* pvLoopData,
+            User32.MSG* pMsgPeeked)
         {
             bool cont = false;
 
-            if (_refCount == 0 && _componentId != (IntPtr)0)
+            if (_refCount == 0 && _componentId != UIntPtr.Zero)
             {
                 if (RevokeComponent())
                 {
                     _components.Clear();
-                    _componentId = (IntPtr)0;
+                    _componentId = UIntPtr.Zero;
                 }
             }
 
             if (_components != null)
             {
-                foreach (UnsafeNativeMethods.IMsoComponent c in _components.Values)
+                foreach (IMsoComponent c in _components.Values)
                 {
-                    cont |= c.FContinueMessageLoop(reason, pvLoopData, msgPeeked);
+                    cont |= c.FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked).IsTrue();
                 }
             }
 
-            return cont;
+            return cont.ToBOOL();
         }
 
-        bool UnsafeNativeMethods.IMsoComponent.FQueryTerminate(bool fPromptUser)
-        {
-            return true;
-        }
+        BOOL IMsoComponent.FQueryTerminate(BOOL fPromptUser) => BOOL.TRUE;
 
-        void UnsafeNativeMethods.IMsoComponent.Terminate()
+        void IMsoComponent.Terminate()
         {
             if (_components != null && _components.Values.Count > 0)
             {
-                UnsafeNativeMethods.IMsoComponent[] components = new UnsafeNativeMethods.IMsoComponent[_components.Values.Count];
+                IMsoComponent[] components = new IMsoComponent[_components.Values.Count];
                 _components.Values.CopyTo(components, 0);
-                foreach (UnsafeNativeMethods.IMsoComponent c in components)
+                foreach (IMsoComponent c in components)
                 {
                     c.Terminate();
                 }
@@ -403,45 +318,37 @@ namespace System.Windows.Forms
             Dispose();
         }
 
-        IntPtr UnsafeNativeMethods.IMsoComponent.HwndGetWindow(int dwWhich, int dwReserved)
-        {
-            UnsafeNativeMethods.IMsoComponent c = Component;
-
-            if (c != null)
-            {
-                return c.HwndGetWindow(dwWhich, dwReserved);
-            }
-
-            return IntPtr.Zero;
-        }
+        IntPtr IMsoComponent.HwndGetWindow(msocWindow dwWhich, uint dwReserved)
+            => Component?.HwndGetWindow(dwWhich, dwReserved) ?? IntPtr.Zero;
         #endregion
 
         #region IMsoComponentManager Implementation
-        int UnsafeNativeMethods.IMsoComponentManager.QueryService(ref Guid guidService, ref Guid iid, out object ppvObj)
-        {
-            return _original.QueryService(ref guidService, ref iid, out ppvObj);
-        }
+        unsafe HRESULT IMsoComponentManager.QueryService(Guid* guidService, Guid* iid, void** ppvObj)
+            => _original?.QueryService(guidService, iid, ppvObj) ?? HRESULT.E_NOINTERFACE;
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FDebugMessage(IntPtr hInst, int msg, IntPtr wparam, IntPtr lparam)
-        {
-            return _original.FDebugMessage(hInst, msg, wparam, lparam);
-        }
+        BOOL IMsoComponentManager.FDebugMessage(
+            IntPtr dwReserved,
+            uint msg,
+            IntPtr wParam,
+            IntPtr lParam)
+            => _original?.FDebugMessage(dwReserved, msg, wParam, lParam) ?? BOOL.TRUE;
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FRegisterComponent(UnsafeNativeMethods.IMsoComponent component, NativeMethods.MSOCRINFOSTRUCT pcrinfo, out IntPtr dwComponentID)
+        unsafe BOOL IMsoComponentManager.FRegisterComponent(
+            IMsoComponent component,
+            MSOCRINFO* pcrinfo,
+            UIntPtr* dwComponentID)
         {
             if (component == null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            dwComponentID = (IntPtr)0;
-
             if (_refCount == 0)
             {
                 // Our first time hooking up to the real component manager
-                if (!_original.FRegisterComponent(this, pcrinfo, out _componentId))
+                if (_original.FRegisterComponent(this, pcrinfo, dwComponentID).IsFalse())
                 {
-                    return false;
+                    return BOOL.FALSE;
                 }
             }
 
@@ -449,60 +356,55 @@ namespace System.Windows.Forms
 
             if (_components == null)
             {
-                _components = new Dictionary<int, UnsafeNativeMethods.IMsoComponent>();
+                _components = new Dictionary<UIntPtr, IMsoComponent>();
             }
 
-            _nextComponentId++;
-            if (_nextComponentId == int.MaxValue)
+            _nextComponentId += 1;
+            if (_nextComponentId == s_maxUIntPtr)
             {
-                _nextComponentId = 1;
+                _nextComponentId = (UIntPtr)1;
             }
 
             bool outofMemory = false;
-            //just in case we wrap, lets search for a free ID
+
+            // Just in case we wrap, lets search for a free ID
             while (_components.ContainsKey(_nextComponentId))
             {
-                _nextComponentId++;
-                if (_nextComponentId == int.MaxValue)
+                _nextComponentId += 1;
+                if (_nextComponentId == s_maxUIntPtr)
                 {
                     if (outofMemory)
                     {
                         throw new InvalidOperationException(SR.ComponentManagerProxyOutOfMemory);
                     }
                     outofMemory = true;
-                    _nextComponentId = 1;
+                    _nextComponentId = (UIntPtr)1;
                 }
             }
 
             _components.Add(_nextComponentId, component);
-            dwComponentID = (IntPtr)_nextComponentId;
+            *dwComponentID = _nextComponentId;
 
-            return true;
+            return BOOL.TRUE;
         }
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FRevokeComponent(IntPtr dwComponentID)
+        unsafe BOOL IMsoComponentManager.FRevokeComponent(UIntPtr dwComponentID)
         {
-            int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-            if (_original == null)
+            if (_original == null || _components == null || !_components.ContainsKey(dwComponentID))
             {
-                return false;
-            }
-
-            if (_components == null || dwLocalComponentID <= 0 || !_components.ContainsKey(dwLocalComponentID))
-            {
-                return false;
+                return BOOL.FALSE;
             }
 
             if (_refCount == 1 && SafeNativeMethods.GetCurrentThreadId() == _creationThread)
             {
                 if (!RevokeComponent())
                 {
-                    return false;
+                    return BOOL.FALSE;
                 }
             }
 
             _refCount--;
-            _components.Remove(dwLocalComponentID);
+            _components.Remove(dwComponentID);
 
             Debug.Assert(_refCount >= 0, "underflow on ref count");
             if (_refCount <= 0)
@@ -510,214 +412,189 @@ namespace System.Windows.Forms
                 Dispose();
             }
 
-            if (dwLocalComponentID == _activeComponentId)
+            if (dwComponentID == _activeComponentId)
             {
                 _activeComponent = null;
-                _activeComponentId = 0;
+                _activeComponentId = UIntPtr.Zero;
             }
-            if (dwLocalComponentID == _trackingComponentId)
+
+            if (dwComponentID == _trackingComponentId)
             {
                 _trackingComponent = null;
-                _trackingComponentId = 0;
+                _trackingComponentId = UIntPtr.Zero;
             }
 
-            return true;
+            return BOOL.TRUE;
         }
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FUpdateComponentRegistration(IntPtr dwComponentID, NativeMethods.MSOCRINFOSTRUCT info)
-        {
-            if (_original == null)
-            {
-                return false;
-            }
-            // We assume that all winforms domains use the same registration.
-            return _original.FUpdateComponentRegistration(_componentId, info);
-        }
+        unsafe BOOL IMsoComponentManager.FUpdateComponentRegistration(
+            UIntPtr dwComponentID,
+            MSOCRINFO* pcrinfo)
+            => _original?.FUpdateComponentRegistration(dwComponentID, pcrinfo) ?? BOOL.FALSE;
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentActivate(IntPtr dwComponentID)
+        unsafe BOOL IMsoComponentManager.FOnComponentActivate(UIntPtr dwComponentID)
         {
-            int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-            if (_original == null)
-            {
-                return false;
-            }
             // Activation requres us to store the currently active component.  We will send data to it
-            if (_components == null || dwLocalComponentID <= 0 || !_components.ContainsKey(dwLocalComponentID))
+            if (_original == null || _components == null || !_components.ContainsKey(dwComponentID)
+                || _original.FOnComponentActivate(dwComponentID).IsFalse())
             {
-                return false;
+                return BOOL.FALSE;
             }
 
-            if (!_original.FOnComponentActivate(_componentId))
-            {
-                return false;
-            }
-
-            _activeComponent = _components[dwLocalComponentID];
-            _activeComponentId = dwLocalComponentID;
-            return true;
+            _activeComponent = _components[dwComponentID];
+            _activeComponentId = dwComponentID;
+            return BOOL.TRUE;
         }
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FSetTrackingComponent(IntPtr dwComponentID, bool fTrack)
+        unsafe BOOL IMsoComponentManager.FSetTrackingComponent(
+            UIntPtr dwComponentID,
+            BOOL fTrack)
         {
             // Tracking requres us to store the current tracking component.  We will send data to it
-            int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-
-            if (_original == null)
+            if (_original == null || _components == null || !_components.ContainsKey(dwComponentID)
+                    || _original.FSetTrackingComponent(dwComponentID, fTrack).IsFalse())
             {
-                return false;
+                return BOOL.FALSE;
             }
 
-            if (_components == null || dwLocalComponentID <= 0 || !_components.ContainsKey(dwLocalComponentID))
+            if (fTrack.IsTrue())
             {
-                return false;
-            }
-
-            if (!_original.FSetTrackingComponent(_componentId, fTrack))
-            {
-                return false;
-            }
-
-            if (fTrack)
-            {
-                _trackingComponent = _components[dwLocalComponentID];
-                _trackingComponentId = dwLocalComponentID;
+                _trackingComponent = _components[dwComponentID];
+                _trackingComponentId = dwComponentID;
             }
             else
             {
                 _trackingComponent = null;
-                _trackingComponentId = 0;
+                _trackingComponentId = UIntPtr.Zero;
             }
 
-            return true;
+            return BOOL.TRUE;
         }
 
-        void UnsafeNativeMethods.IMsoComponentManager.OnComponentEnterState(IntPtr dwComponentID, int uStateID, int uContext, int cpicmExclude, int rgpicmExclude, int dwReserved)
+        unsafe void IMsoComponentManager.OnComponentEnterState(
+            UIntPtr dwComponentID,
+            msocstate uStateID,
+            msoccontext uContext,
+            uint cpicmExclude,
+            void** rgpicmExclude,
+            uint dwReserved)
         {
             if (_original == null)
             {
                 return;
             }
 
-            if (uContext == NativeMethods.MSOCM.msoccontextAll || uContext == NativeMethods.MSOCM.msoccontextMine)
+            if (uContext == msoccontext.All || uContext == msoccontext.Mine)
             {
                 if (_components != null)
                 {
-                    foreach (UnsafeNativeMethods.IMsoComponent comp in _components.Values)
+                    foreach (IMsoComponent comp in _components.Values)
                     {
-                        comp.OnEnterState(uStateID, true);
+                        comp.OnEnterState(uStateID, BOOL.TRUE);
                     }
                 }
             }
 
-            _original.OnComponentEnterState(_componentId, uStateID, uContext, cpicmExclude, rgpicmExclude, dwReserved);
+            _original.OnComponentEnterState(dwComponentID, uStateID, uContext, cpicmExclude, rgpicmExclude, dwReserved);
         }
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentExitState(IntPtr dwComponentID, int uStateID, int uContext, int cpicmExclude, int rgpicmExclude)
+        unsafe BOOL IMsoComponentManager.FOnComponentExitState(
+            UIntPtr dwComponentID,
+            msocstate uStateID,
+            msoccontext uContext,
+            uint cpicmExclude,
+            void** rgpicmExclude)
         {
             if (_original == null)
             {
-                return false;
+                return BOOL.FALSE;
             }
 
-            if (uContext == NativeMethods.MSOCM.msoccontextAll || uContext == NativeMethods.MSOCM.msoccontextMine)
+            if (uContext == msoccontext.All || uContext == msoccontext.Mine)
             {
                 if (_components != null)
                 {
-                    foreach (UnsafeNativeMethods.IMsoComponent comp in _components.Values)
+                    foreach (IMsoComponent comp in _components.Values)
                     {
-                        comp.OnEnterState(uStateID, false);
+                        comp.OnEnterState(uStateID, BOOL.FALSE);
                     }
                 }
             }
 
-            return _original.FOnComponentExitState(_componentId, uStateID, uContext, cpicmExclude, rgpicmExclude);
+            return _original.FOnComponentExitState(dwComponentID, uStateID, uContext, cpicmExclude, rgpicmExclude);
         }
 
-        bool UnsafeNativeMethods.IMsoComponentManager.FInState(int uStateID, IntPtr pvoid)
+        unsafe BOOL IMsoComponentManager.FInState(msocstate uStateID, void* pvoid)
+            => _original?.FInState(uStateID, pvoid) ?? BOOL.FALSE;
+
+        BOOL IMsoComponentManager.FContinueIdle()
+            => _original?.FContinueIdle() ?? BOOL.FALSE;
+
+        unsafe BOOL IMsoComponentManager.FPushMessageLoop(
+            UIntPtr dwComponentID,
+            msoloop uReason,
+            void* pvLoopData)
+            => _original?.FPushMessageLoop(dwComponentID, uReason, pvLoopData) ?? BOOL.FALSE;
+
+        unsafe BOOL IMsoComponentManager.FCreateSubComponentManager(IntPtr punkOuter, IntPtr punkServProv, Guid* riid, void** ppvObj)
         {
             if (_original == null)
             {
-                return false;
-            }
-
-            return _original.FInState(uStateID, pvoid);
-        }
-
-        bool UnsafeNativeMethods.IMsoComponentManager.FContinueIdle()
-        {
-            if (_original == null)
-            {
-                return false;
-            }
-
-            return _original.FContinueIdle();
-        }
-
-        bool UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, int reason, int pvLoopData)
-        {
-            if (_original == null)
-            {
-                return false;
-            }
-
-            return _original.FPushMessageLoop(_componentId, reason, pvLoopData);
-        }
-
-        bool UnsafeNativeMethods.IMsoComponentManager.FCreateSubComponentManager(object punkOuter, object punkServProv, ref Guid riid, out IntPtr ppvObj)
-        {
-            if (_original == null)
-            { ppvObj = IntPtr.Zero; return false; }
-            return _original.FCreateSubComponentManager(punkOuter, punkServProv, ref riid, out ppvObj);
-        }
-
-        bool UnsafeNativeMethods.IMsoComponentManager.FGetParentComponentManager(out UnsafeNativeMethods.IMsoComponentManager ppicm)
-        {
-            if (_original == null)
-            { ppicm = null; return false; }
-            return _original.FGetParentComponentManager(out ppicm);
-        }
-
-        bool UnsafeNativeMethods.IMsoComponentManager.FGetActiveComponent(int dwgac, UnsafeNativeMethods.IMsoComponent[] ppic, NativeMethods.MSOCRINFOSTRUCT info, int dwReserved)
-        {
-            if (_original == null)
-            {
-                return false;
-            }
-
-            if (_original.FGetActiveComponent(dwgac, ppic, info, dwReserved))
-            {
-                // We got a component.  See if it's our proxy, and if it is,
-                // return what we think is currently active.  We need only
-                // check for "this", because we only have one of these
-                // doo jabbers per process.
-                if (ppic[0] == this)
+                if (ppvObj != null)
                 {
-                    if (dwgac == NativeMethods.MSOCM.msogacActive)
-                    {
-                        ppic[0] = _activeComponent;
-                    }
-                    else if (dwgac == NativeMethods.MSOCM.msogacTracking)
-                    {
-                        ppic[0] = _trackingComponent;
-                    }
-                    else if (dwgac == NativeMethods.MSOCM.msogacTrackingOrActive)
-                    {
-                        if (_trackingComponent != null)
-                        {
-                            ppic[0] = _trackingComponent;
-                        }
-                    }
+                    *ppvObj = null;
                 }
+                return BOOL.FALSE;
+            }
+            return _original.FCreateSubComponentManager(punkOuter, punkServProv, riid, ppvObj);
+        }
 
-                return ppic[0] != null;
-            }
-            else
+        unsafe BOOL IMsoComponentManager.FGetParentComponentManager(void** ppicm)
+        {
+            if (_original == null)
             {
-                return false;
+                if (ppicm != null)
+                {
+                    *ppicm = null;
+                }
+                return BOOL.FALSE;
             }
+            return _original.FGetParentComponentManager(ppicm);
+        }
+
+        unsafe BOOL IMsoComponentManager.FGetActiveComponent(
+            msogac dwgac,
+            void** ppic,
+            MSOCRINFO* pcrinfo,
+            uint dwReserved)
+        {
+            if (_original == null
+                || _original.FGetActiveComponent(dwgac, ppic, pcrinfo, dwReserved).IsFalse())
+            {
+                return BOOL.FALSE;
+            }
+
+            // We got a component.  See if it's our proxy, and if it is,
+            // return what we think is currently active.  We need only
+            // check for "this", because we only have one of these
+            // doo jabbers per process.
+
+            IntPtr pUnk = Marshal.GetIUnknownForObject(this);
+            if (*ppic == (void*)pUnk)
+            {
+                *ppic = (void*)Marshal.GetIUnknownForObject(dwgac switch
+                {
+                    msogac.Active => _activeComponent,
+                    msogac.Tracking => _trackingComponent,
+                    msogac.TrackingOrActive => _trackingComponent ?? _activeComponent,
+                    _ => this
+                });
+            }
+            Marshal.Release(pUnk);
+
+            return ppic != null ? BOOL.TRUE : BOOL.FALSE;
         }
         #endregion
-
     }
     #endregion
 }

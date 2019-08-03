@@ -2626,18 +2626,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class MSOCRINFOSTRUCT
-        {
-            public int cbSize = Marshal.SizeOf<MSOCRINFOSTRUCT>();              // size of MSOCRINFO structure in bytes.
-            public int uIdleTimeInterval;   // If olecrfNeedPeriodicIdleTime is registered
-                                            // in grfcrf, component needs to perform
-                                            // periodic idle time tasks during an idle phase
-                                            // every uIdleTimeInterval milliseconds.
-            public int grfcrf;              // bit flags taken from olecrf values (above)
-            public int grfcadvf;            // bit flags taken from olecadvf values (above)
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public struct NMLISTVIEW
         {
             public NMHDR hdr;
@@ -3066,124 +3054,30 @@ namespace System.Windows.Forms
             public char* lpszClassName;
         }
 
-        public class MSOCM
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        public class TOOLINFO_T
         {
-            // MSO Component registration flags
-            public const int msocrfNeedIdleTime = 1;
-            public const int msocrfNeedPeriodicIdleTime = 2;
-            public const int msocrfPreTranslateKeys = 4;
-            public const int msocrfPreTranslateAll = 8;
-            public const int msocrfNeedSpecActiveNotifs = 16;
-            public const int msocrfNeedAllActiveNotifs = 32;
-            public const int msocrfExclusiveBorderSpace = 64;
-            public const int msocrfExclusiveActivation = 128;
-            public const int msocrfNeedAllMacEvents = 256;
-            public const int msocrfMaster = 512;
+            public int cbSize = Marshal.SizeOf<TOOLINFO_T>();
+            public int uFlags;
+            public IntPtr hwnd;
+            public IntPtr uId;
+            public Interop.RECT rect;
+            public IntPtr hinst = IntPtr.Zero;
+            public string lpszText;
+            public IntPtr lParam = IntPtr.Zero;
+        }
 
-            // MSO Component registration advise flags (see msocstate enumeration)
-            public const int msocadvfModal = 1;
-            public const int msocadvfRedrawOff = 2;
-            public const int msocadvfWarningsOff = 4;
-            public const int msocadvfRecording = 8;
-
-            // MSO Component Host flags
-            public const int msochostfExclusiveBorderSpace = 1;
-
-            // MSO idle flags, passed to IMsoComponent::FDoIdle and
-            // IMsoStdComponentMgr::FDoIdle.
-            public const int msoidlefPeriodic = 1;
-            public const int msoidlefNonPeriodic = 2;
-            public const int msoidlefPriority = 4;
-            public const int msoidlefAll = -1;
-
-            // MSO Reasons for pushing a message loop, passed to
-            // IMsoComponentManager::FPushMessageLoop and
-            // IMsoComponentHost::FPushMessageLoop.  The host should remain in message
-            // loop until IMsoComponent::FContinueMessageLoop
-            public const int msoloopDoEventsModal = -2; // Note this is not an official MSO loop -- it just must be distinct.
-            public const int msoloopMain = -1; // Note this is not an official MSO loop -- it just must be distinct.
-            public const int msoloopFocusWait = 1;
-            public const int msoloopDoEvents = 2;
-            public const int msoloopDebug = 3;
-            public const int msoloopModalForm = 4;
-            public const int msoloopModalAlert = 5;
-
-            /* msocstate values: state IDs passed to
-                IMsoComponent::OnEnterState,
-                IMsoComponentManager::OnComponentEnterState/FOnComponentExitState/FInState,
-                IMsoComponentHost::OnComponentEnterState,
-                IMsoStdComponentMgr::OnHostEnterState/FOnHostExitState/FInState.
-                When the host or a component is notified through one of these methods that
-                another entity (component or host) is entering or exiting a state
-                identified by one of these state IDs, the host/component should take
-                appropriate action:
-                    msocstateModal (modal state):
-                        If app is entering modal state, host/component should disable
-                        its toplevel windows, and reenable them when app exits this
-                        state.  Also, when this state is entered or exited, host/component
-                        should notify approprate inplace objects via
-                        IOleInPlaceActiveObject::EnableModeless.
-                    msocstateRedrawOff (redrawOff state):
-                        If app is entering redrawOff state, host/component should disable
-                        repainting of its windows, and reenable repainting when app exits
-                        this state.
-                    msocstateWarningsOff (warningsOff state):
-                        If app is entering warningsOff state, host/component should disable
-                        the presentation of any user warnings, and reenable this when
-                        app exits this state.
-                    msocstateRecording (Recording state):
-                        Used to notify host/component when Recording is turned on or off. */
-            public const int msocstateModal = 1;
-            public const int msocstateRedrawOff = 2;
-            public const int msocstateWarningsOff = 3;
-            public const int msocstateRecording = 4;
-
-            /*             ** Comments on State Contexts **
-            IMsoComponentManager::FCreateSubComponentManager allows one to create a
-            hierarchical tree of component managers.  This tree is used to maintain
-            multiple contexts with regard to msocstateXXX states.  These contexts are
-            referred to as 'state contexts'.
-            Each component manager in the tree defines a state context.  The
-            components registered with a particular component manager or any of its
-            descendents live within that component manager's state context.  Calls
-            to IMsoComponentManager::OnComponentEnterState/FOnComponentExitState
-            can be used to  affect all components, only components within the component
-            manager's state context, or only those components that are outside of the
-            component manager's state context.  IMsoComponentManager::FInState is used
-            to query the state of the component manager's state context at its root.
-
-            msoccontext values: context indicators passed to
-            IMsoComponentManager::OnComponentEnterState/FOnComponentExitState.
-            These values indicate the state context that is to be affected by the
-            state change.
-            In IMsoComponentManager::OnComponentEnterState/FOnComponentExitState,
-            the comp mgr informs only those components/host that are within the
-            specified state context. */
-            public const int msoccontextAll = 0;
-            public const int msoccontextMine = 1;
-            public const int msoccontextOthers = 2;
-
-            /*     ** WM_MOUSEACTIVATE Note (for top level compoenents and host) **
-            If the active (or tracking) comp's reg info indicates that it
-            wants mouse messages, then no MA_xxxANDEAT value should be returned
-            from WM_MOUSEACTIVATE, so that the active (or tracking) comp will be able
-            to process the resulting mouse message.  If one does not want to examine
-            the reg info, no MA_xxxANDEAT value should be returned from
-            WM_MOUSEACTIVATE if any comp is active (or tracking).
-            One can query the reg info of the active (or tracking) component at any
-            time via IMsoComponentManager::FGetActiveComponent. */
-
-            /* msogac values: values passed to
-            IMsoComponentManager::FGetActiveComponent. */
-            public const int msogacActive = 0;
-            public const int msogacTracking = 1;
-            public const int msogacTrackingOrActive = 2;
-
-            /* msocWindow values: values passed to IMsoComponent::HwndGetWindow. */
-            public const int msocWindowFrameToplevel = 0;
-            public const int msocWindowFrameOwner = 1;
-            public const int msocWindowComponent = 2;
-            public const int msocWindowDlgOwner = 3;
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        public class TOOLINFO_TOOLTIP
+        {
+            public int cbSize = Marshal.SizeOf<TOOLINFO_TOOLTIP>();
+            public int uFlags;
+            public IntPtr hwnd;
+            public IntPtr uId;
+            public Interop.RECT rect;
+            public IntPtr hinst = IntPtr.Zero;
+            public IntPtr lpszText;
+            public IntPtr lParam = IntPtr.Zero;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4994,5 +4888,3 @@ namespace System.Windows.Forms
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
     }
 }
-
-

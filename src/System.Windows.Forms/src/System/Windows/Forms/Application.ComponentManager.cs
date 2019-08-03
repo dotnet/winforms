@@ -3,16 +3,17 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
+using static Interop.Mso;
 
 namespace System.Windows.Forms
 {
     public sealed partial class Application
     {
-
         /// <summary>
         ///  This is our implementation of the MSO ComponentManager.  The Componoent Manager is
         ///  an object that is responsible for handling all message loop activity in a process.
@@ -24,105 +25,88 @@ namespace System.Windows.Forms
         ///
         ///  This class is not used when running inside the Visual Studio shell.
         /// </summary>
-        private class ComponentManager : UnsafeNativeMethods.IMsoComponentManager
+        private unsafe class ComponentManager : IMsoComponentManager
         {
-            private class ComponentHashtableEntry
+            private struct ComponentHashtableEntry
             {
-                public UnsafeNativeMethods.IMsoComponent component;
-                public NativeMethods.MSOCRINFOSTRUCT componentInfo;
+                public IMsoComponent component;
+                public MSOCRINFO componentInfo;
             }
 
-            private Hashtable _oleComponents;
-            private int _cookieCounter = 0;
-            private UnsafeNativeMethods.IMsoComponent _activeComponent = null;
-            private UnsafeNativeMethods.IMsoComponent _trackingComponent = null;
-            private int _currentState = 0;
+            private Dictionary<UIntPtr, ComponentHashtableEntry> _oleComponents;
+            private UIntPtr _cookieCounter = UIntPtr.Zero;
+            private IMsoComponent _activeComponent = null;
+            private IMsoComponent _trackingComponent = null;
+            private msocstate _currentState = 0;
 
-            private Hashtable OleComponents
+            private Dictionary<UIntPtr, ComponentHashtableEntry> OleComponents
             {
                 get
                 {
                     if (_oleComponents == null)
                     {
-                        _oleComponents = new Hashtable();
-                        _cookieCounter = 0;
+                        _oleComponents = new Dictionary<UIntPtr, ComponentHashtableEntry>();
+                        _cookieCounter = UIntPtr.Zero;
                     }
 
                     return _oleComponents;
                 }
             }
 
-            /// <summary>
-            ///  Return in *ppvObj an implementation of interface iid for service
-            ///  guidService (same as IServiceProvider::QueryService).
-            ///  Return NOERROR if the requested service is supported, otherwise return
-            ///  NULL in *ppvObj and an appropriate error (eg E_FAIL, E_NOINTERFACE).
-            /// </summary>
-            int UnsafeNativeMethods.IMsoComponentManager.QueryService(
-                                                 ref Guid guidService,
-                                                 ref Guid iid,
-                                                 out object ppvObj)
+            /// <inheritdoc/>
+            unsafe HRESULT IMsoComponentManager.QueryService(
+                Guid* guidService,
+                Guid* iid,
+                void** ppvObj)
             {
-                ppvObj = null;
-                return NativeMethods.E_NOINTERFACE;
+                if (ppvObj != null)
+                {
+                    *ppvObj = null;
+                }
+                return HRESULT.E_NOINTERFACE;
             }
 
-            /// <summary>
-            ///  Standard FDebugMessage method.
-            ///  Since IMsoComponentManager is a reference counted interface,
-            ///  MsoDWGetChkMemCounter should be used when processing the
-            ///  msodmWriteBe message.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FDebugMessage(
-                                                   IntPtr hInst,
-                                                   int msg,
-                                                   IntPtr wparam,
-                                                   IntPtr lparam)
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FDebugMessage(
+                IntPtr dwReserved,
+                uint msg,
+                IntPtr wParam,
+                IntPtr lParam)
             {
-                return true;
+                return BOOL.TRUE;
             }
 
-            /// <summary>
-            ///  Register component piComponent and its registration info pcrinfo with
-            ///  this component manager.  Return in *pdwComponentID a cookie which will
-            ///  identify the component when it calls other IMsoComponentManager
-            ///  methods.
-            ///  Return TRUE if successful, FALSE otherwise.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FRegisterComponent(UnsafeNativeMethods.IMsoComponent component,
-                                                         NativeMethods.MSOCRINFOSTRUCT pcrinfo,
-                                                         out IntPtr dwComponentID)
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FRegisterComponent(
+                IMsoComponent component,
+                MSOCRINFO* pcrinfo,
+                UIntPtr* pdwComponentID)
             {
                 // Construct Hashtable entry for this component
                 ComponentHashtableEntry entry = new ComponentHashtableEntry
                 {
                     component = component,
-                    componentInfo = pcrinfo
+                    componentInfo = *pcrinfo
                 };
-                OleComponents.Add(++_cookieCounter, entry);
+
+                _cookieCounter += 1;
+                OleComponents.Add(_cookieCounter, entry);
 
                 // Return the cookie
-                dwComponentID = (IntPtr)_cookieCounter;
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component registered.  ID: " + _cookieCounter.ToString(CultureInfo.InvariantCulture));
-                return true;
+                *pdwComponentID = _cookieCounter;
+                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Component registered.  ID: {_cookieCounter}");
+                return BOOL.TRUE;
             }
 
-            /// <summary>
-            ///  Undo the registration of the component identified by dwComponentID
-            ///  (the cookie returned from the FRegisterComponent method).
-            ///  Return TRUE if successful, FALSE otherwise.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FRevokeComponent(IntPtr dwComponentID)
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FRevokeComponent(UIntPtr dwComponentID)
             {
-                int dwLocalComponentID = unchecked((int)(long)dwComponentID);
+                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Revoking component {dwComponentID}.");
 
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Revoking component " + dwLocalComponentID.ToString(CultureInfo.InvariantCulture));
-
-                ComponentHashtableEntry entry = (ComponentHashtableEntry)OleComponents[dwLocalComponentID];
-                if (entry == null)
+                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Compoenent not registered.");
-                    return false;
+                    return BOOL.FALSE;
                 }
 
                 if (entry.component == _activeComponent)
@@ -134,374 +118,211 @@ namespace System.Windows.Forms
                     _trackingComponent = null;
                 }
 
-                OleComponents.Remove(dwLocalComponentID);
-
-                return true;
-
+                OleComponents.Remove(dwComponentID);
+                return BOOL.TRUE;
             }
 
-            /// <summary>
-            ///  Update the registration info of the component identified by
-            ///  dwComponentID (the cookie returned from FRegisterComponent) with the
-            ///  new registration information pcrinfo.
-            ///  Typically this is used to update the idle time registration data, but
-            ///  can be used to update other registration data as well.
-            ///  Return TRUE if successful, FALSE otherwise.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FUpdateComponentRegistration(
-                                                                  IntPtr dwComponentID,
-                                                                  NativeMethods.MSOCRINFOSTRUCT info
-                                                                  )
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FUpdateComponentRegistration(
+                UIntPtr dwComponentID,
+                MSOCRINFO* pcrinfo)
             {
-                int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-
                 // Update the registration info
-                ComponentHashtableEntry entry = (ComponentHashtableEntry)OleComponents[dwLocalComponentID];
-                if (entry == null)
+                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
-                    return false;
+                    return BOOL.FALSE;
                 }
 
-                entry.componentInfo = info;
-
-                return true;
+                entry.componentInfo = *pcrinfo;
+                OleComponents[dwComponentID] = entry;
+                return BOOL.TRUE;
             }
 
-            /// <summary>
-            ///  Notify component manager that component identified by dwComponentID
-            ///  (cookie returned from FRegisterComponent) has been activated.
-            ///  The active component gets the chance to process messages before they
-            ///  are dispatched (via IMsoComponent::FPreTranslateMessage) and typically
-            ///  gets first chance at idle time after the host.
-            ///  This method fails if another component is already Exclusively Active.
-            ///  In this case, FALSE is returned and SetLastError is set to
-            ///  msoerrACompIsXActive (comp usually need not take any special action
-            ///  in this case).
-            ///  Return TRUE if successful.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentActivate(IntPtr dwComponentID)
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FOnComponentActivate(UIntPtr dwComponentID)
             {
+                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Component activated.  ID: {dwComponentID}");
 
-                int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component activated.  ID: " + dwLocalComponentID.ToString(CultureInfo.InvariantCulture));
-
-                ComponentHashtableEntry entry = (ComponentHashtableEntry)OleComponents[dwLocalComponentID];
-                if (entry == null)
+                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "*** Component not registered ***");
-                    return false;
+                    return BOOL.FALSE;
                 }
 
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "New active component is : " + entry.component.ToString());
+                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"New active component is : {entry}");
                 _activeComponent = entry.component;
-                return true;
+                return BOOL.TRUE;
             }
 
-            /// <summary>
-            ///  Called to inform component manager that  component identified by
-            ///  dwComponentID (cookie returned from FRegisterComponent) wishes
-            ///  to perform a tracking operation (such as mouse tracking).
-            ///  The component calls this method with fTrack == TRUE to begin the
-            ///  tracking operation and with fTrack == FALSE to end the operation.
-            ///  During the tracking operation the component manager routes messages
-            ///  to the tracking component (via IMsoComponent::FPreTranslateMessage)
-            ///  rather than to the active component.  When the tracking operation ends,
-            ///  the component manager should resume routing messages to the active
-            ///  component.
-            ///  Note: component manager should perform no idle time processing during a
-            ///    tracking operation other than give the tracking component idle
-            ///    time via IMsoComponent::FDoIdle.
-            ///  Note: there can only be one tracking component at a time.
-            ///  Return TRUE if successful, FALSE otherwise.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FSetTrackingComponent(IntPtr dwComponentID, bool fTrack)
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FSetTrackingComponent(UIntPtr dwComponentID, BOOL fTrack)
             {
-
-                int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-                ComponentHashtableEntry entry = (ComponentHashtableEntry)OleComponents[dwLocalComponentID];
-                if (entry == null)
+                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
+                    || ((entry.component == _trackingComponent) ^ fTrack.IsTrue()))
                 {
-                    return false;
+                    return BOOL.FALSE;
                 }
 
-                if (entry.component == _trackingComponent ^ fTrack)
-                {
-                    return false;
-                }
+                _trackingComponent = fTrack.IsTrue() ? entry.component : null;
 
-                if (fTrack)
-                {
-                    _trackingComponent = entry.component;
-                }
-                else
-                {
-                    _trackingComponent = null;
-                }
-
-                return true;
+                return BOOL.TRUE;
             }
 
-            /// <summary>
-            ///  Notify component manager that component identified by dwComponentID
-            ///  (cookie returned from FRegisterComponent) is entering the state
-            ///  identified by uStateID (msocstateXXX value).  (For convenience when
-            ///  dealing with sub CompMgrs, the host can call this method passing 0 for
-            ///  dwComponentID.)
-            ///  Component manager should notify all other interested components within
-            ///  the state context indicated by uContext (a msoccontextXXX value),
-            ///  excluding those within the state context of a CompMgr in rgpicmExclude,
-            ///  via IMsoComponent::OnEnterState (see "Comments on State Contexts",
-            ///  above).
-            ///  Component Manager should also take appropriate action depending on the
-            ///  value of uStateID (see msocstate comments, above).
-            ///  dwReserved is reserved for future use and should be zero.
-            ///
-            ///  rgpicmExclude (can be NULL) is an array of cpicmExclude CompMgrs (can
-            ///  include root CompMgr and/or sub CompMgrs); components within the state
-            ///  context of a CompMgr appearing in this     array should NOT be notified of
-            ///  the state change (note: if uContext        is msoccontextMine, the only
-            ///  CompMgrs in rgpicmExclude that are checked for exclusion are those that
-            ///  are sub CompMgrs of this Component Manager, since all other CompMgrs
-            ///  are outside of this Component Manager's state context anyway.)
-            ///
-            ///  Note: Calls to this method are symmetric with calls to
-            ///  FOnComponentExitState.
-            ///  That is, if n OnComponentEnterState calls are made, the component is
-            ///  considered to be in the state until n FOnComponentExitState calls are
-            ///  made.  Before revoking its registration a component must make a
-            ///  sufficient number of FOnComponentExitState calls to offset any
-            ///  outstanding OnComponentEnterState calls it has made.
-            ///
-            ///  Note: inplace objects should not call this method with
-            ///  uStateID == msocstateModal when entering modal state. Such objects
-            ///  should call IOleInPlaceFrame::EnableModeless instead.
-            /// </summary>
-            void UnsafeNativeMethods.IMsoComponentManager.OnComponentEnterState(
-                                                           IntPtr dwComponentID,
-                                                           int uStateID,
-                                                           int uContext,
-                                                           int cpicmExclude,
-                                                           int rgpicmExclude,          // IMsoComponentManger**
-                                                           int dwReserved)
+            /// <inheritdoc/>
+            void IMsoComponentManager.OnComponentEnterState(
+                UIntPtr dwComponentID,
+                msocstate uStateID,
+                msoccontext uContext,
+                uint cpicmExclude,
+                void** rgpicmExclude,
+                uint dwReserved)
             {
+                _currentState = uStateID;
 
-                int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-                _currentState |= uStateID;
+                Debug.WriteLineIf(
+                    CompModSwitches.MSOComponentManager.TraceInfo,
+                    $"ComponentManager: Component enter state.  ID: {dwComponentID} state: {uStateID}");
 
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component enter state.  ID: " + dwLocalComponentID.ToString(CultureInfo.InvariantCulture) + " state: " + uStateID.ToString(CultureInfo.InvariantCulture));
-
-                if (uContext == NativeMethods.MSOCM.msoccontextAll || uContext == NativeMethods.MSOCM.msoccontextMine)
+                if (uContext == msoccontext.All || uContext == msoccontext.Mine)
                 {
-
                     Debug.Indent();
 
                     // We should notify all components we contain that the state has changed.
-                    //
                     foreach (ComponentHashtableEntry entry in OleComponents.Values)
                     {
-                        Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Notifying " + entry.component.ToString());
-                        entry.component.OnEnterState(uStateID, true);
+                        Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"Notifying {entry.component}");
+                        entry.component.OnEnterState(uStateID, BOOL.TRUE);
                     }
 
                     Debug.Unindent();
                 }
             }
 
-            /// <summary>
-            ///  Notify component manager that component identified by dwComponentID
-            ///  (cookie returned from FRegisterComponent) is exiting the state
-            ///  identified by uStateID (a msocstateXXX value).  (For convenience when
-            ///  dealing with sub CompMgrs, the host can call this method passing 0 for
-            ///  dwComponentID.)
-            ///  uContext, cpicmExclude, and rgpicmExclude are as they are in
-            ///  OnComponentEnterState.
-            ///  Component manager  should notify all appropriate interested components
-            ///  (taking into account uContext, cpicmExclude, rgpicmExclude) via
-            ///  IMsoComponent::OnEnterState (see "Comments on State Contexts", above).
-            ///  Component Manager should also take appropriate action depending on
-            ///  the value of uStateID (see msocstate comments, above).
-            ///  Return TRUE if, at the end of this call, the state is still in effect
-            ///  at the root of this component manager's state context
-            ///  (because the host or some other component is still in the state),
-            ///  otherwise return FALSE (ie. return what FInState would return).
-            ///  Caller can normally ignore the return value.
-            ///
-            ///  Note: n calls to this method are symmetric with n calls to
-            ///  OnComponentEnterState (see OnComponentEnterState comments, above).
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentExitState(
-                                                           IntPtr dwComponentID,
-                                                           int uStateID,
-                                                           int uContext,
-                                                           int cpicmExclude,
-                                                           int rgpicmExclude       // IMsoComponentManager**
-                                                           )
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FOnComponentExitState(
+                UIntPtr dwComponentID,
+                msocstate uStateID,
+                msoccontext uContext,
+                uint cpicmExclude,
+                void** rgpicmExclude)
             {
-                int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-                _currentState &= ~uStateID;
+                _currentState = 0;
+                Debug.WriteLineIf(
+                    CompModSwitches.MSOComponentManager.TraceInfo,
+                    $"ComponentManager: Component exit state.  ID: {dwComponentID} state: {uStateID}");
 
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component exit state.  ID: " + dwLocalComponentID.ToString(CultureInfo.InvariantCulture) + " state: " + uStateID.ToString(CultureInfo.InvariantCulture));
-
-                if (uContext == NativeMethods.MSOCM.msoccontextAll || uContext == NativeMethods.MSOCM.msoccontextMine)
+                if (uContext == msoccontext.All || uContext == msoccontext.Mine)
                 {
-
                     Debug.Indent();
 
                     // We should notify all components we contain that the state has changed.
-                    //
                     foreach (ComponentHashtableEntry entry in OleComponents.Values)
                     {
-                        Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Notifying " + entry.component.ToString());
-                        entry.component.OnEnterState(uStateID, false);
+                        Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"Notifying {entry.component}");
+                        entry.component.OnEnterState(uStateID, BOOL.FALSE);
                     }
 
                     Debug.Unindent();
                 }
 
-                return false;
+                return BOOL.FALSE;
             }
 
-            /// <summary>
-            ///  Return TRUE if the state identified by uStateID (a msocstateXXX value)
-            ///  is in effect at the root of this component manager's state context,
-            ///  FALSE otherwise (see "Comments on State Contexts", above).
-            ///  pvoid is reserved for future use and should be NULL.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FInState(int uStateID, IntPtr pvoid)
-            {
-                return (_currentState & uStateID) != 0;
-            }
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FInState(msocstate uStateID, void* pvoid)
+                => _currentState == uStateID ? BOOL.TRUE : BOOL.FALSE;
 
-            /// <summary>
-            ///  Called periodically by a component during IMsoComponent::FDoIdle.
-            ///  Return TRUE if component can continue its idle time processing,
-            ///  FALSE if not (in which case component returns from FDoIdle.)
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FContinueIdle()
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FContinueIdle()
             {
-
-                // Essentially, if we have a message on queue, then don't continue
-                // idle processing.
-                //
+                // If we have a message on queue, then don't continue idle processing.
                 NativeMethods.MSG msg = new NativeMethods.MSG();
-                return !UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE);
+                return !UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE) 
+                    ? BOOL.TRUE : BOOL.FALSE;
             }
 
-            /// <summary>
-            ///  Component identified by dwComponentID (cookie returned from
-            ///  FRegisterComponent) wishes to push a message loop for reason uReason.
-            ///  uReason is one the values from the msoloop enumeration (above).
-            ///  pvLoopData is data private to the component.
-            ///  The component manager should push its message loop,
-            ///  calling IMsoComponent::FContinueMessageLoop(uReason, pvLoopData)
-            ///  during each loop iteration (see IMsoComponent::FContinueMessageLoop
-            ///  comments).  When IMsoComponent::FContinueMessageLoop returns FALSE, the
-            ///  component manager terminates the loop.
-            ///  Returns TRUE if component manager terminates loop because component
-            ///  told it to (by returning FALSE from IMsoComponent::FContinueMessageLoop),
-            ///  FALSE if it had to terminate the loop for some other reason.  In the
-            ///  latter case, component should perform any necessary action (such as
-            ///  cleanup).
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(
-                                                      IntPtr dwComponentID,
-                                                      int reason,
-                                                      int pvLoopData          // PVOID
-                                                      )
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FPushMessageLoop(
+                UIntPtr dwComponentID,
+                msoloop uReason,
+                void* pvLoopData)
             {
-
-                int dwLocalComponentID = unchecked((int)(long)dwComponentID);
                 // Hold onto old state to allow restore before we exit...
-                //
-                int currentLoopState = _currentState;
-                bool continueLoop = true;
+                msocstate currentLoopState = _currentState;
+                BOOL continueLoop = BOOL.TRUE;
 
-                if (!OleComponents.ContainsKey(dwLocalComponentID))
+                if (!OleComponents.ContainsKey(dwComponentID))
                 {
-                    return false;
+                    return BOOL.FALSE;
                 }
 
-                UnsafeNativeMethods.IMsoComponent prevActive = _activeComponent;
+                IMsoComponent prevActive = _activeComponent;
 
                 try
                 {
-                    // Execute the message loop until the active component tells us to stop.
-                    //
-                    NativeMethods.MSG msg = new NativeMethods.MSG();
-                    NativeMethods.MSG[] rgmsg = new NativeMethods.MSG[] { msg };
-                    bool unicodeWindow = false;
-                    UnsafeNativeMethods.IMsoComponent requestingComponent;
+                    User32.MSG msg = new User32.MSG();
+                    IMsoComponent requestingComponent;
 
-                    ComponentHashtableEntry entry = (ComponentHashtableEntry)OleComponents[dwLocalComponentID];
-                    if (entry == null)
+                    if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                     {
-                        return false;
+                        return BOOL.FALSE;
                     }
 
                     requestingComponent = entry.component;
-
                     _activeComponent = requestingComponent;
 
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Pushing message loop " + reason.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager : Pushing message loop {uReason}");
                     Debug.Indent();
 
-                    while (continueLoop)
+                    while (continueLoop.IsTrue())
                     {
-
                         // Determine the component to route the message to
-                        //
-                        UnsafeNativeMethods.IMsoComponent component;
+                        IMsoComponent component = _trackingComponent ?? _activeComponent ?? requestingComponent;
 
-                        if (_trackingComponent != null)
+                        bool useAnsi = false;
+                        BOOL peeked = User32.PeekMessageW(ref msg);
+
+                        if (peeked.IsTrue())
                         {
-                            component = _trackingComponent;
-                        }
-                        else if (_activeComponent != null)
-                        {
-                            component = _activeComponent;
-                        }
-                        else
-                        {
-                            component = requestingComponent;
+                            useAnsi = msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd).IsFalse();
+                            if (useAnsi)
+                            {
+                                peeked = User32.PeekMessageA(ref msg);
+                            }
                         }
 
-                        bool peeked = UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE);
-
-                        if (peeked)
+                        if (peeked.IsTrue())
                         {
-
-                            rgmsg[0] = msg;
-                            continueLoop = component.FContinueMessageLoop(reason, pvLoopData, rgmsg);
+                            continueLoop = component.FContinueMessageLoop(uReason, pvLoopData, &msg);
 
                             // If the component wants us to process the message, do it.
-                            // The component manager hosts windows from many places.  We must be sensitive
-                            // to ansi / Unicode windows here.
-                            //
-                            if (continueLoop)
+                            if (continueLoop.IsTrue())
                             {
-                                if (msg.hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, msg.hwnd)))
+                                if (useAnsi)
                                 {
-                                    unicodeWindow = true;
-                                    UnsafeNativeMethods.GetMessageW(ref msg, NativeMethods.NullHandleRef, 0, 0);
+                                    User32.GetMessageA(ref msg);
+                                    Debug.Assert(User32.IsWindowUnicode(msg.hwnd).IsFalse());
                                 }
                                 else
                                 {
-                                    unicodeWindow = false;
-                                    UnsafeNativeMethods.GetMessageA(ref msg, NativeMethods.NullHandleRef, 0, 0);
+                                    User32.GetMessageW(ref msg);
+                                    Debug.Assert(msg.hwnd == IntPtr.Zero || User32.IsWindowUnicode(msg.hwnd).IsTrue());
                                 }
 
-                                if (msg.message == Interop.WindowMessages.WM_QUIT)
+                                if (msg.message == User32.WindowMessage.WM_QUIT)
                                 {
-                                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Normal message loop termination");
+                                    Debug.WriteLineIf(
+                                        CompModSwitches.MSOComponentManager.TraceInfo,
+                                        "ComponentManager : Normal message loop termination");
 
-                                    Application.ThreadContext.FromCurrent().DisposeThreadWindows();
+                                    ThreadContext.FromCurrent().DisposeThreadWindows();
 
-                                    if (reason != NativeMethods.MSOCM.msoloopMain)
+                                    if (uReason != msoloop.Main)
                                     {
                                         UnsafeNativeMethods.PostQuitMessage((int)msg.wParam);
                                     }
 
-                                    continueLoop = false;
+                                    continueLoop = BOOL.FALSE;
                                     break;
                                 }
 
@@ -510,35 +331,29 @@ namespace System.Windows.Forms
                                 // Reading through the rather sparse documentation,
                                 // it seems we should only call FPreTranslateMessage
                                 // on the active component.
-                                if (!component.FPreTranslateMessage(ref msg))
+                                if (component.FPreTranslateMessage(&msg).IsFalse())
                                 {
-                                    UnsafeNativeMethods.TranslateMessage(ref msg);
-                                    if (unicodeWindow)
+                                    User32.TranslateMessage(ref msg);
+                                    if (useAnsi)
                                     {
-                                        UnsafeNativeMethods.DispatchMessageW(ref msg);
+                                        User32.DispatchMessageA(ref msg);
                                     }
                                     else
                                     {
-                                        UnsafeNativeMethods.DispatchMessageA(ref msg);
+                                        User32.DispatchMessageW(ref msg);
                                     }
                                 }
                             }
                         }
                         else
                         {
-
-                            // If this is a DoEvents loop, then get out.  There's nothing left
-                            // for us to do.
-                            //
-                            if (reason == NativeMethods.MSOCM.msoloopDoEvents ||
-                                reason == NativeMethods.MSOCM.msoloopDoEventsModal)
+                            // If this is a DoEvents loop, then get out. There's nothing left for us to do.
+                            if (uReason == msoloop.DoEvents || uReason == msoloop.DoEventsModal)
                             {
                                 break;
                             }
 
-                            // Nothing is on the message queue.  Perform idle processing
-                            // and then do a WaitMessage.
-                            //
+                            // Nothing is on the message queue. Perform idle processing and then do a WaitMessage.
                             bool continueIdle = false;
 
                             if (OleComponents != null)
@@ -548,16 +363,14 @@ namespace System.Windows.Forms
                                 while (enumerator.MoveNext())
                                 {
                                     ComponentHashtableEntry idleEntry = (ComponentHashtableEntry)enumerator.Current;
-                                    continueIdle |= idleEntry.component.FDoIdle(-1);
+                                    continueIdle |= idleEntry.component.FDoIdle(msoidlef.All).IsTrue();
                                 }
                             }
 
-                            // give the component one more chance to terminate the
-                            // message loop.
-                            //
-                            continueLoop = component.FContinueMessageLoop(reason, pvLoopData, null);
+                            // Give the component one more chance to terminate the message loop.
+                            continueLoop = component.FContinueMessageLoop(uReason, pvLoopData, null);
 
-                            if (continueLoop)
+                            if (continueLoop.IsTrue())
                             {
                                 if (continueIdle)
                                 {
@@ -566,7 +379,8 @@ namespace System.Windows.Forms
                                     // want someone to attach to idle, forget to detach, and then cause
                                     // CPU to end up in race condition.  For Windows Forms this generally isn't an issue because
                                     // our component always returns false from its idle request
-                                    UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 100, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
+                                    UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(
+                                        0, IntPtr.Zero, 100, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
                                 }
                                 else
                                 {
@@ -578,8 +392,7 @@ namespace System.Windows.Forms
                                     // message appeared between processing and now WaitMessage
                                     // would wait for the next message.  We minimize this here
                                     // by calling PeekMessage.
-                                    //
-                                    if (!UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE))
+                                    if (User32.PeekMessageW(ref msg, IntPtr.Zero, 0, 0, User32.PeekMessageFlags.PM_NOREMOVE).IsFalse())
                                     {
                                         UnsafeNativeMethods.WaitMessage();
                                     }
@@ -589,7 +402,7 @@ namespace System.Windows.Forms
                     }
 
                     Debug.Unindent();
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : message loop " + reason.ToString(CultureInfo.InvariantCulture) + " complete.");
+                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager : message loop {uReason} complete.");
                 }
                 finally
                 {
@@ -597,108 +410,77 @@ namespace System.Windows.Forms
                     _activeComponent = prevActive;
                 }
 
-                return !continueLoop;
+                return continueLoop == BOOL.FALSE ? BOOL.TRUE : BOOL.FALSE;
             }
 
-            /// <summary>
-            ///  Cause the component manager to create a "sub" component manager, which
-            ///  will be one of its children in the hierarchical tree of component
-            ///  managers used to maintiain state contexts (see "Comments on State
-            ///  Contexts", above).
-            ///  piunkOuter is the controlling unknown (can be NULL), riid is the
-            ///  desired IID, and *ppvObj returns   the created sub component manager.
-            ///  piunkServProv (can be NULL) is a ptr to an object supporting
-            ///  IServiceProvider interface to which the created sub component manager
-            ///  will delegate its IMsoComponentManager::QueryService calls.
-            ///  (see objext.h or docobj.h for definition of IServiceProvider).
-            ///  Returns TRUE if successful.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FCreateSubComponentManager(
-                                                                object punkOuter,
-                                                                object punkServProv,
-                                                                ref Guid riid,
-                                                                out IntPtr ppvObj)
+            /// <inheritdoc/>
+            unsafe BOOL IMsoComponentManager.FCreateSubComponentManager(
+                IntPtr punkOuter,
+                IntPtr punkServProv,
+                Guid* riid,
+                void** ppvObj)
             {
-
                 // We do not support sub component managers.
-                //
-                ppvObj = IntPtr.Zero;
-                return false;
+                if (ppvObj != null)
+                {
+                    *ppvObj = null;
+                }
+                return BOOL.FALSE;
             }
 
-            /// <summary>
-            ///  Return in *ppicm an AddRef'ed ptr to this component manager's parent
-            ///  in the hierarchical tree of component managers used to maintain state
-            ///  contexts (see "Comments on State   Contexts", above).
-            ///  Returns TRUE if the parent is returned, FALSE if no parent exists or
-            ///  some error occurred.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FGetParentComponentManager(out UnsafeNativeMethods.IMsoComponentManager ppicm)
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FGetParentComponentManager(void** ppicm)
             {
-                ppicm = null;
-                return false;
+                // We have no parent.
+                if (ppicm != null)
+                {
+                    *ppicm = null;
+                }
+                return BOOL.FALSE;
             }
 
-            /// <summary>
-            ///  Return in *ppic an AddRef'ed ptr to the current active or tracking
-            ///  component (as indicated by dwgac (a msogacXXX value)), and
-            ///  its registration information in *pcrinfo.  ppic and/or pcrinfo can be
-            ///  NULL if caller is not interested these values.  If pcrinfo is not NULL,
-            ///  caller should set pcrinfo->cbSize before calling this method.
-            ///  Returns TRUE if the component indicated by dwgac exists, FALSE if no
-            ///  such component exists or some error occurred.
-            ///  dwReserved is reserved for future use and should be zero.
-            /// </summary>
-            bool UnsafeNativeMethods.IMsoComponentManager.FGetActiveComponent(
-                                                         int dwgac,
-                                                         UnsafeNativeMethods.IMsoComponent[] ppic,
-                                                         NativeMethods.MSOCRINFOSTRUCT info,
-                                                         int dwReserved)
+            /// <inheritdoc/>
+            BOOL IMsoComponentManager.FGetActiveComponent(
+                msogac dwgac,
+                void** ppic,
+                MSOCRINFO* pcrinfo,
+                uint dwReserved)
             {
+                IMsoComponent component = dwgac switch
+                {
+                    msogac.Active => _activeComponent,
+                    msogac.Tracking => _trackingComponent,
+                    msogac.TrackingOrActive => _trackingComponent ?? _activeComponent,
+                    _ => null
+                };
 
-                UnsafeNativeMethods.IMsoComponent component = null;
+                if (component == null)
+                    return BOOL.FALSE;
 
-                if (dwgac == NativeMethods.MSOCM.msogacActive)
+                if (pcrinfo != null)
                 {
-                    component = _activeComponent;
-                }
-                else if (dwgac == NativeMethods.MSOCM.msogacTracking)
-                {
-                    component = _trackingComponent;
-                }
-                else if (dwgac == NativeMethods.MSOCM.msogacTrackingOrActive)
-                {
-                    if (_trackingComponent != null)
+                    if (pcrinfo->cbSize < sizeof(MSOCRINFO))
                     {
-                        component = _trackingComponent;
+                        return BOOL.FALSE;
                     }
-                    else
-                    {
-                        component = _activeComponent;
-                    }
-                }
-                else
-                {
-                    Debug.Fail("Unknown dwgac in FGetActiveComponent");
-                }
 
-                if (ppic != null)
-                {
-                    ppic[0] = component;
-                }
-                if (info != null && component != null)
-                {
                     foreach (ComponentHashtableEntry entry in OleComponents.Values)
                     {
                         if (entry.component == component)
                         {
-                            info = entry.componentInfo;
+                            *pcrinfo = entry.componentInfo;
                             break;
                         }
                     }
                 }
 
-                return component != null;
+                if (ppic != null)
+                {
+                    // This will addref the interface
+                    *ppic = (void*)Marshal.GetComInterfaceForObject<IMsoComponent, IMsoComponent>(component);
+                }
+
+                return BOOL.TRUE;
             }
         }
     }

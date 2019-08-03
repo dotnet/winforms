@@ -83,7 +83,7 @@ namespace System.Windows.Forms
         ///  Returns True if it is OK to continue idle processing. Typically called in an Application.Idle event handler.
         /// </summary>
         internal static bool CanContinueIdle
-            => ThreadContext.FromCurrent().ComponentManager.FContinueIdle();
+            => ThreadContext.FromCurrent().ComponentManager.FContinueIdle().IsTrue();
 
         /// <summary>
         ///  Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
@@ -266,8 +266,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or
-        ///  sets the current input language for the current thread.
+        ///  Gets or sets the current input language for the current thread.
         /// </summary>
         public static InputLanguage CurrentInputLanguage
         {
@@ -279,8 +278,7 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
         /// <summary>
-        ///  Gets the
-        ///  path for the executable file that started the application.
+        ///  Gets the path for the executable file that started the application.
         /// </summary>
         public static string ExecutablePath
         {
@@ -419,7 +417,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets  the product version associated with this application.
+        ///  Gets the product version associated with this application.
         /// </summary>
         public static string ProductVersion
         {
@@ -665,6 +663,7 @@ namespace System.Windows.Forms
                 s_eventHandlers.AddHandler(key, value);
             }
         }
+
         private static void RemoveEventHandler(object key, Delegate value)
         {
             lock (s_internalSyncObject)
@@ -832,10 +831,10 @@ namespace System.Windows.Forms
         ///  Processes all Windows messages currently in the message queue.
         /// </summary>
         public static void DoEvents()
-            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEvents, null);
+            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.DoEvents, null);
 
         internal static void DoEventsModal()
-            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEventsModal, null);
+            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.DoEventsModal, null);
 
         /// <summary>
         ///  Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
@@ -1023,6 +1022,7 @@ namespace System.Windows.Forms
         private static string GetDataPath(string basePath)
         {
             string path = Path.Join(basePath, CompanyName, ProductName, ProductVersion);
+
             lock (s_internalSyncObject)
             {
                 if (!Directory.Exists(path))
@@ -1195,21 +1195,21 @@ namespace System.Windows.Forms
         ///  without a form.
         /// </summary>
         public static void Run()
-            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext());
+            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.Main, new ApplicationContext());
 
         /// <summary>
         ///  Begins running a standard application message loop on the current
         ///  thread, and makes the specified form visible.
         /// </summary>
         public static void Run(Form mainForm)
-            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext(mainForm));
+            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.Main, new ApplicationContext(mainForm));
 
         /// <summary>
         ///  Begins running a standard application message loop on the current thread,
         ///  without a form.
         /// </summary>
         public static void Run(ApplicationContext context)
-            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, context);
+            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.Main, context);
 
         /// <summary>
         ///  Runs a modal dialog.  This starts a special type of message loop that runs until
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms
         ///  when an application calls System.Windows.Forms.Form.ShowDialog().
         /// </summary>
         internal static void RunDialog(Form form)
-            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopModalForm, new ModalApplicationContext(form));
+            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.ModalForm, new ModalApplicationContext(form));
 
         /// <summary>
         ///  Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in.
