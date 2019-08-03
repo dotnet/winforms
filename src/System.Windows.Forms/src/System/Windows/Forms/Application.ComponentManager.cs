@@ -26,31 +26,29 @@ namespace System.Windows.Forms
         /// </summary>
         private class ComponentManager : UnsafeNativeMethods.IMsoComponentManager
         {
-            // ComponentManager instance data.
-            //
             private class ComponentHashtableEntry
             {
                 public UnsafeNativeMethods.IMsoComponent component;
                 public NativeMethods.MSOCRINFOSTRUCT componentInfo;
             }
 
-            private Hashtable oleComponents;
-            private int cookieCounter = 0;
-            private UnsafeNativeMethods.IMsoComponent activeComponent = null;
-            private UnsafeNativeMethods.IMsoComponent trackingComponent = null;
-            private int currentState = 0;
+            private Hashtable _oleComponents;
+            private int _cookieCounter = 0;
+            private UnsafeNativeMethods.IMsoComponent _activeComponent = null;
+            private UnsafeNativeMethods.IMsoComponent _trackingComponent = null;
+            private int _currentState = 0;
 
             private Hashtable OleComponents
             {
                 get
                 {
-                    if (oleComponents == null)
+                    if (_oleComponents == null)
                     {
-                        oleComponents = new Hashtable();
-                        cookieCounter = 0;
+                        _oleComponents = new Hashtable();
+                        _cookieCounter = 0;
                     }
 
-                    return oleComponents;
+                    return _oleComponents;
                 }
             }
 
@@ -65,10 +63,8 @@ namespace System.Windows.Forms
                                                  ref Guid iid,
                                                  out object ppvObj)
             {
-
                 ppvObj = null;
                 return NativeMethods.E_NOINTERFACE;
-
             }
 
             /// <summary>
@@ -83,7 +79,6 @@ namespace System.Windows.Forms
                                                    IntPtr wparam,
                                                    IntPtr lparam)
             {
-
                 return true;
             }
 
@@ -98,20 +93,17 @@ namespace System.Windows.Forms
                                                          NativeMethods.MSOCRINFOSTRUCT pcrinfo,
                                                          out IntPtr dwComponentID)
             {
-
                 // Construct Hashtable entry for this component
-                //
                 ComponentHashtableEntry entry = new ComponentHashtableEntry
                 {
                     component = component,
                     componentInfo = pcrinfo
                 };
-                OleComponents.Add(++cookieCounter, entry);
+                OleComponents.Add(++_cookieCounter, entry);
 
                 // Return the cookie
-                //
-                dwComponentID = (IntPtr)cookieCounter;
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component registered.  ID: " + cookieCounter.ToString(CultureInfo.InvariantCulture));
+                dwComponentID = (IntPtr)_cookieCounter;
+                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component registered.  ID: " + _cookieCounter.ToString(CultureInfo.InvariantCulture));
                 return true;
             }
 
@@ -133,13 +125,13 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (entry.component == activeComponent)
+                if (entry.component == _activeComponent)
                 {
-                    activeComponent = null;
+                    _activeComponent = null;
                 }
-                if (entry.component == trackingComponent)
+                if (entry.component == _trackingComponent)
                 {
-                    trackingComponent = null;
+                    _trackingComponent = null;
                 }
 
                 OleComponents.Remove(dwLocalComponentID);
@@ -162,8 +154,8 @@ namespace System.Windows.Forms
                                                                   )
             {
                 int dwLocalComponentID = unchecked((int)(long)dwComponentID);
+
                 // Update the registration info
-                //
                 ComponentHashtableEntry entry = (ComponentHashtableEntry)OleComponents[dwLocalComponentID];
                 if (entry == null)
                 {
@@ -201,7 +193,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "New active component is : " + entry.component.ToString());
-                activeComponent = entry.component;
+                _activeComponent = entry.component;
                 return true;
             }
 
@@ -232,18 +224,18 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (entry.component == trackingComponent ^ fTrack)
+                if (entry.component == _trackingComponent ^ fTrack)
                 {
                     return false;
                 }
 
                 if (fTrack)
                 {
-                    trackingComponent = entry.component;
+                    _trackingComponent = entry.component;
                 }
                 else
                 {
-                    trackingComponent = null;
+                    _trackingComponent = null;
                 }
 
                 return true;
@@ -294,7 +286,7 @@ namespace System.Windows.Forms
             {
 
                 int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-                currentState |= uStateID;
+                _currentState |= uStateID;
 
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component enter state.  ID: " + dwLocalComponentID.ToString(CultureInfo.InvariantCulture) + " state: " + uStateID.ToString(CultureInfo.InvariantCulture));
 
@@ -346,7 +338,7 @@ namespace System.Windows.Forms
                                                            )
             {
                 int dwLocalComponentID = unchecked((int)(long)dwComponentID);
-                currentState &= ~uStateID;
+                _currentState &= ~uStateID;
 
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager: Component exit state.  ID: " + dwLocalComponentID.ToString(CultureInfo.InvariantCulture) + " state: " + uStateID.ToString(CultureInfo.InvariantCulture));
 
@@ -377,7 +369,7 @@ namespace System.Windows.Forms
             /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FInState(int uStateID, IntPtr pvoid)
             {
-                return (currentState & uStateID) != 0;
+                return (_currentState & uStateID) != 0;
             }
 
             /// <summary>
@@ -421,7 +413,7 @@ namespace System.Windows.Forms
                 int dwLocalComponentID = unchecked((int)(long)dwComponentID);
                 // Hold onto old state to allow restore before we exit...
                 //
-                int currentLoopState = currentState;
+                int currentLoopState = _currentState;
                 bool continueLoop = true;
 
                 if (!OleComponents.ContainsKey(dwLocalComponentID))
@@ -429,7 +421,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                UnsafeNativeMethods.IMsoComponent prevActive = activeComponent;
+                UnsafeNativeMethods.IMsoComponent prevActive = _activeComponent;
 
                 try
                 {
@@ -448,7 +440,7 @@ namespace System.Windows.Forms
 
                     requestingComponent = entry.component;
 
-                    activeComponent = requestingComponent;
+                    _activeComponent = requestingComponent;
 
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Pushing message loop " + reason.ToString(CultureInfo.InvariantCulture));
                     Debug.Indent();
@@ -460,13 +452,13 @@ namespace System.Windows.Forms
                         //
                         UnsafeNativeMethods.IMsoComponent component;
 
-                        if (trackingComponent != null)
+                        if (_trackingComponent != null)
                         {
-                            component = trackingComponent;
+                            component = _trackingComponent;
                         }
-                        else if (activeComponent != null)
+                        else if (_activeComponent != null)
                         {
-                            component = activeComponent;
+                            component = _activeComponent;
                         }
                         else
                         {
@@ -601,8 +593,8 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    currentState = currentLoopState;
-                    activeComponent = prevActive;
+                    _currentState = currentLoopState;
+                    _activeComponent = prevActive;
                 }
 
                 return !continueLoop;
@@ -668,21 +660,21 @@ namespace System.Windows.Forms
 
                 if (dwgac == NativeMethods.MSOCM.msogacActive)
                 {
-                    component = activeComponent;
+                    component = _activeComponent;
                 }
                 else if (dwgac == NativeMethods.MSOCM.msogacTracking)
                 {
-                    component = trackingComponent;
+                    component = _trackingComponent;
                 }
                 else if (dwgac == NativeMethods.MSOCM.msogacTrackingOrActive)
                 {
-                    if (trackingComponent != null)
+                    if (_trackingComponent != null)
                     {
-                        component = trackingComponent;
+                        component = _trackingComponent;
                     }
                     else
                     {
-                        component = activeComponent;
+                        component = _activeComponent;
                     }
                 }
                 else

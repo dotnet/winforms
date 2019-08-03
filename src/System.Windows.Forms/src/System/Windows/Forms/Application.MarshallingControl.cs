@@ -27,6 +27,7 @@ namespace System.Windows.Forms
                 get
                 {
                     CreateParams cp = base.CreateParams;
+
                     // Message only windows are cheaper and have fewer issues than
                     // full blown invisible windows.
                     cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;

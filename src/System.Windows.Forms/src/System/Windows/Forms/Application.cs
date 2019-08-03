@@ -18,41 +18,38 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides <see langword='static '/>
-    ///  methods and properties
-    ///  to manage an application, such as methods to run and quit an application,
-    ///  to process Windows messages, and properties to get information about an application. This
-    ///  class cannot be inherited.
+    ///  Provides <see langword='static '/> methods and properties to manage an application,
+    ///  such as methods to run and quit an application, to process Windows messages, and
+    ///  properties to get information about an application. This class cannot be inherited.
     /// </summary>
     public sealed partial class Application
     {
         /// <summary>
         ///  Hash table for our event list
         /// </summary>
-        static EventHandlerList eventHandlers;
-        static string startupPath;
-        static string executablePath;
-        static object appFileVersion;
-        static Type mainType;
-        static string companyName;
-        static string productName;
-        static string productVersion;
-        static string safeTopLevelCaptionSuffix;
-        private static bool s_useVisualStyles = false;
-        static bool comCtlSupportsVisualStylesInitialized = false;
-        static bool comCtlSupportsVisualStyles = false;
+        private static EventHandlerList s_eventHandlers;
+        private static string s_startupPath;
+        private static string s_executablePath;
+        private static object s_appFileVersion;
+        private static Type s_mainType;
+        private static string s_companyName;
+        private static string s_productName;
+        private static string s_productVersion;
+        private static string s_safeTopLevelCaptionSuffix;
+        private static bool s_comCtlSupportsVisualStylesInitialized = false;
+        private static bool s_comCtlSupportsVisualStyles = false;
         private static FormCollection s_forms = null;
-        private static readonly object internalSyncObject = new object();
-        static bool useWaitCursor = false;
+        private static readonly object s_internalSyncObject = new object();
+        private static bool s_useWaitCursor = false;
 
-        private static bool useEverettThreadAffinity = false;
-        private static bool checkedThreadAffinity = false;
-        private const string everettThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
+        private static bool s_useEverettThreadAffinity = false;
+        private static bool s_checkedThreadAffinity = false;
+        private const string EverettThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
 
         /// <summary>
-        ///  in case Application.exit gets called recursively
+        ///  In case Application.exit gets called recursively
         /// </summary>
-        private static bool exiting;
+        private static bool s_exiting;
 
         /// <summary>
         ///  Events the user can hook into
@@ -80,41 +77,33 @@ namespace System.Windows.Forms
         ///  windows forms control should not attempt to quit the application.
         /// </summary>
         public static bool AllowQuit
-        {
-            get
-            {
-                return ThreadContext.FromCurrent().GetAllowQuit();
-            }
-        }
+            => ThreadContext.FromCurrent().GetAllowQuit();
 
         /// <summary>
         ///  Returns True if it is OK to continue idle processing. Typically called in an Application.Idle event handler.
         /// </summary>
         internal static bool CanContinueIdle
-        {
-            get
-            {
-                return ThreadContext.FromCurrent().ComponentManager.FContinueIdle();
-            }
-        }
+            => ThreadContext.FromCurrent().ComponentManager.FContinueIdle();
 
+        /// <summary>
         ///  Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
+        /// </summary>
         internal static bool ComCtlSupportsVisualStyles
         {
             get
             {
-                if (!comCtlSupportsVisualStylesInitialized)
+                if (!s_comCtlSupportsVisualStylesInitialized)
                 {
-                    comCtlSupportsVisualStyles = InitializeComCtlSupportsVisualStyles();
-                    comCtlSupportsVisualStylesInitialized = true;
+                    s_comCtlSupportsVisualStyles = InitializeComCtlSupportsVisualStyles();
+                    s_comCtlSupportsVisualStylesInitialized = true;
                 }
-                return comCtlSupportsVisualStyles;
+                return s_comCtlSupportsVisualStyles;
             }
         }
 
         private static bool InitializeComCtlSupportsVisualStyles()
         {
-            if (s_useVisualStyles)
+            if (UseVisualStyles)
             {
                 // At this point, we may not have loaded ComCtl6 yet, but it will eventually be loaded,
                 // so we return true here. This works because UseVisualStyles, once set, cannot be
@@ -125,6 +114,7 @@ namespace System.Windows.Forms
             // To see if we are comctl6, we look for a function that is exposed only from comctl6
             // we do not call DllGetVersion or any direct p/invoke, because the binding will be
             // cached.
+            //
             // GetModuleHandle  returns a handle to a mapped module without incrementing its
             // reference count.
             IntPtr hModule = Kernel32.GetModuleHandleW(Libraries.Comctl32);
@@ -144,49 +134,34 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the registry
-        ///  key for the application data that is shared among all users.
+        ///  Gets the registry key for the application data that is shared among all users.
         /// </summary>
         public static RegistryKey CommonAppDataRegistry
-        {
-            get
-            {
-                return Registry.LocalMachine.CreateSubKey(CommonAppDataRegistryKeyName);
-            }
-        }
+            => Registry.LocalMachine.CreateSubKey(CommonAppDataRegistryKeyName);
 
         internal static string CommonAppDataRegistryKeyName
-        {
-            get
-            {
-                string template = @"Software\{0}\{1}\{2}";
-                return string.Format(CultureInfo.CurrentCulture, template,
-                                                                      CompanyName,
-                                                                      ProductName,
-                                                                      ProductVersion);
-            }
-        }
+            => $"Software\\{CompanyName}\\{ProductName}\\{ProductVersion}";
 
         internal static bool UseEverettThreadAffinity
         {
             get
             {
-                if (!checkedThreadAffinity)
+                if (!s_checkedThreadAffinity)
                 {
-                    checkedThreadAffinity = true;
+                    s_checkedThreadAffinity = true;
                     try
                     {
-                        //We need access to be able to read from the registry here.  We're not creating a
-                        //registry key, nor are we returning information from the registry to the user.
+                        // We need access to be able to read from the registry here.  We're not creating a
+                        // registry key, nor are we returning information from the registry to the user.
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
                         if (key != null)
                         {
-                            object value = key.GetValue(everettThreadAffinityValue);
+                            object value = key.GetValue(EverettThreadAffinityValue);
                             key.Close();
 
                             if (value != null && (int)value != 0)
                             {
-                                useEverettThreadAffinity = true;
+                                s_useEverettThreadAffinity = true;
                             }
                         }
                     }
@@ -199,7 +174,7 @@ namespace System.Windows.Forms
                         // Key is of wrong type: use default value (false)
                     }
                 }
-                return useEverettThreadAffinity;
+                return s_useEverettThreadAffinity;
             }
         }
 
@@ -208,15 +183,10 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-        // the Windows logo required adornments to the directory (Company\Product\Version)
+        ///  the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string CommonAppDataPath
-        {
-            get
-            {
-                return GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-            }
-        }
+            => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
 
         /// <summary>
         ///  Gets the company name associated with the application.
@@ -225,37 +195,34 @@ namespace System.Windows.Forms
         {
             get
             {
-                lock (internalSyncObject)
+                lock (s_internalSyncObject)
                 {
-                    if (companyName == null)
+                    if (s_companyName == null)
                     {
-
-                        // custom attribute
-                        //
+                        // Custom attribute
                         Assembly entryAssembly = Assembly.GetEntryAssembly();
                         if (entryAssembly != null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
                             if (attrs != null && attrs.Length > 0)
                             {
-                                companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
+                                s_companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
                             }
                         }
 
-                        // win32 version
-                        //
-                        if (companyName == null || companyName.Length == 0)
+                        // Win32 version
+                        if (s_companyName == null || s_companyName.Length == 0)
                         {
-                            companyName = GetAppFileVersionInfo().CompanyName;
-                            if (companyName != null)
+                            s_companyName = GetAppFileVersionInfo().CompanyName;
+                            if (s_companyName != null)
                             {
-                                companyName = companyName.Trim();
+                                s_companyName = s_companyName.Trim();
                             }
                         }
 
                         // fake it with a namespace
                         // won't work with MC++ see GetAppMainType.
-                        if (companyName == null || companyName.Length == 0)
+                        if (s_companyName == null || s_companyName.Length == 0)
                         {
                             Type t = GetAppMainType();
 
@@ -268,41 +235,34 @@ namespace System.Windows.Forms
                                     int firstDot = ns.IndexOf('.');
                                     if (firstDot != -1)
                                     {
-                                        companyName = ns.Substring(0, firstDot);
+                                        s_companyName = ns.Substring(0, firstDot);
                                     }
                                     else
                                     {
-                                        companyName = ns;
+                                        s_companyName = ns;
                                     }
                                 }
                                 else
                                 {
                                     // last ditch... no namespace, use product name...
-                                    //
-                                    companyName = ProductName;
+                                    s_companyName = ProductName;
                                 }
                             }
                         }
                     }
                 }
-                return companyName;
+
+                return s_companyName;
             }
         }
 
         /// <summary>
-        ///  Gets
-        ///  or sets the locale information for the current thread.
+        ///  Gets or sets the locale information for the current thread.
         /// </summary>
         public static CultureInfo CurrentCulture
         {
-            get
-            {
-                return Thread.CurrentThread.CurrentCulture;
-            }
-            set
-            {
-                Thread.CurrentThread.CurrentCulture = value;
-            }
+            get => Thread.CurrentThread.CurrentCulture;
+            set => Thread.CurrentThread.CurrentCulture = value;
         }
 
         /// <summary>
@@ -311,23 +271,12 @@ namespace System.Windows.Forms
         /// </summary>
         public static InputLanguage CurrentInputLanguage
         {
-            get
-            {
-                return InputLanguage.CurrentInputLanguage;
-            }
-            set
-            {
-                InputLanguage.CurrentInputLanguage = value;
-            }
+            get => InputLanguage.CurrentInputLanguage;
+            set => InputLanguage.CurrentInputLanguage = value;
         }
 
         internal static bool CustomThreadExceptionHandlerAttached
-        {
-            get
-            {
-                return ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
-            }
-        }
+            => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
         /// <summary>
         ///  Gets the
@@ -337,13 +286,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (executablePath == null)
+                if (s_executablePath == null)
                 {
                     Assembly asm = Assembly.GetEntryAssembly();
                     if (asm == null)
                     {
                         StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                        executablePath = Path.GetFullPath(sb.ToString());
+                        s_executablePath = Path.GetFullPath(sb.ToString());
                     }
                     else
                     {
@@ -351,45 +300,33 @@ namespace System.Windows.Forms
                         Uri codeBase = new Uri(cb);
                         if (codeBase.IsFile)
                         {
-                            executablePath = codeBase.LocalPath + Uri.UnescapeDataString(codeBase.Fragment);
+                            s_executablePath = codeBase.LocalPath + Uri.UnescapeDataString(codeBase.Fragment);
                             ;
                         }
                         else
                         {
-                            executablePath = codeBase.ToString();
+                            s_executablePath = codeBase.ToString();
                         }
                     }
                 }
 
-                return executablePath;
+                return s_executablePath;
             }
         }
 
         /// <summary>
-        ///  Gets the current HighDpi mode for the process.
+        ///  Gets the current <see cref="HighDpiMode"/> mode for the process.
         /// </summary>
         public static HighDpiMode HighDpiMode
-        {
-            get
-            {
-                return DpiHelper.GetWinformsApplicationDpiAwareness();
-            }
-        }
+            => DpiHelper.GetWinformsApplicationDpiAwareness();
 
         /// <summary>
-        ///  Sets the HighDpi mode for process.
+        ///  Sets the <see cref="HighDpiMode"/> mode for process.
         /// </summary>
-        /// <param name="highDpiMode">The HighDpi mode to set.</param>
-        /// <returns></returns>
+        /// <param name="highDpiMode">The <see cref="HighDpiMode"/> mode to set.</param>
+        /// <returns><see langword="true" /> if successful.</returns>
         public static bool SetHighDpiMode(HighDpiMode highDpiMode)
-        {
-            if (DpiHelper.FirstParkingWindowCreated)
-            {
-                return false;
-            }
-
-            return DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
-        }
+            => !DpiHelper.FirstParkingWindowCreated && DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
 
         /// <summary>
         ///  Gets the path for the application data specific to a local, non-roaming user.
@@ -399,23 +336,13 @@ namespace System.Windows.Forms
         ///  the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string LocalUserAppDataPath
-        {
-            get
-            {
-                return GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-            }
-        }
+            => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
 
         /// <summary>
         ///  Determines if a message loop exists on this thread.
         /// </summary>
         public static bool MessageLoop
-        {
-            get
-            {
-                return ThreadContext.FromCurrent().GetMessageLoop();
-            }
-        }
+            => ThreadContext.FromCurrent().GetMessageLoop();
 
         /// <summary>
         ///  Gets the forms collection associated with this application.
@@ -430,36 +357,34 @@ namespace System.Windows.Forms
         {
             get
             {
-                lock (internalSyncObject)
+                lock (s_internalSyncObject)
                 {
-                    if (productName == null)
+                    if (s_productName == null)
                     {
-                        // custom attribute
-                        //
+                        // Custom attribute
                         Assembly entryAssembly = Assembly.GetEntryAssembly();
                         if (entryAssembly != null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
                             if (attrs != null && attrs.Length > 0)
                             {
-                                productName = ((AssemblyProductAttribute)attrs[0]).Product;
+                                s_productName = ((AssemblyProductAttribute)attrs[0]).Product;
                             }
                         }
 
-                        // win32 version info
-                        //
-                        if (productName == null || productName.Length == 0)
+                        // Win32 version info
+                        if (s_productName == null || s_productName.Length == 0)
                         {
-                            productName = GetAppFileVersionInfo().ProductName;
-                            if (productName != null)
+                            s_productName = GetAppFileVersionInfo().ProductName;
+                            if (s_productName != null)
                             {
-                                productName = productName.Trim();
+                                s_productName = s_productName.Trim();
                             }
                         }
 
                         // fake it with namespace
                         // won't work with MC++ see GetAppMainType.
-                        if (productName == null || productName.Length == 0)
+                        if (s_productName == null || s_productName.Length == 0)
                         {
                             Type t = GetAppMainType();
 
@@ -472,97 +397,83 @@ namespace System.Windows.Forms
                                     int lastDot = ns.LastIndexOf('.');
                                     if (lastDot != -1 && lastDot < ns.Length - 1)
                                     {
-                                        productName = ns.Substring(lastDot + 1);
+                                        s_productName = ns.Substring(lastDot + 1);
                                     }
                                     else
                                     {
-                                        productName = ns;
+                                        s_productName = ns;
                                     }
                                 }
                                 else
                                 {
                                     // last ditch... use the main type
-                                    //
-                                    productName = t.Name;
+                                    s_productName = t.Name;
                                 }
                             }
                         }
                     }
                 }
 
-                return productName;
+                return s_productName;
             }
         }
 
         /// <summary>
-        ///  Gets
-        ///  the product version associated with this application.
+        ///  Gets  the product version associated with this application.
         /// </summary>
         public static string ProductVersion
         {
             get
             {
-                lock (internalSyncObject)
+                lock (s_internalSyncObject)
                 {
-                    if (productVersion == null)
+                    if (s_productVersion == null)
                     {
-
-                        // custom attribute
-                        //
+                        // Custom attribute
                         Assembly entryAssembly = Assembly.GetEntryAssembly();
                         if (entryAssembly != null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
                             if (attrs != null && attrs.Length > 0)
                             {
-                                productVersion = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
+                                s_productVersion = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
                             }
                         }
 
-                        // win32 version info
-                        //
-                        if (productVersion == null || productVersion.Length == 0)
+                        // Win32 version info
+                        if (s_productVersion == null || s_productVersion.Length == 0)
                         {
-                            productVersion = GetAppFileVersionInfo().ProductVersion;
-                            if (productVersion != null)
+                            s_productVersion = GetAppFileVersionInfo().ProductVersion;
+                            if (s_productVersion != null)
                             {
-                                productVersion = productVersion.Trim();
+                                s_productVersion = s_productVersion.Trim();
                             }
                         }
 
                         // fake it
-                        //
-                        if (productVersion == null || productVersion.Length == 0)
+                        if (s_productVersion == null || s_productVersion.Length == 0)
                         {
-                            productVersion = "1.0.0.0";
+                            s_productVersion = "1.0.0.0";
                         }
                     }
                 }
-                return productVersion;
+
+                return s_productVersion;
             }
         }
 
         // Allows the hosting environment to register a callback
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static void RegisterMessageLoop(MessageLoopCallback callback)
-        {
-            ThreadContext.FromCurrent().RegisterMessageLoop(callback);
-        }
+            => ThreadContext.FromCurrent().RegisterMessageLoop(callback);
 
         /// <summary>
         ///  Magic property that answers a simple question - are my controls currently going to render with
-        //     visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
-        //     of the controls in your app.
+        ///  visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
+        ///  of the controls in your app.
         /// </summary>
         public static bool RenderWithVisualStyles
-        {
-            get
-            {
-                return (ComCtlSupportsVisualStyles && VisualStyles.VisualStyleRenderer.IsSupported);
-            }
-        }
+            => ComCtlSupportsVisualStyles && VisualStyleRenderer.IsSupported;
 
         /// <summary>
         ///  Gets or sets the format string to apply to top level window captions
@@ -572,11 +483,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (safeTopLevelCaptionSuffix == null)
+                if (s_safeTopLevelCaptionSuffix == null)
                 {
-                    safeTopLevelCaptionSuffix = SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
+                    s_safeTopLevelCaptionSuffix = SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
                 }
-                return safeTopLevelCaptionSuffix;
+                return s_safeTopLevelCaptionSuffix;
             }
             set
             {
@@ -585,56 +496,48 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                safeTopLevelCaptionSuffix = value;
+                s_safeTopLevelCaptionSuffix = value;
             }
         }
 
         /// <summary>
-        ///  Gets the
-        ///  path for the executable file that started the application.
+        ///  Gets the path for the executable file that started the application.
         /// </summary>
         public static string StartupPath
         {
             get
             {
-                if (startupPath == null)
+                if (s_startupPath == null)
                 {
                     // StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
                     // startupPath = Path.GetDirectoryName(sb.ToString());
-                    startupPath = AppContext.BaseDirectory;
+                    s_startupPath = AppContext.BaseDirectory;
                 }
-                return startupPath;
+                return s_startupPath;
             }
         }
 
         // Allows the hosting environment to unregister a callback
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static void UnregisterMessageLoop()
-        {
-            ThreadContext.FromCurrent().RegisterMessageLoop(null);
-        }
+            => ThreadContext.FromCurrent().RegisterMessageLoop(null);
 
         /// <summary>
-        ///  Gets
-        ///  or sets whether the wait cursor is used for all open forms of the application.
+        ///  Gets or sets whether the wait cursor is used for all open forms of the application.
         /// </summary>
         public static bool UseWaitCursor
         {
-            get
-            {
-                return useWaitCursor;
-            }
+            get => s_useWaitCursor;
             set
             {
                 lock (FormCollection.CollectionSyncRoot)
                 {
-                    useWaitCursor = value;
+                    s_useWaitCursor = value;
+
                     // Set the WaitCursor of all forms.
                     foreach (Form f in OpenForms)
                     {
-                        f.UseWaitCursor = useWaitCursor;
+                        f.UseWaitCursor = s_useWaitCursor;
                     }
                 }
             }
@@ -648,27 +551,17 @@ namespace System.Windows.Forms
         ///  the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string UserAppDataPath
-        {
-            get
-            {
-                return GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-            }
-        }
+            => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
         /// <summary>
         ///  Gets the registry key of
         ///  the application data specific to the roaming user.
         /// </summary>
         public static RegistryKey UserAppDataRegistry
-        {
-            get
-            {
-                string template = @"Software\{0}\{1}\{2}";
-                return Registry.CurrentUser.CreateSubKey(string.Format(CultureInfo.CurrentCulture, template, CompanyName, ProductName, ProductVersion));
-            }
-        }
+            => Registry.CurrentUser.CreateSubKey($"Software\\{CompanyName}\\{ProductName}\\{ProductVersion}");
 
-        public static bool UseVisualStyles => s_useVisualStyles;
+
+        public static bool UseVisualStyles { get; private set; } = false;
 
         /// <remarks>
         ///  Don't never ever change this name, since the window class and partner teams
@@ -698,15 +591,14 @@ namespace System.Windows.Forms
                 VisualStyleState vState = (VisualStyleState)SafeNativeMethods.GetThemeAppProperties();
                 return vState;
             }
-
             set
             {
                 if (VisualStyleInformation.IsSupportedByOS)
                 {
                     SafeNativeMethods.SetThemeAppProperties((int)value);
 
-                    //248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
-                    //We do it this way to ensure that we get all top level windows -- whether we created them or not.
+                    // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
+                    // We do it this way to ensure that we get all top level windows -- whether we created them or not.
                     SafeNativeMethods.EnumThreadWindowsCallback callback = new SafeNativeMethods.EnumThreadWindowsCallback(Application.SendThemeChanged);
                     SafeNativeMethods.EnumWindows(callback, IntPtr.Zero);
 
@@ -737,17 +629,18 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This helper broadcasts out a WM_THEMECHANGED this window and all children.
-        ///  it is assumed at this point that the handle belongs to the current process and has a visible top level window.
+        ///  It is assumed at this point that the handle belongs to the current process
+        ///  and has a visible top level window.
         /// </summary>
         private static bool SendThemeChangedRecursive(IntPtr handle, IntPtr lparam)
         {
-            //first send to all children...
+            // First send to all children...
             UnsafeNativeMethods.EnumChildWindows(new HandleRef(null, handle),
                 new NativeMethods.EnumChildrenCallback(Application.SendThemeChangedRecursive),
                 NativeMethods.NullHandleRef);
 
-            //then do myself.
-            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), WindowMessages.WM_THEMECHANGED, 0, 0);
+            // Then do myself.
+            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
 
             return true;
         }
@@ -763,24 +656,24 @@ namespace System.Windows.Forms
 
         private static void AddEventHandler(object key, Delegate value)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (null == eventHandlers)
+                if (null == s_eventHandlers)
                 {
-                    eventHandlers = new EventHandlerList();
+                    s_eventHandlers = new EventHandlerList();
                 }
-                eventHandlers.AddHandler(key, value);
+                s_eventHandlers.AddHandler(key, value);
             }
         }
         private static void RemoveEventHandler(object key, Delegate value)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (null == eventHandlers)
+                if (null == s_eventHandlers)
                 {
                     return;
                 }
-                eventHandlers.RemoveHandler(key, value);
+                s_eventHandlers.RemoveHandler(key, value);
             }
         }
 
@@ -789,9 +682,7 @@ namespace System.Windows.Forms
         ///  destinations.
         /// </summary>
         public static void AddMessageFilter(IMessageFilter value)
-        {
-            ThreadContext.FromCurrent().AddMessageFilter(value);
-        }
+            => ThreadContext.FromCurrent().AddMessageFilter(value);
 
         /// <summary>
         ///  Processes all message filters for given message
@@ -831,10 +722,10 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.idleHandler += value;
+                    current._idleHandler += value;
+
                     // This just ensures that the component manager is hooked up.  We
                     // need it for idle time processing.
-                    //
                     object o = current.ComponentManager;
                 }
             }
@@ -843,7 +734,7 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.idleHandler -= value;
+                    current._idleHandler -= value;
                 }
             }
         }
@@ -859,7 +750,7 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.enterModalHandler += value;
+                    current._enterModalHandler += value;
                 }
             }
             remove
@@ -867,7 +758,7 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.enterModalHandler -= value;
+                    current._enterModalHandler -= value;
                 }
             }
         }
@@ -883,7 +774,7 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.leaveModalHandler += value;
+                    current._leaveModalHandler += value;
                 }
             }
             remove
@@ -891,7 +782,7 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.leaveModalHandler -= value;
+                    current._leaveModalHandler -= value;
                 }
             }
         }
@@ -906,7 +797,7 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.threadExceptionHandler = value;
+                    current._threadExceptionHandler = value;
                 }
             }
             remove
@@ -914,16 +805,15 @@ namespace System.Windows.Forms
                 ThreadContext current = ThreadContext.FromCurrent();
                 lock (current)
                 {
-                    current.threadExceptionHandler -= value;
+                    current._threadExceptionHandler -= value;
                 }
             }
         }
 
         /// <summary>
-        ///  Occurs when a thread is about to shut down.  When
-        ///  the main thread for an application is about to be shut down,
-        ///  this event will be raised first, followed by an ApplicationExit
-        ///  event.
+        ///  Occurs when a thread is about to shut down.  When the main thread for an
+        ///  application is about to be shut down, this event will be raised first,
+        ///  followed by an <see cref="ApplicationExit"/> event.
         /// </summary>
         public static event EventHandler ThreadExit
         {
@@ -936,23 +826,16 @@ namespace System.Windows.Forms
         ///  Does not actually start a message pump; that's the caller's responsibility.
         /// </summary>
         internal static void BeginModalMessageLoop()
-        {
-            ThreadContext.FromCurrent().BeginModalMessageLoop(null);
-        }
+            => ThreadContext.FromCurrent().BeginModalMessageLoop(null);
 
         /// <summary>
-        ///  Processes
-        ///  all Windows messages currently in the message queue.
+        ///  Processes all Windows messages currently in the message queue.
         /// </summary>
         public static void DoEvents()
-        {
-            ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEvents, null);
-        }
+            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEvents, null);
 
         internal static void DoEventsModal()
-        {
-            ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEventsModal, null);
-        }
+            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEventsModal, null);
 
         /// <summary>
         ///  Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
@@ -965,8 +848,8 @@ namespace System.Windows.Forms
             if (assemblyLoc != null)
             {
                 // CSC embeds DLL manifests as resource ID 2
-                s_useVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
-                Debug.Assert(s_useVisualStyles, "Enable Visual Styles failed");
+                UseVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
+                Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
             }
         }
 
@@ -975,17 +858,12 @@ namespace System.Windows.Forms
         ///  Does not actually end the message pump itself.
         /// </summary>
         internal static void EndModalMessageLoop()
-        {
-            ThreadContext.FromCurrent().EndModalMessageLoop(null);
-        }
+            => ThreadContext.FromCurrent().EndModalMessageLoop(null);
 
         /// <summary>
         ///  Overload of Exit that does not care about e.Cancel.
         /// </summary>
-        public static void Exit()
-        {
-            Exit(null);
-        }
+        public static void Exit() => Exit(null);
 
         /// <summary>
         ///  Informs all message pumps that they are to terminate and
@@ -1008,13 +886,13 @@ namespace System.Windows.Forms
         private static bool ExitInternal()
         {
             bool cancelExit = false;
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (exiting)
+                if (s_exiting)
                 {
                     return false;
                 }
-                exiting = true;
+                s_exiting = true;
 
                 try
                 {
@@ -1044,7 +922,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    exiting = false;
+                    s_exiting = false;
                 }
             }
             return cancelExit;
@@ -1085,23 +963,23 @@ namespace System.Windows.Forms
         /// </summary>
         private static FileVersionInfo GetAppFileVersionInfo()
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (appFileVersion == null)
+                if (s_appFileVersion == null)
                 {
                     Type t = GetAppMainType();
                     if (t != null)
                     {
-                        appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
+                        s_appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
                     }
                     else
                     {
-                        appFileVersion = FileVersionInfo.GetVersionInfo(ExecutablePath);
+                        s_appFileVersion = FileVersionInfo.GetVersionInfo(ExecutablePath);
                     }
                 }
             }
 
-            return (FileVersionInfo)appFileVersion;
+            return (FileVersionInfo)s_appFileVersion;
         }
 
         /// <summary>
@@ -1109,9 +987,9 @@ namespace System.Windows.Forms
         /// </summary>
         private static Type GetAppMainType()
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (mainType == null)
+                if (s_mainType == null)
                 {
                     Assembly exe = Assembly.GetEntryAssembly();
 
@@ -1119,12 +997,12 @@ namespace System.Windows.Forms
                     // a class static method (it doesn't belong to a Type).
                     if (exe != null)
                     {
-                        mainType = exe.EntryPoint.ReflectedType;
+                        s_mainType = exe.EntryPoint.ReflectedType;
                     }
                 }
             }
 
-            return mainType;
+            return s_mainType;
         }
 
         /// <summary>
@@ -1139,20 +1017,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns a string that is the combination of the
-        ///  basePath + CompanyName + ProducName + ProductVersion. This
+        ///  Returns a string that is the combination of the basePath + CompanyName + ProducName + ProductVersion. This
         ///  will also create the directory if it doesn't exist.
         /// </summary>
         private static string GetDataPath(string basePath)
         {
-            string template = @"{0}\{1}\{2}\{3}";
-
-            string company = CompanyName;
-            string product = ProductName;
-            string version = ProductVersion;
-
-            string path = string.Format(CultureInfo.CurrentCulture, template, new object[] { basePath, company, product, version });
-            lock (internalSyncObject)
+            string path = Path.Join(basePath, CompanyName, ProductName, ProductVersion);
+            lock (s_internalSyncObject)
             {
                 if (!Directory.Exists(path))
                 {
@@ -1167,9 +1038,9 @@ namespace System.Windows.Forms
         /// </summary>
         private static void RaiseExit()
         {
-            if (eventHandlers != null)
+            if (s_eventHandlers != null)
             {
-                Delegate exit = eventHandlers[EVENT_APPLICATIONEXIT];
+                Delegate exit = s_eventHandlers[EVENT_APPLICATIONEXIT];
                 if (exit != null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);
@@ -1182,9 +1053,9 @@ namespace System.Windows.Forms
         /// </summary>
         private static void RaiseThreadExit()
         {
-            if (eventHandlers != null)
+            if (s_eventHandlers != null)
             {
-                Delegate exit = eventHandlers[EVENT_THREADEXIT];
+                Delegate exit = s_eventHandlers[EVENT_THREADEXIT];
                 if (exit != null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);
@@ -1226,17 +1097,13 @@ namespace System.Windows.Forms
         ///  Initializes OLE on the current thread.
         /// </summary>
         public static ApartmentState OleRequired()
-        {
-            return ThreadContext.FromCurrent().OleRequired();
-        }
+            => ThreadContext.FromCurrent().OleRequired();
 
         /// <summary>
         ///  Raises the <see cref='ThreadException'/> event.
         /// </summary>
         public static void OnThreadException(Exception t)
-        {
-            ThreadContext.FromCurrent().OnThreadException(t);
-        }
+            => ThreadContext.FromCurrent().OnThreadException(t);
 
         /// <summary>
         ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
@@ -1256,19 +1123,13 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static void RaiseIdle(EventArgs e)
-        {
-            ThreadContext current = ThreadContext.FromCurrent();
-            current.idleHandler?.Invoke(Thread.CurrentThread, e);
-        }
+            => ThreadContext.FromCurrent()._idleHandler?.Invoke(Thread.CurrentThread, e);
 
         /// <summary>
-        ///  Removes a message
-        ///  filter from the application's message pump.
+        ///  Removes a message filter from the application's message pump.
         /// </summary>
         public static void RemoveMessageFilter(IMessageFilter value)
-        {
-            ThreadContext.FromCurrent().RemoveMessageFilter(value);
-        }
+            => ThreadContext.FromCurrent().RemoveMessageFilter(value);
 
         /// <summary>
         ///  Restarts the application.
@@ -1319,7 +1180,7 @@ namespace System.Windows.Forms
                     sb.Append('"');
                 }
                 ProcessStartInfo currentStartInfo = Process.GetCurrentProcess().StartInfo;
-                currentStartInfo.FileName = Application.ExecutablePath;
+                currentStartInfo.FileName = ExecutablePath;
                 if (sb.Length > 0)
                 {
                     currentStartInfo.Arguments = sb.ToString();
@@ -1330,35 +1191,25 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Begins running a
-        ///  standard
-        ///  application message loop on the current thread,
+        ///  Begins running a standard application message loop on the current thread,
         ///  without a form.
         /// </summary>
         public static void Run()
-        {
-            ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext());
-        }
+            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext());
 
         /// <summary>
         ///  Begins running a standard application message loop on the current
         ///  thread, and makes the specified form visible.
         /// </summary>
         public static void Run(Form mainForm)
-        {
-            ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext(mainForm));
-        }
+            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext(mainForm));
 
         /// <summary>
-        ///  Begins running a
-        ///  standard
-        ///  application message loop on the current thread,
+        ///  Begins running a standard application message loop on the current thread,
         ///  without a form.
         /// </summary>
         public static void Run(ApplicationContext context)
-        {
-            ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, context);
-        }
+            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, context);
 
         /// <summary>
         ///  Runs a modal dialog.  This starts a special type of message loop that runs until
@@ -1366,9 +1217,7 @@ namespace System.Windows.Forms
         ///  when an application calls System.Windows.Forms.Form.ShowDialog().
         /// </summary>
         internal static void RunDialog(Form form)
-        {
-            ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopModalForm, new ModalApplicationContext(form));
-        }
+            => ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopModalForm, new ModalApplicationContext(form));
 
         /// <summary>
         ///  Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in.
@@ -1389,18 +1238,14 @@ namespace System.Windows.Forms
         ///  Returns true if the call succeeded, else false.
         /// </summary>
         public static bool SetSuspendState(PowerState state, bool force, bool disableWakeEvent)
-        {
-            return UnsafeNativeMethods.SetSuspendState(state == PowerState.Hibernate, force, disableWakeEvent);
-        }
+            => UnsafeNativeMethods.SetSuspendState(state == PowerState.Hibernate, force, disableWakeEvent);
 
         /// <summary>
         ///  Overload version of SetUnhandledExceptionMode that sets the UnhandledExceptionMode
         ///  mode at the current thread level.
         /// </summary>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode)
-        {
-            SetUnhandledExceptionMode(mode, true /*threadScope*/);
-        }
+            => SetUnhandledExceptionMode(mode, true /*threadScope*/);
 
         /// <summary>
         ///  This method can be used to modify the exception handling behavior of
@@ -1422,8 +1267,6 @@ namespace System.Windows.Forms
         ///  precedence over the application exception mode.
         /// </summary>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode, bool threadScope)
-        {
-            NativeWindow.SetUnhandledExceptionModeInternal(mode, threadScope);
-        }
+            => NativeWindow.SetUnhandledExceptionModeInternal(mode, threadScope);
     }
 }
