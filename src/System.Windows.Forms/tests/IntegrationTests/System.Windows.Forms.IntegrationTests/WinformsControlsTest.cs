@@ -67,7 +67,7 @@ namespace System.Windows.Forms.IntegrationTests
         [Fact]
         public void WinformsControlsTest_TreeViewAndImageListTest()
         {
-            Process process = TestHelpers.StartProcess(_exePath);
+            var process = TestHelpers.StartProcess(_exePath);
             TestHelpers.PressTabsOnProcess(process, 2);
             TestHelpers.PressEnterOnProcess(process);
 

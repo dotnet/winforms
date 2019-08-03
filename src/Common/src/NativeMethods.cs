@@ -2241,7 +2241,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        [Serializable]
         public struct MSG
         {
             public IntPtr hwnd;
@@ -3062,7 +3061,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        [Serializable]
         public class MSOCRINFOSTRUCT
         {
             public int cbSize = Marshal.SizeOf<MSOCRINFOSTRUCT>();              // size of MSOCRINFO structure in bytes.

@@ -150,8 +150,8 @@ namespace System.Windows.Forms.Tests
         public void Cursor_Clip_Get_ReturnsExpected()
         {
             Rectangle clip = Cursor.Clip;
-            Assert.True(clip.X >= 0);
-            Assert.True(clip.Y >= 0);
+            // Cursor location can be negative when it's located on a secondary screen to the left of
+            // or above the primary one.
             Assert.True(clip.Width >= 0);
             Assert.True(clip.Height >= 0);
         }

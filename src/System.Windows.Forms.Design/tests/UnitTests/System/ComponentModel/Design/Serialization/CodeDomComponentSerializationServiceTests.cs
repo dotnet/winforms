@@ -797,28 +797,22 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Fact]
-        public void LoadStore_SerializedStore_Success()
+        public void LoadStore_SerializedStore_ThrowsSerializationException()
         {
             var service = new CodeDomComponentSerializationService();
             SerializationStore store = service.CreateStore();
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-                formatter.Serialize(stream, store);
-                stream.Position = 0;
-
-                SerializationStore result = service.LoadStore(stream);
-                Assert.NotSame(store, result);
-                Assert.Equal(store.GetType(), result.GetType());
-                Assert.Empty(result.Errors);
+                Assert.Throws<SerializationException>(() => formatter.Serialize(stream, store));
             }
         }
 
         [Fact]
-        public void LoadStore_NullStream_ThrowsArgumentNullException()
+        public void LoadStore_NullStream_ThrowsPlatformNotSupportedException()
         {
             var service = new CodeDomComponentSerializationService();
-            Assert.Throws<ArgumentNullException>("stream", () => service.LoadStore(null));
+            Assert.Throws<PlatformNotSupportedException>(() => service.LoadStore(null));
         }
 
         [Fact]

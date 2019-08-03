@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
     /// </summary>
-    [Serializable]
+    [Serializable] // This class is participating in resx serialization scenarios for listview/treeview items.
     public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
     {
         private Control.FontHandleWrapper _fontWrapper = null;
@@ -20,15 +20,15 @@ namespace System.Windows.Forms
         {
             foreach (SerializationEntry entry in info)
             {
-                if (entry.Name == "Font")
+                if (entry.Name == nameof(Font))
                 {
                     Font = (Font)entry.Value;
                 }
-                else if (entry.Name == "ForeColor")
+                else if (entry.Name == nameof(ForeColor))
                 {
                     ForeColor = (Color)entry.Value;
                 }
-                else if (entry.Name == "BackColor")
+                else if (entry.Name == nameof(BackColor))
                 {
                     BackColor = (Color)entry.Value;
                 }
@@ -85,9 +85,9 @@ namespace System.Windows.Forms
 
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
-            si.AddValue("BackColor", BackColor);
-            si.AddValue("ForeColor", ForeColor);
-            si.AddValue("Font", Font);
+            si.AddValue(nameof(BackColor), BackColor);
+            si.AddValue(nameof(ForeColor), ForeColor);
+            si.AddValue(nameof(Font), Font);
         }
     }
 }

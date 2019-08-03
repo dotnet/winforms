@@ -17,7 +17,6 @@ namespace System.Drawing.Design
     /// <summary>
     /// Provides a base implementation of a toolbox item.
     /// </summary>
-    [Serializable]
     public class ToolboxItem : ISerializable
     {
         private static readonly TraceSwitch s_toolboxItemPersist = new TraceSwitch("ToolboxPersisting", "ToolboxItem: write data");
@@ -57,15 +56,6 @@ namespace System.Drawing.Design
         public ToolboxItem(Type toolType) : this()
         {
             Initialize(toolType);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref='System.Drawing.Design.ToolboxItem'/>
-        /// class using the specified serialization information.
-        /// </summary>
-        private ToolboxItem(SerializationInfo info, StreamingContext context) : this()
-        {
-            Deserialize(info, context);
         }
 
         /// <summary>
@@ -855,7 +845,7 @@ namespace System.Drawing.Design
                 Debug.WriteLine("\tDisplay Name: " + DisplayName);
             }
 
-            info.AddValue("Locked", Locked);
+            info.AddValue(nameof(Locked), Locked);
             ArrayList propertyNames = new ArrayList(Properties.Count);
             foreach (DictionaryEntry de in Properties)
             {
@@ -986,7 +976,7 @@ namespace System.Drawing.Design
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            Serialize(info, context);
+            throw new PlatformNotSupportedException();
         }
 
         private class LockableDictionary : Hashtable

@@ -20,7 +20,7 @@ namespace WinformsControlsTest
             // Create a new ListView control.
             ListView listView1 = new ListView
             {
-                Bounds = new Rectangle(new Point(10, 10), new Size(300, 200)),
+                Bounds = new Rectangle(new Point(0, 0), new Size(400, 200)),
 
                 // Set the view to show details.
                 View = View.Details,
@@ -92,8 +92,8 @@ namespace WinformsControlsTest
             listView1.Groups.AddRange(new ListViewGroup[] { listViewGroup1 });
 
             // Add the ListView to the control collection.
-            this.Controls.Add(listView1);
-            listView1.Dock = DockStyle.Fill;
+            Controls.Add(listView1);
+            listView1.Dock = DockStyle.Bottom;
         }
     }
 }

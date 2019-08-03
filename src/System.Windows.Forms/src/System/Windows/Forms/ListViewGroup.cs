@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Header))]
-    [Serializable]
+    [Serializable] // This type is participating in resx serialization scenarios.
     public sealed class ListViewGroup : ISerializable
     {
         private string _header;
@@ -187,12 +187,12 @@ namespace System.Windows.Forms
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Header", Header);
-            info.AddValue("HeaderAlignment", HeaderAlignment);
-            info.AddValue("Tag", Tag);
+            info.AddValue(nameof(Header), Header);
+            info.AddValue(nameof(HeaderAlignment), HeaderAlignment);
+            info.AddValue(nameof(Tag), Tag);
             if (!string.IsNullOrEmpty(Name))
             {
-                info.AddValue("Name", Name);
+                info.AddValue(nameof(Name), Name);
             }
             if (_items != null && _items.Count > 0)
             {

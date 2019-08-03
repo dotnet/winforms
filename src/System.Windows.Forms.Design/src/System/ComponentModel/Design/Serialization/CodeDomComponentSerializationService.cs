@@ -50,12 +50,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override SerializationStore LoadStore(Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
-
-            return CodeDomSerializationStore.Load(stream);
+            throw new PlatformNotSupportedException();
         }
 
         /// <summary>
@@ -226,9 +221,12 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// The SerializationStore class is an implementation-specific class that stores  serialization data for the component serialization service.  The  service adds state to this serialization store.  Once the store is  closed it can be saved to a stream.  A serialization store can be  deserialized at a later date by the same type of serialization service.   SerializationStore implements the IDisposable interface such that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.  The IDisposable pattern is provided  for languages that support a "using" syntax like C# and VB .NET.
+        /// The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.  
+        /// The service adds state to this serialization store.  Once the store is closed it can be saved to a stream.  A serialization store can
+        /// be deserialized at a later date by the same type of serialization service. SerializationStore implements the IDisposable interface such
+        /// that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
+        /// The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
         /// </summary>
-        [Serializable]
         private sealed class CodeDomSerializationStore : SerializationStore, ISerializable
         {
 #if DEBUG
@@ -271,23 +269,6 @@ namespace System.ComponentModel.Design.Serialization
                 _objects = new Hashtable();
                 _objectNames = new ArrayList();
                 _shimObjectNames = new List<string>();
-            }
-
-            /// <summary>
-            /// Used to deserialize ourselves from binary serialization.
-            /// </summary>
-            private CodeDomSerializationStore(SerializationInfo info, StreamingContext context)
-            {
-                _objectState = (Hashtable)info.GetValue(StateKey, typeof(Hashtable));
-                _objectNames = (ArrayList)info.GetValue(NameKey, typeof(ArrayList));
-                _assemblies = (AssemblyName[])info.GetValue(AssembliesKey, typeof(AssemblyName[]));
-                _shimObjectNames = (List<string>)info.GetValue(ShimKey, typeof(List<string>));
-                Hashtable h = (Hashtable)info.GetValue(ResourcesKey, typeof(Hashtable));
-
-                if (h != null)
-                {
-                    _resources = new LocalResourceManager(h);
-                }
             }
 
             /// <summary>
@@ -589,13 +570,11 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// The Save method saves the store to the given stream.  If the store  is open, Save will automatically close it for you.  You  can call save as many times as you wish to save the store  to different streams.
+            /// The Save method is not supported.
             /// </summary>
             public override void Save(Stream stream)
             {
-                Close();
-                BinaryFormatter f = new BinaryFormatter();
-                f.Serialize(stream, this);
+                throw new PlatformNotSupportedException();
             }
 
             [Conditional("DEBUG")]
@@ -668,7 +647,7 @@ namespace System.ComponentModel.Design.Serialization
 #endif
 
             /// <summary>
-            /// Implements the save part of ISerializable.
+            /// Implements the save part of ISerializable. Used in unit tests only.
             /// </summary>
             void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
             {

@@ -6,11 +6,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Security;
 
 namespace System.Windows.Forms
 {
@@ -19,9 +17,8 @@ namespace System.Windows.Forms
     ///  Different cursor shapes are used to inform the user what operation the mouse will
     ///  have.
     /// </summary>
-    [TypeConverter(typeof(CursorConverter)),
-        Serializable,
-        Editor("System.Drawing.Design.CursorEditor, " + AssemblyRef.SystemDrawingDesign, typeof(UITypeEditor))]
+    [TypeConverter(typeof(CursorConverter))]
+    [Editor("System.Drawing.Design.CursorEditor, " + AssemblyRef.SystemDrawingDesign, typeof(UITypeEditor))]
     public sealed class Cursor : IDisposable, ISerializable
     {
         private static Size cursorSize = System.Drawing.Size.Empty;
@@ -32,34 +29,6 @@ namespace System.Windows.Forms
         private int resourceId = 0;
 
         private object userData;
-
-        /**
-         * Constructor used in deserialization
-         */
-        internal Cursor(SerializationInfo info, StreamingContext context)
-        {
-            SerializationInfoEnumerator sie = info.GetEnumerator();
-            if (sie == null)
-            {
-                return;
-            }
-            for (; sie.MoveNext();)
-            {
-                // Dont catch any exceptions while Deserialising objects from stream.
-                if (string.Equals(sie.Name, "CursorData", StringComparison.OrdinalIgnoreCase))
-                {
-                    cursorData = (byte[])sie.Value;
-                    if (cursorData != null)
-                    {
-                        LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(info));
-                    }
-                }
-                else if (string.Compare(sie.Name, "CursorResourceId", true, CultureInfo.InvariantCulture) == 0)
-                {
-                    LoadFromResourceId((int)sie.Value, nameof(info));
-                }
-            }
-        }
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the
@@ -507,19 +476,7 @@ namespace System.Windows.Forms
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
-            if (cursorData != null)
-            {
-                si.AddValue("CursorData", cursorData, typeof(byte[]));
-            }
-            else if (resourceId != 0)
-            {
-                si.AddValue("CursorResourceId", resourceId, typeof(int));
-            }
-            else
-            {
-                Debug.Fail("Why are we trying to serialize an empty cursor?");
-                throw new SerializationException(SR.CursorNonSerializableHandle);
-            }
+            throw new PlatformNotSupportedException();
         }
 
         /// <summary>
