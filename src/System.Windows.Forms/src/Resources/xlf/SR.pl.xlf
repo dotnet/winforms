@@ -9822,8 +9822,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogVisualStylesNotEnabled">
-        <source>Visual styles are not enabled. Please call {0} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</source>
-        <target state="new">Visual styles are not enabled. Please call {0} before showing the task dialog. Alternatively, you can use an application manifest that declares a dependency on Microsoft.Windows.Common-Controls 6.0.0.0.</target>
+        <source>Visual styles are not enabled. Please call {0} before showing the task dialog.</source>
+        <target state="new">Visual styles are not enabled. Please call {0} before showing the task dialog.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">
