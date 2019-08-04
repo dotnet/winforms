@@ -12,16 +12,16 @@ internal static partial class Interop
         [ComImport]
         [Guid("7FD52380-4E07-101B-AE2D-08002B2EC713")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IPersistStreamInit
+        public unsafe interface IPersistStreamInit /* : IPersist */
         {
             void GetClassID(out Guid pClassID);
 
             [PreserveSig]
-            int IsDirty();
+            HRESULT IsDirty();
 
             void Load(IStream pstm);
 
-            void Save(IStream pstm, [MarshalAs(UnmanagedType.Bool)] bool fClearDirty);
+            void Save(IStream pstm, Interop.BOOL fClearDirty);
 
             // pcbSize is optional so it must be a pointer
             void GetSizeMax(ulong* pcbSize);

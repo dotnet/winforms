@@ -14255,7 +14255,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties)
+        void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
@@ -14269,7 +14269,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        int Interop.Ole32.IPersistStorage.IsDirty()
+        Interop.HRESULT Interop.Ole32.IPersistStorage.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.IsDirty");
             return ActiveXInstance.IsDirty();
@@ -14280,16 +14280,16 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
         }
 
-        int Interop.Ole32.IPersistStorage.Load(Interop.Ole32.IStorage pstg)
+        Interop.HRESULT Interop.Ole32.IPersistStorage.Load(Interop.Ole32.IStorage pstg)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
             ActiveXInstance.Load(pstg);
             Debug.Unindent();
-            return NativeMethods.S_OK;
+            return Interop.HRESULT.S_OK;
         }
 
-        void Interop.Ole32.IPersistStorage.Save(Interop.Ole32.IStorage pstg, bool fSameAsLoad)
+        void Interop.Ole32.IPersistStorage.Save(Interop.Ole32.IStorage pstg, Interop.BOOL fSameAsLoad)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Save");
             Debug.Indent();
@@ -14313,7 +14313,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        int Interop.Ole32.IPersistStreamInit.IsDirty()
+        Interop.HRESULT Interop.Ole32.IPersistStreamInit.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.IsDirty");
             return ActiveXInstance.IsDirty();
@@ -14327,7 +14327,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void Interop.Ole32.IPersistStreamInit.Save(Interop.Ole32.IStream pstm, bool fClearDirty)
+        void Interop.Ole32.IPersistStreamInit.Save(Interop.Ole32.IStream pstm, Interop.BOOL fClearDirty)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Save");
             Debug.Indent();

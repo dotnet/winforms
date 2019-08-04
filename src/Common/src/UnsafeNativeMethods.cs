@@ -2945,28 +2945,18 @@ namespace System.Windows.Forms
                            out Guid pClassID);
         }
 
-        [ComImport(), Guid("37D84F60-42CB-11CE-8135-00AA004BB851"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistPropertyBag
+        [ComImport]
+        [Guid("37D84F60-42CB-11CE-8135-00AA004BB851")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IPersistPropertyBag /* : IPersist */
         {
-            void GetClassID(
-                [Out]
-                out Guid pClassID);
+            void GetClassID(out Guid pClassID);
 
             void InitNew();
 
-            void Load(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IPropertyBag pPropBag,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IErrorLog pErrorLog);
+            void Load(IPropertyBag pPropBag, IErrorLog pErrorLog);
 
-            void Save(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IPropertyBag pPropBag,
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fClearDirty,
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fSaveAllProperties);
+            void Save(IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties);
         }
 
         [

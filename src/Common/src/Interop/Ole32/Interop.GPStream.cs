@@ -214,6 +214,8 @@ internal static partial class Interop
                 // Documented way to say we don't support locking
                 return HRESULT.STG_E_INVALIDFUNCTION;
             }
+
+            public Stream GetDataStream() => _dataStream;
         }
     }
 }

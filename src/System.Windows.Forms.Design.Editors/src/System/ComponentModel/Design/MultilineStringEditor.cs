@@ -496,7 +496,7 @@ namespace System.ComponentModel.Design
                 return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public Interop.HRESULT ShowContainerUI(int fShow)
+            public Interop.HRESULT ShowContainerUI(Interop.BOOL fShow)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::ShowContainerUI");
                 return Interop.HRESULT.S_OK;
@@ -545,7 +545,7 @@ namespace System.ComponentModel.Design
                 return Interop.HRESULT.S_OK;
             }
 
-            public Interop.HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, int reco, int fReally, IntPtr hMetaPict)
+            public Interop.HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, uint reco, Interop.BOOL fReally, IntPtr hMetaPict)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryAcceptData(reco=" + reco + ")");
                 if (reco == NativeMethods.RECO_PASTE)
@@ -563,19 +563,19 @@ namespace System.ComponentModel.Design
                 return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public Interop.HRESULT ContextSensitiveHelp(int fEnterMode)
+            public Interop.HRESULT ContextSensitiveHelp(Interop.BOOL fEnterMode)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::ContextSensitiveHelp");
                 return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public Interop.HRESULT GetClipboardData(ref Interop.Richedit.CHARRANGE lpchrg, int reco, IntPtr lplpdataobj)
+            public Interop.HRESULT GetClipboardData(ref Interop.Richedit.CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetClipboardData");
                 return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public Interop.HRESULT GetDragDropEffect(bool fDrag, int grfKeyState, ref int pdwEffect)
+            public Interop.HRESULT GetDragDropEffect(Interop.BOOL fDrag, int grfKeyState, ref int pdwEffect)
             {
                 pdwEffect = (int)DragDropEffects.None;
                 return Interop.HRESULT.S_OK;

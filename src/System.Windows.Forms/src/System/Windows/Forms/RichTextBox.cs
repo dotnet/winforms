@@ -3953,7 +3953,7 @@ namespace System.Windows.Forms
                 return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public Interop.HRESULT ShowContainerUI(int fShow)
+            public Interop.HRESULT ShowContainerUI(Interop.BOOL fShow)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ShowContainerUI");
                 // Do nothing
@@ -3973,9 +3973,7 @@ namespace System.Windows.Forms
                 return Interop.HRESULT.S_OK;
             }
 
-            public Interop.HRESULT QueryAcceptData(IComDataObject lpdataobj,
-                                       /* CLIPFORMAT* */ IntPtr lpcfFormat, int reco,
-                                       int fReally, IntPtr hMetaPict)
+            public Interop.HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, uint reco, Interop.BOOL fReally, IntPtr hMetaPict)
             {
 
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryAcceptData(reco=" + reco + ")");
@@ -4077,26 +4075,26 @@ namespace System.Windows.Forms
                 }
             }
 
-            public Interop.HRESULT ContextSensitiveHelp(int fEnterMode)
+            public Interop.HRESULT ContextSensitiveHelp(Interop.BOOL fEnterMode)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ContextSensitiveHelp");
                 return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public Interop.HRESULT GetClipboardData(ref Interop.Richedit.CHARRANGE lpchrg, int reco, IntPtr lplpdataobj)
+            public Interop.HRESULT GetClipboardData(ref Interop.Richedit.CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetClipboardData");
                 return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public Interop.HRESULT GetDragDropEffect(bool fDrag, int grfKeyState, ref int pdwEffect)
+            public Interop.HRESULT GetDragDropEffect(Interop.BOOL fDrag, int grfKeyState, ref int pdwEffect)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
 
                 if (owner.AllowDrop || owner.EnableAutoDragDrop)
                 {
 
-                    if (fDrag && grfKeyState == 0)
+                    if (fDrag != Interop.BOOL.FALSE && grfKeyState == 0)
                     {
                         // This is the very first call we receive in a Drag-Drop operation,
                         // so we will let the control know what we support.
@@ -4126,7 +4124,7 @@ namespace System.Windows.Forms
                         // We only care about the drag.
                         //
                         // When we drop, lastEffect will have the right state
-                        if (!fDrag && lastDataObject != null && grfKeyState != 0)
+                        if (fDrag == Interop.BOOL.FALSE && lastDataObject != null && grfKeyState != 0)
                         {
 
                             DragEventArgs e = new DragEventArgs(lastDataObject,

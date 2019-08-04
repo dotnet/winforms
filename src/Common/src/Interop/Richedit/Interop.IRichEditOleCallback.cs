@@ -22,7 +22,7 @@ internal partial class Interop
             HRESULT GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo);
 
             [PreserveSig]
-            HRESULT ShowContainerUI(int fShow);
+            HRESULT ShowContainerUI(BOOL fShow);
 
             [PreserveSig]
             HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp);
@@ -31,16 +31,16 @@ internal partial class Interop
             HRESULT DeleteObject(IntPtr lpoleobj);
 
             [PreserveSig]
-            HRESULT QueryAcceptData(IDataObject lpdataobj, /* CLIPFORMAT* */ IntPtr lpcfFormat, int reco, int fReally, IntPtr hMetaPict);
+            HRESULT QueryAcceptData(IDataObject lpdataobj, /* CLIPFORMAT* */ IntPtr lpcfFormat, uint reco, BOOL fReally, IntPtr hMetaPict);
 
             [PreserveSig]
-            HRESULT ContextSensitiveHelp(int fEnterMode);
+            HRESULT ContextSensitiveHelp(BOOL fEnterMode);
 
             [PreserveSig]
-            HRESULT GetClipboardData(ref CHARRANGE lpchrg, int reco, IntPtr lplpdataobj);
+            HRESULT GetClipboardData(ref CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj);
 
             [PreserveSig]
-            HRESULT GetDragDropEffect(bool fDrag, int grfKeyState, ref int pdwEffect);
+            HRESULT GetDragDropEffect(BOOL fDrag, int grfKeyState, ref int pdwEffect);
 
             [PreserveSig]
             HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref CHARRANGE lpchrg, out IntPtr hmenu);

@@ -13,15 +13,15 @@ internal partial class Interop
         [ComImport]
         [Guid("0000000B-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IStorage
+        public unsafe interface IStorage
         {
-            Interop.Ole32.IStream CreateStream(
+            IStream CreateStream(
                 [MarshalAs(UnmanagedType.LPWStr)] string pwcsName,
                 STGM grfMode,
                 uint reserved1,
                 uint reserved2);
 
-            Interop.Ole32.IStream OpenStream(
+            IStream OpenStream(
                 [MarshalAs(UnmanagedType.LPWStr)] string pwcsName,
                 IntPtr reserved1,
                 STGM grfMode,
@@ -41,7 +41,7 @@ internal partial class Interop
                 uint reserved);
 
             void CopyTo(
-                int ciidExclude,
+                uint ciidExclude,
                 Guid[] pIIDExclude,
                 IntPtr snbExclude,
                 IStorage stgDest);
@@ -52,7 +52,7 @@ internal partial class Interop
                 [MarshalAs(UnmanagedType.LPWStr)] string pwcsNewName,
                 uint grfFlags);
 
-            void Commit(int grfCommitFlags);
+            void Commit(uint grfCommitFlags);
 
             void Revert();
 
@@ -68,15 +68,16 @@ internal partial class Interop
                 [MarshalAs(UnmanagedType.LPWStr)] string pwcsOldName,
                 [MarshalAs(UnmanagedType.LPWStr)] string pwcsNewName);
 
+            // pctime, patime and pmtime are optional
             void SetElementTimes(
                 [MarshalAs(UnmanagedType.LPWStr)] string pwcsName,
-                ref FILETIME pctime,
-                ref FILETIME patime,
-                ref FILETIME pmtime);
+                FILETIME *pctime,
+                FILETIME *patime,
+                FILETIME *pmtime);
 
             void SetClass(ref Guid clsid);
 
-            void SetStateBits(int grfStateBits, int grfMask);
+            void SetStateBits(uint grfStateBits, uint grfMask);
 
             void Stat(out STATSTG pStatStg, STATFLAG grfStatFlag);
         }

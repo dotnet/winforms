@@ -2162,7 +2162,7 @@ namespace System.Windows.Forms
                     if (iPersistPropBag != null)
                     {
                         propBag = new PropertyBagStream();
-                        iPersistPropBag.Save(propBag, true, true);
+                        iPersistPropBag.Save(propBag, Interop.BOOL.TRUE, Interop.BOOL.TRUE);
                     }
 
                     MemoryStream ms = null;
@@ -2173,11 +2173,11 @@ namespace System.Windows.Forms
                             ms = new MemoryStream();
                             if (storageType == STG_STREAM)
                             {
-                                iPersistStream.Save(new Interop.Ole32.GPStream(ms), true);
+                                iPersistStream.Save(new Interop.Ole32.GPStream(ms), Interop.BOOL.TRUE);
                             }
                             else
                             {
-                                iPersistStreamInit.Save(new Interop.Ole32.GPStream(ms), true);
+                                iPersistStreamInit.Save(new Interop.Ole32.GPStream(ms), Interop.BOOL.TRUE);
                             }
                             break;
                         case STG_STORAGE:
@@ -2326,7 +2326,7 @@ namespace System.Windows.Forms
                 return true;
             }
 #endif
-            int hr = NativeMethods.E_FAIL;
+            Interop.HRESULT hr = Interop.HRESULT.E_FAIL;
             switch (storageType)
             {
                 case STG_STREAM:
@@ -2342,23 +2342,16 @@ namespace System.Windows.Forms
                     Debug.Fail("unknown storage type");
                     return true;
             }
-            if (hr == NativeMethods.S_FALSE)
-            {
-                // NOTE: This was a note from the old AxHost codebase. The problem
-                // with doing this is that the some controls that do not run in
-                // unlicensed mode (e.g. ProtoView ScheduleX pvtaskpad.ocx) will
-                // always return S_FALSE to disallow design-time support.
 
-                // Sadly, some controls lie and never say that they are dirty...
-                // SO, we don't believe them unless they told us that they were
-                // dirty at least once...
-                return false;
-            }
-            else if (NativeMethods.Failed(hr))
-            {
-                return true;
-            }
-            return true;
+            // NOTE: This was a note from the old AxHost codebase. The problem
+            // with doing this is that the some controls that do not run in
+            // unlicensed mode (e.g. ProtoView ScheduleX pvtaskpad.ocx) will
+            // always return S_FALSE to disallow design-time support.
+
+            // Sadly, some controls lie and never say that they are dirty...
+            // SO, we don't believe them unless they told us that they were
+            // dirty at least once...
+            return hr != Interop.HRESULT.S_FALSE;
         }
 
         internal bool IsUserMode()
@@ -3117,8 +3110,8 @@ namespace System.Windows.Forms
             //
             if (storage != null)
             {
-                int hr = iPersistStorage.Load(storage);
-                if (hr != NativeMethods.S_OK)
+                Interop.HRESULT hr =  iPersistStorage.Load(storage);
+                if (hr != Interop.HRESULT.S_OK)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Error trying load depersist from IStorage: " + hr);
                 }
@@ -7128,7 +7121,7 @@ namespace System.Windows.Forms
                             iLockBytes,
                             null,
                             Interop.Ole32.STGM.STGM_READWRITE | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
-                            0,
+                            IntPtr.Zero,
                             0);
                     }
                 }
@@ -7230,7 +7223,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                iPersistStorage.Save(storage, true);
+                iPersistStorage.Save(storage, Interop.BOOL.TRUE);
                 storage.Commit(0);
                 iPersistStorage.HandsOffStorage();
                 try

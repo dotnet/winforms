@@ -12,19 +12,19 @@ internal partial class Interop
         [ComImport]
         [Guid("0000010A-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStorage
+        public interface IPersistStorage /* : IPersist */
         {
             void GetClassID(out Guid pClassID);
 
             [PreserveSig]
-            int IsDirty();
+            HRESULT IsDirty();
 
             void InitNew(IStorage pstg);
 
             [PreserveSig]
-            int Load(IStorage pstg);
+            HRESULT Load(IStorage pstg);
 
-            void Save(IStorage pStgSave, [MarshalAs(UnmanagedType.Bool)] bool fSameAsLoad);
+            void Save(IStorage pStgSave, Interop.BOOL fSameAsLoad);
 
             void SaveCompleted(IStorage pStgNew);
 

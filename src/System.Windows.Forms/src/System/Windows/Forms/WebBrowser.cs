@@ -290,7 +290,7 @@ namespace System.Windows.Forms
                     {
                         MemoryStream memoryStream = new MemoryStream();
                         Interop.Ole32.IStream iStream = (Interop.Ole32.IStream)new Interop.Ole32.GPStream(memoryStream);
-                        psi.Save(iStream, false);
+                        psi.Save(iStream, Interop.BOOL.FALSE);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                     }
                 }

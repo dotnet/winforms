@@ -12,16 +12,16 @@ internal static partial class Interop
         [ComImport]
         [Guid("00000109-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStream
+        public interface IPersistStream /* : IPersist */
         {
             void GetClassID(out Guid pClassId);
 
             [PreserveSig]
-            int IsDirty();
+            HRESULT IsDirty();
 
             void Load(IStream pstm);
 
-            void Save(IStream pstm, [MarshalAs(UnmanagedType.Bool)] bool fClearDirty);
+            void Save(IStream pstm, Interop.BOOL fClearDirty);
 
             long GetSizeMax();
         }
