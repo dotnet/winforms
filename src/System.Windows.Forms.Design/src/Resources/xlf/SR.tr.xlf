@@ -513,6 +513,16 @@
         <target state="translated">'{1}' değeri '{0}' öğesi için geçerli değil. '{0}' değeri {2} ile {3} arasında olmalıdır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="new">(None)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="new">(none)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
         <target state="translated">Tasarım gereği, bu metot/nesne uygulanmadı.</target>

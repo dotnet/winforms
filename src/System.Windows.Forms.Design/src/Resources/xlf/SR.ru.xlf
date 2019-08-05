@@ -513,6 +513,16 @@
         <target state="translated">'{1}' не является допустимым значением для '{0}'. Значение '{0}' должно лежать в диапазоне от {2} до {3}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="new">(None)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="new">(none)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
         <target state="translated">Этот метод или объект не реализован намеренно.</target>

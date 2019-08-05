@@ -186,7 +186,7 @@ namespace System.Windows.Forms
         [
             Browsable(true),
             DefaultValue(""),
-            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
+            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemWinformsDesign),
             Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor)),
             SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr)),
             SRCategory(nameof(SR.CatData))

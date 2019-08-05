@@ -513,6 +513,16 @@
         <target state="translated">'{1}' nie jest prawidłową wartością dla '{0}'. Wartość '{0}' powinna należeć do zakresu od {2} do {3}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="new">(None)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="new">(none)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
         <target state="translated">Ta metoda/obiekt nie jest domyślnie implementowana.</target>

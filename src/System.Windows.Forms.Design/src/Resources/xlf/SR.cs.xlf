@@ -513,6 +513,16 @@
         <target state="translated">Hodnota {1} není platnou hodnotou pro argument {0}. Hodnota {0} musí být v rozsahu od {2} do {3}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="new">(None)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="new">(none)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
         <target state="translated">Tuto metodu nebo objekt návrh neimplementuje.</target>
