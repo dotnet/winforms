@@ -1731,20 +1731,20 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool ProcessCmdKey(ref Message m, Keys keyData)
         {
-            Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - processing: [" + keyData.ToString() + "]");
+            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - processing: [" + keyData.ToString() + "]");
             if (ToolStripManager.IsValidShortcut(keyData))
             {
                 // if we're at the toplevel, check the toolstrips for matching shortcuts.
                 // Win32 menus are handled in Form.ProcessCmdKey, but we cant guarantee that
                 // toolstrips will be hosted in a form.  ToolStrips have a hash of shortcuts
                 // per container, so this should hopefully be a quick search.
-                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");
+                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");
 
                 return ToolStripManager.ProcessShortcut(ref m, keyData);
             }
             if (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
             {
-                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
+                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
                 ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);
             }
 
@@ -1767,7 +1767,7 @@ namespace System.Windows.Forms
 
             if (activeControlInChain != null && IsValidShortcut(shortcut))
             {
-                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - processing: [" + shortcut.ToString() + "]");
+                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - processing: [" + shortcut.ToString() + "]");
 
                 // start from the focused control and work your way up the parent chain
                 do
@@ -1780,7 +1780,7 @@ namespace System.Windows.Forms
                             ToolStripMenuItem item = activeControlInChain.ContextMenuStrip.Shortcuts[shortcut] as ToolStripMenuItem;
                             if (item.ProcessCmdKey(ref m, shortcut))
                             {
-                                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on context menu: [" + item.ToString() + "]");
+                                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on context menu: [" + item.ToString() + "]");
                                 return true;
                             }
                         }
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms
                             {
                                 if (item.ProcessCmdKey(ref m, shortcut))
                                 {
-                                    Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on toolstrip: [" + item.ToString() + "]");
+                                    Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on toolstrip: [" + item.ToString() + "]");
                                     retVal = true;
                                     break;
                                 }
@@ -1908,7 +1908,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool ProcessMenuKey(ref Message m)
         {
-            Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessMenuKey: [" + m.ToString() + "]");
+            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessMenuKey: [" + m.ToString() + "]");
             if (!IsThreadUsingToolStrips())
             {
                 return false;

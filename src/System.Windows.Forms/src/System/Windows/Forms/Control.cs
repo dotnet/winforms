@@ -77,15 +77,15 @@ namespace System.Windows.Forms
 #endif
 
 #if DEBUG
-        internal static readonly TraceSwitch PaletteTracing = new TraceSwitch("PaletteTracing", "Debug Palette code");
-        internal static readonly TraceSwitch ControlKeyboardRouting = new TraceSwitch("ControlKeyboardRouting", "Debug Keyboard routing for controls");
-        internal static readonly TraceSwitch FocusTracing = new TraceSwitch("FocusTracing", "Debug focus/active control/enter/leave");
-        private static readonly BooleanSwitch AssertOnControlCreateSwitch = new BooleanSwitch("AssertOnControlCreate", "Assert when anything directly deriving from control is created.");
-        internal static readonly BooleanSwitch TraceMnemonicProcessing = new BooleanSwitch("TraceCanProcessMnemonic", "Trace mnemonic processing calls to assure right child-parent call ordering.");
+        internal static readonly TraceSwitch s_paletteTracing = new TraceSwitch("PaletteTracing", "Debug Palette code");
+        internal static readonly TraceSwitch s_controlKeyboardRouting = new TraceSwitch("ControlKeyboardRouting", "Debug Keyboard routing for controls");
+        private protected static readonly TraceSwitch s_focusTracing = new TraceSwitch("FocusTracing", "Debug focus/active control/enter/leave");
+        private static readonly BooleanSwitch s_assertOnControlCreateSwitch = new BooleanSwitch("AssertOnControlCreate", "Assert when anything directly deriving from control is created.");
+        private protected static readonly BooleanSwitch s_traceMnemonicProcessing = new BooleanSwitch("TraceCanProcessMnemonic", "Trace mnemonic processing calls to assure right child-parent call ordering.");
 
-        internal void TraceCanProcessMnemonic()
+        private protected void TraceCanProcessMnemonic()
         {
-            if (TraceMnemonicProcessing.Enabled)
+            if (s_traceMnemonicProcessing.Enabled)
             {
                 string str;
                 try
@@ -122,16 +122,14 @@ namespace System.Windows.Forms
             }
         }
 #else
-        internal static readonly TraceSwitch ControlKeyboardRouting;
-        internal static readonly TraceSwitch PaletteTracing;
-        internal static readonly TraceSwitch FocusTracing;
+        internal static readonly TraceSwitch s_paletteTracing;
+        internal static readonly TraceSwitch s_controlKeyboardRouting;
+        private protected readonly TraceSwitch s_focusTracing;
 #endif
 
 #if DEBUG
-        internal static readonly BooleanSwitch BufferPinkRect = new BooleanSwitch("BufferPinkRect", "Renders a pink rectangle with painting double buffered controls");
-        internal static readonly BooleanSwitch BufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
-#else
-        internal static readonly BooleanSwitch BufferPinkRect;
+        private static readonly BooleanSwitch s_bufferPinkRect = new BooleanSwitch("BufferPinkRect", "Renders a pink rectangle with painting double buffered controls");
+        private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
 #endif
 
         private static readonly int WM_GETCONTROLNAME = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLNAME");
@@ -193,78 +191,78 @@ namespace System.Windows.Forms
         internal const int STATE2_TOPMDIWINDOWCLOSING = 0x00001000;
         internal const int STATE2_CURRENTLYBEINGSCALED = 0x00002000;   // if set, the control is being scaled, currently
 
-        private static readonly object EventAutoSizeChanged = new object();
-        private static readonly object EventKeyDown = new object();
-        private static readonly object EventKeyPress = new object();
-        private static readonly object EventKeyUp = new object();
-        private static readonly object EventMouseDown = new object();
-        private static readonly object EventMouseEnter = new object();
-        private static readonly object EventMouseLeave = new object();
-        private static readonly object EventDpiChangedBeforeParent = new object();
-        private static readonly object EventDpiChangedAfterParent = new object();
-        private static readonly object EventMouseHover = new object();
-        private static readonly object EventMouseMove = new object();
-        private static readonly object EventMouseUp = new object();
-        private static readonly object EventMouseWheel = new object();
-        private static readonly object EventClick = new object();
-        private static readonly object EventClientSize = new object();
-        private static readonly object EventDoubleClick = new object();
-        private static readonly object EventMouseClick = new object();
-        private static readonly object EventMouseDoubleClick = new object();
-        private static readonly object EventMouseCaptureChanged = new object();
-        private static readonly object EventMove = new object();
-        private static readonly object EventResize = new object();
-        private static readonly object EventLayout = new object();
-        private static readonly object EventGotFocus = new object();
-        private static readonly object EventLostFocus = new object();
-        private static readonly object EventEnabledChanged = new object();
-        private static readonly object EventEnter = new object();
-        private static readonly object EventLeave = new object();
-        private static readonly object EventHandleCreated = new object();
-        private static readonly object EventHandleDestroyed = new object();
-        private static readonly object EventVisibleChanged = new object();
-        private static readonly object EventControlAdded = new object();
-        private static readonly object EventControlRemoved = new object();
-        private static readonly object EventChangeUICues = new object();
-        private static readonly object EventSystemColorsChanged = new object();
-        private static readonly object EventValidating = new object();
-        private static readonly object EventValidated = new object();
-        private static readonly object EventStyleChanged = new object();
-        private static readonly object EventImeModeChanged = new object();
-        private static readonly object EventHelpRequested = new object();
-        private static readonly object EventPaint = new object();
-        private static readonly object EventInvalidated = new object();
-        private static readonly object EventQueryContinueDrag = new object();
-        private static readonly object EventGiveFeedback = new object();
-        private static readonly object EventDragEnter = new object();
-        private static readonly object EventDragLeave = new object();
-        private static readonly object EventDragOver = new object();
-        private static readonly object EventDragDrop = new object();
-        private static readonly object EventQueryAccessibilityHelp = new object();
-        private static readonly object EventBackgroundImage = new object();
-        private static readonly object EventBackgroundImageLayout = new object();
-        private static readonly object EventBindingContext = new object();
-        private static readonly object EventBackColor = new object();
-        private static readonly object EventParent = new object();
-        private static readonly object EventVisible = new object();
-        private static readonly object EventText = new object();
-        private static readonly object EventTabStop = new object();
-        private static readonly object EventTabIndex = new object();
-        private static readonly object EventSize = new object();
-        private static readonly object EventRightToLeft = new object();
-        private static readonly object EventLocation = new object();
-        private static readonly object EventForeColor = new object();
-        private static readonly object EventFont = new object();
-        private static readonly object EventEnabled = new object();
-        private static readonly object EventDock = new object();
-        private static readonly object EventCursor = new object();
-        private static readonly object EventContextMenu = new object();
-        private static readonly object EventContextMenuStrip = new object();
-        private static readonly object EventCausesValidation = new object();
-        private static readonly object EventRegionChanged = new object();
-        private static readonly object EventMarginChanged = new object();
-        internal static readonly object EventPaddingChanged = new object();
-        private static readonly object EventPreviewKeyDown = new object();
+        private static readonly object s_autoSizeChangedEvent = new object();
+        private static readonly object s_keyDownEvent = new object();
+        private static readonly object s_keyPressEvent = new object();
+        private static readonly object s_keyUpEvent = new object();
+        private static readonly object s_mouseDownEvent = new object();
+        private static readonly object s_mouseEnterEvent = new object();
+        private static readonly object s_mouseLeaveEvent = new object();
+        private static readonly object s_dpiChangedBeforeParentEvent = new object();
+        private static readonly object s_dpiChangedAfterParentEvent = new object();
+        private static readonly object s_mouseHoverEvent = new object();
+        private static readonly object s_mouseMoveEvent = new object();
+        private static readonly object s_mouseUpEvent = new object();
+        private static readonly object s_mouseWheelEvent = new object();
+        private static readonly object s_clickEvent = new object();
+        private static readonly object s_clientSizeEvent = new object();
+        private static readonly object s_doubleClickEvent = new object();
+        private static readonly object s_mouseClickEvent = new object();
+        private static readonly object s_mouseDoubleClickEvent = new object();
+        private static readonly object s_mouseCaptureChangedEvent = new object();
+        private static readonly object s_moveEvent = new object();
+        private static readonly object s_resizeEvent = new object();
+        private static readonly object s_layoutEvent = new object();
+        private static readonly object s_gotFocusEvent = new object();
+        private static readonly object s_lostFocusEvent = new object();
+        private static readonly object s_enabledChangedEvent = new object();
+        private static readonly object s_enterEvent = new object();
+        private static readonly object s_leaveEvent = new object();
+        private static readonly object s_handleCreatedEvent = new object();
+        private static readonly object s_handleDestroyedEvent = new object();
+        private static readonly object s_visibleChangedEvent = new object();
+        private static readonly object s_controlAddedEvent = new object();
+        private static readonly object s_controlRemovedEvent = new object();
+        private static readonly object s_changeUICuesEvent = new object();
+        private static readonly object s_systemColorsChangedEvent = new object();
+        private static readonly object s_validatingEvent = new object();
+        private static readonly object s_validatedEvent = new object();
+        private static readonly object s_styleChangedEvent = new object();
+        private static readonly object s_imeModeChangedEvent = new object();
+        private static readonly object s_helpRequestedEvent = new object();
+        private static readonly object s_paintEvent = new object();
+        private static readonly object s_invalidatedEvent = new object();
+        private static readonly object s_queryContinueDragEvent = new object();
+        private static readonly object s_giveFeedbackEvent = new object();
+        private static readonly object s_dragEnterEvent = new object();
+        private static readonly object s_dragLeaveEvent = new object();
+        private static readonly object s_dragOverEvent = new object();
+        private static readonly object s_dragDropEvent = new object();
+        private static readonly object s_queryAccessibilityHelpEvent = new object();
+        private static readonly object s_backgroundImageEvent = new object();
+        private static readonly object s_backgroundImageLayoutEvent = new object();
+        private static readonly object s_bindingContextEvent = new object();
+        private static readonly object s_backColorEvent = new object();
+        private static readonly object s_parentEvent = new object();
+        private static readonly object s_visibleEvent = new object();
+        private static readonly object s_textEvent = new object();
+        private static readonly object s_tabStopEvent = new object();
+        private static readonly object s_tabIndexEvent = new object();
+        private static readonly object s_sizeEvent = new object();
+        private static readonly object s_rightToLeftEvent = new object();
+        private static readonly object s_locationEvent = new object();
+        private static readonly object s_foreColorEvent = new object();
+        private static readonly object s_fontEvent = new object();
+        private static readonly object s_enabledEvent = new object();
+        private static readonly object s_dockEvent = new object();
+        private static readonly object s_cursorEvent = new object();
+        private static readonly object s_contextMenuEvent = new object();
+        private static readonly object s_contextMenuStripEvent = new object();
+        private static readonly object s_causesValidationEvent = new object();
+        private static readonly object s_regionChangedEvent = new object();
+        private static readonly object s_marginChangedEvent = new object();
+        private protected static readonly object s_paddingChangedEvent = new object();
+        private static readonly object s_previewKeyDownEvent = new object();
 
         private static int s_threadCallbackMessage;
         private static ContextCallback s_invokeMarshaledCallbackHelperDelegate;
@@ -295,60 +293,60 @@ namespace System.Windows.Forms
         // Property store keys for properties.  The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
         // likely they are going to be used in a group.
-        private static readonly int PropName = PropertyStore.CreateKey();
-        private static readonly int PropBackBrush = PropertyStore.CreateKey();
-        private static readonly int PropFontHeight = PropertyStore.CreateKey();
-        private static readonly int PropCurrentAmbientFont = PropertyStore.CreateKey();
+        private static readonly int s_namePropertyProperty = PropertyStore.CreateKey();
+        private static readonly int s_backBrushProperty = PropertyStore.CreateKey();
+        private static readonly int s_fontHeightProperty = PropertyStore.CreateKey();
+        private static readonly int s_currentAmbientFontProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropControlsCollection = PropertyStore.CreateKey();
-        private static readonly int PropBackColor = PropertyStore.CreateKey();
-        private static readonly int PropForeColor = PropertyStore.CreateKey();
-        private static readonly int PropFont = PropertyStore.CreateKey();
+        private static readonly int s_controlsCollectionProperty = PropertyStore.CreateKey();
+        private static readonly int s_backColorProperty = PropertyStore.CreateKey();
+        private static readonly int s_foreColorProperty = PropertyStore.CreateKey();
+        private static readonly int s_fontProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropBackgroundImage = PropertyStore.CreateKey();
-        private static readonly int PropFontHandleWrapper = PropertyStore.CreateKey();
-        private static readonly int PropUserData = PropertyStore.CreateKey();
-        private static readonly int PropContextMenu = PropertyStore.CreateKey();
+        private static readonly int s_backgroundImageProperty = PropertyStore.CreateKey();
+        private static readonly int s_fontHandleWrapperProperty = PropertyStore.CreateKey();
+        private static readonly int s_userDataProperty = PropertyStore.CreateKey();
+        private static readonly int s_contextMenuProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropCursor = PropertyStore.CreateKey();
-        private static readonly int PropRegion = PropertyStore.CreateKey();
-        private static readonly int PropRightToLeft = PropertyStore.CreateKey();
+        private static readonly int s_cursorProperty = PropertyStore.CreateKey();
+        private static readonly int s_regionProperty = PropertyStore.CreateKey();
+        private static readonly int s_rightToLeftProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropBindings = PropertyStore.CreateKey();
-        private static readonly int PropBindingManager = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleDefaultActionDescription = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleDescription = PropertyStore.CreateKey();
+        private static readonly int s_bindingsProperty = PropertyStore.CreateKey();
+        private static readonly int s_bindingManagerProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessbileDefaultActionProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleDescriptionProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropAccessibility = PropertyStore.CreateKey();
-        private static readonly int PropNcAccessibility = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleName = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleRole = PropertyStore.CreateKey();
+        private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
+        private static readonly int s_ncAccessibilityProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleNameProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleRoleProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropPaintingException = PropertyStore.CreateKey();
-        private static readonly int PropActiveXImpl = PropertyStore.CreateKey();
-        private static readonly int PropControlVersionInfo = PropertyStore.CreateKey();
-        private static readonly int PropBackgroundImageLayout = PropertyStore.CreateKey();
+        private static readonly int s_paintingExceptionProperty = PropertyStore.CreateKey();
+        private static readonly int s_activeXImplProperty = PropertyStore.CreateKey();
+        private static readonly int s_controlVersionInfoProperty = PropertyStore.CreateKey();
+        private static readonly int s_backgroundImageLayoutProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropAccessibleHelpProvider = PropertyStore.CreateKey();
-        private static readonly int PropContextMenuStrip = PropertyStore.CreateKey();
-        private static readonly int PropAutoScrollOffset = PropertyStore.CreateKey();
-        private static readonly int PropUseCompatibleTextRendering = PropertyStore.CreateKey();
+        private static readonly int s_accessibleHelpProviderProperty = PropertyStore.CreateKey();
+        private static readonly int s_contextMenuStripProperty = PropertyStore.CreateKey();
+        private static readonly int s_autoScrollOffsetProperty = PropertyStore.CreateKey();
+        private static readonly int s_useCompatibleTextRenderingProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropImeWmCharsToIgnore = PropertyStore.CreateKey();
-        private static readonly int PropImeMode = PropertyStore.CreateKey();
-        private static readonly int PropDisableImeModeChangedCount = PropertyStore.CreateKey();
-        private static readonly int PropLastCanEnableIme = PropertyStore.CreateKey();
+        private static readonly int s_imeWmCharsToIgnoreProperty = PropertyStore.CreateKey();
+        private static readonly int s_imeModeProperty = PropertyStore.CreateKey();
+        private static readonly int s_disableImeModeChangedCountProperty = PropertyStore.CreateKey();
+        private static readonly int s_lastCanEnableImeProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropCacheTextCount = PropertyStore.CreateKey();
-        private static readonly int PropCacheTextField = PropertyStore.CreateKey();
-        private static readonly int PropAmbientPropertiesService = PropertyStore.CreateKey();
+        private static readonly int s_cacheTextCountProperty = PropertyStore.CreateKey();
+        private static readonly int s_acheTextFieldProperty = PropertyStore.CreateKey();
+        private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
 
         private static bool s_needToLoadComCtl = true;
 
         // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
         // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
         // True means use GDI+, false means use GDI (TextRenderer).
-        internal static bool UseCompatibleTextRenderingDefault = true;
+        internal static bool UseCompatibleTextRenderingDefault { get; set; } = true;
 
         // Control instance members
         //
@@ -427,7 +425,7 @@ namespace System.Windows.Forms
         internal Control(bool autoInstallSyncContext) : base()
         {
 #if DEBUG
-            if (AssertOnControlCreateSwitch.Enabled)
+            if (s_assertOnControlCreateSwitch.Enabled)
             {
                 Debug.Assert(GetType().BaseType != typeof(Control), "Direct derivative of Control Created: " + GetType().FullName);
                 Debug.Assert(GetType() != typeof(Control), "Control Created!");
@@ -550,7 +548,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(PropAccessibility);
+                AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
                 if (accessibleObject == null)
                 {
                     accessibleObject = CreateAccessibilityInstance();
@@ -561,7 +559,7 @@ namespace System.Windows.Forms
                         Debug.Fail("Accessible objects for controls must be derived from ControlAccessibleObject.");
                         return null;
                     }
-                    Properties.SetObject(PropAccessibility, accessibleObject);
+                    Properties.SetObject(s_accessibilityProperty, accessibleObject);
                 }
 
                 Debug.Assert(accessibleObject != null, "Failed to create accessibility object");
@@ -577,11 +575,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(PropNcAccessibility);
+                AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(s_ncAccessibilityProperty);
                 if (ncAccessibleObject == null)
                 {
                     ncAccessibleObject = new ControlAccessibleObject(this, NativeMethods.OBJID_WINDOW);
-                    Properties.SetObject(PropNcAccessibility, ncAccessibleObject);
+                    Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
                 }
 
                 Debug.Assert(ncAccessibleObject != null, "Failed to create NON-CLIENT accessibility object");
@@ -644,8 +642,8 @@ namespace System.Windows.Forms
         ]
         public string AccessibleDefaultActionDescription
         {
-            get => (string)Properties.GetObject(PropAccessibleDefaultActionDescription);
-            set => Properties.SetObject(PropAccessibleDefaultActionDescription, value);
+            get => (string)Properties.GetObject(s_accessbileDefaultActionProperty);
+            set => Properties.SetObject(s_accessbileDefaultActionProperty, value);
         }
 
         /// <summary>
@@ -659,8 +657,8 @@ namespace System.Windows.Forms
         ]
         public string AccessibleDescription
         {
-            get => (string)Properties.GetObject(PropAccessibleDescription);
-            set => Properties.SetObject(PropAccessibleDescription, value);
+            get => (string)Properties.GetObject(s_accessibleDescriptionProperty);
+            set => Properties.SetObject(s_accessibleDescriptionProperty, value);
         }
 
         /// <summary>
@@ -674,8 +672,8 @@ namespace System.Windows.Forms
         ]
         public string AccessibleName
         {
-            get => (string)Properties.GetObject(PropAccessibleName);
-            set => Properties.SetObject(PropAccessibleName, value);
+            get => (string)Properties.GetObject(s_accessibleNameProperty);
+            set => Properties.SetObject(s_accessibleNameProperty, value);
         }
 
         /// <summary>
@@ -690,7 +688,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int role = Properties.GetInteger(PropAccessibleRole, out bool found);
+                int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
                 if (found)
                 {
                     return (AccessibleRole)role;
@@ -707,7 +705,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
                 }
-                Properties.SetInteger(PropAccessibleRole, (int)value);
+                Properties.SetInteger(s_accessibleRoleProperty, (int)value);
             }
         }
 
@@ -729,7 +727,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(PropActiveXImpl);
+                ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(s_activeXImplProperty);
                 if (activeXImpl == null)
                 {
                     // Don't allow top level objects to be hosted
@@ -744,7 +742,7 @@ namespace System.Windows.Forms
                     // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising.  Using a state
                     // bit to track PropActiveXImpl instead of fetching from the property store.
                     SetState2(STATE2_ISACTIVEX, true);
-                    Properties.SetObject(PropActiveXImpl, activeXImpl);
+                    Properties.SetObject(s_activeXImplProperty, activeXImpl);
                 }
 
                 return activeXImpl;
@@ -797,7 +795,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                AmbientProperties props = (AmbientProperties)Properties.GetObject(PropAmbientPropertiesService, out bool contains);
+                AmbientProperties props = (AmbientProperties)Properties.GetObject(s_ambientPropertiesServiceProperty, out bool contains);
                 if (!contains)
                 {
                     if (Site != null)
@@ -811,7 +809,7 @@ namespace System.Windows.Forms
 
                     if (props != null)
                     {
-                        Properties.SetObject(PropAmbientPropertiesService, props);
+                        Properties.SetObject(s_ambientPropertiesServiceProperty, props);
                     }
                 }
                 return props;
@@ -872,8 +870,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler AutoSizeChanged
         {
-            add => Events.AddHandler(EventAutoSizeChanged, value);
-            remove => Events.RemoveHandler(EventAutoSizeChanged, value);
+            add => Events.AddHandler(s_autoSizeChangedEvent, value);
+            remove => Events.RemoveHandler(s_autoSizeChangedEvent, value);
         }
 
         /// <summary>
@@ -889,9 +887,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(PropAutoScrollOffset))
+                if (Properties.ContainsObject(s_autoScrollOffsetProperty))
                 {
-                    return (Point)Properties.GetObject(PropAutoScrollOffset);
+                    return (Point)Properties.GetObject(s_autoScrollOffsetProperty);
                 }
                 return Point.Empty;
             }
@@ -899,7 +897,7 @@ namespace System.Windows.Forms
             {
                 if (AutoScrollOffset != value)
                 {
-                    Properties.SetObject(PropAutoScrollOffset, value);
+                    Properties.SetObject(s_autoScrollOffsetProperty, value);
                 }
             }
         }
@@ -921,14 +919,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                object customBackBrush = Properties.GetObject(PropBackBrush);
+                object customBackBrush = Properties.GetObject(s_backBrushProperty);
                 if (customBackBrush != null)
                 {
                     // We already have a valid brush.  Unbox, and return.
                     return (IntPtr)customBackBrush;
                 }
 
-                if (!Properties.ContainsObject(PropBackColor))
+                if (!Properties.ContainsObject(s_backColorProperty))
                 {
                     // No custom back color.  See if we can get to our parent.
                     // The color check here is to account for parents and children who
@@ -956,7 +954,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(backBrush != IntPtr.Zero, "Failed to create brushHandle");
-                Properties.SetObject(PropBackBrush, backBrush);
+                Properties.SetObject(s_backBrushProperty, backBrush);
 
                 return backBrush;
             }
@@ -1023,9 +1021,9 @@ namespace System.Windows.Forms
                 }
 
                 Color c = BackColor;
-                if (!value.IsEmpty || Properties.ContainsObject(PropBackColor))
+                if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
                 {
-                    Properties.SetColor(PropBackColor, value);
+                    Properties.SetColor(s_backColorProperty, value);
                 }
 
                 if (!c.Equals(BackColor))
@@ -1038,8 +1036,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged
         {
-            add => Events.AddHandler(EventBackColor, value);
-            remove => Events.RemoveHandler(EventBackColor, value);
+            add => Events.AddHandler(s_backColorEvent, value);
+            remove => Events.RemoveHandler(s_backColorEvent, value);
         }
 
         /// <summary>
@@ -1055,13 +1053,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Image)Properties.GetObject(PropBackgroundImage);
+                return (Image)Properties.GetObject(s_backgroundImageProperty);
             }
             set
             {
                 if (BackgroundImage != value)
                 {
-                    Properties.SetObject(PropBackgroundImage, value);
+                    Properties.SetObject(s_backgroundImageProperty, value);
                     OnBackgroundImageChanged(EventArgs.Empty);
                 }
             }
@@ -1070,8 +1068,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged
         {
-            add => Events.AddHandler(EventBackgroundImage, value);
-            remove => Events.RemoveHandler(EventBackgroundImage, value);
+            add => Events.AddHandler(s_backgroundImageEvent, value);
+            remove => Events.RemoveHandler(s_backgroundImageEvent, value);
         }
 
         /// <summary>
@@ -1087,14 +1085,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found = Properties.ContainsObject(PropBackgroundImageLayout);
+                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
                 if (!found)
                 {
                     return ImageLayout.Tile;
                 }
                 else
                 {
-                    return ((ImageLayout)Properties.GetObject(PropBackgroundImageLayout));
+                    return ((ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty));
                 }
             }
             set
@@ -1118,7 +1116,7 @@ namespace System.Windows.Forms
                             DoubleBuffered = true;
                         }
                     }
-                    Properties.SetObject(PropBackgroundImageLayout, value);
+                    Properties.SetObject(s_backgroundImageLayoutProperty, value);
                     OnBackgroundImageLayoutChanged(EventArgs.Empty);
                 }
             }
@@ -1127,8 +1125,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged
         {
-            add => Events.AddHandler(EventBackgroundImageLayout, value);
-            remove => Events.RemoveHandler(EventBackgroundImageLayout, value);
+            add => Events.AddHandler(s_backgroundImageLayoutEvent, value);
+            remove => Events.RemoveHandler(s_backgroundImageLayoutEvent, value);
         }
 
         // Set/reset by ContainerControl.AssignActiveControlInternal
@@ -1153,7 +1151,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings()
         {
-            ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
+            ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
             if (bindings != null)
             {
                 bindings.Clear();
@@ -1170,7 +1168,7 @@ namespace System.Windows.Forms
             get
             {
                 // See if we have locally overridden the binding manager.
-                BindingContext context = (BindingContext)Properties.GetObject(PropBindingManager);
+                BindingContext context = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
                 if (context != null)
                 {
                     return context;
@@ -1188,12 +1186,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                BindingContext oldContext = (BindingContext)Properties.GetObject(PropBindingManager);
+                BindingContext oldContext = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
                 BindingContext newContext = value;
 
                 if (oldContext != newContext)
                 {
-                    Properties.SetObject(PropBindingManager, newContext);
+                    Properties.SetObject(s_bindingManagerProperty, newContext);
 
                     // the property change will wire up the bindings.
                     //
@@ -1216,8 +1214,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged
         {
-            add => Events.AddHandler(EventBindingContext, value);
-            remove => Events.RemoveHandler(EventBindingContext, value);
+            add => Events.AddHandler(s_bindingContextEvent, value);
+            remove => Events.RemoveHandler(s_bindingContextEvent, value);
         }
 
         /// <summary>
@@ -1350,8 +1348,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged
         {
-            add => Events.AddHandler(EventCausesValidation, value);
-            remove => Events.RemoveHandler(EventCausesValidation, value);
+            add => Events.AddHandler(s_causesValidationEvent, value);
+            remove => Events.RemoveHandler(s_causesValidationEvent, value);
         }
 
         /// This is for perf. Turn this property on to temporarily enable text caching.  This is good for
@@ -1364,7 +1362,7 @@ namespace System.Windows.Forms
             get
             {
                 // check if we're caching text.
-                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out bool _);
+                int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool _);
 
                 return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
             }
@@ -1378,13 +1376,13 @@ namespace System.Windows.Forms
                 }
 
                 // otherwise, get the state and update the cache if necessary.
-                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out bool found);
+                int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool found);
 
                 if (value)
                 {
                     if (cacheTextCounter == 0)
                     {
-                        Properties.SetObject(PropCacheTextField, _text);
+                        Properties.SetObject(s_acheTextFieldProperty, _text);
                         if (_text == null)
                         {
                             _text = WindowText;
@@ -1397,10 +1395,10 @@ namespace System.Windows.Forms
                     cacheTextCounter--;
                     if (cacheTextCounter == 0)
                     {
-                        _text = (string)Properties.GetObject(PropCacheTextField, out found);
+                        _text = (string)Properties.GetObject(s_acheTextFieldProperty, out found);
                     }
                 }
-                Properties.SetInteger(PropCacheTextCount, cacheTextCounter);
+                Properties.SetInteger(s_cacheTextCountProperty, cacheTextCounter);
             }
         }
 
@@ -1449,8 +1447,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
         public event EventHandler ClientSizeChanged
         {
-            add => Events.AddHandler(EventClientSize, value);
-            remove => Events.RemoveHandler(EventClientSize, value);
+            add => Events.AddHandler(s_clientSizeEvent, value);
+            remove => Events.RemoveHandler(s_clientSizeEvent, value);
         }
 
         /// <summary>
@@ -1517,10 +1515,10 @@ namespace System.Windows.Forms
         ]
         public virtual ContextMenu ContextMenu
         {
-            get => (ContextMenu)Properties.GetObject(PropContextMenu);
+            get => (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             set
             {
-                ContextMenu oldValue = (ContextMenu)Properties.GetObject(PropContextMenu);
+                ContextMenu oldValue = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
 
                 if (oldValue != value)
                 {
@@ -1531,7 +1529,7 @@ namespace System.Windows.Forms
                         oldValue.Disposed -= disposedHandler;
                     }
 
-                    Properties.SetObject(PropContextMenu, value);
+                    Properties.SetObject(s_contextMenuProperty, value);
 
                     if (value != null)
                     {
@@ -1550,8 +1548,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler ContextMenuChanged
         {
-            add => Events.AddHandler(EventContextMenu, value);
-            remove => Events.RemoveHandler(EventContextMenu, value);
+            add => Events.AddHandler(s_contextMenuEvent, value);
+            remove => Events.RemoveHandler(s_contextMenuEvent, value);
         }
 
         /// <summary>
@@ -1566,10 +1564,10 @@ namespace System.Windows.Forms
         ]
         public virtual ContextMenuStrip ContextMenuStrip
         {
-            get => (ContextMenuStrip)Properties.GetObject(PropContextMenuStrip);
+            get => (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
             set
             {
-                ContextMenuStrip oldValue = Properties.GetObject(PropContextMenuStrip) as ContextMenuStrip;
+                ContextMenuStrip oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
                 if (oldValue != value)
                 {
@@ -1580,7 +1578,7 @@ namespace System.Windows.Forms
                         oldValue.Disposed -= disposedHandler;
                     }
 
-                    Properties.SetObject(PropContextMenuStrip, value);
+                    Properties.SetObject(s_contextMenuStripProperty, value);
 
                     if (value != null)
                     {
@@ -1596,8 +1594,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged
         {
-            add => Events.AddHandler(EventContextMenuStrip, value);
-            remove => Events.RemoveHandler(EventContextMenuStrip, value);
+            add => Events.AddHandler(s_contextMenuStripEvent, value);
+            remove => Events.RemoveHandler(s_contextMenuStripEvent, value);
         }
 
         /// <summary>
@@ -1612,12 +1610,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection == null)
                 {
                     controlsCollection = CreateControlsInstance();
-                    Properties.SetObject(PropControlsCollection, controlsCollection);
+                    Properties.SetObject(s_controlsCollectionProperty, controlsCollection);
                 }
                 return controlsCollection;
             }
@@ -1855,7 +1853,7 @@ namespace System.Windows.Forms
                     return Cursors.WaitCursor;
                 }
 
-                Cursor cursor = (Cursor)Properties.GetObject(PropCursor);
+                Cursor cursor = (Cursor)Properties.GetObject(s_cursorProperty);
                 if (cursor != null)
                 {
                     return cursor;
@@ -1885,11 +1883,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                Cursor localCursor = (Cursor)Properties.GetObject(PropCursor);
+                Cursor localCursor = (Cursor)Properties.GetObject(s_cursorProperty);
                 Cursor resolvedCursor = Cursor;
                 if (localCursor != value)
                 {
-                    Properties.SetObject(PropCursor, value);
+                    Properties.SetObject(s_cursorProperty, value);
                 }
 
                 // Other things can change the cursor... we
@@ -1919,8 +1917,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged
         {
-            add => Events.AddHandler(EventCursor, value);
-            remove => Events.RemoveHandler(EventCursor, value);
+            add => Events.AddHandler(s_cursorEvent, value);
+            remove => Events.RemoveHandler(s_cursorEvent, value);
         }
 
         /// <summary>
@@ -1937,11 +1935,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
+                ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
                 if (bindings == null)
                 {
                     bindings = new ControlBindingsCollection(this);
-                    Properties.SetObject(PropBindings, bindings);
+                    Properties.SetObject(s_bindingsProperty, bindings);
                 }
                 return bindings;
             }
@@ -2073,13 +2071,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void DisposeFontHandle()
         {
-            if (Properties.ContainsObject(PropFontHandleWrapper))
+            if (Properties.ContainsObject(s_fontHandleWrapperProperty))
             {
-                if (Properties.GetObject(PropFontHandleWrapper) is FontHandleWrapper fontHandle)
+                if (Properties.GetObject(s_fontHandleWrapperProperty) is FontHandleWrapper fontHandle)
                 {
                     fontHandle.Dispose();
                 }
-                Properties.SetObject(PropFontHandleWrapper, null);
+                Properties.SetObject(s_fontHandleWrapperProperty, null);
             }
         }
 
@@ -2137,8 +2135,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged
         {
-            add => Events.AddHandler(EventDock, value);
-            remove => Events.RemoveHandler(EventDock, value);
+            add => Events.AddHandler(s_dockEvent, value);
+            remove => Events.RemoveHandler(s_dockEvent, value);
         }
 
         /// <summary>
@@ -2219,8 +2217,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
         public event EventHandler EnabledChanged
         {
-            add => Events.AddHandler(EventEnabled, value);
-            remove => Events.RemoveHandler(EventEnabled, value);
+            add => Events.AddHandler(s_enabledEvent, value);
+            remove => Events.RemoveHandler(s_enabledEvent, value);
         }
 
         /// <summary>
@@ -2250,7 +2248,7 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             get
             {
-                Font font = (Font)Properties.GetObject(PropFont);
+                Font font = (Font)Properties.GetObject(s_fontProperty);
                 if (font != null)
                 {
                     return font;
@@ -2282,7 +2280,7 @@ namespace System.Windows.Forms
             [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             set
             {
-                Font local = (Font)Properties.GetObject(PropFont);
+                Font local = (Font)Properties.GetObject(s_fontProperty);
                 Font resolved = Font;
 
                 bool localChanged = false;
@@ -2308,7 +2306,7 @@ namespace System.Windows.Forms
                 if (localChanged)
                 {
                     // Store new local value
-                    Properties.SetObject(PropFont, value);
+                    Properties.SetObject(s_fontProperty, value);
 
                     // We only fire the Changed event if the "resolved" value
                     // changed, however we must update the font if the local
@@ -2318,9 +2316,9 @@ namespace System.Windows.Forms
                         // Cleanup any font handle wrapper...
                         DisposeFontHandle();
 
-                        if (Properties.ContainsInteger(PropFontHeight))
+                        if (Properties.ContainsInteger(s_fontHeightProperty))
                         {
-                            Properties.SetInteger(PropFontHeight, (value == null) ? -1 : value.Height);
+                            Properties.SetInteger(s_fontHeightProperty, (value == null) ? -1 : value.Height);
                         }
 
                         // Font is an ambient property.  We need to layout our parent because Font may
@@ -2345,21 +2343,21 @@ namespace System.Windows.Forms
 
         internal void ScaleFont(float factor)
         {
-            Font local = (Font)Properties.GetObject(PropFont);
+            Font local = (Font)Properties.GetObject(s_fontProperty);
             Font resolved = Font;
             Font newFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
 
             if ((local == null) || !local.Equals(newFont))
             {
-                Properties.SetObject(PropFont, newFont);
+                Properties.SetObject(s_fontProperty, newFont);
 
                 if (!resolved.Equals(newFont))
                 {
                     DisposeFontHandle();
 
-                    if (Properties.ContainsInteger(PropFontHeight))
+                    if (Properties.ContainsInteger(s_fontHeightProperty))
                     {
-                        Properties.SetInteger(PropFontHeight, newFont.Height);
+                        Properties.SetInteger(s_fontHeightProperty, newFont.Height);
                     }
                 }
             }
@@ -2368,24 +2366,24 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged
         {
-            add => Events.AddHandler(EventFont, value);
-            remove => Events.RemoveHandler(EventFont, value);
+            add => Events.AddHandler(s_fontEvent, value);
+            remove => Events.RemoveHandler(s_fontEvent, value);
         }
 
         internal IntPtr FontHandle
         {
             get
             {
-                Font font = (Font)Properties.GetObject(PropFont);
+                Font font = (Font)Properties.GetObject(s_fontProperty);
 
                 if (font != null)
                 {
-                    FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(PropFontHandleWrapper);
+                    FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle == null)
                     {
                         fontHandle = new FontHandleWrapper(font);
 
-                        Properties.SetObject(PropFontHandleWrapper, fontHandle);
+                        Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
                     }
 
                     return fontHandle.Handle;
@@ -2403,15 +2401,15 @@ namespace System.Windows.Forms
 
                     FontHandleWrapper fontHandle = null;
 
-                    Font currentAmbient = (Font)Properties.GetObject(PropCurrentAmbientFont);
+                    Font currentAmbient = (Font)Properties.GetObject(s_currentAmbientFontProperty);
 
                     if (currentAmbient != null && currentAmbient == ambient.Font)
                     {
-                        fontHandle = (FontHandleWrapper)Properties.GetObject(PropFontHandleWrapper);
+                        fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     }
                     else
                     {
-                        Properties.SetObject(PropCurrentAmbientFont, ambient.Font);
+                        Properties.SetObject(s_currentAmbientFontProperty, ambient.Font);
                     }
 
                     if (fontHandle == null)
@@ -2419,7 +2417,7 @@ namespace System.Windows.Forms
                         font = ambient.Font;
                         fontHandle = new FontHandleWrapper(font);
 
-                        Properties.SetObject(PropFontHandleWrapper, fontHandle);
+                        Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
                     }
 
                     return fontHandle.Handle;
@@ -2433,18 +2431,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                int fontHeight = Properties.GetInteger(PropFontHeight, out bool found);
+                int fontHeight = Properties.GetInteger(s_fontHeightProperty, out bool found);
                 if (found && fontHeight != -1)
                 {
                     return fontHeight;
                 }
                 else
                 {
-                    Font font = (Font)Properties.GetObject(PropFont);
+                    Font font = (Font)Properties.GetObject(s_fontProperty);
                     if (font != null)
                     {
                         fontHeight = font.Height;
-                        Properties.SetInteger(PropFontHeight, fontHeight);
+                        Properties.SetInteger(s_fontHeightProperty, fontHeight);
                         return fontHeight;
                     }
                 }
@@ -2461,14 +2459,14 @@ namespace System.Windows.Forms
                 if (localFontHeight == -1)
                 {
                     localFontHeight = Font.Height;
-                    Properties.SetInteger(PropFontHeight, localFontHeight);
+                    Properties.SetInteger(s_fontHeightProperty, localFontHeight);
                 }
 
                 return localFontHeight;
             }
             set
             {
-                Properties.SetInteger(PropFontHeight, value);
+                Properties.SetInteger(s_fontHeightProperty, value);
             }
         }
 
@@ -2484,7 +2482,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Color color = Properties.GetColor(PropForeColor);
+                Color color = Properties.GetColor(s_foreColorProperty);
                 if (!color.IsEmpty)
                 {
                     return color;
@@ -2525,9 +2523,9 @@ namespace System.Windows.Forms
             set
             {
                 Color c = ForeColor;
-                if (!value.IsEmpty || Properties.ContainsObject(PropForeColor))
+                if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
                 {
-                    Properties.SetColor(PropForeColor, value);
+                    Properties.SetColor(s_foreColorProperty, value);
                 }
                 if (!c.Equals(ForeColor))
                 {
@@ -2539,8 +2537,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged
         {
-            add => Events.AddHandler(EventForeColor, value);
-            remove => Events.RemoveHandler(EventForeColor, value);
+            add => Events.AddHandler(s_foreColorEvent, value);
+            remove => Events.RemoveHandler(s_foreColorEvent, value);
         }
 
         private Font GetParentFont()
@@ -2661,7 +2659,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controls = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                 return controls != null && controls.Count > 0;
             }
         }
@@ -2984,8 +2982,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged
         {
-            add => Events.AddHandler(EventLocation, value);
-            remove => Events.RemoveHandler(EventLocation, value);
+            add => Events.AddHandler(s_locationEvent, value);
+            remove => Events.RemoveHandler(s_locationEvent, value);
         }
 
         [
@@ -3015,8 +3013,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
-            add => Events.AddHandler(EventMarginChanged, value);
-            remove => Events.RemoveHandler(EventMarginChanged, value);
+            add => Events.AddHandler(s_marginChangedEvent, value);
+            remove => Events.RemoveHandler(s_marginChangedEvent, value);
         }
 
         [SRCategory(nameof(SR.CatLayout))]
@@ -3150,7 +3148,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                string name = (string)Properties.GetObject(PropName);
+                string name = (string)Properties.GetObject(s_namePropertyProperty);
                 if (string.IsNullOrEmpty(name))
                 {
                     if (Site != null)
@@ -3170,11 +3168,11 @@ namespace System.Windows.Forms
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    Properties.SetObject(PropName, null);
+                    Properties.SetObject(s_namePropertyProperty, null);
                 }
                 else
                 {
-                    Properties.SetObject(PropName, value);
+                    Properties.SetObject(s_namePropertyProperty, value);
                 }
             }
         }
@@ -3241,7 +3239,7 @@ namespace System.Windows.Forms
         internal PropertyStore Properties { get; }
 
         // Returns the value of the backColor field -- no asking the parent with its color is, etc.
-        internal Color RawBackColor => Properties.GetColor(PropBackColor);
+        internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
 
         /// <summary>
         ///  Indicates whether the control is currently recreating its handle. This
@@ -3293,13 +3291,13 @@ namespace System.Windows.Forms
         ]
         public Region Region
         {
-            get => (Region)Properties.GetObject(PropRegion);
+            get => (Region)Properties.GetObject(s_regionProperty);
             set
             {
                 Region oldRegion = Region;
                 if (oldRegion != value)
                 {
-                    Properties.SetObject(PropRegion, value);
+                    Properties.SetObject(s_regionProperty, value);
 
                     if (oldRegion != null)
                     {
@@ -3348,8 +3346,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlRegionChangedDescr))]
         public event EventHandler RegionChanged
         {
-            add => Events.AddHandler(EventRegionChanged, value);
-            remove => Events.RemoveHandler(EventRegionChanged, value);
+            add => Events.AddHandler(s_regionChangedEvent, value);
+            remove => Events.RemoveHandler(s_regionChangedEvent, value);
         }
 
         // Helper function for Rtl
@@ -3447,7 +3445,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
+                int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
                 if (!found)
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
@@ -3477,9 +3475,9 @@ namespace System.Windows.Forms
 
                 RightToLeft oldValue = RightToLeft;
 
-                if (Properties.ContainsInteger(PropRightToLeft) || value != RightToLeft.Inherit)
+                if (Properties.ContainsInteger(s_rightToLeftProperty) || value != RightToLeft.Inherit)
                 {
-                    Properties.SetInteger(PropRightToLeft, (int)value);
+                    Properties.SetInteger(s_rightToLeftProperty, (int)value);
                 }
 
                 if (oldValue != RightToLeft)
@@ -3497,8 +3495,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged
         {
-            add => Events.AddHandler(EventRightToLeft, value);
-            remove => Events.RemoveHandler(EventRightToLeft, value);
+            add => Events.AddHandler(s_rightToLeftEvent, value);
+            remove => Events.RemoveHandler(s_rightToLeftEvent, value);
         }
 
         /// <summary>
@@ -3527,10 +3525,10 @@ namespace System.Windows.Forms
                 // If the ambients changed, compare each property.
                 if (oldAmbients != newAmbients)
                 {
-                    bool checkFont = !Properties.ContainsObject(PropFont);
-                    bool checkBackColor = !Properties.ContainsObject(PropBackColor);
-                    bool checkForeColor = !Properties.ContainsObject(PropForeColor);
-                    bool checkCursor = !Properties.ContainsObject(PropCursor);
+                    bool checkFont = !Properties.ContainsObject(s_fontProperty);
+                    bool checkBackColor = !Properties.ContainsObject(s_backColorProperty);
+                    bool checkForeColor = !Properties.ContainsObject(s_foreColorProperty);
+                    bool checkCursor = !Properties.ContainsObject(s_cursorProperty);
 
                     Font oldFont = null;
                     Color oldBackColor = Color.Empty;
@@ -3557,7 +3555,7 @@ namespace System.Windows.Forms
                         oldCursor = Cursor;
                     }
 
-                    Properties.SetObject(PropAmbientPropertiesService, newAmbients);
+                    Properties.SetObject(s_ambientPropertiesServiceProperty, newAmbients);
                     base.Site = value;
 
                     if (checkFont && !oldFont.Equals(Font))
@@ -3602,8 +3600,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged
         {
-            add => Events.AddHandler(EventSize, value);
-            remove => Events.RemoveHandler(EventSize, value);
+            add => Events.AddHandler(s_sizeEvent, value);
+            remove => Events.RemoveHandler(s_sizeEvent, value);
         }
 
         /// <summary>
@@ -3636,8 +3634,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged
         {
-            add => Events.AddHandler(EventTabIndex, value);
-            remove => Events.RemoveHandler(EventTabIndex, value);
+            add => Events.AddHandler(s_tabIndexEvent, value);
+            remove => Events.RemoveHandler(s_tabIndexEvent, value);
         }
 
         /// <summary>
@@ -3684,8 +3682,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged
         {
-            add => Events.AddHandler(EventTabStop, value);
-            remove => Events.RemoveHandler(EventTabStop, value);
+            add => Events.AddHandler(s_tabStopEvent, value);
+            remove => Events.RemoveHandler(s_tabStopEvent, value);
         }
 
         [
@@ -3698,8 +3696,8 @@ namespace System.Windows.Forms
         ]
         public object Tag
         {
-            get => Properties.GetObject(PropUserData);
-            set => Properties.SetObject(PropUserData, value);
+            get => Properties.GetObject(s_userDataProperty);
+            set => Properties.SetObject(s_userDataProperty, value);
         }
 
         /// <summary>
@@ -3739,7 +3737,7 @@ namespace System.Windows.Forms
                 {
                     for (Control ctl = this; ctl != null; ctl = ctl.ParentInternal)
                     {
-                        ActiveXImpl activeXImpl = (ActiveXImpl)ctl.Properties.GetObject(PropActiveXImpl);
+                        ActiveXImpl activeXImpl = (ActiveXImpl)ctl.Properties.GetObject(s_activeXImplProperty);
                         if (activeXImpl != null)
                         {
                             activeXImpl.UpdateAccelTable();
@@ -3753,8 +3751,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged
         {
-            add => Events.AddHandler(EventText, value);
-            remove => Events.RemoveHandler(EventText, value);
+            add => Events.AddHandler(s_textEvent, value);
+            remove => Events.RemoveHandler(s_textEvent, value);
         }
 
         /// <summary>
@@ -3949,7 +3947,7 @@ namespace System.Windows.Forms
                 if (GetState(STATE_USEWAITCURSOR) != value)
                 {
                     SetState(STATE_USEWAITCURSOR, value);
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection != null)
                     {
@@ -3976,9 +3974,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsInteger(PropUseCompatibleTextRendering))
+                if (Properties.ContainsInteger(s_useCompatibleTextRenderingProperty))
                 {
-                    int value = Properties.GetInteger(PropUseCompatibleTextRendering, out bool found);
+                    int value = Properties.GetInteger(s_useCompatibleTextRenderingProperty, out bool found);
                     if (found)
                     {
                         return value == 1;
@@ -3991,7 +3989,7 @@ namespace System.Windows.Forms
             {
                 if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInt != value)
                 {
-                    Properties.SetInteger(PropUseCompatibleTextRendering, value ? 1 : 0);
+                    Properties.SetInteger(s_useCompatibleTextRenderingProperty, value ? 1 : 0);
                     // Update the preferred size cache since we will be rendering text using a different engine.
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.UseCompatibleTextRendering);
                     Invalidate();
@@ -4010,11 +4008,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlVersionInfo info = (ControlVersionInfo)Properties.GetObject(PropControlVersionInfo);
+                ControlVersionInfo info = (ControlVersionInfo)Properties.GetObject(s_controlVersionInfoProperty);
                 if (info == null)
                 {
                     info = new ControlVersionInfo(this);
-                    Properties.SetObject(PropControlVersionInfo, info);
+                    Properties.SetObject(s_controlVersionInfoProperty, info);
                 }
                 return info;
             }
@@ -4040,8 +4038,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged
         {
-            add => Events.AddHandler(EventVisible, value);
-            remove => Events.RemoveHandler(EventVisible, value);
+            add => Events.AddHandler(s_visibleEvent, value);
+            remove => Events.RemoveHandler(s_visibleEvent, value);
         }
 
         /// <summary>
@@ -4221,8 +4219,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click
         {
-            add => Events.AddHandler(EventClick, value);
-            remove => Events.RemoveHandler(EventClick, value);
+            add => Events.AddHandler(s_clickEvent, value);
+            remove => Events.RemoveHandler(s_clickEvent, value);
         }
 
         /// <summary>
@@ -4236,8 +4234,8 @@ namespace System.Windows.Forms
         ]
         public event ControlEventHandler ControlAdded
         {
-            add => Events.AddHandler(EventControlAdded, value);
-            remove => Events.RemoveHandler(EventControlAdded, value);
+            add => Events.AddHandler(s_controlAddedEvent, value);
+            remove => Events.RemoveHandler(s_controlAddedEvent, value);
         }
 
         /// <summary>
@@ -4251,43 +4249,43 @@ namespace System.Windows.Forms
         ]
         public event ControlEventHandler ControlRemoved
         {
-            add => Events.AddHandler(EventControlRemoved, value);
-            remove => Events.RemoveHandler(EventControlRemoved, value);
+            add => Events.AddHandler(s_controlRemovedEvent, value);
+            remove => Events.RemoveHandler(s_controlRemovedEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop
         {
-            add => Events.AddHandler(EventDragDrop, value);
-            remove => Events.RemoveHandler(EventDragDrop, value);
+            add => Events.AddHandler(s_dragDropEvent, value);
+            remove => Events.RemoveHandler(s_dragDropEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter
         {
-            add => Events.AddHandler(EventDragEnter, value);
-            remove => Events.RemoveHandler(EventDragEnter, value);
+            add => Events.AddHandler(s_dragEnterEvent, value);
+            remove => Events.RemoveHandler(s_dragEnterEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver
         {
-            add => Events.AddHandler(EventDragOver, value);
-            remove => Events.RemoveHandler(EventDragOver, value);
+            add => Events.AddHandler(s_dragOverEvent, value);
+            remove => Events.RemoveHandler(s_dragOverEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave
         {
-            add => Events.AddHandler(EventDragLeave, value);
-            remove => Events.RemoveHandler(EventDragLeave, value);
+            add => Events.AddHandler(s_dragLeaveEvent, value);
+            remove => Events.RemoveHandler(s_dragLeaveEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback
         {
-            add => Events.AddHandler(EventGiveFeedback, value);
-            remove => Events.RemoveHandler(EventGiveFeedback, value);
+            add => Events.AddHandler(s_giveFeedbackEvent, value);
+            remove => Events.RemoveHandler(s_giveFeedbackEvent, value);
         }
 
         /// <summary>
@@ -4296,8 +4294,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
         public event EventHandler HandleCreated
         {
-            add => Events.AddHandler(EventHandleCreated, value);
-            remove => Events.RemoveHandler(EventHandleCreated, value);
+            add => Events.AddHandler(s_handleCreatedEvent, value);
+            remove => Events.RemoveHandler(s_handleCreatedEvent, value);
         }
 
         /// <summary>
@@ -4306,22 +4304,22 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
         public event EventHandler HandleDestroyed
         {
-            add => Events.AddHandler(EventHandleDestroyed, value);
-            remove => Events.RemoveHandler(EventHandleDestroyed, value);
+            add => Events.AddHandler(s_handleDestroyedEvent, value);
+            remove => Events.RemoveHandler(s_handleDestroyedEvent, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested
         {
-            add => Events.AddHandler(EventHelpRequested, value);
-            remove => Events.RemoveHandler(EventHelpRequested, value);
+            add => Events.AddHandler(s_helpRequestedEvent, value);
+            remove => Events.RemoveHandler(s_helpRequestedEvent, value);
         }
 
         [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated
         {
-            add => Events.AddHandler(EventInvalidated, value);
-            remove => Events.RemoveHandler(EventInvalidated, value);
+            add => Events.AddHandler(s_invalidatedEvent, value);
+            remove => Events.RemoveHandler(s_invalidatedEvent, value);
         }
 
         [Browsable(false)]
@@ -4365,29 +4363,29 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged
         {
-            add => Events.AddHandler(EventPaddingChanged, value);
-            remove => Events.RemoveHandler(EventPaddingChanged, value);
+            add => Events.AddHandler(s_paddingChangedEvent, value);
+            remove => Events.RemoveHandler(s_paddingChangedEvent, value);
         }
 
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint
         {
-            add => Events.AddHandler(EventPaint, value);
-            remove => Events.RemoveHandler(EventPaint, value);
+            add => Events.AddHandler(s_paintEvent, value);
+            remove => Events.RemoveHandler(s_paintEvent, value);
         }
 
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag
         {
-            add => Events.AddHandler(EventQueryContinueDrag, value);
-            remove => Events.RemoveHandler(EventQueryContinueDrag, value);
+            add => Events.AddHandler(s_queryContinueDragEvent, value);
+            remove => Events.RemoveHandler(s_queryContinueDragEvent, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
         {
-            add => Events.AddHandler(EventQueryAccessibilityHelp, value);
-            remove => Events.RemoveHandler(EventQueryAccessibilityHelp, value);
+            add => Events.AddHandler(s_queryAccessibilityHelpEvent, value);
+            remove => Events.RemoveHandler(s_queryAccessibilityHelpEvent, value);
         }
 
         /// <summary>
@@ -4396,8 +4394,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick
         {
-            add => Events.AddHandler(EventDoubleClick, value);
-            remove => Events.RemoveHandler(EventDoubleClick, value);
+            add => Events.AddHandler(s_doubleClickEvent, value);
+            remove => Events.RemoveHandler(s_doubleClickEvent, value);
         }
 
         /// <summary>
@@ -4406,8 +4404,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter
         {
-            add => Events.AddHandler(EventEnter, value);
-            remove => Events.RemoveHandler(EventEnter, value);
+            add => Events.AddHandler(s_enterEvent, value);
+            remove => Events.RemoveHandler(s_enterEvent, value);
         }
 
         /// <summary>
@@ -4416,8 +4414,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnGotFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler GotFocus
         {
-            add => Events.AddHandler(EventGotFocus, value);
-            remove => Events.RemoveHandler(EventGotFocus, value);
+            add => Events.AddHandler(s_gotFocusEvent, value);
+            remove => Events.RemoveHandler(s_gotFocusEvent, value);
         }
 
         /// <summary>
@@ -4426,8 +4424,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown
         {
-            add => Events.AddHandler(EventKeyDown, value);
-            remove => Events.RemoveHandler(EventKeyDown, value);
+            add => Events.AddHandler(s_keyDownEvent, value);
+            remove => Events.RemoveHandler(s_keyDownEvent, value);
         }
 
         /// <summary>
@@ -4436,8 +4434,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
         public event KeyPressEventHandler KeyPress
         {
-            add => Events.AddHandler(EventKeyPress, value);
-            remove => Events.RemoveHandler(EventKeyPress, value);
+            add => Events.AddHandler(s_keyPressEvent, value);
+            remove => Events.RemoveHandler(s_keyPressEvent, value);
         }
 
         /// <summary>
@@ -4446,15 +4444,15 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp
         {
-            add => Events.AddHandler(EventKeyUp, value);
-            remove => Events.RemoveHandler(EventKeyUp, value);
+            add => Events.AddHandler(s_keyUpEvent, value);
+            remove => Events.RemoveHandler(s_keyUpEvent, value);
         }
 
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnLayoutDescr))]
         public event LayoutEventHandler Layout
         {
-            add => Events.AddHandler(EventLayout, value);
-            remove => Events.RemoveHandler(EventLayout, value);
+            add => Events.AddHandler(s_layoutEvent, value);
+            remove => Events.RemoveHandler(s_layoutEvent, value);
         }
 
         /// <summary>
@@ -4463,8 +4461,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
         public event EventHandler Leave
         {
-            add => Events.AddHandler(EventLeave, value);
-            remove => Events.RemoveHandler(EventLeave, value);
+            add => Events.AddHandler(s_leaveEvent, value);
+            remove => Events.RemoveHandler(s_leaveEvent, value);
         }
 
         /// <summary>
@@ -4473,8 +4471,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLostFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler LostFocus
         {
-            add => Events.AddHandler(EventLostFocus, value);
-            remove => Events.RemoveHandler(EventLostFocus, value);
+            add => Events.AddHandler(s_lostFocusEvent, value);
+            remove => Events.RemoveHandler(s_lostFocusEvent, value);
         }
 
         /// <summary>
@@ -4483,8 +4481,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseClickDescr))]
         public event MouseEventHandler MouseClick
         {
-            add => Events.AddHandler(EventMouseClick, value);
-            remove => Events.RemoveHandler(EventMouseClick, value);
+            add => Events.AddHandler(s_mouseClickEvent, value);
+            remove => Events.RemoveHandler(s_mouseClickEvent, value);
         }
 
         /// <summary>
@@ -4493,8 +4491,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick
         {
-            add => Events.AddHandler(EventMouseDoubleClick, value);
-            remove => Events.RemoveHandler(EventMouseDoubleClick, value);
+            add => Events.AddHandler(s_mouseDoubleClickEvent, value);
+            remove => Events.RemoveHandler(s_mouseDoubleClickEvent, value);
         }
 
         /// <summary>
@@ -4503,8 +4501,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
         public event EventHandler MouseCaptureChanged
         {
-            add => Events.AddHandler(EventMouseCaptureChanged, value);
-            remove => Events.RemoveHandler(EventMouseCaptureChanged, value);
+            add => Events.AddHandler(s_mouseCaptureChangedEvent, value);
+            remove => Events.RemoveHandler(s_mouseCaptureChangedEvent, value);
         }
 
         /// <summary>
@@ -4514,8 +4512,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown
         {
-            add => Events.AddHandler(EventMouseDown, value);
-            remove => Events.RemoveHandler(EventMouseDown, value);
+            add => Events.AddHandler(s_mouseDownEvent, value);
+            remove => Events.RemoveHandler(s_mouseDownEvent, value);
         }
 
         /// <summary>
@@ -4524,8 +4522,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
         public event EventHandler MouseEnter
         {
-            add => Events.AddHandler(EventMouseEnter, value);
-            remove => Events.RemoveHandler(EventMouseEnter, value);
+            add => Events.AddHandler(s_mouseEnterEvent, value);
+            remove => Events.RemoveHandler(s_mouseEnterEvent, value);
         }
 
         /// <summary>
@@ -4534,8 +4532,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
         public event EventHandler MouseLeave
         {
-            add => Events.AddHandler(EventMouseLeave, value);
-            remove => Events.RemoveHandler(EventMouseLeave, value);
+            add => Events.AddHandler(s_mouseLeaveEvent, value);
+            remove => Events.RemoveHandler(s_mouseLeaveEvent, value);
         }
 
         /// <summary>
@@ -4546,8 +4544,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
         public event EventHandler DpiChangedBeforeParent
         {
-            add => Events.AddHandler(EventDpiChangedBeforeParent, value);
-            remove => Events.RemoveHandler(EventDpiChangedBeforeParent, value);
+            add => Events.AddHandler(s_dpiChangedBeforeParentEvent, value);
+            remove => Events.RemoveHandler(s_dpiChangedBeforeParentEvent, value);
         }
 
         /// <summary>
@@ -4558,8 +4556,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
         public event EventHandler DpiChangedAfterParent
         {
-            add => Events.AddHandler(EventDpiChangedAfterParent, value);
-            remove => Events.RemoveHandler(EventDpiChangedAfterParent, value);
+            add => Events.AddHandler(s_dpiChangedAfterParentEvent, value);
+            remove => Events.RemoveHandler(s_dpiChangedAfterParentEvent, value);
         }
 
         /// <summary>
@@ -4568,8 +4566,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
         public event EventHandler MouseHover
         {
-            add => Events.AddHandler(EventMouseHover, value);
-            remove => Events.RemoveHandler(EventMouseHover, value);
+            add => Events.AddHandler(s_mouseHoverEvent, value);
+            remove => Events.RemoveHandler(s_mouseHoverEvent, value);
         }
 
         /// <summary>
@@ -4578,8 +4576,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove
         {
-            add => Events.AddHandler(EventMouseMove, value);
-            remove => Events.RemoveHandler(EventMouseMove, value);
+            add => Events.AddHandler(s_mouseMoveEvent, value);
+            remove => Events.RemoveHandler(s_mouseMoveEvent, value);
         }
 
         /// <summary>
@@ -4588,8 +4586,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp
         {
-            add => Events.AddHandler(EventMouseUp, value);
-            remove => Events.RemoveHandler(EventMouseUp, value);
+            add => Events.AddHandler(s_mouseUpEvent, value);
+            remove => Events.RemoveHandler(s_mouseUpEvent, value);
         }
 
         /// <summary>
@@ -4598,8 +4596,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseWheelDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event MouseEventHandler MouseWheel
         {
-            add => Events.AddHandler(EventMouseWheel, value);
-            remove => Events.RemoveHandler(EventMouseWheel, value);
+            add => Events.AddHandler(s_mouseWheelEvent, value);
+            remove => Events.RemoveHandler(s_mouseWheelEvent, value);
         }
 
         /// <summary>
@@ -4608,8 +4606,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMoveDescr))]
         public event EventHandler Move
         {
-            add => Events.AddHandler(EventMove, value);
-            remove => Events.RemoveHandler(EventMove, value);
+            add => Events.AddHandler(s_moveEvent, value);
+            remove => Events.RemoveHandler(s_moveEvent, value);
         }
 
         /// <summary>
@@ -4618,8 +4616,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.PreviewKeyDownDescr))]
         public event PreviewKeyDownEventHandler PreviewKeyDown
         {
-            add => Events.AddHandler(EventPreviewKeyDown, value);
-            remove => Events.RemoveHandler(EventPreviewKeyDown, value);
+            add => Events.AddHandler(s_previewKeyDownEvent, value);
+            remove => Events.RemoveHandler(s_previewKeyDownEvent, value);
         }
 
         /// <summary>
@@ -4629,29 +4627,29 @@ namespace System.Windows.Forms
          EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler Resize
         {
-            add => Events.AddHandler(EventResize, value);
-            remove => Events.RemoveHandler(EventResize, value);
+            add => Events.AddHandler(s_resizeEvent, value);
+            remove => Events.RemoveHandler(s_resizeEvent, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues
         {
-            add => Events.AddHandler(EventChangeUICues, value);
-            remove => Events.RemoveHandler(EventChangeUICues, value);
+            add => Events.AddHandler(s_changeUICuesEvent, value);
+            remove => Events.RemoveHandler(s_changeUICuesEvent, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged
         {
-            add => Events.AddHandler(EventStyleChanged, value);
-            remove => Events.RemoveHandler(EventStyleChanged, value);
+            add => Events.AddHandler(s_styleChangedEvent, value);
+            remove => Events.RemoveHandler(s_styleChangedEvent, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged
         {
-            add => Events.AddHandler(EventSystemColorsChanged, value);
-            remove => Events.RemoveHandler(EventSystemColorsChanged, value);
+            add => Events.AddHandler(s_systemColorsChangedEvent, value);
+            remove => Events.RemoveHandler(s_systemColorsChangedEvent, value);
         }
 
         /// <summary>
@@ -4660,8 +4658,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating
         {
-            add => Events.AddHandler(EventValidating, value);
-            remove => Events.RemoveHandler(EventValidating, value);
+            add => Events.AddHandler(s_validatingEvent, value);
+            remove => Events.RemoveHandler(s_validatingEvent, value);
         }
 
         /// <summary>
@@ -4670,8 +4668,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated
         {
-            add => Events.AddHandler(EventValidated, value);
-            remove => Events.RemoveHandler(EventValidated, value);
+            add => Events.AddHandler(s_validatedEvent, value);
+            remove => Events.RemoveHandler(s_validatedEvent, value);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4786,7 +4784,7 @@ namespace System.Windows.Forms
                 {
                     OnRightToLeftChanged(EventArgs.Empty);
                 }
-                if (Properties.GetObject(PropBindingManager) == null && Created)
+                if (Properties.GetObject(s_bindingManagerProperty) == null && Created)
                 {
                     // We do not want to call our parent's BindingContext property here.
                     // We have no idea if us or any of our children are using data binding,
@@ -4813,8 +4811,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged
         {
-            add => Events.AddHandler(EventParent, value);
-            remove => Events.RemoveHandler(EventParent, value);
+            add => Events.AddHandler(s_parentEvent, value);
+            remove => Events.RemoveHandler(s_parentEvent, value);
         }
 
         /// <summary>
@@ -5147,7 +5145,7 @@ namespace System.Windows.Forms
             bool controlIsAlreadyCreated = Created;
             CreateControl(false);
 
-            if (Properties.GetObject(PropBindingManager) == null && ParentInternal != null && !controlIsAlreadyCreated)
+            if (Properties.GetObject(s_bindingManagerProperty) == null && ParentInternal != null && !controlIsAlreadyCreated)
             {
                 // We do not want to call our parent's BindingContext property here.
                 // We have no idea if us or any of our children are using data binding,
@@ -5188,7 +5186,7 @@ namespace System.Windows.Forms
 
                     // must snapshot this array because
                     // z-order updates from Windows may rearrange it!
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection != null)
                     {
@@ -5301,7 +5299,7 @@ namespace System.Windows.Forms
         {
             if (GetState(STATE_OWNCTLBRUSH))
             {
-                object backBrush = Properties.GetObject(PropBackBrush);
+                object backBrush = Properties.GetObject(s_backBrushProperty);
                 if (backBrush != null)
                 {
                     IntPtr p = (IntPtr)backBrush;
@@ -5309,7 +5307,7 @@ namespace System.Windows.Forms
                     {
                         Interop.Gdi32.DeleteObject(p);
                     }
-                    Properties.SetObject(PropBackBrush, null);
+                    Properties.SetObject(s_backBrushProperty, null);
                 }
             }
 
@@ -5336,7 +5334,7 @@ namespace System.Windows.Forms
                 {
                     DisposeAxControls();
 
-                    ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+                    ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
                     if (contextMenu != null)
                     {
                         contextMenu.Disposed -= new EventHandler(DetachContextMenu);
@@ -5354,7 +5352,7 @@ namespace System.Windows.Forms
                         _parent.Controls.Remove(this);
                     }
 
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                     if (controlsCollection != null)
                     {
@@ -5368,7 +5366,7 @@ namespace System.Windows.Forms
                             ctl._parent = null;
                             ctl.Dispose();
                         }
-                        Properties.SetObject(PropControlsCollection, null);
+                        Properties.SetObject(s_controlsCollectionProperty, null);
                     }
 
                     base.Dispose(disposing);
@@ -5401,7 +5399,7 @@ namespace System.Windows.Forms
         // Package scope to allow AxHost to override.
         internal virtual void DisposeAxControls()
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
             if (controlsCollection != null)
             {
@@ -5649,7 +5647,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void RaiseCreateHandleEvent(EventArgs e)
         {
-            ((EventHandler)Events[EventHandleCreated])?.Invoke(this, e);
+            ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -5678,7 +5676,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::Focus - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::Focus - " + Name);
 
             // Call the internal method (which form overrides)
             return FocusInternal();
@@ -5691,7 +5689,7 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool FocusInternal()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
                 UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
@@ -6143,7 +6141,7 @@ namespace System.Windows.Forms
 
         internal virtual Control GetFirstChildControlInTabOrder(bool forward)
         {
-            ControlCollection ctlControls = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection ctlControls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
             Control found = null;
             if (ctlControls != null)
@@ -6187,7 +6185,7 @@ namespace System.Windows.Forms
 
             if (forward)
             {
-                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(PropControlsCollection);
+                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
                 if (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
@@ -6211,7 +6209,7 @@ namespace System.Windows.Forms
                     //
                     int parentControlCount = 0;
 
-                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(PropControlsCollection);
+                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
 
                     if (parentControls != null)
                     {
@@ -6273,7 +6271,7 @@ namespace System.Windows.Forms
                     // start with the same tab index as ctl, because there can be dups.
                     int parentControlCount = 0;
 
-                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(PropControlsCollection);
+                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
 
                     if (parentControls != null)
                     {
@@ -6334,7 +6332,7 @@ namespace System.Windows.Forms
                 }
 
                 // We found a control.  Walk into this control to find the proper sub control within it to select.
-                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(PropControlsCollection);
+                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
                 while (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
@@ -6342,7 +6340,7 @@ namespace System.Windows.Forms
                     if (found != null)
                     {
                         ctl = found;
-                        ctlControls = (ControlCollection)ctl.Properties.GetObject(PropControlsCollection);
+                        ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
                     }
                     else
                     {
@@ -6859,7 +6857,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsFontSet()
         {
-            Font font = (Font)Properties.GetObject(PropFont);
+            Font font = (Font)Properties.GetObject(s_fontProperty);
             if (font != null)
             {
                 return true;
@@ -6929,7 +6927,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool IsInputChar(char charCode)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
 
             int mask = 0;
             if (charCode == (char)(int)Keys.Tab)
@@ -6955,7 +6953,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool IsInputKey(Keys keyData)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
 
             if ((keyData & Keys.Alt) == Keys.Alt)
             {
@@ -6994,7 +6992,7 @@ namespace System.Windows.Forms
         public static bool IsMnemonic(char charCode, string text)
         {
 #if DEBUG
-            if (ControlKeyboardRouting.TraceVerbose)
+            if (s_controlKeyboardRouting.TraceVerbose)
             {
                 Debug.Write("Control.IsMnemonic(" + charCode.ToString() + ", ");
 
@@ -7013,7 +7011,7 @@ namespace System.Windows.Forms
             //Special case handling:
             if (charCode == '&')
             {
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning false");
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
                 return false;
             }
 
@@ -7035,16 +7033,16 @@ namespace System.Windows.Forms
                     }
 
                     char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                    Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...& found... char=" + c1.ToString());
+                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...& found... char=" + c1.ToString());
                     if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                     {
-                        Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning true");
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning true");
                         return true;
                     }
                 }
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose && pos == 0, "   ...no & found");
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose && pos == 0, "   ...no & found");
             }
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning false");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
             return false;
         }
 
@@ -7130,7 +7128,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
             }
 
-            ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(PropActiveXImpl);
+            ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(s_activeXImplProperty);
 
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
@@ -7237,14 +7235,14 @@ namespace System.Windows.Forms
         // Used by form to notify the control that it has been "entered"
         internal void NotifyEnter()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::NotifyEnter() - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::NotifyEnter() - " + Name);
             OnEnter(EventArgs.Empty);
         }
 
         // Used by form to notify the control that it has been "left"
         internal void NotifyLeave()
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::NotifyLeave() - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::NotifyLeave() - " + Name);
             OnLeave(EventArgs.Empty);
         }
 
@@ -7287,7 +7285,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAutoSizeChanged(EventArgs e)
         {
-            if (Events[EventAutoSizeChanged] is EventHandler eh)
+            if (Events[s_autoSizeChangedEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7301,7 +7299,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            object backBrush = Properties.GetObject(PropBackBrush);
+            object backBrush = Properties.GetObject(s_backBrushProperty);
             if (backBrush != null)
             {
                 if (GetState(STATE_OWNCTLBRUSH))
@@ -7312,17 +7310,17 @@ namespace System.Windows.Forms
                         Interop.Gdi32.DeleteObject(p);
                     }
                 }
-                Properties.SetObject(PropBackBrush, null);
+                Properties.SetObject(s_backBrushProperty, null);
             }
 
             Invalidate();
 
-            if (Events[EventBackColor] is EventHandler eh)
+            if (Events[s_backColorEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7345,12 +7343,12 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            if (Events[EventBackgroundImage] is EventHandler eh)
+            if (Events[s_backgroundImageEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7373,7 +7371,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            if (Events[EventBackgroundImageLayout] is EventHandler eh)
+            if (Events[s_backgroundImageLayoutEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7382,17 +7380,17 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropBindings) != null)
+            if (Properties.GetObject(s_bindingsProperty) != null)
             {
                 UpdateBindings();
             }
 
-            if (Events[EventBindingContext] is EventHandler eh)
+            if (Events[s_bindingContextEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7408,7 +7406,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCausesValidationChanged(EventArgs e)
         {
-            if (Events[EventCausesValidation] is EventHandler eh)
+            if (Events[s_causesValidationEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7429,7 +7427,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuChanged(EventArgs e)
         {
-            if (Events[EventContextMenu] is EventHandler eh)
+            if (Events[s_contextMenuEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7438,7 +7436,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuStripChanged(EventArgs e)
         {
-            if (Events[EventContextMenuStrip] is EventHandler eh)
+            if (Events[s_contextMenuStripEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7447,12 +7445,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCursorChanged(EventArgs e)
         {
-            if (Events[EventCursor] is EventHandler eh)
+            if (Events[s_cursorEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7468,7 +7466,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e)
         {
-            if (Events[EventDock] is EventHandler eh)
+            if (Events[s_dockEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7500,12 +7498,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (Events[EventEnabled] is EventHandler eh)
+            if (Events[s_enabledEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7534,9 +7532,9 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            if (Properties.ContainsInteger(PropFontHeight))
+            if (Properties.ContainsInteger(s_fontHeightProperty))
             {
-                Properties.SetInteger(PropFontHeight, -1);
+                Properties.SetInteger(s_fontHeightProperty, -1);
             }
 
             // Cleanup any font handle wrapper...
@@ -7547,12 +7545,12 @@ namespace System.Windows.Forms
                 SetWindowFont();
             }
 
-            if (Events[EventFont] is EventHandler eh)
+            if (Events[s_fontEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             using (new LayoutTransaction(this, this, PropertyNames.Font, false))
             {
                 if (controlsCollection != null)
@@ -7581,12 +7579,12 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            if (Events[EventForeColor] is EventHandler eh)
+            if (Events[s_foreColorEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7613,12 +7611,12 @@ namespace System.Windows.Forms
 
             RecreateHandle();
 
-            if (Events[EventRightToLeft] is EventHandler eh)
+            if (Events[s_rightToLeftEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7644,7 +7642,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e)
         {
-            Color backColor = Properties.GetColor(PropBackColor);
+            Color backColor = Properties.GetColor(s_backColorProperty);
             if (backColor.IsEmpty)
             {
                 OnBackColorChanged(e);
@@ -7660,7 +7658,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropBindingManager) == null)
+            if (Properties.GetObject(s_bindingManagerProperty) == null)
             {
                 OnBindingContextChanged(e);
             }
@@ -7669,7 +7667,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropCursor) == null)
+            if (Properties.GetObject(s_cursorProperty) == null)
             {
                 OnCursorChanged(e);
             }
@@ -7687,7 +7685,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropFont) == null)
+            if (Properties.GetObject(s_fontProperty) == null)
             {
                 OnFontChanged(e);
             }
@@ -7745,7 +7743,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e)
         {
-            Color foreColor = Properties.GetColor(PropForeColor);
+            Color foreColor = Properties.GetColor(s_foreColorProperty);
             if (foreColor.IsEmpty)
             {
                 OnForeColorChanged(e);
@@ -7755,7 +7753,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentRightToLeftChanged(EventArgs e)
         {
-            if (!Properties.ContainsInteger(PropRightToLeft) || ((RightToLeft)Properties.GetInteger(PropRightToLeft)) == RightToLeft.Inherit)
+            if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
             {
                 OnRightToLeftChanged(e);
             }
@@ -7776,7 +7774,7 @@ namespace System.Windows.Forms
             if (GetState(STATE_VISIBLE))
             {
                 // This control became invisible too - notify its children
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection != null)
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
@@ -7848,7 +7846,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabIndexChanged(EventArgs e)
         {
-            if (Events[EventTabIndex] is EventHandler eh)
+            if (Events[s_tabIndexEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7857,7 +7855,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabStopChanged(EventArgs e)
         {
-            if (Events[EventTabStop] is EventHandler eh)
+            if (Events[s_tabStopEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7866,7 +7864,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e)
         {
-            if (Events[EventText] is EventHandler eh)
+            if (Events[s_textEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7897,12 +7895,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (Events[EventVisible] is EventHandler eh)
+            if (Events[s_visibleEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7925,7 +7923,7 @@ namespace System.Windows.Forms
 
         internal virtual void OnTopMostActiveXParentChanged(EventArgs e)
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7941,7 +7939,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentChanged(EventArgs e)
         {
-            if (Events[EventParent] is EventHandler eh)
+            if (Events[s_parentEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7960,13 +7958,13 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClick(EventArgs e)
         {
-            ((EventHandler)Events[EventClick])?.Invoke(this, e);
+            ((EventHandler)Events[s_clickEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClientSizeChanged(EventArgs e)
         {
-            if (Events[EventClientSize] is EventHandler eh)
+            if (Events[s_clientSizeEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -7978,7 +7976,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlAdded(ControlEventArgs e)
         {
-            ((ControlEventHandler)Events[EventControlAdded])?.Invoke(this, e);
+            ((ControlEventHandler)Events[s_controlAddedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -7987,7 +7985,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlRemoved(ControlEventArgs e)
         {
-            ((ControlEventHandler)Events[EventControlRemoved])?.Invoke(this, e);
+            ((ControlEventHandler)Events[s_controlRemovedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8029,7 +8027,7 @@ namespace System.Windows.Forms
                 // when the ThreadContext in Application is created
                 SetAcceptDrops(AllowDrop);
 
-                Region region = (Region)Properties.GetObject(PropRegion);
+                Region region = (Region)Properties.GetObject(s_regionProperty);
                 if (region != null)
                 {
                     IntPtr regionHandle = GetHRgn(region);
@@ -8059,11 +8057,11 @@ namespace System.Windows.Forms
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
                 IntPtr handle = Handle;
 
-                if (Properties.GetObject(PropAccessibility) is ControlAccessibleObject accObj)
+                if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject accObj)
                 {
                     accObj.Handle = handle;
                 }
-                if (Properties.GetObject(PropNcAccessibility) is ControlAccessibleObject ncAccObj)
+                if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject ncAccObj)
                 {
                     ncAccObj.Handle = handle;
                 }
@@ -8086,7 +8084,7 @@ namespace System.Windows.Forms
                 {
                     ListenToUserPreferenceChanged(GetTopLevel());
                 }
-            } ((EventHandler)Events[EventHandleCreated])?.Invoke(this, e);
+            } ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
 
             if (IsHandleCreated)
             {
@@ -8129,7 +8127,7 @@ namespace System.Windows.Forms
         protected virtual void OnLocationChanged(EventArgs e)
         {
             OnMove(e);
-            if (Events[EventLocation] is EventHandler eh)
+            if (Events[s_locationEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8144,7 +8142,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleDestroyed(EventArgs e)
         {
-            ((EventHandler)Events[EventHandleDestroyed])?.Invoke(this, e);
+            ((EventHandler)Events[s_handleDestroyedEvent])?.Invoke(this, e);
 
             UpdateReflectParent(false);
 
@@ -8152,10 +8150,10 @@ namespace System.Windows.Forms
             {
                 if (GetState(STATE_OWNCTLBRUSH))
                 {
-                    object backBrush = Properties.GetObject(PropBackBrush);
+                    object backBrush = Properties.GetObject(s_backBrushProperty);
                     if (backBrush != null)
                     {
-                        Properties.SetObject(PropBackBrush, null);
+                        Properties.SetObject(s_backBrushProperty, null);
                         IntPtr p = (IntPtr)backBrush;
                         if (p != IntPtr.Zero)
                         {
@@ -8203,7 +8201,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDoubleClick(EventArgs e)
         {
-            ((EventHandler)Events[EventDoubleClick])?.Invoke(this, e);
+            ((EventHandler)Events[s_doubleClickEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8218,7 +8216,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragEnter(DragEventArgs drgevent)
         {
-            ((DragEventHandler)Events[EventDragEnter])?.Invoke(this, drgevent);
+            ((DragEventHandler)Events[s_dragEnterEvent])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -8228,7 +8226,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragOver(DragEventArgs drgevent)
         {
-            ((DragEventHandler)Events[EventDragOver])?.Invoke(this, drgevent);
+            ((DragEventHandler)Events[s_dragOverEvent])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -8238,7 +8236,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragLeave(EventArgs e)
         {
-            ((EventHandler)Events[EventDragLeave])?.Invoke(this, e);
+            ((EventHandler)Events[s_dragLeaveEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8248,7 +8246,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragDrop(DragEventArgs drgevent)
         {
-            ((DragEventHandler)Events[EventDragDrop])?.Invoke(this, drgevent);
+            ((DragEventHandler)Events[s_dragDropEvent])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -8258,13 +8256,13 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs gfbevent)
         {
-            ((GiveFeedbackEventHandler)Events[EventGiveFeedback])?.Invoke(this, gfbevent);
+            ((GiveFeedbackEventHandler)Events[s_giveFeedbackEvent])?.Invoke(this, gfbevent);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e)
         {
-            ((EventHandler)Events[EventEnter])?.Invoke(this, e);
+            ((EventHandler)Events[s_enterEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8294,7 +8292,7 @@ namespace System.Windows.Forms
             if (_parent != null)
             {
                 _parent.ChildGotFocus(this);
-            } ((EventHandler)Events[EventGotFocus])?.Invoke(this, e);
+            } ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8304,7 +8302,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHelpRequested(HelpEventArgs hevent)
         {
-            HelpEventHandler handler = (HelpEventHandler)Events[EventHelpRequested];
+            HelpEventHandler handler = (HelpEventHandler)Events[s_helpRequestedEvent];
             if (handler != null)
             {
                 handler(this, hevent);
@@ -8337,7 +8335,7 @@ namespace System.Windows.Forms
             }
 
             // Transparent control support
-            ControlCollection controls = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controls != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -8347,7 +8345,7 @@ namespace System.Windows.Forms
                 {
                     controls[i].OnParentInvalidated(e);
                 }
-            } ((InvalidateEventHandler)Events[EventInvalidated])?.Invoke(this, e);
+            } ((InvalidateEventHandler)Events[s_invalidatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8356,7 +8354,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyDown(KeyEventArgs e)
         {
-            ((KeyEventHandler)Events[EventKeyDown])?.Invoke(this, e);
+            ((KeyEventHandler)Events[s_keyDownEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8365,7 +8363,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyPress(KeyPressEventArgs e)
         {
-            ((KeyPressEventHandler)Events[EventKeyPress])?.Invoke(this, e);
+            ((KeyPressEventHandler)Events[s_keyPressEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8374,7 +8372,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
-            ((KeyEventHandler)Events[EventKeyUp])?.Invoke(this, e);
+            ((KeyEventHandler)Events[s_keyUpEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8392,7 +8390,7 @@ namespace System.Windows.Forms
                 ActiveXViewChanged();
             }
             
-            ((LayoutEventHandler)Events[EventLayout])?.Invoke(this, levent);
+            ((LayoutEventHandler)Events[s_layoutEvent])?.Invoke(this, levent);
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
             if (parentRequiresLayout && ParentInternal != null)
@@ -8425,7 +8423,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLeave(EventArgs e)
         {
-            ((EventHandler)Events[EventLeave])?.Invoke(this, e);
+            ((EventHandler)Events[s_leaveEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8447,12 +8445,12 @@ namespace System.Windows.Forms
             if (IsActiveX)
             {
                 ActiveXOnFocus(false);
-            } ((EventHandler)Events[EventLostFocus])?.Invoke(this, e);
+            } ((EventHandler)Events[s_lostFocusEvent])?.Invoke(this, e);
         }
 
         protected virtual void OnMarginChanged(EventArgs e)
         {
-            ((EventHandler)Events[EventMarginChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_marginChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8461,7 +8459,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDoubleClick(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EventMouseDoubleClick])?.Invoke(this, e);
+            ((MouseEventHandler)Events[s_mouseDoubleClickEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8470,7 +8468,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseClick(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EventMouseClick])?.Invoke(this, e);
+            ((MouseEventHandler)Events[s_mouseClickEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8479,7 +8477,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseCaptureChanged(EventArgs e)
         {
-            ((EventHandler)Events[EventMouseCaptureChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_mouseCaptureChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8488,7 +8486,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDown(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EventMouseDown])?.Invoke(this, e);
+            ((MouseEventHandler)Events[s_mouseDownEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8497,7 +8495,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseEnter(EventArgs e)
         {
-            ((EventHandler)Events[EventMouseEnter])?.Invoke(this, e);
+            ((EventHandler)Events[s_mouseEnterEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8506,7 +8504,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseLeave(EventArgs e)
         {
-            ((EventHandler)Events[EventMouseLeave])?.Invoke(this, e);
+            ((EventHandler)Events[s_mouseLeaveEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8521,7 +8519,7 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnDpiChangedBeforeParent(EventArgs e)
         {
-            ((EventHandler)Events[EventDpiChangedBeforeParent])?.Invoke(this, e);
+            ((EventHandler)Events[s_dpiChangedBeforeParentEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8536,7 +8534,7 @@ namespace System.Windows.Forms
         ]
         protected virtual void OnDpiChangedAfterParent(EventArgs e)
         {
-            ((EventHandler)Events[EventDpiChangedAfterParent])?.Invoke(this, e);
+            ((EventHandler)Events[s_dpiChangedAfterParentEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8545,7 +8543,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseHover(EventArgs e)
         {
-            ((EventHandler)Events[EventMouseHover])?.Invoke(this, e);
+            ((EventHandler)Events[s_mouseHoverEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8554,7 +8552,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseMove(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EventMouseMove])?.Invoke(this, e);
+            ((MouseEventHandler)Events[s_mouseMoveEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8563,7 +8561,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseUp(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EventMouseUp])?.Invoke(this, e);
+            ((MouseEventHandler)Events[s_mouseUpEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8572,7 +8570,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseWheel(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[EventMouseWheel])?.Invoke(this, e);
+            ((MouseEventHandler)Events[s_mouseWheelEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8581,7 +8579,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMove(EventArgs e)
         {
-            ((EventHandler)Events[EventMove])?.Invoke(this, e);
+            ((EventHandler)Events[s_moveEvent])?.Invoke(this, e);
 
             if (RenderTransparent)
             {
@@ -8596,7 +8594,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaint(PaintEventArgs e)
         {
-            ((PaintEventHandler)Events[EventPaint])?.Invoke(this, e);
+            ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
         }
 
         protected virtual void OnPaddingChanged(EventArgs e)
@@ -8604,7 +8602,7 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.ResizeRedraw))
             {
                 Invalidate();
-            } ((EventHandler)Events[EventPaddingChanged])?.Invoke(this, e);
+            } ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8657,7 +8655,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnQueryContinueDrag(QueryContinueDragEventArgs qcdevent)
         {
-            ((QueryContinueDragEventHandler)Events[EventQueryContinueDrag])?.Invoke(this, qcdevent);
+            ((QueryContinueDragEventHandler)Events[s_queryContinueDragEvent])?.Invoke(this, qcdevent);
         }
 
         /// <summary>
@@ -8666,7 +8664,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRegionChanged(EventArgs e)
         {
-            if (Events[EventRegionChanged] is EventHandler eh)
+            if (Events[s_regionChangedEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8684,7 +8682,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
-            ((EventHandler)Events[EventResize])?.Invoke(this, e);
+            ((EventHandler)Events[s_resizeEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8693,7 +8691,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
         {
-            ((PreviewKeyDownEventHandler)Events[EventPreviewKeyDown])?.Invoke(this, e);
+            ((PreviewKeyDownEventHandler)Events[s_previewKeyDownEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8701,7 +8699,7 @@ namespace System.Windows.Forms
         {
             OnResize(EventArgs.Empty);
 
-            if (Events[EventSize] is EventHandler eh)
+            if (Events[s_sizeEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -8713,7 +8711,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnChangeUICues(UICuesEventArgs e)
         {
-            ((UICuesEventHandler)Events[EventChangeUICues])?.Invoke(this, e);
+            ((UICuesEventHandler)Events[s_changeUICuesEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8722,7 +8720,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnStyleChanged(EventArgs e)
         {
-            ((EventHandler)Events[EventStyleChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_styleChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8731,7 +8729,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSystemColorsChanged(EventArgs e)
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection != null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -8744,7 +8742,7 @@ namespace System.Windows.Forms
             }
             Invalidate();
 
-            ((EventHandler)Events[EventSystemColorsChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8754,7 +8752,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidating(CancelEventArgs e)
         {
-            ((CancelEventHandler)Events[EventValidating])?.Invoke(this, e);
+            ((CancelEventHandler)Events[s_validatingEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8763,7 +8761,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidated(EventArgs e)
         {
-            ((EventHandler)Events[EventValidated])?.Invoke(this, e);
+            ((EventHandler)Events[s_validatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9368,7 +9366,7 @@ namespace System.Windows.Forms
             target.SetState2(STATE2_INPUTCHAR, false);
             target.SetState2(STATE2_UICUES, true);
 
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.PreProcessControlMessageInternal " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.PreProcessControlMessageInternal " + msg.ToString());
 
             try
             {
@@ -9384,7 +9382,7 @@ namespace System.Windows.Forms
 
                     if (args.IsInputKey)
                     {
-                        Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "PreviewKeyDown indicated this is an input key.");
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "PreviewKeyDown indicated this is an input key.");
                         // Control wants this message - indicate it should be dispatched.
                         return PreProcessControlState.MessageNeeded;
                     }
@@ -9400,7 +9398,7 @@ namespace System.Windows.Forms
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetState2(STATE2_INPUTKEY) || target.IsInputKey(keyData))
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
@@ -9410,7 +9408,7 @@ namespace System.Windows.Forms
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetState2(STATE2_INPUTCHAR) || target.IsInputChar((char)msg.WParam))
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
@@ -9447,8 +9445,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
-            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
+            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             if (contextMenu != null && contextMenu.ProcessCmdKey(ref msg, keyData, this))
             {
                 return true;
@@ -9578,7 +9576,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
             return _parent == null ? false : _parent.ProcessDialogChar(charCode);
         }
 
@@ -9599,7 +9597,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
             return _parent == null ? false : _parent.ProcessDialogKey(keyData);
         }
 
@@ -9618,7 +9616,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyEventArgs(ref Message m)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyEventArgs " + m.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessKeyEventArgs " + m.ToString());
             KeyEventArgs ke = null;
             KeyPressEventArgs kpe = null;
             IntPtr newWParam = IntPtr.Zero;
@@ -9679,13 +9677,13 @@ namespace System.Windows.Forms
 
             if (kpe != null)
             {
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + kpe.Handled);
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + kpe.Handled);
                 m.WParam = newWParam;
                 return kpe.Handled;
             }
             else
             {
-                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress)
                 {
                     RemovePendingMessages(Interop.WindowMessages.WM_CHAR, Interop.WindowMessages.WM_CHAR);
@@ -9713,7 +9711,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual bool ProcessKeyMessage(ref Message m)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
             if (_parent != null && _parent.ProcessKeyPreview(ref m))
             {
                 return true;
@@ -9742,7 +9740,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyPreview(ref Message m)
         {
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyPreview " + m.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessKeyPreview " + m.ToString());
             return _parent == null ? false : _parent.ProcessKeyPreview(ref m);
         }
 
@@ -9767,7 +9765,7 @@ namespace System.Windows.Forms
         protected internal virtual bool ProcessMnemonic(char charCode)
         {
 #if DEBUG
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessMnemonic [0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture) + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessMnemonic [0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture) + "]");
 #endif
             return false;
         }
@@ -9863,7 +9861,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaisePaintEvent(object key, PaintEventArgs e)
         {
-            ((PaintEventHandler)Events[EventPaint])?.Invoke(this, e);
+            ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
         }
 
         private void RemovePendingMessages(int msgMin, int msgMax)
@@ -10007,7 +10005,7 @@ namespace System.Windows.Forms
                             // This behavior can be overridden in OnParentHandleRecreat* and is in ListView.
 
                             //fish out control collection w/o demand creating one.
-                            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                             if (controlsCollection != null && controlsCollection.Count > 0)
                             {
                                 controlSnapshot = new Control[controlsCollection.Count];
@@ -10233,7 +10231,7 @@ namespace System.Windows.Forms
             {
 
                 CommonProperties.xClearPreferredSizeCache(this);
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -10343,7 +10341,7 @@ namespace System.Windows.Forms
                 ScaleControl(factor, factor, this);
                 if (ScaleChildren)
                 {
-                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                    ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                     if (controlsCollection != null)
                     {
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -10415,7 +10413,7 @@ namespace System.Windows.Forms
         {
             if (ScaleChildren)
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection != null)
                 {
@@ -10444,7 +10442,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateWindowFontIfNeeded()
         {
-            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && (Properties.GetObject(PropFont) == null))
+            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && (Properties.GetObject(s_fontProperty) == null))
             {
                 SetWindowFont();
             }
@@ -10650,7 +10648,7 @@ namespace System.Windows.Forms
 
                 SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
 
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection != null)
                 {
@@ -11173,11 +11171,11 @@ namespace System.Windows.Forms
 
         internal static IntPtr SetUpPalette(IntPtr dc, bool force, bool realizePalette)
         {
-            Debug.WriteLineIf(PaletteTracing.TraceVerbose, "SetUpPalette(force:=" + force + ", ralizePalette:=" + realizePalette + ")");
+            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, "SetUpPalette(force:=" + force + ", ralizePalette:=" + realizePalette + ")");
 
             IntPtr halftonePalette = Graphics.GetHalftonePalette();
 
-            Debug.WriteLineIf(PaletteTracing.TraceVerbose, "select palette " + !force);
+            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, "select palette " + !force);
             IntPtr result = SafeNativeMethods.SelectPalette(new HandleRef(null, dc), new HandleRef(null, halftonePalette), (force ? 0 : 1));
 
             if (result != IntPtr.Zero && realizePalette)
@@ -11369,7 +11367,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeBackColor()
         {
-            Color backColor = Properties.GetColor(PropBackColor);
+            Color backColor = Properties.GetColor(s_backColorProperty);
             return !backColor.IsEmpty;
         }
 
@@ -11379,7 +11377,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor()
         {
-            object cursor = Properties.GetObject(PropCursor, out bool found);
+            object cursor = Properties.GetObject(s_cursorProperty, out bool found);
             return (found && cursor != null);
         }
 
@@ -11398,7 +11396,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeForeColor()
         {
-            Color foreColor = Properties.GetColor(PropForeColor);
+            Color foreColor = Properties.GetColor(s_foreColorProperty);
             return !foreColor.IsEmpty;
         }
 
@@ -11408,7 +11406,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            object font = Properties.GetObject(PropFont, out bool found);
+            object font = Properties.GetObject(s_fontProperty, out bool found);
             return (found && font != null);
         }
 
@@ -11418,7 +11416,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeRightToLeft()
         {
-            int rtl = Properties.GetInteger(PropRightToLeft, out bool found);
+            int rtl = Properties.GetInteger(s_rightToLeftProperty, out bool found);
             return (found && rtl != (int)RightToLeft.Inherit);
         }
 
@@ -12019,9 +12017,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal void WmContextMenu(ref Message m, Control sourceControl)
         {
-            ContextMenu contextMenu = Properties.GetObject(PropContextMenu) as ContextMenu;
+            ContextMenu contextMenu = Properties.GetObject(s_contextMenuProperty) as ContextMenu;
             ContextMenuStrip contextMenuStrip = (contextMenu != null) ? null /*save ourselves a property fetch*/
-                                                                        : Properties.GetObject(PropContextMenuStrip) as ContextMenuStrip;
+                                                                        : Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
             if (contextMenu != null || contextMenuStrip != null)
             {
@@ -12171,7 +12169,7 @@ namespace System.Windows.Forms
 
             if (isContextMenu)
             {
-                ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+                ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
                 if (contextMenu != null)
                 {
                     contextMenu.OnCollapse(EventArgs.Empty);
@@ -12344,7 +12342,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmInitMenuPopup(ref Message m)
         {
-            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
+            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             if (contextMenu != null)
             {
 
@@ -12530,7 +12528,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKillFocus(ref Message m)
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::WmKillFocus - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::WmKillFocus - " + Name);
             WmImeKillFocus();
             DefWndProc(ref m);
             InvokeLostFocus(this, EventArgs.Empty);
@@ -12629,7 +12627,7 @@ namespace System.Windows.Forms
                 if (deviceDpiOld != _deviceDpi)
                 {
                     // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
-                    Font local = (Font)Properties.GetObject(PropFont);
+                    Font local = (Font)Properties.GetObject(s_fontProperty);
                     if (local != null)
                     {
                         var factor = (float)_deviceDpi / deviceDpiOld;
@@ -12867,7 +12865,7 @@ namespace System.Windows.Forms
         {
             bool doubleBuffered = DoubleBuffered || (GetStyle(ControlStyles.AllPaintingInWmPaint) && DoubleBufferingEnabled);
 #if DEBUG
-            if (BufferDisabled.Enabled)
+            if (s_bufferDisabled.Enabled)
             {
                 doubleBuffered = false;
             }
@@ -12923,7 +12921,7 @@ namespace System.Windows.Forms
                             {
                                 bufferedGraphics = BufferContext.Allocate(dc, ClientRectangle);
 #if DEBUG
-                                if (BufferPinkRect.Enabled)
+                                if (s_bufferPinkRect.Enabled)
                                 {
                                     Rectangle band = ClientRectangle;
                                     using (BufferedGraphics bufferedGraphics2 = BufferContext.Allocate(dc, band))
@@ -12951,7 +12949,7 @@ namespace System.Windows.Forms
                                     throw;
                                 }
 #if DEBUG
-                                if (BufferPinkRect.Enabled)
+                                if (s_bufferPinkRect.Enabled)
                                 {
                                     Debug.WriteLine("Could not create buffered graphics, will paint in the surface directly");
                                 }
@@ -13038,7 +13036,7 @@ namespace System.Windows.Forms
 
         private void WmQueryNewPalette(ref Message m)
         {
-            Debug.WriteLineIf(PaletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
+            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
             IntPtr dc = Interop.User32.GetDC(new HandleRef(this, Handle));
             try
             {
@@ -13136,7 +13134,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
-            Debug.WriteLineIf(FocusTracing.TraceVerbose, "Control::WmSetFocus - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::WmSetFocus - " + Name);
             WmImeSetFocus();
 
             if (!HostedInWin32DialogManager)
@@ -13444,11 +13442,11 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_SYSCOMMAND:
                     if ((unchecked((int)(long)m.WParam) & 0xFFF0) == NativeMethods.SC_KEYMENU)
                     {
-                        Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
 
                         if (ToolStripManager.ProcessMenuKey(ref m))
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc ToolStripManager.ProcessMenuKey returned true" + m.ToString());
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.WndProc ToolStripManager.ProcessMenuKey returned true" + m.ToString());
                             m.Result = IntPtr.Zero;
                             return;
                         }
@@ -13730,7 +13728,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
+                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection == null)
                 {
                     return ArrangedElementCollection.Empty;

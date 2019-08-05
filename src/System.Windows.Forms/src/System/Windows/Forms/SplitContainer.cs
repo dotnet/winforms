@@ -2530,7 +2530,7 @@ namespace System.Windows.Forms
         protected override bool ProcessDialogKey(Keys keyData)
         {
 #if DEBUG
-            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
 #endif
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
             {

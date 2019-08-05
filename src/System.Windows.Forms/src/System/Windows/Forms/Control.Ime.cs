@@ -69,7 +69,7 @@ namespace System.Windows.Forms
 
                 // Get the ImeMode from the property store
                 //
-                ImeMode cachedImeMode = (ImeMode)Properties.GetInteger(PropImeMode, out bool found);
+                ImeMode cachedImeMode = (ImeMode)Properties.GetInteger(s_imeModeProperty, out bool found);
                 if (!found)
                 {
                     cachedImeMode = DefaultImeMode;
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 Debug.Indent();
 
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Warning, "Setting cached Ime == " + value);
-                Properties.SetInteger(PropImeMode, (int)value);
+                Properties.SetInteger(s_imeModeProperty, (int)value);
 
                 Debug.Unindent();
             }
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_DisableImeModeChangedCount()");
                 Debug.Indent();
 
-                int val = (int)Properties.GetInteger(PropDisableImeModeChangedCount, out bool dummy);
+                int val = (int)Properties.GetInteger(s_disableImeModeChangedCountProperty, out bool dummy);
 
                 Debug.Assert(val >= 0, "Counter underflow.");
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value: " + val);
@@ -184,7 +184,7 @@ namespace System.Windows.Forms
             set
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside set_DisableImeModeChangedCount(): " + value);
-                Properties.SetInteger(PropDisableImeModeChangedCount, value);
+                Properties.SetInteger(s_disableImeModeChangedCountProperty, value);
             }
         }
 
@@ -329,8 +329,8 @@ namespace System.Windows.Forms
         [WinCategory("Behavior"), SRDescription(nameof(SR.ControlOnImeModeChangedDescr))]
         public event EventHandler ImeModeChanged
         {
-            add => Events.AddHandler(EventImeModeChanged, value);
-            remove => Events.RemoveHandler(EventImeModeChanged, value);
+            add => Events.AddHandler(s_imeModeChangedEvent, value);
+            remove => Events.RemoveHandler(s_imeModeChangedEvent, value);
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace System.Windows.Forms
             // not to process each character twice or more.
             get
             {
-                return Properties.GetInteger(PropImeWmCharsToIgnore);
+                return Properties.GetInteger(s_imeWmCharsToIgnoreProperty);
             }
             set
             {
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
                 // dissasociating the IME (for instance when loosing focus and conversion is forced to complete).
                 if (ImeWmCharsToIgnore != ImeCharsToIgnoreDisabled)
                 {
-                    Properties.SetInteger(PropImeWmCharsToIgnore, value);
+                    Properties.SetInteger(s_imeWmCharsToIgnoreProperty, value);
                 }
 
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImeWmCharsToIgnore on leaving setter: " + ImeWmCharsToIgnore);
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_LastCanEnableIme()");
                 Debug.Indent();
 
-                int val = (int)Properties.GetInteger(PropLastCanEnableIme, out bool valueFound);
+                int val = (int)Properties.GetInteger(s_lastCanEnableImeProperty, out bool valueFound);
 
                 if (valueFound)
                 {
@@ -394,7 +394,7 @@ namespace System.Windows.Forms
             set
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside set_LastCanEnableIme(): " + value);
-                Properties.SetInteger(PropLastCanEnableIme, value ? 1 : 0);
+                Properties.SetInteger(s_lastCanEnableImeProperty, value ? 1 : 0);
             }
         }
 
@@ -667,7 +667,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(ImeSupported, "ImeModeChanged should not be raised on an Ime-Unaware control.");
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside OnImeModeChanged(), this = " + this);
-            ((EventHandler)Events[EventImeModeChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_imeModeChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -688,7 +688,7 @@ namespace System.Windows.Forms
         {
             // This method is for designer support.  If the ImeMode has not been changed or it is the same as the
             // default value it should not be serialized.
-            int imeMode = Properties.GetInteger(PropImeMode, out bool found);
+            int imeMode = Properties.GetInteger(s_imeModeProperty, out bool found);
 
             return (found && imeMode != (int)DefaultImeMode);
         }
@@ -866,7 +866,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmImeStartComposition() - Enabling ImeWmCharToIgnore, this=" + this);
 
             // Need to call the property store directly because the WmImeCharsToIgnore property is locked when ImeCharsToIgnoreDisabled.
-            Properties.SetInteger(PropImeWmCharsToIgnore, ImeCharsToIgnoreEnabled);
+            Properties.SetInteger(s_imeWmCharsToIgnoreProperty, ImeCharsToIgnoreEnabled);
             DefWndProc(ref m);
         }
 

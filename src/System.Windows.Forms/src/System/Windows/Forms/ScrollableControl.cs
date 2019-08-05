@@ -690,7 +690,7 @@ namespace System.Windows.Forms
         {
             // Don't call base in this instance - for App compat we should not fire Invalidate
             // when  the padding has changed.
-            ((EventHandler)Events[Control.EventPaddingChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
