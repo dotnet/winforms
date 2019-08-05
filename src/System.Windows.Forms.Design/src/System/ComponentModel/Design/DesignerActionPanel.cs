@@ -1961,7 +1961,7 @@ namespace System.ComponentModel.Design
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     try
                     {
-                        hFont = Interop.Gdi32.SelectObject(new HandleRef(listBox, hdc), new HandleRef(listBox.Font, hFont));
+                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
                         if (listBox.Items.Count > 0)
                         {
                             NativeMethods.SIZE textSize = new NativeMethods.SIZE();
@@ -1974,12 +1974,12 @@ namespace System.ComponentModel.Design
                         SafeNativeMethods.GetTextMetrics(new HandleRef(listBox, hdc), ref tm);
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
-                        hFont = Interop.Gdi32.SelectObject(new HandleRef(listBox, hdc), new HandleRef(listBox.Font, hFont));
+                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
                     }
                     finally
                     {
                         Interop.Gdi32.DeleteObject(hFont);
-                        Interop.User32.ReleaseDC(new HandleRef(listBox, listBox.Handle), new HandleRef(listBox, hdc));
+                        Interop.User32.ReleaseDC(new HandleRef(listBox, listBox.Handle), hdc);
                     }
 
                     listBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(ListBoxMaximumHeight, listBox.PreferredHeight));

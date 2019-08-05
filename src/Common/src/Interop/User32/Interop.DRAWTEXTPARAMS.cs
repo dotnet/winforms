@@ -12,11 +12,11 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Sequential)]
         public struct DRAWTEXTPARAMS
         {
-            public int cbSize;
+            public uint cbSize;
             public int iTabLength;
             public int iLeftMargin;
             public int iRightMargin;
-            public int uiLengthDrawn;
+            public uint uiLengthDrawn;
         }
     }
 }

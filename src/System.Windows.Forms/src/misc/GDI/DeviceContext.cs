@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Pen:
                     if (handle == hCurrentPen)
                     {
-                        IntPtr currentPen = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialPen));
+                        IntPtr currentPen = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialPen);
                         Debug.Assert(currentPen == hCurrentPen, "DeviceContext thinks a different pen is selected than the HDC");
                         hCurrentPen = IntPtr.Zero;
                     }
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Brush:
                     if (handle == hCurrentBrush)
                     {
-                        IntPtr currentBrush = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialBrush));
+                        IntPtr currentBrush = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialBrush);
                         Debug.Assert(currentBrush == hCurrentBrush, "DeviceContext thinks a different brush is selected than the HDC");
                         hCurrentBrush = IntPtr.Zero;
                     }
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Bitmap:
                     if (handle == hCurrentBmp)
                     {
-                        IntPtr currentBmp = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), new HandleRef(this, hInitialBmp));
+                        IntPtr currentBmp = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialBmp);
                         Debug.Assert(currentBmp == hCurrentBmp, "DeviceContext thinks a different brush is selected than the HDC");
                         hCurrentBmp = IntPtr.Zero;
                     }
@@ -363,7 +363,7 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                 int retVal =
 #endif
-                Interop.User32.ReleaseDC(new HandleRef(this, hWnd), new HandleRef(this, hDC));
+                Interop.User32.ReleaseDC(new HandleRef(this, hWnd), hDC);
                 // Note: retVal == 0 means it was not released but doesn't necessarily means an error; class or private DCs are never released.
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("[ret={0}]=DC.ReleaseDC(hDc=0x{1:x8}, hWnd=0x{2:x8})", retVal, unchecked((int) this.hDC), unchecked((int) this.hWnd))));

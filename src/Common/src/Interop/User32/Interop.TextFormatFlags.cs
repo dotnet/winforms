@@ -10,7 +10,7 @@ internal static partial class Interop
     internal static partial class User32
     {
         [Flags]
-        public enum TextFormatFlags
+        public enum TextFormatFlags : uint
         {
             DT_DEFAULT = DT_TOP | DT_LEFT,
             DT_TOP = 0x00000000,

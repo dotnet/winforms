@@ -12,9 +12,9 @@ internal static partial class Interop
         [DllImport(Libraries.User32, EntryPoint = "DrawTextExW", ExactSpelling = true, CharSet = CharSet.Unicode)]
         private static extern int DrawTextExWInternal(IntPtr hdc, string lpchText, int cchText, ref Interop.RECT lprc, TextFormatFlags format, ref DRAWTEXTPARAMS lpdtp);
 
-        public static int DrawTextExW(IntPtr hdc, string lpchText, int cchText, ref Interop.RECT lprc, TextFormatFlags format, ref DRAWTEXTPARAMS lpdtp)
+        public static unsafe int DrawTextExW(IntPtr hdc, string lpchText, int cchText, ref Interop.RECT lprc, TextFormatFlags format, ref DRAWTEXTPARAMS lpdtp)
         {
-            lpdtp.cbSize = Marshal.SizeOf<DRAWTEXTPARAMS>();
+            lpdtp.cbSize = (uint)sizeof(DRAWTEXTPARAMS);
             return DrawTextExWInternal(hdc, lpchText, cchText, ref lprc, format, ref lpdtp);
         }
 
