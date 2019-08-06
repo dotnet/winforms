@@ -152,6 +152,9 @@ namespace System.Windows.Forms.Tests.InteropTests
             Assert.Equal(BOOL.FALSE, manager.FSetTrackingComponent(id, BOOL.TRUE));
 
             Assert.Equal(BOOL.TRUE, manager.FSetTrackingComponent(id, BOOL.FALSE));
+
+            // If we aren't tracking, untracking should return false
+            Assert.Equal(BOOL.FALSE, manager.FSetTrackingComponent(id, BOOL.FALSE));
             Assert.Equal(BOOL.TRUE, manager.FSetTrackingComponent(id, BOOL.TRUE));
         }
 

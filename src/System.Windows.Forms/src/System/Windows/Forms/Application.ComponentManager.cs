@@ -164,7 +164,7 @@ namespace System.Windows.Forms
             BOOL IMsoComponentManager.FSetTrackingComponent(UIntPtr dwComponentID, BOOL fTrack)
             {
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
-                    || ((entry.component == _trackingComponent) && fTrack.IsTrue()))
+                    || !((entry.component == _trackingComponent) ^ fTrack.IsTrue()))
                 {
                     return BOOL.FALSE;
                 }
