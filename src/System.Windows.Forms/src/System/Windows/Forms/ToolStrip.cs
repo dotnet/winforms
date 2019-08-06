@@ -5255,6 +5255,11 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
+            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            {
+                return HitTest((int)x, (int)y);
+            }
+
             /// <summary>
             /// Return the child object at the given screen coordinates.
             /// </summary>
