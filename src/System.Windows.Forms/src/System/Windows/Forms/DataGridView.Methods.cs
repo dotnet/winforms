@@ -5691,7 +5691,7 @@ namespace System.Windows.Forms
 
             Interop.Gdi32.SelectObject(dc, saveBrush);
             Interop.Gdi32.DeleteObject(halftone);
-            Interop.Gdi32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -5707,7 +5707,7 @@ namespace System.Windows.Forms
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
             Interop.Gdi32.SelectObject(dc, saveBrush);
             Interop.Gdi32.DeleteObject(halftone);
-            Interop.Gdi32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)

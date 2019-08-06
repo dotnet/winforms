@@ -30,15 +30,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.Ole32)]
         public static extern int ReadClassStg(HandleRef pStg, ref Guid pclsid);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr GetDC(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetDeviceCaps(HandleRef hDC, int nIndex);
-
         [DllImport(ExternDll.Ole32, PreserveSig = false)]
         public static extern ILockBytes CreateILockBytesOnHGlobal(HandleRef hGlobal, bool fDeleteOnRelease);
 

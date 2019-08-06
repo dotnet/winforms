@@ -1419,7 +1419,7 @@ namespace System.Windows.Forms
                     // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.
                     // Make this hollow to avoid all flicker.
 
-                    windowClass.hbrBackground = UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH);
+                    windowClass.hbrBackground = Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH);
                     windowClass.style = _classStyle;
 
                     _defaultWindowProc = DefaultWindowProc;

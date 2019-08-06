@@ -735,10 +735,9 @@ namespace System.Windows.Forms
 
                     if ((tm.tmPitchAndFamily & NativeMethods.TMPF_FIXED_PITCH) != 0)
                     {
-                        Size size = new Size();
-                        IntUnsafeNativeMethods.GetTextExtentPoint32W(hdc, FontMeasureString, FontMeasureString.Length, ref size);
+                        var size = new Size();
+                        Interop.Gdi32.GetTextExtentPoint32W(hdc, FontMeasureString, FontMeasureString.Length, ref size);
                         // Note: intentional integer round off here for Win32 compat
-                        //retval.Width = (float)(((size.cx / 26) + 1) / 2);
                         retval.Width = (int)Math.Round(size.Width / ((float)FontMeasureString.Length));
                     }
                     else

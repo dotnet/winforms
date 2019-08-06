@@ -1956,12 +1956,12 @@ namespace System.ComponentModel.Design
                     // All measurement code borrowed from WinForms PropertyGridView.cs
                     int maxWidth = 0;
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
-                    IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(listBox, listBox.Handle));
+                    IntPtr hdc = Interop.User32.GetDC(new HandleRef(listBox, listBox.Handle));
                     IntPtr hFont = listBox.Font.ToHfont();
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     try
                     {
-                        hFont = SafeNativeMethods.SelectObject(new HandleRef(listBox, hdc), new HandleRef(listBox.Font, hFont));
+                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
                         if (listBox.Items.Count > 0)
                         {
                             NativeMethods.SIZE textSize = new NativeMethods.SIZE();
@@ -1974,12 +1974,12 @@ namespace System.ComponentModel.Design
                         SafeNativeMethods.GetTextMetrics(new HandleRef(listBox, hdc), ref tm);
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
-                        hFont = SafeNativeMethods.SelectObject(new HandleRef(listBox, hdc), new HandleRef(listBox.Font, hFont));
+                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
                     }
                     finally
                     {
                         Interop.Gdi32.DeleteObject(hFont);
-                        UnsafeNativeMethods.ReleaseDC(new HandleRef(listBox, listBox.Handle), new HandleRef(listBox, hdc));
+                        Interop.User32.ReleaseDC(new HandleRef(listBox, listBox.Handle), hdc);
                     }
 
                     listBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(ListBoxMaximumHeight, listBox.PreferredHeight));
@@ -2662,12 +2662,6 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr GetCapture();
-
-                [DllImport(ExternDll.User32, ExactSpelling = true)]
-                public static extern IntPtr GetDC(HandleRef hWnd);
-
-                [DllImport(ExternDll.User32, ExactSpelling = true)]
-                public static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
             }
             #endregion
 

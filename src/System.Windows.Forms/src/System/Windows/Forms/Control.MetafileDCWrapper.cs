@@ -30,13 +30,12 @@ namespace System.Windows.Forms
 
             internal MetafileDCWrapper(HandleRef hOriginalDC, Size size)
             {
-                Debug.Assert(UnsafeNativeMethods.GetObjectType(hOriginalDC) == NativeMethods.OBJ_ENHMETADC,
+                Debug.Assert(Interop.Gdi32.GetObjectType(hOriginalDC) == Interop.Gdi32.ObjectType.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
 
-                // Security fix: make sure the size has non-negative width and height.
                 if (size.Width < 0 || size.Height < 0)
                 {
-                    throw new ArgumentException(nameof(size), SR.ControlMetaFileDCWrapperSizeInvalid);
+                    throw new ArgumentException(SR.ControlMetaFileDCWrapperSizeInvalid, nameof(size));
                 }
 
                 _hMetafileDC = hOriginalDC;

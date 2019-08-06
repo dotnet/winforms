@@ -545,17 +545,17 @@ namespace System.Windows.Forms
                 {
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
                     {
-                        IntTextFormatFlags flags = IntTextFormatFlags.WordBreak | IntTextFormatFlags.TextBoxControl;
+                        Interop.User32.TextFormatFlags flags = Interop.User32.TextFormatFlags.DT_WORDBREAK | Interop.User32.TextFormatFlags.DT_EDITCONTROL;
 
                         if (!ShowKeyboardCues)
                         {
-                            flags |= IntTextFormatFlags.HidePrefix;
+                            flags |= Interop.User32.TextFormatFlags.DT_HIDEPREFIX;
                         }
 
                         if (RightToLeft == RightToLeft.Yes)
                         {
-                            flags |= IntTextFormatFlags.RightToLeft;
-                            flags |= IntTextFormatFlags.Right;
+                            flags |= Interop.User32.TextFormatFlags.DT_RTLREADING;
+                            flags |= Interop.User32.TextFormatFlags.DT_RIGHT;
                         }
 
                         using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font))

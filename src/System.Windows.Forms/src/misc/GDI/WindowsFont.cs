@@ -116,10 +116,9 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static WindowsFont FromHdc(IntPtr hdc)
         {
-            IntPtr hFont = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(null, hdc), IntNativeMethods.OBJ_FONT);
+            IntPtr hFont = Interop.Gdi32.GetCurrentObject(hdc, Interop.Gdi32.ObjectType.OBJ_FONT);
 
             // don't call DeleteObject on handle from GetCurrentObject, it is the one selected in the hdc.
-
             return FromHfont(hFont);
         }
 

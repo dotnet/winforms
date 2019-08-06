@@ -705,8 +705,8 @@ namespace System.Windows.Forms.Design
                                         int state, int backColor, int textColor)
             {
                 Size size = new Size();
-                IntNativeMethods.RECT rc2 = new IntNativeMethods.RECT();
-                IntNativeMethods.RECT rc = new IntNativeMethods.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
+                var rc2 = new Interop.RECT();
+                var rc = new Interop.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
                 ImageList imagelist = ImageList;
                 IntPtr hfontOld = IntPtr.Zero;
 
@@ -731,7 +731,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Get the height of the font
-                IntUnsafeNativeMethods.GetTextExtentPoint32W(new HandleRef(null, dc), itemText, itemText.Length, ref size);
+                Interop.Gdi32.GetTextExtentPoint32W(dc, itemText, itemText.Length, ref size);
 
                 // Draw the caption
                 rc2.left = rc.left + SIZE_ICON_X + 2 * PADDING_HORZ;
@@ -739,8 +739,12 @@ namespace System.Windows.Forms.Design
                 rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), textColor);
-                IntUnsafeNativeMethods.DrawText(new HandleRef(null, dc), itemText, ref rc2,
-                                 IntNativeMethods.DT_LEFT | IntNativeMethods.DT_VCENTER | IntNativeMethods.DT_END_ELLIPSIS | IntNativeMethods.DT_NOPREFIX);
+                Interop.User32.DrawTextW(
+                    dc,
+                    itemText,
+                    itemText.Length,
+                    ref rc2,
+                    Interop.User32.TextFormatFlags.DT_LEFT | Interop.User32.TextFormatFlags.DT_VCENTER | Interop.User32.TextFormatFlags.DT_END_ELLIPSIS | Interop.User32.TextFormatFlags.DT_NOPREFIX);
 
                 SafeNativeMethods.ImageList_Draw(new HandleRef(imagelist, imagelist.Handle), imageIndex, new HandleRef(null, dc),
                                        PADDING_HORZ, rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),

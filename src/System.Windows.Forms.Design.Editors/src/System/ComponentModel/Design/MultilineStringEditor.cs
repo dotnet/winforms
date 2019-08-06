@@ -229,19 +229,18 @@ namespace System.ComponentModel.Design
                 get
                 {
                     Interop.RECT rect = new Interop.RECT();
-                    HandleRef hdc = new HandleRef(null, UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef));
+                    using ScreenDC hdc = ScreenDC.Create();
                     IntPtr hRtbFont = Font.ToHfont();
-                    IntPtr hOldFont = NativeMethods.SelectObject(hdc, hRtbFont);
+                    IntPtr hOldFont = Interop.Gdi32.SelectObject(hdc, hRtbFont);
 
                     try
                     {
-                        NativeMethods.DrawTextW(hdc, Text, Text.Length, ref rect, NativeMethods.DT_CALCRECT);
+                        Interop.User32.DrawTextW(hdc, Text, Text.Length, ref rect, Interop.User32.TextFormatFlags.DT_CALCRECT);
                     }
                     finally
                     {
                         Interop.Gdi32.DeleteObject(hRtbFont);
-                        NativeMethods.SelectObject(hdc, hOldFont);
-                        UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, hdc);
+                        Interop.Gdi32.SelectObject(hdc, hOldFont);
                     }
                     return new Size(rect.right - rect.left + _caretPadding, rect.bottom - rect.top);
                 }

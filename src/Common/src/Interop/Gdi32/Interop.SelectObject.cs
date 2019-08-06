@@ -12,18 +12,18 @@ internal static partial class Interop
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr SelectObject(IntPtr hdc, IntPtr h);
 
+        public static IntPtr SelectObject(HandleRef hdc, IntPtr h)
+        {
+            IntPtr lastObject = SelectObject(hdc.Handle, h);
+            GC.KeepAlive(hdc.Wrapper);
+            return lastObject;
+        }
+
         public static IntPtr SelectObject(HandleRef hdc, HandleRef h)
         {
             IntPtr lastObject = SelectObject(hdc.Handle, h.Handle);
             GC.KeepAlive(hdc.Wrapper);
             GC.KeepAlive(h.Wrapper);
-            return lastObject;
-        }
-
-        public static IntPtr SelectObject(HandleRef hdc, IntPtr h)
-        {
-            IntPtr lastObject = SelectObject(hdc.Handle, h);
-            GC.KeepAlive(hdc.Wrapper);
             return lastObject;
         }
     }

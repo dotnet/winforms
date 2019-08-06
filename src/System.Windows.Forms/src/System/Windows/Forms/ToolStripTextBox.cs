@@ -827,7 +827,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Interop.Gdi32.ReleaseDC(new HandleRef(this, Handle), hdc);
+                    Interop.User32.ReleaseDC(new HandleRef(this, Handle), hdc);
                 }
                 // we've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;

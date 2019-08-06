@@ -32,14 +32,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-            if (hDC != IntPtr.Zero)
-            {
-                deviceDpi = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), CAPS.LOGPIXELSX);
-
-                UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
-            }
-
+            using ScreenDC dc = ScreenDC.Create();
+            deviceDpi = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
             isInitialized = true;
         }
 

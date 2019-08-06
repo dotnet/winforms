@@ -443,8 +443,8 @@ namespace System.Windows.Forms
                 // supported on classic metafiles.  We throw VIEW_E_DRAW in the hope that
                 // the caller figures it out and sends us a different DC.
                 //
-                int hdcType = UnsafeNativeMethods.GetObjectType(new HandleRef(null, hdcDraw));
-                if (hdcType == NativeMethods.OBJ_METADC)
+                Interop.Gdi32.ObjectType hdcType = Interop.Gdi32.GetObjectType(hdcDraw);
+                if (hdcType == Interop.Gdi32.ObjectType.OBJ_METADC)
                 {
                     ThrowHr(NativeMethods.VIEW_E_DRAW);
                 }
@@ -489,7 +489,7 @@ namespace System.Windows.Forms
                                     | NativeMethods.PRF_ERASEBKGND
                                     | NativeMethods.PRF_NONCLIENT);
 
-                    if (hdcType != NativeMethods.OBJ_ENHMETADC)
+                    if (hdcType != Interop.Gdi32.ObjectType.OBJ_ENHMETADC)
                     {
                         _control.SendMessage(Interop.WindowMessages.WM_PRINT, hdcDraw, flags);
                     }

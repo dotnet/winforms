@@ -9,14 +9,12 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern IntPtr CreateCompatibleDC(IntPtr hDC);
-
-        public static IntPtr CreateCompatibleDC(HandleRef hDC)
+        public enum StockObject : int
         {
-            IntPtr result = CreateCompatibleDC(hDC.Handle);
-            GC.KeepAlive(hDC.Wrapper);
-            return result;
+            HOLLOW_BRUSH = 5
         }
+
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern IntPtr GetStockObject(StockObject nIndex);
     }
 }

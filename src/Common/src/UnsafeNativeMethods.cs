@@ -354,9 +354,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int GetObject(HandleRef hObject, int nSize, ref int nEntries);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetObjectType(HandleRef hObject);
-
         [DllImport(ExternDll.User32)]
         public static extern IntPtr CreateAcceleratorTable(/*ACCEL*/ HandleRef pentries, int cCount);
 
@@ -1049,9 +1046,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DestroyWindow(HandleRef hWnd);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetStockObject(int nIndex);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
         public static extern ushort RegisterClassW(ref NativeMethods.WNDCLASS lpWndClass);

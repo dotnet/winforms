@@ -9,13 +9,13 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
-        public static extern int SetWindowTextW(IntPtr hWnd, string text);
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public static extern IntPtr WindowFromDC(IntPtr hDC);
 
-        public static int SetWindowTextW(HandleRef hWnd, string text)
+        public static IntPtr WindowFromDC(HandleRef hDC)
         {
-            int result = SetWindowTextW(hWnd.Handle, text);
-            GC.KeepAlive(hWnd.Wrapper);
+            IntPtr result = WindowFromDC(hDC.Handle);
+            GC.KeepAlive(hDC.Wrapper);
             return result;
         }
     }

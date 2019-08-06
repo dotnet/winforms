@@ -14,9 +14,6 @@ namespace System.Windows.Forms.Design
 
         public delegate bool EnumChildrenCallback(IntPtr hwnd, IntPtr lParam);
 
-        // Investigate removing this if the duplicate code in OleDragDropHandler.cs is removed
-        public const int HOLLOW_BRUSH = 5;
-
         public const int DLGC_WANTALLKEYS = 0x0004;
         public const int NM_CLICK = 0 - 0 - 2;
         public const int BM_SETIMAGE = 0x00F7;
@@ -42,9 +39,6 @@ namespace System.Windows.Forms.Design
         public const int RECO_PASTE = 0x00000000; // paste from clipboard
         public const int RECO_DROP = 0x00000001; // drop
 
-        public const int LOGPIXELSX = 88,
-            LOGPIXELSY = 90;
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendDlgItemMessage(IntPtr hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
 
@@ -56,12 +50,6 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr SelectObject(HandleRef hDC, IntPtr hObject);
-
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int DrawTextW(HandleRef hDC, string lpszString, int nCount, ref Interop.RECT lpRect, int nFormat);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
@@ -490,7 +478,6 @@ namespace System.Windows.Forms.Design
         public static readonly int WM_MOUSEENTER = Util.RegisterWindowMessage("WinFormsMouseEnter");
         public static readonly int HDN_ENDTRACK = HDN_ENDTRACKW;
 
-        public const int DT_CALCRECT = 0x00000400;
         public const int WS_DISABLED = 0x08000000;
         public const int WS_CLIPSIBLINGS = 0x04000000;
         public const int WS_CLIPCHILDREN = 0x02000000;
@@ -499,7 +486,6 @@ namespace System.Windows.Forms.Design
         public const int WS_BORDER = 0x00800000;
         public const int CS_DROPSHADOW = 0x00020000;
         public const int CS_DBLCLKS = 0x0008;
-        public const int NOTSRCCOPY = 0x00330008;
         public const int SRCCOPY = 0x00CC0020;
         public const int LVM_SETCOLUMNWIDTH = 0x1000 + 30;
         public const int LVM_GETHEADER = 0x1000 + 31;

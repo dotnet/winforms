@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         {
             if (_handle != IntPtr.Zero)
             {
-                Interop.Gdi32.ReleaseDC(IntPtr.Zero, _handle);
+                Interop.User32.ReleaseDC(IntPtr.Zero, _handle);
             }
         }
     }

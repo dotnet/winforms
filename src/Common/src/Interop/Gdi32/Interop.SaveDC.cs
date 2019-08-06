@@ -7,15 +7,15 @@ using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
-    internal static partial class User32
+    internal static partial class Gdi32
     {
-        [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
-        public static extern int SetWindowTextW(IntPtr hWnd, string text);
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern int SaveDC(IntPtr hdc);
 
-        public static int SetWindowTextW(HandleRef hWnd, string text)
+        public static int SaveDC(HandleRef hdc)
         {
-            int result = SetWindowTextW(hWnd.Handle, text);
-            GC.KeepAlive(hWnd.Wrapper);
+            int result = SaveDC(hdc.Handle);
+            GC.KeepAlive(hdc.Wrapper);
             return result;
         }
     }
