@@ -8,7 +8,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <summary>>
+    /// <summary>
     /// Provides an editor for filenames.
     /// </summary>
     [CLSCompliant(false)]
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
             return value;
         }
 
-        /// <summary>>
+        /// <summary>
         /// Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)

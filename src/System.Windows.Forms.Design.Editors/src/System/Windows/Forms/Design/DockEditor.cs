@@ -9,7 +9,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <summary>>
+    /// <summary>
     /// Implements the design time editor for specifying the <see cref='System.Windows.Forms.Control.Dock' />
     /// property.
     /// </summary>

@@ -11,7 +11,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace System.Windows.Forms.Design
 {
-    /// <summary>>
+    /// <summary>
     /// Provides an editor for choosing a folder from the filesystem.
     /// </summary>
     [CLSCompliant(false)]
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public FolderBrowserFolder StartLocation { get; set; } = FolderBrowserFolder.Desktop;
 
-            /// <summary>>
+            /// <summary>
             /// Gets or sets a description to show above the folders. Here you can provide instructions for
             /// selecting a folder.
             /// </summary>

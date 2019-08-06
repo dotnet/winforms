@@ -3,13 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <summary>>
+    /// <summary>
     /// Provides a design-time editor for specifying the <see cref='System.Windows.Forms.Control.Anchor' />
     /// property.
     /// </summary>
@@ -18,7 +17,7 @@ namespace System.Windows.Forms.Design
     {
         private AnchorUI _anchorUI;
 
-        /// <summary>>
+        /// <summary>
         /// Edits the given object value using the editor style provided by GetEditorStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Design
             return value;
         }
 
-        /// <summary>>
+        /// <summary>
         /// Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
