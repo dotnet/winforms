@@ -46,7 +46,6 @@ namespace System.Windows.Forms
                     if (_oleComponents == null)
                     {
                         _oleComponents = new Dictionary<UIntPtr, ComponentHashtableEntry>();
-                        _cookieCounter = UIntPtr.Zero;
                     }
 
                     return _oleComponents;
@@ -82,6 +81,12 @@ namespace System.Windows.Forms
                 MSOCRINFO* pcrinfo,
                 UIntPtr* pdwComponentID)
             {
+                if (pcrinfo == null || pdwComponentID == null
+                    || pcrinfo->cbSize < sizeof(MSOCRINFO))
+                {
+                    return BOOL.FALSE;
+                }
+
                 // Construct Hashtable entry for this component
                 ComponentHashtableEntry entry = new ComponentHashtableEntry
                 {
@@ -128,7 +133,8 @@ namespace System.Windows.Forms
                 MSOCRINFO* pcrinfo)
             {
                 // Update the registration info
-                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
+                if (pcrinfo == null
+                    || !OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
                     return BOOL.FALSE;
                 }
@@ -158,7 +164,7 @@ namespace System.Windows.Forms
             BOOL IMsoComponentManager.FSetTrackingComponent(UIntPtr dwComponentID, BOOL fTrack)
             {
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
-                    || ((entry.component == _trackingComponent) ^ fTrack.IsTrue()))
+                    || ((entry.component == _trackingComponent) && fTrack.IsTrue()))
                 {
                     return BOOL.FALSE;
                 }
@@ -251,7 +257,7 @@ namespace System.Windows.Forms
                 msocstate currentLoopState = _currentState;
                 BOOL continueLoop = BOOL.TRUE;
 
-                if (!OleComponents.ContainsKey(dwComponentID))
+                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
                     return BOOL.FALSE;
                 }
@@ -261,17 +267,12 @@ namespace System.Windows.Forms
                 try
                 {
                     User32.MSG msg = new User32.MSG();
-                    IMsoComponent requestingComponent;
-
-                    if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
-                    {
-                        return BOOL.FALSE;
-                    }
-
-                    requestingComponent = entry.component;
+                    IMsoComponent requestingComponent = entry.component;
                     _activeComponent = requestingComponent;
 
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager : Pushing message loop {uReason}");
+                    Debug.WriteLineIf(
+                        CompModSwitches.MSOComponentManager.TraceInfo,
+                        $"ComponentManager : Pushing message loop {uReason}");
                     Debug.Indent();
 
                     while (continueLoop.IsTrue())
