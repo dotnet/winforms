@@ -242,8 +242,8 @@ namespace System.Windows.Forms
             {
                 if (hWnd != IntPtr.Zero)
                 {
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, hWnd), out int pid);
-                    return hwndThread != SafeNativeMethods.GetCurrentThreadId();
+                    return Interop.User32.GetWindowThreadProcessId(hWnd, out _)
+                        != Interop.Kernel32.GetCurrentThreadId();
                 }
 
                 return false;

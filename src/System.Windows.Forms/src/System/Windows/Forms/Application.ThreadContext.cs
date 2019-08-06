@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop;
@@ -31,7 +30,8 @@ namespace System.Windows.Forms
             private const int STATE_POSTEDQUIT = 0x00000008;
             private const int STATE_FILTERSNAPSHOTVALID = 0x00000010;
             private const int STATE_TRACKINGCOMPONENT = 0x00000020;
-            private static UIntPtr INVALID_ID = (UIntPtr)0xFFFFFFFF;
+
+            private static readonly UIntPtr s_invalidId = (UIntPtr)0xFFFFFFFF;
 
             private static readonly Hashtable s_contextHash = new Hashtable();
 
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             private List<IMessageFilter> _messageFilterSnapshot;
             private int _inProcessFilters = 0;
             private IntPtr _handle;
-            private readonly int _id;
+            private readonly uint _id;
             private int _messageLoopCount;
             private int _threadState;
             private int _modalCount;
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
             private bool _fetchingComponentManager;
 
             // IMsoComponent stuff
-            private UIntPtr _componentID = INVALID_ID;
+            private UIntPtr _componentID = s_invalidId;
             private Form _currentForm;
             private ThreadWindows _threadWindows;
             private int _disposeCount;   // To make sure that we don't allow
@@ -96,13 +96,15 @@ namespace System.Windows.Forms
             {
                 IntPtr address = IntPtr.Zero;
 
-                UnsafeNativeMethods.DuplicateHandle(new HandleRef(null, SafeNativeMethods.GetCurrentProcess()), new HandleRef(null, SafeNativeMethods.GetCurrentThread()),
-                                                    new HandleRef(null, SafeNativeMethods.GetCurrentProcess()), ref address, 0, false,
-                                                    NativeMethods.DUPLICATE_SAME_ACCESS);
+                Kernel32.DuplicateHandle(
+                    Kernel32.GetCurrentProcess(),
+                    Kernel32.GetCurrentThread(),
+                    Kernel32.GetCurrentProcess(),
+                    ref address);
 
                 _handle = address;
 
-                _id = SafeNativeMethods.GetCurrentThreadId();
+                _id = Kernel32.GetCurrentThreadId();
                 _messageLoopCount = 0;
                 t_currentThreadContext = this;
                 s_contextHash[_id] = this;
@@ -120,166 +122,142 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Application.ComponentManager.Get:");
 
-                    if (_componentManager == null)
+                    if (_componentManager != null || _fetchingComponentManager)
                     {
-                        // The CLR is a good COM citizen and will pump messages when things are waiting.
-                        // This is nice; it keeps the world responsive.  But, it is also very hard for
-                        // us because most of the code below causes waits, and the likelihood that
-                        // a message will come in and need a component manager is very high.  Recursing
-                        // here is very very bad, and will almost certainly lead to application failure
-                        // later on as we come out of the recursion.  So, we guard it here and return
-                        // null.  EVERYONE who accesses the component manager must handle a NULL return!
+                        return _componentManager;
+                    }
 
-                        if (_fetchingComponentManager)
+                    // The CLR is a good COM citizen and will pump messages when things are waiting.
+                    // This is nice; it keeps the world responsive.  But, it is also very hard for
+                    // us because most of the code below causes waits, and the likelihood that
+                    // a message will come in and need a component manager is very high.  Recursing
+                    // here is very very bad, and will almost certainly lead to application failure
+                    // later on as we come out of the recursion.  So, we guard it here and return
+                    // null.  EVERYONE who accesses the component manager must handle a NULL return!
+
+                    _fetchingComponentManager = true;
+
+                    try
+                    {
+                        // Attempt to obtain the Host Application MSOComponentManager
+                        _componentManager = GetExternalComponentManager();
+                        if (_componentManager != null)
+                        {
+                            _externalComponentManager = true;
+                            Debug.WriteLineIf(
+                                CompModSwitches.MSOComponentManager.TraceInfo,
+                                "Using MSO Component manager");
+                        }
+                        else
+                        {
+                            _componentManager = new ComponentManager();
+                            Debug.WriteLineIf(
+                                CompModSwitches.MSOComponentManager.TraceInfo,
+                                "Using our own component manager");
+                        }
+
+                        if (_componentManager != null)
+                        {
+                            RegisterComponentManager();
+                        }
+                    }
+                    finally
+                    {
+                        _fetchingComponentManager = false;
+                    }
+
+                    return _componentManager;
+
+                    static IMsoComponentManager GetExternalComponentManager()
+                    {
+                        Application.OleRequired();
+                        IntPtr messageFilterHandle = default;
+
+                        // Clear the thread's message filter to see if there was an existing filter
+                        if (Ole32.CoRegisterMessageFilter(IntPtr.Zero, ref messageFilterHandle).Failed()
+                            || messageFilterHandle == IntPtr.Zero)
                         {
                             return null;
                         }
 
-                        _fetchingComponentManager = true;
+                        // There was an existing filter, reregister it
+                        IntPtr dummy = default;
+                        Ole32.CoRegisterMessageFilter(messageFilterHandle, ref dummy);
+
+                        // Now look to see if it implements the native IServiceProvider
+                        object messageFilter = Marshal.GetObjectForIUnknown(messageFilterHandle);
+                        Marshal.Release(messageFilterHandle);
+
+                        if (!(messageFilter is Ole32.IServiceProvider serviceProvider))
+                        {
+                            return null;
+                        }
+
+                        // Check the service provider for the service that provides IMsoComponentManager
+                        IntPtr serviceHandle = default;
+                        Guid sid = new Guid(ComponentIds.SID_SMsoComponentManager);
+                        Guid iid = new Guid(ComponentIds.IID_IMsoComponentManager);
+
                         try
                         {
-                            // Attempt to obtain the Host Application MSOComponentManager
-
-                            IMsoComponentManager msocm = null;
-                            Application.OleRequired();
-                            IntPtr msgFilterPtr = (IntPtr)0;
-
-                            if (NativeMethods.Succeeded(UnsafeNativeMethods.CoRegisterMessageFilter(NativeMethods.NullHandleRef, ref msgFilterPtr)) && msgFilterPtr != (IntPtr)0)
+                            if (serviceProvider.QueryService(ref sid, ref iid, ref serviceHandle).Failed()
+                                || serviceHandle == IntPtr.Zero)
                             {
-                                IntPtr dummy = (IntPtr)0;
-                                UnsafeNativeMethods.CoRegisterMessageFilter(new HandleRef(null, msgFilterPtr), ref dummy);
-
-                                object msgFilterObj = Marshal.GetObjectForIUnknown(msgFilterPtr);
-                                Marshal.Release(msgFilterPtr);
-
-                                if (msgFilterObj is UnsafeNativeMethods.IOleServiceProvider sp)
-                                {
-                                    try
-                                    {
-                                        IntPtr retval = IntPtr.Zero;
-
-                                        // Using typeof() of COM object spins up COM at JIT time.
-                                        // Guid compModGuid = typeof(UnsafeNativeMethods.SMsoComponentManager).GUID;
-
-                                        Guid compModGuid = new Guid("000C060B-0000-0000-C000-000000000046");
-                                        Guid iid = new Guid("{000C0601-0000-0000-C000-000000000046}");
-                                        int hr = sp.QueryService(
-                                                       ref compModGuid,
-                                                       ref iid,
-                                                       out retval);
-
-                                        if (NativeMethods.Succeeded(hr) && retval != IntPtr.Zero)
-                                        {
-                                            // Now query for the message filter.
-                                            IntPtr pmsocm;
-
-                                            try
-                                            {
-                                                Guid IID_IMsoComponentManager = typeof(IMsoComponentManager).GUID;
-                                                hr = Marshal.QueryInterface(retval, ref IID_IMsoComponentManager, out pmsocm);
-                                            }
-                                            finally
-                                            {
-                                                Marshal.Release(retval);
-                                            }
-
-                                            if (NativeMethods.Succeeded(hr) && pmsocm != IntPtr.Zero)
-                                            {
-                                                // Ok, we have a native component manager.  Hand this over to
-                                                // our broker object to get a proxy we can use
-                                                try
-                                                {
-                                                    msocm = ComponentManagerBroker.GetComponentManager(pmsocm);
-                                                }
-                                                finally
-                                                {
-                                                    Marshal.Release(pmsocm);
-                                                }
-                                            }
-
-                                            if (msocm != null)
-                                            {
-                                                // If the resulting service is the same pUnk as the
-                                                // message filter (a common implementation technique),
-                                                // then we want to null msgFilterObj at this point so
-                                                // we don't call RelaseComObject on it below.  That would
-                                                // also release the RCW for the component manager pointer.
-
-                                                if (msgFilterPtr == retval)
-                                                {
-                                                    msgFilterObj = null;
-                                                }
-
-                                                _externalComponentManager = true;
-                                                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Using MSO Component manager");
-
-                                                // Now attach unload events so we can detect when we need to revoke our component
-                                                AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnDomainUnload);
-                                            }
-                                        }
-                                    }
-                                    catch
-                                    {
-                                    }
-                                }
-
-                                if (msgFilterObj != null && Marshal.IsComObject(msgFilterObj))
-                                {
-                                    Marshal.ReleaseComObject(msgFilterObj);
-                                }
-                            }
-
-                            // Otherwise, we implement component manager ourselves
-                            if (msocm == null)
-                            {
-                                msocm = new ComponentManager();
-                                _externalComponentManager = false;
-
-                                // We must also store this back into the message filter for others
-                                // to use.
-                                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Using our own component manager");
-                            }
-
-                            if (msocm != null && _componentID == INVALID_ID)
-                            {
-                                // Finally, if we got a component manager, register ourselves with it.
-                                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Registering MSO component with the component manager");
-                                MSOCRINFO info = new MSOCRINFO
-                                {
-                                    cbSize = (uint)sizeof(MSOCRINFO),
-                                    uIdleTimeInterval = 0,
-                                    grfcrf = msocrf.PreTranslateAll | msocrf.NeedIdleTime,
-                                    grfcadvf = msocadvf.Modal
-                                };
-
-                                UIntPtr id;
-                                bool result = msocm.FRegisterComponent(this, &info, &id).IsTrue();
-                                _componentID = id;
-                                Debug.Assert(_componentID != INVALID_ID, "Our ID sentinel was returned as a valid ID");
-
-                                if (result && !(msocm is ComponentManager))
-                                {
-                                    _messageLoopCount++;
-                                }
-
-                                Debug.Assert(result,
-                                    $"Failed to register WindowsForms with the ComponentManager -- DoEvents and modal dialogs will be broken. size: {info.cbSize}");
-                                Debug.WriteLineIf(
-                                    CompModSwitches.MSOComponentManager.TraceInfo,
-                                    $"ComponentManager.FRegisterComponent returned {result}");
-                                Debug.WriteLineIf(
-                                    CompModSwitches.MSOComponentManager.TraceInfo,
-                                    $"ComponentManager.FRegisterComponent assigned a componentID == [0x{_componentID.ToUInt64():X16}]");
-                                _componentManager = msocm;
+                                return null;
                             }
                         }
-                        finally
+#pragma warning disable CA1031 // This is an external component, if it fails we just won't use it
+                        catch (Exception e)
                         {
-                            _fetchingComponentManager = false;
+                            Debug.Fail($"Failed to query service: {e.Message}");
+                            return null;
                         }
+#pragma warning enable CA1031
+
+                        // We have the component manager service, now get the component manager interface
+                        HRESULT hr = (HRESULT)Marshal.QueryInterface(serviceHandle, ref iid, out IntPtr componentManagerHandle);
+                        Marshal.Release(serviceHandle);
+
+                        if (hr.Succeeded() && componentManagerHandle != IntPtr.Zero)
+                        {
+                            IMsoComponentManager componentManager = (IMsoComponentManager)Marshal.GetObjectForIUnknown(componentManagerHandle);
+                            Marshal.Release(componentManagerHandle);
+                            return componentManager;
+                        }
+
+                        return null;
                     }
 
-                    return _componentManager;
+                    void RegisterComponentManager()
+                    {
+                        Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Registering MSO component with the component manager");
+                        MSOCRINFO info = new MSOCRINFO
+                        {
+                            cbSize = (uint)sizeof(MSOCRINFO),
+                            uIdleTimeInterval = 0,
+                            grfcrf = msocrf.PreTranslateAll | msocrf.NeedIdleTime,
+                            grfcadvf = msocadvf.Modal
+                        };
+
+                        UIntPtr id;
+                        bool result = _componentManager.FRegisterComponent(this, &info, &id).IsTrue();
+                        _componentID = id;
+                        Debug.Assert(_componentID != s_invalidId, "Our ID sentinel was returned as a valid ID");
+
+                        if (result && !(_componentManager is ComponentManager))
+                        {
+                            _messageLoopCount++;
+                        }
+
+                        Debug.Assert(result,
+                            $"Failed to register WindowsForms with the ComponentManager -- DoEvents and modal dialogs will be broken. size: {info.cbSize}");
+                        Debug.WriteLineIf(
+                            CompModSwitches.MSOComponentManager.TraceInfo,
+                            $"ComponentManager.FRegisterComponent returned {result}");
+                        Debug.WriteLineIf(
+                            CompModSwitches.MSOComponentManager.TraceInfo,
+                            $"ComponentManager.FRegisterComponent assigned a componentID == [0x{_componentID.ToUInt64():X16}]");
+                    }
                 }
             }
 
@@ -473,7 +451,7 @@ namespace System.Windows.Forms
                 ThreadWindows old = _threadWindows;
                 _threadWindows = new ThreadWindows(onlyWinForms);
                 _threadWindows.Enable(false);
-                _threadWindows.previousThreadWindows = old;
+                _threadWindows._previousThreadWindows = old;
 
                 if (context is ModalApplicationContext modalContext)
                 {
@@ -502,7 +480,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                bool ourThread = SafeNativeMethods.GetCurrentThreadId() == _id;
+                                bool ourThread = Kernel32.GetCurrentThreadId() == _id;
 
                                 try
                                 {
@@ -589,8 +567,8 @@ namespace System.Windows.Forms
                     // and do not call Dispose.  Otherwise we would destroy
                     // controls that are living on the parking window.
 
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(_parkingWindows[0], _parkingWindows[0].Handle), out int pid);
-                    int currentThread = SafeNativeMethods.GetCurrentThreadId();
+                    uint hwndThread = User32.GetWindowThreadProcessId(_parkingWindows[0], out _);
+                    uint currentThread = Kernel32.GetCurrentThreadId();
 
                     for (int i = 0; i < _parkingWindows.Count; i++)
                     {
@@ -645,7 +623,7 @@ namespace System.Windows.Forms
                 {
                     _threadWindows.Enable(true);
                     Debug.Assert(_threadWindows != null, "OnEnterState recursed, but it's not supposed to be reentrant");
-                    _threadWindows = _threadWindows.previousThreadWindows;
+                    _threadWindows = _threadWindows._previousThreadWindows;
                 }
 
                 if (context is ModalApplicationContext modalContext)
@@ -718,11 +696,6 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Exits the program by disposing of all thread contexts and message loops.
-            /// </summary>
-            internal static void ExitDomain() => ExitCommon(disposing: false);
-
-            /// <summary>
             ///  Our finalization.  Minimal stuff... this shouldn't be called... We should always be disposed.
             /// </summary>
             ~ThreadContext()
@@ -781,10 +754,10 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves a ThreadContext object for the given thread ID
             /// </summary>
-            internal static ThreadContext FromId(int id)
+            internal static ThreadContext FromId(uint id)
             {
                 ThreadContext context = (ThreadContext)s_contextHash[id];
-                if (context == null && id == SafeNativeMethods.GetCurrentThreadId())
+                if (context == null && id == Kernel32.GetCurrentThreadId())
                 {
                     context = new ThreadContext();
                 }
@@ -807,7 +780,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the ID of this thread.
             /// </summary>
-            internal int GetId() => _id;
+            internal uint GetId() => _id;
 
             /// <summary>
             ///  Retrieves the culture for this thread.
@@ -879,7 +852,7 @@ namespace System.Windows.Forms
             ///  A method of determining whether we are handling messages that does not demand register
             ///  the componentmanager
             /// </summary>
-            internal bool IsValidComponentId() =>_componentID != INVALID_ID;
+            internal bool IsValidComponentId() =>_componentID != s_invalidId;
 
             internal ApartmentState OleRequired()
             {
@@ -903,16 +876,6 @@ namespace System.Windows.Forms
 
             private void OnAppThreadExit(object sender, EventArgs e)
                 => Dispose(postQuit: true);
-
-            /// <summary>
-            ///  Revokes our component if needed.
-            /// </summary>
-            [PrePrepareMethod]
-            private void OnDomainUnload(object sender, EventArgs e)
-            {
-                RevokeComponent();
-                ExitDomain();
-            }
 
             /// <summary>
             ///  Called when an untrapped exception occurs in a thread.  This allows the
@@ -987,7 +950,7 @@ namespace System.Windows.Forms
                 //
                 // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
                 // to.
-                UnsafeNativeMethods.PostThreadMessage(_id, Interop.WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.PostThreadMessage((int)_id, WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
             }
 
@@ -1458,7 +1421,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void RevokeComponent()
             {
-                if (_componentManager != null && _componentID != INVALID_ID)
+                if (_componentManager != null && _componentID != s_invalidId)
                 {
                     IMsoComponentManager msocm = _componentManager;
 
@@ -1473,7 +1436,7 @@ namespace System.Windows.Forms
                     finally
                     {
                         _componentManager = null;
-                        _componentID = INVALID_ID;
+                        _componentID = s_invalidId;
                     }
                 }
             }
@@ -1596,10 +1559,8 @@ namespace System.Windows.Forms
                         case msoloop.FocusWait:
 
                             // For focus wait, check to see if we are now the active application.
-
-                            int pid;
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, UnsafeNativeMethods.GetActiveWindow()), out pid);
-                            if (pid == SafeNativeMethods.GetCurrentProcessId())
+                            User32.GetWindowThreadProcessId(UnsafeNativeMethods.GetActiveWindow(), out uint pid);
+                            if (pid == Kernel32.GetCurrentProcessId())
                             {
                                 continueLoop = false;
                             }

@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 // when control finally reaches us.
                 if (User32.IsWindow(handle).IsTrue())
                 {
-                    int id = User32.GetWindowThreadProcessId(handle, out int lpdwProcessId);
+                    uint id = User32.GetWindowThreadProcessId(handle, out uint lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
                     IntPtr threadHandle = (ctx == null ? IntPtr.Zero : ctx.GetHandle());
 

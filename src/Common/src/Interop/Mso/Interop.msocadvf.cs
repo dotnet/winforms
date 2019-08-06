@@ -5,9 +5,9 @@
 using System;
 using System.Runtime.InteropServices;
 
-internal partial class Interop
+internal static partial class Interop
 {
-    internal partial class Mso
+    internal static partial class Mso
     {
         /// <summary>
         ///  MSO Component registration advise flags <see cref="msocstate" />

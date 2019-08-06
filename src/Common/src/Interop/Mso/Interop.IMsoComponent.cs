@@ -5,10 +5,15 @@
 using System;
 using System.Runtime.InteropServices;
 
-internal partial class Interop
+internal static partial class Interop
 {
-    internal partial class Mso
+    internal static partial class Mso
     {
+        internal static partial class ComponentIds
+        {
+            public const string IID_IMsoComponent = "000C0600-0000-0000-C000-000000000046";
+        }
+
         /// <remarks>
         ///  WM_MOUSEACTIVATE Note (for top level compoenents and host)
         ///  
@@ -21,7 +26,7 @@ internal partial class Interop
         ///  <see cref="IMsoComponentManager.FGetActiveComponent"/>.
         /// </remarks>
         [ComImport()]
-        [Guid("000C0600-0000-0000-C000-000000000046")]
+        [Guid(ComponentIds.IID_IMsoComponent)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IMsoComponent
         {

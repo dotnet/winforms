@@ -209,9 +209,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, EntryPoint = "RtlMoveMemory", CharSet = CharSet.Unicode)]
         public static extern void CopyMemoryW(IntPtr pdst, char[] psrc, int cb);
 
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr DuplicateHandle(HandleRef processSource, HandleRef handleSource, HandleRef processTarget, ref IntPtr handleTarget, int desiredAccess, bool inheritHandle, int options);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SetWindowsHookEx(int hookid, NativeMethods.HookProc pfnhook, HandleRef hinst, int threadid);
 
@@ -269,9 +266,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int PostThreadMessage(int id, int msg, IntPtr wparam, IntPtr lparam);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true)]
-        public static extern int CoRegisterMessageFilter(HandleRef newFilter, ref IntPtr oldMsgFilter);
 
         [DllImport(ExternDll.Ole32, ExactSpelling = true, SetLastError = true)]
         public static extern int OleInitialize(int val = 0);
@@ -2109,17 +2103,7 @@ namespace System.Windows.Forms
                     int bFreeze);
         }
 
-        [ComImport(), Guid("6D5140C1-7436-11CE-8034-00AA006009FA"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleServiceProvider
-        {
-            [PreserveSig]
-            int QueryService(
-                 [In]
-                      ref Guid guidService,
-                 [In]
-                  ref Guid riid,
-                 out IntPtr ppvObject);
-        }
+
 
         [ComImport(), Guid("0000010d-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IViewObject

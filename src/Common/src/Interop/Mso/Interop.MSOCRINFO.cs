@@ -4,9 +4,9 @@
 
 using System.Runtime.InteropServices;
 
-internal partial class Interop
+internal static partial class Interop
 {
-    internal partial class Mso
+    internal static partial class Mso
     {
         [StructLayout(LayoutKind.Sequential)]
         public struct MSOCRINFO

@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     public sealed partial class Application
@@ -18,34 +20,33 @@ namespace System.Windows.Forms
         /// </summary>
         private sealed class ThreadWindows
         {
-            private IntPtr[] windows;
-            private int windowCount;
-            private IntPtr activeHwnd;
-            private IntPtr focusedHwnd;
-            internal ThreadWindows previousThreadWindows;
-            private readonly bool onlyWinForms = true;
+            private IntPtr[] _windows;
+            private int _windowCount;
+            private IntPtr _activeHwnd;
+            private IntPtr _focusedHwnd;
+            internal ThreadWindows _previousThreadWindows;
+            private readonly bool _onlyWinForms = true;
 
             internal ThreadWindows(bool onlyWinForms)
             {
-                windows = new IntPtr[16];
-                this.onlyWinForms = onlyWinForms;
-                UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(),
-                                                new NativeMethods.EnumThreadWindowsCallback(Callback),
-                                                NativeMethods.NullHandleRef);
+                _windows = new IntPtr[16];
+                _onlyWinForms = onlyWinForms;
+                UnsafeNativeMethods.EnumThreadWindows(
+                    (int)Kernel32.GetCurrentThreadId(),
+                    new NativeMethods.EnumThreadWindowsCallback(Callback),
+                    NativeMethods.NullHandleRef);
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lparam)
             {
-
                 // We only do visible and enabled windows.  Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
                 // will be responsible for disabling their own windows.
-                //
                 if (SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWnd)) && SafeNativeMethods.IsWindowEnabled(new HandleRef(null, hWnd)))
                 {
                     bool add = true;
 
-                    if (onlyWinForms)
+                    if (_onlyWinForms)
                     {
                         Control c = Control.FromHandle(hWnd);
                         if (c == null)
@@ -56,24 +57,25 @@ namespace System.Windows.Forms
 
                     if (add)
                     {
-                        if (windowCount == windows.Length)
+                        if (_windowCount == _windows.Length)
                         {
-                            IntPtr[] newWindows = new IntPtr[windowCount * 2];
-                            Array.Copy(windows, 0, newWindows, 0, windowCount);
-                            windows = newWindows;
+                            IntPtr[] newWindows = new IntPtr[_windowCount * 2];
+                            Array.Copy(_windows, 0, newWindows, 0, _windowCount);
+                            _windows = newWindows;
                         }
-                        windows[windowCount++] = hWnd;
+                        _windows[_windowCount++] = hWnd;
                     }
                 }
+
                 return true;
             }
 
             // Disposes all top-level Controls on this thread
             internal void Dispose()
             {
-                for (int i = 0; i < windowCount; i++)
+                for (int i = 0; i < _windowCount; i++)
                 {
-                    IntPtr hWnd = windows[i];
+                    IntPtr hWnd = _windows[i];
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
                     {
                         Control c = Control.FromHandle(hWnd);
@@ -88,24 +90,23 @@ namespace System.Windows.Forms
             // Enables/disables all top-level Controls on this thread
             internal void Enable(bool state)
             {
-
-                if (!onlyWinForms && !state)
+                if (!_onlyWinForms && !state)
                 {
-                    activeHwnd = UnsafeNativeMethods.GetActiveWindow();
-                    Control activatingControl = Application.ThreadContext.FromCurrent().ActivatingControl;
+                    _activeHwnd = UnsafeNativeMethods.GetActiveWindow();
+                    Control activatingControl = ThreadContext.FromCurrent().ActivatingControl;
                     if (activatingControl != null)
                     {
-                        focusedHwnd = activatingControl.Handle;
+                        _focusedHwnd = activatingControl.Handle;
                     }
                     else
                     {
-                        focusedHwnd = UnsafeNativeMethods.GetFocus();
+                        _focusedHwnd = UnsafeNativeMethods.GetFocus();
                     }
                 }
 
-                for (int i = 0; i < windowCount; i++)
+                for (int i = 0; i < _windowCount; i++)
                 {
-                    IntPtr hWnd = windows[i];
+                    IntPtr hWnd = _windows[i];
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Changing enabled on window: " + hWnd.ToString() + " : " + state.ToString());
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
                     {
@@ -121,16 +122,16 @@ namespace System.Windows.Forms
                 // But, DON'T change other people's state when we're simply
                 // responding to external MSOCM events about modality.  When we are,
                 // we are created with a TRUE for onlyWinForms.
-                if (!onlyWinForms && state)
+                if (!_onlyWinForms && state)
                 {
-                    if (activeHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, activeHwnd)))
+                    if (_activeHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _activeHwnd)))
                     {
-                        UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, activeHwnd));
+                        UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, _activeHwnd));
                     }
 
-                    if (focusedHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, focusedHwnd)))
+                    if (_focusedHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _focusedHwnd)))
                     {
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, focusedHwnd));
+                        UnsafeNativeMethods.SetFocus(new HandleRef(null, _focusedHwnd));
                     }
                 }
             }

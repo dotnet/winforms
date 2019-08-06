@@ -5,10 +5,16 @@
 using System;
 using System.Runtime.InteropServices;
 
-internal partial class Interop
+internal static partial class Interop
 {
-    internal partial class Mso
+    internal static partial class Mso
     {
+        internal static partial class ComponentIds
+        {
+            public const string IID_IMsoComponentManager = "000C0601-0000-0000-C000-000000000046";
+            public const string SID_SMsoComponentManager = "000C060B-0000-0000-C000-000000000046";
+        }
+
         /// <remarks>
         ///  ** Comments on State Contexts **
         ///  
@@ -24,7 +30,7 @@ internal partial class Interop
         ///  state of the component manager's state context at its root.
         /// </remarks>
         [ComImport()]
-        [Guid("000C0601-0000-0000-C000-000000000046")]
+        [Guid(ComponentIds.IID_IMsoComponentManager)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IMsoComponentManager
         {

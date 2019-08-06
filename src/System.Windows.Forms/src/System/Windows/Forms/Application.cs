@@ -610,11 +610,10 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
         {
-            int thisPID = SafeNativeMethods.GetCurrentProcessId();
-            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out int processId);
+            uint thisPID = Interop.Kernel32.GetCurrentProcessId();
+            Interop.User32.GetWindowThreadProcessId(handle, out uint processId);
             if (processId == thisPID && SafeNativeMethods.IsWindowVisible(new HandleRef(null, handle)))
             {
-
                 SendThemeChangedRecursive(handle, IntPtr.Zero);
                 User32.RedrawWindow(
                     handle,
@@ -1009,9 +1008,12 @@ namespace System.Windows.Forms
         /// </summary>
         private static ThreadContext GetContextForHandle(HandleRef handle)
         {
-            int id = SafeNativeMethods.GetWindowThreadProcessId(handle, out int pid);
-            ThreadContext cxt = ThreadContext.FromId(id);
-            Debug.Assert(cxt != null, "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
+            ThreadContext cxt = ThreadContext.FromId(Interop.User32.GetWindowThreadProcessId(handle.Handle, out _));
+            Debug.Assert(
+                cxt != null,
+                "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
+
+            GC.KeepAlive(handle.Wrapper);
             return cxt;
         }
 

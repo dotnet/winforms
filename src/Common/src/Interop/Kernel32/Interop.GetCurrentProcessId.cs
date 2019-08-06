@@ -3,18 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
-    internal static partial class Mso
+    internal static partial class Kernel32
     {
-        [Flags]
-        public enum msoidlef : uint
-        {
-            Periodic = 1,
-            NonPeriodic = 2,
-            Priority = 4,
-            All = 0xFFFFFFFF
-        }
+        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
+        public static extern uint GetCurrentProcessId();
     }
 }

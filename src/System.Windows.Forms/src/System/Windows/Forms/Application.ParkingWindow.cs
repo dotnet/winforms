@@ -65,36 +65,33 @@ namespace System.Windows.Forms
 
             internal override void RemoveReflectChild()
             {
-                childCount--;
-                if (childCount < 0)
+                if (--childCount < 0)
                 {
                     Debug.Fail("How did parkingwindow childcount go negative???");
                     childCount = 0;
                 }
-                if (childCount == 0)
-                {
-                    if (IsHandleCreated)
-                    {
-                        //check to see if we are running on the thread that owns the parkingwindow.
-                        //if so, we can destroy immediately.
-                        //This is important for scenarios where apps leak controls until after the
-                        //messagepump is gone and then decide to clean them up.  We should clean
-                        //up the parkingwindow in this case and a postmessage won't do it.
-                        //unused
-                        int id = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, HandleInternal), out int lpdwProcessId);
-                        ThreadContext ctx = Application.ThreadContext.FromId(id);
 
-                        //We only do this if the ThreadContext tells us that we are currently
-                        //handling a window message.
-                        if (ctx == null ||
-                            !Object.ReferenceEquals(ctx, Application.ThreadContext.FromCurrent()))
-                        {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, HandleInternal), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
-                        }
-                        else
-                        {
-                            CheckDestroy();
-                        }
+                if (childCount == 0 && IsHandleCreated)
+                {
+                    // Check to see if we are running on the thread that owns the parkingwindow.
+                    // If so, we can destroy immediately.
+                    //
+                    // This is important for scenarios where apps leak controls until after the
+                    // messagepump is gone and then decide to clean them up.  We should clean
+                    // up the parkingwindow in this case and a postmessage won't do it.
+
+                    uint id = Interop.User32.GetWindowThreadProcessId(this, out _);
+                    ThreadContext context = ThreadContext.FromId(id);
+
+                    //We only do this if the ThreadContext tells us that we are currently
+                    //handling a window message.
+                    if (context == null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
+                    {
+                        UnsafeNativeMethods.PostMessage(new HandleRef(this, HandleInternal), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
+                    }
+                    else
+                    {
+                        CheckDestroy();
                     }
                 }
             }

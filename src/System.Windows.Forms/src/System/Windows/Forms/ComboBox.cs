@@ -6253,9 +6253,13 @@ namespace System.Windows.Forms
                     //generating a before snapshot -- lets lose the null handles
                     ACNativeWindow.ClearNullACWindows();
                 }
+
                 // Look for a popped up dropdown
                 shouldSubClass = subclass;
-                UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(), new NativeMethods.EnumThreadWindowsCallback(Callback), new HandleRef(null, IntPtr.Zero));
+                UnsafeNativeMethods.EnumThreadWindows(
+                    (int)Interop.Kernel32.GetCurrentThreadId(),
+                    new NativeMethods.EnumThreadWindowsCallback(Callback),
+                    new HandleRef(null, IntPtr.Zero));
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lParam)

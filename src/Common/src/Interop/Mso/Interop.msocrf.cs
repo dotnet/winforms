@@ -4,9 +4,9 @@
 
 using System;
 
-internal partial class Interop
+internal static partial class Interop
 {
-    internal partial class Mso
+    internal static partial class Mso
     {
         /// <summary>
         ///  MSO Component registration flags

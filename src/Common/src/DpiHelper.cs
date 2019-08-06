@@ -55,8 +55,11 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows10_1607OrGreater)
             {
                 // We are on Windows 10/1603 or greater, but we could still be DpiUnaware or SystemAware, so let's find that out...
-                var currentProcessId = SafeNativeMethods.GetCurrentProcessId();
-                IntPtr hProcess = SafeNativeMethods.OpenProcess(SafeNativeMethods.PROCESS_QUERY_INFORMATION, false, currentProcessId);
+                IntPtr hProcess = SafeNativeMethods.OpenProcess(
+                    SafeNativeMethods.PROCESS_QUERY_INFORMATION,
+                    false,
+                    (int)Interop.Kernel32.GetCurrentProcessId());
+
                 SafeNativeMethods.GetProcessDpiAwareness(hProcess, out CAPS.PROCESS_DPI_AWARENESS processDpiAwareness);
 
                 // Only if we're not, it makes sense to query for PerMonitorV2 awareness from now on, if needed.

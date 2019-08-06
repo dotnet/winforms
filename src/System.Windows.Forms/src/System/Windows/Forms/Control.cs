@@ -1776,9 +1776,9 @@ namespace System.Windows.Forms
         ///  handle for this control.  If the control's handle hasn't been
         ///  created yet, this method will return the current thread's ID.
         /// </summary>
-        internal int CreateThreadId => IsHandleCreated 
-            ? SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out int _)
-            : SafeNativeMethods.GetCurrentThreadId();
+        internal uint CreateThreadId => IsHandleCreated 
+            ? Interop.User32.GetWindowThreadProcessId(this, out _)
+            : Interop.Kernel32.GetCurrentThreadId();
 
         /// <summary>
         ///  Retrieves the cursor that will be displayed when the mouse is over this
@@ -2782,10 +2782,10 @@ namespace System.Windows.Forms
             {
                 using (new MultithreadSafeCallScope())
                 {
-                    HandleRef hwnd;
+                    Control control;
                     if (IsHandleCreated)
                     {
-                        hwnd = new HandleRef(this, Handle);
+                        control = this;
                     }
                     else
                     {
@@ -2796,12 +2796,11 @@ namespace System.Windows.Forms
                             return false;
                         }
 
-                        hwnd = new HandleRef(marshalingControl, marshalingControl.Handle);
+                        control = marshalingControl;
                     }
 
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(hwnd, out int pid);
-                    int currentThread = SafeNativeMethods.GetCurrentThreadId();
-                    return (hwndThread != currentThread);
+                    return Interop.User32.GetWindowThreadProcessId(control, out _)
+                        != Interop.Kernel32.GetCurrentThreadId();
                 }
             }
         }
@@ -3976,7 +3975,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WaitForWaitHandle(WaitHandle waitHandle)
         {
-            int threadId = CreateThreadId;
+            uint threadId = CreateThreadId;
             Application.ThreadContext ctx = Application.ThreadContext.FromId(threadId);
             if (ctx == null)
             {
@@ -5466,9 +5465,8 @@ namespace System.Windows.Forms
 
                 if (!asyncResult.IsCompleted)
                 {
-                    // ignored
                     Control marshaler = FindMarshalingControl();
-                    if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(marshaler, marshaler.Handle), out int pid) == SafeNativeMethods.GetCurrentThreadId())
+                    if (Interop.User32.GetWindowThreadProcessId(marshaler, out _) == Interop.Kernel32.GetCurrentThreadId())
                     {
                         marshaler.InvokeMarshaledCallbacks();
                     }
@@ -7052,8 +7050,7 @@ namespace System.Windows.Forms
             // It is important that syncSameThread always be false for asynchronous calls.
             bool syncSameThread = false;
 
-            // ignored
-            if (SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, Handle), out int pid) == SafeNativeMethods.GetCurrentThreadId())
+            if (Interop.User32.GetWindowThreadProcessId(this, out _) == Interop.Kernel32.GetCurrentThreadId())
             {
                 if (synchronous)
                 {
