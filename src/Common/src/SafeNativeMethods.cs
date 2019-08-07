@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         public static extern bool LineTo(HandleRef hdc, int x, int y);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool MoveToEx(HandleRef hdc, int x, int y, NativeMethods.POINT pt);
+        public static unsafe extern bool MoveToEx(HandleRef hdc, int x, int y, Point *lppt);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool Rectangle(
@@ -360,7 +360,14 @@ namespace System.Windows.Forms
         public static extern IntPtr /* HPALETTE */SelectPalette(HandleRef hdc, HandleRef hpal, int bForceBackground);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, [In, Out] NativeMethods.POINT point);
+        public static unsafe extern bool SetViewportOrgEx(IntPtr hdc, int x, int y, Point *lppt);
+
+        public static unsafe bool SetViewportOrgEx(HandleRef hdc, int x, int y, Point *lppt)
+        {
+            bool result = SetViewportOrgEx(hdc.Handle, x, y, lppt);
+            GC.KeepAlive(hdc.Wrapper);
+            return result;
+        }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern int RealizePalette(HandleRef hDC);
@@ -369,10 +376,10 @@ namespace System.Windows.Forms
         public static extern bool LPtoDP(HandleRef hDC, ref Interop.RECT lpRect, int nCount);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowOrgEx(HandleRef hDC, int x, int y, [In, Out] NativeMethods.POINT point);
+        public static unsafe extern bool SetWindowOrgEx(IntPtr hdc, int x, int y, Point *lppt);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetViewportOrgEx(HandleRef hDC, [In, Out] NativeMethods.POINT point);
+        public static extern bool GetViewportOrgEx(HandleRef hdc, out Point lppoint);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int SetMapMode(HandleRef hDC, int nMapMode);
@@ -590,7 +597,7 @@ namespace System.Windows.Forms
         public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, VisualStyles.ThemeSizeType eSize, [Out] NativeMethods.SIZE psz);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, [Out] NativeMethods.POINT pPoint);
+        public static extern int GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, out Point pPoint);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemeMargins(HandleRef hTheme, HandleRef hDC, int iPartId, int iStateId, int iPropId, NativeMethods.COMRECT prc, ref NativeMethods.MARGINS margins);

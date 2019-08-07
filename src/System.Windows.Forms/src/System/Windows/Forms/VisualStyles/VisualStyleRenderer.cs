@@ -813,9 +813,8 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(PointProperty));
             }
 
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            lastHResult = SafeNativeMethods.GetThemePosition(new HandleRef(this, Handle), part, state, (int)prop, point);
-            return new Point(point.x, point.y);
+            lastHResult = SafeNativeMethods.GetThemePosition(new HandleRef(this, Handle), part, state, (int)prop, out Point point);
+            return point;
         }
 
         /// <summary>

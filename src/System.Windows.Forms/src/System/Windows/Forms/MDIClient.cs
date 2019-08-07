@@ -242,16 +242,16 @@ namespace System.Windows.Forms
                             if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
                             {
                                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
-                                wp.ptMinPosition_y -= yDelta;
-                                if (wp.ptMinPosition_y == -1)
+                                wp.ptMinPosition.Y -= yDelta;
+                                if (wp.ptMinPosition.Y == -1)
                                 {
                                     if (yDelta < 0)
                                     {
-                                        wp.ptMinPosition_y = 0;
+                                        wp.ptMinPosition.Y = 0;
                                     }
                                     else
                                     {
-                                        wp.ptMinPosition_y = -2;
+                                        wp.ptMinPosition.Y = -2;
                                     }
                                 }
                                 wp.flags = NativeMethods.WPF_SETMINPOSITION;

@@ -1641,13 +1641,9 @@ namespace System.Windows.Forms.Design
                     {
                         // Get a hit test on any glyhs that we are managing this way - we know where to route appropriate  messages
                         Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
-                        NativeMethods.POINT pt1 = new NativeMethods.POINT
-                        {
-                            x = 0,
-                            y = 0
-                        };
-                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt1, 1);
-                        pt.Offset(pt1.x, pt1.y);
+                        var pt1 = new Point();
+                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        pt.Offset(pt1.X, pt1.Y);
                         glyphManager.GetHitTest(pt);
                     }
                     base.WndProc(ref m);
@@ -2576,13 +2572,9 @@ namespace System.Windows.Forms.Design
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
                             Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
-                            NativeMethods.POINT pt1 = new NativeMethods.POINT
-                            {
-                                x = 0,
-                                y = 0
-                            };
-                            NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt1, 1);
-                            pt.Offset(pt1.x, pt1.y);
+                            var pt1 = new Point();
+                            NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                            pt.Offset(pt1.X, pt1.Y);
                             pt.Offset(Location.X, Location.Y);//offset the loc of the traycontrol -so now we're in comptray coords
                             _tray.glyphManager.GetHitTest(pt);
                         }

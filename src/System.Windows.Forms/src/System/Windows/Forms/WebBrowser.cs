@@ -1528,7 +1528,7 @@ namespace System.Windows.Forms
             //
             // IDocHostUIHandler Implementation
             //
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(int dwID, NativeMethods.POINT pt, object pcmdtReserved, object pdispReserved)
+            int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(uint dwID, ref Point pt, object pcmdtReserved, object pdispReserved)
             {
                 WebBrowser wb = (WebBrowser)Host;
 
@@ -1539,14 +1539,14 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (pt.x == 0 && pt.y == 0)
+                    if (pt.X == 0 && pt.Y == 0)
                     {
                         // IDocHostUIHandler::ShowContextMenu sends (0,0) when the context menu is invoked via the keyboard
                         // make it (-1, -1) for the WebBrowser::ShowContextMenu method
-                        pt.x = -1;
-                        pt.y = -1;
+                        pt.X = -1;
+                        pt.Y = -1;
                     }
-                    wb.ShowContextMenu(pt.x, pt.y);
+                    wb.ShowContextMenu(pt.X, pt.Y);
                     // MSHTML should not display its context menu because we displayed ours
                     return NativeMethods.S_OK;
                 }

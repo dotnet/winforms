@@ -634,19 +634,19 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.GetClientRect(rootHwnd, ref rootHwndClientArea);
 
                         // map the size grip FROM statusStrip coords TO the toplevel window coords.
-                        NativeMethods.POINT gripLocation;
+                        Point gripLocation;
                         if (RightToLeft == RightToLeft.Yes)
                         {
-                            gripLocation = new NativeMethods.POINT(SizeGripBounds.Left, SizeGripBounds.Bottom);
+                            gripLocation = new Point(SizeGripBounds.Left, SizeGripBounds.Bottom);
                         }
                         else
                         {
-                            gripLocation = new NativeMethods.POINT(SizeGripBounds.Right, SizeGripBounds.Bottom);
+                            gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
-                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, gripLocation, 1);
+                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, ref gripLocation, 1);
 
-                        int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.y);
-                        int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.x);
+                        int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
+                        int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
 
                         if (RightToLeft != RightToLeft.Yes)
                         {

@@ -3159,9 +3159,7 @@ namespace System.Windows.Forms
 
                 if (contextMenu != null)
                 {
-
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    UnsafeNativeMethods.GetCursorPos(pt);
+                    UnsafeNativeMethods.GetCursorPos(out Point pt);
 
                     // Summary: the current window must be made the foreground window
                     // before calling TrackPopupMenuEx, and a task switch must be
@@ -3173,8 +3171,8 @@ namespace System.Windows.Forms
 
                     SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
                                              NativeMethods.TPM_VERTICAL,
-                                             pt.x,
-                                             pt.y,
+                                             pt.X,
+                                             pt.Y,
                                              new HandleRef(this, Handle),
                                              null);
 

@@ -324,9 +324,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point AdornerWindowPointToScreen(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT(p.X, p.Y);
-            NativeMethods.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, offset, 1);
-            return new Point(offset.x, offset.y);
+            NativeMethods.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, ref p, 1);
+            return p;
         }
 
         /// <summary>
@@ -348,17 +347,13 @@ namespace System.Windows.Forms.Design.Behavior
                 return Point.Empty;
             }
 
-            NativeMethods.POINT pt = new NativeMethods.POINT
-            {
-                x = c.Left,
-                y = c.Top
-            };
-            NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, pt, 1);
+            var pt = new Point(c.Left, c.Top);
+            NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, ref pt, 1);
             if (c.Parent.IsMirrored)
             {
-                pt.x -= c.Width;
+                pt.X -= c.Width;
             }
-            return new Point(pt.x, pt.y);
+            return pt;
         }
 
         /// <summary>
@@ -366,13 +361,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            NativeMethods.POINT nativePoint = new NativeMethods.POINT
-            {
-                x = pt.X,
-                y = pt.Y
-            };
-            NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, nativePoint, 1);
-            return new Point(nativePoint.x, nativePoint.y);
+            NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, ref pt, 1);
+            return pt;
         }
 
         /// <summary>
@@ -566,13 +556,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point ScreenToAdornerWindow(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT
-            {
-                x = p.X,
-                y = p.Y
-            };
-            NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, offset, 1);
-            return new Point(offset.x, offset.y);
+            NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, ref p, 1);
+            return p;
         }
 
         internal void OnLoseCapture()
@@ -832,11 +817,9 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    NativeMethods.GetCursorPos(pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt, 1);
-                    Point mousePos = new Point(pt.x, pt.y);
-                    _behaviorService.PropagateHitTest(mousePos);
+                    NativeMethods.GetCursorPos(out Point pt);
+                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    _behaviorService.PropagateHitTest(pt);
 
                 }
                 _behaviorService.OnDragEnter(null, e);
@@ -868,11 +851,9 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    NativeMethods.GetCursorPos(pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt, 1);
-                    Point mousePos = new Point(pt.x, pt.y);
-                    _behaviorService.PropagateHitTest(mousePos);
+                    NativeMethods.GetCursorPos(out Point pt);
+                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    _behaviorService.PropagateHitTest(pt);
                 }
 
                 _behaviorService.OnDragOver(e);
@@ -954,13 +935,9 @@ namespace System.Windows.Forms.Design.Behavior
                     case Interop.WindowMessages.WM_NCHITTEST:
                         Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)),
                                              (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
-                        NativeMethods.POINT pt1 = new NativeMethods.POINT
-                        {
-                            x = 0,
-                            y = 0
-                        };
-                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt1, 1);
-                        pt.Offset(pt1.x, pt1.y);
+                        var pt1 = new Point();
+                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        pt.Offset(pt1.X, pt1.Y);
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
                             m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
@@ -1128,7 +1105,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             try
                             {
-                                if (ProcessMouseMessage(mhs.hWnd, unchecked((int)(long)wparam), mhs.pt_x, mhs.pt_y))
+                                if (ProcessMouseMessage(mhs.hWnd, unchecked((int)(long)wparam), mhs.pt.X, mhs.pt.Y))
                                 {
                                     return (IntPtr)1;
                                 }
@@ -1202,13 +1179,9 @@ namespace System.Windows.Forms.Design.Behavior
                             try
                             {
                                 _processingMessage = true;
-                                NativeMethods.POINT pt = new NativeMethods.POINT
-                                {
-                                    x = x,
-                                    y = y
-                                };
-                                NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, pt, 1);
-                                Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.y, pt.x));
+                                var pt = new Point(x, y);
+                                NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, ref pt, 1);
+                                Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.Y, pt.X));
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == Interop.WindowMessages.WM_LBUTTONDOWN)
                                 {
@@ -1223,7 +1196,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     }
                                 }
 
-                                if (!adornerWindow.WndProcProxy(ref m, pt.x, pt.y))
+                                if (!adornerWindow.WndProcProxy(ref m, pt.X, pt.Y))
                                 {
                                     // we did the work, stop the message propogation
                                     return true;

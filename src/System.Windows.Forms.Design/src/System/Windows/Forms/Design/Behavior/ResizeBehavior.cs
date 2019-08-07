@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Point _lastMouseLoc; //helps us avoid re-entering code if the mouse hasn't moved
         private Point _parentLocation; //used to snap resize ops to the grid
         private Size _parentGridSize; //used to snap resize ops to the grid
-        private NativeMethods.POINT _lastMouseAbs; // last absolute mouse position
+        private Point _lastMouseAbs; // last absolute mouse position
         private Point _lastSnapOffset; //the last snapoffset we used.
         private bool _didSnap; //did we actually snap.
         private Control _primaryControl; //the primary control the status bar will queue off of
@@ -465,9 +465,9 @@ namespace System.Windows.Forms.Design.Behavior
             // When DesignerWindowPane has scrollbars and we resize, shrinking the the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
             if (_lastMouseAbs != null)
             {
-                NativeMethods.POINT mouseLocAbs = new NativeMethods.POINT(mouseLoc.X, mouseLoc.Y);
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), mouseLocAbs);
-                if (mouseLocAbs.x == _lastMouseAbs.x && mouseLocAbs.y == _lastMouseAbs.y)
+                var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
+                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
+                if (mouseLocAbs.X == _lastMouseAbs.X && mouseLocAbs.Y == _lastMouseAbs.Y)
                 {
                     return true;
                 }
@@ -528,8 +528,8 @@ namespace System.Windows.Forms.Design.Behavior
 
             Control targetControl = _resizeComponents[0].resizeControl as Control;
             _lastMouseLoc = mouseLoc;
-            _lastMouseAbs = new NativeMethods.POINT(mouseLoc.X, mouseLoc.Y);
-            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), _lastMouseAbs);
+            _lastMouseAbs = new Point(mouseLoc.X, mouseLoc.Y);
+            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref _lastMouseAbs);
             int minHeight = Math.Max(targetControl.MinimumSize.Height, MINSIZE);
             int minWidth = Math.Max(targetControl.MinimumSize.Width, MINSIZE);
             if (_dragManager != null)

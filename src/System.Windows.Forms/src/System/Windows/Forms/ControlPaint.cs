@@ -2015,7 +2015,7 @@ namespace System.Windows.Forms
         ///  Draws a reversible line on the screen. A reversible line can
         ///  be erased by just drawing over it again.
         /// </summary>
-        public static void DrawReversibleLine(Point start, Point end, Color backColor)
+        public static unsafe void DrawReversibleLine(Point start, Point end, Color backColor)
         {
             int rop2 = GetColorRop(backColor,
                                    0xA, // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET),

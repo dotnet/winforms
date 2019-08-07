@@ -3302,8 +3302,7 @@ namespace System.Windows.Forms
                 else
                 {
                     lvFindInfo.flags = NativeMethods.LVFI_NEARESTXY;
-                    lvFindInfo.ptX = pt.X;
-                    lvFindInfo.ptY = pt.Y;
+                    lvFindInfo.pt = pt;
                     // we can do this because SearchDirectionHint is set to the VK_*
                     lvFindInfo.vkDirection = (int)dir;
                 }
@@ -3548,10 +3547,9 @@ namespace System.Windows.Forms
 
         internal Point GetItemPosition(int index)
         {
-            NativeMethods.POINT pt = new NativeMethods.POINT();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETITEMPOSITION, index, pt);
-
-            return new Point(pt.x, pt.y);
+            var pt = new Point();
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETITEMPOSITION, index, ref pt);
+            return pt;
         }
 
         internal int GetItemState(int index)
@@ -5391,12 +5389,8 @@ namespace System.Windows.Forms
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
-            NativeMethods.POINT pt = new NativeMethods.POINT
-            {
-                x = x,
-                y = y
-            };
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEMPOSITION32, index, pt);
+            var pt = new Point(x, y);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEMPOSITION32, index, ref pt);
         }
 
         internal void SetItemState(int index, int state, int mask)
@@ -6587,7 +6581,7 @@ namespace System.Windows.Forms
                             Point startingPoint = Point.Empty;
                             if ((nmlvif.lvfi.flags & NativeMethods.LVFI_NEARESTXY) != 0)
                             {
-                                startingPoint = new Point(nmlvif.lvfi.ptX, nmlvif.lvfi.ptY);
+                                startingPoint = nmlvif.lvfi.pt;
                             }
 
                             SearchDirectionHint dir = SearchDirectionHint.Down;

@@ -376,8 +376,7 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                Point point = new Point();
-                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), ref point);
+                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), out Point point);
                 return point;
             }
             set
@@ -390,10 +389,10 @@ namespace System.Windows.Forms.Internal
         ///  Sets the DC Viewport origin to the specified value and returns its previous value;
         ///  origin values are in device units.
         /// </summary>
-        public Point SetViewportOrigin(Point newOrigin)
+        public unsafe Point SetViewportOrigin(Point newOrigin)
         {
-            Point oldOrigin = new Point();
-            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, ref oldOrigin);
+            var oldOrigin = new Point();
+            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, &oldOrigin);
             return oldOrigin;
         }
     }

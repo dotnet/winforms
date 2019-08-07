@@ -1896,12 +1896,11 @@ namespace System.Windows.Forms
                 {
                     // We want to instantly change the cursor if the mouse is within our bounds.
                     // This includes the case where the mouse is over one of our children
-                    NativeMethods.POINT p = new NativeMethods.POINT();
-                    Interop.RECT r = new Interop.RECT();
-                    UnsafeNativeMethods.GetCursorPos(p);
+                    var r = new Interop.RECT();
+                    UnsafeNativeMethods.GetCursorPos(out Point p);
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
-                    if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                     {
                         SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                     }
@@ -3132,9 +3131,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                var pt = new NativeMethods.POINT();
-                UnsafeNativeMethods.GetCursorPos(pt);
-                return new Point(pt.x, pt.y);
+                UnsafeNativeMethods.GetCursorPos(out Point pt);
+                return pt;
             }
         }
 
@@ -9233,9 +9231,8 @@ namespace System.Windows.Forms
         /// </summary>
         public Point PointToClient(Point p)
         {
-            var point = new NativeMethods.POINT(p.X, p.Y);
-            UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), point, 1);
-            return new Point(point.x, point.y);
+            UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), ref p, 1);
+            return p;
         }
 
         /// <summary>
@@ -9243,9 +9240,8 @@ namespace System.Windows.Forms
         /// </summary>
         public Point PointToScreen(Point p)
         {
-            NativeMethods.POINT point = new NativeMethods.POINT(p.X, p.Y);
-            UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, point, 1);
-            return new Point(point.x, point.y);
+            UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, ref p, 1);
+            return p;
         }
 
         /// <summary>
@@ -9469,11 +9465,10 @@ namespace System.Windows.Forms
 
             // We're the root contol, so we need to set up our clipping region.  Retrieve the
             // x-coordinates and y-coordinates of the viewport origin for the specified device context.
-            NativeMethods.POINT viewportOrg = new NativeMethods.POINT();
-            bool success = SafeNativeMethods.GetViewportOrgEx(hDC, viewportOrg);
+            bool success = SafeNativeMethods.GetViewportOrgEx(hDC, out Point viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-            IntPtr hClippingRegion = Interop.Gdi32.CreateRectRgn(viewportOrg.x, viewportOrg.y, viewportOrg.x + Width, viewportOrg.y + Height);
+            IntPtr hClippingRegion = Interop.Gdi32.CreateRectRgn(viewportOrg.X, viewportOrg.Y, viewportOrg.X + Width, viewportOrg.Y + Height);
             Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
             try
@@ -12326,7 +12321,7 @@ namespace System.Windows.Forms
             // Note: info.hItemHandle is the handle of the window that sent the help message.
             NativeMethods.HELPINFO info = (NativeMethods.HELPINFO)m.GetLParam(typeof(NativeMethods.HELPINFO));
 
-            HelpEventArgs hevent = new HelpEventArgs(new Point(info.MousePos.x, info.MousePos.y));
+            HelpEventArgs hevent = new HelpEventArgs(info.MousePos);
             OnHelpRequested(hevent);
             if (!hevent.Handled)
             {

@@ -644,8 +644,7 @@ namespace System.Windows.Forms
         {
             if (contextMenu != null || contextMenuStrip != null)
             {
-                NativeMethods.POINT pt = new NativeMethods.POINT();
-                UnsafeNativeMethods.GetCursorPos(pt);
+                UnsafeNativeMethods.GetCursorPos(out Point pt);
 
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
@@ -658,8 +657,8 @@ namespace System.Windows.Forms
 
                     SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
                                              NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTALIGN,
-                                             pt.x,
-                                             pt.y,
+                                             pt.X,
+                                             pt.Y,
                                              new HandleRef(window, window.Handle),
                                              null);
 
@@ -670,7 +669,7 @@ namespace System.Windows.Forms
                 {
                     // this will set the context menu strip to be toplevel
                     // and will allow us to overlap the system tray
-                    contextMenuStrip.ShowInTaskbar(pt.x, pt.y);
+                    contextMenuStrip.ShowInTaskbar(pt.X, pt.Y);
                 }
             }
         }

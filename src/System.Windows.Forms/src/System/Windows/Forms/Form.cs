@@ -4601,14 +4601,11 @@ namespace System.Windows.Forms
             {
 
                 Control button = AcceptButton as Control;
-                NativeMethods.POINT ptToSnap = new NativeMethods.POINT(
-                    button.Left + button.Width / 2,
-                    button.Top + button.Height / 2);
-
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ptToSnap);
+                var ptToSnap = new Point(button.Left + button.Width / 2, button.Top + button.Height / 2);
+                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref ptToSnap);
                 if (!button.IsWindowObscured)
                 {
-                    Cursor.Position = new Point(ptToSnap.x, ptToSnap.y);
+                    Cursor.Position = ptToSnap;
                 }
             }
         }
@@ -6843,8 +6840,8 @@ namespace System.Windows.Forms
 
             if (!minTrack.IsEmpty)
             {
-                mmi.ptMinTrackSize.x = minTrack.Width;
-                mmi.ptMinTrackSize.y = minTrack.Height;
+                mmi.ptMinTrackSize.X = minTrack.Width;
+                mmi.ptMinTrackSize.Y = minTrack.Height;
 
                 // When the MinTrackSize is set to a value larger than the screen
                 // size but the MaxTrackSize is not set to a value equal to or greater than the
@@ -6861,11 +6858,11 @@ namespace System.Windows.Forms
                     Size virtualScreen = SystemInformation.VirtualScreen.Size;
                     if (minTrack.Height > virtualScreen.Height)
                     {
-                        mmi.ptMaxTrackSize.y = int.MaxValue;
+                        mmi.ptMaxTrackSize.Y = int.MaxValue;
                     }
                     if (minTrack.Width > virtualScreen.Width)
                     {
-                        mmi.ptMaxTrackSize.x = int.MaxValue;
+                        mmi.ptMaxTrackSize.X = int.MaxValue;
                     }
                 }
             }
@@ -6874,16 +6871,16 @@ namespace System.Windows.Forms
             {
                 // Is the specified MaxTrackSize smaller than the smallest allowable Window size?
                 Size minTrackWindowSize = SystemInformation.MinWindowTrackSize;
-                mmi.ptMaxTrackSize.x = Math.Max(maxTrack.Width, minTrackWindowSize.Width);
-                mmi.ptMaxTrackSize.y = Math.Max(maxTrack.Height, minTrackWindowSize.Height);
+                mmi.ptMaxTrackSize.X = Math.Max(maxTrack.Width, minTrackWindowSize.Width);
+                mmi.ptMaxTrackSize.Y = Math.Max(maxTrack.Height, minTrackWindowSize.Height);
             }
 
             if (!maximizedBounds.IsEmpty)
             {
-                mmi.ptMaxPosition.x = maximizedBounds.X;
-                mmi.ptMaxPosition.y = maximizedBounds.Y;
-                mmi.ptMaxSize.x = maximizedBounds.Width;
-                mmi.ptMaxSize.y = maximizedBounds.Height;
+                mmi.ptMaxPosition.X = maximizedBounds.X;
+                mmi.ptMaxPosition.Y = maximizedBounds.Y;
+                mmi.ptMaxSize.X = maximizedBounds.Width;
+                mmi.ptMaxSize.Y = maximizedBounds.Height;
             }
 
             Marshal.StructureToPtr(mmi, m.LParam, false);
@@ -7038,9 +7035,8 @@ namespace System.Windows.Forms
                 int y = NativeMethods.Util.HIWORD(m.LParam);
 
                 // Convert to client coordinates
-                //
-                NativeMethods.POINT pt = new NativeMethods.POINT(x, y);
-                UnsafeNativeMethods.ScreenToClient(new HandleRef(this, Handle), pt);
+                var pt = new Point(x, y);
+                UnsafeNativeMethods.ScreenToClient(new HandleRef(this, Handle), ref pt);
 
                 Size clientSize = ClientSize;
 
@@ -7048,8 +7044,8 @@ namespace System.Windows.Forms
                 // the grip area in this case not to get in the way of the control box.  We only need to check for the client's
                 // height since the window width will be at least the size of the control box which is always bigger than the
                 // grip width.
-                if (pt.x >= (clientSize.Width - SizeGripSize) &&
-                    pt.y >= (clientSize.Height - SizeGripSize) &&
+                if (pt.X >= (clientSize.Width - SizeGripSize) &&
+                    pt.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
                     m.Result = IsMirrored ? (IntPtr)NativeMethods.HTBOTTOMLEFT : (IntPtr)NativeMethods.HTBOTTOMRIGHT;
