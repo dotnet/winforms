@@ -181,14 +181,6 @@ namespace System.Windows.Forms.Design
             public readonly IntPtr hwndFrame;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagSIZE
-        {
-            [MarshalAs(UnmanagedType.I4)] public readonly int cx = 0;
-
-            [MarshalAs(UnmanagedType.I4)] public readonly int cy = 0;
-        }
-
         [ComVisible(true)]
         [ComImport]
         [Guid("00000116-0000-0000-C000-000000000046")]
@@ -376,10 +368,8 @@ namespace System.Windows.Forms.Design
                 [Out] COMRECT lprcClipRect,
                 [In] [Out] tagOIFI lpFrameInfo);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int Scroll(
-                [In] [MarshalAs(UnmanagedType.U4)] tagSIZE scrollExtant);
+            Interop.HRESULT Scroll(Size scrollExtant);
 
             void OnUIDeactivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fUndoable);

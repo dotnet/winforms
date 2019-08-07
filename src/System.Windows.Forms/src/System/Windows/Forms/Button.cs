@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                 if (isMouseDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle && !ValidationCancelled)
+                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle && !ValidationCancelled)
                     {
                         if (GetStyle(ControlStyles.UserPaint))
                         {

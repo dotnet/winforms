@@ -563,7 +563,7 @@ namespace System.Windows.Forms
                 if (base.MouseIsDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                     {
                         //Paint in raised state...
                         //

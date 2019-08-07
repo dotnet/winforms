@@ -1965,11 +1965,11 @@ namespace System.ComponentModel.Design
                         hFont = Gdi32.SelectObject(hdc, hFont);
                         if (listBox.Items.Count > 0)
                         {
-                            NativeMethods.SIZE textSize = new NativeMethods.SIZE();
                             foreach (string s in listBox.Items)
                             {
-                                SafeNativeMethods.GetTextExtentPoint32(new HandleRef(listBox, hdc), s, s.Length, textSize);
-                                maxWidth = Math.Max((int)textSize.cx, maxWidth);
+                                var textSize = new Size();
+                                Gdi32.GetTextExtentPoint32W(new HandleRef(listBox, hdc), s, s.Length, ref textSize);
+                                maxWidth = Math.Max((int)textSize.Width, maxWidth);
                             }
                         }
                         SafeNativeMethods.GetTextMetrics(new HandleRef(listBox, hdc), ref tm);
@@ -2532,16 +2532,6 @@ namespace System.ComponentModel.Design
                     public static int LOWORD(int n) => n & 0xffff;
                 }
 
-                [StructLayout(LayoutKind.Sequential)]
-                public class SIZE
-                {
-                    public int cx = 0;
-                    public int cy = 0;
-                    public SIZE()
-                    {
-                    }
-                }
-
                 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
                 public struct TEXTMETRIC
                 {
@@ -2600,9 +2590,6 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
-
-                [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-                public static extern int GetTextExtentPoint32(HandleRef hDC, string str, int len, [In, Out] NativeMethods.SIZE size);
 
                 [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
                 public static extern int GetTextMetricsW(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRIC lptm);

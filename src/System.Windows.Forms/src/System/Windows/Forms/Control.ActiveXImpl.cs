@@ -453,8 +453,8 @@ namespace System.Windows.Forms
                 RECT rc;
                 var pVp = new Point();
                 var pW = new Point();
-                NativeMethods.SIZE sWindowExt = new NativeMethods.SIZE();
-                NativeMethods.SIZE sViewportExt = new NativeMethods.SIZE();
+                var sWindowExt = new Size();
+                var sViewportExt = new Size();
                 int iMode = NativeMethods.MM_TEXT;
 
                 if (!_control.IsHandleCreated)
@@ -477,9 +477,9 @@ namespace System.Windows.Forms
 
                     iMode = SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), NativeMethods.MM_ANISOTROPIC);
                     SafeNativeMethods.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
-                    SafeNativeMethods.SetWindowExtEx(new HandleRef(null, hdcDraw), _control.Width, _control.Height, sWindowExt);
+                    SafeNativeMethods.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
                     SafeNativeMethods.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
-                    SafeNativeMethods.SetViewportExtEx(new HandleRef(null, hdcDraw), rc.right - rc.left, rc.bottom - rc.top, sViewportExt);
+                    SafeNativeMethods.SetViewportExtEx(hdcDraw, rc.right - rc.left, rc.bottom - rc.top, &sViewportExt);
                 }
 
                 // Now do the actual drawing.  We must ask all of our children to draw as well.
@@ -505,9 +505,9 @@ namespace System.Windows.Forms
                     if (prcBounds != null)
                     {
                         SafeNativeMethods.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
-                        SafeNativeMethods.SetWindowExtEx(new HandleRef(null, hdcDraw), sWindowExt.cx, sWindowExt.cy, null);
+                        SafeNativeMethods.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
                         SafeNativeMethods.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
-                        SafeNativeMethods.SetViewportExtEx(new HandleRef(null, hdcDraw), sViewportExt.cx, sViewportExt.cy, null);
+                        SafeNativeMethods.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
                         SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), iMode);
                     }
                 }
@@ -749,15 +749,15 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::GetExtent.
             /// </summary>
-            internal void GetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel)
+            internal unsafe void GetExtent(uint dwDrawAspect, Size* pSizel)
             {
                 if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0)
                 {
                     Size size = _control.Size;
 
                     Point pt = PixelToHiMetric(size.Width, size.Height);
-                    pSizel.cx = pt.X;
-                    pSizel.cy = pt.Y;
+                    pSizel->Width = pt.X;
+                    pSizel->Height = pt.Y;
                 }
                 else
                 {
@@ -2015,7 +2015,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::SetExtent
             /// </summary>
-            internal void SetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel)
+            internal unsafe void SetExtent(uint dwDrawAspect, Size* pSizel)
             {
                 if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0)
                 {
@@ -2028,7 +2028,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        Size size = new Size(HiMetricToPixel(pSizel.cx, pSizel.cy));
+                        Size size = new Size(HiMetricToPixel(pSizel->Width, pSizel->Height));
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : new size:" + size.ToString());
 
                         // If we're in place active, let the in place site set our bounds.

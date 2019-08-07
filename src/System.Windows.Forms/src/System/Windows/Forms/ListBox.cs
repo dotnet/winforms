@@ -2565,7 +2565,7 @@ namespace System.Windows.Forms
                     Point pt = new Point(x, y);
                     pt = PointToScreen(pt);
                     bool captured = Capture;
-                    if (captured && UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                    if (captured && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired && !ValidationCancelled)
                         {
@@ -2612,7 +2612,7 @@ namespace System.Windows.Forms
                     Point rpt = new Point(rx, ry);
                     rpt = PointToScreen(rpt);
                     bool rCaptured = Capture;
-                    if (rCaptured && UnsafeNativeMethods.WindowFromPoint(rpt.X, rpt.Y) == Handle)
+                    if (rCaptured && UnsafeNativeMethods.WindowFromPoint(rpt) == Handle)
                     {
                         if (selectedItems != null)
                         {

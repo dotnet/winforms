@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         public static extern IntPtr CreateSolidBrush(int crColor);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowExtEx(HandleRef hDC, int x, int y, [In, Out] NativeMethods.SIZE size);
+        public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern int FormatMessage(int dwFlags, HandleRef lpSource, int dwMessageId,
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
         public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out]NativeMethods.MONITORINFOEX info);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr MonitorFromPoint(NativeMethods.POINTSTRUCT pt, int flags);
+        public static extern IntPtr MonitorFromPoint(Point pt, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr MonitorFromRect(ref Interop.RECT rect, int flags);
@@ -296,8 +296,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr ExtCreatePen(int fnStyle, int dwWidth, ref NativeMethods.LOGBRUSH lplb, int dwStyleCount, int[] lpStyle);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetViewportExtEx(HandleRef hDC, int x, int y, NativeMethods.SIZE size);
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
+        public static unsafe extern bool SetViewportExtEx(IntPtr hDC, int x, int y, Size *size);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public extern static bool GetClipCursor(ref Interop.RECT lpRect);
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
         public static extern int GetThemeInt(HandleRef hTheme, int iPartId, int iStateId, int iPropId, ref int piVal);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, VisualStyles.ThemeSizeType eSize, [Out] NativeMethods.SIZE psz);
+        public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, VisualStyles.ThemeSizeType eSize, out Size psz);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, out Point pPoint);
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
         public static extern int GetThemeTextMetrics(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, ref VisualStyles.TextMetrics ptm);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, [In] NativeMethods.POINTSTRUCT ptTest, ref int pwHitTestCode);
+        public static extern int HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, Point ptTest, ref ushort pwHitTestCode);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern bool IsThemeBackgroundPartiallyTransparent(HandleRef hTheme, int iPartId, int iStateId);

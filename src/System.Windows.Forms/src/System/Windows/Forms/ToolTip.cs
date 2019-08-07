@@ -1114,7 +1114,7 @@ namespace System.Windows.Forms
             if (baseVar != null && baseVar.IsActiveX)
             {
                 // Find the matching HWnd matching the ScreenCoord and find if the Control has a Tooltip.
-                IntPtr hwndControl = UnsafeNativeMethods.WindowFromPoint(screenCoords.X, screenCoords.Y);
+                IntPtr hwndControl = UnsafeNativeMethods.WindowFromPoint(screenCoords);
                 if (hwndControl != IntPtr.Zero)
                 {
                     Control currentControl = Control.FromHandle(hwndControl);
@@ -1137,7 +1137,7 @@ namespace System.Windows.Forms
                     pt = baseVar.PointToClient(screenCoords);
                 }
 
-                IntPtr found = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, baseHwnd), pt.X, pt.Y, NativeMethods.CWP_SKIPINVISIBLE);
+                IntPtr found = UnsafeNativeMethods.ChildWindowFromPointEx(baseHwnd, pt, NativeMethods.CWP_SKIPINVISIBLE);
                 if (found == baseHwnd)
                 {
                     hwnd = found;

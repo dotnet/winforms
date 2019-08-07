@@ -1789,7 +1789,7 @@ namespace System.Windows.Forms
                             dwMask = NativeMethods.LVTVIM_TILESIZE
                         };
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETTILEVIEWINFO, 0, tileViewInfo);
-                        return new Size(tileViewInfo.sizeTile.cx, tileViewInfo.sizeTile.cy);
+                        return tileViewInfo.sizeTile;
                     }
                     else
                     {
@@ -1817,7 +1817,7 @@ namespace System.Windows.Forms
                         {
                             dwMask = NativeMethods.LVTVIM_TILESIZE,
                             dwFlags = NativeMethods.LVTVIF_FIXEDSIZE,
-                            sizeTile = new NativeMethods.SIZE(tileSize.Width, tileSize.Height)
+                            sizeTile = tileSize
                         };
                         bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETTILEVIEWINFO, 0, tileViewInfo);
                         Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");
@@ -5701,7 +5701,7 @@ namespace System.Windows.Forms
             // the tile view info size
             tileViewInfo.dwMask |= NativeMethods.LVTVIM_TILESIZE;
             tileViewInfo.dwFlags = NativeMethods.LVTVIF_FIXEDSIZE;
-            tileViewInfo.sizeTile = new NativeMethods.SIZE(TileSize.Width, TileSize.Height);
+            tileViewInfo.sizeTile = TileSize;
 
             bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETTILEVIEWINFO, 0, tileViewInfo);
             Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");

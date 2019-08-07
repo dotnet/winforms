@@ -10,12 +10,12 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int GetTextExtentPoint32W(IntPtr hdc, string lpString, int c, ref Size psizl);
+        [DllImport(Libraries.Gdi32, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static extern BOOL GetTextExtentPoint32W(IntPtr hdc, string lpString, int c, ref Size psizl);
 
-        public static int GetTextExtentPoint32W(HandleRef hdc, string lpString, int c, ref Size psizl)
+        public static BOOL GetTextExtentPoint32W(HandleRef hdc, string lpString, int c, ref Size psizl)
         {
-            int result = GetTextExtentPoint32W(hdc.Handle, lpString, c, ref psizl);
+            BOOL result = GetTextExtentPoint32W(hdc.Handle, lpString, c, ref psizl);
             GC.KeepAlive(hdc.Wrapper);
             return result;
         }
