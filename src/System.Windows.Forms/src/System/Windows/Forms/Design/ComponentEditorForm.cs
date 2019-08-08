@@ -13,7 +13,7 @@ using System.Windows.Forms.Internal;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
+    ///  Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
     /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch)

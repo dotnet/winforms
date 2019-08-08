@@ -17,7 +17,7 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides an editor for visually picking a color.
+    ///  Provides an editor for visually picking a color.
     /// </summary>
     [CLSCompliant(false)]
     public class ColorEditor : UITypeEditor
@@ -25,7 +25,7 @@ namespace System.Drawing.Design
         private ColorUI _colorUI;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
+        ///  Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -56,8 +56,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets the editing style of the Edit method.
-        /// If the method is not supported, this will return UITypeEditorEditStyle.None.
+        ///  Gets the editing style of the Edit method.
+        ///  If the method is not supported, this will return UITypeEditorEditStyle.None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -65,8 +65,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets a value indicating if this editor supports the painting of a representation
-        /// of an object's value.
+        ///  Gets a value indicating if this editor supports the painting of a representation
+        ///  of an object's value.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
@@ -74,8 +74,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Paints a representative value of the given object to the provided canvas.
-        /// Painting should be done within the boundaries of the provided rectangle.
+        ///  Paints a representative value of the given object to the provided canvas.
+        ///  Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)
         {
@@ -88,7 +88,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// A control to display the color palette.
+        ///  A control to display the color palette.
         /// </summary>
         private class ColorPalette : Control
         {
@@ -682,12 +682,12 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Array of standard colors.
+            ///  Array of standard colors.
             /// </summary>
             private object[] ColorValues => colorConstants ?? (colorConstants = GetConstants(typeof(Color)));
 
             /// <summary>
-            /// Retrieves the array of custom colors for our use.
+            ///  Retrieves the array of custom colors for our use.
             /// </summary>
             private Color[] CustomColors
             {
@@ -712,12 +712,12 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Allows someone else to close our dropdown.
+            ///  Allows someone else to close our dropdown.
             /// </summary>
             public IWindowsFormsEditorService EditorService => edSvc;
 
             /// <summary>
-            /// Array of system colors.
+            ///  Array of system colors.
             /// </summary>
             private object[] SystemColorValues => systemColorConstants ?? (systemColorConstants = GetConstants(typeof(SystemColors)));
 
@@ -747,7 +747,7 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Takes the given color and looks for an instance in the ColorValues table.
+            ///  Takes the given color and looks for an instance in the ColorValues table.
             /// </summary>
             private Color GetBestColor(Color color)
             {
@@ -764,7 +764,7 @@ namespace System.Drawing.Design
             }
 
             /// <summary>
-            /// Retrieves an array of color constants for the given object.
+            ///  Retrieves an array of color constants for the given object.
             /// </summary>
             private static object[] GetConstants(Type enumType)
             {
@@ -1150,7 +1150,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Comparer for system colors.
+        ///  Comparer for system colors.
         /// </summary>
         private class SystemColorComparer : IComparer
         {
@@ -1161,7 +1161,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Comparer for standard colors
+        ///  Comparer for standard colors
         /// </summary>
         private class StandardColorComparer : IComparer
         {

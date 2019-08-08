@@ -223,8 +223,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Deriving classes can override this to configure a default size for their control.
-        /// This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Padding DefaultMargin
         {

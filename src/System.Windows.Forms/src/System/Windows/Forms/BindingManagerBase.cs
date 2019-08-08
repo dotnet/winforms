@@ -279,16 +279,16 @@ namespace System.Windows.Forms
         public abstract int Count { get; }
 
         /// <summary>
-        /// BindingComplete events on individual Bindings are propagated up through the BindingComplete event on
-        /// the owning BindingManagerBase. To do this, we have to track changes to the bindings collection, adding
-        /// or removing handlers on items in the collection as appropriate.
+        ///  BindingComplete events on individual Bindings are propagated up through the BindingComplete event on
+        ///  the owning BindingManagerBase. To do this, we have to track changes to the bindings collection, adding
+        ///  or removing handlers on items in the collection as appropriate.
         ///
-        /// For the Add and Remove cases, we hook the collection 'changed' event, and add or remove handler for
-        /// specific binding.
+        ///  For the Add and Remove cases, we hook the collection 'changed' event, and add or remove handler for
+        ///  specific binding.
         ///
-        /// For the Refresh case, we hook both the 'changing' and 'changed' events, removing handlers for all
-        /// items that were in the collection before the change, then adding handlers for whatever items are
-        /// in the collection after the change.
+        ///  For the Refresh case, we hook both the 'changing' and 'changed' events, removing handlers for all
+        ///  items that were in the collection before the change, then adding handlers for whatever items are
+        ///  in the collection after the change.
         /// </summary>
         private void OnBindingsCollectionChanged(object sender, CollectionChangeEventArgs e)
         {

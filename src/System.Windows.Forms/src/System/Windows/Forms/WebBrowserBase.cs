@@ -15,17 +15,17 @@ using System.Threading;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Wraps ActiveX controls and exposes them as fully featured windows forms controls
-    /// (by inheriting from Control). Some of Control's properties that don't make sense
-    /// for ActiveX controls are blocked here (by setting Browsable attributes on some and
-    /// throwing exceptions from others), to make life easy for the inheritors.
+    ///  Wraps ActiveX controls and exposes them as fully featured windows forms controls
+    ///  (by inheriting from Control). Some of Control's properties that don't make sense
+    ///  for ActiveX controls are blocked here (by setting Browsable attributes on some and
+    ///  throwing exceptions from others), to make life easy for the inheritors.
     ///
-    /// Inheritors of this class simply need to concentrate on defining & implementing the
-    /// properties/methods/events of the specific ActiveX control they are wrapping, the
-    /// default properties etc and the code to implement the activation etc. are
-    /// encapsulated in the class below.
+    ///  Inheritors of this class simply need to concentrate on defining & implementing the
+    ///  properties/methods/events of the specific ActiveX control they are wrapping, the
+    ///  default properties etc and the code to implement the activation etc. are
+    ///  encapsulated in the class below.
     ///
-    /// The classid of the ActiveX control is specified in the constructor.
+    ///  The classid of the ActiveX control is specified in the constructor.
     /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -69,8 +69,8 @@ namespace System.Windows.Forms
         internal object activeXInstance;
 
         /// <summary>
-            /// Creates a new instance of a WinForms control which wraps an ActiveX control
-        /// given by the clsid parameter.
+            ///  Creates a new instance of a WinForms control which wraps an ActiveX control
+        ///  given by the clsid parameter.
             /// </summary>
         internal WebBrowserBase(string clsidString) : base()
         {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         //
 
         /// <summary>
-            /// Returns the native webbrowser object that this control wraps.
+            ///  Returns the native webbrowser object that this control wraps.
             /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object ActiveXInstance
@@ -121,8 +121,8 @@ namespace System.Windows.Forms
         // below method and return their own WebBrowserSiteBaseBase derived object.
         //
         /// <summary>
-        /// Returns an object that will be set as the site for the native ActiveX control.
-        /// Implementors of the site can derive from <see cref='WebBrowserSiteBase'/> class.
+        ///  Returns an object that will be set as the site for the native ActiveX control.
+        ///  Implementors of the site can derive from <see cref='WebBrowserSiteBase'/> class.
         /// </summary>
         protected virtual WebBrowserSiteBase CreateWebBrowserSiteBase()
         {
@@ -130,34 +130,34 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// This will be called when the native ActiveX control has just been created.
-        /// Inheritors of this class can override this method to cast the nativeActiveXObject
-        /// parameter to the appropriate interface. They can then cache this interface
-        /// value in a member variable. However, they must release this value when
-        /// DetachInterfaces is called (by setting the cached interface variable to null).
+            ///  This will be called when the native ActiveX control has just been created.
+        ///  Inheritors of this class can override this method to cast the nativeActiveXObject
+        ///  parameter to the appropriate interface. They can then cache this interface
+        ///  value in a member variable. However, they must release this value when
+        ///  DetachInterfaces is called (by setting the cached interface variable to null).
             /// </summary>
         protected virtual void AttachInterfaces(object nativeActiveXObject)
         {
         }
 
         /// <summary>
-            /// See AttachInterfaces for a description of when to override DetachInterfaces.
+            ///  See AttachInterfaces for a description of when to override DetachInterfaces.
             /// </summary>
         protected virtual void DetachInterfaces()
         {
         }
 
         /// <summary>
-            /// This will be called when we are ready to start listening to events.
-        /// Inheritors can override this method to hook their own connection points.
+            ///  This will be called when we are ready to start listening to events.
+        ///  Inheritors can override this method to hook their own connection points.
             /// </summary>
         protected virtual void CreateSink()
         {
         }
 
         /// <summary>
-            /// This will be called when it is time to stop listening to events.
-        /// This is where inheritors have to disconnect their connection points.
+            ///  This will be called when it is time to stop listening to events.
+        ///  This is where inheritors have to disconnect their connection points.
             /// </summary>
         protected virtual void DetachSink()
         {

@@ -35,8 +35,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Indicates whether or not the control supports UIA Providers via
-        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        ///  Indicates whether or not the control supports UIA Providers via
+        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
         internal override bool SupportsUiaProviders => true;
 
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Constructs the new instance of the accessibility object for this control.
+        ///  Constructs the new instance of the accessibility object for this control.
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -233,8 +233,8 @@ namespace System.Windows.Forms.PropertyGridInternal
     }
 
     /// <summary>
-    /// Represents the accessibility object for the PropertyGrid DropDown button.
-    /// This DropDownButtonAccessibleObject is available in Level3 only.
+    ///  Represents the accessibility object for the PropertyGrid DropDown button.
+    ///  This DropDownButtonAccessibleObject is available in Level3 only.
     /// </summary>
     [Runtime.InteropServices.ComVisible(true)]
     internal class DropDownButtonAccessibleObject : Control.ControlAccessibleObject
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private readonly PropertyGridView _owningPropertyGrid;
 
         /// <summary>
-        /// Constructs the new instance of DropDownButtonAccessibleObject.
+        ///  Constructs the new instance of DropDownButtonAccessibleObject.
         /// </summary>
         /// <param name="owningDropDownButton"></param>
         public DropDownButtonAccessibleObject(DropDownButton owningDropDownButton) : base(owningDropDownButton)
@@ -260,7 +260,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Request to return the element in the specified direction.
+        ///  Request to return the element in the specified direction.
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Returns the element that is the root node of this fragment of UI.
+        ///  Returns the element that is the root node of this fragment of UI.
         /// </summary>
         internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
         {
@@ -292,7 +292,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Request value of specified property from an element.
+        ///  Request value of specified property from an element.
         /// </summary>
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
@@ -314,7 +314,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Indicates whether the specified pattern is supported.
+        ///  Indicates whether the specified pattern is supported.
         /// </summary>
         /// <param name="patternId">The pattern ID.</param>
         /// <returns>True if specified pattern is supported, otherwise false.</returns>
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Gets the accessible role.
+        ///  Gets the accessible role.
         /// </summary>
         public override AccessibleRole Role
         {
@@ -340,10 +340,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Request that focus is set to this item.
-        /// The UIAutomation framework will ensure that the UI hosting this fragment is already
-        /// focused before calling this method, so this method should only update its internal
-        /// focus state; it should not attempt to give its own HWND the focus, for example.
+        ///  Request that focus is set to this item.
+        ///  The UIAutomation framework will ensure that the UI hosting this fragment is already
+        ///  focused before calling this method, so this method should only update its internal
+        ///  focus state; it should not attempt to give its own HWND the focus, for example.
         /// </summary>
         internal override void SetFocus()
         {

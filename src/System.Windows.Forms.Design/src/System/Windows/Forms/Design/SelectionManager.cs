@@ -12,7 +12,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// The SelectionBehavior is pushed onto the BehaviorStack in response to apositively hit tested SelectionGlyph. The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potention DragBehavior.
+    ///  The SelectionBehavior is pushed onto the BehaviorStack in response to apositively hit tested SelectionGlyph. The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potention DragBehavior.
     /// </summary>
     internal sealed class SelectionManager : IDisposable
     {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         private bool _selectionChanging; //we dont want the OnSelectionChanged to be recursively called.
 
         /// <summary>
-        /// Constructor.  Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change.  Also, we create our custom Adorner and add it to the BehaviorService.
+        ///  Constructor.  Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change.  Also, we create our custom Adorner and add it to the BehaviorService.
         /// </summary>
         public SelectionManager(IServiceProvider serviceProvider, BehaviorService behaviorService)
         {
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the Adorner that contains all the BodyGlyphs for the current selection state.
+        ///  Returns the Adorner that contains all the BodyGlyphs for the current selection state.
         /// </summary>
         internal Adorner BodyGlyphAdorner
         {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// There are certain cases like Adding Item to ToolStrips through InSitu Editor, where there is ParentTransaction that has to be cancelled depending upon the user action. When this parent transaction is cancelled, there may be no reason to REFRESH the selectionManager which actually clears all the glyphs and readds them. This REFRESH causes a lot of flicker and can be avoided by setting this property to false. Since this property is checked in the TransactionClosed, the SelectionManager won't REFRESH and hence just eat up the refresh thus avoiding unnecessary flicker.
+        ///  There are certain cases like Adding Item to ToolStrips through InSitu Editor, where there is ParentTransaction that has to be cancelled depending upon the user action. When this parent transaction is cancelled, there may be no reason to REFRESH the selectionManager which actually clears all the glyphs and readds them. This REFRESH causes a lot of flicker and can be avoided by setting this property to false. Since this property is checked in the TransactionClosed, the SelectionManager won't REFRESH and hence just eat up the refresh thus avoiding unnecessary flicker.
         /// </summary>
         internal bool NeedRefresh
         {
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the Adorner that contains all the BodyGlyphs for the current selection state.
+        ///  Returns the Adorner that contains all the BodyGlyphs for the current selection state.
         /// </summary>
         internal Adorner SelectionGlyphAdorner
         {
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method fist calls the recursive AddControlGlyphs() method. When finished, we add the final glyph(s) to the root comp.
+        ///  This method fist calls the recursive AddControlGlyphs() method. When finished, we add the final glyph(s) to the root comp.
         /// </summary>
         private void AddAllControlGlyphs(Control parent, ArrayList selComps, object primarySelection)
         {
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Recursive method that goes through and adds all the glyphs of every child to our global Adorner.
+        ///  Recursive method that goes through and adds all the glyphs of every child to our global Adorner.
         /// </summary>
         private void AddControlGlyphs(Control c, GlyphSelectionType selType)
         {
@@ -165,7 +165,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Unhook all of our event notifications, clear our adorner and remove it from the Beh.Svc.
+        ///  Unhook all of our event notifications, clear our adorner and remove it from the Beh.Svc.
         /// </summary>
         public void Dispose()
         {
@@ -205,7 +205,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Refreshes all selection Glyphs.
+        ///  Refreshes all selection Glyphs.
         /// </summary>
         public void Refresh()
         {
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When a component is added, we get the designer and add it to our hashtable for quick lookup.
+        ///  When a component is added, we get the designer and add it to our hashtable for quick lookup.
         /// </summary>
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
@@ -227,7 +227,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Before a drag, remove all glyphs that are involved in the drag operation and any that don't allow drops.
+        ///  Before a drag, remove all glyphs that are involved in the drag operation and any that don't allow drops.
         /// </summary>
         private void OnBeginDrag(object source, BehaviorDragDropEventArgs e)
         {
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When a component is changed - we need to refresh the selection.
+        ///  When a component is changed - we need to refresh the selection.
         /// </summary>
         private void OnComponentChanged(object source, ComponentChangedEventArgs ce)
         {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When a component is removed - we remove the key & value from our hashtable.
+        ///  When a component is removed - we remove the key & value from our hashtable.
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.Design
             }
         }
         /// <summary>
-        /// Computes the region representing the difference between the old  selection and the new selection.
+        ///  Computes the region representing the difference between the old  selection and the new selection.
         /// </summary>
         private Region DetermineRegionToRefresh(object primarySelection)
         {
@@ -365,7 +365,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Event handler for the behaviorService's Synchronize event
+        ///  Event handler for the behaviorService's Synchronize event
         /// </summary>
         private void OnSynchronize(object sender, EventArgs e)
         {
@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// On every selectionchange, we remove all glyphs, get the newly selected components, and re-add all glyphs back to the Adorner.
+        ///  On every selectionchange, we remove all glyphs, get the newly selected components, and re-add all glyphs back to the Adorner.
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
@@ -437,7 +437,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When a transaction that involves one of our components closes,  refresh to reflect any changes.
+        ///  When a transaction that involves one of our components closes,  refresh to reflect any changes.
         /// </summary>
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {

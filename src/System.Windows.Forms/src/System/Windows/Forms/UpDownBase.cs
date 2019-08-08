@@ -35,7 +35,6 @@ namespace System.Windows.Forms
         // Member variables
         //
         ////////////////////////////////////////////////////////////////////////
-
         // Child controls
         internal UpDownEdit upDownEdit; // See nested class at end of this file
         internal UpDownButtons upDownButtons; // See nested class at end of this file
@@ -105,7 +104,6 @@ namespace System.Windows.Forms
         // Properties
         //
         ////////////////////////////////////////////////////////////////////////
-
         // AutoScroll is not relevant to an UpDownBase
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -663,7 +661,6 @@ namespace System.Windows.Forms
         // Methods
         //
         ////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  When overridden in a derived class, handles the pressing of the down button
         ///  on the up-down control.
@@ -678,7 +675,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets an accessible name.
+        ///  Gets an accessible name.
         /// </summary>
         /// <param name="baseName">The base name.</param>
         /// <returns>The accessible name.</returns>
@@ -707,8 +704,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, raises the Changed event.
-        /// event.
+        ///  When overridden in a derived class, raises the Changed event.
+        ///  event.
         /// </summary>
         protected virtual void OnChanged(object source, EventArgs e)
         {
@@ -804,8 +801,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyDown'/>
-        /// event.
+        ///  Raises the <see cref='Control.KeyDown'/>
+        ///  event.
         /// </summary>
         protected virtual void OnTextBoxKeyDown(object source, KeyEventArgs e)
         {
@@ -837,8 +834,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyPress'/>
-        /// event.
+        ///  Raises the <see cref='Control.KeyPress'/>
+        ///  event.
         /// </summary>
         protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
@@ -847,7 +844,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.LostFocus'/> event.
+        ///  Raises the <see cref='Control.LostFocus'/> event.
         /// </summary>
         protected virtual void OnTextBoxLostFocus(object source, EventArgs e)
         {
@@ -858,7 +855,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected virtual void OnTextBoxResize(object source, EventArgs e)
         {
@@ -867,8 +864,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the TextBoxTextChanged event.
-        /// event.
+        ///  Raises the TextBoxTextChanged event.
+        ///  event.
         /// </summary>
         protected virtual void OnTextBoxTextChanged(object source, EventArgs e)
         {
@@ -938,7 +935,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.OnMouseWheel'/> event.
+        ///  Raises the <see cref='Control.OnMouseWheel'/> event.
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -1213,7 +1210,6 @@ namespace System.Windows.Forms
             // Member variables
             //
             /////////////////////////////////////////////////////////////////////
-
             // Parent control
             private readonly UpDownBase parent;
             private bool doubleClickFired = false;
@@ -1221,7 +1217,6 @@ namespace System.Windows.Forms
             // Constructors
             //
             /////////////////////////////////////////////////////////////////////
-
             internal UpDownEdit(UpDownBase parent)
             : base()
             {
@@ -1313,8 +1308,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Raises the <see cref='Control.KeyUp'/>
-            /// event.
+            ///  Raises the <see cref='Control.KeyUp'/>
+            ///  event.
             /// </summary>
             protected override void OnKeyUp(KeyEventArgs e)
             {
@@ -1390,7 +1385,6 @@ namespace System.Windows.Forms
             // Member variables
             //
             /////////////////////////////////////////////////////////////////////
-
             // Parent control
             private readonly UpDownBase parent;
 
@@ -1412,7 +1406,6 @@ namespace System.Windows.Forms
             // Constructors
             //
             /////////////////////////////////////////////////////////////////////
-
             internal UpDownButtons(UpDownBase parent)
 
             : base()
@@ -1430,7 +1423,6 @@ namespace System.Windows.Forms
             // Methods
             //
             /////////////////////////////////////////////////////////////////////
-
             /// <summary>
             ///
             ///  Adds a handler for the updown button event.

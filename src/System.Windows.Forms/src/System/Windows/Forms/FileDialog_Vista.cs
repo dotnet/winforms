@@ -287,7 +287,7 @@ namespace System.Windows.Forms
         public FileDialogCustomPlacesCollection CustomPlaces => _customPlaces;
 
         /// <summary>
-        /// Gets or sets whether the dialog will be automatically upgraded to enable new features.
+        ///  Gets or sets whether the dialog will be automatically upgraded to enable new features.
         /// </summary>
         [DefaultValue(true)]
         public bool AutoUpgradeEnabled { get; set; } = true;

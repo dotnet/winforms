@@ -2050,7 +2050,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Helper to handle MouseEnter.
+        ///  Helper to handle MouseEnter.
         /// </summary>
         /// <param name="args"></param>
         private void OnMouseEnterInternal(EventArgs args)
@@ -2063,7 +2063,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Helper to handle mouseleave
+        ///  Helper to handle mouseleave
         /// </summary>
         /// <param name="args"></param>
         private void OnMouseLeaveInternal(EventArgs args)
@@ -2151,14 +2151,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the combo box that starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item in the combo box that starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s) => FindString(s, startIndex: -1);
 
         /// <summary>
-        /// Finds the first item after the given index which starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item after the given index which starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s, int startIndex)
         {
@@ -2166,8 +2166,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the combo box that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item in the combo box that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s)
         {
@@ -2175,8 +2175,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item after the given index that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item after the given index that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {
@@ -2184,8 +2184,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item after the given index that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item after the given index that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         internal int FindStringExact(string s, int startIndex, bool ignoreCase)
         {
@@ -2670,7 +2670,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ComboBox.KeyDown'/> event.
+        ///  Raises the <see cref='ComboBox.KeyDown'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyDown(KeyEventArgs e)
@@ -2751,7 +2751,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This internal helper allows us to call the committed function multiple times without worrying about double firing.
+        ///  This internal helper allows us to call the committed function multiple times without worrying about double firing.
         /// </summary>
         private void OnSelectionChangeCommittedInternal(EventArgs e)
         {
@@ -2988,8 +2988,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ComboBox.Validating'/>
-        /// event.
+        ///  Raises the <see cref='ComboBox.Validating'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnValidating(CancelEventArgs e)
@@ -3026,7 +3026,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -3155,7 +3155,7 @@ namespace System.Windows.Forms
             prefHeightCache = -1;
         }
         /// <summary>
-        /// Reparses the objects, getting new text strings for them.
+        ///  Reparses the objects, getting new text strings for them.
         /// </summary>
         protected override void RefreshItems()
         {
@@ -3216,7 +3216,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reparses the object at the given index, getting new text string for it.
+        ///  Reparses the object at the given index, getting new text string for it.
         /// </summary>
         protected override void RefreshItem(int index)
         {
@@ -3671,10 +3671,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Text change behavior.
-        /// Here are the window messages corresponding to each user event.
+        ///  Text change behavior.
+        ///  Here are the window messages corresponding to each user event.
         ///
-        /// DropDown (free text window):
+        ///  DropDown (free text window):
         ///  Type in Text Window:
         ///   CBN_EDITUPDATE
         ///   CBN_EDITCHANGE
@@ -3694,7 +3694,7 @@ namespace System.Windows.Forms
         ///   CBN_CLOSEUP
         ///   CBN_SELCHANGE (text changes here via selected item)
         ///
-        /// DropDownList (limited text window):
+        ///  DropDownList (limited text window):
         ///
         ///  Type text and arrow up/down:
         ///   CBN_SELENDOK  (text already changed)
@@ -3709,7 +3709,7 @@ namespace System.Windows.Forms
         ///   CBN_CLOSEUP
         ///   CBN_SELCHANGE
         ///
-        /// Simple (listbox visible):
+        ///  Simple (listbox visible):
         ///  Type in Text Window:
         ///   CBN_EDITUPDATE
         ///   CBN_EDITCHANGE
@@ -3721,15 +3721,15 @@ namespace System.Windows.Forms
         ///   CBN_SELCHANGE
         ///
         ///
-        /// What we do is fire textchange events in these messages:
+        ///  What we do is fire textchange events in these messages:
         ///  CBN_SELCHANGE
         ///  CBN_EDITCHANGE
         ///  CBN_CLOSEUP
         ///
-        /// and we only actually call the real event if the Text is different than currentText.
-        /// currentText is never changed outside this method.
-        /// This internal version can be called from anywhere we might suspect text has changed
-        /// it's fairly safe to call anywhere.
+        ///  and we only actually call the real event if the Text is different than currentText.
+        ///  currentText is never changed outside this method.
+        ///  This internal version can be called from anywhere we might suspect text has changed
+        ///  it's fairly safe to call anywhere.
 
         private void WmReflectCommand(ref Message m)
         {
@@ -4675,7 +4675,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox item accessible object.
+        ///  Represents the ComboBox item accessible object.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxItemAccessibleObject : AccessibleObject
@@ -4685,7 +4685,7 @@ namespace System.Windows.Forms
             private IAccessible _systemIAccessible;
 
             /// <summary>
-            /// Initializes new instance of ComboBox item accessible object.
+            ///  Initializes new instance of ComboBox item accessible object.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox.</param>
             /// <param name="owningItem">The owning ComboBox item.</param>
@@ -4698,7 +4698,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the ComboBox Item bounds.
+            ///  Gets the ComboBox Item bounds.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -4718,7 +4718,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the ComboBox item default action.
+            ///  Gets the ComboBox item default action.
             /// </summary>
             public override string DefaultAction
             {
@@ -4826,7 +4826,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the help text.
+            ///  Gets the help text.
             /// </summary>
             public override string Help
             {
@@ -4837,7 +4837,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether specified pattern is supported.
+            ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
@@ -4854,7 +4854,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible name.
+            ///  Gets or sets the accessible name.
             /// </summary>
             public override string Name
             {
@@ -4875,7 +4875,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible role.
+            ///  Gets the accessible role.
             /// </summary>
             public override AccessibleRole Role
             {
@@ -4886,7 +4886,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -4905,7 +4905,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -4994,9 +4994,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// ComboBox control accessible object with UI Automation provider functionality.
-        /// This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
-        /// to have all base functionality.
+        ///  ComboBox control accessible object with UI Automation provider functionality.
+        ///  This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
+        ///  to have all base functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxAccessibleObject : ControlAccessibleObject
@@ -5008,7 +5008,7 @@ namespace System.Windows.Forms
             private readonly ComboBox _owningComboBox;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxAccessibleObject.
+            ///  Initializes new instance of ComboBoxAccessibleObject.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox control.</param>
             public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
@@ -5123,7 +5123,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the collection of item accessible objects.
+            ///  Gets the collection of item accessible objects.
             /// </summary>
             public ComboBoxItemAccessibleObjectCollection ItemAccessibleObjects
             {
@@ -5134,7 +5134,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the DropDown button accessible object. (UI Automation provider)
+            ///  Gets the DropDown button accessible object. (UI Automation provider)
             /// </summary>
             public ComboBoxChildDropDownButtonUiaProvider DropDownButtonUiaProvider
             {
@@ -5150,7 +5150,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5197,12 +5197,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible child corresponding to the specified index.
+            ///  Gets the accessible child corresponding to the specified index.
             /// </summary>
             /// <param name="index">The child index.</param>
             /// <returns>The accessible child.</returns>
             /// <remarks>
-            /// GetChild method should be unchanged to not break the MSAA scenarios.
+            ///  GetChild method should be unchanged to not break the MSAA scenarios.
             /// </remarks>
             internal AccessibleObject GetChildFragment(int index)
             {
@@ -5225,11 +5225,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the number of children belonging to an accessible object.
+            ///  Gets the number of children belonging to an accessible object.
             /// </summary>
             /// <returns>The number of children.</returns>
             /// <remarks>
-            /// GetChildCount method should be unchanged to not break the MSAA scenarios.
+            ///  GetChildCount method should be unchanged to not break the MSAA scenarios.
             /// </remarks>
             internal int GetChildFragmentCount()
             {
@@ -5249,7 +5249,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5317,7 +5317,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox's child (inner) edit native window control accessible object with UI Automation provider functionality.
+        ///  Represents the ComboBox's child (inner) edit native window control accessible object with UI Automation provider functionality.
         /// </summary>
         internal class ComboBoxChildEditUiaProvider : ChildAccessibleObject
         {
@@ -5327,7 +5327,7 @@ namespace System.Windows.Forms
             private readonly IntPtr _handle;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildEditUiaProvider.
+            ///  Initializes new instance of ComboBoxChildEditUiaProvider.
             /// </summary>
             /// <param name="owner">The ComboBox owning control.</param>
             /// <param name="childEditControlhandle">The child edit native window handle.</param>
@@ -5338,7 +5338,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5383,7 +5383,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5394,7 +5394,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5446,7 +5446,7 @@ namespace System.Windows.Forms
             internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -5462,7 +5462,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox's child (inner) list native window control accessible object with UI Automation provider functionality.
+        ///  Represents the ComboBox's child (inner) list native window control accessible object with UI Automation provider functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxChildListUiaProvider : ChildAccessibleObject
@@ -5473,7 +5473,7 @@ namespace System.Windows.Forms
             private readonly IntPtr _childListControlhandle;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildListUiaProvider.
+            ///  Initializes new instance of ComboBoxChildListUiaProvider.
             /// </summary>
             /// <param name="childListControlhandle"></param>
             /// <param name="owner"></param>
@@ -5484,7 +5484,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Return the child object at the given screen coordinates.
+            ///  Return the child object at the given screen coordinates.
             /// </summary>
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
@@ -5509,7 +5509,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Request to return the element in the specified direction.
+            ///  Request to return the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5533,7 +5533,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5561,7 +5561,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5650,7 +5650,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether specified pattern is supported.
+            ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
@@ -5675,7 +5675,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -5691,7 +5691,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -5709,7 +5709,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList but not DropDown) accessible object.
+        ///  Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList but not DropDown) accessible object.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxChildTextUiaProvider : AccessibleObject
@@ -5719,7 +5719,7 @@ namespace System.Windows.Forms
             private readonly ComboBox _owner;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildTextUiaProvider.
+            ///  Initializes new instance of ComboBoxChildTextUiaProvider.
             /// </summary>
             /// <param name="owner">The owning ComboBox control.</param>
             public ComboBoxChildTextUiaProvider(ComboBox owner)
@@ -5728,7 +5728,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the bounds.
+            ///  Gets the bounds.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -5739,7 +5739,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the child ID.
+            ///  Gets the child ID.
             /// </summary>
             /// <returns>The child ID.</returns>
             internal override int GetChildId()
@@ -5748,7 +5748,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible Name of ComboBox's child text element.
+            ///  Gets or sets the accessible Name of ComboBox's child text element.
             /// </summary>
             public override string Name
             {
@@ -5763,7 +5763,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5802,7 +5802,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5813,7 +5813,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5848,7 +5848,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -5866,7 +5866,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -5884,7 +5884,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox child (inner) DropDown button accessible object with UI Automation functionality.
+        ///  Represents the ComboBox child (inner) DropDown button accessible object with UI Automation functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxChildDropDownButtonUiaProvider : AccessibleObject
@@ -5893,7 +5893,7 @@ namespace System.Windows.Forms
             private readonly ComboBox _owner;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildDropDownButtonUiaProvider.
+            ///  Initializes new instance of ComboBoxChildDropDownButtonUiaProvider.
             /// </summary>
             /// <param name="owner">The owning ComboBox control.</param>
             /// <param name="comboBoxControlhandle">The owning ComboBox control's handle.</param>
@@ -5904,7 +5904,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible Name of ComboBox's child DropDown button. ("Open" or "Close" depending on stat of the DropDown)
+            ///  Gets or sets the accessible Name of ComboBox's child DropDown button. ("Open" or "Close" depending on stat of the DropDown)
             /// </summary>
             public override string Name
             {
@@ -5920,7 +5920,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the DropDown button bounds.
+            ///  Gets the DropDown button bounds.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -5933,7 +5933,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the DropDown button default action.
+            ///  Gets the DropDown button default action.
             /// </summary>
             public override string DefaultAction
             {
@@ -5945,7 +5945,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5973,7 +5973,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5984,7 +5984,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the child accessible object ID.
+            ///  Gets the child accessible object ID.
             /// </summary>
             /// <returns>The child accessible object ID.</returns>
             internal override int GetChildId()
@@ -5993,7 +5993,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -6029,7 +6029,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the help text.
+            ///  Gets the help text.
             /// </summary>
             public override string Help
             {
@@ -6041,7 +6041,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the keyboard shortcut.
+            ///  Gets the keyboard shortcut.
             /// </summary>
             public override string KeyboardShortcut
             {
@@ -6053,7 +6053,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether specified pattern is supported.
+            ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
@@ -6069,7 +6069,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible role.
+            ///  Gets the accessible role.
             /// </summary>
             public override AccessibleRole Role
             {
@@ -6081,7 +6081,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -6102,7 +6102,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -6212,8 +6212,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This method clears out null entries so we get a clean BEFORE and AFTER snapshot
-            /// null entries are ACWindows that belong to someone else.
+            ///  This method clears out null entries so we get a clean BEFORE and AFTER snapshot
+            ///  null entries are ACWindows that belong to someone else.
             /// </summary>
             internal static void ClearNullACWindows()
             {
@@ -6541,7 +6541,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox child native window type.
+        ///  Represents the ComboBox child native window type.
         /// </summary>
         private enum ChildWindowType
         {

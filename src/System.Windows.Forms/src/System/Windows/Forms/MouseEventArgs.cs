@@ -8,14 +8,14 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see langword='MouseUp'/>, <see langword='MouseDown'/>, and
+    ///  Provides data for the <see langword='MouseUp'/>, <see langword='MouseDown'/>, and
     /// <see langword='MouseMove '/> events.
     /// </summary>
     [ComVisible(true)]
     public class MouseEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='MouseEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref='MouseEventArgs'/> class.
         /// </summary>
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
         {
@@ -27,32 +27,32 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets which mouse button was pressed.
+        ///  Gets which mouse button was pressed.
         /// </summary>
         public MouseButtons Button { get; }
 
         /// <summary>
-        /// Gets the number of times the mouse button was pressed and released.
+        ///  Gets the number of times the mouse button was pressed and released.
         /// </summary>
         public int Clicks { get; }
 
         /// <summary>
-        /// Gets the x-coordinate of a mouse click.
+        ///  Gets the x-coordinate of a mouse click.
         /// </summary>
         public int X { get; }
 
         /// <summary>
-        /// Gets the y-coordinate of a mouse click.
+        ///  Gets the y-coordinate of a mouse click.
         /// </summary>
         public int Y { get; }
 
         /// <summary>
-        /// Gets a signed count of the number of detents the mouse wheel has rotated.
+        ///  Gets a signed count of the number of detents the mouse wheel has rotated.
         /// </summary>
         public int Delta { get; }
 
         /// <summary>
-        /// Gets the location of the mouse during MouseEvent.
+        ///  Gets the location of the mouse during MouseEvent.
         /// </summary>
         public Point Location => new Point(X, Y);
     }

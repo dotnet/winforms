@@ -159,7 +159,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Returns the text value of this property.
+        ///  Returns the text value of this property.
         /// </summary>
         public override string GetPropertyTextValue(object value)
         {

@@ -7,12 +7,12 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides information about a Binding Completed event.
+    ///  Provides information about a Binding Completed event.
     /// </summary>
     public class BindingCompleteEventArgs : CancelEventArgs
     {
         /// <summary>
-        /// Constructor for BindingCompleteEventArgs.
+        ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,
@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Constructor for BindingCompleteEventArgs.
+        ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Constructor for BindingCompleteEventArgs.
+        ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Constructor for BindingCompleteEventArgs.
+        ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,

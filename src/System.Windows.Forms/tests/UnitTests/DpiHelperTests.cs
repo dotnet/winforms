@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class DpiHelperTests
     {
         /// <summary>
-        /// Data for the LogicalToDeviceUnits test
+        ///  Data for the LogicalToDeviceUnits test
         /// </summary>
         public static TheoryData<int> LogicalToDeviceUnitsData =>
             CommonTestHelper.GetIntTheoryData();

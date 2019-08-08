@@ -5,23 +5,23 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies whether any characters in the
-    /// current selection have the style or attribute.
+    ///  Specifies whether any characters in the
+    ///  current selection have the style or attribute.
     /// </summary>
     public enum RichTextBoxSelectionAttribute
     {
         /// <summary>
-        /// Some but not all characters.
+        ///  Some but not all characters.
         /// </summary>
         Mixed = -1,
 
         /// <summary>
-        /// No characters.
+        ///  No characters.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// All characters.
+        ///  All characters.
         /// </summary>
         All = 1,
     }

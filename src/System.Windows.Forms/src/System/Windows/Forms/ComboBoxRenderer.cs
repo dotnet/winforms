@@ -133,7 +133,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Renders a ComboBox drop-down button in per-monitor scenario.
+        ///  Renders a ComboBox drop-down button in per-monitor scenario.
         /// </summary>
         /// <param name="g">graphics object</param>
         /// <param name="bounds">dropdown button bounds</param>

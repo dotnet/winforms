@@ -38,7 +38,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        /// Check if visual styles is supported for client area.
+        ///  Check if visual styles is supported for client area.
         /// </summary>
         private static bool AreClientAreaVisualStylesSupported
         {

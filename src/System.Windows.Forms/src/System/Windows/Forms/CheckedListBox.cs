@@ -926,7 +926,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reparses the objects, getting new text strings for them.
+        ///  Reparses the objects, getting new text strings for them.
         /// </summary>
         protected override void RefreshItems()
         {

@@ -5,14 +5,14 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Decodes Windows messages. This is in a separate class from Message so we can avoid
-    /// loading it in the 99% case where we don't need it.
+    ///  Decodes Windows messages. This is in a separate class from Message so we can avoid
+    ///  loading it in the 99% case where we don't need it.
     /// </summary>
     internal static class MessageDecoder
     {
         /// <summary>
-        /// Returns the symbolic name of the msg value, or null if it isn't one of the
-        /// existing constants.
+        ///  Returns the symbolic name of the msg value, or null if it isn't one of the
+        ///  existing constants.
         /// </summary>
         private static string MsgToString(int msg)
         {

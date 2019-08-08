@@ -12,22 +12,22 @@ using Xunit;
 namespace System.Windows.Forms.Maui.IntegrationTests
 {
     /// <summary>
-    /// This class performs common operations for maui xUnit tests.
+    ///  This class performs common operations for maui xUnit tests.
     /// </summary>
     public static class MauiTestHelper
     {
         /// <summary>
-        /// The test runner
+        ///  The test runner
         /// </summary>
         private static readonly MauiTestRunner s_testRunner = new MauiTestRunner();
 
         /// <summary>
-        /// The test results, indexed by project name
+        ///  The test results, indexed by project name
         /// </summary>
         private static readonly Dictionary<string, TestResult> s_testResults = new Dictionary<string, TestResult>();
 
         /// <summary>
-        /// Get the scenarios that will run for a specified maui project
+        ///  Get the scenarios that will run for a specified maui project
         /// </summary>
         /// <param name="projectName">The project</param>
         /// <returns>The scenarios that ran</returns>
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         }
 
         /// <summary>
-        /// Validate a specified scenario passed.
+        ///  Validate a specified scenario passed.
         /// </summary>
         /// <param name="projectName">The name of the maui project</param>
         /// <param name="scenarioName">The name of the scenario</param>
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         }
 
         /// <summary>
-        /// Run the maui test for the specified project name and store the results
+        ///  Run the maui test for the specified project name and store the results
         /// </summary>
         /// <param name="projectName">The name of the project to run</param>
         private static void RunMauiTest(string projectName)

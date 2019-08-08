@@ -32,12 +32,12 @@ namespace System.Windows.Forms
         private static readonly object EventAllowNull = new object();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGridBoolColumn'/> class.
+        ///  Initializes a new instance of the <see cref='DataGridBoolColumn'/> class.
         /// </summary>
         public DataGridBoolColumn() : base() { }
 
         /// <summary>
-        /// Initializes a new instance of a <see cref='DataGridBoolColumn'/> with the specified <see cref='Data.DataColumn'/>.
+        ///  Initializes a new instance of a <see cref='DataGridBoolColumn'/> with the specified <see cref='Data.DataColumn'/>.
         /// </summary>
         public DataGridBoolColumn(PropertyDescriptor prop)
             : base(prop) { }
@@ -353,8 +353,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the <see cref='DataGridBoolColumn'/>
-        /// with the given <see cref='Graphics'/>,
+        ///  Draws the <see cref='DataGridBoolColumn'/>
+        ///  with the given <see cref='Graphics'/>,
         /// <see cref='Rectangle'/> and row number.
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
@@ -363,9 +363,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the <see cref='DataGridBoolColumn'/>
-        /// with the given <see cref='Graphics'/>, <see cref='Rectangle'/>,
-        /// row number, and alignment settings.
+        ///  Draws the <see cref='DataGridBoolColumn'/>
+        ///  with the given <see cref='Graphics'/>, <see cref='Rectangle'/>,
+        ///  row number, and alignment settings.
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight)
         {
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the <see cref='DataGridBoolColumn'/> with the given <see cref='Graphics'/>, <see cref='Rectangle'/>,
+        ///  Draws the <see cref='DataGridBoolColumn'/> with the given <see cref='Graphics'/>, <see cref='Rectangle'/>,
         ///  row number, <see cref='Brush'/>, and <see cref='Color'/>.
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
@@ -466,7 +466,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Enters a <see langword='null'/> into the column.
+        ///  Enters a <see langword='null'/> into the column.
         /// </summary>
         protected internal override void EnterNullValue()
         {

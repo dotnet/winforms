@@ -12,9 +12,9 @@ namespace System.Windows.Forms
     public partial class ListBox
     {
         /// <summary>
-        /// ListBox control accessible object with UI Automation provider functionality.
-        /// This inherits from the base ListBoxExAccessibleObject and ListBoxAccessibleObject
-        /// to have all base functionality.
+        ///  ListBox control accessible object with UI Automation provider functionality.
+        ///  This inherits from the base ListBoxExAccessibleObject and ListBoxAccessibleObject
+        ///  to have all base functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ListBoxItemAccessibleObject : AccessibleObject
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             internal override UnsafeNativeMethods.IRawElementProviderSimple ItemSelectionContainer => _owningAccessibleObject;
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the ListBox Item bounds.
+            ///  Gets the ListBox Item bounds.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -93,17 +93,17 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the ListBox item default action.
+            ///  Gets the ListBox item default action.
             /// </summary>
             public override string DefaultAction => _systemIAccessible.accDefaultAction[GetChildId()];
 
             /// <summary>
-            /// Gets the help text.
+            ///  Gets the help text.
             /// </summary>
             public override string Help => _systemIAccessible.accHelp[GetChildId()];
 
             /// <summary>
-            /// Gets or sets the accessible name.
+            ///  Gets or sets the accessible name.
             /// </summary>
             public override string Name
             {
@@ -118,12 +118,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible role.
+            ///  Gets the accessible role.
             /// </summary>
             public override AccessibleRole Role => (AccessibleRole)_systemIAccessible.get_accRole(GetChildId());
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -220,7 +220,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether specified pattern is supported.
+            ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>

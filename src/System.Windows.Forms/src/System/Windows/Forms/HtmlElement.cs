@@ -1009,7 +1009,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        /// HtmlElementShim - this is the glue between the DOM eventing mechanisms
+        ///  HtmlElementShim - this is the glue between the DOM eventing mechanisms
         ///          and our CLR callbacks.
         ///
         ///  HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
                 get { return associatedWindow; }
             }
 
-            /// Support IHTMLElement2.AttachEventHandler
+            ///  Support IHTMLElement2.AttachEventHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
 
@@ -1109,7 +1109,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// Support IHTMLElement2.DetachHandler
+            ///  Support IHTMLElement2.DetachHandler
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);

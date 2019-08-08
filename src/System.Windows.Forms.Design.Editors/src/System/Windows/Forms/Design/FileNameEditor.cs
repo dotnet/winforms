@@ -9,7 +9,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides an editor for filenames.
+    ///  Provides an editor for filenames.
     /// </summary>
     [CLSCompliant(false)]
     public class FileNameEditor : UITypeEditor
@@ -17,8 +17,8 @@ namespace System.Windows.Forms.Design
         private OpenFileDialog _openFileDialog;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by GetEditorStyle.
-        /// A service provider is provided so that any required editing services can be obtained.
+        ///  Edits the given object value using the editor style provided by GetEditorStyle.
+        ///  A service provider is provided so that any required editing services can be obtained.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the editing style of the Edit method.
+        ///  Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -56,9 +56,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Initializes the open file dialog when it is created. This gives you an opportunity to
-        /// configure the dialog as you please. The default implementation provides a generic file
-        /// filter and title.
+        ///  Initializes the open file dialog when it is created. This gives you an opportunity to
+        ///  configure the dialog as you please. The default implementation provides a generic file
+        ///  filter and title.
         /// </summary>
         protected virtual void InitializeDialog(OpenFileDialog openFileDialog)
         {

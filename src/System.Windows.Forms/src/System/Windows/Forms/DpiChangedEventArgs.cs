@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides information about a DpiChanged event.
+    ///  Provides information about a DpiChanged event.
     /// </summary>
     public sealed class DpiChangedEventArgs : CancelEventArgs
     {
         /// <devdov>
-        /// Parameter units are pixels(dots) per inch.
+        ///  Parameter units are pixels(dots) per inch.
         /// </summary>
         internal DpiChangedEventArgs(int old, Message m)
         {

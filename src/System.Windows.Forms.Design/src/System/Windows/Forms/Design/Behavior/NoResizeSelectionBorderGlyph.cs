@@ -7,12 +7,12 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The NoResizeSelectionBorderGlyph draws one side (depending on type) of a SelectionBorder.
+    ///  The NoResizeSelectionBorderGlyph draws one side (depending on type) of a SelectionBorder.
     /// </summary>
     internal class NoResizeSelectionBorderGlyph : SelectionGlyphBase
     {
         /// <summary>
-        /// This constructor extends from the standard SelectionGlyphBase constructor.
+        ///  This constructor extends from the standard SelectionGlyphBase constructor.
         /// </summary>
         internal NoResizeSelectionBorderGlyph(Rectangle controlBounds, SelectionRules rules, SelectionBorderGlyphType type, Behavior behavior) : base(behavior)
         {
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Helper function that initializes the Glyph based on bounds, type, and bordersize.
+        ///  Helper function that initializes the Glyph based on bounds, type, and bordersize.
         /// </summary>
         private void InitializeGlyph(Rectangle controlBounds, SelectionRules selRules, SelectionBorderGlyphType type)
         {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Simple painting logic for selection Glyphs.
+        ///  Simple painting logic for selection Glyphs.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

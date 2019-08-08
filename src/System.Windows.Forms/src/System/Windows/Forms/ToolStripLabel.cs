@@ -9,7 +9,7 @@ using System.Windows.Forms.Design;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// A non selectable ToolStrip item
+    ///  A non selectable ToolStrip item
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripLabel : ToolStripItem
@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         private Cursor lastCursor;
 
         /// <summary>
-        /// A non selectable ToolStrip item
+        ///  A non selectable ToolStrip item
         /// </summary>
         public ToolStripLabel()
         {
@@ -315,8 +315,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates an instance of the object that defines how image and text
-        /// gets laid out in the ToolStripItem
+        ///  Creates an instance of the object that defines how image and text
+        ///  gets laid out in the ToolStripItem
         /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout()
         {
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
+        ///  Inheriting classes should override this method to handle this event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {

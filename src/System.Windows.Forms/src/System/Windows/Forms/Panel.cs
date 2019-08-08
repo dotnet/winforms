@@ -10,7 +10,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a <see cref='Panel'/> control.
+    ///  Represents a <see cref='Panel'/> control.
     /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         private BorderStyle _borderStyle = BorderStyle.None;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Panel'/> class.
+        ///  Initializes a new instance of the <see cref='Panel'/> class.
         /// </summary>
         public Panel() : base()
         {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Override to re-expose AutoSize.
+        ///  Override to re-expose AutoSize.
         /// </summary>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Allows the control to optionally shrink when AutoSize is true.
+        ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
         [SRDescription(nameof(SR.ControlAutoSizeModeDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the border style for the control.
+        ///  Indicates the border style for the control.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.None)]
@@ -119,9 +119,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the parameters needed to create the handle. Inheriting classes can override
-        /// this to provide extra functionality. They should not, however, forget to call
-        /// base.getCreateParams() first to get the struct filled up with the basic info.
+        ///  Returns the parameters needed to create the handle. Inheriting classes can override
+        ///  this to provide extra functionality. They should not, however, forget to call
+        ///  base.getCreateParams() first to get the struct filled up with the basic info.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -147,8 +147,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Deriving classes can override this to configure a default size for their control.
-        /// This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize => new Size(200, 100);
 
@@ -210,10 +210,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Fires the event indicating that the panel has been resized.
-        /// Inheriting controls should use this in favour of actually listening to
-        /// the event, but should not forget to call base.onResize() to
-        /// ensure that the event is still fired for external listeners.
+        ///  Fires the event indicating that the panel has been resized.
+        ///  Inheriting controls should use this in favour of actually listening to
+        ///  the event, but should not forget to call base.onResize() to
+        ///  ensure that the event is still fired for external listeners.
         /// </summary>
         protected override void OnResize(EventArgs eventargs)
         {
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
         {

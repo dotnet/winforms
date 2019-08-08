@@ -422,9 +422,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Raises the LiveRegionChanged UIA event.
-            /// To make this method effective, the control must implement System.Windows.Forms.Automation.IAutomationLiveRegion interface
-            /// and its LiveSetting property must return either AutomationLiveSetting.Polite or AutomationLiveSetting.Assertive value.
+            ///  Raises the LiveRegionChanged UIA event.
+            ///  To make this method effective, the control must implement System.Windows.Forms.Automation.IAutomationLiveRegion interface
+            ///  and its LiveSetting property must return either AutomationLiveSetting.Polite or AutomationLiveSetting.Assertive value.
             /// </summary>
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()

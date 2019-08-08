@@ -21,11 +21,11 @@ using Directory = System.IO.Directory;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides <see langword='static '/>
-    /// methods and properties
-    /// to manage an application, such as methods to run and quit an application,
-    /// to process Windows messages, and properties to get information about an application. This
-    /// class cannot be inherited.
+    ///  Provides <see langword='static '/>
+    ///  methods and properties
+    ///  to manage an application, such as methods to run and quit an application,
+    ///  to process Windows messages, and properties to get information about an application. This
+    ///  class cannot be inherited.
     /// </summary>
     public sealed class Application
     {
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
+        ///  Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
         internal static bool ComCtlSupportsVisualStyles
         {
             get
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
         ///  Gets the path for the application data that is shared among all users.
         /// </summary>
         /// <remarks>
-        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
         // the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string CommonAppDataPath
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the current HighDpi mode for the process.
+        ///  Gets the current HighDpi mode for the process.
         /// </summary>
         public static HighDpiMode HighDpiMode
         {
@@ -380,7 +380,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the HighDpi mode for process.
+        ///  Sets the HighDpi mode for process.
         /// </summary>
         /// <param name="highDpiMode">The HighDpi mode to set.</param>
         /// <returns></returns>
@@ -398,8 +398,8 @@ namespace System.Windows.Forms
         ///  Gets the path for the application data specific to a local, non-roaming user.
         /// </summary>
         /// <remarks>
-        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-        /// the Windows logo required adornments to the directory (Company\Product\Version)
+        ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        ///  the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string LocalUserAppDataPath
         {
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the forms collection associated with this application.
+        ///  Gets the forms collection associated with this application.
         /// </summary>
         public static FormCollection OpenForms => s_forms ?? (s_forms = new FormCollection());
 
@@ -647,8 +647,8 @@ namespace System.Windows.Forms
         ///  Gets the path for the application data specific to the roaming user.
         /// </summary>
         /// <remarks>
-        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-        /// the Windows logo required adornments to the directory (Company\Product\Version)
+        ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        ///  the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string UserAppDataPath
         {
@@ -674,9 +674,9 @@ namespace System.Windows.Forms
         public static bool UseVisualStyles => s_useVisualStyles;
 
         /// <remarks>
-        /// Don't never ever change this name, since the window class and partner teams
-        /// dependent on this. Changing this will introduce breaking changes.
-        /// If there is some reason need to change this, notify any partner teams affected.
+        ///  Don't never ever change this name, since the window class and partner teams
+        ///  dependent on this. Changing this will introduce breaking changes.
+        ///  If there is some reason need to change this, notify any partner teams affected.
         /// </remarks>
         internal static string WindowsFormsVersion => "WindowsForms10";
 
@@ -725,7 +725,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
+        ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
         private static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
         {
@@ -746,8 +746,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This helper broadcasts out a WM_THEMECHANGED this window and all children.
-        /// it is assumed at this point that the handle belongs to the current process and has a visible top level window.
+        ///  This helper broadcasts out a WM_THEMECHANGED this window and all children.
+        ///  it is assumed at this point that the handle belongs to the current process and has a visible top level window.
         /// </summary>
         private static bool SendThemeChangedRecursive(IntPtr handle, IntPtr lparam)
         {
@@ -965,8 +965,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
-        /// Uses the default theming manifest file shipped with the redist.
+        ///  Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
+        ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
         public static void EnableVisualStyles()
         {
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Park control handle on a parkingwindow that has matching DpiAwareness.
+        ///  Park control handle on a parkingwindow that has matching DpiAwareness.
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiContext"> dpi awareness</param>
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ThreadException'/> event.
+        ///  Raises the <see cref='ThreadException'/> event.
         /// </summary>
         public static void OnThreadException(Exception t)
         {
@@ -2455,7 +2455,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns parking window that matches dpi awareness context. return null if not found.
+            ///  Returns parking window that matches dpi awareness context. return null if not found.
             /// </summary>
             /// <returns>return matching parking window from list. returns null if not found</returns>
             internal ParkingWindow GetParkingWindowForContext(DpiAwarenessContext context)
@@ -3052,8 +3052,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// A method of determining whether we are handling messages that does not demand register
-            /// the componentmanager
+            ///  A method of determining whether we are handling messages that does not demand register
+            ///  the componentmanager
             /// </summary>
             /// <returns></returns>
             internal bool IsValidComponentId()
@@ -3706,7 +3706,6 @@ namespace System.Windows.Forms
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
-
             /****************************************************************************************
              *
              *                                  IMsoComponent

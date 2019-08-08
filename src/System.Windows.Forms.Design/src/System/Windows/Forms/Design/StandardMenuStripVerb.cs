@@ -13,7 +13,7 @@ using System.Globalization;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Internal class to provide 'Insert Standard Items" verb for ToolStrips & MenuStrips.
+    ///  Internal class to provide 'Insert Standard Items" verb for ToolStrips & MenuStrips.
     /// </summary>
     internal class StandardMenuStripVerb
     {
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         private readonly IServiceProvider _provider;
 
         /// <summary>
-        /// Create one of these things...
+        ///  Create one of these things...
         /// </summary>
         internal StandardMenuStripVerb(ToolStripDesigner designer)
         {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When the verb is invoked, use all the stuff above to show the dialog, etc.
+        ///  When the verb is invoked, use all the stuff above to show the dialog, etc.
         /// </summary>
         public void InsertItems()
         {
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Here is where all the fun stuff starts.  We create the structure and apply the naming here.
+        ///  Here is where all the fun stuff starts.  We create the structure and apply the naming here.
         /// </summary>
         private void CreateStandardMenuStrip(System.ComponentModel.Design.IDesignerHost host, MenuStrip tool)
         {
@@ -248,7 +248,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Here is where all the fun stuff starts.  We create the structure and apply the naming here.
+        ///  Here is where all the fun stuff starts.  We create the structure and apply the naming here.
         /// </summary>
         private void CreateStandardToolStrip(IDesignerHost host, ToolStrip tool)
         {
@@ -400,7 +400,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Helper Function to get Images from types.
+        ///  Helper Function to get Images from types.
         /// </summary>
         private Bitmap GetImage(string name)
         {
@@ -445,7 +445,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Computes a name from a text label by removing all spaces and non-alphanumeric characters.
+        ///  Computes a name from a text label by removing all spaces and non-alphanumeric characters.
         /// </summary>
         private string NameFromText(string text, Type itemType, INameCreationService nameCreationService, bool adjustCapitalization)
         {

@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         private bool showNetwork;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='PrintDialog'/> class.
+        ///  Initializes a new instance of the <see cref='PrintDialog'/> class.
         /// </summary>
         public PrintDialog()
         {
@@ -213,10 +213,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
-        /// ShowHelp & ShowNetwork properties.
-        /// UseEXDialog = false means to never use the EX versions of the dialog.
-        /// ShowHelp & ShowNetwork will work in this case.
+        ///  UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
+        ///  ShowHelp & ShowNetwork properties.
+        ///  UseEXDialog = false means to never use the EX versions of the dialog.
+        ///  ShowHelp & ShowNetwork will work in this case.
         /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.PDuseEXDialog))]

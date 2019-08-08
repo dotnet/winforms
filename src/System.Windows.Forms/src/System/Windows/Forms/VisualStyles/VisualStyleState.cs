@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.VisualStyles
 {
     /// <summary>
-    /// Determines whether visual styles are enabled.
+    ///  Determines whether visual styles are enabled.
     /// </summary>
     [Flags]
     public enum VisualStyleState
@@ -16,17 +16,17 @@ namespace System.Windows.Forms.VisualStyles
         NoneEnabled = 0,
 
         /// <summary>
-        /// Visual styles enabled only for client area.
+        ///  Visual styles enabled only for client area.
         /// </summary>
         ClientAreaEnabled = NativeMethods.STAP_ALLOW_CONTROLS,
 
         /// <summary>
-        /// Visual styles enabled only for non-client area.
+        ///  Visual styles enabled only for non-client area.
         /// </summary>
         NonClientAreaEnabled = NativeMethods.STAP_ALLOW_NONCLIENT,
 
         /// <summary>
-        /// Visual styles enabled only for client and non-client areas.
+        ///  Visual styles enabled only for client and non-client areas.
         /// </summary>
         ClientAndNonClientAreasEnabled = NativeMethods.STAP_ALLOW_NONCLIENT | NativeMethods.STAP_ALLOW_CONTROLS
     }

@@ -998,14 +998,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets back color respectively to the High Contrast theme is applied or not
-        /// and taking into account saved custom back color.
+        ///  Gets back color respectively to the High Contrast theme is applied or not
+        ///  and taking into account saved custom back color.
         /// </summary>
         /// <param name="isHighContract">Indicates whether High Contrast theme is applied or not.</param>
         /// <returns>
-        /// Standard back color for PrintPreview control in standard theme (1),
-        /// contrasted color if there is High Contrast theme applied (2) and
-        /// custom color if this is set irrespectively to HC or not HC mode (3).
+        ///  Standard back color for PrintPreview control in standard theme (1),
+        ///  contrasted color if there is High Contrast theme applied (2) and
+        ///  custom color if this is set irrespectively to HC or not HC mode (3).
         /// </returns>
         private Color GetBackColor(bool isHighContract)
         {

@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the appearance and text formatting and behavior of a <see cref='DataGrid'/> control column.
+    ///  Specifies the appearance and text formatting and behavior of a <see cref='DataGrid'/> control column.
     /// </summary>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         private static readonly object s_widthEvent = new object();
 
         /// <summary>
-        /// In a derived class, initializes a new instance of the
+        ///  In a derived class, initializes a new instance of the
         /// <see cref='DataGridColumnStyle'/> class.
         /// </summary>
         public DataGridColumnStyle()
@@ -48,8 +48,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGridColumnStyle'/>
-        /// class with the specified <see cref='T:System.ComponentModel.PropertyDescriptor'/>.
+        ///  Initializes a new instance of the <see cref='DataGridColumnStyle'/>
+        ///  class with the specified <see cref='T:System.ComponentModel.PropertyDescriptor'/>.
         /// </summary>
         public DataGridColumnStyle(PropertyDescriptor prop) : this()
         {
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        /// Gets or sets the alignment of text in a column.
+        ///  Gets or sets the alignment of text in a column.
         /// </summary>
         [SRCategory(nameof(SR.CatDisplay))]
         [Localizable(true)]
@@ -109,15 +109,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, updates the value of a specified row with
-        /// the given text.
+        ///  When overridden in a derived class, updates the value of a specified row with
+        ///  the given text.
         /// </summary>
         protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText)
         {
         }
 
         /// <summary>
-        /// Gets or sets the background color of the column.
+        ///  Gets or sets the background color of the column.
         /// </summary>
         [Browsable(false)]
         public AccessibleObject HeaderAccessibleObject
@@ -126,8 +126,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref='Data.DataColumn'/> that determines the
-        /// attributes of data displayed by the <see cref='DataGridColumnStyle'/>.
+        ///  Gets or sets the <see cref='Data.DataColumn'/> that determines the
+        ///  attributes of data displayed by the <see cref='DataGridColumnStyle'/>.
         /// </summary>
         [DefaultValue(null)]
         [Browsable(false)]
@@ -158,8 +158,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref='DataGrid'/>
-        /// control that this column belongs to.
+        ///  When overridden in a derived class, sets the <see cref='DataGrid'/>
+        ///  control that this column belongs to.
         /// </summary>
         protected virtual void SetDataGrid(DataGrid value)
         {
@@ -167,8 +167,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref='DataGrid'/>
-        /// for the column.
+        ///  When overridden in a derived class, sets the <see cref='DataGrid'/>
+        ///  for the column.
         /// </summary>
         protected virtual void SetDataGridInColumn(DataGrid value)
         {
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the System.Windows.Forms.DataGridTableStyle for the column.
+        ///  Gets the System.Windows.Forms.DataGridTableStyle for the column.
         /// </summary>
         [Browsable(false)]
         public virtual DataGridTableStyle DataGridTableStyle => _dataGridTableStyle;
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the height of the column's font.
+        ///  Gets the height of the column's font.
         /// </summary>
         protected int FontHeight
         {
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the Font property should be persisted.
+        ///  Indicates whether the Font property should be persisted.
         /// </summary>
         private bool ShouldSerializeFont() => _font != null;
 
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the text of the column header.
+        ///  Gets or sets the text of the column header.
         /// </summary>
         [Localizable(true)]
         [SRCategory(nameof(SR.CatDisplay))]
@@ -318,8 +318,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the System.Windows.Forms.DataGridColumnStyle.HeaderText property
-        /// should be persisted.
+        ///  Indicates whether the System.Windows.Forms.DataGridColumnStyle.HeaderText property
+        ///  should be persisted.
         /// </summary>
         private bool ShouldSerializeHeaderText()
         {
@@ -327,13 +327,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Resets the System.Windows.Forms.DataGridColumnStyle.HeaderText to its default value.
+        ///  Resets the System.Windows.Forms.DataGridColumnStyle.HeaderText to its default value.
         /// </summary>
         public void ResetHeaderText() => HeaderText = string.Empty;
 
         /// <summary>
-        /// Gets or sets the text that is displayed when the column contains a null
-        /// value.
+        ///  Gets or sets the text that is displayed when the column contains a null
+        ///  value.
         /// </summary>
         [Localizable(true)]
         [SRCategory(nameof(SR.CatDisplay))]
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the data in the column cannot be edited.
+        ///  Gets or sets a value indicating whether the data in the column cannot be edited.
         /// </summary>
         [DefaultValue(false)]
         public virtual bool ReadOnly
@@ -381,7 +381,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the width of the column.
+        ///  Gets or sets the width of the column.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
@@ -416,13 +416,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Suspends the painting of the column until the <see cref='EndUpdate'/>
-        /// method is called.
+        ///  Suspends the painting of the column until the <see cref='EndUpdate'/>
+        ///  method is called.
         /// </summary>
         protected void BeginUpdate() => _updating = true;
 
         /// <summary>
-        /// Resumes the painting of columns suspended by calling the
+        ///  Resumes the painting of columns suspended by calling the
         /// <see cref='BeginUpdate'/> method.
         /// </summary>
         protected void EndUpdate()
@@ -442,24 +442,24 @@ namespace System.Windows.Forms
         private bool ShouldSerializeNullText() => !SR.DataGridNullText.Equals(_nullText);
 
         /// <summary>
-        /// When overridden in a derived class, gets the optimum width and height of the
-        /// specified value.
+        ///  When overridden in a derived class, gets the optimum width and height of the
+        ///  specified value.
         /// </summary>
         protected internal abstract Size GetPreferredSize(Graphics g, object value);
 
         /// <summary>
-        /// Gets the minimum height of a row.
+        ///  Gets the minimum height of a row.
         /// </summary>
         protected internal abstract int GetMinimumHeight();
 
         /// <summary>
-        /// When overridden in a derived class, gets the height to be used in for
-        /// automatically resizing columns.
+        ///  When overridden in a derived class, gets the height to be used in for
+        ///  automatically resizing columns.
         /// </summary>
         protected internal abstract int GetPreferredHeight(Graphics g, object value);
 
         /// <summary>
-        /// Gets the value in the specified row from the specified System.Windows.Forms.ListManager.
+        ///  Gets the value in the specified row from the specified System.Windows.Forms.ListManager.
         /// </summary>
         protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum)
         {
@@ -474,7 +474,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Redraws the column and causes a paint message to be sent to the control.
+        ///  Redraws the column and causes a paint message to be sent to the control.
         /// </summary>
         protected virtual void Invalidate()
         {
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Checks if the specified DataView is valid.
+        ///  Checks if the specified DataView is valid.
         /// </summary>
         protected void CheckValidDataSource(CurrencyManager value)
         {
@@ -508,19 +508,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, initiates a request to interrrupt an edit
-        /// procedure.
+        ///  When overridden in a derived class, initiates a request to interrrupt an edit
+        ///  procedure.
         /// </summary>
         protected internal abstract void Abort(int rowNum);
 
         /// <summary>
-        /// When overridden in a derived class, inititates a request to complete an
-        /// editing procedure.
+        ///  When overridden in a derived class, inititates a request to complete an
+        ///  editing procedure.
         /// </summary>
         protected internal abstract bool Commit(CurrencyManager dataSource, int rowNum);
 
         /// <summary>
-        /// When overridden in a deriving class, prepares a cell for editing.
+        ///  When overridden in a deriving class, prepares a cell for editing.
         /// </summary>
         protected internal virtual void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly)
         {
@@ -528,9 +528,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Prepares the cell for editing, passing the specified <see cref='Data.DataView'/>,
-        /// row number, <see cref='Rectangle'/>, argument indicating whether
-        /// the column is read-only, and the text to display in the new control.
+        ///  Prepares the cell for editing, passing the specified <see cref='Data.DataView'/>,
+        ///  row number, <see cref='Rectangle'/>, argument indicating whether
+        ///  the column is read-only, and the text to display in the new control.
         /// </summary>
         protected internal virtual void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly, string displayText)
         {
@@ -538,13 +538,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a deriving class, prepares a cell for editing.
+        ///  When overridden in a deriving class, prepares a cell for editing.
         /// </summary>
         protected internal abstract void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible);
 
         /// <summary>
-        /// Indicates whether the a mouse down event occurred at the specified row, at
-        /// the specified x and y coordinates.
+        ///  Indicates whether the a mouse down event occurred at the specified row, at
+        ///  the specified x and y coordinates.
         /// </summary>
         internal virtual bool MouseDown(int rowNum, int x, int y)
         {
@@ -552,16 +552,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overriden in a derived class, enters a <see cref='T:System.DBNull.Value' qualify='true'/>
-        /// into the column.
+        ///  When overriden in a derived class, enters a <see cref='T:System.DBNull.Value' qualify='true'/>
+        ///  into the column.
         /// </summary>
         protected internal virtual void EnterNullValue()
         {
         }
 
         /// <summary>
-        /// Provides a handler for determining which key was pressed, and whether to
-        /// process it.
+        ///  Provides a handler for determining which key was pressed, and whether to
+        ///  process it.
         /// </summary>
         internal virtual bool KeyPress(int rowNum, Keys keyData)
         {
@@ -580,29 +580,29 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, directs the column to concede focus with
-        /// an appropriate action.
+        ///  When overridden in a derived class, directs the column to concede focus with
+        ///  an appropriate action.
         /// </summary>
         protected internal virtual void ConcedeFocus()
         {
         }
 
         /// <summary>
-        /// Paints the a <see cref='DataGridColumnStyle'/> with the specified
+        ///  Paints the a <see cref='DataGridColumnStyle'/> with the specified
         /// <see cref='Graphics'/>, <see cref='Rectangle'/>,
-        /// System.Windows.Forms.CurrencyManager, and row number.
+        ///  System.Windows.Forms.CurrencyManager, and row number.
         /// </summary>
         protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum);
 
         /// <summary>
-        /// When overridden in a derived class, paints a <see cref='DataGridColumnStyle'/>
-        /// with the specified <see cref='Graphics'/>, <see cref='Rectangle'/>,
-        /// see Rectangle, row number, and alignment.
+        ///  When overridden in a derived class, paints a <see cref='DataGridColumnStyle'/>
+        ///  with the specified <see cref='Graphics'/>, <see cref='Rectangle'/>,
+        ///  see Rectangle, row number, and alignment.
         /// </summary>
         protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight);
 
         /// <summary>
-        /// Paints a <see cref='DataGridColumnStyle'/> with the specified <see cref='Graphics'/>, <see cref='Rectangle'/>, see System.Data.DataView, row number, background color, foreground color, and alignment.
+        ///  Paints a <see cref='DataGridColumnStyle'/> with the specified <see cref='Graphics'/>, <see cref='Rectangle'/>, see System.Data.DataView, row number, background color, foreground color, and alignment.
         /// </summary>
         protected internal virtual void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                     Brush backBrush, Brush foreBrush, bool alignToRight)
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the value in a specified row with the value from a specified see DataView.
+        ///  Sets the value in a specified row with the value from a specified see DataView.
         /// </summary>
         protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
         {

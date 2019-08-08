@@ -7,12 +7,12 @@ using System.Collections;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// A collection that stores <see cref='System.Drawing.Design.ToolboxItem'/> objects.
+    ///  A collection that stores <see cref='System.Drawing.Design.ToolboxItem'/> objects.
     /// </summary>
     public sealed class ToolboxItemCollection : ReadOnlyCollectionBase
     {
         /// <summary>
-        /// Initializes a new instance of <see cref='System.Drawing.Design.ToolboxItemCollection'/> based on another <see cref='System.Drawing.Design.ToolboxItemCollection'/>.
+        ///  Initializes a new instance of <see cref='System.Drawing.Design.ToolboxItemCollection'/> based on another <see cref='System.Drawing.Design.ToolboxItemCollection'/>.
         /// </summary>
         public ToolboxItemCollection(ToolboxItemCollection value)
         {
@@ -20,7 +20,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref='System.Drawing.Design.ToolboxItemCollection'/> containing any array of <see cref='System.Drawing.Design.ToolboxItem'/> objects.
+        ///  Initializes a new instance of <see cref='System.Drawing.Design.ToolboxItemCollection'/> containing any array of <see cref='System.Drawing.Design.ToolboxItem'/> objects.
         /// </summary>
         public ToolboxItemCollection(ToolboxItem[] value)
         {
@@ -28,7 +28,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Represents the entry at the specified index of the <see cref='System.Drawing.Design.ToolboxItem'/>.
+        ///  Represents the entry at the specified index of the <see cref='System.Drawing.Design.ToolboxItem'/>.
         /// </summary>
         public ToolboxItem this[int index]
         {
@@ -39,7 +39,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets a value indicating whether the
+        ///  Gets a value indicating whether the
         /// <see cref='System.Drawing.Design.ToolboxItemCollection'/> contains the specified <see cref='System.Drawing.Design.ToolboxItem'/>.
         /// </summary>
         public bool Contains(ToolboxItem value)
@@ -48,7 +48,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Copies the <see cref='System.Drawing.Design.ToolboxItemCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the
+        ///  Copies the <see cref='System.Drawing.Design.ToolboxItemCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the
         ///  specified index.
         /// </summary>
         public void CopyTo(ToolboxItem[] array, int index)
@@ -57,8 +57,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Returns the index of a <see cref='System.Drawing.Design.ToolboxItem'/> in
-        /// the <see cref='System.Drawing.Design.ToolboxItemCollection'/> .
+        ///  Returns the index of a <see cref='System.Drawing.Design.ToolboxItem'/> in
+        ///  the <see cref='System.Drawing.Design.ToolboxItemCollection'/> .
         /// </summary>
         public int IndexOf(ToolboxItem value)
         {

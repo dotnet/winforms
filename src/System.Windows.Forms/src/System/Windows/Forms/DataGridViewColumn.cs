@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Scale to current device dpi settings
+        ///  Scale to current device dpi settings
         /// </summary>
         /// <param name="value"> initial value</param>
         /// <returns> scaled metric</returns>

@@ -26,7 +26,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
-        /// determine how to render.
+        ///  determine how to render.
         ///  If this property is false, the renderer will always render with visualstyles.
         /// </summary>
         public static bool RenderMatchingApplicationState
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Method to draw visualstyle themes in case of per-monitor scenarios where Hwnd is necessary
+        ///  Method to draw visualstyle themes in case of per-monitor scenarios where Hwnd is necessary
         /// </summary>
         /// <param name="g"> graphics object</param>
         /// <param name="bounds"> button bounds</param>

@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This behavior is associated with the ContainerGlyph offered up by ParentControlDesigner.  This Behavior simply  starts a new dragdrop behavior.
+    ///  This behavior is associated with the ContainerGlyph offered up by ParentControlDesigner.  This Behavior simply  starts a new dragdrop behavior.
     /// </summary>
     internal sealed class ContainerSelectorBehavior : Behavior
     {
@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _setInitialDragPoint;
 
         /// <summary>
-        /// Constructor, here we cache off all of our member vars and sync location & size changes.
+        ///  Constructor, here we cache off all of our member vars and sync location & size changes.
         /// </summary>
         internal ContainerSelectorBehavior(Control containerControl, IServiceProvider serviceProvider)
         {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Constructor, here we cache off all of our member vars and sync location & size changes.
+        ///  Constructor, here we cache off all of our member vars and sync location & size changes.
         /// </summary>
         internal ContainerSelectorBehavior(Control containerControl, IServiceProvider serviceProvider, bool setInitialDragPoint)
         {
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This will be true when we detect a mousedown on our glyph.  The Glyph can use this state to always return 'true' from hittesting indicating that it would like all messages (like mousemove).
+        ///  This will be true when we detect a mousedown on our glyph.  The Glyph can use this state to always return 'true' from hittesting indicating that it would like all messages (like mousemove).
         /// </summary>
         public bool OkToMove
         {
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// If the user selects the containerglyph - select our related component.
+        ///  If the user selects the containerglyph - select our related component.
         /// </summary>
         public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
         {
@@ -151,7 +151,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// We will compare the mouse loc to the initial point (set in onmousedown) and if we're far enough, we'll create a dropsourcebehavior object and start out drag operation!
+        ///  We will compare the mouse loc to the initial point (set in onmousedown) and if we're far enough, we'll create a dropsourcebehavior object and start out drag operation!
         /// </summary>
         public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
         {
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Simply clear the initial drag point, so we can start again on the next mouse down.
+        ///  Simply clear the initial drag point, so we can start again on the next mouse down.
         /// </summary>
         public override bool OnMouseUp(Glyph g, MouseButtons button)
         {
@@ -184,7 +184,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called when we've identified that we want to start a drag operation with our data container.
+        ///  Called when we've identified that we want to start a drag operation with our data container.
         /// </summary>
         private void StartDragOperation(Point initialMouseLocation)
         {

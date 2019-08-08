@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private bool enableMetric;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='PageSetupDialog'/> class.
+        ///  Initializes a new instance of the <see cref='PageSetupDialog'/> class.
         /// </summary>
         public PageSetupDialog()
         {
@@ -106,8 +106,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating the <see cref='PrintDocument'/>
-        /// to get page settings from.
+        ///  Gets or sets a value indicating the <see cref='PrintDocument'/>
+        ///  to get page settings from.
         /// </summary>
         [
         SRCategory(nameof(SR.CatData)),

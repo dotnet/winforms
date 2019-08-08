@@ -400,7 +400,7 @@ namespace System.Windows.Forms
 #pragma warning restore 0414
 #endif
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGridView'/> class.
+        ///  Initializes a new instance of the <see cref='DataGridView'/> class.
         /// </summary>
         public DataGridView()
         {
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Scaling row header width and column header height.
+        ///  Scaling row header width and column header height.
         /// </summary>
         private int ScaleToCurrentDpi(int value)
         {
@@ -1902,12 +1902,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the ComboBox editing control was just detached. (focused out to another cell)
+        ///  Indicates whether the ComboBox editing control was just detached. (focused out to another cell)
         /// </summary>
         internal bool ComboBoxControlWasDetached { get; set; }
 
         /// <summary>
-        /// Indicates whether the TextBox editing control was just detached. (focused out to another cell)
+        ///  Indicates whether the TextBox editing control was just detached. (focused out to another cell)
         /// </summary>
         internal bool TextBoxControlWasDetached { get; set; }
 

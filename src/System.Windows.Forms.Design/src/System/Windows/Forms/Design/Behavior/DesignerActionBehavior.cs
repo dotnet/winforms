@@ -12,7 +12,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This is the Behavior that represents DesignerActions for a particular control.  The DesignerActionBehavior is responsible for responding to the MouseDown message and either 1) selecting the control and changing the  DesignerActionGlyph's image or 2) building up a chrome menu  and requesting it to be shown. Also, this Behavior acts as a proxy between "clicked" context menu items and the actual DesignerActions that they represent.
+    ///  This is the Behavior that represents DesignerActions for a particular control.  The DesignerActionBehavior is responsible for responding to the MouseDown message and either 1) selecting the control and changing the  DesignerActionGlyph's image or 2) building up a chrome menu  and requesting it to be shown. Also, this Behavior acts as a proxy between "clicked" context menu items and the actual DesignerActions that they represent.
     /// </summary>
     internal sealed class DesignerActionBehavior : Behavior
     {
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool _ignoreNextMouseUp = false;
 
         /// <summary>
-        /// Constructor that calls base and caches off the action lists.
+        ///  Constructor that calls base and caches off the action lists.
         /// </summary>
         internal DesignerActionBehavior(IServiceProvider serviceProvider, IComponent relatedComponent, DesignerActionListCollection actionLists, DesignerActionUI parentUI)
         {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the collection of DesignerActionLists this Behavior is managing. These will be dynamically updated (some can be removed, new ones can be added, etc...).
+        ///  Returns the collection of DesignerActionLists this Behavior is managing. These will be dynamically updated (some can be removed, new ones can be added, etc...).
         /// </summary>
         internal DesignerActionListCollection ActionLists
         {
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the parenting UI (a DesignerActionUI)
+        ///  Returns the parenting UI (a DesignerActionUI)
         /// </summary>
         internal DesignerActionUI ParentUI
         {
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the Component that this glyph is attached to.
+        ///  Returns the Component that this glyph is attached to.
         /// </summary>
         internal IComponent RelatedComponent
         {
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Hides the designer action panel UI.
+        ///  Hides the designer action panel UI.
         /// </summary>
         internal void HideUI()
         {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Shows the designer action panel UI associated with this glyph.
+        ///  Shows the designer action panel UI associated with this glyph.
         /// </summary>
         internal void ShowUI(Glyph g)
         {
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// In response to a MouseUp, we will either 1) select the Glyph and control if not selected, or 2) Build up our context menu representing our DesignerActions and show it.
+        ///  In response to a MouseUp, we will either 1) select the Glyph and control if not selected, or 2) Build up our context menu representing our DesignerActions and show it.
         /// </summary>
         public override bool OnMouseUp(Glyph g, MouseButtons button)
         {

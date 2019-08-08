@@ -20,19 +20,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private readonly AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
 
         /// <summary>
-        /// Our collection of Object managers (Com2Properties) for native properties
+        ///  Our collection of Object managers (Com2Properties) for native properties
         /// </summary>
         private readonly WeakHashtable nativeProps = new WeakHashtable();
 
         /// <summary>
-        /// Our collection of browsing handlers, which are stateless and shared across objects.
+        ///  Our collection of browsing handlers, which are stateless and shared across objects.
         /// </summary>
         private readonly Hashtable extendedBrowsingHandlers = new Hashtable();
 
         /// <summary>
-        /// We increment this every time we look at an Object, at specified
-        /// intervals, we run through the properies list to see if we should
-        /// delete any.
+        ///  We increment this every time we look at an Object, at specified
+        ///  intervals, we run through the properies list to see if we should
+        ///  delete any.
         /// </summary>
         private int clearCount = 0;
         private const int CLEAR_INTERVAL = 25;
@@ -243,8 +243,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Checks if the given dispid matches the dispid that the Object would like to specify
-        /// as its identification proeprty (Name, ID, etc).
+        ///  Checks if the given dispid matches the dispid that the Object would like to specify
+        ///  as its identification proeprty (Name, ID, etc).
         /// </summary>
         internal bool IsNameDispId(object obj, int dispid)
         {
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Checks all our property manages to see if any have become invalid.
+        ///  Checks all our property manages to see if any have become invalid.
         /// </summary>
         private void CheckClear(object component)
         {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Gets the properties manager for an Object.
+        ///  Gets the properties manager for an Object.
         /// </summary>
         private Com2Properties GetPropsInfo(object component)
         {
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Got attributes?
+        ///  Got attributes?
         /// </summary>
         internal AttributeCollection GetAttributes(object component)
         {
@@ -375,7 +375,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Default Property, please
+        ///  Default Property, please
         /// </summary>
         internal PropertyDescriptor GetDefaultProperty(object component)
         {
@@ -405,7 +405,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Props!
+        ///  Props!
         /// </summary>
         internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
         {
@@ -431,7 +431,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Fired when the property info gets disposed.
+        ///  Fired when the property info gets disposed.
         /// </summary>
         private void OnPropsInfoDisposed(object sender, EventArgs e)
         {
@@ -475,8 +475,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Looks at at value's type and creates an editor based on that.  We use this to decide which editor to use
-        /// for a generic variant.
+        ///  Looks at at value's type and creates an editor based on that.  We use this to decide which editor to use
+        ///  for a generic variant.
         /// </summary>
         internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor)
         {

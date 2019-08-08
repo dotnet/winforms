@@ -170,7 +170,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
+        ///  Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </summary>
         public static ToolStrip FindToolStrip(string toolStripName)
         {
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
+        ///  Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </summary>
         internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
         {
@@ -482,21 +482,21 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// ============================================================================
+        ///  ============================================================================
         ///  BEGIN task specific functions.  Since ToolStripManager is used
         ///  for Painting, Merging and Rafting, and who knows what else in the future
         ///  the following properties/methods/events are organized in regions
         ///  alphabetically by task
-        /// ----------------------------------------------------------------------------
+        ///  ----------------------------------------------------------------------------
 
         ///
         ///  ToolStripManager Default Renderer
         ///
         #region DefaultRenderer
 
-        /// These are thread static because we want separate instances
-        /// for each thread.  We dont want to guarantee thread safety
-        /// and dont want to have to take locks in painting code.
+        ///  These are thread static because we want separate instances
+        ///  for each thread.  We dont want to guarantee thread safety
+        ///  and dont want to have to take locks in painting code.
         [ThreadStatic]
         private static ToolStripRenderer defaultRenderer;
 
@@ -530,7 +530,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
-        /// is the property used.
+        ///  is the property used.
         /// </summary>
         public static ToolStripRenderer Renderer
         {
@@ -545,7 +545,6 @@ namespace System.Windows.Forms
             set
             {
                 ///
-
                 if (defaultRenderer != value)
                 {
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
@@ -596,7 +595,6 @@ namespace System.Windows.Forms
             {
 
                 ///
-
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripManagerRenderMode));
@@ -615,8 +613,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary> an additional layering of control.  this lets you pick whether your toolbars
-        /// should use visual style information (theming) to render itself.
-        /// potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
+        ///  should use visual style information (theming) to render itself.
+        ///  potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
         /// </summary>
         public static bool VisualStylesEnabled
         {
@@ -785,10 +783,9 @@ namespace System.Windows.Forms
         ///
         ///  ToolStripManager ALT key PreProcessing
         ///
-
         #region MenuKeyAndShortcutProcessing
 
-        /// ModalMenuFilter
+        ///  ModalMenuFilter
         ///  - this installs a message filter when a dropdown becomes active.
         ///  - the message filter
         ///  a. eats WM_MOUSEMOVEs so that the window that's underneath
@@ -801,8 +798,8 @@ namespace System.Windows.Forms
         ///
         ///  - There should be 1 Message Filter per thread and it should be uninstalled once
         ///  the last dropdown has gone away
-        /// This is not part of ToolStripManager because it's DropDown specific and
-        /// we dont want to publicly expose this message filter.
+        ///  This is not part of ToolStripManager because it's DropDown specific and
+        ///  we dont want to publicly expose this message filter.
         internal class ModalMenuFilter : IMessageModifyAndFilter
         {
             private HandleRef _activeHwnd = NativeMethods.NullHandleRef; // the window that was active when we showed the dropdown
@@ -843,7 +840,7 @@ namespace System.Windows.Forms
             {
             }
 
-            /// this is the HWnd that was active when we popped the first dropdown.
+            ///  this is the HWnd that was active when we popped the first dropdown.
             internal static HandleRef ActiveHwnd
             {
                 get { return Instance.ActiveHwndInternal; }
@@ -923,9 +920,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// This is used in scenarios where windows forms
-            /// does not own the message pump, but needs access
-            /// to the message queue.
+            ///  This is used in scenarios where windows forms
+            ///  does not own the message pump, but needs access
+            ///  to the message queue.
             private HostedWindowsFormsMessageHook MessageHook
             {
                 get
@@ -2063,9 +2060,8 @@ namespace System.Windows.Forms
         #endregion MenuKeyAndShortcutProcessing
 
         ///
-        /// ToolStripManager MenuMerging functions
+        ///  ToolStripManager MenuMerging functions
         ///
-
         #region MenuMerging
 
         private static ToolStripItem FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
@@ -2123,7 +2119,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// merge two toolstrips
+        ///  merge two toolstrips
         /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, ToolStrip targetToolStrip)
         {
@@ -2314,7 +2310,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// merge two toolstrips
+        ///  merge two toolstrips
         /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, string targetName)
         {
@@ -2339,7 +2335,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// doesn't do a null check on source... if it's null we unmerge everything
+        ///  doesn't do a null check on source... if it's null we unmerge everything
         /// </summary>
         internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls)
         {
@@ -2449,7 +2445,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// unmerge two toolstrips
+        ///  unmerge two toolstrips
         /// </summary>
         public static bool RevertMerge(ToolStrip targetToolStrip)
         {
@@ -2457,7 +2453,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// unmerge two toolstrips
+        ///  unmerge two toolstrips
         /// </summary>
         public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip)
         {
@@ -2469,7 +2465,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// unmerge two toolstrips
+        ///  unmerge two toolstrips
         /// </summary>
         public static bool RevertMerge(string targetName)
         {

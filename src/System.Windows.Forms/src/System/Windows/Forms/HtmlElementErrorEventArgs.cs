@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// EventArgs for onerror event of HtmlElement
+    ///  EventArgs for onerror event of HtmlElement
     /// </summary>
     public sealed class HtmlElementErrorEventArgs : EventArgs
     {
@@ -20,23 +20,23 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Description of error
+        ///  Description of error
         /// </summary>
         public string Description { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref='HtmlWindow.Error'/>
-        /// event was handled.
+        ///  Gets or sets a value indicating whether the <see cref='HtmlWindow.Error'/>
+        ///  event was handled.
         /// </summary>
         public bool Handled { get; set; }
 
         /// <summary>
-        /// Line number where error occurred
+        ///  Line number where error occurred
         /// </summary>
         public int LineNumber { get; }
 
         /// <summary>
-        /// Url where error occurred
+        ///  Url where error occurred
         /// </summary>
         public Uri Url => _url ?? (_url = new Uri(_urlString));
     }

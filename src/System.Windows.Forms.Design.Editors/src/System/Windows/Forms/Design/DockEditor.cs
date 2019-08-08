@@ -10,8 +10,8 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Implements the design time editor for specifying the <see cref='System.Windows.Forms.Control.Dock' />
-    /// property.
+    ///  Implements the design time editor for specifying the <see cref='System.Windows.Forms.Control.Dock' />
+    ///  property.
     /// </summary>
     [CLSCompliant(false)]
     public sealed class DockEditor : UITypeEditor
@@ -19,8 +19,8 @@ namespace System.Windows.Forms.Design
         private DockUI _dockUI;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by GetEditorStyle.
-        /// A service provider is provided so that any required editing services can be obtained.
+        ///  Edits the given object value using the editor style provided by GetEditorStyle.
+        ///  A service provider is provided so that any required editing services can be obtained.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the editing style of the Edit method.
+        ///  Retrieves the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// User Interface for the DockEditor.
+        ///  User Interface for the DockEditor.
         /// </summary>
         private class DockUI : Control
         {

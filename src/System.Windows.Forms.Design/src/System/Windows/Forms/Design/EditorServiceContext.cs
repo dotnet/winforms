@@ -12,7 +12,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides an implementation of IWindowsFormsEditorService and ITypeDescriptorContext. Also provides a static method to invoke a UITypeEditor given a designer, an object  and a property name.
+    ///  Provides an implementation of IWindowsFormsEditorService and ITypeDescriptorContext. Also provides a static method to invoke a UITypeEditor given a designer, an object  and a property name.
     /// </summary>
     internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescriptorContext
     {
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Our caching property for the IComponentChangeService
+        ///  Our caching property for the IComponentChangeService
         /// </summary>
         private IComponentChangeService ChangeService
         {
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         IContainer ITypeDescriptorContext.Container
         {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         void ITypeDescriptorContext.OnComponentChanged()
         {
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         bool ITypeDescriptorContext.OnComponentChanging()
         {
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When the verb is invoked, use all the stuff above to show the dialog, etc.
+        ///  When the verb is invoked, use all the stuff above to show the dialog, etc.
         /// </summary>
         private void OnEditItems(object sender, EventArgs e)
         {

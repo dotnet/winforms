@@ -499,14 +499,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref='Control'/> class.
         /// </summary>
         public Control(string text) : this(null, text)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref='Control'/> class.
         /// </summary>
         public Control(string text, int left, int top, int width, int height) :
                     this(null, text, left, top, width, height)
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref='Control'/> class.
         /// </summary>
         public Control(Control parent, string text) : this()
         {
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref='Control'/> class.
         /// </summary>
         public Control(Control parent, string text, int left, int top, int width, int height) : this(parent, text)
         {
@@ -875,8 +875,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Controls the location of where this control is scrolled to in ScrollableControl.ScrollControlIntoView.
-        /// Default is the upper left hand corner of the control.
+        ///  Controls the location of where this control is scrolled to in ScrollableControl.ScrollControlIntoView.
+        ///  Default is the upper left hand corner of the control.
         /// </summary>
         [
             Browsable(false),
@@ -1352,10 +1352,10 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_causesValidationEvent, value);
         }
 
-        /// This is for perf. Turn this property on to temporarily enable text caching.  This is good for
-        /// operations such as layout or painting where we don't expect the text to change (we will update the
-        /// cache if it does) but prevents us from sending a ton of messages turing layout.  See the PaintWithErrorHandling
-        /// function.
+        ///  This is for perf. Turn this property on to temporarily enable text caching.  This is good for
+        ///  operations such as layout or painting where we don't expect the text to change (we will update the
+        ///  cache if it does) but prevents us from sending a ton of messages turing layout.  See the PaintWithErrorHandling
+        ///  function.
         ///
         internal bool CacheTextInternal
         {
@@ -3125,7 +3125,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The current position of the mouse in screen coordinates.
+        ///  The current position of the mouse in screen coordinates.
         /// </summary>
         public static Point MousePosition
         {
@@ -3362,8 +3362,8 @@ namespace System.Windows.Forms
             => GetStyle(ControlStyles.SupportsTransparentBackColor) && c.A < 255;
 
         /// <summary>
-        /// This property is required by certain controls (TabPage) to render its transparency using theming API.
-        /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
+        ///  This property is required by certain controls (TabPage) to render its transparency using theming API.
+        ///  We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </summary>
         internal virtual bool RenderTransparencyWithVisualStyles => false;
 
@@ -4836,20 +4836,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Executes the given delegate on the thread that owns this Control's
-        /// underlying window handle.  The delegate is called asynchronously and this
-        /// method returns immediately.  You may call this from any thread, even the
-        /// thread that owns the control's handle.  If the control's handle doesn't
-        /// exist yet, this will follow up the control's parent chain until it finds a
-        /// control or form that does have a window handle.  If no appropriate handle
-        /// can be found, BeginInvoke will throw an exception.  Exceptions within the
-        /// delegate method are considered untrapped and will be sent to the
-        /// application's untrapped exception handler.
+        ///  Executes the given delegate on the thread that owns this Control's
+        ///  underlying window handle.  The delegate is called asynchronously and this
+        ///  method returns immediately.  You may call this from any thread, even the
+        ///  thread that owns the control's handle.  If the control's handle doesn't
+        ///  exist yet, this will follow up the control's parent chain until it finds a
+        ///  control or form that does have a window handle.  If no appropriate handle
+        ///  can be found, BeginInvoke will throw an exception.  Exceptions within the
+        ///  delegate method are considered untrapped and will be sent to the
+        ///  application's untrapped exception handler.
         ///
-        /// There are five functions on a control that are safe to call from any
-        /// thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
-        /// For all other method calls, you should use one of the invoke methods to marshal
-        /// the call to the control's thread.
+        ///  There are five functions on a control that are safe to call from any
+        ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
+        ///  For all other method calls, you should use one of the invoke methods to marshal
+        ///  the call to the control's thread.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Delegate method, params object[] args)
@@ -5586,8 +5586,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the form that this control is on. The control's parent may not be
-        /// the same as the form.
+        ///  Retrieves the form that this control is on. The control's parent may not be
+        ///  the same as the form.
         /// </summary>
         public Form FindForm()
         {
@@ -5669,7 +5669,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Attempts to set focus to this control.
+        ///  Attempts to set focus to this control.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus()
@@ -5681,9 +5681,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Internal method for setting focus to the control.
-        /// Form overrides this method - because MDI child forms
-        /// need to be focused by calling the MDIACTIVATE message.
+        ///  Internal method for setting focus to the control.
+        ///  Form overrides this method - because MDI child forms
+        ///  need to be focused by calling the MDIACTIVATE message.
         /// </summary>
         private protected virtual bool FocusInternal()
         {
@@ -5713,11 +5713,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the control that is currently associated with handle.
-        /// This method will search up the HWND parent chain until it finds some
-        /// handle that is associated with with a control. This method is more
-        /// robust that fromHandle because it will correctly return controls
-        /// that own more than one handle.
+        ///  Returns the control that is currently associated with handle.
+        ///  This method will search up the HWND parent chain until it finds some
+        ///  handle that is associated with with a control. This method is more
+        ///  robust that fromHandle because it will correctly return controls
+        ///  that own more than one handle.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Control FromChildHandle(IntPtr handle)
@@ -5736,7 +5736,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the control that is currently associated with handle.
+        ///  Returns the control that is currently associated with handle.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Control FromHandle(IntPtr handle)
@@ -5819,8 +5819,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the closest ContainerControl in the control's chain of parent controls
-        /// and forms.
+        ///  Returns the closest ContainerControl in the control's chain of parent controls
+        ///  and forms.
         /// </summary>
         public IContainerControl GetContainerControl()
         {
@@ -7060,8 +7060,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Transforms an integer coordinate from logical to device units
-        /// by scaling it for the current DPI and rounding down to the nearest integer value.
+        ///  Transforms an integer coordinate from logical to device units
+        ///  by scaling it for the current DPI and rounding down to the nearest integer value.
         /// </summary>
         public int LogicalToDeviceUnits(int value)
         {
@@ -7268,7 +7268,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Click'/> event.
+        ///  Raises the <see cref='Click'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeOnClick(Control toInvoke, EventArgs e)
@@ -7626,9 +7626,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage bit is set.
-        /// This allows for controls to listen to window messages, without allowing them to
-        /// actually modify the message.
+        ///  OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage bit is set.
+        ///  This allows for controls to listen to window messages, without allowing them to
+        ///  actually modify the message.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnNotifyMessage(Message m)
@@ -7867,8 +7867,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Visible'/> event.
-        /// Inheriting classes should override this method to handle this event.
+        ///  Raises the <see cref='Visible'/> event.
+        ///  Inheriting classes should override this method to handle this event.
         ///  Call base.OnVisible to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -7948,8 +7948,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Click'/>
-        /// event.
+        ///  Raises the <see cref='Click'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClick(EventArgs e)
@@ -7967,7 +7967,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ControlAdded'/> event.
+        ///  Raises the <see cref='ControlAdded'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlAdded(ControlEventArgs e)
@@ -7976,7 +7976,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ControlRemoved'/> event.
+        ///  Raises the <see cref='ControlRemoved'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlRemoved(ControlEventArgs e)
@@ -8133,7 +8133,7 @@ namespace System.Windows.Forms
         ///  Inheriting classes should override this method to find out when the
         ///  handle is about to be destroyed.
         ///  Call base.OnHandleDestroyed last.
-        /// Raises the <see cref='HandleDestroyed'/> event.
+        ///  Raises the <see cref='HandleDestroyed'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleDestroyed(EventArgs e)
@@ -8192,7 +8192,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='DoubleClick'/> event.
+        ///  Raises the <see cref='DoubleClick'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDoubleClick(EventArgs e)
@@ -8201,8 +8201,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Enter'/> event.
-        /// Inheriting classes should override this method to handle this event.
+        ///  Raises the <see cref='Enter'/> event.
+        ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onEnter to send this event to any registered event listeners.
         /// </summary>
         /// <summary>
@@ -8262,7 +8262,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='GotFocus'/> event.
+        ///  Raises the <see cref='GotFocus'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeGotFocus(Control toInvoke, EventArgs e)
@@ -8275,7 +8275,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='GotFocus'/> event.
+        ///  Raises the <see cref='GotFocus'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnGotFocus(EventArgs e)
@@ -8292,8 +8292,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
-        /// Call base.onHelp to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.onHelp to send this event to any registered event listeners.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHelpRequested(HelpEventArgs hevent)
@@ -8345,7 +8345,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='KeyDown'/> event.
+        ///  Raises the <see cref='KeyDown'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyDown(KeyEventArgs e)
@@ -8354,7 +8354,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='KeyPress'/> event.
+        ///  Raises the <see cref='KeyPress'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyPress(KeyPressEventArgs e)
@@ -8363,7 +8363,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='KeyUp'/> event.
+        ///  Raises the <see cref='KeyUp'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e)
@@ -8372,10 +8372,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Core layout logic. Inheriting controls should override this function to do any custom
-        /// layout logic. It is not neccessary to call base.OnLayout, however for normal docking
-        /// an functions to work, base.OnLayout must be called.
-        /// Raises the <see cref='Layout'/> event.
+        ///  Core layout logic. Inheriting controls should override this function to do any custom
+        ///  layout logic. It is not neccessary to call base.OnLayout, however for normal docking
+        ///  an functions to work, base.OnLayout must be called.
+        ///  Raises the <see cref='Layout'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLayout(LayoutEventArgs levent)
@@ -8400,9 +8400,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when the last resume layout call is made. If performLayout is true a layout will
-        /// occur as soon as this call returns. Layout is still suspended when this call is made.
-        /// The default implementation calls OnChildLayoutResuming on the parent, if it exists.
+        ///  Called when the last resume layout call is made. If performLayout is true a layout will
+        ///  occur as soon as this call returns. Layout is still suspended when this call is made.
+        ///  The default implementation calls OnChildLayoutResuming on the parent, if it exists.
         /// </summary>
         internal virtual void OnLayoutResuming(bool performLayout)
         {
@@ -8414,7 +8414,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Leave'/> event.
+        ///  Raises the <see cref='Leave'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLeave(EventArgs e)
@@ -8433,7 +8433,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='LostFocus'/> event.
+        ///  Raises the <see cref='LostFocus'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLostFocus(EventArgs e)
@@ -8450,7 +8450,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseDoubleClick'/> event.
+        ///  Raises the <see cref='MouseDoubleClick'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDoubleClick(MouseEventArgs e)
@@ -8459,7 +8459,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='OnMouseClick'/> event.
+        ///  Raises the <see cref='OnMouseClick'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseClick(MouseEventArgs e)
@@ -8468,7 +8468,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseCaptureChanged'/> event.
+        ///  Raises the <see cref='MouseCaptureChanged'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseCaptureChanged(EventArgs e)
@@ -8477,7 +8477,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseDown'/> event.
+        ///  Raises the <see cref='MouseDown'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDown(MouseEventArgs e)
@@ -8486,7 +8486,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseEnter'/> event.
+        ///  Raises the <see cref='MouseEnter'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseEnter(EventArgs e)
@@ -8495,7 +8495,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseLeave'/> event.
+        ///  Raises the <see cref='MouseLeave'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseLeave(EventArgs e)
@@ -8504,10 +8504,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='DpiChangedBeforeParent'/> event.
-        /// Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
-        /// or when scaling level is changed in the windows setting by the user.
-        /// This message is not sent to the top level windows.
+        ///  Raises the <see cref='DpiChangedBeforeParent'/> event.
+        ///  Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
+        ///  or when scaling level is changed in the windows setting by the user.
+        ///  This message is not sent to the top level windows.
         /// </summary>
         [
             Browsable(true),
@@ -8519,10 +8519,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='DpiChangedAfterParent'/> event.
-        /// Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
-        /// or when scaling level is changed in windows setting by the user.
-        /// This message is not sent to the top level windows.
+        ///  Raises the <see cref='DpiChangedAfterParent'/> event.
+        ///  Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
+        ///  or when scaling level is changed in windows setting by the user.
+        ///  This message is not sent to the top level windows.
         /// </summary>
         [
             Browsable(true),
@@ -8534,7 +8534,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseHover'/> event.
+        ///  Raises the <see cref='MouseHover'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseHover(EventArgs e)
@@ -8543,7 +8543,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseMove'/> event.
+        ///  Raises the <see cref='MouseMove'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseMove(MouseEventArgs e)
@@ -8552,7 +8552,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseUp'/> event.
+        ///  Raises the <see cref='MouseUp'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseUp(MouseEventArgs e)
@@ -8561,7 +8561,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MouseWheel'/> event.
+        ///  Raises the <see cref='MouseWheel'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseWheel(MouseEventArgs e)
@@ -8570,7 +8570,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Move'/> event.
+        ///  Raises the <see cref='Move'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMove(EventArgs e)
@@ -8655,7 +8655,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='RegionChanged'/> event when the Region property has changed.
+        ///  Raises the <see cref='RegionChanged'/> event when the Region property has changed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRegionChanged(EventArgs e)
@@ -8667,7 +8667,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Resize'/> event.
+        ///  Raises the <see cref='Resize'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResize(EventArgs e)
@@ -8682,7 +8682,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='PreviewKeyDown'/> event.
+        ///  Raises the <see cref='PreviewKeyDown'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
@@ -8742,8 +8742,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Validating'/>
-        /// event.
+        ///  Raises the <see cref='Validating'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidating(CancelEventArgs e)
@@ -8752,7 +8752,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Validated'/> event.
+        ///  Raises the <see cref='Validated'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidated(EventArgs e)
@@ -8761,9 +8761,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Is invoked when the control handle is created or right before the top level parent receives WM_DPICHANGED message.
-        /// This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
-        /// The derived class can choose to not call the base class implementation.
+        ///  Is invoked when the control handle is created or right before the top level parent receives WM_DPICHANGED message.
+        ///  This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
+        ///  The derived class can choose to not call the base class implementation.
         /// </summary>
         [
             Browsable(true),
@@ -9227,7 +9227,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Computes the location of the screen point p in client coords.
+        ///  Computes the location of the screen point p in client coords.
         /// </summary>
         public Point PointToClient(Point p)
         {
@@ -9236,7 +9236,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Computes the location of the client point p in screen coords.
+        ///  Computes the location of the client point p in screen coords.
         /// </summary>
         public Point PointToScreen(Point p)
         {
@@ -9250,21 +9250,21 @@ namespace System.Windows.Forms
         ///  msg.message field are WM_KEYDOWN, WM_SYSKEYDOWN, WM_CHAR, and WM_SYSCHAR.
         ///  If this method processes the message it must return true, in which case
         ///  the message loop will not dispatch the message.
-        /// For WM_KEYDOWN and WM_SYSKEYDOWN messages, preProcessMessage() first
+        ///  For WM_KEYDOWN and WM_SYSKEYDOWN messages, preProcessMessage() first
         ///  calls processCmdKey() to check for command keys such as accelerators and
         ///  menu shortcuts. If processCmdKey() doesn't process the message, then
         ///  isInputKey() is called to check whether the key message represents an
         ///  input key for the control. Finally, if isInputKey() indicates that the
         ///  control isn't interested in the key message, then processDialogKey() is
         ///  called to check for dialog keys such as TAB, arrow keys, and mnemonics.
-        /// For WM_CHAR messages, preProcessMessage() first calls isInputChar() to
+        ///  For WM_CHAR messages, preProcessMessage() first calls isInputChar() to
         ///  check whether the character message represents an input character for
         ///  the control. If isInputChar() indicates that the control isn't interested
         ///  in the character message, then processDialogChar() is called to check for
         ///  dialog characters such as mnemonics.
-        /// For WM_SYSCHAR messages, preProcessMessage() calls processDialogChar()
+        ///  For WM_SYSCHAR messages, preProcessMessage() calls processDialogChar()
         ///  to check for dialog characters such as mnemonics.
-        /// When overriding preProcessMessage(), a control should return true to
+        ///  When overriding preProcessMessage(), a control should return true to
         ///  indicate that it has processed the message. For messages that aren't
         ///  processed by the control, the result of "base.preProcessMessage()"
         ///  should be returned. Controls will typically override one of the more
@@ -9427,15 +9427,15 @@ namespace System.Windows.Forms
         ///  include accelerators and menu shortcuts. The method must return true to
         ///  indicate that it has processed the command key, or false to indicate
         ///  that the key is not a command key.
-        /// processCmdKey() first checks if the control has a context menu, and if
+        ///  processCmdKey() first checks if the control has a context menu, and if
         ///  so calls the menu's processCmdKey() to check for menu shortcuts. If the
         ///  command key isn't a menu shortcut, and if the control has a parent, the
         ///  key is passed to the parent's processCmdKey() method. The net effect is
         ///  that command keys are "bubbled" up the control hierarchy.
-        /// When overriding processCmdKey(), a control should return true to
+        ///  When overriding processCmdKey(), a control should return true to
         ///  indicate that it has processed the key. For keys that aren't processed by
         ///  the control, the result of "base.processCmdKey()" should be returned.
-        /// Controls will seldom, if ever, need to override this method.
+        ///  Controls will seldom, if ever, need to override this method.
         /// </summary>
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -9557,15 +9557,15 @@ namespace System.Windows.Forms
         ///  pre-processing to handle dialog characters, such as control mnemonics.
         ///  This method is called only if the isInputChar() method indicates that
         ///  the control isn't interested in the character.
-        /// processDialogChar() simply sends the character to the parent's
+        ///  processDialogChar() simply sends the character to the parent's
         ///  processDialogChar() method, or returns false if the control has no
         ///  parent. The Form class overrides this method to perform actual
         ///  processing of dialog characters.
-        /// When overriding processDialogChar(), a control should return true to
+        ///  When overriding processDialogChar(), a control should return true to
         ///  indicate that it has processed the character. For characters that aren't
         ///  processed by the control, the result of "base.processDialogChar()"
         ///  should be returned.
-        /// Controls will seldom, if ever, need to override this method.
+        ///  Controls will seldom, if ever, need to override this method.
         /// </summary>
         protected virtual bool ProcessDialogChar(char charCode)
         {
@@ -9578,15 +9578,15 @@ namespace System.Windows.Forms
         ///  pre-processing to handle dialog characters, such as TAB, RETURN, ESCAPE,
         ///  and arrow keys. This method is called only if the isInputKey() method
         ///  indicates that the control isn't interested in the key.
-        /// processDialogKey() simply sends the character to the parent's
+        ///  processDialogKey() simply sends the character to the parent's
         ///  processDialogKey() method, or returns false if the control has no
         ///  parent. The Form class overrides this method to perform actual
         ///  processing of dialog keys.
-        /// When overriding processDialogKey(), a control should return true to
+        ///  When overriding processDialogKey(), a control should return true to
         ///  indicate that it has processed the key. For keys that aren't processed
         ///  by the control, the result of "base.processDialogKey(...)" should be
         ///  returned.
-        /// Controls will seldom, if ever, need to override this method.
+        ///  Controls will seldom, if ever, need to override this method.
         /// </summary>
         protected virtual bool ProcessDialogKey(Keys keyData)
         {
@@ -9601,11 +9601,11 @@ namespace System.Windows.Forms
         ///  onKeyUp(). The m parameter contains the window message that must
         ///  be processed. Possible values for the m.msg field are WM_CHAR,
         ///  WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, WM_SYSKEYUP, and WM_IMECHAR.
-        /// When overriding processKeyEventArgs(), a control should return true to
+        ///  When overriding processKeyEventArgs(), a control should return true to
         ///  indicate that it has processed the key. For keys that aren't processed
         ///  by the control, the result of "base.processKeyEventArgs()" should be
         ///  returned.
-        /// Controls will seldom, if ever, need to override this method.
+        ///  Controls will seldom, if ever, need to override this method.
         /// </summary>
         protected virtual bool ProcessKeyEventArgs(ref Message m)
         {
@@ -9696,11 +9696,11 @@ namespace System.Windows.Forms
         ///  The m parameter contains the window message that must be
         ///  processed. Possible values for the m.msg field are WM_CHAR,
         ///  WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP.
-        /// When overriding processKeyMessage(), a control should return true to
+        ///  When overriding processKeyMessage(), a control should return true to
         ///  indicate that it has processed the key. For keys that aren't processed
         ///  by the control, the result of "base.processKeyMessage()" should be
         ///  returned.
-        /// Controls will seldom, if ever, need to override this method.
+        ///  Controls will seldom, if ever, need to override this method.
         /// </summary>
         protected internal virtual bool ProcessKeyMessage(ref Message m)
         {
@@ -9722,11 +9722,11 @@ namespace System.Windows.Forms
         ///  parameter contains the window message to preview. Possible values for
         ///  the m.msg field are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP,
         ///  and WM_SYSKEYUP.
-        /// processKeyPreview() simply sends the character to the parent's
+        ///  processKeyPreview() simply sends the character to the parent's
         ///  processKeyPreview() method, or returns false if the control has no
         ///  parent. The Form class overrides this method to perform actual
         ///  processing of dialog keys.
-        /// When overriding processKeyPreview(), a control should return true to
+        ///  When overriding processKeyPreview(), a control should return true to
         ///  indicate that it has processed the key. For keys that aren't processed
         ///  by the control, the result of "base.ProcessKeyPreview(...)" should be
         ///  returned.
@@ -9744,7 +9744,7 @@ namespace System.Windows.Forms
         ///  character represents a mnemonic. If so, the method should perform the
         ///  action associated with the mnemonic and return true. If not, the method
         ///  should return false.
-        /// Implementations of this method often use the isMnemonic() method to
+        ///  Implementations of this method often use the isMnemonic() method to
         ///  check if the given character matches a mnemonic in the control's text,
         ///  for example:
         /// <code>
@@ -9752,7 +9752,7 @@ namespace System.Windows.Forms
         ///  // perform action associated with mnemonic
         ///  }
         /// </code>
-        /// This default implementation of processMnemonic() simply returns false
+        ///  This default implementation of processMnemonic() simply returns false
         ///  to indicate that the control has no mnemonic.
         /// </summary>
         protected internal virtual bool ProcessMnemonic(char charCode)
@@ -10072,7 +10072,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Computes the location of the screen rectangle r in client coords.
+        ///  Computes the location of the screen rectangle r in client coords.
         /// </summary>
         public Rectangle RectangleToClient(Rectangle r)
         {
@@ -10082,7 +10082,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Computes the location of the client rectangle r in screen coords.
+        ///  Computes the location of the client rectangle r in screen coords.
         /// </summary>
         public Rectangle RectangleToScreen(Rectangle r)
         {
@@ -10092,7 +10092,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reflects the specified message to the control that is bound to hWnd.
+        ///  Reflects the specified message to the control that is bound to hWnd.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static bool ReflectMessage(IntPtr hWnd, ref Message m)
@@ -10118,7 +10118,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// /Releases UI Automation provinder for specified window.
+        ///  /Releases UI Automation provinder for specified window.
         /// </summary>
         /// <param name="handle">The window handle.</param>
         internal virtual void ReleaseUiaProvider(IntPtr handle)
@@ -10430,8 +10430,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Calls SetWindowFont if DpiHelper.IsPerMonitorV2Awareness is true,
-        /// control uses default or inherited font and is not user-painted.
+        ///  Calls SetWindowFont if DpiHelper.IsPerMonitorV2Awareness is true,
+        ///  control uses default or inherited font and is not user-painted.
         /// </summary>
         internal void UpdateWindowFontIfNeeded()
         {
@@ -11563,7 +11563,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if the <see cref='Size'/> property needs to be persisted.
+        ///  Determines if the <see cref='Size'/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeSize()
@@ -11575,7 +11575,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if the <see cref='Text'/> property needs to be persisted.
+        ///  Determines if the <see cref='Text'/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeText()
@@ -13827,8 +13827,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether or not the control supports UIA Providers via
-        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
+        ///  Indicates whether or not the control supports UIA Providers via
+        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
         /// </summary>
         internal virtual bool SupportsUiaProviders
         {
@@ -13840,7 +13840,7 @@ namespace System.Windows.Forms
 
 
         ///
-        /// Explicit support of DropTarget
+        ///  Explicit support of DropTarget
         ///
         void IDropTarget.OnDragEnter(DragEventArgs drgEvent)
         {
@@ -13863,7 +13863,7 @@ namespace System.Windows.Forms
         }
 
         ///
-        /// Explicit support of DropSource
+        ///  Explicit support of DropSource
         ///
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)
         {

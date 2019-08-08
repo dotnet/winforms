@@ -279,27 +279,27 @@ namespace System.Windows.Forms
         ///  keystrokes are going at a given moment. Hence only send a notification
         ///  about where the NEW focus is going. A NEW item getting the focus already
         ///  implies that the OLD item is losing it.
-        ///  
+        ///
         ///  SELECTION however can be multiple. Hence the different SELECTION
         ///  notifications. Here's when to use each:
-        ///  
+        ///
         ///  (1) Send a SELECTION notification in the simple single selection
         ///  case (like the focus) when the item with the selection is
         ///  merely moving to a different item within a container. hwnd + ID
         ///  is the container control, idChildItem is the new child with the
         ///  selection.
-        ///  
+        ///
         ///  (2) Send a SELECTIONADD notification when a new item has simply been added
         ///  to the selection within a container. This is appropriate when the
         ///  number of newly selected items is very small. hwnd + ID is the
         ///  container control, idChildItem is the new child added to the selection.
-        ///  
+        ///
         ///  (3) Send a SELECTIONREMOVE notification when a new item has simply been
         ///  removed from the selection within a container. This is appropriate
         ///  when the number of newly selected items is very small, just like
         ///  SELECTIONADD. hwnd + ID is the container control, idChildItem is the
         ///  new child removed from the selection.
-        ///  
+        ///
         ///  (4) Send a SELECTIONWITHIN notification when the selected items within a
         ///  control have changed substantially. Rather than propagate a large
         ///  number of changes to reflect removal for some items, addition of

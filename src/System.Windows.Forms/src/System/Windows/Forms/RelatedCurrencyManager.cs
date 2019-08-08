@@ -10,8 +10,8 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the child version of the System.Windows.Forms.ListManager
-    /// that is used when a parent/child relationship exists in a System.Windows.Forms.DataSet.
+    ///  Represents the child version of the System.Windows.Forms.ListManager
+    ///  that is used when a parent/child relationship exists in a System.Windows.Forms.DataSet.
     /// </summary>
     internal class RelatedCurrencyManager : CurrencyManager
     {

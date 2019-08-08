@@ -15,7 +15,7 @@ using System.Runtime.Serialization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Implements an item of a <see cref='Forms.ListView'/>.
+    ///  Implements an item of a <see cref='Forms.ListView'/>.
     /// </summary>
     [TypeConverter(typeof(ListViewItemConverter))]
     [ToolboxItem(false)]
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a ListViewItem object from an Stream.
+        ///  Creates a ListViewItem object from an Stream.
         /// </summary>
         protected ListViewItem(SerializationInfo info, StreamingContext context) : this()
         {
@@ -243,8 +243,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The font that this item will be displayed in. If its value is null, it will be displayed
-        /// using the global font for the ListView control that hosts it.
+        ///  The font that this item will be displayed in. If its value is null, it will be displayed
+        ///  using the global font for the ListView control that hosts it.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -270,8 +270,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the ListViewItem's bounding rectangle, including subitems. The bounding rectangle is empty if
-        /// the ListViewItem has not been added to a ListView control.
+        ///  Returns the ListViewItem's bounding rectangle, including subitems. The bounding rectangle is empty if
+        ///  the ListViewItem has not been added to a ListView control.
         /// </summary>
         [Browsable(false)]
         public Rectangle Bounds
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the focus state of the ListViewItem.
+        ///  Returns the focus state of the ListViewItem.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
@@ -425,7 +425,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the ListViewItem's currently set image index
+        ///  Returns the ListViewItem's currently set image index
         /// </summary>
         [DefaultValue(-1)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -465,7 +465,7 @@ namespace System.Windows.Forms
         internal ListViewItemImageIndexer ImageIndexer => imageIndexer ?? (imageIndexer = new ListViewItemImageIndexer(this));
 
         /// <summary>
-        /// Returns the ListViewItem's currently set image index
+        ///  Returns the ListViewItem's currently set image index
         /// </summary>
         [DefaultValue("")]
         [TypeConverter(typeof(ImageKeyConverter))]
@@ -536,7 +536,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns ListViewItem's current index in the listview, or -1 if it has not been added to a ListView control.
+        ///  Returns ListViewItem's current index in the listview, or -1 if it has not been added to a ListView control.
         /// </summary>
         [Browsable(false)]
         public int Index
@@ -561,14 +561,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the ListView control that holds this ListViewItem. May be null if no
-        /// control has been assigned yet.
+        ///  Returns the ListView control that holds this ListViewItem. May be null if no
+        ///  control has been assigned yet.
         /// </summary>
         [Browsable(false)]
         public ListView ListView => listView;
 
         /// <summary>
-        /// Name associated with this ListViewItem
+        ///  Name associated with this ListViewItem
         /// </summary>
         [Localizable(true)]
         [Browsable(false)]
@@ -622,7 +622,7 @@ namespace System.Windows.Forms
         internal int RawStateImageIndex => (SavedStateImageIndex + 1) << 12;
 
         /// <summary>
-        /// Accessor for our state bit vector.
+        ///  Accessor for our state bit vector.
         /// </summary>
         private int SavedStateImageIndex
         {
@@ -643,7 +643,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Treats the ListViewItem as a row of strings, and returns an array of those strings
+        ///  Treats the ListViewItem as a row of strings, and returns an array of those strings
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -719,7 +719,7 @@ namespace System.Windows.Forms
         internal bool StateImageSet => (state[s_stateImageMaskSet] != 0);
 
         /// <summary>
-        /// Accessor for our state bit vector.
+        ///  Accessor for our state bit vector.
         /// </summary>
         internal bool StateSelected
         {
@@ -728,7 +728,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Accessor for our state bit vector.
+        ///  Accessor for our state bit vector.
         /// </summary>
         private int SubItemCount // Do NOT rename (binary serialization).
         {
@@ -768,7 +768,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Text associated with this ListViewItem
+        ///  Text associated with this ListViewItem
         /// </summary>
         [Localizable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -790,7 +790,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Tool tip text associated with this ListViewItem
+        ///  Tool tip text associated with this ListViewItem
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue("")]
@@ -818,10 +818,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Whether or not the font and coloring for the ListViewItem will be used for all of its subitems.
-        /// If true, the ListViewItem style will be used when drawing the subitems.
-        /// If false, the ListViewItem and its subitems will be drawn in their own individual styles
-        /// if any have been set.
+        ///  Whether or not the font and coloring for the ListViewItem will be used for all of its subitems.
+        ///  If true, the ListViewItem style will be used when drawing the subitems.
+        ///  If false, the ListViewItem and its subitems will be drawn in their own individual styles
+        ///  if any have been set.
         /// </summary>
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -832,7 +832,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initiate editing of the item's label. Only effective if LabelEdit property is true.
+        ///  Initiate editing of the item's label. Only effective if LabelEdit property is true.
         /// </summary>
         public void BeginEdit()
         {
@@ -905,7 +905,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Ensure that the item is visible, scrolling the view as necessary.
+        ///  Ensure that the item is visible, scrolling the view as necessary.
         /// </summary>
         public virtual void EnsureVisible()
         {
@@ -935,8 +935,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a specific portion of the ListViewItem's bounding rectangle.
-        /// The rectangle returned is empty if the ListViewItem has not been added to a ListView control.
+        ///  Returns a specific portion of the ListViewItem's bounding rectangle.
+        ///  The rectangle returned is empty if the ListViewItem has not been added to a ListView control.
         /// </summary>
         public Rectangle GetBounds(ItemBoundsPortion portion)
         {
@@ -983,7 +983,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is used to map list view items w/ their respective groups in localized forms.
+        ///  This is used to map list view items w/ their respective groups in localized forms.
         /// </summary>
         internal void UpdateGroupFromName()
         {
@@ -1008,9 +1008,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when we have just pushed this item into a list view and we need
-        /// to configure the list view's state for the item. Use a valid index
-        /// if you can, or use -1 if you can't.
+        ///  Called when we have just pushed this item into a list view and we need
+        ///  to configure the list view's state for the item. Use a valid index
+        ///  if you can, or use -1 if you can't.
         /// </summary>
         internal void UpdateStateToListView(int index, ref NativeMethods.LVITEM lvItem, bool updateOwner)
         {
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Saves this ListViewItem object to the given data stream.
+        ///  Saves this ListViewItem object to the given data stream.
         /// </summary>
         protected virtual void Serialize(SerializationInfo info, StreamingContext context)
         {
@@ -1565,7 +1565,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the total number of items within the list view.
+            ///  Returns the total number of items within the list view.
             /// </summary>
             [Browsable(false)]
             public int Count => _owner.SubItemCount;
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms
             public bool IsReadOnly => false;
 
             /// <summary>
-            /// Returns a ListViewSubItem given it's zero based index into the ListViewSubItemCollection.
+            ///  Returns a ListViewSubItem given it's zero based index into the ListViewSubItemCollection.
             /// </summary>
             public ListViewSubItem this[int index]
             {
@@ -1618,7 +1618,7 @@ namespace System.Windows.Forms
                 }
             }
             /// <summary>
-            /// Retrieves the child control with the specified key.
+            ///  Retrieves the child control with the specified key.
             /// </summary>
             public virtual ListViewSubItem this[string key]
             {
@@ -1759,17 +1759,17 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns true if the collection contains an item with the specified key, false otherwise.
+            ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
             public virtual bool ContainsKey(string key) => IsValidIndex(IndexOfKey(key));
 
             /// <summary>
-            /// Ensures that the sub item array has the given
-            /// capacity. If it doesn't, it enlarges the
-            /// array until it does. If index is -1, additional
-            /// space is tacked onto the end. If it is a valid
-            /// insertion index into the array, this will move
-            /// the array data to accomodate the space.
+            ///  Ensures that the sub item array has the given
+            ///  capacity. If it doesn't, it enlarges the
+            ///  array until it does. If index is -1, additional
+            ///  space is tacked onto the end. If it is a valid
+            ///  insertion index into the array, this will move
+            ///  the array data to accomodate the space.
             /// </summary>
             private void EnsureSubItemSpace(int size, int index)
             {
@@ -1848,7 +1848,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
+            ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
             public virtual int IndexOfKey(string key)
             {
@@ -1879,7 +1879,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Determines if the index is valid for the collection.
+            ///  Determines if the index is valid for the collection.
             /// </summary>
             private bool IsValidIndex(int index) => ((index >= 0) && (index < Count));
 
@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Removes the child control with the specified key.
+            ///  Removes the child control with the specified key.
             /// </summary>
             public virtual void RemoveByKey(string key)
             {

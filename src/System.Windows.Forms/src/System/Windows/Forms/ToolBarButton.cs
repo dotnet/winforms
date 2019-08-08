@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         internal Menu dropDownMenu = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='ToolBarButton'/> class.
+        ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.
         /// </summary>
         public ToolBarButton()
         {

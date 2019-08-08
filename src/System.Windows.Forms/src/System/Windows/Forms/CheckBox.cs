@@ -133,9 +133,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref='Checked'/> or <see cref='CheckState'/>
-        /// value and the check box's appearance are automatically
-        /// changed when it is clicked.
+        ///  Gets or sets a value indicating whether the <see cref='Checked'/> or <see cref='CheckState'/>
+        ///  value and the check box's appearance are automatically
+        ///  changed when it is clicked.
         /// </summary>
         [
         DefaultValue(true),
@@ -339,11 +339,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
-        /// For CheckBox controls, scale the width of the system-style padding, and height of the box.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
-        /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
+        ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
+        ///  For CheckBox controls, scale the width of the system-style padding, and height of the box.
+        ///  Must call the base class method to get the current DPI values. This method is invoked only when
+        ///  Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
+        ///  EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
         /// <param name="deviceDpiNew">New DPI value</param>
@@ -499,8 +499,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='CheckedChanged'/>
-        /// event.
+        ///  Raises the <see cref='CheckedChanged'/>
+        ///  event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
         {
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='CheckStateChanged'/> event.
+        ///  Raises the <see cref='CheckStateChanged'/> event.
         /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e)
         {

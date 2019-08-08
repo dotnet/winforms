@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is the index we use to send items to the overflow if we run out of room
+        ///  This is the index we use to send items to the overflow if we run out of room
         /// </summary>
         protected int BackwardsWalkingIndex { get; set; }
 
@@ -55,12 +55,12 @@ namespace System.Windows.Forms
         private bool OverflowRequired { get; set; }
 
         /// <summary>
-        /// The current ToolStrip we're operating over.
+        ///  The current ToolStrip we're operating over.
         /// </summary>
         public ToolStrip ToolStrip { get; }
 
         /// <summary>
-        /// This method will mark whether items should be placed in the overflow or on the main ToolStrip.
+        ///  This method will mark whether items should be placed in the overflow or on the main ToolStrip.
         /// </summary>
         private void CalculatePlacementsHorizontal()
         {
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This method will mark whether items should be placed in the overflow or on the main ToolStrip.
+        ///  This method will mark whether items should be placed in the overflow or on the main ToolStrip.
         /// </summary>
         private void CalculatePlacementsVertical()
         {
@@ -641,8 +641,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This method is called when we are walking through the item collection and we have realized that we
-        /// need to free up "X" amount of space to be able to fit an item onto the ToolStrip.
+        ///  This method is called when we are walking through the item collection and we have realized that we
+        ///  need to free up "X" amount of space to be able to fit an item onto the ToolStrip.
         /// </summary>
         private int SendNextItemToOverflow(int spaceNeeded, bool horizontal)
         {

@@ -9,8 +9,8 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides a design-time editor for specifying the <see cref='System.Windows.Forms.Control.Anchor' />
-    /// property.
+    ///  Provides a design-time editor for specifying the <see cref='System.Windows.Forms.Control.Anchor' />
+    ///  property.
     /// </summary>
     [CLSCompliant(false)]
     public sealed class AnchorEditor : UITypeEditor
@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design
         private AnchorUI _anchorUI;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by GetEditorStyle.
+        ///  Edits the given object value using the editor style provided by GetEditorStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the editing style of the Edit method.
+        ///  Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// User Interface for the AnchorEditor.
+        ///  User Interface for the AnchorEditor.
         /// </summary>
         private class AnchorUI : Control
         {

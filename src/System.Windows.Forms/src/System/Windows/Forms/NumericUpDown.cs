@@ -36,7 +36,6 @@ namespace System.Windows.Forms
         // Member variables
         //
         //////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  The number of decimal places to display.
         /// </summary>
@@ -89,7 +88,6 @@ namespace System.Windows.Forms
         // Properties
         //
         //////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Specifies the acceleration information.
         /// </summary>
@@ -383,7 +381,6 @@ namespace System.Windows.Forms
         // Methods
         //
         //////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Occurs when the <see cref='Value'/> property has been changed in some way.
         /// </summary>
@@ -546,7 +543,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='OnValueChanged'/> event.
+        ///  Raises the <see cref='OnValueChanged'/> event.
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {
@@ -658,7 +655,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Increment'/> property should be
+        ///  Indicates whether the <see cref='Increment'/> property should be
         ///  persisted.
         /// </summary>
         private bool ShouldSerializeIncrement()
@@ -667,7 +664,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Maximum'/> property should be persisted.
+        ///  Indicates whether the <see cref='Maximum'/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeMaximum()
         {
@@ -675,7 +672,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Minimum'/> property should be persisted.
+        ///  Indicates whether the <see cref='Minimum'/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeMinimum()
         {
@@ -683,7 +680,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Value'/> property should be persisted.
+        ///  Indicates whether the <see cref='Value'/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeValue()
         {
@@ -928,7 +925,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible name.
+            ///  Gets or sets the accessible name.
             /// </summary>
             public override string Name
             {

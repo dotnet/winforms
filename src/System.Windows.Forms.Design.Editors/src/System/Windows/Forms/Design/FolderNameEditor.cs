@@ -12,7 +12,7 @@ using Microsoft.Win32.SafeHandles;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides an editor for choosing a folder from the filesystem.
+    ///  Provides an editor for choosing a folder from the filesystem.
     /// </summary>
     [CLSCompliant(false)]
     public class FolderNameEditor : UITypeEditor
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the editing style of the Edit method.
+        ///  Retrieves the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -44,8 +44,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Initializes the folder browser dialog when it is created. This gives you an opportunity
-        /// to configure the dialog as you please. The default implementation provides a generic folder browser.
+        ///  Initializes the folder browser dialog when it is created. This gives you an opportunity
+        ///  to configure the dialog as you please. The default implementation provides a generic folder browser.
         /// </summary>
         protected virtual void InitializeDialog(FolderBrowser folderBrowser)
         {
@@ -57,25 +57,25 @@ namespace System.Windows.Forms.Design
             private string _descriptionText = string.Empty;
 
             /// <summary>
-            /// The styles the folder browser will use when browsing
-            /// folders. This should be a combination of flags from
-            /// the FolderBrowserStyles enum.
+            ///  The styles the folder browser will use when browsing
+            ///  folders. This should be a combination of flags from
+            ///  the FolderBrowserStyles enum.
             /// </summary>
             public FolderBrowserStyles Style { get; set; } = FolderBrowserStyles.RestrictToFilesystem;
 
             /// <summary>
-            /// Gets the directory path of the folder the user picked.
+            ///  Gets the directory path of the folder the user picked.
             /// </summary>
             public string DirectoryPath { get; private set; } = string.Empty;
 
             /// <summary>
-            /// Gets/sets the start location of the root node.
+            ///  Gets/sets the start location of the root node.
             /// </summary>
             public FolderBrowserFolder StartLocation { get; set; } = FolderBrowserFolder.Desktop;
 
             /// <summary>
-            /// Gets or sets a description to show above the folders. Here you can provide instructions for
-            /// selecting a folder.
+            ///  Gets or sets a description to show above the folders. Here you can provide instructions for
+            ///  selecting a folder.
             /// </summary>
             public string Description
             {
@@ -84,12 +84,12 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Shows the folder browser dialog.
+            ///  Shows the folder browser dialog.
             /// </summary>
             public DialogResult ShowDialog() => ShowDialog(null);
 
             /// <summary>
-            /// Shows the folder browser dialog with the specified owner.
+            ///  Shows the folder browser dialog with the specified owner.
             /// </summary>
             public unsafe DialogResult ShowDialog(IWin32Window owner)
             {

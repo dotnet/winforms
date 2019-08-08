@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a <see cref='TextBox'/> control that is hosted in a
+    ///  Represents a <see cref='TextBox'/> control that is hosted in a
     /// <see cref='DataGridTextBoxColumn'/> .
     /// </summary>
     [
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             TabStop = false;
         }
         /// <summary>
-        /// Sets the <see cref='DataGrid'/> to which this <see cref='TextBox'/> control belongs.
+        ///  Sets the <see cref='DataGrid'/> to which this <see cref='TextBox'/> control belongs.
         /// </summary>
         public void SetDataGrid(DataGrid parentGrid)
         {

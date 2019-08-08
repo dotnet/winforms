@@ -27,7 +27,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
-        /// determine how to render.
+        ///  determine how to render.
         ///  If this property is false, the renderer will always render with visualstyles.
         /// </summary>
         public static bool RenderMatchingApplicationState

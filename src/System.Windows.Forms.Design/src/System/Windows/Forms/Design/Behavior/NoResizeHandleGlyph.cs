@@ -7,14 +7,14 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The NoResizeHandleGlyph represents the handle for a non-resizeable control in our new seleciton model.  Note that the pen and brush are created once per instance of this class and re-used in our painting logic for perf. reasonse.
+    ///  The NoResizeHandleGlyph represents the handle for a non-resizeable control in our new seleciton model.  Note that the pen and brush are created once per instance of this class and re-used in our painting logic for perf. reasonse.
     /// </summary>
     internal class NoResizeHandleGlyph : SelectionGlyphBase
     {
         private readonly bool _isPrimary = false;
 
         /// <summary>
-        /// NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
+        ///  NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
         /// </summary>
         internal NoResizeHandleGlyph(Rectangle controlBounds, SelectionRules selRules, bool primarySelection, Behavior behavior) : base(behavior)
         {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Very simple paint logic.
+        ///  Very simple paint logic.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

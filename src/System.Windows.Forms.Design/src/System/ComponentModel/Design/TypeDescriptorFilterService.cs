@@ -7,19 +7,19 @@ using System.Collections;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This service is requested by TypeDescriptor when asking for type information for a component.  Our implementation forwards this filter onto IDesignerFilter on the component's designer, should one exist.
+    ///  This service is requested by TypeDescriptor when asking for type information for a component.  Our implementation forwards this filter onto IDesignerFilter on the component's designer, should one exist.
     /// </summary>
     internal sealed class TypeDescriptorFilterService : ITypeDescriptorFilterService
     {
         /// <summary>
-        /// Internal ctor to prevent semitrust from creating us.
+        ///  Internal ctor to prevent semitrust from creating us.
         /// </summary>
         internal TypeDescriptorFilterService()
         {
         }
 
         /// <summary>
-        /// Helper method to return the designer for a given component.
+        ///  Helper method to return the designer for a given component.
         /// </summary>
         private IDesigner GetDesigner(IComponent component)
         {
@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Provides a way to filter the attributes from a component that are displayed to the user.
+        ///  Provides a way to filter the attributes from a component that are displayed to the user.
         /// </summary>
         bool ITypeDescriptorFilterService.FilterAttributes(IComponent component, IDictionary attributes)
         {
@@ -59,7 +59,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Provides a way to filter the events from a component that are displayed to the user.
+        ///  Provides a way to filter the events from a component that are displayed to the user.
         /// </summary>
         bool ITypeDescriptorFilterService.FilterEvents(IComponent component, IDictionary events)
         {
@@ -83,7 +83,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Provides a way to filter the properties from a component that are displayed to the user.
+        ///  Provides a way to filter the properties from a component that are displayed to the user.
         /// </summary>
         bool ITypeDescriptorFilterService.FilterProperties(IComponent component, IDictionary properties)
         {

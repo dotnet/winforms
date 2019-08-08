@@ -76,10 +76,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /*
         /// <summary>
-        /// Checks if the value of the current item can be modified by the user.
+        ///  Checks if the value of the current item can be modified by the user.
         /// </summary>
         /// <returns>
-        /// True if the value can be modified
+        ///  True if the value can be modified
         /// </returns>
         public override bool CanSetPropertyValue() {
            return this.ParentGridEntry.CanSetPropertyValue();
@@ -88,13 +88,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /*
         /// <summary>
-        /// Returns if it's an editable item.  An example of a readonly
-        /// editable item is a collection property -- the property itself
-        /// can not be modified, but it's value (e.g. it's children) can, so
-        /// we don't want to draw it as readonly.
+        ///  Returns if it's an editable item.  An example of a readonly
+        ///  editable item is a collection property -- the property itself
+        ///  can not be modified, but it's value (e.g. it's children) can, so
+        ///  we don't want to draw it as readonly.
         /// </summary>
         /// <returns>
-        /// True if the value associated with this property (e.g. it's children) can be modified even if it's readonly.
+        ///  True if the value associated with this property (e.g. it's children) can be modified even if it's readonly.
         /// </returns>
         public override bool CanSetReadOnlyPropertyValue() {
            return this.ParentGridEntry.CanSetReadOnlyPropertyValue();

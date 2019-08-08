@@ -14,7 +14,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature.  This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.  Responding to this single event will enable the DesignerActionUI to perform all neceessary UI-related operations. Note that the DesignerActionUI uses the BehaviorService to manage all UI interaction.  For every component containing a DesignerAction (determined by the DesignerActionsChagned event) there will be an associated  DesignerActionGlyph and DesignerActionBehavior. Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.  Note that every DesignerAction context menu has an item that will bring up the DesignerActions option pane in the options dialog.
+    ///  The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature.  This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.  Responding to this single event will enable the DesignerActionUI to perform all neceessary UI-related operations. Note that the DesignerActionUI uses the BehaviorService to manage all UI interaction.  For every component containing a DesignerAction (determined by the DesignerActionsChagned event) there will be an associated  DesignerActionGlyph and DesignerActionBehavior. Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.  Note that every DesignerAction context menu has an item that will bring up the DesignerActions option pane in the options dialog.
     /// </summary>
     internal class DesignerActionUI : IDisposable
     {
@@ -50,7 +50,7 @@ namespace System.ComponentModel.Design
         internal static readonly TraceSwitch DropDownVisibilityDebug;
 #endif
         /// <summary>
-        /// Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelecteionService, as well as spin-up the DesignerActionService.
+        ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelecteionService, as well as spin-up the DesignerActionService.
         /// </summary>
         public DesignerActionUI(IServiceProvider serviceProvider, Adorner containerAdorner)
         {
@@ -107,7 +107,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Disposes all UI-related objects and unhooks services.
+        ///  Disposes all UI-related objects and unhooks services.
         /// </summary>
         // Don't need to dispose of designerActionUIService.
         public void Dispose()
@@ -238,7 +238,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We monitor this event so we can update smart tag locations when  controls move.
+        ///  We monitor this event so we can update smart tag locations when  controls move.
         /// </summary>
         private void OnComponentChanged(object source, ComponentChangedEventArgs ce)
         {
@@ -366,7 +366,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is fired by the DesignerActionService in response to a DesignerActionCollection changing.  The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
+        ///  This event is fired by the DesignerActionService in response to a DesignerActionCollection changing.  The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
         /// </summary>
         private void OnDesignerActionsChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
@@ -417,7 +417,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This is the same as DesignerActionChanged, but it is invoked on our control's thread
+        ///  This is the same as DesignerActionChanged, but it is invoked on our control's thread
         /// </summary>
         private void OnInvokedDesignerActionChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
@@ -456,7 +456,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when our KeyShowDesignerActions menu command is fired  (a.k.a. Alt+Shift+F10) - we will find the primary selection, see if it has designer actions, and if so - show the menu.
+        ///  Called when our KeyShowDesignerActions menu command is fired  (a.k.a. Alt+Shift+F10) - we will find the primary selection, see if it has designer actions, and if so - show the menu.
         /// </summary>
         private void OnKeyShowDesignerActions(object sender, EventArgs e)
         {
@@ -501,7 +501,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// When all the DesignerActions have been removed for a particular object, we remove any UI (glyphs) that we may have been managing.
+        ///  When all the DesignerActions have been removed for a particular object, we remove any UI (glyphs) that we may have been managing.
         /// </summary>
         internal void RemoveActionGlyph(object relatedObject)
         {
@@ -684,7 +684,7 @@ namespace System.ComponentModel.Design
 
         bool _cancelClose = false;
         /// <summary>
-        /// This shows the actual chrome paenl that is created by the DesignerActionBehavior object.
+        ///  This shows the actual chrome paenl that is created by the DesignerActionBehavior object.
         /// </summary>
         internal void ShowDesignerActionPanel(IComponent relatedComponent, DesignerActionPanel panel, DesignerActionGlyph glyph)
         {
@@ -949,8 +949,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// General purpose method, based on Control.Contains()...
-        /// Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
+        ///  General purpose method, based on Control.Contains()...
+        ///  Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
         /// </summary>
         private static bool WindowOwnsWindow(IntPtr hWndOwner, IntPtr hWndDescendant)
         {

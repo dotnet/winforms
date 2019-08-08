@@ -98,7 +98,7 @@ namespace System.Windows.Forms
         private ToolBarButtonClickEventHandler onButtonDropDown = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='ToolBar'/> class.
+        ///  Initializes a new instance of the <see cref='ToolBar'/> class.
         /// </summary>
         public ToolBar()
         : base()
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We need to track the current scale factor so that we can tell the
+        ///  We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -843,7 +843,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We need to track the current scale factor so that we can tell the
+        ///  We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -982,7 +982,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when a <see cref='ToolBarButton'/> on the <see cref='ToolBar'/> is clicked.
+        ///  Occurs when a <see cref='ToolBarButton'/> on the <see cref='ToolBar'/> is clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
         public event ToolBarButtonClickEventHandler ButtonClick
@@ -992,7 +992,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when a drop-down style <see cref='ToolBarButton'/> or its down arrow is clicked.
+        ///  Occurs when a drop-down style <see cref='ToolBarButton'/> or its down arrow is clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
         public event ToolBarButtonClickEventHandler ButtonDropDown
@@ -1283,8 +1283,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ButtonClick'/>
-        /// event.
+        ///  Raises the <see cref='ButtonClick'/>
+        ///  event.
         /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
         {
@@ -1292,8 +1292,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ButtonDropDown'/>
-        /// event.
+        ///  Raises the <see cref='ButtonDropDown'/>
+        ///  event.
         /// </summary>
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
         {
@@ -1472,7 +1472,7 @@ namespace System.Windows.Forms
             RecreateHandle();
         }
 
-        /// Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
+        ///  Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
         private void SendToolbarButtonSizeMessage()
         {
             SendMessage(NativeMethods.TB_SETBUTTONSIZE, 0, NativeMethods.Util.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
@@ -1532,7 +1532,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if the <see cref='ButtonSize'/> property needs to be persisted.
+        ///  Determines if the <see cref='ButtonSize'/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeButtonSize()
         {
@@ -1819,20 +1819,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Encapsulates a collection of <see cref='ToolBarButton'/> controls for use by the
+        ///  Encapsulates a collection of <see cref='ToolBarButton'/> controls for use by the
         /// <see cref='ToolBar'/> class.
         /// </summary>
         public class ToolBarButtonCollection : IList
         {
             private readonly ToolBar owner;
             private bool suspendUpdate;
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref='ToolBarButtonCollection'/> class and assigns it to the specified toolbar.
+            ///  Initializes a new instance of the <see cref='ToolBarButtonCollection'/> class and assigns it to the specified toolbar.
             /// </summary>
             public ToolBarButtonCollection(ToolBar owner)
             {

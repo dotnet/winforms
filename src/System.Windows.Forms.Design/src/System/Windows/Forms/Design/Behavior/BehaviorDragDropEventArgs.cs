@@ -7,8 +7,8 @@ using System.Collections;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This class represents the arguments describing a BehaviorDragDrop event
-    /// fired by the BehaviorService.
+    ///  This class represents the arguments describing a BehaviorDragDrop event
+    ///  fired by the BehaviorService.
     /// </summary>
     public class BehaviorDragDropEventArgs : EventArgs
     {
@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the list of IComponents currently being dragged.
+        ///  Returns the list of IComponents currently being dragged.
         /// </summary>
         public ICollection DragComponents { get; }
     }

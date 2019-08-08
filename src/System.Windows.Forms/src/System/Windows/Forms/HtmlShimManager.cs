@@ -153,8 +153,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to
-        /// walk through our lists and make sure we've cleaned up
+        ///  HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to
+        ///  walk through our lists and make sure we've cleaned up
         /// </summary>
         internal void OnWindowUnloaded(HtmlWindow unloadedWindow)
         {

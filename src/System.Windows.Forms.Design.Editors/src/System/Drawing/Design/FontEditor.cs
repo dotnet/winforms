@@ -11,7 +11,7 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides a font editor that is used to visually select and configure a Font object.
+    ///  Provides a font editor that is used to visually select and configure a Font object.
     /// </summary>
     [CLSCompliant(false)]
     public class FontEditor : UITypeEditor
@@ -19,8 +19,8 @@ namespace System.Drawing.Design
         private FontDialog _fontDialog;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by GetEditorStyle.
-        /// A service provider is provided so that any required editing services can be obtained.
+        ///  Edits the given object value using the editor style provided by GetEditorStyle.
+        ///  A service provider is provided so that any required editing services can be obtained.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -65,7 +65,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Retrieves the editing style of the Edit method.false
+        ///  Retrieves the editing style of the Edit method.false
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {

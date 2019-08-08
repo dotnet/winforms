@@ -170,7 +170,7 @@ namespace System.Windows.Forms
         private VisualStyleRenderer sizeGripRenderer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Form'/> class.
+        ///  Initializes a new instance of the <see cref='Form'/> class.
         /// </summary>
         public Form() : base()
         {
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the <see cref='Button'/> control on the form that is clicked when
+        ///  Indicates the <see cref='Button'/> control on the form that is clicked when
         ///  the user presses the ENTER key.
         /// </summary>
         [
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves true if this form is currently active.
+        ///  Retrieves true if this form is currently active.
         /// </summary>
         internal bool Active
         {
@@ -759,7 +759,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the border style of the form.
+        ///  Gets or sets the border style of the form.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(FormBorderStyle.Sizable)]
@@ -862,8 +862,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether a control box is displayed in the
-        /// caption bar of the form.
+        ///  Gets or sets a value indicating whether a control box is displayed in the
+        ///  caption bar of the form.
         /// </summary>
         [SRCategory(nameof(SR.CatWindowStyle))]
         [DefaultValue(true)]
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the icon for the form.
+        ///  Gets or sets the icon for the form.
         /// </summary>
         [AmbientValue(null)]
         [Localizable(true)]
@@ -1326,8 +1326,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if this form should display a warning banner when the form is
-        /// displayed in an unsecure mode.
+        ///  Determines if this form should display a warning banner when the form is
+        ///  displayed in an unsecure mode.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1571,7 +1571,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the minimum size the form can be resized to.
+        ///  Gets the minimum size the form can be resized to.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
@@ -1929,8 +1929,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines the opacity of the form. This can only be set on top level controls.
-        /// Opacity requires Windows 2000 or later, and is ignored on earlier operating systems.
+        ///  Determines the opacity of the form. This can only be set on top level controls.
+        ///  Opacity requires Windows 2000 or later, and is ignored on earlier operating systems.
         /// </summary>
         [SRCategory(nameof(SR.CatWindowStyle))]
         [TypeConverter(typeof(OpacityConverter))]
@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets an array of <see cref='Form'/> objects that represent all forms that are owned by this form.
+        ///  Gets an array of <see cref='Form'/> objects that represent all forms that are owned by this form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -2159,7 +2159,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
+        ///  If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
         /// </summary>
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatWindowStyle))]
@@ -2181,10 +2181,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether an icon is displayed in the
-        /// caption bar of the form.
-        /// If ControlBox == false, then the icon won't be shown no matter what
-        /// the value of ShowIcon is
+        ///  Gets or sets a value indicating whether an icon is displayed in the
+        ///  caption bar of the form.
+        ///  If ControlBox == false, then the icon won't be shown no matter what
+        ///  the value of ShowIcon is
         /// </summary>
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatWindowStyle))]
@@ -2437,8 +2437,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the form should be displayed as the
-        /// top-most form of the application.
+        ///  Gets or sets a value indicating whether the form should be displayed as the
+        ///  top-most form of the application.
         /// </summary>
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatWindowStyle))]
@@ -2630,7 +2630,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the form's window state.
+        ///  Gets or sets the form's window state.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(FormWindowState.Normal)]
@@ -2681,7 +2681,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the text to display in the caption bar of the form.
+        ///  Gets or sets the text to display in the caption bar of the form.
         /// </summary>
         internal override string WindowText
         {
@@ -3691,7 +3691,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the window style of the CreateParams to reflect the bordericons.
+        ///  Adjusts the window style of the CreateParams to reflect the bordericons.
         /// </summary>
         private void FillInCreateParamsBorderIcons(CreateParams cp)
         {
@@ -3745,7 +3745,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the window style of the CreateParams to reflect the borderstyle.
+        ///  Adjusts the window style of the CreateParams to reflect the borderstyle.
         /// </summary>
         private void FillInCreateParamsBorderStyles(CreateParams cp)
         {
@@ -3779,7 +3779,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the CreateParams to reflect the window bounds and start position.
+        ///  Adjusts the CreateParams to reflect the window bounds and start position.
         /// </summary>
         private void FillInCreateParamsStartPosition(CreateParams cp)
         {
@@ -3851,7 +3851,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the Createparams to reflect the window state.
+        ///  Adjusts the Createparams to reflect the window state.
         /// </summary>
         private void FillInCreateParamsWindowState(CreateParams cp)
         {
@@ -3867,7 +3867,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Attempts to set focus to this Form.
+        ///  Attempts to set focus to this Form.
         /// </summary>
         private protected override bool FocusInternal()
         {
@@ -4243,8 +4243,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Override of AutoScaleModeChange method from ContainerControl. We use this to keep our
-        /// own AutoScale property in sync.
+        ///  Override of AutoScaleModeChange method from ContainerControl. We use this to keep our
+        ///  own AutoScale property in sync.
         /// </summary>
         private protected override void OnAutoScaleModeChanged()
         {
@@ -4336,7 +4336,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the Deactivate event.
+        ///  Raises the Deactivate event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDeactivate(EventArgs e)
@@ -4345,7 +4345,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the EnabledChanged event.
+        ///  Raises the EnabledChanged event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnEnabledChanged(EventArgs e)
@@ -4403,9 +4403,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to find out when the
-        /// handle is about to be destroyed.
-        /// Call base.OnHandleDestroyed last.
+        ///  Inheriting classes should override this method to find out when the
+        ///  handle is about to be destroyed.
+        ///  Call base.OnHandleDestroyed last.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnHandleDestroyed(EventArgs e)
@@ -4480,7 +4480,6 @@ namespace System.Windows.Forms
 
             /*
                         ///
-
             */
 
             // Also, at this time we can now locate the form the the correct
@@ -4558,8 +4557,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='InputLanguageChanged'/>
-        /// event.
+        ///  Raises the <see cref='InputLanguageChanged'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanged(InputLanguageChangedEventArgs e)
@@ -4568,8 +4567,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='InputLanguageChanging'/>
-        /// event.
+        ///  Raises the <see cref='InputLanguageChanging'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanging(InputLanguageChangingEventArgs e)
@@ -4611,7 +4610,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MdiChildActivate'/> event.
+        ///  Raises the <see cref='MdiChildActivate'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMdiChildActivate(EventArgs e)
@@ -4622,7 +4621,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MenuStart'/> event.
+        ///  Raises the <see cref='MenuStart'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuStart(EventArgs e)
@@ -4632,7 +4631,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the MenuComplete event.
+        ///  Raises the MenuComplete event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuComplete(EventArgs e)
@@ -4902,7 +4901,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Processes a dialog key. Overrides Control.processDialogKey(). This
         ///  method implements handling of the RETURN, and ESCAPE keys in dialogs.
-        /// The method performs no processing on keys that include the ALT or
+        ///  The method performs no processing on keys that include the ALT or
         ///  CONTROL modifiers.
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
@@ -5314,7 +5313,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Selects this form, and optionally selects the next/previous control.
+        ///  Selects this form, and optionally selects the next/previous control.
         /// </summary>
         protected override void Select(bool directed, bool forward)
         {
@@ -5823,7 +5822,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='AutoScaleBaseSize'/> property should be
+        ///  Indicates whether the <see cref='AutoScaleBaseSize'/> property should be
         ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5838,7 +5837,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Icon'/> property should be persisted.
+        ///  Indicates whether the <see cref='Icon'/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeIcon()
         {
@@ -5855,7 +5854,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Size'/> property should be persisted.
+        ///  Indicates whether the <see cref='Size'/> property should be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeSize()
@@ -5864,7 +5863,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='TransparencyKey'/> property should be
+        ///  Indicates whether the <see cref='TransparencyKey'/> property should be
         ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -6376,8 +6375,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ResizeBegin'/>
-        /// event.
+        ///  Raises the <see cref='ResizeBegin'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResizeBegin(EventArgs e)
@@ -6389,8 +6388,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ResizeEnd'/>
-        /// event.
+        ///  Raises the <see cref='ResizeEnd'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResizeEnd(EventArgs e)
@@ -6409,7 +6408,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Updates the window icon.
+        ///  Updates the window icon.
         /// </summary>
         private void UpdateWindowIcon(bool redrawFrame)
         {
@@ -6810,7 +6809,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// WM_GETMINMAXINFO handler
+        ///  WM_GETMINMAXINFO handler
         /// </summary>
         private void WmGetMinMaxInfo(ref Message m)
         {
@@ -7299,7 +7298,7 @@ namespace System.Windows.Forms
             /*C#r:protected*/
 
             /// <summary>
-            /// Initializes a new instance of the ControlCollection class.
+            ///  Initializes a new instance of the ControlCollection class.
             /// </summary>
             public ControlCollection(Form owner)
             : base(owner)

@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class represents all the information to render the ToolStrip
+    ///  This class represents all the information to render the ToolStrip
     /// </summary>
     public class ToolStripItemTextRenderEventArgs : ToolStripItemRenderEventArgs
     {
@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         private bool _textColorChanged = false;
 
         /// <summary>
-        /// This class represents all the information to render the ToolStrip
+        ///  This class represents all the information to render the ToolStrip
         /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format) : base(g, item)
         {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This class represents all the information to render the ToolStrip
+        ///  This class represents all the information to render the ToolStrip
         /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign) : base(g, item)
         {
@@ -52,12 +52,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The string to draw
+        ///  The string to draw
         /// </summary>
         public string Text { get; set; }
 
         /// <summary>
-        /// The color to draw the text
+        ///  The color to draw the text
         /// </summary>
         public Color TextColor
         {
@@ -72,22 +72,22 @@ namespace System.Windows.Forms
         internal Color DefaultTextColor { get; set; }
 
         /// <summary>
-        /// The font to draw the text
+        ///  The font to draw the text
         /// </summary>
         public Font TextFont { get; set; }
 
         /// <summary>
-        /// The rectangle to draw the text in
+        ///  The rectangle to draw the text in
         /// </summary>
         public Rectangle TextRectangle { get; set; }
 
         /// <summary>
-        /// The rectangle to draw the text in
+        ///  The rectangle to draw the text in
         /// </summary>
         public TextFormatFlags TextFormat { get; set; }
 
         /// <summary>
-        /// The angle at which the text should be drawn in tenths of degrees.
+        ///  The angle at which the text should be drawn in tenths of degrees.
         /// </summary>
         public ToolStripTextDirection TextDirection { get; set; }
     }

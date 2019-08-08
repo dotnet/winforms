@@ -994,7 +994,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Indicates the drawing mode for the tree view.
+            ///  Indicates the drawing mode for the tree view.
             /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Fires the DrawNode event.
+        ///  Fires the DrawNode event.
         /// </summary>
         protected virtual void OnDrawNode(DrawTreeNodeEventArgs e)
         {
@@ -2041,7 +2041,7 @@ namespace System.Windows.Forms
                 SendMessage(NativeMethods.TVM_SETTEXTCOLOR, 0, ColorTranslator.ToWin32(c));
             }
 
-            /// put the linecolor into the native control only if Set ...
+            ///  put the linecolor into the native control only if Set ...
             if (lineColor != Color.Empty)
             {
                 SendMessage(NativeMethods.TVM_SETLINECOLOR, 0, ColorTranslator.ToWin32(lineColor));
@@ -2186,9 +2186,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseHover(EventArgs e)
         {
-            /// Hover events need to be caught for each node
-            /// within the TreeView so the appropriate
-            /// NodeHovered event can be raised.
+            ///  Hover events need to be caught for each node
+            ///  within the TreeView so the appropriate
+            ///  NodeHovered event can be raised.
 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;

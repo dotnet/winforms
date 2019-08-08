@@ -683,11 +683,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Process a command key.
-        /// Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
-        /// Winforms TextBox supports this in .NET.
+        ///  Process a command key.
+        ///  Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
+        ///  Winforms TextBox supports this in .NET.
             ///  m - the current windows message
-        /// keyData - bitmask containing one or more keys
+        ///  keyData - bitmask containing one or more keys
             /// </summary>
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
@@ -882,7 +882,7 @@ namespace System.Windows.Forms
         //-------------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Draws the PlaceholderText in the client area of the TextBox using the default font and color.
+        ///  Draws the PlaceholderText in the client area of the TextBox using the default font and color.
         /// </summary>
         private void DrawPlaceholderText(Graphics graphics)
         {

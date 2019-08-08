@@ -140,7 +140,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Setting child label bounds
+        ///  Setting child label bounds
         /// </summary>
         private void SetChildLabelsBounds()
         {
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Rescaling constants when DPi of the window changed.
+        ///  Rescaling constants when DPi of the window changed.
         /// </summary>
         /// <param name="deviceDpiOld"> old dpi</param>
         /// <param name="deviceDpiNew"> new dpi</param>
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Constructs the new instance of the accessibility object for this control.
+        ///  Constructs the new instance of the accessibility object for this control.
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -217,8 +217,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Indicates whether or not the control supports UIA Providers via
-        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        ///  Indicates whether or not the control supports UIA Providers via
+        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
         internal override bool SupportsUiaProviders => true;
 
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     }
 
     /// <summary>
-    /// Represents the DocComment control accessible object.
+    ///  Represents the DocComment control accessible object.
     /// </summary>
     [Runtime.InteropServices.ComVisible(true)]
     internal class DocCommentAccessibleObject : Control.ControlAccessibleObject
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
-        /// Initializes new instance of DocCommentAccessibleObject.
+        ///  Initializes new instance of DocCommentAccessibleObject.
         /// </summary>
         /// <param name="owningDocComment">The owning DocComment control.</param>
         /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Request to return the element in the specified direction.
+        ///  Request to return the element in the specified direction.
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
@@ -291,7 +291,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Request value of specified property from an element.
+        ///  Request value of specified property from an element.
         /// </summary>
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>

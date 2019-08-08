@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a group within a ListView.
+    ///  Represents a group within a ListView.
     /// </summary>
     [TypeConverter(typeof(ListViewGroupConverter))]
     [ToolboxItem(false)]
@@ -28,14 +28,14 @@ namespace System.Windows.Forms
         private static int s_nextHeader = 1;
 
         /// <summary>
-        /// Creates a ListViewGroup.
+        ///  Creates a ListViewGroup.
         /// </summary>
         public ListViewGroup() : this(string.Format(SR.ListViewGroupDefaultHeader, s_nextHeader++))
         {
         }
 
         /// <summary>
-        /// Creates a ListViewItem object from an Stream.
+        ///  Creates a ListViewItem object from an Stream.
         /// </summary>
         private ListViewGroup(SerializationInfo info, StreamingContext context) : this()
         {
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a ListViewItem object from a Key and a Name
+        ///  Creates a ListViewItem object from a Key and a Name
         /// </summary>
         public ListViewGroup(string key, string headerText) : this()
         {
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a ListViewGroup.
+        ///  Creates a ListViewGroup.
         /// </summary>
         public ListViewGroup(string header)
         {
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a ListViewGroup.
+        ///  Creates a ListViewGroup.
         /// </summary>
     	public ListViewGroup(string header, HorizontalAlignment headerAlignment) : this(header)
         {
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The text displayed in the group header.
+        ///  The text displayed in the group header.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         public string Header
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The alignment of the group header.
+        ///  The alignment of the group header.
         /// </summary>
         [DefaultValue(HorizontalAlignment.Left)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
         internal int ID { get; }
 
         /// <summary>
-        /// The items that belong to this group.
+        ///  The items that belong to this group.
         /// </summary>
         [Browsable(false)]
         public ListView.ListViewItemCollection Items

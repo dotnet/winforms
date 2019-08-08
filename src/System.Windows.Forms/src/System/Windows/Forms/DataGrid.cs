@@ -306,8 +306,8 @@ namespace System.Windows.Forms
         // =-----------------------------------------------------------------
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGrid'/>
-        /// class.
+        ///  Initializes a new instance of the <see cref='DataGrid'/>
+        ///  class.
         /// </summary>
         public DataGrid() : base()
         {
@@ -1379,7 +1379,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='BackColor'/> property should be
+        ///  Indicates whether the <see cref='BackColor'/> property should be
         ///  persisted.
         /// </summary>
         internal override bool ShouldSerializeBackColor()
@@ -3248,7 +3248,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the value of a specified <see cref='DataGridCell'/>.
+        ///  Gets or sets the value of a specified <see cref='DataGridCell'/>.
         /// </summary>
         public object this[DataGridCell cell]
         {
@@ -3772,7 +3772,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='RowHeaderClick'/> event.
+        ///  Raises the <see cref='RowHeaderClick'/> event.
         /// </summary>
         protected void OnRowHeaderClick(EventArgs e)
         {
@@ -4180,8 +4180,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Enter'/>
-        /// event.
+        ///  Raises the <see cref='Control.Enter'/>
+        ///  event.
         /// </summary>
         protected override void OnEnter(EventArgs e)
         {
@@ -4196,8 +4196,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Leave'/>
-        /// event.
+        ///  Raises the <see cref='Control.Leave'/>
+        ///  event.
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
@@ -4254,7 +4254,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyPress'/> event.
+        ///  Raises the <see cref='Control.KeyPress'/> event.
         /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs kpe)
         {
@@ -4275,7 +4275,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseDown'/> event.
+        ///  Raises the <see cref='Control.MouseDown'/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -4481,8 +4481,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates the <see cref='Control.MouseLeave'/>
-        /// event.
+        ///  Creates the <see cref='Control.MouseLeave'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -4506,8 +4506,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseMove'/>
-        /// event.
+        ///  Raises the <see cref='Control.MouseMove'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -4626,7 +4626,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseUp'/> event.
+        ///  Raises the <see cref='Control.MouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
@@ -4670,7 +4670,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseWheel'/> event.
+        ///  Raises the <see cref='Control.MouseWheel'/> event.
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -4730,8 +4730,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Paint'/>
-        /// event.
+        ///  Raises the <see cref='Control.Paint'/>
+        ///  event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs pe)
         {
@@ -4817,7 +4817,7 @@ namespace System.Windows.Forms
         // Since Win32 only invalidates the area that gets uncovered,
         // we have to manually invalidate the old border area
         /// <summary>
-        /// Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -7059,8 +7059,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a <see cref='T:System.Drawing.Rectangle'/>
-        /// that specifies the four corners of the selected cell.
+        ///  Gets a <see cref='T:System.Drawing.Rectangle'/>
+        ///  that specifies the four corners of the selected cell.
         /// </summary>
         public Rectangle GetCurrentCellBounds()
         {
@@ -7069,7 +7069,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by row and column number.
+        ///  Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by row and column number.
         /// </summary>
         public Rectangle GetCellBounds(int row, int col)
         {
@@ -7082,7 +7082,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by <see cref='DataGridCell'/>.
+        ///  Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by <see cref='DataGridCell'/>.
         /// </summary>
         public Rectangle GetCellBounds(DataGridCell dgc)
         {
@@ -10415,7 +10415,7 @@ namespace System.Windows.Forms
             internal int col;
 
             /// <summary>
-            /// Allows the <see cref='HitTestInfo'/> object to inform you the
+            ///  Allows the <see cref='HitTestInfo'/> object to inform you the
             ///  extent of the grid.
             /// </summary>
             public static readonly HitTestInfo Nowhere = new HitTestInfo();
@@ -10456,7 +10456,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the part of the <see cref='DataGrid'/> control, other than the row or column, that was
+            ///  Gets the part of the <see cref='DataGrid'/> control, other than the row or column, that was
             ///  clicked.
             /// </summary>
             public HitTestType Type
@@ -10482,7 +10482,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the hash code for the <see cref='HitTestInfo'/> instance.
+            ///  Gets the hash code for the <see cref='HitTestInfo'/> instance.
             /// </summary>
             public override int GetHashCode() => HashCode.Combine(type, row, col);
 
@@ -10496,8 +10496,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the part of the <see cref='DataGrid'/>
-        /// control the user has clicked.<
+        ///  Specifies the part of the <see cref='DataGrid'/>
+        ///  control the user has clicked.<
         /// </summary>
         [Flags]
         public enum HitTestType

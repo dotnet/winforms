@@ -19,19 +19,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Is Windows 10 Anniversary Update or later. (Redstone 1, build 14393, version 1607)
+        ///  Is Windows 10 Anniversary Update or later. (Redstone 1, build 14393, version 1607)
         /// </summary>
         public static bool IsWindows10_1607OrGreater
             => s_versionInfo.dwMajorVersion >= 10 && s_versionInfo.dwBuildNumber >= 14393;
 
         /// <summary>
-        /// Is Windows 10 Creators Update or later. (Redstone 2, build 15063, version 1703)
+        ///  Is Windows 10 Creators Update or later. (Redstone 2, build 15063, version 1703)
         /// </summary>
         public static bool IsWindows10_1703OrGreater
             => s_versionInfo.dwMajorVersion >= 10 && s_versionInfo.dwBuildNumber >= 15063;
 
         /// <summary>
-        /// Is Windows 8.1 or later.
+        ///  Is Windows 8.1 or later.
         /// </summary>
         public static bool IsWindows8_1OrGreater
             => s_versionInfo.dwMajorVersion >= 10

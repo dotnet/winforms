@@ -12,7 +12,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// A non selectable ToolStrip item
+    ///  A non selectable ToolStrip item
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         private AutomationLiveSetting liveSetting;
 
         /// <summary>
-        /// A non selectable ToolStrip item
+        ///  A non selectable ToolStrip item
         /// </summary>
         public ToolStripStatusLabel()
         {
@@ -54,11 +54,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a new AccessibleObject for this ToolStripStatusLabel instance.
-        /// The AccessibleObject instance returned by this method supports UIA Live Region feature.
+        ///  Creates a new AccessibleObject for this ToolStripStatusLabel instance.
+        ///  The AccessibleObject instance returned by this method supports UIA Live Region feature.
         /// </summary>
         /// <returns>
-        /// AccessibleObject for this ToolStripStatusLabel instance.
+        ///  AccessibleObject for this ToolStripStatusLabel instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
@@ -66,8 +66,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates an instance of the object that defines how image and text
-        /// gets laid out in the ToolStripItem
+        ///  Creates an instance of the object that defines how image and text
+        ///  gets laid out in the ToolStripItem
         /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout()
         {
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called by all constructors of ToolStripButton.
+        ///  Called by all constructors of ToolStripButton.
         /// </summary>
         private void Initialize()
         {
@@ -191,8 +191,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the "politeness" level that a client should use
-        /// to notify the user of changes to the live region.
+        ///  Indicates the "politeness" level that a client should use
+        ///  to notify the user of changes to the live region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAccessibility)),
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
+        ///  Inheriting classes should override this method to handle this event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -269,7 +269,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Raises the LiveRegionChanged UIA event.
+            ///  Raises the LiveRegionChanged UIA event.
             /// </summary>
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()

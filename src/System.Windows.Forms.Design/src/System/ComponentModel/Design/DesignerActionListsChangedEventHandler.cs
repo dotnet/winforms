@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This event is thown by the DesignerActionListservice when a shortcut is either added or removed to/from the related object.
+    ///  This event is thown by the DesignerActionListservice when a shortcut is either added or removed to/from the related object.
     /// </summary>
     [System.Runtime.InteropServices.ComVisible(true)]
     public delegate void DesignerActionListsChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);

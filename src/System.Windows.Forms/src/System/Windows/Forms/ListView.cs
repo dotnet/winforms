@@ -1300,8 +1300,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the current LISTVIEWSTATE_handleDestroyed value so that this
-        /// value can be accessed from child classes.
+        ///  Returns the current LISTVIEWSTATE_handleDestroyed value so that this
+        ///  value can be accessed from child classes.
         /// </summary>
         internal bool ListViewHandleDestroyed
         {
@@ -4378,9 +4378,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseHover(EventArgs e)
         {
-            /// Hover events need to be caught for each node
-            /// within the TreeView so the appropriate
-            /// NodeHovered event can be raised.
+            ///  Hover events need to be caught for each node
+            ///  within the TreeView so the appropriate
+            ///  NodeHovered event can be raised.
 
             ListViewItem item = null;
 
@@ -5420,7 +5420,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        /// For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
+        ///  For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
         ///</summary>
         private void SetItemText(int itemIndex, int subItemIndex, string text, ref NativeMethods.LVITEM lvItem)
         {
@@ -7048,9 +7048,9 @@ namespace System.Windows.Forms
         {
             private readonly ListView owner;
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /* C#r: protected */
@@ -7703,9 +7703,9 @@ namespace System.Windows.Forms
         {
             private readonly ListView owner;
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /* C#r: protected */
@@ -8233,10 +8233,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
-            /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
+            ///  Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
             private int lastAccessedIndex = -1;
 
             /// <summary>
@@ -8715,9 +8715,9 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class ListViewItemCollection : IList
         {
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             internal interface IInnerList
@@ -9730,11 +9730,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates the new instance of AccessibleObject for this ListView control.
-        /// Returning ListViewAccessibleObject.
+        ///  Creates the new instance of AccessibleObject for this ListView control.
+        ///  Returning ListViewAccessibleObject.
         /// </summary>
         /// <returns>
-        /// The AccessibleObject for this ListView instance.
+        ///  The AccessibleObject for this ListView instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {

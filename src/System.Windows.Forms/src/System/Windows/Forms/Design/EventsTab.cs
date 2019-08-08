@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides a tab on the property browser to display events for selection and linking.
+    ///  Provides a tab on the property browser to display events for selection and linking.
     /// </summary>
     public class EventsTab : PropertyTab
     {
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
         private bool _sunkEvent;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='EventsTab'/> class.
+        ///  Initializes a new instance of the <see cref='EventsTab'/> class.
         /// </summary>
         public EventsTab(IServiceProvider sp)
         {
@@ -27,17 +27,17 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets or sets the name of the tab.
+        ///  Gets or sets the name of the tab.
         /// </summary>
         public override string TabName => SR.PBRSToolTipEvents;
 
         /// <summary>
-        /// Gets or sets the help keyword for the tab.
+        ///  Gets or sets the help keyword for the tab.
         /// </summary>
         public override string HelpKeyword => "Events";
 
         /// <summary>
-        /// Gets a value indicating whether the specified object can be extended.
+        ///  Gets a value indicating whether the specified object can be extended.
         /// </summary>
         public override bool CanExtend(object extendee) => extendee == null || !Marshal.IsComObject(extendee);
 
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the default property from the specified object.
+        ///  Gets the default property from the specified object.
         /// </summary>
         public override PropertyDescriptor GetDefaultProperty(object obj)
         {
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets all the properties of the tab.
+        ///  Gets all the properties of the tab.
         /// </summary>
         public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
         {
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the properties of the specified component.
+        ///  Gets the properties of the specified component.
         /// </summary>
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes)
         {

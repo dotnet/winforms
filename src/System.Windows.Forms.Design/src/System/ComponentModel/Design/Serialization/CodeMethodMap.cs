@@ -7,7 +7,7 @@ using System.CodeDom;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This structure is used by IntegrateStatements to put statements in the right place.
+    ///  This structure is used by IntegrateStatements to put statements in the right place.
     /// </summary>
     internal class CodeMethodMap
     {

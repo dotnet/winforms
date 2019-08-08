@@ -5,16 +5,16 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Specifies IDs for containers of certain event types.
+    ///  Specifies IDs for containers of certain event types.
     /// </summary>
     internal enum ContainerSelectorActiveEventArgsType
     {
         /// <summary>
-        /// Indicates the container of the active event was the contextmenu.
+        ///  Indicates the container of the active event was the contextmenu.
         /// </summary>
         Contextmenu = 1,
         /// <summary>
-        /// Indicates the container of the active event was the mouse.
+        ///  Indicates the container of the active event was the mouse.
         /// </summary>
         Mouse = 2,
     }

@@ -5,13 +5,13 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies how a control should be docked by default when added through the designer.
+    ///  Specifies how a control should be docked by default when added through the designer.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockingAttribute : Attribute
     {
         /// <summary>
-        /// Default constructor.
+        ///  Default constructor.
         /// </summary>
         public DockingAttribute()
         {
@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Constructor.
+        ///  Constructor.
         /// </summary>
         public DockingAttribute(DockingBehavior dockingBehavior)
         {
@@ -27,13 +27,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
-        /// This <see langword='static '/>field is read-only.
+        ///  Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
+        ///  This <see langword='static '/>field is read-only.
         /// </summary>
         public static readonly DockingAttribute Default = new DockingAttribute();
 
         /// <summary>
-        /// DockingBehavior property.
+        ///  DockingBehavior property.
         /// </summary>
         public DockingBehavior DockingBehavior { get; }
 

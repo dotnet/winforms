@@ -156,7 +156,7 @@ namespace System.Windows.Forms
         internal override bool IsBinding => _dataSource != null;
 
         /// <remarks>
-        /// no op on the propertyManager
+        ///  no op on the propertyManager
         /// </remarks>
         public override int Position
         {

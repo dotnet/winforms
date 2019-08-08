@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class implements the ISupportInSituService which enables some designers to  go into InSitu Editing when Keys are pressed while the Component is Selected.
+    ///  This class implements the ISupportInSituService which enables some designers to  go into InSitu Editing when Keys are pressed while the Component is Selected.
     /// </summary>
     internal class ToolStripInSituService : ISupportInSituService, IDisposable
     {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         private ToolStripKeyboardHandlingService _toolStripKeyBoardService;
 
         /// <summary>
-        /// The constructor for this class which takes the serviceprovider used to get the selectionservice. This ToolStripInSituService is ToolStrip specific.
+        ///  The constructor for this class which takes the serviceprovider used to get the selectionservice. This ToolStripInSituService is ToolStrip specific.
         /// </summary>
         public ToolStripInSituService(IServiceProvider provider)
         {
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this object, removing all commands from the menu service.
+        ///  Disposes of this object, removing all commands from the menu service.
         /// </summary>
         public void Dispose()
         {
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returning true for IgnoreMessages means that this service is interested in getting the KeyBoard characters.
+        ///  Returning true for IgnoreMessages means that this service is interested in getting the KeyBoard characters.
         /// </summary>
         public bool IgnoreMessages
         {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This function is called on the service when the PBRSFORWARD gets the first WM_CHAR message.
+        ///  This function is called on the service when the PBRSFORWARD gets the first WM_CHAR message.
         /// </summary>
         public void HandleKeyChar()
         {
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This function returns the Window handle that should get all the Keyboard messages.
+        ///  This function returns the Window handle that should get all the Keyboard messages.
         /// </summary>
         public IntPtr GetEditWindow()
         {

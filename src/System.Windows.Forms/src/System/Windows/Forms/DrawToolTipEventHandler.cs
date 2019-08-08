@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Handler for the Draw event of the ToolTip control.
+    ///  Handler for the Draw event of the ToolTip control.
     /// </summary>
     public delegate void DrawToolTipEventHandler(object sender, DrawToolTipEventArgs e);
 }

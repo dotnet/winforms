@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Associated Parent Designer
+        ///  Associated Parent Designer
         /// </summary>
         internal override bool CanBeAssociatedWith(IDesigner parentDesigner)
         {
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Designer Custom ContextMenu.
+        ///  Designer Custom ContextMenu.
         /// </summary>
         private ContextMenuStrip DesignerContextMenu
         {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ToolStripEditorManager used this internal property to  Activate the editor.
+        ///  ToolStripEditorManager used this internal property to  Activate the editor.
         /// </summary>
         internal virtual ToolStripTemplateNode Editor
         {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ToolStripEditorManager used this internal property to  set the the desinger's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
+        ///  ToolStripEditorManager used this internal property to  set the the desinger's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
         /// </summary>
         internal bool IsEditorActive
         {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When the ToolStripItem is created we dont want InitializeNewComponent to set the "text" we do it ourselves from the Text the User has provided in the InSitu Edit Mode. Reason being the item and the Parent unnecessarily Layout and cause flicker.
+        ///  When the ToolStripItem is created we dont want InitializeNewComponent to set the "text" we do it ourselves from the Text the User has provided in the InSitu Edit Mode. Reason being the item and the Parent unnecessarily Layout and cause flicker.
         /// </summary>
         internal bool InternalCreate
         {
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Easy method for getting to the ToolStripItem
+        ///  Easy method for getting to the ToolStripItem
         /// </summary>
         public ToolStripItem ToolStripItem
         {
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method adds the Parent Hierarchy to arraylist and returns that arraylist to the Base ContextMenu provider. This way the ToolStripItem can show the right parents in the contextMenu
+        ///  This method adds the Parent Hierarchy to arraylist and returns that arraylist to the Base ContextMenu provider. This way the ToolStripItem can show the right parents in the contextMenu
         /// <summary>
         internal ArrayList AddParentTree()
         {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Creates the InSitu Edit Node (which is called the TemplateNode).
+        ///  Creates the InSitu Edit Node (which is called the TemplateNode).
         /// </summary>
         private void CreateDummyNode()
         {
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is called by the TemplateNode to Commit the Edit. This Function Simply changes the "Text and Image" property of the  current ToolStripItem.
+        ///  This is called by the TemplateNode to Commit the Edit. This Function Simply changes the "Text and Image" property of the  current ToolStripItem.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
         internal virtual void CommitEdit(Type type, string text, bool commit, bool enterKeyPressed, bool tabKeyPressed)
@@ -462,7 +462,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this designer.
+        ///  Disposes of this designer.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -515,7 +515,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the owner of the current ToolStripItem.
+        ///  Returns the owner of the current ToolStripItem.
         /// </summary>
         protected virtual Component GetOwnerForActionList() => (ToolStripItem.Placement == ToolStripItemPlacement.Main) ? ToolStripItem.GetCurrentParent() : ToolStripItem.Owner;
 
@@ -614,7 +614,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the root dropdown in the chain.
+        ///  Returns the root dropdown in the chain.
         /// </summary>
         internal ToolStripDropDown GetFirstDropDown(ToolStripItem currentItem)
         {
@@ -632,7 +632,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This helper function resets the AutoSize property so that the item SNAPS back to its "preferredSize".
+        ///  This helper function resets the AutoSize property so that the item SNAPS back to its "preferredSize".
         /// </summary>
         private void HideDummyNode()
         {
@@ -645,7 +645,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Get the designer set up to run.
+        ///  Get the designer set up to run.
         /// </summary>
         public override void Initialize(IComponent component)
         {
@@ -675,7 +675,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overriden to always Initialise the ToolStripItem with Text property.
+        ///  Overriden to always Initialise the ToolStripItem with Text property.
         /// </summary>
         public override void InitializeNewComponent(IDictionary defaultValues)
         {
@@ -717,7 +717,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will morph the current item to the provided type "t" of the item...
+        ///  This will morph the current item to the provided type "t" of the item...
         /// </summary>
         internal virtual ToolStripItem MorphCurrentItem(Type t)
         {
@@ -920,7 +920,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Raised when a component's name changes.  Here we update the AccessibleName Property to match the newName.
+        ///  Raised when a component's name changes.  Here we update the AccessibleName Property to match the newName.
         /// </summary>
         private void OnComponentRename(object sender, ComponentRenameEventArgs e)
         {
@@ -931,7 +931,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This can be used for OVERFLOW !!!
+        ///  This can be used for OVERFLOW !!!
         /// </summary>
         private void OnItemPaint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
@@ -960,7 +960,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// For ToolStripItems that are not MenuItems and are on Dropdown we need ot update Selection Rect.
+        ///  For ToolStripItems that are not MenuItems and are on Dropdown we need ot update Selection Rect.
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -1232,7 +1232,7 @@ namespace System.Windows.Forms.Design
         private bool ShouldSerializeOverflow() => (ShadowProperties["Overflow"] != null);
 
         /// <summary>
-        /// This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.
+        ///  This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.
         /// </summary>
         internal virtual void ShowEditNode(bool clicked)
         {

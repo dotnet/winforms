@@ -11,7 +11,7 @@ using System.Globalization;
 namespace System.Windows.Forms.Internal
 {
     /// <summary>
-    /// Debug help utility.
+    ///  Debug help utility.
     /// </summary>
     internal sealed class DbgUtil
     {

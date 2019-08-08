@@ -11,7 +11,7 @@ using System.Drawing.Design;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// Describes and represents inherited properties in an inherited class.
+    ///  Describes and represents inherited properties in an inherited class.
     /// </summary>
     internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     {
@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         private object _originalValue;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
+        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
         /// </summary>
         public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, new Attribute[] { })
         {
@@ -111,7 +111,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets the type of the component this property descriptor is bound to.
+        ///  Gets or sets the type of the component this property descriptor is bound to.
         /// </summary>
         public override Type ComponentType
         {
@@ -122,7 +122,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this property is read only.
+        ///  Gets or sets a value indicating whether this property is read only.
         /// </summary>
         public override bool IsReadOnly
         {
@@ -154,7 +154,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets the type of the property.
+        ///  Gets or sets the type of the property.
         /// </summary>
         public override Type PropertyType
         {
@@ -162,7 +162,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Indicates whether reset will change the value of the component.
+        ///  Indicates whether reset will change the value of the component.
         /// </summary>
         public override bool CanResetValue(object component)
         {
@@ -209,7 +209,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We need to merge in attributes from the wrapped property descriptor here.
+        ///  We need to merge in attributes from the wrapped property descriptor here.
         /// </summary>
         protected override void FillAttributes(IList attributeList)
         {
@@ -221,7 +221,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the current value of the property on the component, invoking the getXXX method.
+        ///  Gets the current value of the property on the component, invoking the getXXX method.
         /// </summary>
         public override object GetValue(object component)
         {
@@ -267,7 +267,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Resets the default value for this property on the component.
+        ///  Resets the default value for this property on the component.
         /// </summary>
         public override void ResetValue(object component)
         {
@@ -295,7 +295,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sets the value to be the new value of this property on the component by invoking the setXXX method on the component.
+        ///  Sets the value to be the new value of this property on the component by invoking the setXXX method on the component.
         /// </summary>
         public override void SetValue(object component, object value)
         {
@@ -303,7 +303,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Indicates whether the value of this property needs to be persisted.
+        ///  Indicates whether the value of this property needs to be persisted.
         /// </summary>
         public override bool ShouldSerializeValue(object component)
         {

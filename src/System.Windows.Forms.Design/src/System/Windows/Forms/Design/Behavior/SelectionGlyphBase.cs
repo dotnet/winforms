@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This is the base class for all the selection Glyphs: GrabHandle, Hidden, Locked, Selection, and Tray Glyphs.  This class includes all like-operations for the Selection glyphs.
+    ///  This is the base class for all the selection Glyphs: GrabHandle, Hidden, Locked, Selection, and Tray Glyphs.  This class includes all like-operations for the Selection glyphs.
     /// </summary>
     internal abstract class SelectionGlyphBase : Glyph
     {
@@ -17,14 +17,14 @@ namespace System.Windows.Forms.Design.Behavior
         protected SelectionRules rules; // the selection rules - defining how the control can change
 
         /// <summary>
-        /// Standard constructor.
+        ///  Standard constructor.
         /// </summary>
         internal SelectionGlyphBase(Behavior behavior) : base(behavior)
         {
         }
 
         /// <summary>
-        /// Read-only property describing the SelecitonRules for these Glyphs.
+        ///  Read-only property describing the SelecitonRules for these Glyphs.
         /// </summary>
         public SelectionRules SelectionRules
         {
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
+        ///  Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
         /// </summary>
         public override Cursor GetHitTest(Point p)
         {
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the HitTestCursor for this glyph.
+        ///  Returns the HitTestCursor for this glyph.
         /// </summary>
         public Cursor HitTestCursor
         {
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// The Bounds of this glyph.
+        ///  The Bounds of this glyph.
         /// </summary>
         public override Rectangle Bounds
         {
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// There's no paint logic on this base class.
+        ///  There's no paint logic on this base class.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

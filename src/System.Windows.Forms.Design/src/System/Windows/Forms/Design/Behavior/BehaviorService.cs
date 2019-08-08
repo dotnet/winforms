@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
+        ///  Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
         /// </summary>
         internal bool UseSnapLines
         {
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.Design.Behavior
             set => _actionPointer = value;
         }
         /// <summary>
-        /// Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for testing purposes. See TestHook_GetRecentSnapLines method.
+        ///  Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for testing purposes. See TestHook_GetRecentSnapLines method.
         /// </summary>
         internal string[] RecentSnapLines
         {
@@ -577,7 +577,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
+        ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
         /// </summary>
         private class AdornerWindow : Control
         {
@@ -622,7 +622,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// We'll use CreateHandle as our notification for creating our mouse attacher.
+            ///  We'll use CreateHandle as our notification for creating our mouse attacher.
             /// </summary>
             protected override void OnHandleCreated(EventArgs e)
             {
@@ -635,7 +635,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Unhook and null out our mouseHook.
+            ///  Unhook and null out our mouseHook.
             /// </summary>
             protected override void OnHandleDestroyed(EventArgs e)
             {
@@ -650,7 +650,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Null out our mouseHook and unhook any events.
+            ///  Null out our mouseHook and unhook any events.
             /// </summary>
             protected override void Dispose(bool disposing)
             {
@@ -665,7 +665,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created & not being disposed.
             /// </summary>
             internal Control DesignerFrame
             {
@@ -673,7 +673,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Returns the display rectangle for the adorner window
+            ///  Returns the display rectangle for the adorner window
             /// </summary>
             internal Rectangle DesignerFrameDisplayRectangle
             {
@@ -691,7 +691,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created & not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
             {
@@ -708,7 +708,7 @@ namespace System.Windows.Forms.Design.Behavior
             public IEnumerable<Adorner> Adorners { get; private set; }
 
             /// <summary>
-            /// Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
+            ///  Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
             /// </summary>
             internal void EndDragNotification()
             {
@@ -716,7 +716,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow()
             {
@@ -728,7 +728,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Region region)
             {
@@ -744,7 +744,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Rectangle rectangle)
             {
@@ -760,7 +760,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragDrop(DragEventArgs e)
             {
@@ -807,7 +807,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragEnter(DragEventArgs e)
             {
@@ -826,7 +826,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragLeave(EventArgs e)
             {
@@ -843,7 +843,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragOver(DragEventArgs e)
             {
@@ -860,7 +860,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
             {
@@ -868,7 +868,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e)
             {
@@ -876,7 +876,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse Messages so we can send drag notifcations.
+            ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse Messages so we can send drag notifcations.
             /// </summary>
             internal void StartDragNotification()
             {
@@ -884,7 +884,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
+            ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
             /// </summary>
             protected override void WndProc(ref Message m)
             {

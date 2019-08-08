@@ -64,8 +64,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
+        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            /// Retrieve a copy of the value array
+            ///  Retrieve a copy of the value array
             /// </summary>
             public override object[] Values
             {
@@ -259,7 +259,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             /// <summary>
-            /// Retrieve a copy of the nme array.
+            ///  Retrieve a copy of the nme array.
             /// </summary>
             public override string[] Names
             {

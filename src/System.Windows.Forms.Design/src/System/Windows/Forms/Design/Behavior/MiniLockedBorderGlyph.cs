@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The LockedBorderGlyph draws one side (depending on type) of a SelectionBorder in the 'Locked' mode.  The constructor will initialize and cache the pen and brush objects to avoid uneccessary recreations.
+    ///  The LockedBorderGlyph draws one side (depending on type) of a SelectionBorder in the 'Locked' mode.  The constructor will initialize and cache the pen and brush objects to avoid uneccessary recreations.
     /// </summary>
     internal class MiniLockedBorderGlyph : SelectionGlyphBase
     {
@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design.Behavior
         internal SelectionBorderGlyphType Type { get => _type; set => _type = value; }
 
         /// <summary>
-        /// This constructor extends from the standard SelectionGlyphBase constructor.  Note that a primarySelection flag is passed in - this will be used when determining the colors of the borders.
+        ///  This constructor extends from the standard SelectionGlyphBase constructor.  Note that a primarySelection flag is passed in - this will be used when determining the colors of the borders.
         /// </summary>
         internal MiniLockedBorderGlyph(Rectangle controlBounds, SelectionBorderGlyphType type, Behavior behavior, bool primarySelection) : base(behavior)
         {
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Helper function that initializes the Glyph based on bounds, type, primary sel, and bordersize.
+        ///  Helper function that initializes the Glyph based on bounds, type, primary sel, and bordersize.
         /// </summary>
         private void InitializeGlyph(Rectangle controlBounds, SelectionBorderGlyphType type)
         {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Simple painting logic for locked Glyphs.
+        ///  Simple painting logic for locked Glyphs.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

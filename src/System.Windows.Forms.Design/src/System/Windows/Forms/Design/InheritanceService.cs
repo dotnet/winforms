@@ -13,7 +13,7 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// Provides a set of methods for analyzing and identifying inherited components.
+    ///  Provides a set of methods for analyzing and identifying inherited components.
     /// </summary>
     public class InheritanceService : IInheritanceService, IDisposable
     {
@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         private InheritanceAttribute _addingAttribute;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritanceService'/> class.
+        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritanceService'/> class.
         /// </summary>
         public InheritanceService()
         {
@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.InheritanceService'/>.
         /// </summary>
         public void Dispose()
         {
@@ -49,7 +49,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
         /// </summary>
         public void AddInheritedComponents(IComponent component, IContainer container)
         {
@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
         /// </summary>
         protected virtual void AddInheritedComponents(Type type, IComponent component, IContainer container)
         {
@@ -231,7 +231,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Indicates the inherited members to ignore.
+        ///  Indicates the inherited members to ignore.
         /// </summary>
         protected virtual bool IgnoreInheritedMember(MemberInfo member, IComponent component)
         {
@@ -249,7 +249,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the inheritance attribute of the specified component.
+        ///  Gets the inheritance attribute of the specified component.
         /// </summary>
         public InheritanceAttribute GetInheritanceAttribute(IComponent component)
         {

@@ -17,7 +17,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class implements the standard set of menu commands for the form designer.  This set of command is shared between the form designer (and other UI-based form packages), and composition designer, which doesn't manipulate controls. Therefore, this set of command should only contain commands that are common to both functions.
+    ///  This class implements the standard set of menu commands for the form designer.  This set of command is shared between the form designer (and other UI-based form packages), and composition designer, which doesn't manipulate controls. Therefore, this set of command should only contain commands that are common to both functions.
     /// </summary>
     internal class CommandSet : IDisposable
     {
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
         private StatusCommandUI _statusCommandUI; //Used to update the statusBar Information.
 
         /// <summary>
-        /// Creates a new CommandSet object. This object implements the set of commands that the UI.Win32 form designer offers.
+        ///  Creates a new CommandSet object. This object implements the set of commands that the UI.Win32 form designer offers.
         /// </summary>
         public CommandSet(ISite site)
         {
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Demand creates a pointer to the BehaviorService
+        ///  Demand creates a pointer to the BehaviorService
         /// </summary>
         protected BehaviorService BehaviorService
         {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the menu command service, which the command set typically uses quite a bit.
+        ///  Retrieves the menu command service, which the command set typically uses quite a bit.
         /// </summary>
         protected IMenuCommandService MenuService
         {
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the selection service, which the command set typically uses quite a bit.
+        ///  Retrieves the selection service, which the command set typically uses quite a bit.
         /// </summary>
         protected ISelectionService SelectionService
         {
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This property demand creates our snaplinetimer used to track how long we'll leave snaplines on the screen before erasing them
+        ///  This property demand creates our snaplinetimer used to track how long we'll leave snaplines on the screen before erasing them
         /// </summary>
         protected Timer SnapLineTimer
         {
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Checks if an object supports ComponentEditors, and optionally launches the editor.
+        ///  Checks if an object supports ComponentEditors, and optionally launches the editor.
         /// </summary>
         private bool CheckComponentEditor(object obj, bool launchEditor)
         {
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this object, removing all commands from the menu service.
+        ///  Disposes of this object, removing all commands from the menu service.
         /// </summary>
         public virtual void Dispose()
         {
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Properly cleans up our drag engine.
+        ///  Properly cleans up our drag engine.
         /// </summary>
         protected void EndDragManager()
         {
@@ -306,7 +306,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Filters the set of selected components.  The selection service will retrieve all components that are currently selected.  This method allows you to filter this set down to components that match your criteria.  The selectionRules parameter must contain one or more flags from the SelectionRules class.  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
+        ///  Filters the set of selected components.  The selection service will retrieve all components that are currently selected.  This method allows you to filter this set down to components that match your criteria.  The selectionRules parameter must contain one or more flags from the SelectionRules class.  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
         /// </summary>
         private object[] FilterSelection(object[] components, SelectionRules selectionRules)
         {
@@ -336,7 +336,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used to retrieve the selection for a copy.  The default implementation retrieves the current selection.
+        ///  Used to retrieve the selection for a copy.  The default implementation retrieves the current selection.
         /// </summary>
         protected virtual ICollection GetCopySelection()
         {
@@ -388,7 +388,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used to retrieve the current location of the given component.
+        ///  Used to retrieve the current location of the given component.
         /// </summary>
         private Point GetLocation(IComponent comp)
         {
@@ -412,7 +412,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the given property on the given component.
+        ///  Retrieves the given property on the given component.
         /// </summary>
         protected PropertyDescriptor GetProperty(object comp, string propName)
         {
@@ -420,7 +420,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the requested service.
+        ///  Retrieves the requested service.
         /// </summary>
         protected virtual object GetService(Type serviceType)
         {
@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used to retrieve the current size of the given component.
+        ///  Used to retrieve the current size of the given component.
         /// </summary>
         private Size GetSize(IComponent comp)
         {
@@ -445,7 +445,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the snap information for the given component.
+        ///  Retrieves the snap information for the given component.
         /// </summary>
         protected virtual void GetSnapInformation(IDesignerHost host, IComponent component, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty)
         {
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called before doing any change to multiple controls to check if we have the right to make any change otherwise we would get a checkout message for each control we call setvalue on
+        ///  Called before doing any change to multiple controls to check if we have the right to make any change otherwise we would get a checkout message for each control we call setvalue on
         /// </summary>
         protected bool CanCheckout(IComponent comp)
         {
@@ -508,7 +508,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by the event handler service when the current event handler has changed.  Here we invalidate all of our menu items so that they can pick up the new event handler.
+        ///  Called by the event handler service when the current event handler has changed.  Here we invalidate all of our menu items so that they can pick up the new event handler.
         /// </summary>
         private void OnEventHandlerChanged(object sender, EventArgs e)
         {
@@ -516,7 +516,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called for the two cancel commands we support.
+        ///  Called for the two cancel commands we support.
         /// </summary>
         private void OnKeyCancel(object sender, EventArgs e)
         {
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called for the two cancel commands we support.  Returns true If we did anything with the cancel, or false if not.
+        ///  Called for the two cancel commands we support.  Returns true If we did anything with the cancel, or false if not.
         /// </summary>
         protected virtual bool OnKeyCancel(object sender)
         {
@@ -558,7 +558,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called for the "default" command, typically the Enter key.
+        ///  Called for the "default" command, typically the Enter key.
         /// </summary>
         protected void OnKeyDefault(object sender, EventArgs e)
         {
@@ -583,7 +583,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called for all cursor movement commands.
+        ///  Called for all cursor movement commands.
         /// </summary>
         protected virtual void OnKeyMove(object sender, EventArgs e)
         {
@@ -788,7 +788,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called for all alignment operations that key off of a primary selection.
+        ///  Called for all alignment operations that key off of a primary selection.
         /// </summary>
         protected void OnMenuAlignByPrimary(object sender, EventArgs e)
         {
@@ -937,7 +937,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the align->to grid menu item is selected.
+        ///  Called when the align->to grid menu item is selected.
         /// </summary>
         protected void OnMenuAlignToGrid(object sender, EventArgs e)
         {
@@ -1053,7 +1053,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the center horizontally or center vertically menu item is selected.
+        ///  Called when the center horizontally or center vertically menu item is selected.
         /// </summary>
         protected void OnMenuCenterSelection(object sender, EventArgs e)
         {
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the copy menu item is selected.
+        ///  Called when the copy menu item is selected.
         /// </summary>
         protected void OnMenuCopy(object sender, EventArgs e)
         {
@@ -1284,7 +1284,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the cut menu item is selected.
+        ///  Called when the cut menu item is selected.
         /// </summary>
         protected void OnMenuCut(object sender, EventArgs e)
         {
@@ -1431,7 +1431,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the delete menu item is selected.
+        ///  Called when the delete menu item is selected.
         /// </summary>
         protected void OnMenuDelete(object sender, EventArgs e)
         {
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the paste menu item is selected.
+        ///  Called when the paste menu item is selected.
         /// </summary>
         protected void OnMenuPaste(object sender, EventArgs e)
         {
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the select all menu item is selected.
+        ///  Called when the select all menu item is selected.
         /// </summary>
         protected void OnMenuSelectAll(object sender, EventArgs e)
         {
@@ -2054,7 +2054,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the show grid menu item is selected.
+        ///  Called when the show grid menu item is selected.
         /// </summary>
         protected void OnMenuShowGrid(object sender, EventArgs e)
         {
@@ -2093,7 +2093,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Handles the various size to commands.
+        ///  Handles the various size to commands.
         /// </summary>
         protected void OnMenuSizingCommand(object sender, EventArgs e)
         {
@@ -2193,7 +2193,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the size->to grid menu item is selected.
+        ///  Called when the size->to grid menu item is selected.
         /// </summary>
         protected void OnMenuSizeToGrid(object sender, EventArgs e)
         {
@@ -2274,7 +2274,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the properties menu item is selected on the Context menu
+        ///  Called when the properties menu item is selected on the Context menu
         /// </summary>
         protected void OnMenuDesignerProperties(object sender, EventArgs e)
         {
@@ -2297,7 +2297,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the snap to grid menu item is selected.
+        ///  Called when the snap to grid menu item is selected.
         /// </summary>
         protected void OnMenuSnapToGrid(object sender, EventArgs e)
         {
@@ -2335,7 +2335,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a spacing command is selected
+        ///  Called when a spacing command is selected
         /// </summary>
         protected void OnMenuSpacingCommand(object sender, EventArgs e)
         {
@@ -2707,7 +2707,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the current selection changes.  Here we determine what commands can and can't be enabled.
+        ///  Called when the current selection changes.  Here we determine what commands can and can't be enabled.
         /// </summary>
         protected void OnSelectionChanged(object sender, EventArgs e)
         {
@@ -2754,7 +2754,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When this timer expires, this tells us that we need to erase any snaplines we have drawn.  First, we need to marshal this back to the correct thread.
+        ///  When this timer expires, this tells us that we need to erase any snaplines we have drawn.  First, we need to marshal this back to the correct thread.
         /// </summary>
         private void OnSnapLineTimerExpire(object sender, EventArgs e)
         {
@@ -2766,7 +2766,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when our snapline timer expires - this method has been call has been properly marshalled back to the correct thread.
+        ///  Called when our snapline timer expires - this method has been call has been properly marshalled back to the correct thread.
         /// </summary>
         private void OnSnapLineTimerExpireMarshalled(object sender, EventArgs e)
         {
@@ -2775,7 +2775,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines the status of a menu command.  Commands with this event handler are always enabled.
+        ///  Determines the status of a menu command.  Commands with this event handler are always enabled.
         /// </summary>
         protected void OnStatusAlways(object sender, EventArgs e)
         {
@@ -2784,7 +2784,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines the status of a menu command.  Commands with this event handler are enabled when one or more objects are selected.
+        ///  Determines the status of a menu command.  Commands with this event handler are enabled when one or more objects are selected.
         /// </summary>
         protected void OnStatusAnySelection(object sender, EventArgs e)
         {
@@ -2793,7 +2793,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Status for the copy command.  This is enabled when there is something juicy selected.
+        ///  Status for the copy command.  This is enabled when there is something juicy selected.
         /// </summary>
         protected void OnStatusCopy(object sender, EventArgs e)
         {
@@ -2827,7 +2827,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Status for the cut command.  This is enabled when there is something juicy selected and that something does not contain any inherited components.
+        ///  Status for the cut command.  This is enabled when there is something juicy selected and that something does not contain any inherited components.
         /// </summary>
         protected void OnStatusCut(object sender, EventArgs e)
         {
@@ -2839,7 +2839,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Status for the delete command. This is enabled when there is something selected and that something does not contain inherited components.
+        ///  Status for the delete command. This is enabled when there is something selected and that something does not contain inherited components.
         /// </summary>
         protected void OnStatusDelete(object sender, EventArgs e)
         {
@@ -2873,7 +2873,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines the status of a menu command.  Commands with this event are enabled when there is something yummy on the clipboard.
+        ///  Determines the status of a menu command.  Commands with this event are enabled when there is something yummy on the clipboard.
         /// </summary>
         protected void OnStatusPaste(object sender, EventArgs e)
         {
@@ -2932,7 +2932,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is called when the selection has changed.  Anyone using CommandSetItems that need to update their status based on selection changes should override this and update their own commands at this time.  The base implementaion runs through all base commands and calls UpdateStatus on them.
+        ///  This is called when the selection has changed.  Anyone using CommandSetItems that need to update their status based on selection changes should override this and update their own commands at this time.  The base implementaion runs through all base commands and calls UpdateStatus on them.
         /// </summary>
         protected virtual void OnUpdateCommandStatus()
         {
@@ -2944,7 +2944,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method grows the objects collection by one.  It prepends the collection with a string[] which contains the component names in order for each component in the list.
+        ///  This method grows the objects collection by one.  It prepends the collection with a string[] which contains the component names in order for each component in the list.
         /// </summary>
         private ICollection PrependComponentNames(ICollection objects)
         {
@@ -2971,7 +2971,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// called by the formatting commands when we need a given selection array sorted. Sorting the array sorts by x from left to right, and by Y from top to bottom.
+        ///  called by the formatting commands when we need a given selection array sorted. Sorting the array sorts by x from left to right, and by Y from top to bottom.
         /// </summary>
         private void SortSelection(object[] selectedObjects, int nSortBy)
         {
@@ -2994,7 +2994,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Common function that updates the status of clipboard menu items only
+        ///  Common function that updates the status of clipboard menu items only
         /// </summary>
         private void UpdateClipboardItems(object s, EventArgs e)
         {
@@ -3192,7 +3192,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We extend MenuCommand for our command set items.  A command set item is a menu command with an added delegate that is used to determine the flags for the menu item.  We have different classes of delegates here. For example, many  menu items may be enabled when there is at least one object selected, while others are only enabled if there is more than one object or if there is a primary selection.
+        ///  We extend MenuCommand for our command set items.  A command set item is a menu command with an added delegate that is used to determine the flags for the menu item.  We have different classes of delegates here. For example, many  menu items may be enabled when there is at least one object selected, while others are only enabled if there is more than one object or if there is a primary selection.
         /// </summary>
         protected class CommandSetItem : MenuCommand
         {
@@ -3216,7 +3216,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Creates a new CommandSetItem.
+            ///  Creates a new CommandSetItem.
             /// </summary>
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, bool optimizeStatus, IUIService uiService)
             : base(invokeHandler, id)
@@ -3250,7 +3250,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Checks if the status for this command is valid, meaning we don't need to call the status handler.
+            ///  Checks if the status for this command is valid, meaning we don't need to call the status handler.
             /// </summary>
             private bool CommandStatusValid
             {
@@ -3269,7 +3269,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Applys the cached status to this item.
+            ///  Applys the cached status to this item.
             /// </devdco>
             private void ApplyCachedStatus()
             {
@@ -3291,7 +3291,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// This may be called to invoke the menu item.
+            ///  This may be called to invoke the menu item.
             /// </summary>
             public override void Invoke()
             {
@@ -3322,7 +3322,7 @@ namespace System.Windows.Forms.Design
             }
 
             ///<summary>
-            /// Only pass this down to the base when we're not doing the cached update.
+            ///  Only pass this down to the base when we're not doing the cached update.
             ///</summary>
             protected override void OnCommandChanged(EventArgs e)
             {
@@ -3333,7 +3333,7 @@ namespace System.Windows.Forms.Design
             }
 
             ///<summary>
-            /// Saves the status for this command to the statusstate that's stored in the hashtable based on our status handler delegate.
+            ///  Saves the status for this command to the statusstate that's stored in the hashtable based on our status handler delegate.
             ///</summary>
             private void SaveCommandStatus()
             {
@@ -3355,7 +3355,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the status of this command should be re-queried.
+            ///  Called when the status of this command should be re-queried.
             /// </summary>
             public void UpdateStatus()
             {
@@ -3390,7 +3390,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Remove this command item from the static hashtable to avoid leaking this object.
+            ///  Remove this command item from the static hashtable to avoid leaking this object.
             /// </summary>
             public virtual void Dispose()
             {
@@ -3405,7 +3405,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// This class saves the state for a given command.  It keeps track of the results of the last status handler invocation and what "selection version" that happened on.
+            ///  This class saves the state for a given command.  It keeps track of the results of the last status handler invocation and what "selection version" that happened on.
             /// </summary>
             private class StatusState
             {
@@ -3421,7 +3421,7 @@ namespace System.Windows.Forms.Design
                 internal int refCount = 0;
 
                 /// <summary>
-                /// Just what it says...
+                ///  Just what it says...
                 /// </summary>
                 public int SelectionVersion
                 {
@@ -3429,7 +3429,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 /// <summary>
-                /// Pushes the state stored in this object into the given command item.
+                ///  Pushes the state stored in this object into the given command item.
                 /// </summary>
                 internal void ApplyState(CommandSetItem item)
                 {
@@ -3441,7 +3441,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 /// <summary>
-                /// Updates this status object  with the state from the given item, and saves teh seletion version.
+                ///  Updates this status object  with the state from the given item, and saves teh seletion version.
                 /// </summary>
                 internal void SaveState(CommandSetItem item, int version)
                 {
@@ -3468,19 +3468,19 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The immediate command set item is used for commands that cannot be cached.  Commands such as Paste that get outside stimulus cannot be cached by our menu system, so they get an ImmediateCommandSetItem instead of a CommandSetItem.
+        ///  The immediate command set item is used for commands that cannot be cached.  Commands such as Paste that get outside stimulus cannot be cached by our menu system, so they get an ImmediateCommandSetItem instead of a CommandSetItem.
         /// </summary>
         protected class ImmediateCommandSetItem : CommandSetItem
         {
             /// <summary>
-            /// Creates a new ImmediateCommandSetItem.
+            ///  Creates a new ImmediateCommandSetItem.
             /// </summary>
             public ImmediateCommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService) : base(commandSet, statusHandler, invokeHandler, id, uiService)
             {
             }
 
             /// <summary>
-            /// Overrides OleStatus in MenuCommand to invoke our status handler first.
+            ///  Overrides OleStatus in MenuCommand to invoke our status handler first.
             /// </summary>
             public override int OleStatus
             {
@@ -3493,7 +3493,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Component comparer that compares the left property of a component.
+        ///  Component comparer that compares the left property of a component.
         /// </summary>
         private class ComponentLeftCompare : IComparer
         {
@@ -3513,7 +3513,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Component comparer that compares the top property of a component.
+        ///  Component comparer that compares the top property of a component.
         /// </summary>
         private class ComponentTopCompare : IComparer
         {

@@ -10,7 +10,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Transparent Window to parent the DropDowns.
+    ///  Transparent Window to parent the DropDowns.
     /// </summary>
     internal sealed class ToolStripAdornerWindowService : IDisposable
     {
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
         private readonly IOverlayService _overlayService;
 
         /// <summary>
-        /// This constructor is called from DocumentDesigner's Initialize method.
+        ///  This constructor is called from DocumentDesigner's Initialize method.
         /// </summary>
         internal ToolStripAdornerWindowService(IServiceProvider serviceProvider, Control windowFrame)
         {
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the actual Control that represents the transparent AdornerWindow.
+        ///  Returns the actual Control that represents the transparent AdornerWindow.
         /// </summary>
         internal Control ToolStripAdornerWindowControl
         {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Creates and returns a Graphics object for the AdornerWindow
+        ///  Creates and returns a Graphics object for the AdornerWindow
         /// </summary>
         public Graphics ToolStripAdornerWindowGraphics
         {
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes the behavior service.
+        ///  Disposes the behavior service.
         /// </summary>
         public void Dispose()
         {
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Translates a point in the AdornerWindow to screen coords.
+        ///  Translates a point in the AdornerWindow to screen coords.
         /// </summary>
         public Point AdornerWindowPointToScreen(Point p)
         {
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the location (upper-left corner) of the AdornerWindow in screen coords.
+        ///  Gets the location (upper-left corner) of the AdornerWindow in screen coords.
         /// </summary>
         public Point AdornerWindowToScreen()
         {
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the location of a Control translated to AdornerWidnow coords.
+        ///  Returns the location of a Control translated to AdornerWidnow coords.
         /// </summary>
         public Point ControlToAdornerWindow(Control c)
         {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate()
         {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect)
         {
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r)
         {
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ControlDesigner calls this internal method in response to a WmPaint. We need to know when a ControlDesigner paints - 'cause we will need to re-paint any glyphs above of this Control.
+        ///  ControlDesigner calls this internal method in response to a WmPaint. We need to know when a ControlDesigner paints - 'cause we will need to re-paint any glyphs above of this Control.
         /// </summary>
         internal void ProcessPaintMessage(Rectangle paintRect)
         {
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the ToolStripAdornerWindowService to parent the MenuItem DropDowns.
+        ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the ToolStripAdornerWindowService to parent the MenuItem DropDowns.
         /// </summary>
         private class ToolStripAdornerWindow : Control
         {
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// The key here is to set the appropriate TransparetWindow style.
+            ///  The key here is to set the appropriate TransparetWindow style.
             /// </summary>
             protected override CreateParams CreateParams
             {
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// We'll use CreateHandle as our notification for creating our mouse attacher.
+            ///  We'll use CreateHandle as our notification for creating our mouse attacher.
             /// </summary>
             protected override void OnHandleCreated(EventArgs e)
             {
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Unhook and null out our mouseHook.
+            ///  Unhook and null out our mouseHook.
             /// </summary>
             protected override void OnHandleDestroyed(EventArgs e)
             {
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Null out our mouseHook and unhook any events.
+            ///  Null out our mouseHook and unhook any events.
             /// </summary>
             protected override void Dispose(bool disposing)
             {
@@ -234,7 +234,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created & not being disposed.
             /// </summary>
             private bool DesignerFrameValid
             {
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow()
             {
@@ -261,7 +261,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Region region)
             {
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Rectangle rectangle)
             {
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest  messages are correctly parsed and translated to AdornerWindow coords.
+            ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest  messages are correctly parsed and translated to AdornerWindow coords.
             /// </summary>
             protected override void WndProc(ref Message m)
             {

@@ -141,7 +141,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Performs vector addition of two <see cref='Padding'/> objects.
+        ///  Performs vector addition of two <see cref='Padding'/> objects.
         /// </summary>
         public static Padding operator +(Padding p1, Padding p2)
         {
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Contracts a <see cref='Drawing.Size'/> by another <see cref='Drawing.Size'/>.
+        ///  Contracts a <see cref='Drawing.Size'/> by another <see cref='Drawing.Size'/>.
         /// </summary>
         public static Padding operator -(Padding p1, Padding p2)
         {
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Tests whether two <see cref='Padding'/> objects are identical.
+        ///  Tests whether two <see cref='Padding'/> objects are identical.
         /// </summary>
         public static bool operator ==(Padding p1, Padding p2)
         {
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Tests whether two <see cref='Padding'/> objects are different.
+        ///  Tests whether two <see cref='Padding'/> objects are different.
         /// </summary>
         public static bool operator !=(Padding p1, Padding p2) => !(p1 == p2);
 

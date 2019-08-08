@@ -9,7 +9,7 @@ using System.Globalization;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This service allows clients to work with all references on a form, not just the top-level sited components.
+    ///  This service allows clients to work with all references on a form, not just the top-level sited components.
     /// </summary>
     internal sealed class ReferenceService : IReferenceService, IDisposable
     {
@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         private bool _populating;
 
         /// <summary>
-        /// Constructs the ReferenceService.
+        ///  Constructs the ReferenceService.
         /// </summary>
         internal ReferenceService(IServiceProvider provider)
         {
@@ -30,7 +30,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Creates an entry for a top-level component and it's children.
+        ///  Creates an entry for a top-level component and it's children.
         /// </summary>
         private void CreateReferences(IComponent component)
         {
@@ -38,7 +38,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Recursively creates references for namespaced objects.
+        ///  Recursively creates references for namespaced objects.
         /// </summary>
         private void CreateReferences(string trailingName, object reference, IComponent sitedComponent)
         {
@@ -59,7 +59,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Demand populates the _references variable.
+        ///  Demand populates the _references variable.
         /// </summary>
         private void EnsureReferences()
         {
@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Listens for component additions to find all the references it contributes.
+        ///  Listens for component additions to find all the references it contributes.
         /// </summary>
         private void OnComponentAdded(object sender, ComponentEventArgs cevent)
         {
@@ -147,7 +147,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Listens for component removes to delete all the references it holds.
+        ///  Listens for component removes to delete all the references it holds.
         /// </summary>
         private void OnComponentRemoved(object sender, ComponentEventArgs cevent)
         {
@@ -168,7 +168,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Listens for component removes to delete all the references it holds.
+        ///  Listens for component removes to delete all the references it holds.
         /// </summary>
         private void OnComponentRename(object sender, ComponentRenameEventArgs cevent)
         {
@@ -183,7 +183,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes all the references that this component owns.
+        ///  Removes all the references that this component owns.
         /// </summary>
         private void RemoveReferences(IComponent component)
         {
@@ -201,7 +201,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Cleanup and detach from our events.
+        ///  Cleanup and detach from our events.
         /// </summary>
         void IDisposable.Dispose()
         {
@@ -219,7 +219,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Finds the sited component for a given reference, returning null if not found.
+        ///  Finds the sited component for a given reference, returning null if not found.
         /// </summary>
         IComponent IReferenceService.GetComponent(object reference)
         {
@@ -240,7 +240,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Finds name for a given reference, returning null if not found.
+        ///  Finds name for a given reference, returning null if not found.
         /// </summary>
         string IReferenceService.GetName(object reference)
         {
@@ -262,7 +262,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Finds a reference with the given name, returning null if not found.
+        ///  Finds a reference with the given name, returning null if not found.
         /// </summary>
         object IReferenceService.GetReference(string name)
         {
@@ -283,7 +283,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns all references available in this designer.
+        ///  Returns all references available in this designer.
         /// </summary>
         object[] IReferenceService.GetReferences()
         {
@@ -298,7 +298,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns all references available in this designer that are assignable to the given type.
+        ///  Returns all references available in this designer that are assignable to the given type.
         /// </summary>
         object[] IReferenceService.GetReferences(Type baseType)
         {
@@ -325,7 +325,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// The class that holds the information about a reference.
+        ///  The class that holds the information about a reference.
         /// </summary>
         private sealed class ReferenceHolder
         {
@@ -335,7 +335,7 @@ namespace System.ComponentModel.Design
             private string _fullName;
 
             /// <summary>
-            /// Creates a new reference holder.
+            ///  Creates a new reference holder.
             /// </summary>
             internal ReferenceHolder(string trailingName, object reference, IComponent sitedComponent)
             {
@@ -360,7 +360,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Resets the name of this reference holder.  It will be re-aquired on demand
+            ///  Resets the name of this reference holder.  It will be re-aquired on demand
             /// </summary>
             internal void ResetName()
             {
@@ -368,7 +368,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The name of the reference we are holding.
+            ///  The name of the reference we are holding.
             /// </summary>
             internal string Name
             {
@@ -406,7 +406,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The reference we are holding.
+            ///  The reference we are holding.
             /// </summary>
             internal object Reference
             {
@@ -414,7 +414,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The sited component associated with this reference.
+            ///  The sited component associated with this reference.
             /// </summary>
             internal IComponent SitedComponent
             {

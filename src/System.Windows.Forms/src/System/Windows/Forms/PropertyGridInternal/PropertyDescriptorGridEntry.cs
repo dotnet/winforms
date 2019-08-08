@@ -58,8 +58,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// specify that this grid entry should be allowed to be merged for.
-        /// multi-select.
+        ///  specify that this grid entry should be allowed to be merged for.
+        ///  multi-select.
         /// </summary>
         public override bool AllowMerge
         {
@@ -291,7 +291,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Returns non-localized name of this property.
+        ///  Returns non-localized name of this property.
         /// </summary>
         public override string PropertyName
         {
@@ -314,8 +314,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Gets or sets the value for the property that is represented
-        /// by this GridEntry.
+        ///  Gets or sets the value for the property that is represented
+        ///  by this GridEntry.
         /// </summary>
         public override object PropertyValue
         {
@@ -405,7 +405,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Returns the type converter for this entry.
+        ///  Returns the type converter for this entry.
         /// </summary>
         internal override TypeConverter TypeConverter
         {
@@ -425,8 +425,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Returns the type editor for this entry.  This may return null if there
-        /// is no type editor.
+        ///  Returns the type editor for this entry.  This may return null if there
+        ///  is no type editor.
         /// </summary>
         internal override UITypeEditor UITypeEditor
         {
@@ -444,7 +444,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Invokes the type editor for editing this item.
+        ///  Invokes the type editor for editing this item.
         /// </summary>
         internal override void EditPropertyValue(PropertyGridView iva)
         {
@@ -1127,11 +1127,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Creates a new AccessibleObject for this PropertyDescriptorGridEntry instance.
-        /// The AccessibleObject instance returned by this method supports IsEnabled UIA property.
+        ///  Creates a new AccessibleObject for this PropertyDescriptorGridEntry instance.
+        ///  The AccessibleObject instance returned by this method supports IsEnabled UIA property.
         /// </summary>
         /// <returns>
-        /// AccessibleObject for this PropertyDescriptorGridEntry instance.
+        ///  AccessibleObject for this PropertyDescriptorGridEntry instance.
         /// </returns>
         protected override GridEntryAccessibleObject GetAccessibilityObject()
         {
@@ -1151,7 +1151,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>

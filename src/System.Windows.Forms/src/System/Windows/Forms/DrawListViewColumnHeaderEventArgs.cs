@@ -8,13 +8,13 @@ using System.Windows.Forms.VisualStyles;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class contains the information a user needs to paint ListView
-    /// column header (Details view only).
+    ///  This class contains the information a user needs to paint ListView
+    ///  column header (Details view only).
     /// </summary>
     public class DrawListViewColumnHeaderEventArgs : EventArgs
     {
         /// <summary>
-        /// Creates a new DrawListViewColumnHeaderEventArgs with the given parameters.
+        ///  Creates a new DrawListViewColumnHeaderEventArgs with the given parameters.
         /// </summary>
         public DrawListViewColumnHeaderEventArgs(Graphics graphics, Rectangle bounds, int columnIndex,
                                                  ColumnHeader header, ListViewItemStates state,
@@ -31,52 +31,52 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Graphics object with which painting should be done.
+        ///  Graphics object with which painting should be done.
         /// </summary>
         public Graphics Graphics { get; }
 
         /// <summary>
-        /// The rectangle outlining the area in which the painting should be done.
+        ///  The rectangle outlining the area in which the painting should be done.
         /// </summary>
         public Rectangle Bounds { get; }
 
         /// <summary>
-        /// The index of this column.
+        ///  The index of this column.
         /// </summary>
         public int ColumnIndex { get; }
 
         /// <summary>
-        /// The header object.
+        ///  The header object.
         /// </summary>
         public ColumnHeader Header { get; }
 
         /// <summary>
-        /// State information pertaining to the header.
+        ///  State information pertaining to the header.
         /// </summary>
         public ListViewItemStates State { get; }
 
         /// <summary>
-        /// Color used to draw the header's text.
+        ///  Color used to draw the header's text.
         /// </summary>
         public Color ForeColor { get; }
 
         /// <summary>
-        /// Color used to draw the header's background.
+        ///  Color used to draw the header's background.
         /// </summary>
         public Color BackColor { get; }
 
         /// <summary>
-        /// Font used to render the header's text.
+        ///  Font used to render the header's text.
         /// </summary>
         public Font Font { get; }
 
         /// <summary>
-        /// Causes the item do be drawn by the system instead of owner drawn.
+        ///  Causes the item do be drawn by the system instead of owner drawn.
         /// </summary>
         public bool DrawDefault { get; set; }
 
         /// <summary>
-        /// Draws the header's background.
+        ///  Draws the header's background.
         /// </summary>
         public void DrawBackground()
         {
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the header's text (overloaded)
+        ///  Draws the header's text (overloaded)
         /// </summary>
         public void DrawText()
         {
@@ -129,7 +129,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the header's text (overloaded) - takes a TextFormatFlags argument.
+        ///  Draws the header's text (overloaded) - takes a TextFormatFlags argument.
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {

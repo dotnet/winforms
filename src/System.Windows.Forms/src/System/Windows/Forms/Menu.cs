@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This is the base class for all menu components (MainMenu, MenuItem, and ContextMenu).
+    ///  This is the base class for all menu components (MainMenu, MenuItem, and ContextMenu).
     /// </summary>
     [ToolboxItemFilter("System.Windows.Forms")]
     [ListBindable(false)]
@@ -522,7 +522,7 @@ namespace System.Windows.Forms
             return (IntPtr)NativeMethods.Util.MAKELONG(firstMatch, action);
         }
 
-        /// Delegate type used by MatchKeyToMenuItem
+        ///  Delegate type used by MatchKeyToMenuItem
         private delegate bool MenuItemKeyComparer(MenuItem mi, char key);
 
         /// <summary>
@@ -694,14 +694,14 @@ namespace System.Windows.Forms
             return result;
         }
 
-        /// MenuItemKeyComparer delegate used by WmMenuCharInternal
+        ///  MenuItemKeyComparer delegate used by WmMenuCharInternal
         private bool CheckOwnerDrawItemWithMnemonic(MenuItem mi, char key)
         {
             return mi.OwnerDraw &&
                    mi.Mnemonic == key;
         }
 
-        /// MenuItemKeyComparer delegate used by WmMenuCharInternal
+        ///  MenuItemKeyComparer delegate used by WmMenuCharInternal
         private bool CheckOwnerDrawItemNoMnemonic(MenuItem mi, char key)
         {
             return mi.OwnerDraw &&
@@ -715,9 +715,9 @@ namespace System.Windows.Forms
         {
             private readonly Menu owner;
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             public MenuItemCollection(Menu owner)

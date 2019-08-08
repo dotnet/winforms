@@ -12,7 +12,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class is going to replace the shell contextMenu and uses the ContextMenuStrip. The ContextMenuStrip contains groups and groupOrder which it uses to add items to itself. ControlDesigners can add custom items to the contextMenu, using the new member to the  group and add the groupOrder to the ContextMenu.
+    ///  This class is going to replace the shell contextMenu and uses the ContextMenuStrip. The ContextMenuStrip contains groups and groupOrder which it uses to add items to itself. ControlDesigners can add custom items to the contextMenu, using the new member to the  group and add the groupOrder to the ContextMenu.
     /// </summary>
     internal class BaseContextMenuStrip : GroupedContextMenuStrip
     {

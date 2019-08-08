@@ -126,7 +126,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// [To be  supplied]
+        ///  [To be  supplied]
         /// </summary>
         public event EventHandler AllowSortingChanged
         {
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms
         public static readonly DataGridTableStyle DefaultTableStyle = new DataGridTableStyle(true);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGridTableStyle'/> class.
+        ///  Initializes a new instance of the <see cref='DataGridTableStyle'/> class.
         /// </summary>
         public DataGridTableStyle(bool isDefaultTableStyle)
         {
@@ -1206,7 +1206,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGridTableStyle'/> class with the specified
+        ///  Initializes a new instance of the <see cref='DataGridTableStyle'/> class with the specified
         /// <see cref='CurrencyManager'/>.
         /// </summary>
         public DataGridTableStyle(CurrencyManager listManager) : this()
@@ -1457,7 +1457,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref='Forms.DataGrid'/> control for the drawn table.
+        ///  Gets or sets the <see cref='Forms.DataGrid'/> control for the drawn table.
         /// </summary>
         [Browsable(false)]
         public virtual DataGrid DataGrid

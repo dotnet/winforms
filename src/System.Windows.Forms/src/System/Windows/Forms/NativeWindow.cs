@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
+        ///  Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
         internal DpiAwarenessContext DpiAwarenessContext { get; } = DpiHelper.IsScalingRequirementMet
             ? CommonUnsafeNativeMethods.TryGetThreadDpiAwarenessContext()
@@ -114,9 +114,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This was factored into another function so the finalizer in control that releases the window
-        /// can perform the exact same code without further changes.  If you make changes to the finalizer,
-        /// change this method -- try not to change NativeWindow's finalizer.
+        ///  This was factored into another function so the finalizer in control that releases the window
+        ///  can perform the exact same code without further changes.  If you make changes to the finalizer,
+        ///  change this method -- try not to change NativeWindow's finalizer.
         /// </summary>
         internal void ForceExitMessageLoop()
         {
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
         internal NativeWindow PreviousWindow { get; private set; }
 
         /// <summary>
-        /// Address of the Windows default WNDPROC (DefWindowProcW).
+        ///  Address of the Windows default WNDPROC (DefWindowProcW).
         /// </summary>
         internal static IntPtr DefaultWindowProc
         {
@@ -1405,7 +1405,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Once the classname and style bits have been set, this can be called to register the class.
+            ///  Once the classname and style bits have been set, this can be called to register the class.
             /// </summary>
             private unsafe void RegisterClass()
             {

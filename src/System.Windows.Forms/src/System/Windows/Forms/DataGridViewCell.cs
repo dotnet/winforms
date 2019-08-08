@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the Index of a column in the <see cref='DataGrid'/> control.
+        ///  Gets or sets the Index of a column in the <see cref='DataGrid'/> control.
         /// </summary>
         public int ColumnIndex => OwningColumn?.Index ?? -1;
 
@@ -571,7 +571,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the index of a row in the <see cref='DataGrid'/> control.
+        ///  Gets or sets the index of a row in the <see cref='DataGrid'/> control.
         /// </summary>
         [Browsable(false)]
         public int RowIndex => OwningRow?.Index ?? -1;
@@ -5092,7 +5092,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+            ///  Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
             /// </summary>
             /// <param name="child">The child accessible object.</param>
             internal override void SetDetachableChild(AccessibleObject child)

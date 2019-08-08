@@ -480,9 +480,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// true if the commands pane will be can be made visible
-        /// for the currently selected objects.  Objects that
-        /// expose verbs can show commands.
+        ///  true if the commands pane will be can be made visible
+        ///  for the currently selected objects.  Objects that
+        ///  expose verbs can show commands.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         SRDescription(nameof(SR.PropertyGridCanShowCommandsDesc))]
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The text used color for category headings. The background color is determined by the LineColor property.
+        ///  The text used color for category headings. The background color is determined by the LineColor property.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The background color for the hot commands region.
+        ///  The background color for the hot commands region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -539,7 +539,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The forground color for the hot commands region.
+        ///  The forground color for the hot commands region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The link color for the hot commands region.
+        ///  The link color for the hot commands region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -578,7 +578,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The active link color for the hot commands region.
+        ///  The active link color for the hot commands region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -597,7 +597,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The color for the hot commands region when the link is disabled.
+        ///  The color for the hot commands region when the link is disabled.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -636,7 +636,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns true if the commands pane is currently shown.
+        ///  Returns true if the commands pane is currently shown.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual bool CommandsVisible
@@ -648,8 +648,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns true if the commands pane will be shown for objects
-        /// that expose verbs.
+        ///  Returns true if the commands pane will be shown for objects
+        ///  that expose verbs.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -676,10 +676,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a default location for showing the context menu.  This
-        /// location is the center of the active property label in the grid, and
-        /// is used useful to position the context menu when the menu is invoked
-        /// via the keyboard.
+        ///  Returns a default location for showing the context menu.  This
+        ///  location is the center of the active property label in the grid, and
+        ///  is used useful to position the context menu when the menu is invoked
+        ///  via the keyboard.
         /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the help control accessibility object.
+        ///  Gets the help control accessibility object.
         /// </summary>
         internal AccessibleObject HelpAccessibleObject
         {
@@ -811,7 +811,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The background color for the help region.
+        ///  The background color for the help region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -831,7 +831,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The forground color for the help region.
+        ///  The forground color for the help region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -871,7 +871,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets or gets the visiblity state of the help pane.
+        ///  Sets or gets the visiblity state of the help pane.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -897,7 +897,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the hot commands control accessible object.
+        ///  Gets the hot commands control accessible object.
         /// </summary>
         internal AccessibleObject HotCommandsAccessibleObject
         {
@@ -908,7 +908,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the main entry accessible object.
+        ///  Gets the main entry accessible object.
         /// </summary>
         internal AccessibleObject GridViewAccessibleObject
         {
@@ -919,7 +919,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the value indicating whether the main entry is visible.
+        ///  Gets the value indicating whether the main entry is visible.
         /// </summary>
         internal bool GridViewVisible
         {
@@ -1103,8 +1103,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets or gets the current property sort type, which can be
-        /// PropertySort.Categorized or PropertySort.Alphabetical.
+        ///  Sets or gets the current property sort type, which can be
+        ///  PropertySort.Categorized or PropertySort.Alphabetical.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1176,9 +1176,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets a single Object into the grid to be browsed.  If multiple
-        /// objects are being browsed, this property will return the first
-        /// one in the list.  If no objects are selected, null is returned.
+        ///  Sets a single Object into the grid to be browsed.  If multiple
+        ///  objects are being browsed, this property will return the first
+        ///  one in the list.  If no objects are selected, null is returned.
         /// </summary>
         [
         DefaultValue(null),
@@ -1557,7 +1557,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the value indicating whether the Property grid is sorted by categories.
+        ///  Gets the value indicating whether the Property grid is sorted by categories.
         /// </summary>
         internal bool SortedByCategories
         {
@@ -1631,7 +1631,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the toolbar control accessibility object.
+        ///  Gets the toolbar control accessibility object.
         /// </summary>
         internal AccessibleObject ToolbarAccessibleObject
         {
@@ -1642,7 +1642,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets or gets the visiblity state of the toolStrip.
+        ///  Sets or gets the visiblity state of the toolStrip.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -2029,8 +2029,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Clears the tabs of the given scope or smaller.
-        /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
+        ///  Clears the tabs of the given scope or smaller.
+        ///  tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
         /// </summary>
         internal void ClearTabs(PropertyTabScope tabScope)
         {
@@ -2046,7 +2046,7 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        /// Constructs the new instance of the accessibility object for current PropertyGrid control.
+        ///  Constructs the new instance of the accessibility object for current PropertyGrid control.
         /// </summary>
         /// <returns></returns>
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -2749,7 +2749,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the element from point.
+        ///  Gets the element from point.
         /// </summary>
         /// <param name="point">The point where to search the element.</param>
         /// <returns>The element found in the current point.</returns>
@@ -2903,8 +2903,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when a property on an Ole32 Object changes.
-        /// See IPropertyNotifySink::OnChanged
+        ///  Called when a property on an Ole32 Object changes.
+        ///  See IPropertyNotifySink::OnChanged
         /// </summary>
         void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispID)
         {
@@ -2945,8 +2945,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We forward messages from several of our children
-        /// to our mouse move so we can put up the spliter over their borders
+        ///  We forward messages from several of our children
+        ///  to our mouse move so we can put up the spliter over their borders
         /// </summary>
         private void OnChildMouseMove(object sender, MouseEventArgs me)
         {
@@ -2960,8 +2960,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We forward messages from several of our children
-        /// to our mouse move so we can put up the spliter over their borders
+        ///  We forward messages from several of our children
+        ///  to our mouse move so we can put up the spliter over their borders
         /// </summary>
         private void OnChildMouseDown(object sender, MouseEventArgs me)
         {
@@ -3411,9 +3411,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when a property on an Ole32 Object that is tagged
-        /// with "requestedit" is about to be edited.
-        /// See IPropertyNotifySink::OnRequestEdit
+        ///  Called when a property on an Ole32 Object that is tagged
+        ///  with "requestedit" is about to be edited.
+        ///  See IPropertyNotifySink::OnRequestEdit
         /// </summary>
         int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispID)
         {
@@ -3823,10 +3823,10 @@ namespace System.Windows.Forms
         /*
 
         /// <summary>
-        /// Returns the first child control that can take focus
+        ///  Returns the first child control that can take focus
         /// </summary>
         /// <retval>
-        /// Returns null if no control is able to take focus
+        ///  Returns null if no control is able to take focus
         /// </retval>
         private Control FirstFocusableChild {
             get {
@@ -3870,7 +3870,7 @@ namespace System.Windows.Forms
 */
 
         /// <summary>
-        /// Returns the last child control that can take focus
+        ///  Returns the last child control that can take focus
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -4090,8 +4090,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Refreshes the tabs of the given scope by deleting them and requerying objects and documents
-        /// for them.
+        ///  Refreshes the tabs of the given scope by deleting them and requerying objects and documents
+        ///  for them.
         /// </summary>
         public void RefreshTabs(PropertyTabScope tabScope)
         {
@@ -4804,7 +4804,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This 16x16 Bitmap is applied to the button which orders properties alphabetically.
+        ///  This 16x16 Bitmap is applied to the button which orders properties alphabetically.
         /// </summary>
         [
         Browsable(false),
@@ -4820,7 +4820,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
+        ///  This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
         /// </summary>
         [
         Browsable(false),
@@ -4836,7 +4836,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
+        ///  This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
         /// </summary>
         [
         Browsable(false),
@@ -5053,8 +5053,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether or not the control supports UIA Providers via
-        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        ///  Indicates whether or not the control supports UIA Providers via
+        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
         internal override bool SupportsUiaProviders => true;
 
@@ -5123,7 +5123,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Rescaling constants.
+        ///  Rescaling constants.
         /// </summary>
         private void RescaleConstants()
         {
@@ -5134,7 +5134,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Rescale constants when DPI changed
+        ///  Rescale constants when DPI changed
         /// </summary>
         /// <param name="deviceDpiOld">old dpi</param>
         /// <param name="deviceDpiNew">new dpi</param>
@@ -5460,8 +5460,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Clears the tabs of the given scope or smaller.
-            /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
+            ///  Clears the tabs of the given scope or smaller.
+            ///  tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
             /// </summary>
             public void Clear(PropertyTabScope tabScope)
             {
@@ -5727,8 +5727,8 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// Represents the PropertyGrid accessibility object.
-    /// Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
+    ///  Represents the PropertyGrid accessibility object.
+    ///  Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
     /// </summary>
     [ComVisible(true)]
     internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject
@@ -5736,7 +5736,7 @@ namespace System.Windows.Forms
         private readonly PropertyGrid _owningPropertyGrid;
 
         /// <summary>
-        /// Initializes new instance of PropertyGridAccessibleObject
+        ///  Initializes new instance of PropertyGridAccessibleObject
         /// </summary>
         /// <param name="owningPropertyGrid">The PropertyGrid owning control.</param>
         public PropertyGridAccessibleObject(PropertyGrid owningPropertyGrid) : base(owningPropertyGrid)
@@ -5745,15 +5745,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Return the child element at the specified point, if one exists,
-        /// otherwise return this element if the point is on this element,
-        /// otherwise return null.
+        ///  Return the child element at the specified point, if one exists,
+        ///  otherwise return this element if the point is on this element,
+        ///  otherwise return null.
         /// </summary>
         /// <param name="x">x coordinate of point to check</param>
         /// <param name="y">y coordinate of point to check</param>
         /// <returns>Return the child element at the specified point, if one exists,
-        /// otherwise return this element if the point is on this element,
-        /// otherwise return null.
+        ///  otherwise return this element if the point is on this element,
+        ///  otherwise return null.
         /// </returns>
         internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
         {
@@ -5769,7 +5769,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Request to return the element in the specified direction.
+        ///  Request to return the element in the specified direction.
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
@@ -5794,7 +5794,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Request to return the element in the specified direction regarding the provided child element.
+        ///  Request to return the element in the specified direction regarding the provided child element.
         /// </summary>
         /// <param name="childFragment">The child element regarding which the target element is searched.</param>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
@@ -5830,7 +5830,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Return the element that is the root node of this fragment of UI.
+        ///  Return the element that is the root node of this fragment of UI.
         /// </summary>
         internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
         {
@@ -5841,7 +5841,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the accessible child corresponding to the specified index.
+        ///  Gets the accessible child corresponding to the specified index.
         /// </summary>
         /// <param name="index">The child index.</param>
         /// <returns>The accessible child.</returns>
@@ -5894,7 +5894,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the number of children belonging to an accessible object.
+        ///  Gets the number of children belonging to an accessible object.
         /// </summary>
         /// <returns>The number of children.</returns>
         internal int GetChildFragmentCount()
@@ -5925,17 +5925,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Return the element in this fragment which has the keyboard focus,
+        ///  Return the element in this fragment which has the keyboard focus,
         /// </summary>
         /// <returns>Return the element in this fragment which has the keyboard focus,
-        /// if any; otherwise return null.</returns>
+        ///  if any; otherwise return null.</returns>
         internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
         {
             return GetFocused();
         }
 
         /// <summary>
-        /// Gets the child control index.
+        ///  Gets the child control index.
         /// </summary>
         /// <param name="controlAccessibleObject">The control accessible object which index should be found.</param>
         /// <returns>The child accessible index or -1 if not found.</returns>
@@ -5956,15 +5956,15 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// Represents the PropertyGrid inner ToolStrip control.
-    /// Is used starting with Accessibility Improvements of level 3.
+    ///  Represents the PropertyGrid inner ToolStrip control.
+    ///  Is used starting with Accessibility Improvements of level 3.
     /// </summary>
     internal class PropertyGridToolStrip : ToolStrip
     {
         private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
-        /// Initializes new instance of PropertyGridToolStrip control.
+        ///  Initializes new instance of PropertyGridToolStrip control.
         /// </summary>
         /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
         public PropertyGridToolStrip(PropertyGrid parentPropertyGrid)
@@ -5973,13 +5973,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether or not the control supports UIA Providers via
-        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        ///  Indicates whether or not the control supports UIA Providers via
+        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        /// Constructs the new instance of the accessibility object for this control.
+        ///  Constructs the new instance of the accessibility object for this control.
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -5989,7 +5989,7 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// Represents the PropertyGridToolStrip control accessibility object.
+    ///  Represents the PropertyGridToolStrip control accessibility object.
     /// </summary>
     [ComVisible(true)]
     internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
@@ -5997,7 +5997,7 @@ namespace System.Windows.Forms
         private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
-        /// Constructs new instance of PropertyGridToolStripAccessibleObject
+        ///  Constructs new instance of PropertyGridToolStripAccessibleObject
         /// </summary>
         /// <param name="owningPropertyGridToolStrip">The PropertyGridToolStrip owning control.</param>
         /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
@@ -6007,7 +6007,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Request to return the element in the specified direction.
+        ///  Request to return the element in the specified direction.
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
@@ -6026,7 +6026,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Request value of specified property from an element.
+        ///  Request value of specified property from an element.
         /// </summary>
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>

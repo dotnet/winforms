@@ -20,14 +20,14 @@ namespace System.ComponentModel.Design
         private Selector _selector = null;
 
         /// <summary>
-        /// Default constructor for ObjectSelectorEditor
+        ///  Default constructor for ObjectSelectorEditor
         /// </summary>
         public ObjectSelectorEditor()
         {
         }
 
         /// <summary>
-        /// Constructor for ObjectSelectorEditor which sets SubObjectSelector equal to parameter subObjectSelector
+        ///  Constructor for ObjectSelectorEditor which sets SubObjectSelector equal to parameter subObjectSelector
         /// </summary>
         public ObjectSelectorEditor(bool subObjectSelector)
         {
@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by ObjectSelectorEditor.GetEditStyle.
+        ///  Edits the given object value using the editor style provided by ObjectSelectorEditor.GetEditStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -71,7 +71,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Modify a WinForms TreeView control to use the new Explorer style theme
+        ///  Modify a WinForms TreeView control to use the new Explorer style theme
         /// </summary>
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
@@ -113,7 +113,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Override this method to add validation code for new value
+        ///  Override this method to add validation code for new value
         /// </summary>
         public virtual void SetValue(object value)
         {
@@ -127,7 +127,7 @@ namespace System.ComponentModel.Design
             public bool clickSeen = false;
 
             /// <summary>
-            /// Constructor for Selector, takes ObjectSelectorEditor
+            ///  Constructor for Selector, takes ObjectSelectorEditor
             /// </summary>
             public Selector(ObjectSelectorEditor editor)
             {
@@ -146,8 +146,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Adds a Node with given label and value to the parent, provided the parent is not null;
-            /// Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
+            ///  Adds a Node with given label and value to the parent, provided the parent is not null;
+            ///  Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
             /// </summary>
             public SelectorNode AddNode(string label, object value, SelectorNode parent)
             {
@@ -165,7 +165,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Returns true if the given node was selected; false otherwise.
+            ///  Returns true if the given node was selected; false otherwise.
             /// </summary>
             private bool ChooseSelectedNodeIfEqual()
             {
@@ -182,7 +182,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Clears the TreeNodeCollection and sets clickSeen to false
+            ///  Clears the TreeNodeCollection and sets clickSeen to false
             /// </summary>
             public void Clear()
             {
@@ -242,7 +242,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Sets the selection
+            ///  Sets the selection
             /// </summary>
             public bool SetSelection(object value, TreeNodeCollection nodes)
             {
@@ -286,7 +286,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
+            ///  Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
@@ -296,7 +296,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Sets the internal IWindowsFormsEditorService to null
+            ///  Sets the internal IWindowsFormsEditorService to null
             /// </summary>
             public void Stop()
             {
@@ -328,15 +328,15 @@ namespace System.ComponentModel.Design
             }
         }
 
-        /// Suppressed because although the type implements ISerializable --its on the base class and this class
-        /// is not modifying the stream to include its local information.  Therefore, we should not publicly advertise this as
-        /// Serializable unless explicitly required.
+        ///  Suppressed because although the type implements ISerializable --its on the base class and this class
+        ///  is not modifying the stream to include its local information.  Therefore, we should not publicly advertise this as
+        ///  Serializable unless explicitly required.
         public class SelectorNode : TreeNode
         {
             public object value = null;
 
             /// <summary>
-            /// Sets label and value to given.
+            ///  Sets label and value to given.
             /// </summary>
             public SelectorNode(string label, object value) : base(label)
             {

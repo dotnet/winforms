@@ -16,7 +16,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Designer for the ToolStrip class.
+    ///  Designer for the ToolStrip class.
     /// </summary>
     internal class ToolStripDesigner : ControlDesigner
     {
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Design
         private bool _addingDummyItem = false; //When the dummyItem is added the toolStrip might resize (as in the Vertival Layouts). In this case we dont want the Resize to cause SyncSelection and Layouts.
 
         /// <summary>
-        /// Adds designer actions to the ActionLists collection.
+        ///  Adds designer actions to the ActionLists collection.
         /// </summary>
         public override DesignerActionListCollection ActionLists
         {
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Compute the rect for the "Add New Item" button.
+        ///  Compute the rect for the "Add New Item" button.
         /// </summary>
         private Rectangle AddItemRect
         {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor for Shadow Property for AllowDrop.
+        ///  Accessor for Shadow Property for AllowDrop.
         /// </summary>
         private bool AllowDrop
         {
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor for Shadow Property for AllowItemReorder.
+        ///  Accessor for Shadow Property for AllowItemReorder.
         /// </summary>
         private bool AllowItemReorder
         {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
+        ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
         /// </summary>
         public override System.Collections.ICollection AssociatedComponents
         {
@@ -155,7 +155,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting the DropDown property is undone. In this case the Undo adds the original items to the Main MenustripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem
+        ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting the DropDown property is undone. In this case the Undo adds the original items to the Main MenustripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem
         /// </summary>
         public bool CacheItems
         {
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// False if were inherited and can't be modified.
+        ///  False if were inherited and can't be modified.
         /// </summary>
         private bool CanAddItems
         {
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// DesignerContextMenu that is shown on the ToolStrip/MenuStrip/StatusStrip.
+        ///  DesignerContextMenu that is shown on the ToolStrip/MenuStrip/StatusStrip.
         /// </summary>
         private ContextMenuStrip DesignerContextMenu
         {
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used by ToolStripTemplateNode. When the ToolStrip gains selection the Overflow is closed. But when an item is added through the TemplateNode which itself is on the Overflow, we should not close the Overflow as this caused weird artifacts and flicker. Hence this boolean property.
+        ///  Used by ToolStripTemplateNode. When the ToolStrip gains selection the Overflow is closed. But when an item is added through the TemplateNode which itself is on the Overflow, we should not close the Overflow as this caused weird artifacts and flicker. Hence this boolean property.
         /// </summary>
         public bool DontCloseOverflow
         {
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown" while the item Drag-Drop operation.
+        ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown" while the item Drag-Drop operation.
         /// </summary>
         public Rectangle DragBoxFromMouseDown
         {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Set by the ToolStripItemCollectionEditor when it's launched for this ToolStrip so we won't pick up it's items when added.  We count this so that we can deal with nestings.
+        ///  Set by the ToolStripItemCollectionEditor when it's launched for this ToolStrip so we won't pick up it's items when added.  We count this so that we can deal with nestings.
         /// </summary>
         internal bool EditingCollection
         {
@@ -252,7 +252,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// EditManager for the ToolStrip Designer. This EditorManager controls the Insitu Editing.
+        ///  EditManager for the ToolStrip Designer. This EditorManager controls the Insitu Editing.
         /// </summary>
         public ToolStripEditorManager EditManager
         {
@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The TemplateNode. This is the object that actually creates miniToolStrip and manages InSitu editing.
+        ///  The TemplateNode. This is the object that actually creates miniToolStrip and manages InSitu editing.
         /// </summary>
         internal ToolStripTemplateNode Editor
         {
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the ToolStripControlHost that hosts the ToolStripTemplateNode's miniToolStrip.
+        ///  This is the ToolStripControlHost that hosts the ToolStripTemplateNode's miniToolStrip.
         /// </summary>
         public DesignerToolStripControlHost EditorNode
         {
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the ToolStripTemplateNode's miniToolStrip.
+        ///  This is the ToolStripTemplateNode's miniToolStrip.
         /// </summary>
         internal ToolStrip EditorToolStrip
         {
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will be set through ToolStripItemDesigner.SetItemVisible( ) if we find there is atleast one time that toggled from Visible==false to Visible==true In such a case we need to call BehaviorService.SyncSelection( ) toupdate the glyphs.
+        ///  This will be set through ToolStripItemDesigner.SetItemVisible( ) if we find there is atleast one time that toggled from Visible==false to Visible==true In such a case we need to call BehaviorService.SyncSelection( ) toupdate the glyphs.
         /// </summary>
         public bool FireSyncSelection
         {
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown while the item Drag-Drop operation.
+        ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown while the item Drag-Drop operation.
         /// </summary>
         public int IndexOfItemUnderMouseToDrag
         {
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ToolStrips if inherited act as ReadOnly.
+        ///  ToolStrips if inherited act as ReadOnly.
         /// </summary>
         protected override InheritanceAttribute InheritanceAttribute
         {
@@ -323,7 +323,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the insert Transaction. Now insert can happen at Main Menu level or the DropDown Level. This transaction is used to keep both in sync.
+        ///  This is the insert Transaction. Now insert can happen at Main Menu level or the DropDown Level. This transaction is used to keep both in sync.
         /// </summary>
         public DesignerTransaction InsertTansaction
         {
@@ -332,7 +332,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Checks if there is a seleciton of the ToolStrip or one of it's items.
+        ///  Checks if there is a seleciton of the ToolStrip or one of it's items.
         /// </summary>
         private bool IsToolStripOrItemSelected
         {
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting the DropDown property is undone. In this case the Undo adds the original items to the Main MenustripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem. This is the Items Collection.
+        ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting the DropDown property is undone. In this case the Undo adds the original items to the Main MenustripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem. This is the Items Collection.
         /// </summary>
         public ArrayList Items
         {
@@ -355,7 +355,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the new item Transaction. This is used when the Insitu editor adds new Item.
+        ///  This is the new item Transaction. This is used when the Insitu editor adds new Item.
         /// </summary>
         public DesignerTransaction NewItemTransaction
         {
@@ -364,7 +364,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Compute the rect for the "OverFlow" button.
+        ///  Compute the rect for the "OverFlow" button.
         /// </summary>
         private Rectangle OverFlowButtonRect
         {
@@ -383,7 +383,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Get and cache the selection service
+        ///  Get and cache the selection service
         /// </summary>
         internal ISelectionService SelectionService
         {
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Handy way of gettting our ToolStrip
+        ///  Handy way of gettting our ToolStrip
         /// </summary>
         protected ToolStrip ToolStrip
         {
@@ -419,7 +419,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Get and cache the toolStripKeyBoard service
+        ///  Get and cache the toolStripKeyBoard service
         /// </summary>
         private ToolStripKeyboardHandlingService KeyboardHandlingService
         {
@@ -439,7 +439,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// There are certain containers (like ToolStrip) that require PerformLayout to be serialized in the code gen.
+        ///  There are certain containers (like ToolStrip) that require PerformLayout to be serialized in the code gen.
         /// </summary>
         internal override bool SerializePerformLayout
         {
@@ -447,7 +447,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Un - ShadowProperty.
+        ///  Un - ShadowProperty.
         /// </summary>
         internal bool Visible
         {
@@ -464,7 +464,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves.
+        ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves.
         /// </summary>
         private void AddBodyGlyphsForOverflow()
         {
@@ -484,7 +484,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves. Called by AddBodyGlyphsForOverflow()
+        ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves. Called by AddBodyGlyphsForOverflow()
         /// </summary>
         private void AddItemBodyGlyph(ToolStripItem item)
         {
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Fired when a new item is chosen from the AddItems menu from the Template Node.
+        ///  Fired when a new item is chosen from the AddItems menu from the Template Node.
         /// </summary>
         private ToolStripItem AddNewItem(Type t)
         {
@@ -890,7 +890,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Make sure the AddNewItem button is setup properly.
+        ///  Make sure the AddNewItem button is setup properly.
         /// </summary>
         private void Control_HandleCreated(object sender, EventArgs e)
         {
@@ -898,7 +898,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
+        ///  Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
         /// </summary>
         private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
         {
@@ -973,7 +973,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Checks if the component being added is a child ToolStripItem.
+        ///  Checks if the component being added is a child ToolStripItem.
         /// </summary>
         private void ComponentChangeSvc_ComponentAdding(object sender, ComponentEventArgs e)
         {
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Required to check if we need to show the Overflow, if any change has caused the item to go into the overflow.
+        ///  Required to check if we need to show the Overflow, if any change has caused the item to go into the overflow.
         /// </summary>
         private void ComponentChangeSvc_ComponentChanged(object sender, ComponentChangedEventArgs e)
         {
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// After a ToolStripItem is removed, remove it from the ToolStrip and select the next item.
+        ///  After a ToolStripItem is removed, remove it from the ToolStrip and select the next item.
         /// </summary>
         private void ComponentChangeSvc_ComponentRemoved(object sender, ComponentEventArgs e)
         {
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Before a ToolStripItem is removed, open a transaction to batch the operation.
+        ///  Before a ToolStripItem is removed, open a transaction to batch the operation.
         /// </summary>
         private void ComponentChangeSvc_ComponentRemoving(object sender, ComponentEventArgs e)
         {
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Clean up the mess we've made!
+        ///  Clean up the mess we've made!
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Creates a method signature in the source code file for the default event on the component and navigates the user's cursor to that location in preparation to assign the default action.
+        ///  Creates a method signature in the source code file for the default event on the component and navigates the user's cursor to that location in preparation to assign the default action.
         /// </summary>
         public override void DoDefaultAction()
         {
@@ -1253,7 +1253,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We add our BodyGlyphs as well as bodyGlyphs for the ToolStripItems here.
+        ///  We add our BodyGlyphs as well as bodyGlyphs for the ToolStripItems here.
         /// </summary>
         protected override ControlBodyGlyph GetControlGlyph(GlyphSelectionType selectionType)
         {
@@ -1339,7 +1339,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We add our SelectionGlyphs here. Since ToolStripItems are components we add the SelectionGlyphs for those in this call as well.
+        ///  We add our SelectionGlyphs here. Since ToolStripItems are components we add the SelectionGlyphs for those in this call as well.
         /// </summary>
         public override GlyphCollection GetGlyphs(GlyphSelectionType selType)
         {
@@ -1386,7 +1386,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allow hit testing over the AddNewItem button only.
+        ///  Allow hit testing over the AddNewItem button only.
         /// </summary>
         protected override bool GetHitTest(Point point)
         {
@@ -1406,7 +1406,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Get the designer set up to run.
+        ///  Get the designer set up to run.
         /// </summary>
         // EditorServiceContext is newed up to add Edit Items verb.
         public override void Initialize(IComponent component)
@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ControlDesigner overrides this method.  It will look at the default property for the control and, if it is of type string, it will set this property's value to the name of the component.  It only does this if the designer has been configured with this option in the options service.  This method also connects the control to its parent and positions it.  If you override this method, you should always call base.
+        ///  ControlDesigner overrides this method.  It will look at the default property for the control and, if it is of type string, it will set this property's value to the name of the component.  It only does this if the designer has been configured with this option in the options service.  This method also connects the control to its parent and positions it.  If you override this method, you should always call base.
         /// </summary>
         public override void InitializeNewComponent(IDictionary defaultValues)
         {
@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            /// set up parenting and all the base stuff...
+            ///  set up parenting and all the base stuff...
             if (parentPanel == null || ToolStrip is MenuStrip)
             {
                 base.InitializeNewComponent(defaultValues);
@@ -1594,7 +1594,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Setup the "AddNewItem" button
+        ///  Setup the "AddNewItem" button
         /// </summary>
         private void InitializeNewItemDropDown()
         {
@@ -1609,7 +1609,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is called to ascertain if the Glyph is totally visible. This is called from ToolStripMenuItemDesigner too.
+        ///  This is called to ascertain if the Glyph is totally visible. This is called from ToolStripMenuItemDesigner too.
         /// </summary>
         internal static bool IsGlyphTotallyVisible(Rectangle itemBounds, Rectangle parentBounds)
         {
@@ -1617,7 +1617,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns true if the item is on the overflow.
+        ///  Returns true if the item is on the overflow.
         /// </summary>
         private bool ItemParentIsOverflow(ToolStripItem item)
         {
@@ -1641,7 +1641,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Sets up the add new button, and invalidates the behavior glyphs if needed so they always stay in sync.
+        ///  Sets up the add new button, and invalidates the behavior glyphs if needed so they always stay in sync.
         /// </summary>
         private void LayoutToolStrip()
         {
@@ -1667,7 +1667,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Computes a name from a text label by removing all spaces and non-alphanumeric characters.
+        ///  Computes a name from a text label by removing all spaces and non-alphanumeric characters.
         /// </summary>
         internal static string NameFromText(string text, Type componentType, IServiceProvider serviceProvider)
         {
@@ -1781,7 +1781,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// DesignerContextMenu should be shown when the ToolStripDesigner.
+        ///  DesignerContextMenu should be shown when the ToolStripDesigner.
         /// </summary>
         protected override void OnContextMenu(int x, int y)
         {
@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Add item on Drop and it its a MenuItem, open its dropDown.
+        ///  Add item on Drop and it its a MenuItem, open its dropDown.
         /// </summary>
         protected override void OnDragDrop(DragEventArgs de)
         {
@@ -1961,7 +1961,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Everytime we add Item .. the TemplateNode needs to go at the end if its not there.
+        ///  Everytime we add Item .. the TemplateNode needs to go at the end if its not there.
         /// </summary>
         private void OnItemAdded(object sender, ToolStripItemEventArgs e)
         {
@@ -1980,7 +1980,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overriden so that the ToolStrip honors dragging only through container selector glyph.
+        ///  Overriden so that the ToolStrip honors dragging only through container selector glyph.
         /// </summary>
         protected override void OnMouseDragMove(int x, int y)
         {
@@ -1991,7 +1991,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Controls the dismissal of the drop down, here - we just cancel it
+        ///  Controls the dismissal of the drop down, here - we just cancel it
         /// </summary>
         private void OnOverflowDropDownClosing(object sender, ToolStripDropDownClosingEventArgs e)
         {
@@ -2000,7 +2000,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Remove the Glyphs for Items on the overflow when the Overflow closes.
+        ///  Remove the Glyphs for Items on the overflow when the Overflow closes.
         /// </summary>
         private void OnOverFlowDropDownClosed(object sender, EventArgs e)
         {
@@ -2021,7 +2021,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Add Glyphs when the OverFlow opens ....
+        ///  Add Glyphs when the OverFlow opens ....
         /// </summary>
         private void OnOverFlowDropDownOpened(object sender, EventArgs e)
         {
@@ -2051,7 +2051,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// In Order to Draw the Selection Glyphs we need to reforce painting on the  the AdonerWindow.This method forces the repaint
+        ///  In Order to Draw the Selection Glyphs we need to reforce painting on the  the AdonerWindow.This method forces the repaint
         /// </summary>
         private void OnOverFlowDropDownPaint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
@@ -2077,7 +2077,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Change the parent of the overFlow so that it is parented to the ToolStripAdornerWindow
+        ///  Change the parent of the overFlow so that it is parented to the ToolStripAdornerWindow
         /// </summary>
         private void OnOverFlowDropDownOpening(object sender, EventArgs e)
         {
@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When Items change the size, Recalculate the glyph sizes.
+        ///  When Items change the size, Recalculate the glyph sizes.
         /// </summary>
         private void OnOverflowDropDownResize(object sender, EventArgs e)
         {
@@ -2115,7 +2115,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Set proper cursor
+        ///  Set proper cursor
         /// </summary>
         protected override void OnSetCursor()
         {
@@ -2131,11 +2131,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ResumeLayout after Undone.
+        ///  ResumeLayout after Undone.
         /// </summary>
         private void OnUndone(object source, EventArgs e)
         {
-            /// IMPORTANT : The Undo Unit .. Clears of the ITems....
+            ///  IMPORTANT : The Undo Unit .. Clears of the ITems....
             if (_editorNode != null && (ToolStrip.Items.IndexOf(_editorNode) == -1))
             {
                 ToolStrip.Items.Add(_editorNode);
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// SuspendLayout before unDoing.
+        ///  SuspendLayout before unDoing.
         /// </summary>
         private void OnUndoing(object source, EventArgs e)
         {
@@ -2172,7 +2172,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// SyncSelection on ToolStrip move.
+        ///  SyncSelection on ToolStrip move.
         /// </summary>
         private void OnToolStripMove(object sender, System.EventArgs e)
         {
@@ -2183,7 +2183,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Remove all the glyphs we were are not visible..
+        ///  Remove all the glyphs we were are not visible..
         /// </summary>
         private void OnToolStripVisibleChanged(object sender, System.EventArgs e)
         {
@@ -2204,7 +2204,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -2227,7 +2227,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Remove the glyphs for individual items on the DropDown.
+        ///  Remove the glyphs for individual items on the DropDown.
         /// </summary>
         private void RemoveBodyGlyphsForOverflow()
         {
@@ -2276,7 +2276,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When the Drag Data does not contain ToolStripItem; change the dragEffect to None;  This will result current cursor to change into NO-SMOKING cursor
+        ///  When the Drag Data does not contain ToolStripItem; change the dragEffect to None;  This will result current cursor to change into NO-SMOKING cursor
         /// </summary>
         private void SetDragDropEffects(DragEventArgs de)
         {
@@ -2294,7 +2294,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When selection changes to the ToolStrip, show the "AddItemsButton", when it leaves, hide it.
+        ///  When selection changes to the ToolStrip, show the "AddItemsButton", when it leaves, hide it.
         /// </summary>
         private void SelSvc_SelectionChanging(object sender, EventArgs e)
         {
@@ -2333,7 +2333,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When selection changes to the ToolStrip, show the "AddItemsButton", when it leaves, hide it.
+        ///  When selection changes to the ToolStrip, show the "AddItemsButton", when it leaves, hide it.
         /// </summary>
         private void SelSvc_SelectionChanged(object sender, EventArgs e)
         {
@@ -2496,7 +2496,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Make sure the AddItem button stays in the right spot.
+        ///  Make sure the AddItem button stays in the right spot.
         /// </summary>
         private void ToolStrip_Resize(object sender, EventArgs e)
         {
@@ -2511,7 +2511,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Handle lower level mouse input.
+        ///  Handle lower level mouse input.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
