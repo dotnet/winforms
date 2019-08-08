@@ -166,14 +166,14 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// Defines the DataGridView ComboBox EditingControl accessible object.
+    ///  Defines the DataGridView ComboBox EditingControl accessible object.
     /// </summary>
     internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
     {
         private readonly DataGridViewComboBoxEditingControl ownerControl;
 
         /// <summary>
-        /// The parent is changed when the editing control is attached to another editing cell.
+        ///  The parent is changed when the editing control is attached to another editing cell.
         /// </summary>
         private AccessibleObject _parentAccessibleObject = null;
 
@@ -243,7 +243,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
         /// </summary>
         /// <param name="parent">The parent accessible object.</param>
         internal override void SetParent(AccessibleObject parent)

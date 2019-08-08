@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        /// Drawing methods.
+        ///  Drawing methods.
 
         public unsafe void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
         {
@@ -101,9 +101,8 @@ namespace System.Windows.Forms.Internal
             DrawEllipse(pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
         }
 
-        /// Text rendering methods
+        ///  Text rendering methods
         ///
-
         /// <summary>
         ///  Draws the text at the specified point, using the given Font and foreColor.
         ///  CR/LF are honored.

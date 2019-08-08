@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         private const byte imeConvertionUpdate = 1;  // the char being composed has been updated but not coverted yet.
         private const byte imeConvertionCompleted = 2;  // the char being composed has been fully converted.
 
-        ///////// Instance fields
+        /////////  Instance fields
 
         // Used for keeping selection when prompt is hidden on leave (text changes).
         private int lastSelLength;
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
         private static readonly int CUTCOPYINCLUDEPROMPT = BitVector32.CreateMask(INSERT_TOGGLED);
         private static readonly int CUTCOPYINCLUDELITERALS = BitVector32.CreateMask(CUTCOPYINCLUDEPROMPT);
 
-        ///////// Properties backend fields. See corresponding property comments for more info.
+        /////////  Properties backend fields. See corresponding property comments for more info.
 
         private char passwordChar; // control's pwd char, it could be different from the one displayed if using system password.
         private Type validatingType;
@@ -184,9 +184,8 @@ namespace System.Windows.Forms
             caretTestPos = 0;
         }
 
-        /////////////////// Properties
+        ///////////////////  Properties
         ///
-
         /// <summary>
         ///  Unsupported method/property.
         /// </summary>
@@ -1203,7 +1202,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The value of the Edit control default password char.
+        ///  The value of the Edit control default password char.
         /// </summary>
         private char SystemPasswordChar
         {
@@ -1585,7 +1584,7 @@ namespace System.Windows.Forms
             set { }
         }
 
-        ////////////// Methods
+        //////////////  Methods
 
         /// <summary>
         ///  Clears information about the most recent operation from the undo buffer of the control.
@@ -2135,7 +2134,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyUp'/> event.
+        ///  Raises the <see cref='Control.KeyUp'/> event.
         /// </summary>
         protected override void OnKeyUp(KeyEventArgs e)
         {

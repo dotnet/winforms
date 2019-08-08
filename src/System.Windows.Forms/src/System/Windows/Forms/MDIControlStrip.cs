@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an
+    ///  This is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an
     ///  mdi parent when an MDI child is maximized.
     /// </summary>
     internal class MdiControlStrip : MenuStrip

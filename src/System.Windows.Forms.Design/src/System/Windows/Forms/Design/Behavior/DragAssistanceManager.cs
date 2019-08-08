@@ -12,7 +12,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior.  At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag.  The DragAssistanceManager needs to work as fast as possible - so not to interupt a drag operation.  Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation.  Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
+    ///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior.  At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag.  The DragAssistanceManager needs to work as fast as possible - so not to interupt a drag operation.  Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation.  Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
     /// </summary>
     internal sealed class DragAssistanceManager
     {
@@ -53,36 +53,36 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _ctrlDrag; // Are we in a ctrl-drag?
 
         /// <summary>
-        /// Internal constructor called that only takes a service provider.  Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controsl to exclude from snapping.
+        ///  Internal constructor called that only takes a service provider.  Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controsl to exclude from snapping.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider) : this(serviceProvider, null, null, null, false, false)
         {
         }
 
         /// <summary>
-        /// Internal constructor that takes the service provider and the list of dragCompoents.
+        ///  Internal constructor that takes the service provider and the list of dragCompoents.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, ArrayList dragComponents) : this(serviceProvider, null, dragComponents, null, false, false)
         {
         }
 
         /// <summary>
-        /// Internal constructor that takes the service provider, the list of dragCompoents, and a boolean
-        /// indicating that we are resizing.
+        ///  Internal constructor that takes the service provider, the list of dragCompoents, and a boolean
+        ///  indicating that we are resizing.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, ArrayList dragComponents, bool resizing) : this(serviceProvider, null, dragComponents, null, resizing, false)
         {
         }
 
         /// <summary>
-        /// Internal constructor called by DragBehavior.
+        ///  Internal constructor called by DragBehavior.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, ArrayList dragComponents, Image backgroundImage, bool ctrlDrag) : this(serviceProvider, graphics, dragComponents, backgroundImage, false, ctrlDrag)
         {
         }
 
         /// <summary>
-        /// Internal constructor called by DragBehavior.
+        ///  Internal constructor called by DragBehavior.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, ArrayList dragComponents, Image backgroundImage, bool resizing, bool ctrlDrag)
         {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Adjusts then adds each snap line the designer has to offer to either our global horizontal and vertical lists or our target lists. Note that we also keep track of our target snapline types - 'cause we can safely ignore all other types.  If valid target is false- then we don't yet know what we're snapping against - so we'll exclude the check below to skip unwanted snap line types.
+        ///  Adjusts then adds each snap line the designer has to offer to either our global horizontal and vertical lists or our target lists. Note that we also keep track of our target snapline types - 'cause we can safely ignore all other types.  If valid target is false- then we don't yet know what we're snapping against - so we'll exclude the check below to skip unwanted snap line types.
         /// </summary>
         private void AddSnapLines(ControlDesigner controlDesigner, ArrayList horizontalList, ArrayList verticalList, bool isTarget, bool validTarget)
         {
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Build up a distance array of all same-type-alignment pts to the closest point on our targetControl.  Also, keep track of the smallest distance overall.
+        ///  Build up a distance array of all same-type-alignment pts to the closest point on our targetControl.  Also, keep track of the smallest distance overall.
         /// </summary>
         private int BuildDistanceArray(ArrayList snapLines, ArrayList targetSnapLines, int[] distances, Rectangle dragBounds)
         {
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Here, we erase all of our old horizontal and vertical snaplines UNLESS they are also contained in our tempHorzLines or tempVertLines arrays - if they are - then erasing them would be redundant (since we know we want to draw them on this mousemove)
+        ///  Here, we erase all of our old horizontal and vertical snaplines UNLESS they are also contained in our tempHorzLines or tempVertLines arrays - if they are - then erasing them would be redundant (since we know we want to draw them on this mousemove)
         /// </summary>
         private Line[] EraseOldSnapLines(Line[] lines, ArrayList tempLines)
         {
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This internal method returns a snap line[] representing the last SnapLines that were rendered before this algorithm was stopped (usually by an OnMouseUp). This is used for storing additional toolbox drag/drop info and testing hooks.
+        ///  This internal method returns a snap line[] representing the last SnapLines that were rendered before this algorithm was stopped (usually by an OnMouseUp). This is used for storing additional toolbox drag/drop info and testing hooks.
         /// </summary>
         internal Line[] GetRecentLines()
         {
@@ -408,7 +408,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Initializes our class - we cache all snap lines for every control we can find. This is done for perf. reasons.
+        ///  Initializes our class - we cache all snap lines for every control we can find. This is done for perf. reasons.
         /// </summary>
         private void Initialize(ArrayList dragComponents, IDesignerHost host)
         {
@@ -494,7 +494,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Helper function that determines if the child control is related to the parent.
+        ///  Helper function that determines if the child control is related to the parent.
         /// </summary>
         private static bool IsChildOfParent(Control child, Control parent)
         {
@@ -515,7 +515,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Helper function that identifies margin or padding snaplines
+        ///  Helper function that identifies margin or padding snaplines
         /// </summary>
         private static bool IsMarginOrPaddingSnapLine(SnapLine snapLine)
         {
@@ -523,7 +523,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the offset in which the targetControl's rect needs to be re-positioned (given the direction by 'directionOffset') in order to align with the nearest possible snapline.  This is called by commandSet during keyboard movements to auto-snap the control around the designer.
+        ///  Returns the offset in which the targetControl's rect needs to be re-positioned (given the direction by 'directionOffset') in order to align with the nearest possible snapline.  This is called by commandSet during keyboard movements to auto-snap the control around the designer.
         /// </summary>
         internal Point OffsetToNearestSnapLocation(Control targetControl, IList targetSnaplines, Point directionOffset)
         {
@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the offset in which the targetControl's rect needs to be re-positioned (given the direction by 'directionOffset') in order to align with the nearest possible snapline.  This is called by commandSet during keyboard movements to auto-snap the control around the designer.
+        ///  Returns the offset in which the targetControl's rect needs to be re-positioned (given the direction by 'directionOffset') in order to align with the nearest possible snapline.  This is called by commandSet during keyboard movements to auto-snap the control around the designer.
         /// </summary>
         internal Point OffsetToNearestSnapLocation(Control targetControl, Point directionOffset)
         {
@@ -672,7 +672,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Actually draws the snaplines based on type, location, and specified pen
+        ///  Actually draws the snaplines based on type, location, and specified pen
         /// </summary>
         private void RenderSnapLines(Line[] lines, Rectangle dragRect)
         {
@@ -752,7 +752,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Performance improvement: Given an snapline we will render, check if it overlaps with an existing snapline. If so, combine the two.
+        ///  Performance improvement: Given an snapline we will render, check if it overlaps with an existing snapline. If so, combine the two.
         /// </summary>
         private static void CombineSnaplines(Line snapLine, ArrayList currentLines)
         {
@@ -774,7 +774,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Here, we store all the SnapLines we will render.  This way we can erase them when they are no longer needed.
+        ///  Here, we store all the SnapLines we will render.  This way we can erase them when they are no longer needed.
         /// </summary>
         private void StoreSnapLine(SnapLine snapLine, Rectangle dragBounds)
         {
@@ -842,7 +842,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This function validates a Margin or Padding SnapLine.  A valid Margin SnapLine is one that will be drawn only if the target control being dragged somehow intersects (vertically or horizontally) the coords of the given snapLine. This is done so we don't start drawing margin lines when controls are large distances apart (too much mess);
+        ///  This function validates a Margin or Padding SnapLine.  A valid Margin SnapLine is one that will be drawn only if the target control being dragged somehow intersects (vertically or horizontally) the coords of the given snapLine. This is done so we don't start drawing margin lines when controls are large distances apart (too much mess);
         /// </summary>
         private bool ValidateMarginOrPaddingLine(SnapLine snapLine, Rectangle dragBounds)
         {
@@ -886,7 +886,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the DragBehavior on every mouse move.  We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
+        ///  Called by the DragBehavior on every mouse move.  We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
         /// </summary>
         internal Point OnMouseMove(Rectangle dragBounds, SnapLine[] snapLines, ref bool didSnap, bool shouldSnapHorizontally)
         {
@@ -912,7 +912,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the DragBehavior on every mouse move.  We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
+        ///  Called by the DragBehavior on every mouse move.  We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
         /// </summary>
         internal Point OnMouseMove(Rectangle dragBounds)
         {
@@ -921,7 +921,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the resizebehavior. It needs to know whether we really snapped or not. The snapPoint could be (0,0) even though we snapped.
+        ///  Called by the resizebehavior. It needs to know whether we really snapped or not. The snapPoint could be (0,0) even though we snapped.
         /// </summary>
         internal Point OnMouseMove(Control targetControl, SnapLine[] snapLines, ref bool didSnap, bool shouldSnapHorizontally)
         {
@@ -931,7 +931,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the DragBehavior on every mouse move.  We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
+        ///  Called by the DragBehavior on every mouse move.  We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
         /// </summary>
         private Point OnMouseMove(Rectangle dragBounds, bool offsetSnapLines, ref bool didSnap, bool shouldSnapHorizontally)
         {
@@ -992,7 +992,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         //NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
         /// <summary>
-        /// Called by the ResizeBehavior after it has finished drawing
+        ///  Called by the ResizeBehavior after it has finished drawing
         /// </summary>
         internal void RenderSnapLinesInternal(Rectangle dragRect)
         {
@@ -1001,7 +1001,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the DropSourceBehavior after it finished drawing its' draging images so that we can draw our lines on top of everything.
+        ///  Called by the DropSourceBehavior after it finished drawing its' draging images so that we can draw our lines on top of everything.
         /// </summary>
         internal void RenderSnapLinesInternal()
         {
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Clean up all of our references.
+        ///  Clean up all of our references.
         /// </summary>
         internal void OnMouseUp()
         {
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Our 'line' class - used to manage two points and calculate the difference between any two lines.
+        ///  Our 'line' class - used to manage two points and calculate the difference between any two lines.
         /// </summary>
         internal class Line
         {
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Describes different types of lines (used for margins, etc..)
+        ///  Describes different types of lines (used for margins, etc..)
         /// </summary>
         internal enum LineType
         {
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Describes what kind of padding line we have
+        ///  Describes what kind of padding line we have
         /// </summary>
         internal enum PaddingLineType
         {

@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Automation
     public interface IAutomationLiveRegion
     {
         /// <summary>
-        /// Gets or sets notification characteristics of the live region.
+        ///  Gets or sets notification characteristics of the live region.
         /// </summary>
         AutomationLiveSetting LiveSetting { get; set; }
     }

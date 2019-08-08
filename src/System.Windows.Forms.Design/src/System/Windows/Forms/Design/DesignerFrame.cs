@@ -15,14 +15,14 @@ using Microsoft.Win32;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
-    /// DesignerFrame
+    ///  This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
+    ///  DesignerFrame
     ///  ScrollableControl
     ///  Designer
     ///  Splitter
     ///  ScrollableControl
     ///  Component Tray
-    /// The splitter and second scrollable control are created on demand when a tray is added.
+    ///  The splitter and second scrollable control are created on demand when a tray is added.
     /// </summary>
     internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IContainsThemedScrollbarWindows
     {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
         private readonly IUIService _uiService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.DesignerFrame'/> class.
+        ///  Initializes a new instance of the <see cref='System.Windows.Forms.Design.DesignerFrame'/> class.
         /// </summary>
         public DesignerFrame(ISite site)
         {
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the scroll offset for the scrollable control that manages all overlays.  This is needed by the BehaviorService so we can correctly invalidate our AdornerWindow based on scrollposition.
+        ///  Returns the scroll offset for the scrollable control that manages all overlays.  This is needed by the BehaviorService so we can correctly invalidate our AdornerWindow based on scrollposition.
         /// </summary>
         internal Point AutoScrollPosition
         {
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Demand creates a ptr to the BehaviorService - we do this so we can route keyboard message to it.
+        ///  Demand creates a ptr to the BehaviorService - we do this so we can route keyboard message to it.
         /// </summary>
         private BehaviorService BehaviorService
         {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Initializes this frame with the given designer view.
+        ///  Initializes this frame with the given designer view.
         /// </summary>
         public void Initialize(Control view)
         {
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
+        ///  When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
+        ///  When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
         /// </summary>
         protected override void OnLostFocus(EventArgs e)
         {
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We override this to do nothing.  Otherwise, all the nice keyboard messages we want would get run through the Form's keyboard handling procedure.
+        ///  We override this to do nothing.  Otherwise, all the nice keyboard messages we want would get run through the Form's keyboard handling procedure.
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Base wndProc. All messages are sent to wndProc after getting filtered through the preProcessMessage function. Inheriting controls should call base.wndProc for any messages that they don't handle.
+        ///  Base wndProc. All messages are sent to wndProc after getting filtered through the preProcessMessage function. Inheriting controls should call base.wndProc for any messages that they don't handle.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
@@ -262,12 +262,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
+        ///  Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
         /// </summary>
         int IOverlayService.PushOverlay(Control control) => _designerRegion.PushOverlay(control);
 
         /// <summary>
-        /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
+        ///  Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
         /// </summary>
         void IOverlayService.RemoveOverlay(Control control)
         {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inserts the overlay.
+        ///  Inserts the overlay.
         /// </summary>
         void IOverlayService.InsertOverlay(Control control, int index)
         {
@@ -283,7 +283,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Invalidate child overlays
+        ///  Invalidate child overlays
         /// </summary>
         void IOverlayService.InvalidateOverlays(Rectangle screenRectangle)
         {
@@ -291,7 +291,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Invalidate child overlays
+        ///  Invalidate child overlays
         /// </summary>
         void IOverlayService.InvalidateOverlays(Region screenRegion)
         {
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Requests the service to add a window 'pane'.
+        ///  Requests the service to add a window 'pane'.
         /// </summary>
         void ISplitWindowService.AddSplitWindow(Control window)
         {
@@ -333,7 +333,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Requests the service to remove a window 'pane'.
+        ///  Requests the service to remove a window 'pane'.
         /// </summary>
         void ISplitWindowService.RemoveSplitWindow(Control window)
         {
@@ -344,7 +344,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
+        ///  Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
         /// </summary>
         IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
         {
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is a scrollable control that supports additional floating overlay controls.
+        ///  This is a scrollable control that supports additional floating overlay controls.
         /// </summary>
         private class OverlayControl : ScrollableControl
         {
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.Design
             private BehaviorService _behaviorService;
 
             /// <summary>
-            /// Creates a new overlay control.
+            ///  Creates a new overlay control.
             /// </summary>
             public OverlayControl(IServiceProvider provider)
             {
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Demand creates a ptr to the BehaviorService
+            ///  Demand creates a ptr to the BehaviorService
             /// </summary>
             private BehaviorService BehaviorService
             {
@@ -407,7 +407,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// At handle creation time we request the designer's handle and parent it.
+            ///  At handle creation time we request the designer's handle and parent it.
             /// </summary>
             protected override void OnCreateControl()
             {
@@ -429,7 +429,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// We override onLayout to provide our own custom layout functionality. This just overlaps all of the controls.
+            ///  We override onLayout to provide our own custom layout functionality. This just overlaps all of the controls.
             /// </summary>
             protected override void OnLayout(LayoutEventArgs e)
             {
@@ -447,7 +447,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called to parent an overlay window into our document.  This assumes that we call in reverse stack order, as it always pushes to the top of the z-order.
+            ///  Called to parent an overlay window into our document.  This assumes that we call in reverse stack order, as it always pushes to the top of the z-order.
             /// </summary>
             private void ParentOverlay(Control control)
             {
@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
+            ///  Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
             /// </summary>
             public int PushOverlay(Control control)
             {
@@ -472,7 +472,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
+            ///  Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
             /// </summary>
             public void RemoveOverlay(Control control)
             {
@@ -483,7 +483,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Inserts Overlay.
+            ///  Inserts Overlay.
             /// </summary>
             public void InsertOverlay(Control control, int index)
             {
@@ -496,7 +496,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Invalidates overlays that intersect with the given section of the screen;
+            ///  Invalidates overlays that intersect with the given section of the screen;
             /// </summary>
             public void InvalidateOverlays(Rectangle screenRectangle)
             {
@@ -515,7 +515,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Invalidates overlays that intersect with the given section of the screen;
+            ///  Invalidates overlays that intersect with the given section of the screen;
             /// </summary>
             public void InvalidateOverlays(Region screenRegion)
             {
@@ -538,7 +538,7 @@ namespace System.Windows.Forms.Design
                 }
             }
             /// <summary>
-            /// Need to know when child windows are created so we can properly set the Z-order
+            ///  Need to know when child windows are created so we can properly set the Z-order
             /// </summary>
             protected override void WndProc(ref Message m)
             {

@@ -146,7 +146,7 @@ namespace System.Windows.Forms
 
         }
 
-        /// Override base AutoSizeChanged to we can change visibility/browsability attributes
+        ///  Override base AutoSizeChanged to we can change visibility/browsability attributes
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always)
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Collection of child controls.
+        ///  Collection of child controls.
         /// </summary>
         [
         Browsable(false),
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We want to Set ToolStripPanel at DesignTime when the ToolStripPanel is added to the Form,
+        ///  We want to Set ToolStripPanel at DesignTime when the ToolStripPanel is added to the Form,
         /// </summary>
         protected override void OnParentChanged(EventArgs e)
         {
@@ -1293,8 +1293,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Given a point within the ToolStripPanel client area -
-        /// it returns the row.  If no such row exists, returns null
+        ///  Given a point within the ToolStripPanel client area -
+        ///  it returns the row.  If no such row exists, returns null
         /// </summary>
         public ToolStripPanelRow PointToRow(Point clientLocation)
         {

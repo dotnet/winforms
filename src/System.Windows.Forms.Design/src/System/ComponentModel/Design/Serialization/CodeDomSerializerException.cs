@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// The exception that is thrown when the code dom serializer experiences an error.
+    ///  The exception that is thrown when the code dom serializer experiences an error.
     /// </summary>
     public class CodeDomSerializerException : SystemException
     {
@@ -39,7 +39,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Gets the line pragma object that is related to this error.
+        ///  Gets the line pragma object that is related to this error.
         /// </summary>
         public CodeLinePragma LinePragma { get; }
 

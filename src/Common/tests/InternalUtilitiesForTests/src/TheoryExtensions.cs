@@ -13,7 +13,7 @@ namespace System
     public static class TheoryExtensions
     {
         /// <summary>
-        /// Converts an IEnumerable<typeparamref name="T"/> into an Xunit theory compatible enumerable.
+        ///  Converts an IEnumerable<typeparamref name="T"/> into an Xunit theory compatible enumerable.
         /// </summary>
         public static TheoryData ToTheoryData<T>(this IEnumerable<T> data)
         {

@@ -5,17 +5,17 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Partial DpiHelper class, with methods specific to thread DpiAwarenessContext
+    ///  Partial DpiHelper class, with methods specific to thread DpiAwarenessContext
     /// </summary>
     internal static partial class DpiHelper
     {
         /// <summary>
-        /// Enters a scope during which the current thread's DPI awareness context is set to
+        ///  Enters a scope during which the current thread's DPI awareness context is set to
         /// <paramref name="awareness"/>
         /// </summary>
         /// <param name="awareness">The new DPI awareness for the current thread</param>
         /// <returns>An object that, when disposed, will reset the current thread's
-        /// DPI awareness to the value it had when the object was created.</returns>
+        ///  DPI awareness to the value it had when the object was created.</returns>
         public static IDisposable EnterDpiAwarenessScope(DpiAwarenessContext awareness)
         {
             return new DpiAwarenessScope(awareness);
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         #region Scoping DpiAwareness context helper class
 
         /// <summary>
-        /// Class that help setting Dpi awareness context scope
+        ///  Class that help setting Dpi awareness context scope
         /// </summary>
         private class DpiAwarenessScope : IDisposable
         {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             private readonly DpiAwarenessContext originalAwareness = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
             /// <summary>
-            /// Enters given Dpi awareness scope
+            ///  Enters given Dpi awareness scope
             /// </summary>
             public DpiAwarenessScope(DpiAwarenessContext awareness)
             {
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Dispose object and resources
+            ///  Dispose object and resources
             /// </summary>
             public void Dispose()
             {
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// resetting dpiawareness of the thread.
+            ///  resetting dpiawareness of the thread.
             /// </summary>
             private void ResetDpiAwarenessContextChanges()
             {

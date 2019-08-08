@@ -130,9 +130,8 @@ namespace System.Windows.Forms
             }
         }
 
-        /// -----------------------------------------------------------------------------
+        ///  -----------------------------------------------------------------------------
         ///
-
         public event ToolStripArrowRenderEventHandler RenderArrow
         {
             add => AddHandler(EventRenderArrow, value);
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripRenderEventHandler RenderToolStripBackground
         {
@@ -161,7 +160,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripRenderEventHandler RenderToolStripBorder
         {
@@ -170,7 +169,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderButtonBackground
         {
@@ -178,7 +177,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderButtonBackground, value);
         }
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderDropDownButtonBackground
         {
@@ -187,7 +186,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderOverflowButtonBackground
         {
@@ -195,7 +194,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderOverflowButtonBackground, value);
         }
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripGripRenderEventHandler RenderGrip
         {
@@ -203,7 +202,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderGrip, value);
         }
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderItemBackground
         {
@@ -211,7 +210,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderItemBackground, value);
         }
         /// <summary>
-        /// Draws the split button
+        ///  Draws the split button
         /// </summary>
         public event ToolStripItemImageRenderEventHandler RenderItemImage
         {
@@ -219,7 +218,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderItemImage, value);
         }
         /// <summary>
-        /// Draws the checkmark
+        ///  Draws the checkmark
         /// </summary>
         public event ToolStripItemImageRenderEventHandler RenderItemCheck
         {
@@ -227,7 +226,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderItemCheck, value);
         }
         /// <summary>
-        /// Draws the split button
+        ///  Draws the split button
         /// </summary>
         public event ToolStripItemTextRenderEventHandler RenderItemText
         {
@@ -241,7 +240,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderImageMargin, value);
         }
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderLabelBackground
         {
@@ -249,7 +248,7 @@ namespace System.Windows.Forms
             remove => RemoveHandler(EventRenderLabelBackground, value);
         }
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderMenuItemBackground
         {
@@ -258,7 +257,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the split button
+        ///  Draws the split button
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderToolStripStatusLabelBackground
         {
@@ -267,7 +266,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the display style has changed
+        ///  Occurs when the display style has changed
         /// </summary>
         public event ToolStripRenderEventHandler RenderStatusStripSizingGrip
         {
@@ -276,7 +275,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the split button
+        ///  Draws the split button
         /// </summary>
         public event ToolStripItemRenderEventHandler RenderSplitButtonBackground
         {
@@ -291,9 +290,8 @@ namespace System.Windows.Forms
         }
 
         #region EventHandlerSecurity
-        /// -----------------------------------------------------------------------------
+        ///  -----------------------------------------------------------------------------
         ///
-
         private void AddHandler(object key, Delegate value)
         {
             Events.AddHandler(key, value);
@@ -321,7 +319,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the background color
+        ///  Draw the background color
         /// </summary>
         public void DrawToolStripBackground(ToolStripRenderEventArgs e)
         {
@@ -334,7 +332,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the background color
+        ///  Draw the background color
         /// </summary>
         public void DrawGrip(ToolStripGripRenderEventArgs e)
         {
@@ -346,7 +344,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the item's background.
+        ///  Draw the item's background.
         /// </summary>
         public void DrawItemBackground(ToolStripItemRenderEventArgs e)
         {
@@ -360,7 +358,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the background color
+        ///  Draw the background color
         /// </summary>
         public void DrawImageMargin(ToolStripRenderEventArgs e)
         {
@@ -373,7 +371,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the background color
+        ///  Draw the background color
         /// </summary>
         public void DrawLabelBackground(ToolStripItemRenderEventArgs e)
         {
@@ -385,7 +383,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the item's background.
+        ///  Draw the item's background.
         /// </summary>
         public void DrawButtonBackground(ToolStripItemRenderEventArgs e)
         {
@@ -408,7 +406,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the item's background.
+        ///  Draw the item's background.
         /// </summary>
         public void DrawDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
@@ -421,7 +419,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the item's background.
+        ///  Draw the item's background.
         /// </summary>
         public void DrawOverflowButtonBackground(ToolStripItemRenderEventArgs e)
         {
@@ -434,7 +432,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw image
+        ///  Draw image
         /// </summary>
         public void DrawItemImage(ToolStripItemImageRenderEventArgs e)
         {
@@ -447,7 +445,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw image
+        ///  Draw image
         /// </summary>
         public void DrawItemCheck(ToolStripItemImageRenderEventArgs e)
         {
@@ -460,7 +458,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw text
+        ///  Draw text
         /// </summary>
         public void DrawItemText(ToolStripItemTextRenderEventArgs e)
         {
@@ -473,7 +471,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the item's background.
+        ///  Draw the item's background.
         /// </summary>
         public void DrawMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
@@ -486,7 +484,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the background color
+        ///  Draw the background color
         /// </summary>
         public void DrawSplitButton(ToolStripItemRenderEventArgs e)
         {
@@ -500,7 +498,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the background color
+        ///  Draw the background color
         /// </summary>
         public void DrawToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
         {
@@ -524,7 +522,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// Draw the separator
+        ///  Draw the separator
         /// </summary>
         public void DrawSeparator(ToolStripSeparatorRenderEventArgs e)
         {
@@ -671,7 +669,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
+        ///  Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
         /// </summary>
         protected virtual void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
@@ -683,7 +681,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the border around the ToolStrip.  This should be done as the last step.
+        ///  Draw the border around the ToolStrip.  This should be done as the last step.
         /// </summary>
         protected virtual void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
@@ -695,7 +693,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the grip.  ToolStrip users should override this if they want to draw differently.
+        ///  Draw the grip.  ToolStrip users should override this if they want to draw differently.
         /// </summary>
         protected virtual void OnRenderGrip(ToolStripGripRenderEventArgs e)
         {
@@ -707,7 +705,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the items background
+        ///  Draw the items background
         /// </summary>
         protected virtual void OnRenderItemBackground(ToolStripItemRenderEventArgs e)
         {
@@ -720,7 +718,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the items background
+        ///  Draw the items background
         /// </summary>
         protected virtual void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
@@ -732,7 +730,7 @@ namespace System.Windows.Forms
 
         }
         /// <summary>
-        /// Draw the button background
+        ///  Draw the button background
         /// </summary>
         protected virtual void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
@@ -745,7 +743,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the button background
+        ///  Draw the button background
         /// </summary>
         protected virtual void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
@@ -758,7 +756,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the button background
+        ///  Draw the button background
         /// </summary>
         protected virtual void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
         {
@@ -769,8 +767,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// Draw the item'si mage.  ToolStrip users should override this function to change the
-        /// drawing of all images.
+        ///  Draw the item'si mage.  ToolStrip users should override this function to change the
+        ///  drawing of all images.
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
@@ -836,8 +834,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the item's text.  ToolStrip users should override this function to change the
-        /// drawing of all text.
+        ///  Draw the item's text.  ToolStrip users should override this function to change the
+        ///  drawing of all text.
         /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
@@ -881,7 +879,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draw the button background
+        ///  Draw the button background
         /// </summary>
         protected virtual void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
         {
@@ -893,7 +891,7 @@ namespace System.Windows.Forms
 
         }
         /// <summary>
-        /// Draw the items background
+        ///  Draw the items background
         /// </summary>
         protected virtual void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
@@ -905,8 +903,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws a toolbar separator. ToolStrip users should override this function to change the
-        /// drawing of all separators.
+        ///  Draws a toolbar separator. ToolStrip users should override this function to change the
+        ///  drawing of all separators.
         /// </summary>
         protected virtual void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
@@ -995,7 +993,7 @@ namespace System.Windows.Forms
 
         }
         /// <summary>
-        /// Draw the item's background.
+        ///  Draw the item's background.
         /// </summary>
         protected virtual void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {

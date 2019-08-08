@@ -396,7 +396,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the CreateControlInternal test
+        ///  Data for the CreateControlInternal test
         /// </summary>
         public static TheoryData<bool> CreateControlInternalData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -1174,7 +1174,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the AccessibleRole test
+        ///  Data for the AccessibleRole test
         /// </summary>
         public static TheoryData<AccessibleRole> AccessibleRoleData =>
             CommonTestHelper.GetEnumTheoryData<AccessibleRole>();
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the AccessibleRoleInvalid test
+        ///  Data for the AccessibleRoleInvalid test
         /// </summary>
         public static TheoryData<CheckState> AccessibleRoleInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the IsAccessibleGetSet test
+        ///  Data for the IsAccessibleGetSet test
         /// </summary>
         public static TheoryData<bool> IsAccessibleGetSetData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms.Tests
         #region ApplySizeConstraints
 
         /// <summary>
-        /// Data for the ApplySizeConstraints test
+        ///  Data for the ApplySizeConstraints test
         /// </summary>
         public static TheoryData<int> ApplySizeConstraintsData =>
             CommonTestHelper.GetIntTheoryData();
@@ -1679,7 +1679,7 @@ namespace System.Windows.Forms.Tests
         #region ApplyBoundsConstraints
 
         /// <summary>
-        /// Data for the ApplyBoundsConstraints test
+        ///  Data for the ApplyBoundsConstraints test
         /// </summary>
         public static TheoryData<int> ApplyBoundsConstraintsData =>
             CommonTestHelper.GetIntTheoryData();
@@ -1835,7 +1835,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the HeightGetSet test
+        ///  Data for the HeightGetSet test
         /// </summary>
         public static TheoryData<int> HeightGetSetData =>
             CommonTestHelper.GetIntTheoryData();
@@ -1853,7 +1853,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the LeftGetSet test
+        ///  Data for the LeftGetSet test
         /// </summary>
         public static TheoryData<int> LeftGetSetData =>
             CommonTestHelper.GetIntTheoryData();
@@ -1871,7 +1871,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the TopGetSet test
+        ///  Data for the TopGetSet test
         /// </summary>
         public static TheoryData<int> TopGetSetData =>
             CommonTestHelper.GetIntTheoryData();
@@ -2200,7 +2200,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the WidthGetSet test
+        ///  Data for the WidthGetSet test
         /// </summary>
         public static TheoryData<int> WidthGetSetData =>
             CommonTestHelper.GetIntTheoryData();
@@ -2759,7 +2759,7 @@ namespace System.Windows.Forms.Tests
         #region Capture
 
         /// <summary>
-        /// Data for the CaptureGetSet test
+        ///  Data for the CaptureGetSet test
         /// </summary>
         public static TheoryData<bool> CaptureGetSetData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -2777,7 +2777,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the CaptureInternalGetSet test
+        ///  Data for the CaptureInternalGetSet test
         /// </summary>
         public static TheoryData<bool> CaptureInternalGetSetData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -2905,7 +2905,7 @@ namespace System.Windows.Forms.Tests
         #region GetChildAtPoint
 
         /// <summary>
-        /// Data for the GetChildAtPointNull test
+        ///  Data for the GetChildAtPointNull test
         /// </summary>
         public static TheoryData<GetChildAtPointSkip> GetChildAtPointNullData =>
             CommonTestHelper.GetEnumTheoryData<GetChildAtPointSkip>();
@@ -2922,7 +2922,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the GetChildAtPointInvalid test
+        ///  Data for the GetChildAtPointInvalid test
         /// </summary>
         public static TheoryData<GetChildAtPointSkip> GetChildAtPointInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<GetChildAtPointSkip>();
@@ -2962,7 +2962,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the DoDragDrop test
+        ///  Data for the DoDragDrop test
         /// </summary>
         public static TheoryData<DragDropEffects> DoDragDropData =>
             CommonTestHelper.GetEnumTheoryData<DragDropEffects>();
@@ -3368,7 +3368,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the UseWaitCursorGetSet test
+        ///  Data for the UseWaitCursorGetSet test
         /// </summary>
         public static TheoryData<bool> UseWaitCursorGetSetData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -3665,7 +3665,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the ValidationCancelledGetSet test
+        ///  Data for the ValidationCancelledGetSet test
         /// </summary>
         public static TheoryData<bool> ValidationCancelledGetSetData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -3683,7 +3683,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the IsTopMdiWindowClosingGetSet test
+        ///  Data for the IsTopMdiWindowClosingGetSet test
         /// </summary>
         public static TheoryData<bool> IsTopMdiWindowClosingGetSetData =>
             CommonTestHelper.GetBoolTheoryData();

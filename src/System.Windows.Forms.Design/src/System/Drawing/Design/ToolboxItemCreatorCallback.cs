@@ -5,7 +5,7 @@
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// method that will handle the ToolboxItemCreatorCallback event.
+    ///  method that will handle the ToolboxItemCreatorCallback event.
     /// </summary>
     public delegate ToolboxItem ToolboxItemCreatorCallback(object serializedObject, string format);
 }

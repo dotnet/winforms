@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the AutoSizeModeGetSet test
+        ///  Data for the AutoSizeModeGetSet test
         /// </summary>
         public static TheoryData<AutoSizeMode> AutoSizeModeGetSetData =>
             CommonTestHelper.GetEnumTheoryData<AutoSizeMode>();
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the AutoSizeModeGetSetInvalid test
+        ///  Data for the AutoSizeModeGetSetInvalid test
         /// </summary>
         public static TheoryData<AutoSizeMode> AutoSizeModeGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<AutoSizeMode>();
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the DialogResultGetSet test
+        ///  Data for the DialogResultGetSet test
         /// </summary>
         public static TheoryData<DialogResult> DialogResultGetSetData =>
             CommonTestHelper.GetEnumTheoryData<DialogResult>();
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the DialogResultGetSetInvalid test
+        ///  Data for the DialogResultGetSetInvalid test
         /// </summary>
         public static TheoryData<DialogResult> DialogResultGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<DialogResult>();
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the NotifyDefault test
+        ///  Data for the NotifyDefault test
         /// </summary>
         public static TheoryData<bool> NotifyDefaultData =>
             CommonTestHelper.GetBoolTheoryData();

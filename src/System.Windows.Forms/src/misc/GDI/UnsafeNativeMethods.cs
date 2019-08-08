@@ -64,11 +64,11 @@ namespace System.Windows.Forms.Internal
         public static extern int GetBkColor(HandleRef hDC);
 
         /// <remarks>
-        /// This method is currently used just for drawing the text background
-        /// (ComponentEditorForm.cs) and not for rendering text.
-        /// Prefer using DrawText over this method if possible, it handles issues on older
-        /// platforms properly. Ideally, we should remove this method but to avoid issues at this
-        /// point I'm leaving it here.
+        ///  This method is currently used just for drawing the text background
+        ///  (ComponentEditorForm.cs) and not for rendering text.
+        ///  Prefer using DrawText over this method if possible, it handles issues on older
+        ///  platforms properly. Ideally, we should remove this method but to avoid issues at this
+        ///  point I'm leaving it here.
         /// </remarks>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = false, CharSet = CharSet.Auto)]
         internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref Interop.RECT rect, string str, int length, int[] spacing);

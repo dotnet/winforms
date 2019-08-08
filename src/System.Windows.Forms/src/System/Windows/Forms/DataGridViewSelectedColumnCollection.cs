@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a <see cref='DataGridViewCell'/> to this collection.
+        ///  Adds a <see cref='DataGridViewCell'/> to this collection.
         /// </summary>
         internal int Add(DataGridViewColumn dataGridViewColumn)
         {

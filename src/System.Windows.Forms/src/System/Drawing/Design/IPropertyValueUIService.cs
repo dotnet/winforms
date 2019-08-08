@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides an interface to manage the images, ToolTips, and event handlers for the properties of a component displayed in a property browser.
+    ///  Provides an interface to manage the images, ToolTips, and event handlers for the properties of a component displayed in a property browser.
     /// </summary>
     public interface IPropertyValueUIService
     {
@@ -17,13 +17,13 @@ namespace System.Drawing.Design
         event EventHandler PropertyUIValueItemsChanged;
 
         /// <summary>
-        /// Adds the specified <see cref="PropertyValueUIHandler" /> to this service.
+        ///  Adds the specified <see cref="PropertyValueUIHandler" /> to this service.
         /// </summary>
         /// <param name="newHandler">The UI handler to add. </param>
         void AddPropertyValueUIHandler(PropertyValueUIHandler newHandler);
 
         /// <summary>
-        /// Gets the <see cref="PropertyValueUIItem" /> objects that match the specified context and property descriptor characteristics.
+        ///  Gets the <see cref="PropertyValueUIItem" /> objects that match the specified context and property descriptor characteristics.
         /// </summary>
         /// <returns>An array of <see cref="PropertyValueUIItem" /> objects that match the specified parameters.</returns>
         /// <param name="context">An <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information. </param>
@@ -36,7 +36,7 @@ namespace System.Drawing.Design
         void NotifyPropertyValueUIItemsChanged();
 
         /// <summary>
-        /// Removes a <see cref='PropertyValueUIHandler'/> from this service.
+        ///  Removes a <see cref='PropertyValueUIHandler'/> from this service.
         /// </summary>
         /// <param name="newHandler">The handler to remove.</param>
         void RemovePropertyValueUIHandler(PropertyValueUIHandler newHandler);

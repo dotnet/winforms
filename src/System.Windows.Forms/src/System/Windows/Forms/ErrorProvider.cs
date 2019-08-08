@@ -13,11 +13,11 @@ using System.Windows.Forms.Internal;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// ErrorProvider presents a simple user interface for indicating to the
-    /// user that a control on a form has an error associated with it. If a
-    /// error description string is specified for the control, then an icon
-    /// will appear next to the control, and when the mouse hovers over the
-    /// icon, a tooltip will appear showing the error description string.
+    ///  ErrorProvider presents a simple user interface for indicating to the
+    ///  user that a control on a form has an error associated with it. If a
+    ///  error description string is specified for the control, then an icon
+    ///  will appear next to the control, and when the mouse hovers over the
+    ///  icon, a tooltip will appear showing the error description string.
     /// </summary>
     [ProvideProperty("IconPadding", typeof(Control))]
     [ProvideProperty("IconAlignment", typeof(Control))]
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         private bool _rightToLeft = false;
 
         /// <summary>
-        /// Default constructor.
+        ///  Default constructor.
         /// </summary>
         public ErrorProvider()
         {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns or sets when the error icon flashes.
+        ///  Returns or sets when the error icon flashes.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(DefaultBlinkStyle)]
@@ -167,9 +167,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates what container control (usually the form) should be inspected for bindings.
-        /// A binding will reveal what control to place errors on for a error in the current row
-        /// in the DataSource/DataMember pair.
+        ///  Indicates what container control (usually the form) should be inspected for bindings.
+        ///  A binding will reveal what control to place errors on for a error in the current row
+        ///  in the DataSource/DataMember pair.
         /// </summary>
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatData))]
@@ -201,8 +201,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is used for international applications where the language is written from RightToLeft.
-        /// When this property is true, text will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, text will be from right to left.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// User defined data associated with the control.
+        ///  User defined data associated with the control.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
@@ -302,7 +302,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the source of data to bind errors against.
+        ///  Indicates the source of data to bind errors against.
         /// </summary>
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatData))]
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeDataSource() => _dataSource != null;
 
         /// <summary>
-        /// Indicates the sub-list of data from the DataSource to bind errors against.
+        ///  Indicates the sub-list of data from the DataSource to bind errors against.
         /// </summary>
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatData))]
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns or set the rate in milliseconds at which the error icon flashes.
+        ///  Returns or set the rate in milliseconds at which the error icon flashes.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(DefaultBlinkRate)]
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Demand load and cache the default icon.
+        ///  Demand load and cache the default icon.
         /// </summary>
         private static Icon DefaultIcon
         {
@@ -560,9 +560,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns or sets the Icon that displayed next to a control when an error
-        /// description string has been set for the control. For best results, an
-        /// icon containing a 16 by 16 icon should be used.
+        ///  Returns or sets the Icon that displayed next to a control when an error
+        ///  description string has been set for the control. For best results, an
+        ///  icon containing a 16 by 16 icon should be used.
         /// </summary>
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -587,12 +587,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Create the icon region on demand.
+        ///  Create the icon region on demand.
         /// </summary>
         internal IconRegion Region => _region ??= new IconRegion(Icon);
 
         /// <summary>
-        /// Begin bulk member initialization - deferring binding to data source until EndInit is reached
+        ///  Begin bulk member initialization - deferring binding to data source until EndInit is reached
         /// </summary>
         void ISupportInitialize.BeginInit()
         {
@@ -600,7 +600,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// End bulk member initialization by binding to data source
+        ///  End bulk member initialization by binding to data source
         /// </summary>
         private void EndInitCore()
         {
@@ -614,9 +614,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Check to see if DataSource has completed its initialization, before ending our initialization.
-        /// If DataSource is still initializing, hook its Initialized event and wait for it to signal completion.
-        /// If DataSource is already initialized, just go ahead and complete our initialization now.
+        ///  Check to see if DataSource has completed its initialization, before ending our initialization.
+        ///  If DataSource is still initializing, hook its Initialized event and wait for it to signal completion.
+        ///  If DataSource is already initialized, just go ahead and complete our initialization now.
         /// </summary>
         void ISupportInitialize.EndInit()
         {
@@ -631,9 +631,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Respond to late completion of the DataSource's initialization, by completing our own initialization.
-        /// This situation can arise if the call to the DataSource's EndInit() method comes after the call to the
-        /// BindingSource's EndInit() method (since code-generated ordering of these calls is non-deterministic).
+        ///  Respond to late completion of the DataSource's initialization, by completing our own initialization.
+        ///  This situation can arise if the call to the DataSource's EndInit() method comes after the call to the
+        ///  BindingSource's EndInit() method (since code-generated ordering of these calls is non-deterministic).
         /// </summary>
         private void DataSource_Initialized(object sender, EventArgs e)
         {
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Clears all errors being tracked by this error provider, ie. undoes all previous calls to SetError.
+        ///  Clears all errors being tracked by this error provider, ie. undoes all previous calls to SetError.
         /// </summary>
         public void Clear()
         {
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns whether a control can be extended.
+        ///  Returns whether a control can be extended.
         /// </summary>
         public bool CanExtend(object extendee)
         {
@@ -679,8 +679,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Release any resources that this component is using. After calling Dispose,
-        /// the component should no longer be used.
+        ///  Release any resources that this component is using. After calling Dispose,
+        ///  the component should no longer be used.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -694,7 +694,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Helper to dispose the cached icon region.
+        ///  Helper to dispose the cached icon region.
         /// </summary>
         void DisposeRegion()
         {
@@ -706,7 +706,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Helper to make sure we have allocated a control item for this control.
+        ///  Helper to make sure we have allocated a control item for this control.
         /// </summary>
         private ControlItem EnsureControlItem(Control control)
         {
@@ -725,7 +725,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Helper to make sure we have allocated an error window for this control.
+        ///  Helper to make sure we have allocated an error window for this control.
         /// </summary>
         internal ErrorWindow EnsureErrorWindow(Control parent)
         {
@@ -740,7 +740,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the current error description string for the specified control.
+        ///  Returns the current error description string for the specified control.
         /// </summary>
         [DefaultValue("")]
         [Localizable(true)]
@@ -749,7 +749,7 @@ namespace System.Windows.Forms
         public string GetError(Control control) => EnsureControlItem(control).Error;
 
         /// <summary>
-        /// Returns where the error icon should be placed relative to the control.
+        ///  Returns where the error icon should be placed relative to the control.
         /// </summary>
         [DefaultValue(DefaultIconAlignment)]
         [Localizable(true)]
@@ -758,7 +758,7 @@ namespace System.Windows.Forms
         public ErrorIconAlignment GetIconAlignment(Control control) => EnsureControlItem(control).IconAlignment;
 
         /// <summary>
-        /// Returns the amount of extra space to leave next to the error icon.
+        ///  Returns the amount of extra space to leave next to the error icon.
         /// </summary>
         [DefaultValue(0)]
         [Localizable(true)]
@@ -780,7 +780,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the error description string for the specified control.
+        ///  Sets the error description string for the specified control.
         /// </summary>
         public void SetError(Control control, string value)
         {
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets where the error icon should be placed relative to the control.
+        ///  Sets where the error icon should be placed relative to the control.
         /// </summary>
         public void SetIconAlignment(Control control, ErrorIconAlignment value)
         {
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the amount of extra space to leave next to the error icon.
+        ///  Sets the amount of extra space to leave next to the error icon.
         /// </summary>
         public void SetIconPadding(Control control, int padding)
         {
@@ -806,12 +806,12 @@ namespace System.Windows.Forms
         private bool ShouldSerializeIcon() => Icon != DefaultIcon;
 
         /// <summary>
-        /// There is one ErrorWindow for each control parent. It is parented to the
-        /// control parent. The window's region is made up of the regions from icons
-        /// of all child icons. The window's size is the enclosing rectangle for all
-        /// the regions. A tooltip window is created as a child of this window. The
-        /// rectangle associated with each error icon being displayed is added as a
-        /// tool to the tooltip window.
+        ///  There is one ErrorWindow for each control parent. It is parented to the
+        ///  control parent. The window's region is made up of the regions from icons
+        ///  of all child icons. The window's size is the enclosing rectangle for all
+        ///  the regions. A tooltip window is created as a child of this window. The
+        ///  rectangle associated with each error icon being displayed is added as a
+        ///  tool to the tooltip window.
         /// </summary>
         internal class ErrorWindow : NativeWindow
         {
@@ -828,7 +828,7 @@ namespace System.Windows.Forms
             private DeviceContextMapMode _mirrordcMode = DeviceContextMapMode.Text;
 
             /// <summary>
-            /// Construct an error window for this provider and control parent.
+            ///  Construct an error window for this provider and control parent.
             /// </summary>
             public ErrorWindow(ErrorProvider provider, Control parent)
             {
@@ -837,7 +837,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This is called when a control would like to show an error icon.
+            ///  This is called when a control would like to show an error icon.
             /// </summary>
             public void Add(ControlItem item)
             {
@@ -859,12 +859,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Called to get rid of any resources the Object may have.
+            ///  Called to get rid of any resources the Object may have.
             /// </summary>
             public void Dispose() => EnsureDestroyed();
 
             /// <summary>
-            /// Make sure the error window is created, and the tooltip window is created.
+            ///  Make sure the error window is created, and the tooltip window is created.
             /// </summary>
             bool EnsureCreated()
             {
@@ -912,7 +912,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Destroy the timer, toolwindow, and the error window itself.
+            ///  Destroy the timer, toolwindow, and the error window itself.
             /// </summary>
             private void EnsureDestroyed()
             {
@@ -948,12 +948,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Since we added mirroring to certain controls, we need to make sure the
-            /// error icons show up in the correct place. We cannot mirror the errorwindow
-            /// in EnsureCreated (although that would have been really easy), since we use
-            /// GDI+ for some of this code, and as we all know, GDI+ does not handle mirroring
-            /// at all.
-            /// To work around that we create our own mirrored dc when we need to.
+            ///  Since we added mirroring to certain controls, we need to make sure the
+            ///  error icons show up in the correct place. We cannot mirror the errorwindow
+            ///  in EnsureCreated (although that would have been really easy), since we use
+            ///  GDI+ for some of this code, and as we all know, GDI+ does not handle mirroring
+            ///  at all.
+            ///  To work around that we create our own mirrored dc when we need to.
             /// </summary>
             private void CreateMirrorDC(IntPtr hdc, int originOffset)
             {
@@ -990,8 +990,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This is called when the error window needs to paint. We paint each icon at its
-            /// correct location.
+            ///  This is called when the error window needs to paint. We paint each icon at its
+            ///  correct location.
             /// </summary>
             private void OnPaint(ref Message m)
             {
@@ -1027,7 +1027,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This is called when an error icon is flashing, and the view needs to be updatd.
+            ///  This is called when an error icon is flashing, and the view needs to be updatd.
             /// </summary>
             private void OnTimer(object sender, EventArgs e)
             {
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This is called when a control no longer needs to display an error icon.
+            ///  This is called when a control no longer needs to display an error icon.
             /// </summary>
             public void Remove(ControlItem item)
             {
@@ -1093,8 +1093,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Start the blinking process. The timer will fire until there are no more
-            /// icons that need to blink.
+            ///  Start the blinking process. The timer will fire until there are no more
+            ///  icons that need to blink.
             /// </summary>
             public void StartBlinking()
             {
@@ -1116,9 +1116,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Move and size the error window, compute and set the window region, set the tooltip
-            /// rectangles and descriptions. This basically brings the error window up to date with
-            /// the internal data structures.
+            ///  Move and size the error window, compute and set the window region, set the tooltip
+            ///  rectangles and descriptions. This basically brings the error window up to date with
+            ///  the internal data structures.
             /// </summary>
             public void Update(bool timerCaused)
             {
@@ -1250,7 +1250,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Called when the error window gets a windows message.
+            ///  Called when the error window gets a windows message.
             /// </summary>
             protected override void WndProc(ref Message m)
             {
@@ -1276,8 +1276,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// There is one ControlItem for each control that the ErrorProvider is tracking state for.
-        /// It contains the values of all the extender properties.
+        ///  There is one ControlItem for each control that the ErrorProvider is tracking state for.
+        ///  It contains the values of all the extender properties.
         /// </summary>
         internal class ControlItem
         {
@@ -1290,8 +1290,8 @@ namespace System.Windows.Forms
             private const int _startingBlinkPhase = 10; // We want to blink 5 times
 
             /// <summary>
-            /// Construct the item with its associated control, provider, and a unique ID. The ID is
-            /// used for the tooltip ID.
+            ///  Construct the item with its associated control, provider, and a unique ID. The ID is
+            ///  used for the tooltip ID.
             /// </summary>
             public ControlItem(ErrorProvider provider, Control control, IntPtr id)
             {
@@ -1324,22 +1324,22 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the unique ID for this control. The ID used as the tooltip ID.
+            ///  Returns the unique ID for this control. The ID used as the tooltip ID.
             /// </summary>
             public IntPtr Id { get; }
 
             /// <summary>
-            /// Returns or set the phase of blinking that this control is currently
-            /// in.  If zero, the control is not blinking. If odd, then the control
-            /// is blinking, but invisible. If even, the control is blinking and
-            /// currently visible. Each time the blink timer fires, this value is
-            /// reduced by one (until zero), thus causing the error icon to appear
-            /// or disappear.
+            ///  Returns or set the phase of blinking that this control is currently
+            ///  in.  If zero, the control is not blinking. If odd, then the control
+            ///  is blinking, but invisible. If even, the control is blinking and
+            ///  currently visible. Each time the blink timer fires, this value is
+            ///  reduced by one (until zero), thus causing the error icon to appear
+            ///  or disappear.
             /// </summary>
             public int BlinkPhase { get; set; }
 
             /// <summary>
-            /// Returns or sets the icon padding for the control.
+            ///  Returns or sets the icon padding for the control.
             /// </summary>
             public int IconPadding
             {
@@ -1357,7 +1357,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns or sets the error description string for the control.
+            ///  Returns or sets the error description string for the control.
             /// </summary>
             public string Error
             {
@@ -1404,7 +1404,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns or sets the location of the error icon for the control.
+            ///  Returns or sets the location of the error icon for the control.
             /// </summary>
             public ErrorIconAlignment IconAlignment
             {
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns true if the tooltip for this control item is currently shown.
+            ///  Returns true if the tooltip for this control item is currently shown.
             /// </summary>
             public bool ToolTipShown { get; set; }
 
@@ -1461,8 +1461,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the location of the icon in the same coordinate system as the control being
-            /// extended. The size passed in is the size of the icon.
+            ///  Returns the location of the icon in the same coordinate system as the control being
+            ///  extended. The size passed in is the size of the icon.
             /// </summary>
             internal Rectangle GetIconBounds(Size size)
             {
@@ -1503,14 +1503,14 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// If this control's error icon has been added to the error window, then update the
-            /// window state because some property has changed.
+            ///  If this control's error icon has been added to the error window, then update the
+            ///  window state because some property has changed.
             /// </summary>
             private void UpdateWindow() => _window?.Update(timerCaused: false);
 
             /// <summary>
-            /// If this control's error icon has been added to the error window, then start blinking
-            /// the error window.
+            ///  If this control's error icon has been added to the error window, then start blinking
+            ///  the error window.
             /// </summary>
             private void StartBlinking()
             {
@@ -1522,7 +1522,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Add this control's error icon to the error window.
+            ///  Add this control's error icon to the error window.
             /// </summary>
             private void AddToWindow()
             {
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Remove this control's error icon from the error window.
+            ///  Remove this control's error icon from the error window.
             /// </summary>
             private void RemoveFromWindow()
             {
@@ -1555,7 +1555,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This is called when a property on the control is changed.
+            ///  This is called when a property on the control is changed.
             /// </summary>
             private void OnBoundsChanged(object sender, EventArgs e) => UpdateWindow();
 
@@ -1567,18 +1567,18 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This is called when the control's handle is created.
+            ///  This is called when the control's handle is created.
             /// </summary>
             private void OnCreateHandle(object sender, EventArgs e) => AddToWindow();
 
             /// <summary>
-            /// This is called when the control's handle is destroyed.
+            ///  This is called when the control's handle is destroyed.
             /// </summary>
             private void OnDestroyHandle(object sender, EventArgs e) => RemoveFromWindow();
         }
 
         /// <summary>
-        /// This represents the HRGN of icon. The region is calculate from the icon's mask.
+        ///  This represents the HRGN of icon. The region is calculate from the icon's mask.
         /// </summary>
         internal class IconRegion
         {
@@ -1586,7 +1586,7 @@ namespace System.Windows.Forms
             private readonly Icon icon;
 
             /// <summary>
-            /// Constructor that takes an Icon and extracts its 16x16 version.
+            ///  Constructor that takes an Icon and extracts its 16x16 version.
             /// </summary>
             public IconRegion(Icon icon)
             {
@@ -1594,12 +1594,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the handle of the icon.
+            ///  Returns the handle of the icon.
             /// </summary>
             public IntPtr IconHandle => icon.Handle;
 
             /// <summary>
-            /// Returns the handle of the region.
+            ///  Returns the handle of the region.
             /// </summary>
             public Region Region
             {
@@ -1654,12 +1654,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Return the size of the icon.
+            ///  Return the size of the icon.
             /// </summary>
             public Size Size => icon.Size;
 
             /// <summary>
-            /// Release any resources held by this Object.
+            ///  Release any resources held by this Object.
             /// </summary>
             public void Dispose()
             {

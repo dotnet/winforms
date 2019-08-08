@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='RichTextBox.LinkClicked'/> event.
+    ///  Provides data for the <see cref='RichTextBox.LinkClicked'/> event.
     /// </summary>
     [ComVisible(true)]
     public class LinkClickedEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='LinkClickedEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref='LinkClickedEventArgs'/> class.
         /// </summary>
         public LinkClickedEventArgs(string linkText)
         {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the text of the link being clicked.
+        ///  Gets the text of the link being clicked.
         /// </summary>
         public string LinkText { get; }
     }

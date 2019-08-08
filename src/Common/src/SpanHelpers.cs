@@ -9,9 +9,9 @@ namespace System.Windows.Forms
     internal static class SpanHelpers
     {
         /// <summary>
-        /// Copies the <paramref name="source"/> to the <paramref name="destination"/>,
-        /// terminating with null and truncating <paramref name="source"/> to fit if
-        /// necessary.
+        ///  Copies the <paramref name="source"/> to the <paramref name="destination"/>,
+        ///  terminating with null and truncating <paramref name="source"/> to fit if
+        ///  necessary.
         /// </summary>
         public static void CopyAndTerminate(ReadOnlySpan<char> source, Span<char> destination)
         {
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Slices the given <paramref name="span"/> at the first null found (if any).
+        ///  Slices the given <paramref name="span"/> at the first null found (if any).
         /// </summary>
         public static ReadOnlySpan<char> SliceAtFirstNull(this ReadOnlySpan<char> span)
         {
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Slices the given <paramref name="span"/> at the first null found (if any).
+        ///  Slices the given <paramref name="span"/> at the first null found (if any).
         /// </summary>
         public static Span<char> SliceAtFirstNull(this Span<char> span)
         {

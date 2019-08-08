@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the AppearanceGetSet test
+        ///  Data for the AppearanceGetSet test
         /// </summary>
         public static TheoryData<Appearance> AppearanceGetSetData =>
             CommonTestHelper.GetEnumTheoryData<Appearance>();
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the AppearanceGetSetInvalid test
+        ///  Data for the AppearanceGetSetInvalid test
         /// </summary>
         public static TheoryData<Appearance> AppearanceGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<Appearance>();
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the AutoCheck test
+        ///  Data for the AutoCheck test
         /// </summary>
         public static TheoryData<bool> AutoCheckData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the ContentAlignmentGetSet test
+        ///  Data for the ContentAlignmentGetSet test
         /// </summary>
         public static TheoryData<ContentAlignment> ContentAlignmentGetSetData =>
             CommonTestHelper.GetEnumTheoryData<ContentAlignment>();
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the ContentAlignmentGetSetInvalid test
+        ///  Data for the ContentAlignmentGetSetInvalid test
         /// </summary>
         public static TheoryData<ContentAlignment> ContentAlignmentGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<ContentAlignment>();
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the CheckStateGetSet test
+        ///  Data for the CheckStateGetSet test
         /// </summary>
         public static TheoryData<CheckState> CheckStateGetSetData =>
             CommonTestHelper.GetEnumTheoryData<CheckState>();
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the CheckStateGetSetInvalid test
+        ///  Data for the CheckStateGetSetInvalid test
         /// </summary>
         public static TheoryData<CheckState> CheckStateGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the ThreeState test
+        ///  Data for the ThreeState test
         /// </summary>
         public static TheoryData<bool> ThreeStateData =>
             CommonTestHelper.GetBoolTheoryData();

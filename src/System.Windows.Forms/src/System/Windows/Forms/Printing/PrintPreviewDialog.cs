@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         readonly ImageList imageList;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='PrintPreviewDialog'/> class.
+        ///  Initializes a new instance of the <see cref='PrintPreviewDialog'/> class.
         /// </summary>
         public PrintPreviewDialog()
         {
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         //subhag addition
         //-------------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Indicates the <see cref='Button'/> control on the form that is clicked when
+        ///  Indicates the <see cref='Button'/> control on the form that is clicked when
         ///  the user presses the ENTER key.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  PrintPreviewDialog does not support AutoScaleBaseSize.
         /// </summary>
-        /// Keeping implementation of obsoleted AutoScaleBaseSize API
+        ///  Keeping implementation of obsoleted AutoScaleBaseSize API
 #pragma warning disable 618
         // disable csharp compiler warning #0809: obsolete member overrides non-obsolete member
 #pragma warning disable 0809
@@ -1148,8 +1148,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating the <see cref='Forms.PrintPreviewControl'/>
-        /// contained in this form.
+        ///  Gets or sets a value indicating the <see cref='Forms.PrintPreviewControl'/>
+        ///  contained in this form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),

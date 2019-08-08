@@ -10,16 +10,16 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class implements the necessary interfaces required for an ActiveX site.
+    ///  This class implements the necessary interfaces required for an ActiveX site.
     ///
-    /// This class is public, but has an internal constructor so that external
-    /// users can only reference the Type (cannot instantiate it directly).
-    /// Other classes have to inherit this class and expose it to the outside world.
+    ///  This class is public, but has an internal constructor so that external
+    ///  users can only reference the Type (cannot instantiate it directly).
+    ///  Other classes have to inherit this class and expose it to the outside world.
     ///
-    /// This class does not have any public property/method/event by itself.
-    /// All implementations of the site interface methods are private, which
-    /// means that inheritors who want to override even a single method of one
-    /// of these interfaces will have to implement the whole interface.
+    ///  This class does not have any public property/method/event by itself.
+    ///  All implementations of the site interface methods are private, which
+    ///  means that inheritors who want to override even a single method of one
+    ///  of these interfaces will have to implement the whole interface.
     /// </summary>
     public class WebBrowserSiteBase
         : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Dispose(release the cookie)
+        ///  Dispose(release the cookie)
         /// </summary>
         public void Dispose()
         {
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Release the cookie if we're disposing
+        ///  Release the cookie if we're disposing
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the WebBrowserBase object set in the constructor.
+        ///  Retrieves the WebBrowserBase object set in the constructor.
         /// </summary>
         internal WebBrowserBase Host
         {

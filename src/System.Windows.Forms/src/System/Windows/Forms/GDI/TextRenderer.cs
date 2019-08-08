@@ -210,7 +210,7 @@ namespace System.Windows.Forms
             return windowsGraphicsSupportedFlags;
         }
 
-        /// MeasureText wrappers.
+        ///  MeasureText wrappers.
 
         public static Size MeasureText(string text, Font font)
         {

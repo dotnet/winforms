@@ -924,7 +924,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseWheel'/> event.
+        ///  Raises the <see cref='Control.MouseWheel'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseWheel(MouseEventArgs e)

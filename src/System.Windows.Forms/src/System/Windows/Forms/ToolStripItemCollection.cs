@@ -11,7 +11,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Summary description for ToolStripItemCollection.
+    ///  Summary description for ToolStripItemCollection.
     /// </summary>
     [
     Editor("System.Windows.Forms.Design.ToolStripCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -22,10 +22,10 @@ namespace System.Windows.Forms
         private readonly ToolStrip owner;
         private readonly bool itemsCollection;
         private readonly bool isReadOnly = false;
-        /// A caching mechanism for key accessor
-        /// We use an index here rather than control so that we don't have lifetime
-        /// issues by holding on to extra references.
-        /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
+        ///  A caching mechanism for key accessor
+        ///  We use an index here rather than control so that we don't have lifetime
+        ///  issues by holding on to extra references.
+        ///  Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
         private int lastAccessedIndex = -1;
 
         internal ToolStripItemCollection(ToolStrip owner, bool itemsCollection) : this(owner, itemsCollection, /*isReadOnly=*/false)
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the child control with the specified key.
+        ///  Retrieves the child control with the specified key.
         /// </summary>
         public virtual ToolStripItem this[string key]
         {
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns true if the collection contains an item with the specified key, false otherwise.
+        ///  Returns true if the collection contains an item with the specified key, false otherwise.
         /// </summary>
         public virtual bool ContainsKey(string key)
         {
@@ -241,8 +241,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Searches for Items by their Name property, builds up an array
-        /// of all the controls that match.
+        ///  Searches for Items by their Name property, builds up an array
+        ///  of all the controls that match.
             /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren)
         {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
             return InnerList.IndexOf(value);
         }
         /// <summary>
-        /// The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
+        ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
         /// </summary>
         public virtual int IndexOfKey(string key)
         {
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Removes the child item with the specified key.
+        ///  Removes the child item with the specified key.
         /// </summary>
         public virtual void RemoveByKey(string key)
         {

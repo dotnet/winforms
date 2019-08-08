@@ -14,8 +14,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Personal appears twice in type editor because its numeric value matches with MyDocuments.
-        /// This code filters out the duplicate value.
+        ///  Personal appears twice in type editor because its numeric value matches with MyDocuments.
+        ///  This code filters out the duplicate value.
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {

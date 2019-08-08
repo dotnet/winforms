@@ -51,8 +51,8 @@ namespace System.Windows.Forms
         public const int NoMatches = NativeMethods.LB_ERR;
 
         /// <summary>
-        /// The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
-        /// item height is 13 for the default font on Windows.
+        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
+        ///  item height is 13 for the default font on Windows.
         /// </summary>
         public const int DefaultItemHeight = 13;
 
@@ -114,17 +114,17 @@ namespace System.Windows.Forms
         private IntegerCollection customTabOffsets;
 
         /// <summary>
-        /// Default start position of items in the checked list box
+        ///  Default start position of items in the checked list box
         /// </summary>
         private const int defaultListItemStartPos = 1;
 
         /// <summary>
-        /// Borders are 1 pixel height.
+        ///  Borders are 1 pixel height.
         /// </summary>
         private const int defaultListItemBorderHeight = 1;
 
         /// <summary>
-        /// Borders are 1 pixel width and a pixel buffer
+        ///  Borders are 1 pixel width and a pixel buffer
         /// </summary>
         private const int defaultListItemPaddingBuffer = 3;
 
@@ -1476,14 +1476,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the list box that starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item in the list box that starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s) => FindString(s, startIndex: -1);
 
         /// <summary>
-        /// Finds the first item after the given index which starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item after the given index which starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s, int startIndex)
         {
@@ -1491,14 +1491,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the list box that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item in the list box that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s) => FindStringExact(s, startIndex: -1);
 
         /// <summary>
-        /// Finds the first item after the given index that matches the given string.
-        /// The strings must match excatly, except for differences in casing.
+        ///  Finds the first item after the given index that matches the given string.
+        ///  The strings must match excatly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {
@@ -2087,7 +2087,7 @@ namespace System.Windows.Forms
             base.Refresh();
         }
         /// <summary>
-        /// Reparses the objects, getting new text strings for them.
+        ///  Reparses the objects, getting new text strings for them.
         /// </summary>
         protected override void RefreshItems()
         {
@@ -2159,7 +2159,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reparses the object at the given index, getting new text string for it.
+        ///  Reparses the object at the given index, getting new text string for it.
         /// </summary>
         protected override void RefreshItem(int index)
         {

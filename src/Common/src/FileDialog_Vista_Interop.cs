@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// IID GUID strings for relevant COM interfaces
+        ///  IID GUID strings for relevant COM interfaces
         /// </summary>
         public static class IIDGuid
         {
@@ -71,17 +71,17 @@ namespace System.Windows.Forms
         public enum SIATTRIBFLAGS
         {
             /// <summary>
-            /// Multiple items and the attributes together.
+            ///  Multiple items and the attributes together.
             /// </summary>
             SIATTRIBFLAGS_AND = 0x00000001,
 
             /// <summary>
-            /// Multiple items or the attributes together.
+            ///  Multiple items or the attributes together.
             /// </summary>
             SIATTRIBFLAGS_OR = 0x00000002, 
 
             /// <summary>
-            /// Call GetAttributes directly on the ShellFolder for multiple attributes
+            ///  Call GetAttributes directly on the ShellFolder for multiple attributes
             /// <summary>
             SIATTRIBFLAGS_APPCOMPAT = 0x00000003
         }
@@ -297,9 +297,9 @@ namespace System.Windows.Forms
 #pragma warning restore 108
 
         /// <remarks>
-        /// Some of these callbacks are cancelable - returning S_FALSE means that the dialog should
-        /// not proceed (e.g. with closing, changing folder); to support this, we need to use the
-        /// PreserveSig attribute to enable us to return the proper HRESULT
+        ///  Some of these callbacks are cancelable - returning S_FALSE means that the dialog should
+        ///  not proceed (e.g. with closing, changing folder); to support this, we need to use the
+        ///  PreserveSig attribute to enable us to return the proper HRESULT
         /// </remarks>
         [ComImport]
         [Guid(IIDGuid.IFileDialogEvents)]

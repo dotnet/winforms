@@ -7,42 +7,42 @@ using System.Globalization;
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// This class mimics a clr enum that we can create at runtime.
-    /// It associates an array of names with an array of values and converts
-    /// between them.
+    ///  This class mimics a clr enum that we can create at runtime.
+    ///  It associates an array of names with an array of values and converts
+    ///  between them.
     ///
-    /// A note here: we compare string values when looking for the value of an item.
-    /// Typically these aren't large lists and the perf is worth it.  The reason stems
-    /// from IPerPropertyBrowsing, which supplies a list of names and a list of
-    /// variants to mimic enum functionality.  If the actual property value is a DWORD,
-    /// which translates to VT_UI4, and they specify their values as VT_I4 (which is a common
-    /// mistake), they won't compare properly and values can't be updated.
-    /// By comparing strings, we avoid this problem and add flexiblity to the system.
+    ///  A note here: we compare string values when looking for the value of an item.
+    ///  Typically these aren't large lists and the perf is worth it.  The reason stems
+    ///  from IPerPropertyBrowsing, which supplies a list of names and a list of
+    ///  variants to mimic enum functionality.  If the actual property value is a DWORD,
+    ///  which translates to VT_UI4, and they specify their values as VT_I4 (which is a common
+    ///  mistake), they won't compare properly and values can't be updated.
+    ///  By comparing strings, we avoid this problem and add flexiblity to the system.
     /// </summary>
     internal class Com2Enum
     {
         /// <summary>
-        /// Our array of value string names
+        ///  Our array of value string names
         /// </summary>
         private string[] names;
 
         /// <summary>
-        /// Our values
+        ///  Our values
         /// </summary>
         private object[] values;
 
         /// <summary>
-        /// Our cached array of value.ToString()'s
+        ///  Our cached array of value.ToString()'s
         /// </summary>
         private string[] stringValues;
 
         /// <summary>
-        /// Should we allow values besides what's in the listbox?
+        ///  Should we allow values besides what's in the listbox?
         /// </summary>
         private readonly bool allowUnknownValues;
 
         /// <summary>
-        /// Our one and only ctor
+        ///  Our one and only ctor
         /// </summary>
         public Com2Enum(string[] names, object[] values, bool allowUnknownValues)
         {
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Can this enum be values other than the strict enum?
+        ///  Can this enum be values other than the strict enum?
         /// </summary>
         public bool IsStrictEnum
         {
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Retrieve a copy of the value array
+        ///  Retrieve a copy of the value array
         /// </summary>
         public virtual object[] Values
         {
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Retrieve a copy of the nme array.
+        ///  Retrieve a copy of the nme array.
         /// </summary>
         public virtual string[] Names
         {
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Associate a string to the appropriate value.
+        ///  Associate a string to the appropriate value.
         /// </summary>
         public virtual object FromString(string s)
         {
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Retrieves the string name of a given value.
+        ///  Retrieves the string name of a given value.
         /// </summary>
         public virtual string ToString(object v)
         {

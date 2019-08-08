@@ -5,12 +5,12 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// The event class that is created when the selection state of a ListViewItem is changed.
+    ///  The event class that is created when the selection state of a ListViewItem is changed.
     /// </summary>
     public class ListViewItemSelectionChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Constructs a ListViewItemSelectionChangedEventArgs object.
+        ///  Constructs a ListViewItemSelectionChangedEventArgs object.
         /// </summary>
         public ListViewItemSelectionChangedEventArgs(ListViewItem item, int itemIndex, bool isSelected)
         {
@@ -20,17 +20,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The list view item whose selection changed
+        ///  The list view item whose selection changed
         /// </summary>
         public ListViewItem Item { get; }
 
         /// <summary>
-        /// The list view item's index
+        ///  The list view item's index
         /// </summary>
         public int ItemIndex { get; }
 
         /// <summary>
-        /// Return true if the item is selected
+        ///  Return true if the item is selected
         /// </summary>
         public bool IsSelected { get; }
     }

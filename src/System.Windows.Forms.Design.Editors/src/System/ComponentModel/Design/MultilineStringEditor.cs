@@ -19,14 +19,14 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// An editor for editing strings that supports multiple lines of text and is resizable.
+    ///  An editor for editing strings that supports multiple lines of text and is resizable.
     /// </summary>
     public sealed class MultilineStringEditor : UITypeEditor
     {
         private MultilineStringEditorUI _editorUI;
 
         /// <summary>
-        /// Edits the given value, returning the editing results.
+        ///  Edits the given value, returning the editing results.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// The MultilineStringEditor is a drop down editor, so this returns UITypeEditorEditStyle.DropDown.
+        ///  The MultilineStringEditor is a drop down editor, so this returns UITypeEditorEditStyle.DropDown.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -61,7 +61,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns false; no extra painting is performed.
+        ///  Returns false; no extra painting is performed.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {

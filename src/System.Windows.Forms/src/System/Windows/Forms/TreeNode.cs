@@ -2122,7 +2122,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves this TreeNode object to the given data stream.
         /// </summary>
-        /// Review: Changing this would break VB users. so suppresing this message.
+        ///  Review: Changing this would break VB users. so suppresing this message.
         ///
         protected virtual void Serialize(SerializationInfo si, StreamingContext context)
         {
@@ -2271,7 +2271,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// ISerializable private implementation
+        ///  ISerializable private implementation
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {

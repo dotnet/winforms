@@ -378,7 +378,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the property
+        ///  Hide the property
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

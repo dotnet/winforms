@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the relatd control based on the new mouse location and the resize Rules.
+    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the relatd control based on the new mouse location and the resize Rules.
     /// </summary>
     internal class ResizeBehavior : Behavior
     {
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool _captureLost;
 
         /// <summary>
-        /// Constructor that caches all values for perf. reasons.
+        ///  Constructor that caches all values for perf. reasons.
         /// </summary>
         internal ResizeBehavior(IServiceProvider serviceProvider)
         {
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Demand creates the BehaviorService.
+        ///  Demand creates the BehaviorService.
         /// </summary>
         private BehaviorService BehaviorService
         {
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called during the resize operation, we'll try to determine an offset so that the controls snap to the grid settings of the parent.
+        ///  Called during the resize operation, we'll try to determine an offset so that the controls snap to the grid settings of the parent.
         /// </summary>
         private Rectangle AdjustToGrid(Rectangle controlBounds, SelectionRules rules)
         {
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Builds up an array of snaplines used during resize to adjust/snap the controls bounds.
+        ///  Builds up an array of snaplines used during resize to adjust/snap the controls bounds.
         /// </summary>
         private SnapLine[] GenerateSnapLines(SelectionRules rules, Point loc)
         {
@@ -201,7 +201,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This is called in response to the mouse moving far enough away from its initial point.  Basically, we calculate the bounds for each control we're resizing and disable any adorners.
+        ///  This is called in response to the mouse moving far enough away from its initial point.  Basically, we calculate the bounds for each control we're resizing and disable any adorners.
         /// </summary>
         private void InitiateResize()
         {
@@ -282,7 +282,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// In response to a MouseDown, the SelectionBehavior will push (initiate) a dragBehavior by alerting the SelectionMananger that a new control has been selected and the mouse is down. Note that this is only if we find the related control's Dock property == none.
+        ///  In response to a MouseDown, the SelectionBehavior will push (initiate) a dragBehavior by alerting the SelectionMananger that a new control has been selected and the mouse is down. Note that this is only if we find the related control's Dock property == none.
         /// </summary>
         public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
         {
@@ -353,7 +353,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This method is called when we lose capture, which can occur when another window requests capture or the user presses ESC during a drag.  We check to see if we are currently dragging, and if we are we abort the transaction.  We pop our behavior off the stack at this time.
+        ///  This method is called when we lose capture, which can occur when another window requests capture or the user presses ESC during a drag.  We check to see if we are currently dragging, and if we are we abort the transaction.  We pop our behavior off the stack at this time.
         /// </summary>
         public override void OnLoseCapture(Glyph g, EventArgs e)
         {
@@ -441,7 +441,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This method will either initiate a new resize operation or continue with an existing one.  If we're currently dragging (i.e. resizing) then we look at the resize rules and set the bounds of each control to the new location of the mouse pointer.
+        ///  This method will either initiate a new resize operation or continue with an existing one.  If we're currently dragging (i.e. resizing) then we look at the resize rules and set the bounds of each control to the new location of the mouse pointer.
         /// </summary>
         public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
         {
@@ -826,7 +826,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This ends the Behavior by popping itself from the BehaviorStack.  Also, all Adorners are re-enabled at the end of a successful drag.
+        ///  This ends the Behavior by popping itself from the BehaviorStack.  Also, all Adorners are re-enabled at the end of a successful drag.
         /// </summary>
         public override bool OnMouseUp(Glyph g, MouseButtons button)
         {

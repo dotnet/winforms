@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         protected const int yOffset = 2;
 
         /// <summary>
-        /// Initializes a new instance of a <see cref='DataGridRow'/> .
+        ///  Initializes a new instance of a <see cref='DataGridRow'/> .
         /// </summary>
         public DataGridRow(DataGrid dataGrid, DataGridTableStyle dgTable, int rowNumber)
         {
@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         // =------------------------------------------------------------------
 
         /// <summary>
-        /// Gets the <see cref='Forms.DataGrid'/> control the row belongs to.
+        ///  Gets the <see cref='Forms.DataGrid'/> control the row belongs to.
         /// </summary>
         public DataGrid DataGrid
         {
@@ -234,8 +234,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, gets the <see cref='Rectangle'/>
-        /// where a cell's contents gets painted.
+        ///  When overridden in a derived class, gets the <see cref='Rectangle'/>
+        ///  where a cell's contents gets painted.
         /// </summary>
         public virtual Rectangle GetCellBounds(int col)
         {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, gets the <see cref='Rectangle'/> of the non-scrollable area of
+        ///  When overridden in a derived class, gets the <see cref='Rectangle'/> of the non-scrollable area of
         ///  the row.
         /// </summary>
         public virtual Rectangle GetNonScrollableArea()
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, called by the <see cref='Forms.DataGrid'/> control when a key press occurs on a row with focus.
+        ///  When overridden in a derived class, called by the <see cref='Forms.DataGrid'/> control when a key press occurs on a row with focus.
         /// </summary>
         public virtual bool OnKeyPress(Keys keyData)
         {
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, is called by the <see cref='Forms.DataGrid'/> when a click occurs
+        ///  When overridden in a derived class, is called by the <see cref='Forms.DataGrid'/> when a click occurs
         ///  in the row's
         ///  client area, specified by x and y coordinates.
         /// </summary>
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, is called by the <see cref='Forms.DataGrid'/> when
+        ///  When overridden in a derived class, is called by the <see cref='Forms.DataGrid'/> when
         ///  the mouse moves within the row's client area.
         /// </summary>
         public virtual bool OnMouseMove(int x, int y, Rectangle rowHeaders, bool alignToRight)

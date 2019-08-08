@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         private static readonly byte[] serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IDataObject'/>.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IDataObject'/>.
         /// </summary>
         internal DataObject(IDataObject data)
         {
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see langword='IComDataObject'/>.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see langword='IComDataObject'/>.
         /// </summary>
         internal DataObject(IComDataObject data)
         {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data.
         /// </summary>
         public DataObject(object data)
         {
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data and its
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data and its
         ///  associated format.
         /// </summary>
         public DataObject(string format, object data) : this()
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We are restricting serialization of formats that represent strings, bitmaps or OLE types.
+        ///  We are restricting serialization of formats that represent strings, bitmaps or OLE types.
         /// </summary>
         /// <param name="format">format name</param>
         /// <returns>true - serialize only safe types, strings or bitmaps.</returns>
@@ -2145,9 +2145,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Binder that restricts DataObject content deserialization to Bitmap type and
-        /// serialization to strings and Bitmaps.
-        /// Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
+        ///  Binder that restricts DataObject content deserialization to Bitmap type and
+        ///  serialization to strings and Bitmaps.
+        ///  Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
         /// </summary>
         private class BitmapBinder : SerializationBinder
         {
@@ -2211,7 +2211,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Bitmap and string types are safe type to serialize/deserialize.
+            ///  Bitmap and string types are safe type to serialize/deserialize.
             /// </summary>
             /// <param name="serializedType"></param>
             /// <param name="assemblyName"></param>
@@ -2229,8 +2229,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This exception is used to indicate that clipboard contains a serialized
-        /// managed object that contains unexpected types and that we should stop processing this data.
+        ///  This exception is used to indicate that clipboard contains a serialized
+        ///  managed object that contains unexpected types and that we should stop processing this data.
         /// </summary>
         private class RestrictedTypeDeserializationException : Exception
         {

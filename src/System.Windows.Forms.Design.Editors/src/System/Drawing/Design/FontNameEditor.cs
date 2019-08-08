@@ -77,8 +77,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Tries to render sample of text in specified font and style,
-        /// throwing exception if specified font does not support that style...
+        ///  Tries to render sample of text in specified font and style,
+        ///  throwing exception if specified font does not support that style...
         /// </summary>
         private static void DrawFontSample(PaintValueEventArgs e, FontFamily fontFamily, FontStyle fontStyle)
         {

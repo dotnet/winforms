@@ -41,8 +41,8 @@ namespace System.Windows.Forms
         private bool _inSetDataConnection = false;
 
         /// <summary>
-        /// The ListSource to consume as this ListBox's source of data.
-        /// When set, a user can not modify the Items collection.
+        ///  The ListSource to consume as this ListBox's source of data.
+        ///  When set, a user can not modify the Items collection.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue(null)]
@@ -98,8 +98,8 @@ namespace System.Windows.Forms
         protected CurrencyManager DataManager => _dataManager;
 
         /// <summary>
-        /// If the ListBox contains objects that support properties, this indicates
-        /// which property of the object to show. If "", the object shows it's ToString().
+        ///  If the ListBox contains objects that support properties, this indicates
+        ///  which property of the object to show. If "", the object shows it's ToString().
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Cached type converter of the property associated with the display member
+        ///  Cached type converter of the property associated with the display member
         /// </summary>
         private TypeConverter DisplayMemberConverter
         {
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether list currently allows selection of list items.
+        ///  Indicates whether list currently allows selection of list items.
         /// </summary>
         protected virtual bool AllowSelection => true;
 
@@ -454,8 +454,8 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        /// We use this to prevent getting the selected item when mouse is hovering
-        /// over the dropdown.
+        ///  We use this to prevent getting the selected item when mouse is hovering
+        ///  over the dropdown.
         /// </remarks>
         private protected bool BindingFieldEmpty => _displayMember.BindingField.Length == 0;
 
@@ -547,7 +547,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Handling special input keys, such as PageUp, PageDown, Home, End, etc...
+        ///  Handling special input keys, such as PageUp, PageDown, Home, End, etc...
         /// </summary>
         protected override bool IsInputKey(Keys keyData)
         {
@@ -611,11 +611,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Actually goes and fires the selectedIndexChanged event. Inheriting controls
-        /// should use this to know when the event is fired [this is preferable to
-        /// adding an event handler on yourself for this event]. They should,
-        /// however, remember to call base.OnSelectedIndexChanged(e); to ensure the event is
-        /// still fired to external listeners
+        ///  Actually goes and fires the selectedIndexChanged event. Inheriting controls
+        ///  should use this to know when the event is fired [this is preferable to
+        ///  adding an event handler on yourself for this event]. They should,
+        ///  however, remember to call base.OnSelectedIndexChanged(e); to ensure the event is
+        ///  still fired to external listeners
         /// </summary>
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {

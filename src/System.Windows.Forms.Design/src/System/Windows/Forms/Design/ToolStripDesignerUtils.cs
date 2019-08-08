@@ -79,9 +79,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// If IComponent is ToolStrip return ToolStrip
-        /// If IComponent is ToolStripItem return the Owner ToolStrip
-        /// If IComponent is ToolStripDropDownItem return the child DropDown ToolStrip
+        ///  If IComponent is ToolStrip return ToolStrip
+        ///  If IComponent is ToolStripItem return the Owner ToolStrip
+        ///  If IComponent is ToolStripDropDownItem return the child DropDown ToolStrip
         /// </summary>
         private static ToolStrip GetToolStripFromComponent(IComponent component)
         {
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Fishes out the display name attribute from the Toolbox item  if not present, uses Type.Name
+        ///  Fishes out the display name attribute from the Toolbox item  if not present, uses Type.Name
         /// </summary>
         public static string GetToolboxDescription(Type itemType)
         {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The first item returned should be the DefaultItem to create on the ToolStrip
+        ///  The first item returned should be the DefaultItem to create on the ToolStrip
         /// </summary>
         public static Type[] GetStandardItemTypes(IComponent component)
         {
@@ -314,7 +314,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// wraps the result of GetStandardItemTypes in ItemTypeToolStripMenuItems.
+        ///  wraps the result of GetStandardItemTypes in ItemTypeToolStripMenuItems.
         /// </summary>
         public static ToolStripItem[] GetStandardItemMenuItems(IComponent component, EventHandler onClick, bool convertTo)
         {
@@ -336,7 +336,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// wraps the result of GetCustomItemTypes in ItemTypeToolStripMenuItems.
+        ///  wraps the result of GetCustomItemTypes in ItemTypeToolStripMenuItems.
         /// </summary>
         public static ToolStripItem[] GetCustomItemMenuItems(IComponent component, EventHandler onClick, bool convertTo, IServiceProvider serviceProvider)
         {
@@ -358,7 +358,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// build up a list of standard items separated by the custom items
+        ///  build up a list of standard items separated by the custom items
         /// </summary>
         public static NewItemsContextMenuStrip GetNewItemDropDown(IComponent component, ToolStripItem currentItem, EventHandler onClick, bool convertTo, IServiceProvider serviceProvider, bool populateCustom)
         {

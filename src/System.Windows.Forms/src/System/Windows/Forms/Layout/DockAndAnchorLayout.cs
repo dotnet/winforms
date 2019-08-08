@@ -18,9 +18,9 @@ namespace System.Windows.Forms.Layout
         private static readonly int s_cachedBoundsProperty = PropertyStore.CreateKey();
 
         /// <summary>
-        /// Loop through the AutoSized controls and expand them if they are smaller than
-        /// their preferred size. If expanding the controls causes overlap, bump the overlapped
-        /// control if it is AutoRelocatable.
+        ///  Loop through the AutoSized controls and expand them if they are smaller than
+        ///  their preferred size. If expanding the controls causes overlap, bump the overlapped
+        ///  control if it is AutoRelocatable.
         /// </summary>
         private static void LayoutAutoSizedControls(IArrangedElement container)
         {
@@ -71,9 +71,9 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Gets the bounds of the element after growing to newSize (note that depending on
-        /// anchoring the element may grow to the left/updwards rather than to the
-        /// right/downwards. i.e., it may be translated.)
+        ///  Gets the bounds of the element after growing to newSize (note that depending on
+        ///  anchoring the element may grow to the left/updwards rather than to the
+        ///  right/downwards. i.e., it may be translated.)
         /// </summary>
         private static Rectangle GetGrowthBounds(IArrangedElement element, Size newSize)
         {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Examines an elements anchoring to figure out which direction it should grow.
+        ///  Examines an elements anchoring to figure out which direction it should grow.
         /// </summary>
         private static GrowthDirection GetGrowthDirection(IArrangedElement element)
         {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Layout for a single anchored control. There's no order dependency when laying out anchored controls.
+        ///  Layout for a single anchored control. There's no order dependency when laying out anchored controls.
         /// </summary>
         private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
@@ -396,8 +396,8 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Helper method that either sets the element bounds or does the preferredSize computation based on
-        /// the value of measureOnly.
+        ///  Helper method that either sets the element bounds or does the preferredSize computation based on
+        ///  the value of measureOnly.
         /// </summary>
         private static void TryCalculatePreferredSizeDockedControl(IArrangedElement element, Rectangle newElementBounds, bool measureOnly, ref Size preferredSize, ref Rectangle remainingBounds)
         {
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <remarks>
-        /// PreferredSize is only computed if measureOnly = true.
+        ///  PreferredSize is only computed if measureOnly = true.
         /// </remarks>
         private static bool TryCalculatePreferredSize(IArrangedElement container, bool measureOnly, out Size preferredSize)
         {
@@ -604,8 +604,8 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Updates the Anchor information based on the controls current bounds. This should only be called
-        /// when the parent control changes or the anchor mode changes.
+        ///  Updates the Anchor information based on the controls current bounds. This should only be called
+        ///  when the parent control changes or the anchor mode changes.
         /// </summary>
         private static void UpdateAnchorInfo(IArrangedElement element)
         {

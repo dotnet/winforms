@@ -3068,7 +3068,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Logic copied from Windows sources to copy the lightening and darkening of colors.
+        ///  Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </summary>
         private struct HLSColor
         {

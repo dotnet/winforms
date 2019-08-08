@@ -145,7 +145,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns the list of commands that should be filtered by the form that hosts this panel. This is done so that these specific commands will not get passed on to VS, and can instead be handled by the panel itself.
+        ///  Returns the list of commands that should be filtered by the form that hosts this panel. This is done so that these specific commands will not get passed on to VS, and can instead be handled by the panel itself.
         /// </summary>
         public CommandID[] FilteredCommandIDs
         {
@@ -194,7 +194,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the Line that currently has input focus.
+        ///  Gets the Line that currently has input focus.
         /// </summary>
         private Line FocusedLine
         {
@@ -261,7 +261,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Helper event so that Lines can be notified of this event.
+        ///  Helper event so that Lines can be notified of this event.
         /// </summary>
         private event EventHandler FormActivated
         {
@@ -270,7 +270,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Helper event so that Lines can be notified of this event.
+        ///  Helper event so that Lines can be notified of this event.
         /// </summary>
         private event EventHandler FormDeactivate
         {
@@ -303,7 +303,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Computes the best possible location (in desktop coordinates) to display the panel, given the size of the panel and the position of its anchor
+        ///  Computes the best possible location (in desktop coordinates) to display the panel, given the size of the panel and the position of its anchor
         /// </summary>
         public static Point ComputePreferredDesktopLocation(Rectangle rectangleAnchor, Size sizePanel, out DockStyle edgeToDock)
         {
@@ -816,10 +816,10 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Strips out ampersands used for mnemonics so that they don't show up in the rendering.
-        /// - Convert "&&" to "&"
-        /// - Convert "&x" to "x"
-        /// - An ampersand by itself at the end of a string is displayed as-is
+        ///  Strips out ampersands used for mnemonics so that they don't show up in the rendering.
+        ///  - Convert "&&" to "&"
+        ///  - Convert "&x" to "x"
+        ///  - An ampersand by itself at the end of a string is displayed as-is
         /// </summary>
         private static string StripAmpersands(string s)
         {
@@ -1858,7 +1858,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Custom label that provides accurate accessibility information and focus abilities.
+            ///  Custom label that provides accurate accessibility information and focus abilities.
             /// </summary>
             private sealed class EditorLabel : Label
             {
@@ -2410,7 +2410,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// General purpose method, based on Control.Contains()... Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
+                ///  General purpose method, based on Control.Contains()... Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
                 /// </summary>
                 private bool OwnsWindow(IntPtr hWnd)
                 {

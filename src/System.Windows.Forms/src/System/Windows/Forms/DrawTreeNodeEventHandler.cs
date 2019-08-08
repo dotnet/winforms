@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Handler for the DrawTreeNode event of the TreeView control.
+    ///  Handler for the DrawTreeNode event of the TreeView control.
     /// </summary>
     public delegate void DrawTreeNodeEventHandler(object sender, DrawTreeNodeEventArgs e);
 }

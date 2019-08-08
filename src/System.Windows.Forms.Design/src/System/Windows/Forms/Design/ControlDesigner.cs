@@ -20,7 +20,7 @@ using Accessibility;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides a designer that can design components that extend Control.
+    ///  Provides a designer that can design components that extend Control.
     /// </summary>
     public class ControlDesigner : ComponentDesigner
     {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves a list of associated components. These are components that should be incluced in a cut or copy operation on this component.
+        ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy operation on this component.
         /// </summary>
         public override ICollection AssociatedComponents
         {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the control we're designing.
+        ///  Retrieves the control we're designing.
         /// </summary>
         public virtual Control Control
         {
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines whether drag rects can be drawn on this designer.
+        ///  Determines whether drag rects can be drawn on this designer.
         /// </summary>
         protected virtual bool EnableDragRect
         {
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the parent component for this control designer. The default implementation just checks to see if the component being designed is a control, and if it is it returns its parent.  This property can return null if there is no parent component.
+        ///  Returns the parent component for this control designer. The default implementation just checks to see if the component being designed is a control, and if it is it returns its parent.  This property can return null if there is no parent component.
         /// </summary>
         protected override IComponent ParentComponent
         {
@@ -165,7 +165,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines whether or not the ControlDesigner will allow SnapLine alignment during a drag operation when the primary drag control is over this designer, or when a control is being dragged from the toolbox, or when a control is being drawn through click-drag.
+        ///  Determines whether or not the ControlDesigner will allow SnapLine alignment during a drag operation when the primary drag control is over this designer, or when a control is being dragged from the toolbox, or when a control is being drawn through click-drag.
         /// </summary>
         public virtual bool ParticipatesWithSnapLines
         {
@@ -197,7 +197,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves a set of rules concerning the movement capabilities of a component. This should be one or more flags from the SelectionRules class.  If no designer provides rules for a component, the component will not get any UI services.
+        ///  Retrieves a set of rules concerning the movement capabilities of a component. This should be one or more flags from the SelectionRules class.  If no designer provides rules for a component, the component will not get any UI services.
         /// </summary>
         public virtual SelectionRules SelectionRules
         {
@@ -322,7 +322,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns a list of SnapLine objects representing interesting alignment points for this control.  These SnapLines are used to assist in the positioning of the control on a parent's surface.
+        ///  Returns a list of SnapLine objects representing interesting alignment points for this control.  These SnapLines are used to assist in the positioning of the control on a parent's surface.
         /// </summary>
         public virtual IList SnapLines
         {
@@ -382,27 +382,27 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the number of internal control designers in the ControlDesigner. An internal control is a control that is not in the IDesignerHost.Container.Components collection. SplitterPanel is an example of one such control. We use this to get SnapLines for the internal control designers.
+        ///  Returns the number of internal control designers in the ControlDesigner. An internal control is a control that is not in the IDesignerHost.Container.Components collection. SplitterPanel is an example of one such control. We use this to get SnapLines for the internal control designers.
         /// </summary>
         public virtual int NumberOfInternalControlDesigners() => 0;
 
         /// <summary>
-        /// Returns the internal control designer with the specified index in the ControlDesigner. An internal control is a control that is not in the IDesignerHost.Container.Components collection. SplitterPanel is an example of one such control. internalControlIndex is zero-based.
+        ///  Returns the internal control designer with the specified index in the ControlDesigner. An internal control is a control that is not in the IDesignerHost.Container.Components collection. SplitterPanel is an example of one such control. internalControlIndex is zero-based.
         /// </summary>
         public virtual ControlDesigner InternalControlDesigner(int internalControlIndex) => null;
 
         /// <summary>
-        /// Default processing for messages.  This method causes the message to get processed by windows, skipping the control.  This is useful if you want to block this message from getting to the control, but you do not want to block it from getting to Windows itself because it causes other messages to be generated.
+        ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the control.  This is useful if you want to block this message from getting to the control, but you do not want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
         protected void BaseWndProc(ref Message m) => m.Result = UnsafeNativeMethods.DefWindowProc(m.HWnd, m.Msg, m.WParam, m.LParam);
 
         /// <summary>
-        /// Determines if the this designer can be parented to the specified desinger -- generally this means if the control for this designer can be parented into the given ParentControlDesigner's designer.
+        ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the control for this designer can be parented into the given ParentControlDesigner's designer.
         /// </summary>
         public virtual bool CanBeParentedTo(IDesigner parentDesigner) => parentDesigner is ParentControlDesigner p && !Control.Contains(p.Control);
 
         /// <summary>
-        /// Default processing for messages.  This method causes the message to get processed by the control, rather than the designer.
+        ///  Default processing for messages.  This method causes the message to get processed by the control, rather than the designer.
         /// </summary>
         protected void DefWndProc(ref Message m)
         {
@@ -410,7 +410,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Displays the given exception to the user.
+        ///  Displays the given exception to the user.
         /// </summary>
         protected void DisplayError(Exception e)
         {
@@ -431,7 +431,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this object.
+        ///  Disposes of this object.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Enables design time functionality for a child control.  The child control is a child of this control designer's control.  The child does not directly participate in persistence, but it will if it is exposed as a property of the main control.  Consider a control like the SplitContainer:  it has two panels, Panel1 and Panel2.  These panels are exposed through read only Panel1 and Panel2 properties on the SplitContainer class. SplitContainer's designer calls EnableDesignTime for each panel, which allows other components to be dropped on them.  But, in order for the contents of Panel1 and Panel2 to be saved, SplitContainer itself needed to expose the panels as public properties. The child paramter is the control to enable.  The name paramter is the name of this control as exposed to the end user.  Names need to be unique within a control designer, but do not have to be unique to other control designer's children. This method returns true if the child control could be enabled for design time, or false if the hosting infrastructure does not support it.  To support this feature, the hosting infrastructure must expose the INestedContainer class as a service off of the site.
+        ///  Enables design time functionality for a child control.  The child control is a child of this control designer's control.  The child does not directly participate in persistence, but it will if it is exposed as a property of the main control.  Consider a control like the SplitContainer:  it has two panels, Panel1 and Panel2.  These panels are exposed through read only Panel1 and Panel2 properties on the SplitContainer class. SplitContainer's designer calls EnableDesignTime for each panel, which allows other components to be dropped on them.  But, in order for the contents of Panel1 and Panel2 to be saved, SplitContainer itself needed to expose the panels as public properties. The child paramter is the control to enable.  The name paramter is the name of this control as exposed to the end user.  Names need to be unique within a control designer, but do not have to be unique to other control designer's children. This method returns true if the child control could be enabled for design time, or false if the hosting infrastructure does not support it.  To support this feature, the hosting infrastructure must expose the INestedContainer class as a service off of the site.
         /// </summary>
         protected bool EnableDesignMode(Control child, string name)
         {
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Enables or disables drag/drop support.  This hooks drag event handlers to the control.
+        ///  Enables or disables drag/drop support.  This hooks drag event handlers to the control.
         /// </summary>
         protected void EnableDragDrop(bool value)
         {
@@ -697,7 +697,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns a 'BodyGlyph' representing the bounds of this control. The BodyGlyph is responsible for hit testing the related CtrlDes and forwarding messages directly to the designer.
+        ///  Returns a 'BodyGlyph' representing the bounds of this control. The BodyGlyph is responsible for hit testing the related CtrlDes and forwarding messages directly to the designer.
         /// </summary>
         protected virtual ControlBodyGlyph GetControlGlyph(GlyphSelectionType selectionType)
         {
@@ -741,7 +741,7 @@ namespace System.Windows.Forms.Design
         internal ControlBodyGlyph GetControlGlyphInternal(GlyphSelectionType selectionType) => GetControlGlyph(selectionType);
 
         /// <summary>
-        /// Returns a collection of Glyph objects representing the selection borders and grab handles for a standard control.  Note that based on 'selectionType' the Glyphs returned will either: represent a fully resizeable selection border with grab handles, a locked selection border, or a single 'hidden' selection Glyph.
+        ///  Returns a collection of Glyph objects representing the selection borders and grab handles for a standard control.  Note that based on 'selectionType' the Glyphs returned will either: represent a fully resizeable selection border with grab handles, a locked selection border, or a single 'hidden' selection Glyph.
         /// </summary>
         public virtual GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
         {
@@ -856,7 +856,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows your component to support a design time user interface.  A TabStrip control, for example, has a design time user interface that allows the user to click the tabs to change tabs.  To implement this, TabStrip returns true whenever the given point is within its tabs.
+        ///  Allows your component to support a design time user interface.  A TabStrip control, for example, has a design time user interface that allows the user to click the tabs to change tabs.  To implement this, TabStrip returns true whenever the given point is within its tabs.
         /// </summary>
         protected virtual bool GetHitTest(Point point)
         {
@@ -864,7 +864,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Hooks the children of the given control.  We need to do this for child controls that are not in design mode, which is the case for composite controls.
+        ///  Hooks the children of the given control.  We need to do this for child controls that are not in design mode, which is the case for composite controls.
         /// </summary>
         protected void HookChildControls(Control firstChild)
         {
@@ -912,7 +912,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by the host when we're first initialized.
+        ///  Called by the host when we're first initialized.
         /// </summary>
         public override void Initialize(IComponent component)
         {
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ControlDesigner overrides this method to handle after-drop cases.
+        ///  ControlDesigner overrides this method to handle after-drop cases.
         /// </summary>
         public override void InitializeExistingComponent(IDictionary defaultValues)
         {
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ControlDesigner overrides this method.  It will look at the default property for the control and, if it is of type string, it will set this property's value to the name of the component.  It only does this if the designer has been configured with this option in the options service.  This method also connects the control to its parent and positions it.  If you override this method, you should always call base.
+        ///  ControlDesigner overrides this method.  It will look at the default property for the control and, if it is of type string, it will set this property's value to the name of the component.  It only does this if the designer has been configured with this option in the options service.  This method also connects the control to its parent and positions it.  If you override this method, you should always call base.
         /// </summary>
         public override void InitializeNewComponent(IDictionary defaultValues)
         {
@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the designer is intialized.  This allows the designer to provide some meaningful default values in the component.  The default implementation of this sets the components's default property to it's name, if that property is a string.
+        ///  Called when the designer is intialized.  This allows the designer to provide some meaningful default values in the component.  The default implementation of this sets the components's default property to it's name, if that property is a string.
         /// </summary>
         [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         public override void OnSetComponentDefaults()
@@ -1203,7 +1203,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the context menu should be displayed
+        ///  Called when the context menu should be displayed
         /// </summary>
         protected virtual void OnContextMenu(int x, int y)
         {
@@ -1211,7 +1211,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is called immediately after the control handle has been created.
+        ///  This is called immediately after the control handle has been created.
         /// </summary>
         protected virtual void OnCreateHandle()
         {
@@ -1223,7 +1223,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a drag-drop operation enters the control designer view
+        ///  Called when a drag-drop operation enters the control designer view
         /// </summary>
         protected virtual void OnDragEnter(DragEventArgs de)
         {
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called to cleanup a D&D operation
+        ///  Called to cleanup a D&D operation
         /// </summary>
         protected virtual void OnDragComplete(DragEventArgs de)
         {
@@ -1244,7 +1244,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a drag drop object is dropped onto the control designer view
+        ///  Called when a drag drop object is dropped onto the control designer view
         /// </summary>
         protected virtual void OnDragDrop(DragEventArgs de)
         {
@@ -1258,7 +1258,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a drag-drop operation leaves the control designer view
+        ///  Called when a drag-drop operation leaves the control designer view
         /// </summary>
         protected virtual void OnDragLeave(EventArgs e)
         {
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a drag drop object is dragged over the control designer view
+        ///  Called when a drag drop object is dragged over the control designer view
         /// </summary>
         protected virtual void OnDragOver(DragEventArgs de)
         {
@@ -1284,14 +1284,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Event handler for our GiveFeedback event, which is called when a drag operation is in progress.  The host will call us with this when an OLE drag event happens.
+        ///  Event handler for our GiveFeedback event, which is called when a drag operation is in progress.  The host will call us with this when an OLE drag event happens.
         /// </summary>
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
         }
 
         /// <summary>
-        /// Called in response to the left mouse button being pressed on a component. It ensures that the component is selected.
+        ///  Called in response to the left mouse button being pressed on a component. It ensures that the component is selected.
         /// </summary>
         protected virtual void OnMouseDragBegin(int x, int y)
         {
@@ -1312,7 +1312,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called at the end of a drag operation.  This either commits or rolls back the drag.
+        ///  Called at the end of a drag operation.  This either commits or rolls back the drag.
         /// </summary>
         protected virtual void OnMouseDragEnd(bool cancel)
         {
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called for each movement of the mouse. This will check to see if a drag operation is in progress. If so, it will pass the updated drag dimensions on to the selection UI service.
+        ///  Called for each movement of the mouse. This will check to see if a drag operation is in progress. If so, it will pass the updated drag dimensions on to the selection UI service.
         /// </summary>
         protected virtual void OnMouseDragMove(int x, int y)
         {
@@ -1438,7 +1438,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the mouse first enters the control. This is forwarded to the parent designer to enable the container selector.
+        ///  Called when the mouse first enters the control. This is forwarded to the parent designer to enable the container selector.
         /// </summary>
         protected virtual void OnMouseEnter()
         {
@@ -1465,9 +1465,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called after the mouse hovers over the control. This is forwarded to the parent designer to enabled the container selector.
-        /// Called after the mouse hovers over the control. This is forwarded to the parent
-        /// designer to enabled the container selector.
+        ///  Called after the mouse hovers over the control. This is forwarded to the parent designer to enabled the container selector.
+        ///  Called after the mouse hovers over the control. This is forwarded to the parent
+        ///  designer to enabled the container selector.
         /// </summary>
         protected virtual void OnMouseHover()
         {
@@ -1494,7 +1494,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the mouse first enters the control. This is forwarded to the parent designer to enable the container selector.
+        ///  Called when the mouse first enters the control. This is forwarded to the parent designer to enable the container selector.
         /// </summary>
         protected virtual void OnMouseLeave()
         {
@@ -1521,7 +1521,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the control we're designing has finished painting.  This method gives the designer a chance to paint any additional adornments on top of the control.
+        ///  Called when the control we're designing has finished painting.  This method gives the designer a chance to paint any additional adornments on top of the control.
         /// </summary>
         protected virtual void OnPaintAdornments(PaintEventArgs pe)
         {
@@ -1533,11 +1533,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called each time the cursor needs to be set.  The ControlDesigner behavior here will set the cursor to one of three things:
-        /// 1.  If the toolbox service has a tool selected, it will allow the toolbox service to set the cursor.
-        /// 2.  If the selection UI service shows a locked selection, or if there is no location property on the control, then the default arrow will be set.
-        /// 3.  Otherwise, the four headed arrow will be set to indicate that the component can be clicked and moved.
-        /// 4.  If the user is currently dragging a component, the crosshair cursor will be used instead of the four headed arrow.
+        ///  Called each time the cursor needs to be set.  The ControlDesigner behavior here will set the cursor to one of three things:
+        ///  1.  If the toolbox service has a tool selected, it will allow the toolbox service to set the cursor.
+        ///  2.  If the selection UI service shows a locked selection, or if there is no location property on the control, then the default arrow will be set.
+        ///  3.  Otherwise, the four headed arrow will be set to indicate that the component can be clicked and moved.
+        ///  4.  If the user is currently dragging a component, the crosshair cursor will be used instead of the four headed arrow.
         /// </summary>
         protected virtual void OnSetCursor()
         {
@@ -1591,7 +1591,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -1631,7 +1631,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Hooks the children of the given control.  We need to do this for child controls that are not in design mode, which is the case for composite controls.
+        ///  Hooks the children of the given control.  We need to do this for child controls that are not in design mode, which is the case for composite controls.
         /// </summary>
         protected void UnhookChildControls(Control firstChild)
         {
@@ -1660,7 +1660,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method should be called by the extending designer for each message the control would normally receive.  This allows the designer to pre-process messages before allowing them to be routed to the control.
+        ///  This method should be called by the extending designer for each message the control would normally receive.  This allows the designer to pre-process messages before allowing them to be routed to the control.
         /// </summary>
         protected virtual void WndProc(ref Message m)
         {
@@ -2549,7 +2549,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This TransparentBehavior is associated with the BodyGlyph for this ControlDesigner.  When the BehaviorService hittests a glyph w/a TransparentBehavior, all messages will be passed through the BehaviorService directly to the ControlDesigner. During a Drag operation, when the BehaviorService hittests
+        ///  This TransparentBehavior is associated with the BodyGlyph for this ControlDesigner.  When the BehaviorService hittests a glyph w/a TransparentBehavior, all messages will be passed through the BehaviorService directly to the ControlDesigner. During a Drag operation, when the BehaviorService hittests
         /// </summary>
         internal class TransparentBehavior : Behavior.Behavior
         {
@@ -2557,7 +2557,7 @@ namespace System.Windows.Forms.Design
             Rectangle _controlRect = Rectangle.Empty;
 
             /// <summary>
-            /// Constructor that accepts the related ControlDesigner.
+            ///  Constructor that accepts the related ControlDesigner.
             /// </summary>
             internal TransparentBehavior(ControlDesigner designer)
             {
@@ -2565,12 +2565,12 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// This property performs a hit test on the ControlDesigner to determine if the BodyGlyph should return '-1' for hit testing (letting all messages pass directly to the the control).
+            ///  This property performs a hit test on the ControlDesigner to determine if the BodyGlyph should return '-1' for hit testing (letting all messages pass directly to the the control).
             /// </summary>
             internal bool IsTransparent(Point p) => _designer.GetHitTest(p);
 
             /// <summary>
-            /// Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
+            ///  Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
             /// </summary>
             public override void OnDragDrop(Glyph g, DragEventArgs e)
             {
@@ -2579,7 +2579,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
+            ///  Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
             /// </summary>
             public override void OnDragEnter(Glyph g, DragEventArgs e)
             {
@@ -2591,7 +2591,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
+            ///  Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
             /// </summary>
             public override void OnDragLeave(Glyph g, EventArgs e)
             {
@@ -2600,7 +2600,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
+            ///  Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
             /// </summary>
             public override void OnDragOver(Glyph g, DragEventArgs e)
             {
@@ -2614,7 +2614,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
+            ///  Forwards DragDrop notification from the BehaviorService to the related ControlDesigner.
             /// </summary>
             public override void OnGiveFeedback(Glyph g, GiveFeedbackEventArgs e)
             {

@@ -291,7 +291,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Destroys the Win32 handle of this <see cref='Cursor'/>, if the
         /// <see cref='Cursor'/>
-        /// owns the handle
+        ///  owns the handle
         /// </summary>
         private void DestroyHandle()
         {
@@ -468,7 +468,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// ISerializable private implementation
+        ///  ISerializable private implementation
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {

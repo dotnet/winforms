@@ -10,7 +10,7 @@ internal partial class Interop
     internal partial class Kernel32
     {
         /// <remarks>
-        /// There isn't a unicode version of this API so pass in an ANSI string.
+        ///  There isn't a unicode version of this API so pass in an ANSI string.
         /// </remarks>
         [DllImport(Libraries.Kernel32, CharSet = CharSet.Ansi, BestFitMapping = false, ExactSpelling = true)]
         public static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);

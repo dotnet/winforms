@@ -5,7 +5,7 @@
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides information about the property value UI including the invoke handler, tool tip and glyph icon.
+    ///  Provides information about the property value UI including the invoke handler, tool tip and glyph icon.
     /// </summary>
     public class PropertyValueUIItem
     {

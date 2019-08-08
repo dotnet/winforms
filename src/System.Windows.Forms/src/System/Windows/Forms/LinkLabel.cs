@@ -926,9 +926,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Gets or sets a value that is returned to the
-        /// parent form when the link label.
-        /// is clicked.
+            ///  Gets or sets a value that is returned to the
+        ///  parent form when the link label.
+        ///  is clicked.
             /// </summary>
         DialogResult IButtonControl.DialogResult
         {
@@ -954,7 +954,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.GotFocus'/> event.
+        ///  Raises the <see cref='Control.GotFocus'/> event.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -2106,10 +2106,10 @@ namespace System.Windows.Forms
             private readonly LinkLabel owner;
             private bool linksAdded = false;   //whether we should serialize the linkCollection
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
-            /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
+            ///  Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
             private int lastAccessedIndex = -1;
 
             public LinkCollection(LinkLabel owner)
@@ -2554,7 +2554,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Description for accessibility
+            ///  Description for accessibility
             /// </summary>
             public string Description { get; set; }
 
@@ -2619,14 +2619,14 @@ namespace System.Windows.Forms
             public object LinkData { get; set; }
 
             /// <summary>
-            /// The LinkLabel object that owns this link.
+            ///  The LinkLabel object that owns this link.
             /// </summary>
             internal LinkLabel Owner { get; set; }
 
             internal LinkState State { get; set; } = LinkState.Normal;
 
             /// <summary>
-            /// The name for the link - useful for indexing by key.
+            ///  The name for the link - useful for indexing by key.
             /// </summary>
             [DefaultValue("")]
             [SRCategory(nameof(SR.CatAppearance))]

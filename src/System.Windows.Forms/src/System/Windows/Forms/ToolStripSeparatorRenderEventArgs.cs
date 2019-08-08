@@ -7,12 +7,12 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class represents all the information to render the ToolStrip
+    ///  This class represents all the information to render the ToolStrip
     /// </summary>
     public class ToolStripSeparatorRenderEventArgs : ToolStripItemRenderEventArgs
     {
         /// <summary>
-        /// This class represents all the information to render the ToolStrip
+        ///  This class represents all the information to render the ToolStrip
         /// </summary>
         public ToolStripSeparatorRenderEventArgs(Graphics g, ToolStripSeparator separator, bool vertical) : base(g, separator)
         {

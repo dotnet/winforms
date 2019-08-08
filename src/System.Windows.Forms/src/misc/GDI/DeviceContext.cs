@@ -89,9 +89,8 @@ namespace System.Windows.Forms.Internal
 #endif
 
         ///
-        /// Class properties...
+        ///  Class properties...
         ///
-
         /// <summary>
         ///  Specifies whether a modification has been applied to the dc, like setting the clipping area or a coordinate transform.
         /// </summary>

@@ -532,7 +532,7 @@ namespace System.Windows.Forms
             finally
             {
                 if ((original.options & OriginalOptions.OwnsImage) != 0)
-                { /// this is to handle the case were we clone the icon (see WHY WHY WHY below)
+                { ///  this is to handle the case were we clone the icon (see WHY WHY WHY below)
                     icon.Dispose();
                 }
             }
@@ -1108,9 +1108,9 @@ namespace System.Windows.Forms
             private readonly ImageList owner;
             private readonly ArrayList imageInfoCollection = new ArrayList();
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /// <summary>

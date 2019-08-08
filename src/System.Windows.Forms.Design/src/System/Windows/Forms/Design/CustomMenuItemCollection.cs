@@ -7,19 +7,19 @@ using System.Collections;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// A strongly-typed collection that stores ToolStripMenuItem objects for DesignerContextMenu
+    ///  A strongly-typed collection that stores ToolStripMenuItem objects for DesignerContextMenu
     /// </summary>
     internal class CustomMenuItemCollection : CollectionBase
     {
         /// <summary>
-        /// Constructor
+        ///  Constructor
         /// </summary>
         public CustomMenuItemCollection()
         {
         }
 
         /// <summary>
-        /// Add value to the collection
+        ///  Add value to the collection
         /// </summary>
         public int Add(ToolStripItem value)
         {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Add range of values to the collection
+        ///  Add range of values to the collection
         /// </summary>
         public void AddRange(ToolStripItem[] value)
         {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Abstract base class version for refreshing the items
+        ///  Abstract base class version for refreshing the items
         /// </summary>
         public virtual void RefreshItems()
         {

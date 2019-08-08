@@ -7,17 +7,17 @@ namespace System.Windows.Forms.Design
     public enum ThemedScrollbarMode
     {
         /// <summary>
-        /// The window and all of its children will have themed scrollbars
+        ///  The window and all of its children will have themed scrollbars
         /// </summary>
         All = 1,
 
         /// <summary>
-        /// The window and all of its children will be un-themed
+        ///  The window and all of its children will be un-themed
         /// </summary>
         None = 2,
 
         /// <summary>
-        /// The window will have themed scrollbars but all of its children will be un-themed
+        ///  The window will have themed scrollbars but all of its children will be un-themed
         /// </summary>
         OnlyTopLevel = 3
     };

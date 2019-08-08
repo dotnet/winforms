@@ -241,19 +241,19 @@ namespace System.Windows.Forms
             NativeHtmlWindow.Navigate(url.ToString());
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        /// break.
+        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+        ///  break.
         public void Navigate(string urlString)
         {
             NativeHtmlWindow.Navigate(urlString);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        /// break.
+        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+        ///  break.
         public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
         {
             IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, target, windowOptions, replaceEntry);
@@ -265,10 +265,10 @@ namespace System.Windows.Forms
             return Open(url.ToString(), target, windowOptions, replaceEntry);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        /// break.
+        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+        ///  break.
         public HtmlWindow OpenNew(string urlString, string windowOptions)
         {
             IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, "_blank", windowOptions, true);
@@ -451,7 +451,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        /// HtmlWindowShim - this is the glue between the DOM eventing mechanisms
+        ///  HtmlWindowShim - this is the glue between the DOM eventing mechanisms
         ///        and our CLR callbacks.
         ///
         ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
@@ -483,7 +483,7 @@ namespace System.Windows.Forms
                 get { return htmlWindow.NativeHtmlWindow; }
             }
 
-            /// Support IHtmlDocument3.AttachHandler
+            ///  Support IHtmlDocument3.AttachHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
 
@@ -496,7 +496,7 @@ namespace System.Windows.Forms
                 Debug.Assert(success, "failed to add event");
             }
 
-            /// Support HTMLWindowEvents2
+            ///  Support HTMLWindowEvents2
             public override void ConnectToEvents()
             {
                 if (cookie == null || !cookie.Connected)
@@ -512,7 +512,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// Support IHTMLWindow3.DetachHandler
+            ///  Support IHTMLWindow3.DetachHandler
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);

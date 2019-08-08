@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the entry at the specified index of the <see cref='InputLanguage'/>.
+        ///  Represents the entry at the specified index of the <see cref='InputLanguage'/>.
         /// </summary>
         public InputLanguage this[int index]
         {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether the
+        ///  Gets a value indicating whether the
         ///  <see cref='InputLanguageCollection'/> contains the specified <see cref='InputLanguage'/>.
         /// </summary>
         public bool Contains(InputLanguage value)
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Copies the <see cref='InputLanguageCollection'/> values to a one-dimensional <see cref='Array'/> instance at the
+        ///  Copies the <see cref='InputLanguageCollection'/> values to a one-dimensional <see cref='Array'/> instance at the
         ///  specified index.
         /// </summary>
         public void CopyTo(InputLanguage[] array, int index)

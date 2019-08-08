@@ -9,7 +9,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class handles the user interface for inherited components.
+    ///  This class handles the user interface for inherited components.
     /// </summary>
     internal class InheritanceUI
     {
@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design
         private ToolTip _tooltip;
 
         /// <summary>
-        /// The bitmap we use to show inheritance.
+        ///  The bitmap we use to show inheritance.
         /// </summary>
         public Bitmap InheritanceGlyph
         {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The rectangle surrounding the glyph.
+        ///  The rectangle surrounding the glyph.
         /// </summary>
         public Rectangle InheritanceGlyphRectangle
         {
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Adds an inherited control to our list.  This creates a tool tip for that control.
+        ///  Adds an inherited control to our list.  This creates a tool tip for that control.
         /// </summary>
         public void AddInheritedControl(Control c, InheritanceLevel level)
         {
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Removes a previously added inherited control.
+        ///  Removes a previously added inherited control.
         /// </summary>
         public void RemoveInheritedControl(Control c)
         {

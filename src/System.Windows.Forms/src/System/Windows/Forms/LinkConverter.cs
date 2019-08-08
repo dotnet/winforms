@@ -9,13 +9,13 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// A TypeConverter for LinkLabel.Link objects. Access this class through the TypeDescriptor.
+    ///  A TypeConverter for LinkLabel.Link objects. Access this class through the TypeDescriptor.
     /// </summary>
     public class LinkConverter : TypeConverter
     {
         /// <summary>
-        /// Determines if this converter can convert an object in the given source
-        /// type to the native type of the converter.
+        ///  Determines if this converter can convert an object in the given source
+        ///  type to the native type of the converter.
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
@@ -28,8 +28,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether this converter can convert an object to the given
-        /// destination type using the context.
+        ///  Gets a value indicating whether this converter can convert an object to the given
+        ///  destination type using the context.
         /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Converts the given object to the converter's native type.
+        ///  Converts the given object to the converter's native type.
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
@@ -83,11 +83,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Converts the given object to another type. The most common types to convert
-        /// are to and from a string object. The default implementation will make a call
-        /// to ToString on the object if the object is valid and if the destination
-        /// type is string. If this cannot convert to the desitnation type, this will
-        /// throw a NotSupportedException.
+        ///  Converts the given object to another type. The most common types to convert
+        ///  are to and from a string object. The default implementation will make a call
+        ///  to ToString on the object if the object is valid and if the destination
+        ///  type is string. If this cannot convert to the desitnation type, this will
+        ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {

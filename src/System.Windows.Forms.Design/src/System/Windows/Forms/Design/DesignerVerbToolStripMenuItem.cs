@@ -7,7 +7,7 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-	/// Associates DesignerVerb with ToolStripMenuItem.
+	///  Associates DesignerVerb with ToolStripMenuItem.
 	/// </summary>
 	internal class DesignerVerbToolStripMenuItem : ToolStripMenuItem
     {

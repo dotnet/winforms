@@ -7,14 +7,14 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Identifies an element in the dataGridView (base class for TCell, TBand, TRow, TColumn.
+    ///  Identifies an element in the dataGridView (base class for TCell, TBand, TRow, TColumn.
     /// </summary>
     public class DataGridViewElement
     {
         private DataGridView _dataGridView;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGridViewElement'/> class.
+        ///  Initializes a new instance of the <see cref='DataGridViewElement'/> class.
         /// </summary>
         public DataGridViewElement()
         {

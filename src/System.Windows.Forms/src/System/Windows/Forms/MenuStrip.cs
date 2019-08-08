@@ -187,7 +187,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
+        ///  Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
         /// </summary>
         internal bool OnMenuKey()
         {
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
 
         }
         /// <summary>
-        /// Summary of WndProc.
+        ///  Summary of WndProc.
         /// </summary>
         /// <param name=m></param>
         protected override void WndProc(ref Message m)

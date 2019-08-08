@@ -84,11 +84,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a new AccessibleObject for this DataGridViewComboBoxCell instance.
-        /// The AccessibleObject instance returned by this method supports ControlType UIA property.
+        ///  Creates a new AccessibleObject for this DataGridViewComboBoxCell instance.
+        ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
         /// </summary>
         /// <returns>
-        /// AccessibleObject for this DataGridViewComboBoxCell instance.
+        ///  AccessibleObject for this DataGridViewComboBoxCell instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {

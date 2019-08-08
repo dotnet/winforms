@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// This base class maps an ole defined data type (OLE_COLOR, IFont, etc.),
+    ///  This base class maps an ole defined data type (OLE_COLOR, IFont, etc.),
     /// </summary>
     internal abstract class Com2DataTypeToManagedDataTypeConverter
     {

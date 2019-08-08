@@ -11,7 +11,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This internal Class is used by all TOPLEVEL ToolStripItems to show the InSitu Editor. When the ToolStripItem receives the MouseDown on its Glyph it calls the "ActivateEditor" Function on this EditorManager. The ActivateEditor Function checks for any existing "EDITOR" active, closes that down and now opens the new editor on the "AdornerWindow". This class is also responsible for "hookingup" to the F2 Command on VS.
+    ///  This internal Class is used by all TOPLEVEL ToolStripItems to show the InSitu Editor. When the ToolStripItem receives the MouseDown on its Glyph it calls the "ActivateEditor" Function on this EditorManager. The ActivateEditor Function checks for any existing "EDITOR" active, closes that down and now opens the new editor on the "AdornerWindow". This class is also responsible for "hookingup" to the F2 Command on VS.
     /// </summary>
     internal class ToolStripEditorManager
     {
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Activates the editor for the given item.If there's still an editor around  for the previous-edited item, it is deactivated. Pass in 'null' to deactivate and remove the current editor, if any.
+        ///  Activates the editor for the given item.If there's still an editor around  for the previous-edited item, it is deactivated. Pass in 'null' to deactivate and remove the current editor, if any.
         /// </summary>
         internal void ActivateEditor(ToolStripItem item, bool clicked)
         {
@@ -91,14 +91,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will remove the Command for F2.
+        ///  This will remove the Command for F2.
         /// </summary>
         internal void CloseManager()
         {
         }
 
         /// <summary>
-        /// This LISTENs to the Editor Resize for resizing the Insitu edit on  the Adorner Window ... CURRENTLY DISABLED.
+        ///  This LISTENs to the Editor Resize for resizing the Insitu edit on  the Adorner Window ... CURRENTLY DISABLED.
         /// </summary>
         private void OnEditorResize(object sender, EventArgs e)
         {

@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the EncryptionLevel of the document in the WebBrowser control.
-    /// Returned by the <see cref='WebBrowser.EncryptionLevel'/> property.
+    ///  Specifies the EncryptionLevel of the document in the WebBrowser control.
+    ///  Returned by the <see cref='WebBrowser.EncryptionLevel'/> property.
     /// </summary>
     public enum WebBrowserEncryptionLevel
     {

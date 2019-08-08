@@ -14,32 +14,32 @@ using System.Text;
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// This class wraps a com native property in a property descriptor.
-    /// It maintains all information relative to the basic (e.g. ITypeInfo)
-    /// information about the member dispid function, and converts that info
-    /// to meaningful managed code information.
+    ///  This class wraps a com native property in a property descriptor.
+    ///  It maintains all information relative to the basic (e.g. ITypeInfo)
+    ///  information about the member dispid function, and converts that info
+    ///  to meaningful managed code information.
     ///
-    /// It also allows other objects to register listeners to add extended
-    /// information at runtime such as attributes of TypeConverters.
+    ///  It also allows other objects to register listeners to add extended
+    ///  information at runtime such as attributes of TypeConverters.
     /// </summary>
     internal class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     {
         private EventHandlerList events;
 
         /// <summary>
-        /// Is this guy read only?
+        ///  Is this guy read only?
         /// </summary>
         private readonly bool baseReadOnly;
         private bool readOnly;
 
         /// <summary>
-        /// The resoved native type -> clr type
+        ///  The resoved native type -> clr type
         /// </summary>
         private readonly Type propertyType;
 
         /// <summary>
-        /// The dispid. This is also in a DispIDAttiribute, but we
-        /// need it a lot.
+        ///  The dispid. This is also in a DispIDAttiribute, but we
+        ///  need it a lot.
         /// </summary>
         private readonly int dispid;
 
@@ -47,64 +47,64 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private object editor;
 
         /// <summary>
-        /// The current display name to show for this property
+        ///  The current display name to show for this property
         /// </summary>
         private string displayName;
 
         /// <summary>
-        /// This is any extra data needed.  For IDispatch types, it's the GUID of
-        /// the interface, etc.
+        ///  This is any extra data needed.  For IDispatch types, it's the GUID of
+        ///  the interface, etc.
         /// </summary>
         private readonly object typeData;
 
         /// <summary>
-        /// Keeps track of which data members need to be refreshed.
+        ///  Keeps track of which data members need to be refreshed.
         /// </summary>
         private int refreshState;
 
         /// <summary>
-        /// Should we bother asking if refresh is needed?
+        ///  Should we bother asking if refresh is needed?
         /// </summary>
         private readonly bool queryRefresh = false;
 
         /// <summary>
-        /// Our properties manager
+        ///  Our properties manager
         /// </summary>
         private Com2Properties com2props;
 
         /// <summary>
-        /// Our original baseline properties
+        ///  Our original baseline properties
         /// </summary>
         private Attribute[] baseAttrs;
 
         /// <summary>
-        /// Our cached last value -- this is only
-        /// for checking if we should ask for a display value
+        ///  Our cached last value -- this is only
+        ///  for checking if we should ask for a display value
         /// </summary>
         private object lastValue;
 
         /// <summary>
-        /// For Object and dispatch types, we hide them by default.
+        ///  For Object and dispatch types, we hide them by default.
         /// </summary>
         private readonly bool typeHide;
 
         /// <summary>
-        /// Set if the metadata causes this property to always be hidden
+        ///  Set if the metadata causes this property to always be hidden
         /// </summary>
         private readonly bool canShow;
 
         /// <summary>
-        /// This property is hidden because its get didn't return S_OK
+        ///  This property is hidden because its get didn't return S_OK
         /// </summary>
         private bool hrHidden;
 
         /// <summary>
-        /// Set if we are in the process of asking handlers for attributes
+        ///  Set if we are in the process of asking handlers for attributes
         /// </summary>
         private bool inAttrQuery;
 
         /// <summary>
-        /// Our event signitures.
+        ///  Our event signitures.
         /// </summary>
         private static readonly object EventGetBaseAttributes = new object();
         private static readonly object EventGetDynamicAttributes = new object();
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static readonly Guid GUID_COLOR = new Guid("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
 
         /// <summary>
-        /// Our map of native types that we can map to managed types for editors
+        ///  Our map of native types that we can map to managed types for editors
         /// </summary>
         private static readonly IDictionary oleConverters;
 
@@ -137,12 +137,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Should we convert our type?
+        ///  Should we convert our type?
         /// </summary>
         private readonly Com2DataTypeToManagedDataTypeConverter valueConverter;
 
         /// <summary>
-        /// Ctor.
+        ///  Ctor.
         /// </summary>
         public Com2PropertyDescriptor(int dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
         : base(name, attrs)
@@ -1412,9 +1412,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return gbv.Value;
         }
         /// <summary>
-        /// we wrap all value editors in this one so we can intercept
-        /// the GetTextFromValue calls for objects that would like
-        /// to modify the display name
+        ///  we wrap all value editors in this one so we can intercept
+        ///  the GetTextFromValue calls for objects that would like
+        ///  to modify the display name
         /// </summary>
         private class Com2PropDescMainConverter : Com2ExtendedTypeConverter
         {

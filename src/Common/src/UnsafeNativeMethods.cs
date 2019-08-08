@@ -748,7 +748,7 @@ namespace System.Windows.Forms
             uint dpi);
 
         /// <summary>
-        /// Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
+        ///  Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
         /// </summary>
         public unsafe static bool TrySystemParametersInfoForDpi(ref NativeMethods.NONCLIENTMETRICSW metrics, uint dpi)
         {
@@ -4008,7 +4008,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This class provides static methods to create, activate and deactivate the theming scope.
+        ///  This class provides static methods to create, activate and deactivate the theming scope.
         /// </summary>
         internal class ThemingScope
         {
@@ -4017,8 +4017,8 @@ namespace System.Windows.Forms
             private static bool contextCreationSucceeded;
 
             /// <summary>
-            /// We now use explicitactivate everywhere and use this method to determine if we
-            /// really need to activate the activationcontext.  This should be pretty fast.
+            ///  We now use explicitactivate everywhere and use this method to determine if we
+            ///  really need to activate the activationcontext.  This should be pretty fast.
             /// </summary>
             private static bool IsContextActive()
             {
@@ -4157,7 +4157,7 @@ namespace System.Windows.Forms
         // obtained from UIAutomation source code
 
         /// <summary>
-        /// Logical structure change flags
+        ///  Logical structure change flags
         /// </summary>
         [ComVisible(true)]
         [Guid("e4cfef41-071d-472c-a65c-c14f59ea81eb")]
@@ -4204,25 +4204,25 @@ namespace System.Windows.Forms
             OverrideProvider = 0x0008,
 
             /// <summary>Indicates that this provider handles its own focus, and does not want
-            /// UIA to set focus to the nearest HWND on its behalf when AutomationElement.SetFocus
-            /// is used. This option is typically used by providers for HWNDs that appear to take
-            /// focus without actually receiving actual Win32 focus, such as menus and dropdowns</summary>
+            ///  UIA to set focus to the nearest HWND on its behalf when AutomationElement.SetFocus
+            ///  is used. This option is typically used by providers for HWNDs that appear to take
+            ///  focus without actually receiving actual Win32 focus, such as menus and dropdowns</summary>
             ProviderOwnsSetFocus = 0x0010,
 
             /// <summary>Indicates that this provider expects to be called according to COM threading rules:
-            /// if the provider is in a Single-Threaded Apartment, it will be called only on the apartment
-            /// thread. Only Server-side providers can use this option.</summary>
+            ///  if the provider is in a Single-Threaded Apartment, it will be called only on the apartment
+            ///  thread. Only Server-side providers can use this option.</summary>
             UseComThreading = 0x0020
         }
 
         public static readonly Guid guid_IAccessibleEx = new Guid("{F8B80ADA-2C44-48D0-89BE-5FF23C9CD875}");
 
         /// <summary>
-        /// The interface representing containers that manage selection.
+        ///  The interface representing containers that manage selection.
         /// </summary>
         /// <remarks>
-        /// Client code uses this public interface; server implementers implent the
-        /// ISelectionProvider public interface instead.
+        ///  Client code uses this public interface; server implementers implent the
+        ///  ISelectionProvider public interface instead.
         /// </remarks>
         [ComImport()]
         [ComVisible(true)]
@@ -4231,7 +4231,7 @@ namespace System.Windows.Forms
         public interface ISelectionProvider
         {
             /// <summary>
-            /// Get the currently selected elements
+            ///  Get the currently selected elements
             /// </summary>
             /// <returns>An AutomationElement array containing the currently selected elements</returns>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
@@ -4239,7 +4239,7 @@ namespace System.Windows.Forms
             object[] GetSelection();
 
             /// <summary>
-            /// Indicates whether the control allows more than one element to be selected
+            ///  Indicates whether the control allows more than one element to be selected
             /// </summary>
             /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
             /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
@@ -4250,7 +4250,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether the control requires at least one element to be selected
+            ///  Indicates whether the control requires at least one element to be selected
             /// </summary>
             /// <returns>Boolean indicating whether the control requires at least one element to be selected</returns>
             /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
@@ -4262,9 +4262,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Define a Selectable Item (only supported on logical elements that are a
-        /// child of an Element that supports SelectionPattern and is itself selectable).
-        /// This allows for manipulation of Selection from the element itself.
+        ///  Define a Selectable Item (only supported on logical elements that are a
+        ///  child of an Element that supports SelectionPattern and is itself selectable).
+        ///  This allows for manipulation of Selection from the element itself.
         /// </summary>
         [ComImport()]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -4273,37 +4273,37 @@ namespace System.Windows.Forms
         public interface ISelectionItemProvider
         {
             /// <summary>
-            /// Sets the current element as the selection
-            /// This clears the selection from other elements in the container.
+            ///  Sets the current element as the selection
+            ///  This clears the selection from other elements in the container.
             /// </summary>
             void Select();
 
             /// <summary>
-            /// Adds current element to selection.
+            ///  Adds current element to selection.
             /// </summary>
             void AddToSelection();
 
             /// <summary>
-            /// Removes current element from selection.
+            ///  Removes current element from selection.
             /// </summary>
             void RemoveFromSelection();
 
             /// <summary>
-            /// Check whether an element is selected.
+            ///  Check whether an element is selected.
             /// </summary>
             /// <returns>Returns true if the element is selected.</returns>
             bool IsSelected { [return: MarshalAs(UnmanagedType.Bool)] get; }
 
             /// <summary>
-            /// The logical element that supports the SelectionPattern for this Item.
+            ///  The logical element that supports the SelectionPattern for this Item.
             /// </summary>
             /// <returns>Returns a IRawElementProviderSimple.</returns>
             IRawElementProviderSimple SelectionContainer { [return: MarshalAs(UnmanagedType.Interface)] get; }
         }
 
         /// <summary>
-        /// Implemented by providers which want to provide information about or want to
-        /// reposition contained HWND-based elements.
+        ///  Implemented by providers which want to provide information about or want to
+        ///  reposition contained HWND-based elements.
         /// </summary>
         [ComVisible(true)]
         [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
@@ -4311,8 +4311,8 @@ namespace System.Windows.Forms
         public interface IRawElementProviderHwndOverride : IRawElementProviderSimple
         {
             /// <summary>
-            /// Request a provider for the specified component. The returned provider can supply additional
-            /// properties or override properties of the specified component.
+            ///  Request a provider for the specified component. The returned provider can supply additional
+            ///  properties or override properties of the specified component.
             /// </summary>
             /// <param name="hwnd">The window handle of the component.</param>
             /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
@@ -4389,12 +4389,12 @@ namespace System.Windows.Forms
         public interface IExpandCollapseProvider
         {
             /// <summary>
-            /// Blocking method that returns after the element has been expanded.
+            ///  Blocking method that returns after the element has been expanded.
             /// </summary>
             void Expand();
 
             /// <summary>
-            /// Blocking method that returns after the element has been collapsed.
+            ///  Blocking method that returns after the element has been collapsed.
             /// </summary>
             void Collapse();
 
@@ -4412,7 +4412,7 @@ namespace System.Windows.Forms
         public interface IValueProvider
         {
             /// <summary>
-            /// Request to set the value that this UI element is representing
+            ///  Request to set the value that this UI element is representing
             /// </summary>
             /// <param name="value">Value to set the UI to</param>
             void SetValue([MarshalAs(UnmanagedType.LPWStr)] string value);
@@ -4460,16 +4460,16 @@ namespace System.Windows.Forms
         public interface IRawElementProviderSimple
         {
             /// <summary>
-            /// Indicates the type of provider this is, for example, whether it is a client-side
-            /// or server-side provider.
+            ///  Indicates the type of provider this is, for example, whether it is a client-side
+            ///  or server-side provider.
             /// </summary>
             /// <remarks>
-            /// Providers must specify at least either one of ProviderOptions.ClientSideProvider
-            /// or ProviderOptions.ServerSideProvider.
+            ///  Providers must specify at least either one of ProviderOptions.ClientSideProvider
+            ///  or ProviderOptions.ServerSideProvider.
             ///
-            /// UIAutomation treats different types of providers
-            /// differently - for example, events from server-side provider are broadcast to all listening
-            /// clients, whereas events from client-side providers remain in that client.
+            ///  UIAutomation treats different types of providers
+            ///  differently - for example, events from server-side provider are broadcast to all listening
+            ///  clients, whereas events from client-side providers remain in that client.
             /// </remarks>
             ProviderOptions ProviderOptions
             {
@@ -4477,7 +4477,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Get a pattern interface from this object
+            ///  Get a pattern interface from this object
             /// </summary>
             /// <param name="patternId">Identifier indicating the interface to return</param>
             /// <returns>Returns the interface as an object, if supported; otherwise returns null/</returns>
@@ -4485,7 +4485,7 @@ namespace System.Windows.Forms
             object GetPatternProvider(int patternId);
 
             /// <summary>
-            /// Request value of specified property from an element.
+            ///  Request value of specified property from an element.
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
@@ -4497,10 +4497,10 @@ namespace System.Windows.Forms
             // also need to implement this so we can determine the HWND. Still only
             // lives on a root, however.
             /// <summary>
-            /// Returns a base provider for this element.
+            ///  Returns a base provider for this element.
             ///
-            /// Typically only used by elements that correspond directly to a Win32 Window Handle,
-            /// in which case the implementation returns AutomationInteropProvider.BaseElementFromHandle( hwnd ).
+            ///  Typically only used by elements that correspond directly to a Win32 Window Handle,
+            ///  in which case the implementation returns AutomationInteropProvider.BaseElementFromHandle( hwnd ).
             /// </summary>
             IRawElementProviderSimple HostRawElementProvider
             {
@@ -4509,7 +4509,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Directions for navigation the UIAutomation tree
+        ///  Directions for navigation the UIAutomation tree
         /// </summary>
         [ComVisible(true)]
         [Guid("670c3006-bf4c-428b-8534-e1848f645122")]
@@ -4528,13 +4528,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implemented by providers to expose elements that are part of
-        /// a structure more than one level deep. For simple one-level
-        /// structures which have no children, IRawElementProviderSimple
-        /// can be used instead.
+        ///  Implemented by providers to expose elements that are part of
+        ///  a structure more than one level deep. For simple one-level
+        ///  structures which have no children, IRawElementProviderSimple
+        ///  can be used instead.
         ///
-        /// The root node of the fragment must support the IRawElementProviderFragmentRoot
-        /// interface, which is derived from this, and has some additional methods.
+        ///  The root node of the fragment must support the IRawElementProviderFragmentRoot
+        ///  interface, which is derived from this, and has some additional methods.
         /// </summary>
         [ComVisible(true)]
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
@@ -4543,7 +4543,7 @@ namespace System.Windows.Forms
         public interface IRawElementProviderFragment : IRawElementProviderSimple
         {
             /// <summary>
-            /// Request to return the element in the specified direction
+            ///  Request to return the element in the specified direction
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate</param>
             /// <returns>Returns the element in the specified direction</returns>
@@ -4551,19 +4551,19 @@ namespace System.Windows.Forms
             object /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
             /// <summary>
-            /// Gets the runtime ID of an elemenent. This should be unique
-            /// among elements on a desktop.
+            ///  Gets the runtime ID of an elemenent. This should be unique
+            ///  among elements on a desktop.
             /// </summary>
             /// <remarks>
-            /// Proxy implementations should return null for the top-level proxy which
-            /// correpsonds to the HWND; and should return an array which starts
-            /// with AutomationInteropProvider.AppendRuntimeId, followed by values
-            /// which are then unique within that proxy's HWNDs.
+            ///  Proxy implementations should return null for the top-level proxy which
+            ///  correpsonds to the HWND; and should return an array which starts
+            ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
+            ///  which are then unique within that proxy's HWNDs.
             /// </remarks>
             int[] GetRuntimeId();
 
             /// <summary>
-            /// Return a bounding rectangle of this element
+            ///  Return a bounding rectangle of this element
             /// </summary>
             NativeMethods.UiaRect BoundingRectangle
             {
@@ -4571,25 +4571,25 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// If this UI is capable of hosting other UI that also supports UIAutomation, and
-            /// the subtree rooted at this element contains such hosted UI fragments, this should return
-            /// an array of those fragments.
+            ///  If this UI is capable of hosting other UI that also supports UIAutomation, and
+            ///  the subtree rooted at this element contains such hosted UI fragments, this should return
+            ///  an array of those fragments.
             ///
-            /// If this UI does not host other UI, it may return null.
+            ///  If this UI does not host other UI, it may return null.
             /// </summary>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
             object[] /*IRawElementProviderSimple[]*/ GetEmbeddedFragmentRoots();
 
             /// <summary>
-            /// Request that focus is set to this item.
-            /// The UIAutomation framework will ensure that the UI hosting this fragment is already
-            /// focused before calling this method, so this method should only update its internal
-            /// focus state; it should not attempt to give its own HWND the focus, for example.
+            ///  Request that focus is set to this item.
+            ///  The UIAutomation framework will ensure that the UI hosting this fragment is already
+            ///  focused before calling this method, so this method should only update its internal
+            ///  focus state; it should not attempt to give its own HWND the focus, for example.
             /// </summary>
             void SetFocus();
 
             /// <summary>
-            /// Return the element that is the root node of this fragment of UI.
+            ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
             IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -4599,9 +4599,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The root element in a fragment of UI must support this interface. Other
-        /// elements in the same fragment need to support the IRawElementProviderFragment
-        /// interface.
+        ///  The root element in a fragment of UI must support this interface. Other
+        ///  elements in the same fragment need to support the IRawElementProviderFragment
+        ///  interface.
         /// </summary>
         [ComVisible(true)]
         [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
@@ -4610,24 +4610,24 @@ namespace System.Windows.Forms
         public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment
         {
             /// <summary>
-            /// Return the child element at the specified point, if one exists,
-            /// otherwise return this element if the point is on this element,
-            /// otherwise return null.
+            ///  Return the child element at the specified point, if one exists,
+            ///  otherwise return this element if the point is on this element,
+            ///  otherwise return null.
             /// </summary>
             /// <param name="x">x coordinate of point to check</param>
             /// <param name="y">y coordinate of point to check</param>
             /// <returns>Return the child element at the specified point, if one exists,
-            /// otherwise return this element if the point is on this element,
-            /// otherwise return null.
+            ///  otherwise return this element if the point is on this element,
+            ///  otherwise return null.
             /// </returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object /*IRawElementProviderFragment*/ ElementProviderFromPoint(double x, double y);
 
             /// <summary>
-            /// Return the element in this fragment which has the keyboard focus,
+            ///  Return the element in this fragment which has the keyboard focus,
             /// </summary>
             /// <returns>Return the element in this fragment which has the keyboard focus,
-            /// if any; otherwise return null.</returns>
+            ///  if any; otherwise return null.</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object /*IRawElementProviderFragment*/ GetFocus();
         }
@@ -4758,14 +4758,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implemented by objects that have a single, unambiguous, action associated with them.
-        /// These objects are usually stateless, and invoking them does not change their own state,
-        /// but causes something to happen in the larger context of the app the control is in.
+        ///  Implemented by objects that have a single, unambiguous, action associated with them.
+        ///  These objects are usually stateless, and invoking them does not change their own state,
+        ///  but causes something to happen in the larger context of the app the control is in.
         ///
-        /// Examples of UI that implments this includes:
-        /// Push buttons
-        /// Hyperlinks
-        /// Menu items
+        ///  Examples of UI that implments this includes:
+        ///  Push buttons
+        ///  Hyperlinks
+        ///  Menu items
         /// </summary>
         [ComImport()]
         [ComVisible(true)]
@@ -4774,17 +4774,17 @@ namespace System.Windows.Forms
         public interface IInvokeProvider
         {
             /// <summary>
-            /// Request that the control initiate its action.
-            /// Should return immediately without blocking.
-            /// There is no way to determine what happened, when it happend, or whether
-            /// anything happened at all.
+            ///  Request that the control initiate its action.
+            ///  Should return immediately without blocking.
+            ///  There is no way to determine what happened, when it happend, or whether
+            ///  anything happened at all.
             /// </summary>
             void Invoke();
         }
 
         /// <summary>
-        /// Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
-        /// This allows them to be scrolled into view using known API's based on the control in question.
+        ///  Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
+        ///  This allows them to be scrolled into view using known API's based on the control in question.
         /// </summary>
         [ComImport()]
         [ComVisible(true)]
@@ -4793,9 +4793,9 @@ namespace System.Windows.Forms
         public interface IScrollItemProvider
         {
             /// <summary>
-            /// Scrolls the windows containing this automation element to make this element visible.
-            /// InvalidOperationException should be thrown if item becomes unable to be scrolled. Makes
-            /// no guarantees about where the item will be in the scrolled window.
+            ///  Scrolls the windows containing this automation element to make this element visible.
+            ///  InvalidOperationException should be thrown if item becomes unable to be scrolled. Makes
+            ///  no guarantees about where the item will be in the scrolled window.
             /// </summary>
             void ScrollIntoView();
         }

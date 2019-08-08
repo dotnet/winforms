@@ -3316,7 +3316,6 @@ namespace System.Windows.Forms
             // FROM HERE DOWN THE DATA CONNECTION DETERMINES IF THE DATAGRIDVIEW SHOULD VALIDATE THE CELL. //
             //                                                                                             //
             /////////////////////////////////////////////////////////////////////////////////////////////////
-
             if (dataConnection.ProcessingMetaDataChanges)
             {
                 // don't validate a cell in a data bound column while the property descriptors change under us

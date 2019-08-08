@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides data for the <see cref='System.Windows.Forms.Design.ISelectionUIService.ContainerSelectorActive'/> event.
+    ///  Provides data for the <see cref='System.Windows.Forms.Design.ISelectionUIService.ContainerSelectorActive'/> event.
     /// </summary>
     internal class ContainerSelectorActiveEventArgs : EventArgs
     {
@@ -13,14 +13,14 @@ namespace System.Windows.Forms.Design
         private readonly ContainerSelectorActiveEventArgsType _eventType;
 
         /// <summary>
-        /// Initializes a new instance of the 'ContainerSelectorActiveEventArgs' class.
+        ///  Initializes a new instance of the 'ContainerSelectorActiveEventArgs' class.
         /// </summary>
         public ContainerSelectorActiveEventArgs(object component) : this(component, ContainerSelectorActiveEventArgsType.Mouse)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the 'ContainerSelectorActiveEventArgs' class.
+        ///  Initializes a new instance of the 'ContainerSelectorActiveEventArgs' class.
         /// </summary>
         public ContainerSelectorActiveEventArgs(object component, ContainerSelectorActiveEventArgsType eventType)
         {

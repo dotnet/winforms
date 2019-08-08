@@ -11,7 +11,7 @@ using CAPS = System.Windows.Forms.NativeMethods;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Helper class for scaling coordinates and images according to current DPI scaling set in Windows for the primary screen.
+    ///  Helper class for scaling coordinates and images according to current DPI scaling set in Windows for the primary screen.
     /// </summary>
     internal static partial class DpiHelper
     {
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         private static bool s_isInitializeDpiHelperForWinforms = false;
 
         /// <summary>
-        /// The primary screen's (device) current DPI
+        ///  The primary screen's (device) current DPI
         /// </summary>
         private static double s_deviceDpi = LogicalDpi;
         private static double s_logicalToDeviceUnitsScalingFactor = 0.0;
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             => true;
 
         /// <summary>
-        /// Returns a boolean to specify if we should enable processing of WM_DPICHANGED and related messages
+        ///  Returns a boolean to specify if we should enable processing of WM_DPICHANGED and related messages
         /// </summary>
         internal static bool IsPerMonitorV2Awareness
         {
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates, if rescaling becomes necessary, either because we are not 96 DPI or we're PerMonitorV2Aware.
+        ///  Indicates, if rescaling becomes necessary, either because we are not 96 DPI or we're PerMonitorV2Aware.
         /// </summary>
         internal static bool IsScalingRequirementMet
         {
@@ -197,8 +197,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns whether scaling is required when converting between logical-device units,
-        /// if the application opted in the automatic scaling in the .config file.
+        ///  Returns whether scaling is required when converting between logical-device units,
+        ///  if the application opted in the automatic scaling in the .config file.
         /// </summary>
         public static bool IsScalingRequired
         {
@@ -210,8 +210,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Transforms a horizontal or vertical integer coordinate from logical to device units
-        /// by scaling it up  for current DPI and rounding to nearest integer value
+        ///  Transforms a horizontal or vertical integer coordinate from logical to device units
+        ///  by scaling it up  for current DPI and rounding to nearest integer value
         /// </summary>
         /// <param name="value">value in logical units</param>
         /// <returns>value in device units</returns>
@@ -226,8 +226,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Transforms a horizontal integer coordinate from logical to device units
-        /// by scaling it up  for current DPI and rounding to nearest integer value
+        ///  Transforms a horizontal integer coordinate from logical to device units
+        ///  by scaling it up  for current DPI and rounding to nearest integer value
         /// </summary>
         /// <param name="value">The horizontal value in logical units</param>
         /// <returns>The horizontal value in device units</returns>
@@ -237,8 +237,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Transforms a vertical integer coordinate from logical to device units
-        /// by scaling it up  for current DPI and rounding to nearest integer value
+        ///  Transforms a vertical integer coordinate from logical to device units
+        ///  by scaling it up  for current DPI and rounding to nearest integer value
         /// </summary>
         /// <param name="value">The vertical value in logical units</param>
         /// <returns>The vertical value in device units</returns>
@@ -248,8 +248,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a new Size with the input's
-        /// dimensions converted from logical units to device units.
+        ///  Returns a new Size with the input's
+        ///  dimensions converted from logical units to device units.
         /// </summary>
         /// <param name="logicalSize">Size in logical units</param>
         /// <returns>Size in device units</returns>
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Create and return a new bitmap scaled to the specified size.
+        ///  Create and return a new bitmap scaled to the specified size.
         /// </summary>
         /// <param name="logicalImage">The image to scale from logical units to device units</param>
         /// <param name="targetImageSize">The size to scale image to</param>
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creating bitmap from Icon resource
+        ///  Creating bitmap from Icon resource
         /// </summary>
         public static Bitmap GetBitmapFromIcon(Type t, string name)
         {
@@ -286,8 +286,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Create a new bitmap scaled for the device units.
-        /// When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
+        ///  Create a new bitmap scaled for the device units.
+        ///  When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
         /// </summary>
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public static void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap, int deviceDpi = 0)
@@ -305,13 +305,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Set, when the first (Parking)Window has been created. From that moment on,
-        /// we will not be able nor allow to change the Process' DpiMode.
+        ///  Set, when the first (Parking)Window has been created. From that moment on,
+        ///  we will not be able nor allow to change the Process' DpiMode.
         /// </summary>
         internal static bool FirstParkingWindowCreated { get; set; }
 
         /// <summary>
-        /// Gets the DPI awareness.
+        ///  Gets the DPI awareness.
         /// </summary>
         /// <returns>The thread's/process' current HighDpi mode</returns>
         internal static HighDpiMode GetWinformsApplicationDpiAwareness()
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the DPI awareness. If not available on the current OS, it falls back to the next possible.
+        ///  Sets the DPI awareness. If not available on the current OS, it falls back to the next possible.
         /// </summary>
         /// <returns>true/false - If the process DPI awareness is successfully set, returns true. Otherwise false.</returns>
         internal static bool SetWinformsApplicationDpiAwareness(HighDpiMode highDpiMode)

@@ -10,8 +10,8 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Manages the collection of System.Windows.Forms.BindingManagerBase
-    /// objects for a Win Form.
+    ///  Manages the collection of System.Windows.Forms.BindingManagerBase
+    ///  objects for a Win Form.
     /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     public class BindingContext : ICollection
@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         private readonly Hashtable _listManagers;
 
         /// <summary>
-        /// Initializes a new instance of the System.Windows.Forms.BindingContext class.
+        ///  Initializes a new instance of the System.Windows.Forms.BindingContext class.
         /// </summary>
         public BindingContext()
         {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the total number of System.Windows.Forms.BindingManagerBases objects.
+        ///  Gets the total number of System.Windows.Forms.BindingManagerBases objects.
         /// </summary>
         int ICollection.Count
         {
@@ -39,8 +39,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Copies the elements of the collection into a specified array, starting
-        /// at the collection index.
+        ///  Copies the elements of the collection into a specified array, starting
+        ///  at the collection index.
         /// </summary>
         void ICollection.CopyTo(Array ar, int index)
         {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets an enumerator for the collection.
+        ///  Gets an enumerator for the collection.
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -58,29 +58,29 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether the collection is read-only.
+        ///  Gets a value indicating whether the collection is read-only.
         /// </summary>
         public bool IsReadOnly => false;
 
         /// <summary>
-        /// Gets a value indicating whether the collection is synchronized.
+        ///  Gets a value indicating whether the collection is synchronized.
         /// </summary>
         bool ICollection.IsSynchronized => false;
 
         /// <summary>
-        /// Gets an object to use for synchronization (thread safety).
+        ///  Gets an object to use for synchronization (thread safety).
         /// </summary>
         object ICollection.SyncRoot => null;
 
         /// <summary>
-        /// Gets the System.Windows.Forms.BindingManagerBase associated with the specified
-        /// data source.
+        ///  Gets the System.Windows.Forms.BindingManagerBase associated with the specified
+        ///  data source.
         /// </summary>
         public BindingManagerBase this[object dataSource] => this[dataSource, string.Empty];
 
         /// <summary>
-        /// Gets the System.Windows.Forms.BindingManagerBase associated with the specified
-        /// data source and data member.
+        ///  Gets the System.Windows.Forms.BindingManagerBase associated with the specified
+        ///  data source and data member.
         /// </summary>
         public BindingManagerBase this[object dataSource, string dataMember]
         {
@@ -88,14 +88,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds the listManager to the collection. An ArgumentNullException is thrown if this
-        /// listManager is null. An exception is thrown if a listManager to the same target
-        /// and Property as an existing listManager or if the listManager's column isn't a
-        /// valid column given this DataSource.Table's schema.
-        /// Fires the CollectionChangedEvent.
+        ///  Adds the listManager to the collection. An ArgumentNullException is thrown if this
+        ///  listManager is null. An exception is thrown if a listManager to the same target
+        ///  and Property as an existing listManager or if the listManager's column isn't a
+        ///  valid column given this DataSource.Table's schema.
+        ///  Fires the CollectionChangedEvent.
         /// </summary>
         /// <remarks>
-        /// This method is obsolete and unused.
+        ///  This method is obsolete and unused.
         /// </remarks>
         protected internal void Add(object dataSource, BindingManagerBase listManager)
         {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        /// This method is obsolete and unused.
+        ///  This method is obsolete and unused.
         /// </remarks>
         protected virtual void AddCore(object dataSource, BindingManagerBase listManager)
         {
@@ -121,10 +121,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the collection has changed.
+        ///  Occurs when the collection has changed.
         /// </summary>
         /// <remarks>
-        /// This method is obsolete and unused.
+        ///  This method is obsolete and unused.
         /// </remarks>
         [SRDescription(nameof(SR.collectionChangedEventDescr)), EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
         public event CollectionChangeEventHandler CollectionChanged
@@ -139,11 +139,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Clears the collection of any bindings.
-        /// Fires the CollectionChangedEvent.
+        ///  Clears the collection of any bindings.
+        ///  Fires the CollectionChangedEvent.
         /// </summary>
         /// <remarks>
-        /// This method is obsolete and unused.
+        ///  This method is obsolete and unused.
         /// </remarks>
         protected internal void Clear()
         {
@@ -152,22 +152,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Clears the collection.
+        ///  Clears the collection.
         /// </summary>
         /// <remarks>
-        /// This method is obsolete and unused.
+        ///  This method is obsolete and unused.
         /// </remarks>
         protected virtual void ClearCore() => _listManagers.Clear();
 
         /// <summary>
-        /// Gets a value indicating whether the System.Windows.Forms.BindingContext contains
-        /// the specified data source.
+        ///  Gets a value indicating whether the System.Windows.Forms.BindingContext contains
+        ///  the specified data source.
         /// </summary>
         public bool Contains(object dataSource) => Contains(dataSource, string.Empty);
 
         /// <summary>
-        /// Gets a value indicating whether the System.Windows.Forms.BindingContext
-        /// contains the specified data source and data member.
+        ///  Gets a value indicating whether the System.Windows.Forms.BindingContext
+        ///  contains the specified data source and data member.
         /// </summary>
         public bool Contains(object dataSource, string dataMember)
         {
@@ -217,21 +217,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This method is called whenever the collection changes. Overriders of this method
-        /// should call the base implementation of this method.
+        ///  This method is called whenever the collection changes. Overriders of this method
+        ///  should call the base implementation of this method.
         /// </summary>
         protected virtual void OnCollectionChanged(CollectionChangeEventArgs ccevent)
         {
         }
 
         /// <summary>
-        /// Removes the given listManager from the collection.
-        /// An ArgumentNullException is thrown if this listManager is null. An ArgumentException
-        /// is thrown if this listManager doesn't belong to this collection.
-        /// The CollectionChanged event is fired if it succeeds.
+        ///  Removes the given listManager from the collection.
+        ///  An ArgumentNullException is thrown if this listManager is null. An ArgumentException
+        ///  is thrown if this listManager doesn't belong to this collection.
+        ///  The CollectionChanged event is fired if it succeeds.
         /// </summary>
         /// <remarks>
-        /// This method is obsolete and unused.
+        ///  This method is obsolete and unused.
         /// </remarks>
         protected internal void Remove(object dataSource)
         {
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        /// This method is obsolete and unused.
+        ///  This method is obsolete and unused.
         /// </remarks>
         protected virtual void RemoveCore(object dataSource)
         {
@@ -248,10 +248,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Create a suitable binding manager for the specified dataSource/dataMember combination.
-        /// - If one has already been created and cached by this BindingContext, return that
+        ///  Create a suitable binding manager for the specified dataSource/dataMember combination.
+        ///  - If one has already been created and cached by this BindingContext, return that
         ///  instead.
-        /// - If the data source is an ICurrencyManagerProvider, just delegate to the data
+        ///  - If the data source is an ICurrencyManagerProvider, just delegate to the data
         ///  source.
         /// </summary>
         private BindingManagerBase EnsureListManager(object dataSource, string dataMember)
@@ -395,9 +395,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Associates a Binding with a different BindingContext. Intended for use by components
-        /// that support IBindableComponent, to update their Bindings when the value of
-        /// IBindableComponent.BindingContext is changed.
+        ///  Associates a Binding with a different BindingContext. Intended for use by components
+        ///  that support IBindableComponent, to update their Bindings when the value of
+        ///  IBindableComponent.BindingContext is changed.
         /// </summary>
         public static void UpdateBinding(BindingContext newBindingContext, Binding binding)
         {

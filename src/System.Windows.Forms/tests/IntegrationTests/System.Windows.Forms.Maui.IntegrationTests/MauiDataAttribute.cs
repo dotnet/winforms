@@ -11,20 +11,20 @@ using Xunit.Sdk;
 namespace System.Windows.Forms.Maui.IntegrationTests
 {
     /// <summary>
-    /// This is a custom xUnit memberdata attribute which allows us to execute code
-    /// before the data is resolved. It's needed because we want to read scenario names from
-    /// test results while still being able to use memberdata to parameterize the xUnit test,
-    /// but the normal MemberData attribute resolves before anything else (even the constructor)
-    /// is invoked.
+    ///  This is a custom xUnit memberdata attribute which allows us to execute code
+    ///  before the data is resolved. It's needed because we want to read scenario names from
+    ///  test results while still being able to use memberdata to parameterize the xUnit test,
+    ///  but the normal MemberData attribute resolves before anything else (even the constructor)
+    ///  is invoked.
     ///
-    /// This code is based on an example at https://tpodolak.com/blog/2017/06/19/xunit-memberdataattribute-generic-type-inheritance/
+    ///  This code is based on an example at https://tpodolak.com/blog/2017/06/19/xunit-memberdataattribute-generic-type-inheritance/
     /// </summary>
     [DataDiscoverer("Xunit.Sdk.MemberDataDiscoverer", "xunit.core")]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class MauiDataAttribute : MemberDataAttributeBase
     {
         /// <summary>
-        /// The name of the maui test project to get scenarios for
+        ///  The name of the maui test project to get scenarios for
         /// </summary>
         private readonly string _projectName;
 
@@ -43,9 +43,9 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         }
 
         /// <summary>
-        /// This is the method that actually returns the data that will be parameterized into the
-        /// xUnit test method. We actually don't use the base class logic at all,
-        /// we just get the scenarios for the specified project name and return them.
+        ///  This is the method that actually returns the data that will be parameterized into the
+        ///  xUnit test method. We actually don't use the base class logic at all,
+        ///  we just get the scenarios for the specified project name and return them.
         /// </summary>
         /// <param name="testMethod">MethodInfo of the method being decorated</param>
         /// <returns>The test data</returns>
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         }
 
         /// <summary>
-        /// Required to derive from MemberDataAttributeBase
+        ///  Required to derive from MemberDataAttributeBase
         /// </summary>
         /// <param name="testMethod">MethodInfo of the method being decorated</param>
         /// <param name="item">The item representing a single line of data</param>

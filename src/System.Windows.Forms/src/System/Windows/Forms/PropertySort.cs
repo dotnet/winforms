@@ -7,31 +7,31 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Possible values for property grid sorting mode
+    ///  Possible values for property grid sorting mode
     /// </summary>
     [ComVisible(true)]
     public enum PropertySort
     {
         /// <summary>
-        /// Properties will not be sorted, rather they will be displayed in the
-        /// order that they are retrieved from the TypeDescriptor.
+        ///  Properties will not be sorted, rather they will be displayed in the
+        ///  order that they are retrieved from the TypeDescriptor.
         /// </summary>
         NoSort = 0,
 
         /// <summary>
-        /// Properties are sorted as a flat, alphabetical list.
+        ///  Properties are sorted as a flat, alphabetical list.
         /// </summary>
         Alphabetical = 1,
 
         /// <summary>
-        /// Properties are under category groups, which are defined by the
-        /// properties themselves.
+        ///  Properties are under category groups, which are defined by the
+        ///  properties themselves.
         /// </summary>
         Categorized = 2,
 
         /// <summary>
-        /// Properties are under category groups, which are defined by the
-        /// properties themselves, and are alphabetical within those groups.
+        ///  Properties are under category groups, which are defined by the
+        ///  properties themselves, and are alphabetical within those groups.
         /// </summary>
         CategorizedAlphabetical = Alphabetical | Categorized,
     }

@@ -5,22 +5,22 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the Fixed Panel in the SplitContainer Control.
+    ///  Specifies the Fixed Panel in the SplitContainer Control.
     /// </summary>
     public enum FixedPanel
     {
         /// <summary>
-        /// No panel is fixed. Resize causes the Resize of both the panels.
+        ///  No panel is fixed. Resize causes the Resize of both the panels.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// Panel1 is Fixed. The resize will increase the size of second panel.
+        ///  Panel1 is Fixed. The resize will increase the size of second panel.
         /// </summary>
         Panel1 = 1,
 
         /// <summary>
-        /// Panel2 is Fixed. The resize will increase the size of first panel.
+        ///  Panel2 is Fixed. The resize will increase the size of first panel.
         /// </summary>
         Panel2 = 2,
     }

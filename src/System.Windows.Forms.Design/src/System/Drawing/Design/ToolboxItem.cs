@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides a base implementation of a toolbox item.
+    ///  Provides a base implementation of a toolbox item.
     /// </summary>
     public class ToolboxItem : ISerializable
     {
@@ -35,7 +35,7 @@ namespace System.Drawing.Design
         private ToolboxComponentsCreatingEventHandler _componentsCreatingEvent;
 
         /// <summary>
-        /// Initializes a new instance of the ToolboxItem class.
+        ///  Initializes a new instance of the ToolboxItem class.
         /// </summary>
         public ToolboxItem()
         {
@@ -51,7 +51,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Initializes a new instance of the ToolboxItem class using the specified type.
+        ///  Initializes a new instance of the ToolboxItem class using the specified type.
         /// </summary>
         public ToolboxItem(Type toolType) : this()
         {
@@ -59,8 +59,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// The assembly name for this toolbox item. The assembly name describes the assembly
-        /// information needed to load the toolbox item's type.
+        ///  The assembly name for this toolbox item. The assembly name describes the assembly
+        ///  information needed to load the toolbox item's type.
         /// </summary>
         public AssemblyName AssemblyName
         {
@@ -75,8 +75,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// The assembly name for this toolbox item. The assembly name describes the assembly
-        /// information needed to load the toolbox item's type.
+        ///  The assembly name for this toolbox item. The assembly name describes the assembly
+        ///  information needed to load the toolbox item's type.
         /// </summary>
         public AssemblyName[] DependentAssemblies
         {
@@ -96,8 +96,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the bitmap that will be used on the toolbox for this item.
-        /// Use this property on the design surface as this bitmap is scaled according to the current the DPI setting.
+        ///  Gets or sets the bitmap that will be used on the toolbox for this item.
+        ///  Use this property on the design surface as this bitmap is scaled according to the current the DPI setting.
         /// </summary>
         public Bitmap Bitmap
         {
@@ -112,8 +112,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the original bitmap that will be used on the toolbox for this item.
-        /// This bitmap should be 16x16 pixel and should be used in the Visual Studio toolbox, not on the design surface.
+        ///  Gets or sets the original bitmap that will be used on the toolbox for this item.
+        ///  This bitmap should be 16x16 pixel and should be used in the Visual Studio toolbox, not on the design surface.
         /// </summary>
         public Bitmap OriginalBitmap
         {
@@ -128,8 +128,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the company name for this <see cref='System.Drawing.Design.ToolboxItem'/>.
-        /// This defaults to the companyname attribute retrieved from type.Assembly, if set.
+        ///  Gets or sets the company name for this <see cref='System.Drawing.Design.ToolboxItem'/>.
+        ///  This defaults to the companyname attribute retrieved from type.Assembly, if set.
         /// </summary>
         public string Company
         {
@@ -144,7 +144,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// The Component Type is ".Net Component" -- unless otherwise specified by a derived toolboxitem
+        ///  The Component Type is ".Net Component" -- unless otherwise specified by a derived toolboxitem
         /// </summary>
         public virtual string ComponentType
         {
@@ -155,8 +155,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Description is a free-form, multiline capable text description that will be displayed in the tooltip
-        /// for the toolboxItem.  It defaults to the path of the assembly that contains the item, but can be overridden.
+        ///  Description is a free-form, multiline capable text description that will be displayed in the tooltip
+        ///  for the toolboxItem.  It defaults to the path of the assembly that contains the item, but can be overridden.
         /// </summary>
         public string Description
         {
@@ -171,7 +171,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the display name for this <see cref='System.Drawing.Design.ToolboxItem'/>.
+        ///  Gets or sets the display name for this <see cref='System.Drawing.Design.ToolboxItem'/>.
         /// </summary>
         public string DisplayName
         {
@@ -186,8 +186,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the filter for this toolbox item.  The filter is a collection of
-        /// ToolboxItemFilterAttribute objects.
+        ///  Gets or sets the filter for this toolbox item.  The filter is a collection of
+        ///  ToolboxItemFilterAttribute objects.
         /// </summary>
         public ICollection Filter
         {
@@ -202,9 +202,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// If true, it indicates that this toolbox item should not be stored in
-        /// any toolbox database when an application that is providing a toolbox
-        /// closes down.  This property defaults to false.
+        ///  If true, it indicates that this toolbox item should not be stored in
+        ///  any toolbox database when an application that is providing a toolbox
+        ///  closes down.  This property defaults to false.
         /// </summary>
         public bool IsTransient
         {
@@ -219,8 +219,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Determines if this toolbox item is locked.  Once locked, a toolbox item will
-        /// not accept any changes to its properties.
+        ///  Determines if this toolbox item is locked.  Once locked, a toolbox item will
+        ///  not accept any changes to its properties.
         /// </summary>
         public virtual bool Locked
         {
@@ -231,11 +231,11 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// The properties dictionary is a set of name/value pairs.  The keys are property
-        /// names and the values are property values.  This dictionary becomes read-only
-        /// after the toolbox item has been locked.
-        /// Values in the properties dictionary are validated through ValidateProperty
-        /// and default values are obtained from GetDefalutProperty.
+        ///  The properties dictionary is a set of name/value pairs.  The keys are property
+        ///  names and the values are property values.  This dictionary becomes read-only
+        ///  after the toolbox item has been locked.
+        ///  Values in the properties dictionary are validated through ValidateProperty
+        ///  and default values are obtained from GetDefalutProperty.
         /// </summary>
         public IDictionary Properties
         {
@@ -251,7 +251,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the fully qualified name of the type this toolbox item will create.
+        ///  Gets or sets the fully qualified name of the type this toolbox item will create.
         /// </summary>
         public string TypeName
         {
@@ -266,9 +266,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets the version for this toolboxitem. It defaults to AssemblyName.Version unless
-        /// overridden in a derived toolboxitem. This can be overridden to
-        /// return an empty string to suppress its display in the toolbox tooltip.
+        ///  Gets the version for this toolboxitem. It defaults to AssemblyName.Version unless
+        ///  overridden in a derived toolboxitem. This can be overridden to
+        ///  return an empty string to suppress its display in the toolbox tooltip.
         /// </summary>
         public virtual string Version
         {
@@ -276,7 +276,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Occurs when components are created.
+        ///  Occurs when components are created.
         /// </summary>
         public event ToolboxComponentsCreatedEventHandler ComponentsCreated
         {
@@ -285,7 +285,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Occurs before components are created.
+        ///  Occurs before components are created.
         /// </summary>
         public event ToolboxComponentsCreatingEventHandler ComponentsCreating
         {
@@ -294,8 +294,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// This method checks that the toolbox item is currently unlocked (read-write) and
-        /// throws an appropriate exception if it isn't.
+        ///  This method checks that the toolbox item is currently unlocked (read-write) and
+        ///  throws an appropriate exception if it isn't.
         /// </summary>
         protected void CheckUnlocked()
         {
@@ -306,7 +306,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Creates objects from the type contained in this toolbox item.
+        ///  Creates objects from the type contained in this toolbox item.
         /// </summary>
         /// <returns></returns>
         public IComponent[] CreateComponents()
@@ -315,8 +315,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Creates objects from the type contained in this toolbox item.  If designerHost is non-null
-        /// this will also add them to the designer.
+        ///  Creates objects from the type contained in this toolbox item.  If designerHost is non-null
+        ///  this will also add them to the designer.
         /// </summary>
         public IComponent[] CreateComponents(IDesignerHost host)
         {
@@ -330,8 +330,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Creates objects from the type contained in this toolbox item.  If designerHost is non-null
-        /// this will also add them to the designer.
+        ///  Creates objects from the type contained in this toolbox item.  If designerHost is non-null
+        ///  this will also add them to the designer.
         /// </summary>
         /// <returns></returns>
         public IComponent[] CreateComponents(IDesignerHost host, IDictionary defaultValues)
@@ -346,8 +346,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Creates objects from the type contained in this toolbox item.  If designerHost is non-null
-        /// this will also add them to the designer.
+        ///  Creates objects from the type contained in this toolbox item.  If designerHost is non-null
+        ///  this will also add them to the designer.
         /// </summary>
         protected virtual IComponent[] CreateComponentsCore(IDesignerHost host)
         {
@@ -372,8 +372,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Creates objects from the type contained in this toolbox item.  If designerHost is non-null
-        /// this will also add them to the designer.
+        ///  Creates objects from the type contained in this toolbox item.  If designerHost is non-null
+        ///  this will also add them to the designer.
         /// </summary>
         protected virtual IComponent[] CreateComponentsCore(IDesignerHost host, IDictionary defaultValues)
         {
@@ -499,7 +499,7 @@ namespace System.Drawing.Design
         public override int GetHashCode() => HashCode.Combine(TypeName, DisplayName);
 
         /// <summary>
-        /// Filters a property value before returning it.  This allows a property to always clone values,
+        ///  Filters a property value before returning it.  This allows a property to always clone values,
         ///  or to provide a default value when none exists.
         /// </summary>
         protected virtual object FilterPropertyValue(string propertyName, object value)
@@ -543,9 +543,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Allows access to the type associated with the toolbox item.
-        /// The designer host is used to access an implementation of ITypeResolutionService.
-        /// However, the loaded type is not added to the list of references in the designer host.
+        ///  Allows access to the type associated with the toolbox item.
+        ///  The designer host is used to access an implementation of ITypeResolutionService.
+        ///  However, the loaded type is not added to the list of references in the designer host.
         /// </summary>
         public Type GetType(IDesignerHost host)
         {
@@ -553,7 +553,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// This utility function can be used to load a type given a name.  AssemblyName and
+        ///  This utility function can be used to load a type given a name.  AssemblyName and
         ///  designer host can be null, but if they are present they will be used to help
         ///  locate the type.  If reference is true, the given assembly name will be added
         ///  to the designer host's set of references.
@@ -670,7 +670,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Initializes a toolbox item with a given type.  A locked toolbox item cannot be initialized.
+        ///  Initializes a toolbox item with a given type.  A locked toolbox item cannot be initialized.
         /// </summary>
         public virtual void Initialize(Type type)
         {
@@ -826,8 +826,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Locks this toolbox item.  Locking a toolbox item makes it read-only and
-        /// prevents any changes to its properties.
+        ///  Locks this toolbox item.  Locking a toolbox item makes it read-only and
+        ///  prevents any changes to its properties.
         /// </summary>
         public virtual void Lock()
         {
@@ -855,8 +855,8 @@ namespace System.Drawing.Design
             info.AddValue("PropertyNames", (string[])propertyNames.ToArray(typeof(string)));
         }
         /// <summary>
-        /// Raises the OnComponentsCreated event. This
-        /// will be called when this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
+        ///  Raises the OnComponentsCreated event. This
+        ///  will be called when this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
         /// </summary>
         protected virtual void OnComponentsCreated(ToolboxComponentsCreatedEventArgs args)
         {
@@ -864,8 +864,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Raises the OnCreateComponentsInvoked event. This
-        /// will be called before this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
+        ///  Raises the OnCreateComponentsInvoked event. This
+        ///  will be called before this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
         /// </summary>
         protected virtual void OnComponentsCreating(ToolboxComponentsCreatingEventArgs args)
         {
@@ -875,7 +875,7 @@ namespace System.Drawing.Design
         public override string ToString() => DisplayName ?? string.Empty;
 
         /// <summary>
-        /// Called as a helper to ValidatePropertyValue to validate that an object
+        ///  Called as a helper to ValidatePropertyValue to validate that an object
         ///  is of a given type.
         /// </summary>
         protected void ValidatePropertyType(string propertyName, object value, Type expectedType, bool allowNull)
@@ -897,9 +897,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// This is called whenever a value is set in the property dictionary.  It gives you a chance
-        /// to change the value of an object before comitting it, our reject it by throwing an
-        /// exception.
+        ///  This is called whenever a value is set in the property dictionary.  It gives you a chance
+        ///  to change the value of an object before comitting it, our reject it by throwing an
+        ///  exception.
         /// </summary>
         protected virtual object ValidatePropertyValue(string propertyName, object value)
         {

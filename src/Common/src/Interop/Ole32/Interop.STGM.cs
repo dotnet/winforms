@@ -9,16 +9,16 @@ internal static partial class Interop
     internal static partial class Ole32
     {
         /// <summary>
-        /// Stream / storage modes.
+        ///  Stream / storage modes.
         /// <see href="https://docs.microsoft.com/en-us/windows/desktop/Stg/stgm-constants"/>
         /// </summary>
         [Flags]
         public enum STGM : uint
         {
             /// <summary>
-            /// Read only, and each change to a storage or stream element is written as it occurs.
-            /// Fails if the given storage object already exists.
-            /// [STGM_DIRECT] [STGM_READ] [STGM_FAILIFTHERE] [STGM_SHARE_DENY_WRITE]
+            ///  Read only, and each change to a storage or stream element is written as it occurs.
+            ///  Fails if the given storage object already exists.
+            ///  [STGM_DIRECT] [STGM_READ] [STGM_FAILIFTHERE] [STGM_SHARE_DENY_WRITE]
             /// </summary>
             Default = 0x00000000,
             STGM_READ = 0x00000000,

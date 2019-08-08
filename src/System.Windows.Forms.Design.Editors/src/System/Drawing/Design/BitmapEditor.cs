@@ -8,8 +8,8 @@ using System.IO;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides an editor that can perform default file searching for bitmap (.bmp)
-    /// files.
+    ///  Provides an editor that can perform default file searching for bitmap (.bmp)
+    ///  files.
     ///</summary>
     [CLSCompliant(false)]
     public class BitmapEditor : ImageEditor

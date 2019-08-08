@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Delegate to the WebBrowser DocumentCompleted event.
+    ///  Delegate to the WebBrowser DocumentCompleted event.
     /// </summary>
     public delegate void WebBrowserDocumentCompletedEventHandler(object sender, WebBrowserDocumentCompletedEventArgs e);
 }

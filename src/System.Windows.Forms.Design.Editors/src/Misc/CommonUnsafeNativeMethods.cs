@@ -21,8 +21,8 @@ namespace System.Windows.Forms
         internal static extern bool AreDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB);
 
         /// <summary>
-        /// Tries to compare two DPIawareness context values. Return true if they were equal.
-        /// Return false when they are not equal or underlying OS does not support this API.
+        ///  Tries to compare two DPIawareness context values. Return true if they were equal.
+        ///  Return false when they are not equal or underlying OS does not support this API.
         /// </summary>
         /// <returns>true/false</returns>
         public static bool TryFindDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB)
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Tries to set thread dpi awareness context
+        ///  Tries to set thread dpi awareness context
         /// </summary>
         /// <returns> returns old thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
         public static DpiAwarenessContext TrySetThreadDpiAwarenessContext(DpiAwarenessContext dpiCOntext)

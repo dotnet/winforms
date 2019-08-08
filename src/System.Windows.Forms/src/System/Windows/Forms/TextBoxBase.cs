@@ -57,8 +57,8 @@ namespace System.Windows.Forms
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
         /// <summary>
-        /// Controls the maximum length of text in the edit control.
-        /// Matches the Windows limit.
+        ///  Controls the maximum length of text in the edit control.
+        ///  Matches the Windows limit.
         /// </summary>
         private int maxLength = 32767;
 

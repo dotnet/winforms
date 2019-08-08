@@ -9,9 +9,9 @@ using System.Text.RegularExpressions;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// A menu command that defines text and other metadata to describe a targeted task that can be performed.
-    /// Tasks typically walk the user through some multi-step process, such as configuring a data source for a component.
-    /// Designer tasks are shown in a custom piece of UI (Chrome).
+    ///  A menu command that defines text and other metadata to describe a targeted task that can be performed.
+    ///  Tasks typically walk the user through some multi-step process, such as configuring a data source for a component.
+    ///  Designer tasks are shown in a custom piece of UI (Chrome).
     /// </summary>
     public abstract class DesignerActionItem
     {

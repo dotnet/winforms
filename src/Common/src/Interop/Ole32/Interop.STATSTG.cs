@@ -11,23 +11,23 @@ internal static partial class Interop
     internal static partial class Ole32
     {
         /// <summary>
-        /// Statistics for <see cref="IStream"/>.
+        ///  Statistics for <see cref="IStream"/>.
         /// <see href="https://docs.microsoft.com/en-us/windows/desktop/api/objidl/ns-objidl-tagstatstg"/>
         /// </summary>
         /// <remarks>
-        /// The definition in <see cref="System.Runtime.InteropServices.ComTypes"/> isn't blittable.
+        ///  The definition in <see cref="System.Runtime.InteropServices.ComTypes"/> isn't blittable.
         /// </remarks>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public struct STATSTG
         {
             /// <summary>
-            /// Pointer to the name.
+            ///  Pointer to the name.
             /// </summary>
             private IntPtr pwcsName;
             public STGTY type;
 
             /// <summary>
-            /// Size of the stream in bytes.
+            ///  Size of the stream in bytes.
             /// </summary>
             public ulong cbSize;
 
@@ -36,26 +36,26 @@ internal static partial class Interop
             public FILETIME atime;
 
             /// <summary>
-            /// The stream mode.
+            ///  The stream mode.
             /// </summary>
             public STGM grfMode;
 
             /// <summary>
-            /// Supported locking modes.
+            ///  Supported locking modes.
             /// <see href="https://docs.microsoft.com/en-us/windows/desktop/api/objidl/ne-objidl-taglocktype"/>
             /// </summary>
             /// <remarks>
-            /// '0' means does not support lock modes.
+            ///  '0' means does not support lock modes.
             /// </remarks>
             public uint grfLocksSupported;
 
             /// <remarks>
-            /// Only for IStorage objects
+            ///  Only for IStorage objects
             /// </remarks>
             public Guid clsid;
 
             /// <remarks>
-            /// Only valid for IStorage objects.
+            ///  Only valid for IStorage objects.
             /// </remarks>
             public uint grfStateBits;
             public uint reserved;
@@ -63,7 +63,7 @@ internal static partial class Interop
             public string GetName() => Marshal.PtrToStringUni(pwcsName);
 
             /// <summary>
-            /// Caller is responsible for freeing the name memory.
+            ///  Caller is responsible for freeing the name memory.
             /// </summary>
             public void FreeName()
             {
@@ -74,7 +74,7 @@ internal static partial class Interop
             }
 
             /// <summary>
-            /// Callee is repsonsible for allocating the name memory.
+            ///  Callee is repsonsible for allocating the name memory.
             /// </summary>
             public void AllocName(string name)
             {

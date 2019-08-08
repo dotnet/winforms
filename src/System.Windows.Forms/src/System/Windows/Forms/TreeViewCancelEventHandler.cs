@@ -5,9 +5,9 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that will handle the <see cref='TreeView.OnBeforeCheck'/>,
+    ///  Represents the method that will handle the <see cref='TreeView.OnBeforeCheck'/>,
     /// <see cref='TreeView.OnBeforeCollapse'/>, <see cref='TreeView.BeforeExpand'/>,
-    /// or <see cref='TreeView.BeforeSelect'/> event of a <see cref='TreeView'/>
+    ///  or <see cref='TreeView.BeforeSelect'/> event of a <see cref='TreeView'/>
     /// </summary>
     public delegate void TreeViewCancelEventHandler(object sender, TreeViewCancelEventArgs e);
 }

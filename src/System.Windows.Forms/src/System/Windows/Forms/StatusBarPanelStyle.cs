@@ -5,17 +5,17 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies whether a panel on a status bar is owner drawn or system drawn.
+    ///  Specifies whether a panel on a status bar is owner drawn or system drawn.
     /// </summary>
     public enum StatusBarPanelStyle
     {
         /// <summary>
-        /// The panel is drawn by the system.
+        ///  The panel is drawn by the system.
         /// </summary>
         Text = 1,
 
         /// <summary>
-        /// The panel is drawn by the owner.
+        ///  The panel is drawn by the owner.
         /// </summary>
         OwnerDraw = 2,
     }

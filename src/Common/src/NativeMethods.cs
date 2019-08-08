@@ -1894,24 +1894,24 @@ namespace System.Windows.Forms
         public interface IVsPerPropertyBrowsing
         {
             /// <summary>
-            /// Hides the property at the given dispid from the properties window
-            /// implmentors should can return E_NOTIMPL to show all properties that
-            /// are otherwise browsable.
+            ///  Hides the property at the given dispid from the properties window
+            ///  implmentors should can return E_NOTIMPL to show all properties that
+            ///  are otherwise browsable.
             /// </summary>
             [PreserveSig]
             int HideProperty(int dispid, ref bool pfHide);
 
             /// <summary>
-            /// Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
-            /// Returning a non-S_OK return code or false for pfDisplay will suppress this feature
+            ///  Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
+            ///  Returning a non-S_OK return code or false for pfDisplay will suppress this feature
             /// </summary>
             [PreserveSig]
             int DisplayChildProperties(int dispid,
                                        ref bool pfDisplay);
 
             /// <summary>
-            /// Retrieves the localized name and description for a property.
-            /// returning a non-S_OK return code will display the default values
+            ///  Retrieves the localized name and description for a property.
+            ///  returning a non-S_OK return code will display the default values
             /// </summary>
             [PreserveSig]
             int GetLocalizedPropertyInfo(int dispid, int localeID,
@@ -1921,38 +1921,38 @@ namespace System.Windows.Forms
                                          string[] pbstrLocalizeDescription);
 
             /// <summary>
-            /// Determines if the given (usually current) value for a property is the default.  If it is not default,
-            /// the property will be shown as bold in the browser to indcate that it has been modified from the default.
+            ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
+            ///  the property will be shown as bold in the browser to indcate that it has been modified from the default.
             /// </summary>
             [PreserveSig]
             int HasDefaultValue(int dispid,
                                ref bool fDefault);
 
             /// <summary>
-            /// Determines if a property should be made read only.  This only applies to properties that are writeable,
+            ///  Determines if a property should be made read only.  This only applies to properties that are writeable,
             /// </summary>
             [PreserveSig]
             int IsPropertyReadOnly(int dispid,
                                    ref bool fReadOnly);
 
             /// <summary>
-            /// Returns the classname for this object. The class name is the non-bolded text
-            /// that appears in the properties window selection combo.  If this method returns
-            /// a non-S_OK return code, the default will be used. The default is the name
-            /// string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
+            ///  Returns the classname for this object. The class name is the non-bolded text
+            ///  that appears in the properties window selection combo.  If this method returns
+            ///  a non-S_OK return code, the default will be used. The default is the name
+            ///  string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
             [PreserveSig]
             int GetClassName([In, Out]ref string pbstrClassName);
 
             /// <summary>
-            /// Checks whether the given property can be reset to some default value.
-            /// If return value is non-S_OK or *pfCanReset is
+            ///  Checks whether the given property can be reset to some default value.
+            ///  If return value is non-S_OK or *pfCanReset is
             /// </summary>
             [PreserveSig]
             int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
 
             /// <summary>
-            /// If the return value is S_OK, the property's value will then be refreshed to the
-            /// new default values.
+            ///  If the return value is S_OK, the property's value will then be refreshed to the
+            ///  new default values.
             /// </summary>
             [PreserveSig]
             int ResetPropertyValue(int dispid);

@@ -503,7 +503,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An implementation of AccessibleChild for use with ToolStripItems
+        ///  An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
         [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripSeparatorAccessibleObject : ToolStripItemAccessibleObject

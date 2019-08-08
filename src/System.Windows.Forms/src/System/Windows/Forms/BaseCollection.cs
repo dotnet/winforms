@@ -8,12 +8,12 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides the base functionality for creating collections.
+    ///  Provides the base functionality for creating collections.
     /// </summary>
     public class BaseCollection : MarshalByRefObject, ICollection
     {
         /// <summary>
-        /// Gets the total number of elements in a collection.
+        ///  Gets the total number of elements in a collection.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         public void CopyTo(Array ar, int index) => List.CopyTo(ar, index);
 
         /// <summary>
-        /// Gets an IEnumerator for the collection.
+        ///  Gets an IEnumerator for the collection.
         /// </summary>
         public IEnumerator GetEnumerator() => List.GetEnumerator();
 

@@ -537,17 +537,17 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///
-        /// Returns info about the 'indexer' property on the specified type. The presence of an indexer is used to
-        /// determine that the type represents a collection or list. The return type of that indexer is used to
-        /// determine the underlying item type.
+        ///  Returns info about the 'indexer' property on the specified type. The presence of an indexer is used to
+        ///  determine that the type represents a collection or list. The return type of that indexer is used to
+        ///  determine the underlying item type.
         ///
-        /// PROCESS: We look for the first public instance property on the type that is an 'indexer'. This property
-        /// is usually - but not always - called "Item". So we look at 'indexer parameters' to identify true indexers,
-        /// rather than looking at the property name. And we also ignore any indexers that return an item type of just
-        /// Object, since we are trying to use indexers here to determine the actual underlying item type!
+        ///  PROCESS: We look for the first public instance property on the type that is an 'indexer'. This property
+        ///  is usually - but not always - called "Item". So we look at 'indexer parameters' to identify true indexers,
+        ///  rather than looking at the property name. And we also ignore any indexers that return an item type of just
+        ///  Object, since we are trying to use indexers here to determine the actual underlying item type!
         ///
-        /// NOTE: A special rule is also enforced here - we only want to consider using the typed indexer on list
-        /// based types, ie. types we already know are supposed to be treated as lists (rather than list items).
+        ///  NOTE: A special rule is also enforced here - we only want to consider using the typed indexer on list
+        ///  based types, ie. types we already know are supposed to be treated as lists (rather than list items).
         /// </summary>
         private static PropertyInfo GetTypedIndexer(Type type)
         {

@@ -23,8 +23,8 @@ namespace System.Windows.Forms
         public static readonly ContentAlignment AnyCenterAlign = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
 
         /// <summary>
-        /// The GetMessagePos function retrieves the cursor position for the last message
-        /// retrieved by the GetMessage function.
+        ///  The GetMessagePos function retrieves the cursor position for the last message
+        ///  retrieved by the GetMessage function.
         /// </summary>
         public static Point LastCursorPoint
         {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        /// this graphics requires disposal.
+        ///  this graphics requires disposal.
         /// </remarks>
         public static Graphics CreateMeasurementGraphics()
         {
@@ -44,9 +44,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// If you want to know if a piece of text contains one and only one &
-        /// this is your function. If you have a character "t" and want match it to &Text
-        /// Control.IsMnemonic is a better bet.
+        ///  If you want to know if a piece of text contains one and only one &
+        ///  this is your function. If you have a character "t" and want match it to &Text
+        ///  Control.IsMnemonic is a better bet.
         /// </summary>
         public static bool ContainsMnemonic(string text)
         {
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Given a rectangle, constrain it to fit onto the current screen.
+        ///  Given a rectangle, constrain it to fit onto the current screen.
         /// </summary>
         internal static Rectangle ConstrainToScreenBounds(Rectangle bounds)
         {
@@ -126,8 +126,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds an extra & to to the text so that "Fish & Chips" can be displayed on a menu item
-        /// without underlining anything.
+        ///  Adds an extra & to to the text so that "Fish & Chips" can be displayed on a menu item
+        ///  without underlining anything.
         ///  Fish & Chips --> Fish && Chips
         /// </summary>
         internal static string EscapeTextWithAmpersands(string text)
@@ -159,9 +159,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// helper function for generating information about a particular control
-        /// use AssertControlInformation if sticking in an assert - then the work
-        /// to figure out the control info will only be done when the assertion is false.
+        ///  helper function for generating information about a particular control
+        ///  use AssertControlInformation if sticking in an assert - then the work
+        ///  to figure out the control info will only be done when the assertion is false.
         /// </summary>
         internal static string GetControlInformation(IntPtr hwnd)
         {
@@ -212,8 +212,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the mnemonic from a given string, or zero if no mnemonic.
-        /// As used by the Control.Mnemonic to get mnemonic from Control.Text.
+        ///  Retrieves the mnemonic from a given string, or zero if no mnemonic.
+        ///  As used by the Control.Mnemonic to get mnemonic from Control.Text.
         /// <summary>
         public static char GetMnemonic(string text, bool convertToUpperCase)
         {
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the top level handle for a given handle.
+        ///  Finds the top level handle for a given handle.
         /// </summary>
         public static HandleRef GetRootHWnd(HandleRef hwnd)
         {
@@ -257,7 +257,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the top level handle for a given handle.
+        ///  Finds the top level handle for a given handle.
         /// </summary>
         public static HandleRef GetRootHWnd(Control control)
         {
@@ -265,12 +265,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Strips all keyboard mnemonic prefixes from a given string, eg. turning "He&lp" into "Help".
+        ///  Strips all keyboard mnemonic prefixes from a given string, eg. turning "He&lp" into "Help".
         /// </summary>
         /// <remarks>
-        /// Note: Be careful not to call this multiple times on the same string, otherwise you'll turn
-        /// something like "Fi&sh && Chips" into "Fish & Chips" on the first call, and then "Fish Chips"
-        /// on the second call.
+        ///  Note: Be careful not to call this multiple times on the same string, otherwise you'll turn
+        ///  something like "Fi&sh && Chips" into "Fish & Chips" on the first call, and then "Fish Chips"
+        ///  on the second call.
         /// </remarks>
         public static string TextWithoutMnemonics(string text)
         {
@@ -304,10 +304,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Translates a point from one control's coordinate system to the other
-        /// same as:
+        ///  Translates a point from one control's coordinate system to the other
+        ///  same as:
         ///  controlTo.PointToClient(controlFrom.PointToScreen(point))
-        /// but slightly more performant.
+        ///  but slightly more performant.
         /// </summary>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
@@ -316,10 +316,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Compares the strings using invariant culture for Turkish-I support. Returns true if they match.
+        ///  Compares the strings using invariant culture for Turkish-I support. Returns true if they match.
         ///
-        /// If your strings are symbolic (returned from APIs, not from user) the following calls
-        /// are faster than this method:
+        ///  If your strings are symbolic (returned from APIs, not from user) the following calls
+        ///  are faster than this method:
         ///
         ///  String.Equals(s1, s2, StringComparison.Ordinal)
         ///  String.Equals(s1, s2, StringComparison.OrdinalIgnoreCase)
@@ -359,8 +359,8 @@ namespace System.Windows.Forms
         public static class EnumValidator
         {
             /// <summary>
-            /// Valid values are 0x001,0x002,0x004, 0x010,0x020,0x040, 0x100, 0x200,0x400
-            /// Method for verifying
+            ///  Valid values are 0x001,0x002,0x004, 0x010,0x020,0x040, 0x100, 0x200,0x400
+            ///  Method for verifying
             ///  Verify that the number passed in has only one bit on
             ///  Verify that the bit that is on is a valid bit by bitwise anding it to a mask.
             /// </summary>
@@ -378,11 +378,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// shifts off the number of bits specified by numBitsToShift
+            ///  shifts off the number of bits specified by numBitsToShift
             ///  -  makes sure the bits we've shifted off are just zeros
             ///  -  then compares if the resulting value is between minValAfterShift and maxValAfterShift
             ///
-            /// EXAMPLE:
+            ///  EXAMPLE:
             ///  MessageBoxIcon. Valid values are 0x0, 0x10, 0x20, 0x30, 0x40
             ///  Method for verifying: chop off the last 0 by shifting right 4 bits, verify resulting number is between 0 & 4.
             ///
@@ -436,9 +436,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is a ControlCollection which can be made readonly. In readonly mode, this
-        /// ControlCollection throws NotSupportedExceptions for any operation that attempts
-        /// to modify the collection.
+        ///  This is a ControlCollection which can be made readonly. In readonly mode, this
+        ///  ControlCollection throws NotSupportedExceptions for any operation that attempts
+        ///  to modify the collection.
         /// </summary>
         internal class ReadOnlyControlCollection : Control.ControlCollection
         {
@@ -487,8 +487,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This control collection only allows a specific type of control
-        /// into the controls collection. It optionally supports readonlyness.
+        ///  This control collection only allows a specific type of control
+        ///  into the controls collection. It optionally supports readonlyness.
         /// </summary>
         internal class TypedControlCollection : ReadOnlyControlCollection
         {
@@ -530,14 +530,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// DCMapping is used to change the mapping and clip region of the
-        /// the specified device context to the given bounds. When the
-        /// DCMapping is disposed, the original mapping and clip rectangle
-        /// are restored.
+        ///  DCMapping is used to change the mapping and clip region of the
+        ///  the specified device context to the given bounds. When the
+        ///  DCMapping is disposed, the original mapping and clip rectangle
+        ///  are restored.
         ///
-        /// Example:
+        ///  Example:
         ///
-        /// using(WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, new Rectangle(10,10, 50, 50) {
+        ///  using(WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, new Rectangle(10,10, 50, 50) {
         ///  // inside here the hDC's mapping of (0,0) is inset by (10,10) and
         ///  // all painting is clipped at (0,0) - (50,50)
         ///  }
@@ -686,8 +686,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Allows you to get the graphics object based off of the translated HDC.
-            /// Note this will be disposed when the DCMapping object is disposed.
+            ///  Allows you to get the graphics object based off of the translated HDC.
+            ///  Note this will be disposed when the DCMapping object is disposed.
             /// </summary>
             public Graphics Graphics
             {

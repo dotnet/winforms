@@ -9,7 +9,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Summary description for ProfessionalToolStripRenderer.
+    ///  Summary description for ProfessionalToolStripRenderer.
     /// </summary>
     public class ToolStripProfessionalRenderer : ToolStripRenderer
     {

@@ -41,11 +41,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a new AccessibleObject for this DataGridViewTextBoxCell instance.
-        /// The AccessibleObject instance returned by this method supports ControlType UIA property.
+        ///  Creates a new AccessibleObject for this DataGridViewTextBoxCell instance.
+        ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
         /// </summary>
         /// <returns>
-        /// AccessibleObject for this DataGridViewTextBoxCell instance.
+        ///  AccessibleObject for this DataGridViewTextBoxCell instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {

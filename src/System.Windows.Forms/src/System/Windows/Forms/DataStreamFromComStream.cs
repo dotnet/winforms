@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Read the data into the given buffer
+        ///  Read the data into the given buffer
         /// </summary>
         /// <param name="buffer">The buffer receiving the data</param>
         /// <param name="index">The offset from the beginning of the buffer</param>
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Read the data into the given buffer
+        ///  Read the data into the given buffer
         /// </summary>
         /// <param name="buffer">The buffer receiving the data</param>
         /// <returns>The number of bytes read</returns>
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Writes the data contained in the given buffer
+        ///  Writes the data contained in the given buffer
         /// </summary>
         /// <param name="buffer">The buffer containing the data to write</param>
         /// <param name="index">The offset from the beginning of the buffer</param>
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Writes the data contained in the given buffer
+        ///  Writes the data contained in the given buffer
         /// </summary>
         /// <param name="buffer">The buffer to write</param>
         public unsafe override void Write(ReadOnlySpan<byte> buffer)

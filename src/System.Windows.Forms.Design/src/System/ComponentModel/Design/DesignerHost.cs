@@ -12,7 +12,7 @@ using System.Reflection;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This is the main hosting object.  DesignerHost implements services and interfaces specific to the design time IContainer object.  The services this class implements are generally non-removable (they work as a unit so removing them would break things).
+    ///  This is the main hosting object.  DesignerHost implements services and interfaces specific to the design time IContainer object.  The services this class implements are generally non-removable (they work as a unit so removing them would break things).
     /// </summary>
     internal sealed class DesignerHost : Container, IDesignerLoaderHost2, IDesignerHostTransactionState, IComponentChangeService, IReflect
     {
@@ -114,7 +114,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Override of Container.Add
+        ///  Override of Container.Add
         /// </summary>
         public override void Add(IComponent component, string name)
         {
@@ -162,8 +162,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We support adding to either our main IDesignerHost container or to a private per-site container for nested objects.  This code is the stock add code that creates a designer, etc.  See Add (above) for an example of how to call this correctly.
-        /// This method is called before the component is actually added.  It returns true if the component can be added to this container or false if the add should not occur (because the component may already be in this container, for example.) It may also throw if adding this component is illegal.
+        ///  We support adding to either our main IDesignerHost container or to a private per-site container for nested objects.  This code is the stock add code that creates a designer, etc.  See Add (above) for an example of how to call this correctly.
+        ///  This method is called before the component is actually added.  It returns true if the component can be added to this container or false if the add should not occur (because the component may already be in this container, for example.) It may also throw if adding this component is illegal.
         /// </summary>
         internal bool AddToContainerPreProcess(IComponent component, string name, IContainer containerToAddTo)
         {
@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We support adding to either our main IDesignerHost container or to a private     per-site container for nested objects.  This code is the stock add code     that creates a designer, etc.  See Add (above) for an example of how to call     this correctly.
+        ///  We support adding to either our main IDesignerHost container or to a private     per-site container for nested objects.  This code is the stock add code     that creates a designer, etc.  See Add (above) for an example of how to call     this correctly.
         /// </summary>
         internal void AddToContainerPostProcess(IComponent component, string name, IContainer containerToAddTo)
         {
@@ -287,7 +287,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called by DesignerSurface to begin loading the designer.
+        ///  Called by DesignerSurface to begin loading the designer.
         /// </summary>
         internal void BeginLoad(DesignerLoader loader)
         {
@@ -353,7 +353,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Override of CreateSite.  We create a custom site here, called Site, which is an inner class of DesignerHost.  DesignerSite contains an instance of the designer for the component.
+        ///  Override of CreateSite.  We create a custom site here, called Site, which is an inner class of DesignerHost.  DesignerSite contains an instance of the designer for the component.
         /// </summary>
         /// <param name="component"> The component to create the site for </param>
         /// <param name="name"> The name of the component.  If no name is provided this will fabricate a name for you. </param>
@@ -398,7 +398,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Override of dispose to clean up our state.
+        ///  Override of dispose to clean up our state.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -410,7 +410,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We move all "dispose" functionality to the DisposeHost method.  The reason for this is that Dispose is inherited from our container implementation, and we do not want someone disposing the container.  That would leave the design surface still alive, but it would kill the host.  Instead, DesignSurface always calls DisposeHost, which calls the base version of Dispose to clean out the container.
+        ///  We move all "dispose" functionality to the DisposeHost method.  The reason for this is that Dispose is inherited from our container implementation, and we do not want someone disposing the container.  That would leave the design surface still alive, but it would kill the host.  Instead, DesignSurface always calls DisposeHost, which calls the base version of Dispose to clean out the container.
         /// </summary>
         internal void DisposeHost()
         {
@@ -460,7 +460,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Invokes flush on the designer loader.
+        ///  Invokes flush on the designer loader.
         /// </summary>
         internal void Flush()
         {
@@ -471,7 +471,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Override of Container's GetService method.  This just delegates to the  parent service provider.
+        ///  Override of Container's GetService method.  This just delegates to the  parent service provider.
         /// </summary>
         /// <param name="service"> The type of service to retrieve </param>
         /// <returns> An instance of the service. </returns>
@@ -502,7 +502,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called in response to a designer becoming active or inactive.
+        ///  Called in response to a designer becoming active or inactive.
         /// </summary>
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
         {
@@ -540,7 +540,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Method is called by the site when a component is renamed.
+        ///  Method is called by the site when a component is renamed.
         /// </summary>
         private void OnComponentRename(IComponent component, string oldName, string newName)
         {
@@ -564,7 +564,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Method is called when the designer has finished loading.
+        ///  Method is called when the designer has finished loading.
         /// </summary>
         private void OnLoadComplete(EventArgs e)
         {
@@ -572,7 +572,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Method is called when the last transaction has closed.
+        ///  Method is called when the last transaction has closed.
         /// </summary>
         private void OnTransactionClosed(DesignerTransactionCloseEventArgs e)
         {
@@ -580,7 +580,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Method is called when the last transaction is closing.
+        ///  Method is called when the last transaction is closing.
         /// </summary>
         private void OnTransactionClosing(DesignerTransactionCloseEventArgs e)
         {
@@ -588,7 +588,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Method is called when the first transaction has opened.
+        ///  Method is called when the first transaction has opened.
         /// </summary>
         private void OnTransactionOpened(EventArgs e)
         {
@@ -596,7 +596,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Method is called when the first transaction is opening.
+        ///  Method is called when the first transaction is opening.
         /// </summary>
         private void OnTransactionOpening(EventArgs e)
         {
@@ -604,7 +604,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called to remove a component from its container.
+        ///  Called to remove a component from its container.
         /// </summary>
         public override void Remove(IComponent component)
         {
@@ -689,7 +689,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called to unload the design surface.
+        ///  Called to unload the design surface.
         /// </summary>
         private void Unload()
         {
@@ -798,7 +798,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentAdded event.
+        ///  Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentAdded event.
         /// </summary>
         event ComponentEventHandler IComponentChangeService.ComponentAdded
         {
@@ -807,7 +807,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentAdding event.
+        ///  Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentAdding event.
         /// </summary>
         event ComponentEventHandler IComponentChangeService.ComponentAdding
         {
@@ -816,7 +816,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentChanged event.
+        ///  Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentChanged event.
         /// </summary>
         event ComponentChangedEventHandler IComponentChangeService.ComponentChanged
         {
@@ -825,7 +825,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentChanging event.
+        ///  Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.ComponentChanging event.
         /// </summary>
         event ComponentChangingEventHandler IComponentChangeService.ComponentChanging
         {
@@ -834,7 +834,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.OnComponentRemoved event.
+        ///  Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.OnComponentRemoved event.
         /// </summary>
         event ComponentEventHandler IComponentChangeService.ComponentRemoved
         {
@@ -843,7 +843,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.OnComponentRemoving event.
+        ///  Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.OnComponentRemoving event.
         /// </summary>
         event ComponentEventHandler IComponentChangeService.ComponentRemoving
         {
@@ -852,7 +852,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.OnComponentRename event.
+        ///  Adds an event handler for the System.ComponentModel.Design.IComponentChangeService.OnComponentRename event.
         /// </summary>
         event ComponentRenameEventHandler IComponentChangeService.ComponentRename
         {
@@ -861,7 +861,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Announces to the component change service that a particular component has changed.
+        ///  Announces to the component change service that a particular component has changed.
         /// </summary>
         void IComponentChangeService.OnComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
         {
@@ -872,7 +872,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Announces to the component change service that a particular component is changing.
+        ///  Announces to the component change service that a particular component is changing.
         /// </summary>
         void IComponentChangeService.OnComponentChanging(object component, MemberDescriptor member)
         {
@@ -883,7 +883,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the designer host is currently loading the document.
+        ///  Gets or sets a value indicating whether the designer host is currently loading the document.
         /// </summary>
         bool IDesignerHost.Loading
         {
@@ -891,7 +891,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets a value indicating whether the designer host is currently in a transaction.
+        ///  Gets a value indicating whether the designer host is currently in a transaction.
         /// </summary>
         bool IDesignerHost.InTransaction
         {
@@ -899,7 +899,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the container for this designer host.
+        ///  Gets the container for this designer host.
         /// </summary>
         IContainer IDesignerHost.Container
         {
@@ -907,7 +907,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the instance of the base class used as the base class for the current design.
+        ///  Gets the instance of the base class used as the base class for the current design.
         /// </summary>
         IComponent IDesignerHost.RootComponent
         {
@@ -915,7 +915,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the fully qualified name of the class that is being designed.
+        ///  Gets the fully qualified name of the class that is being designed.
         /// </summary>
         string IDesignerHost.RootComponentClassName
         {
@@ -923,7 +923,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the description of the current transaction.
+        ///  Gets the description of the current transaction.
         /// </summary>
         string IDesignerHost.TransactionDescription
         {
@@ -938,7 +938,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Activated'/> event.
+        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Activated'/> event.
         /// </summary>
         event EventHandler IDesignerHost.Activated
         {
@@ -947,7 +947,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Deactivated'/> event.
+        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Deactivated'/> event.
         /// </summary>
         event EventHandler IDesignerHost.Deactivated
         {
@@ -956,7 +956,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.LoadComplete'/> event.
+        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.LoadComplete'/> event.
         /// </summary>
         event EventHandler IDesignerHost.LoadComplete
         {
@@ -965,7 +965,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosed'/> event.
+        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosed'/> event.
         /// </summary>
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosed
         {
@@ -974,7 +974,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosing'/> event.
+        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosing'/> event.
         /// </summary>
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosing
         {
@@ -983,7 +983,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpened'/> event.
+        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpened'/> event.
         /// </summary>
         event EventHandler IDesignerHost.TransactionOpened
         {
@@ -992,7 +992,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpening'/> event.
+        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpening'/> event.
         /// </summary>
         event EventHandler IDesignerHost.TransactionOpening
         {
@@ -1001,7 +1001,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Activates the designer that this host is hosting.
+        ///  Activates the designer that this host is hosting.
         /// </summary>
         void IDesignerHost.Activate()
         {
@@ -1009,7 +1009,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Creates a component of the specified class type.
+        ///  Creates a component of the specified class type.
         /// </summary>
         IComponent IDesignerHost.CreateComponent(Type componentType)
         {
@@ -1017,7 +1017,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Creates a component of the given class type and name and places it into the designer container.
+        ///  Creates a component of the given class type and name and places it into the designer container.
         /// </summary>
         IComponent IDesignerHost.CreateComponent(Type componentType, string name)
         {
@@ -1077,7 +1077,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Lengthy operations that involve multiple components may raise many events.  These events may cause other side-effects, such as flicker or performance degradation.  When operating on multiple components at one time, or setting multiple properties on a single component, you should encompass these changes inside a transaction.  Transactions are used to improve performance and reduce flicker.  Slow operations can listen to  transaction events and only do work when the transaction completes.
+        ///  Lengthy operations that involve multiple components may raise many events.  These events may cause other side-effects, such as flicker or performance degradation.  When operating on multiple components at one time, or setting multiple properties on a single component, you should encompass these changes inside a transaction.  Transactions are used to improve performance and reduce flicker.  Slow operations can listen to  transaction events and only do work when the transaction completes.
         /// </summary>
         DesignerTransaction IDesignerHost.CreateTransaction()
         {
@@ -1085,7 +1085,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Lengthy operations that involve multiple components may raise many events.  These events may cause other side-effects, such as flicker or performance degradation.  When operating on multiple components at one time, or setting multiple properties on a single component, you should encompass these changes inside a transaction.  Transactions are used to improve performance and reduce flicker.  Slow operations can listen to  transaction events and only do work when the transaction completes.
+        ///  Lengthy operations that involve multiple components may raise many events.  These events may cause other side-effects, such as flicker or performance degradation.  When operating on multiple components at one time, or setting multiple properties on a single component, you should encompass these changes inside a transaction.  Transactions are used to improve performance and reduce flicker.  Slow operations can listen to  transaction events and only do work when the transaction completes.
         /// </summary>
         DesignerTransaction IDesignerHost.CreateTransaction(string description)
         {
@@ -1097,7 +1097,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Destroys the given component, removing it from the design container.
+        ///  Destroys the given component, removing it from the design container.
         /// </summary>
         void IDesignerHost.DestroyComponent(IComponent component)
         {
@@ -1147,7 +1147,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the designer instance for the specified component.
+        ///  Gets the designer instance for the specified component.
         /// </summary>
         IDesigner IDesignerHost.GetDesigner(IComponent component)
         {
@@ -1159,7 +1159,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the type instance for the specified fully qualified type name <paramref name="TypeName"/>.
+        ///  Gets the type instance for the specified fully qualified type name <paramref name="TypeName"/>.
         /// </summary>
         Type IDesignerHost.GetType(string typeName)
         {
@@ -1176,7 +1176,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This is called by the designer loader to indicate that the load has  terminated.  If there were errors, they should be passed in the errorCollection as a collection of exceptions (if they are not exceptions the designer loader host may just call ToString on them).  If the load was successful then errorCollection should either be null or contain an empty collection.
+        ///  This is called by the designer loader to indicate that the load has  terminated.  If there were errors, they should be passed in the errorCollection as a collection of exceptions (if they are not exceptions the designer loader host may just call ToString on them).  If the load was successful then errorCollection should either be null or contain an empty collection.
         /// </summary>
         void IDesignerLoaderHost.EndLoad(string rootClassName, bool successful, ICollection errorCollection)
         {
@@ -1283,7 +1283,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This is called by the designer loader when it wishes to reload the design document.  The reload will happen immediately so the caller should ensure that it is in a state where BeginLoad may be called again.
+        ///  This is called by the designer loader when it wishes to reload the design document.  The reload will happen immediately so the caller should ensure that it is in a state where BeginLoad may be called again.
         /// </summary>
         void IDesignerLoaderHost.Reload()
         {
@@ -1330,7 +1330,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
         {
@@ -1338,7 +1338,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
         {
@@ -1346,7 +1346,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
         {
@@ -1354,7 +1354,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
         {
@@ -1362,7 +1362,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
         {
@@ -1370,7 +1370,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
         {
@@ -1378,7 +1378,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
         {
@@ -1386,7 +1386,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
         {
@@ -1394,7 +1394,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
         {
@@ -1402,7 +1402,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
         {
@@ -1410,7 +1410,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
         {
@@ -1418,7 +1418,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
+        ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
         /// </summary>
         Type IReflect.UnderlyingSystemType
         {
@@ -1426,7 +1426,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds the given service to the service container.
+        ///  Adds the given service to the service container.
         /// </summary>
         void IServiceContainer.AddService(Type serviceType, object serviceInstance)
         {
@@ -1439,7 +1439,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds the given service to the service container.
+        ///  Adds the given service to the service container.
         /// </summary>
         void IServiceContainer.AddService(Type serviceType, object serviceInstance, bool promote)
         {
@@ -1452,7 +1452,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds the given service to the service container.
+        ///  Adds the given service to the service container.
         /// </summary>
         void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback)
         {
@@ -1465,7 +1465,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds the given service to the service container.
+        ///  Adds the given service to the service container.
         /// </summary>
         void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback, bool promote)
         {
@@ -1478,7 +1478,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes the given service type from the service container.
+        ///  Removes the given service type from the service container.
         /// </summary>
         void IServiceContainer.RemoveService(Type serviceType)
         {
@@ -1491,7 +1491,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes the given service type from the service container.
+        ///  Removes the given service type from the service container.
         /// </summary>
         void IServiceContainer.RemoveService(Type serviceType, bool promote)
         {
@@ -1504,7 +1504,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// IServiceProvider implementation.  We just delegate to the  protected GetService method we are inheriting from our container.
+        ///  IServiceProvider implementation.  We just delegate to the  protected GetService method we are inheriting from our container.
         /// </summary>
         object IServiceProvider.GetService(Type serviceType)
         {
@@ -1512,7 +1512,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// DesignerHostTransaction is our implementation of the  DesignerTransaction abstract class.
+        ///  DesignerHostTransaction is our implementation of the  DesignerTransaction abstract class.
         /// </summary>
         private sealed class DesignerHostTransaction : DesignerTransaction
         {
@@ -1531,7 +1531,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// User code should implement this method to perform the actual work of committing a transaction.
+            ///  User code should implement this method to perform the actual work of committing a transaction.
             /// </summary>
             protected override void OnCancel()
             {
@@ -1559,7 +1559,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// User code should implement this method to perform the actual work of committing a transaction.
+            ///  User code should implement this method to perform the actual work of committing a transaction.
             /// </summary>
             protected override void OnCommit()
             {
@@ -1589,7 +1589,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Site is the site we use at design time when we host components.
+        ///  Site is the site we use at design time when we host components.
         /// </summary>
         internal class Site : ISite, IServiceContainer, IDictionaryService
         {
@@ -1610,7 +1610,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Used by the IServiceContainer implementation to return a container-specific service container.
+            ///  Used by the IServiceContainer implementation to return a container-specific service container.
             /// </summary>
             private IServiceContainer SiteServiceContainer
             {
@@ -1625,7 +1625,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Retrieves the key corresponding to the given value.
+            ///  Retrieves the key corresponding to the given value.
             /// </summary>
             object IDictionaryService.GetKey(object value)
             {
@@ -1644,7 +1644,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Retrieves the value corresponding to the given key.
+            ///  Retrieves the value corresponding to the given key.
             /// </summary>
             object IDictionaryService.GetValue(object key)
             {
@@ -1656,7 +1656,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Stores the given key-value pair in an object's site.  This key-value pair is stored on a per-object basis, and is a handy place to save additional information about a component.
+            ///  Stores the given key-value pair in an object's site.  This key-value pair is stored on a per-object basis, and is a handy place to save additional information about a component.
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {
@@ -1675,7 +1675,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Adds the given service to the service container.
+            ///  Adds the given service to the service container.
             /// </summary>
             void IServiceContainer.AddService(Type serviceType, object serviceInstance)
             {
@@ -1683,7 +1683,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Adds the given service to the service container.
+            ///  Adds the given service to the service container.
             /// </summary>
             void IServiceContainer.AddService(Type serviceType, object serviceInstance, bool promote)
             {
@@ -1691,7 +1691,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Adds the given service to the service container.
+            ///  Adds the given service to the service container.
             /// </summary>
             void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback)
             {
@@ -1699,7 +1699,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Adds the given service to the service container.
+            ///  Adds the given service to the service container.
             /// </summary>
             void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback, bool promote)
             {
@@ -1707,7 +1707,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Removes the given service type from the service container.
+            ///  Removes the given service type from the service container.
             /// </summary>
             void IServiceContainer.RemoveService(Type serviceType)
             {
@@ -1715,7 +1715,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Removes the given service type from the service container.
+            ///  Removes the given service type from the service container.
             /// </summary>
             void IServiceContainer.RemoveService(Type serviceType, bool promote)
             {
@@ -1723,7 +1723,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Returns the requested service.
+            ///  Returns the requested service.
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
@@ -1758,7 +1758,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The component sited by this component site.
+            ///  The component sited by this component site.
             /// </summary>
             IComponent ISite.Component
             {
@@ -1766,7 +1766,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The container in which the component is sited.
+            ///  The container in which the component is sited.
             /// </summary>
             IContainer ISite.Container
             {
@@ -1774,7 +1774,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Indicates whether the component is in design mode.
+            ///  Indicates whether the component is in design mode.
             /// </summary>
             bool ISite.DesignMode
             {
@@ -1782,7 +1782,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Indicates whether this Site has been disposed.
+            ///  Indicates whether this Site has been disposed.
             /// </summary>
             internal bool Disposed
             {
@@ -1799,7 +1799,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The name of the component.
+            ///  The name of the component.
             /// </summary>
             string ISite.Name
             {

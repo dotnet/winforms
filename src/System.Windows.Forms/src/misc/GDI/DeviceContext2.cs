@@ -93,20 +93,20 @@ namespace System.Windows.Forms.Internal
         }
 
         /// <summary>
-        /// Get the number of pixels per logical inch along the device axes. In a system with multiple display
-        /// monitors, this value is the same for all monitors.
+        ///  Get the number of pixels per logical inch along the device axes. In a system with multiple display
+        ///  monitors, this value is the same for all monitors.
         /// </summary>
         public Size Dpi => new Size(DpiX, DpiY);
 
         /// <summary>
-        /// Get the number of pixels per logical inch along the device width. In a system with multiple display
-        /// monitors, this value is the same for all monitors.
+        ///  Get the number of pixels per logical inch along the device width. In a system with multiple display
+        ///  monitors, this value is the same for all monitors.
         /// </summary>
         public int DpiX => Interop.Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSX);
 
         /// <summary>
-        /// Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
-        /// display monitors, this value is the same for all monitors.
+        ///  Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
+        ///  display monitors, this value is the same for all monitors.
         /// </summary>
         public int DpiY => Interop.Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSY);
 

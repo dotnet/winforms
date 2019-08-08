@@ -11,7 +11,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// A ToolStripButton that can display a popup.
+    ///  A ToolStripButton that can display a popup.
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripDropDownButton : ToolStripDropDownItem
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         private byte openMouseId = 0;
 
         /// <summary>
-        /// Constructs a ToolStripButton that can display a popup.
+        ///  Constructs a ToolStripButton that can display a popup.
         /// </summary>
         public ToolStripDropDownButton()
         {
@@ -98,8 +98,8 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// Creates an instance of the object that defines how image and text
-        /// gets laid out in the ToolStripItem
+        ///  Creates an instance of the object that defines how image and text
+        ///  gets laid out in the ToolStripItem
         /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout()
         {
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called by all constructors of ToolStripButton.
+        ///  Called by all constructors of ToolStripButton.
         /// </summary>
         private void Initialize()
         {
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Overriden to invoke displaying the popup.
+        ///  Overriden to invoke displaying the popup.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
             base.OnMouseLeave(e);
         }
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
+        ///  Inheriting classes should override this method to handle this event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An implementation of Accessibleobject for use with ToolStripDropDownButton
+        ///  An implementation of Accessibleobject for use with ToolStripDropDownButton
         /// </summary>
         [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject

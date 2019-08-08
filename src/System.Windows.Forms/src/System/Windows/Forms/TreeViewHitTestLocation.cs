@@ -7,59 +7,59 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the return value for HITTEST on treeview.
+    ///  Specifies the return value for HITTEST on treeview.
     /// </summary>
     [Flags]
     [ComVisible(true)]
     public enum TreeViewHitTestLocations
     {
         /// <summary>
-        /// No Information.
+        ///  No Information.
         /// </summary>
         None = NativeMethods.TVHT_NOWHERE,
 
         /// <summary>
-        /// On Image.
+        ///  On Image.
         /// </summary>
         Image = NativeMethods.TVHT_ONITEMICON,
 
         /// <summary>
-        /// On Label.
+        ///  On Label.
         /// </summary>
         Label = NativeMethods.TVHT_ONITEMLABEL,
 
         /// <summary>
-        /// Indent.
+        ///  Indent.
         /// </summary>
         Indent = NativeMethods.TVHT_ONITEMINDENT,
 
         /// <summary>
-        /// AboveClientArea.
+        ///  AboveClientArea.
         /// </summary>
         AboveClientArea = NativeMethods.TVHT_ABOVE,
 
         /// <summary>
-        /// BelowClientArea.
+        ///  BelowClientArea.
         /// </summary>
         BelowClientArea = NativeMethods.TVHT_BELOW,
 
         /// <summary>
-        /// LeftOfClientArea.
+        ///  LeftOfClientArea.
         /// </summary>
         LeftOfClientArea = NativeMethods.TVHT_TOLEFT,
 
         /// <summary>
-        /// RightOfClientArea.
+        ///  RightOfClientArea.
         /// </summary>
         RightOfClientArea = NativeMethods.TVHT_TORIGHT,
 
         /// <summary>
-        /// RightOfNode.
+        ///  RightOfNode.
         /// </summary>
         RightOfLabel = NativeMethods.TVHT_ONITEMRIGHT,
 
         /// <summary>
-        /// StateImage.
+        ///  StateImage.
         /// </summary>
         StateImage = NativeMethods.TVHT_ONITEMSTATEICON,
 

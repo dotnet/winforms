@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the CheckOnClick test
+        ///  Data for the CheckOnClick test
         /// </summary>
         public static TheoryData<bool> CheckOnClickData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the DisplayMember test
+        ///  Data for the DisplayMember test
         /// </summary>
         public static TheoryData<string> DisplayMemberData =>
             CommonTestHelper.GetStringTheoryData();
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the SelectionModeGetSetInvalid test
+        ///  Data for the SelectionModeGetSetInvalid test
         /// </summary>
         public static TheoryData<SelectionMode> SelectionModeGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<SelectionMode>();
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the ThreeDCheckBoxes test
+        ///  Data for the ThreeDCheckBoxes test
         /// </summary>
         public static TheoryData<bool> ThreeDCheckBoxesData =>
             CommonTestHelper.GetBoolTheoryData();
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the ValueMember test
+        ///  Data for the ValueMember test
         /// </summary>
         public static TheoryData<string> ValueMemberData =>
             CommonTestHelper.GetStringTheoryData();
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the SetItemCheckState test
+        ///  Data for the SetItemCheckState test
         /// </summary>
         public static TheoryData<CheckState> SetItemCheckStateData =>
             CommonTestHelper.GetEnumTheoryData<CheckState>();
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the SetItemCheckStateInvalid test
+        ///  Data for the SetItemCheckStateInvalid test
         /// </summary>
         public static TheoryData<CheckState> SetItemCheckStateInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();

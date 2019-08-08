@@ -24,10 +24,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// this is the property to look at when there is no ImageList property
-        /// on the current object.  For example, in ToolBarButton - the ImageList is
-        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
-        /// the ToolStripItem.Owner property.
+        ///  this is the property to look at when there is no ImageList property
+        ///  on the current object.  For example, in ToolBarButton - the ImageList is
+        ///  on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
+        ///  the ToolStripItem.Owner property.
         /// </summary>
         internal string ParentImageListProperty
         {

@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.LostFocus'/> event.
+        ///  Raises the <see cref='Control.LostFocus'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e)
@@ -1504,8 +1504,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Destroys the handle associated with this control.
-        /// User code should in general not call this function.
+        ///  Destroys the handle associated with this control.
+        ///  User code should in general not call this function.
         /// </summary>
         protected override void DestroyHandle()
         {
@@ -2015,9 +2015,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Process a mnemonic character.
-        /// This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
-        /// ActiveX control.
+        ///  Process a mnemonic character.
+        ///  This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
+        ///  ActiveX control.
         /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
@@ -2250,7 +2250,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if the Text property needs to be persisted.
+        ///  Determines if the Text property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeText()
@@ -2754,8 +2754,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the class name for this object.  If null is returned,
-        /// the type name is used.
+        ///  Retrieves the class name for this object.  If null is returned,
+        ///  the type name is used.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         string ICustomTypeDescriptor.GetClassName()
@@ -2764,8 +2764,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the name for this object.  If null is returned,
-        /// the default is used.
+        ///  Retrieves the name for this object.  If null is returned,
+        ///  the default is used.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         string ICustomTypeDescriptor.GetComponentName()
@@ -2774,7 +2774,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the type converter for this object.
+        ///  Retrieves the type converter for this object.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         TypeConverter ICustomTypeDescriptor.GetConverter()
@@ -2795,7 +2795,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the an editor for this object.
+        ///  Retrieves the an editor for this object.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
@@ -3806,8 +3806,8 @@ namespace System.Windows.Forms
             private readonly string callStack;
 #endif
             /// <summary>
-            /// Creates a connection point to of the given interface type.
-            /// which will call on a managed code sink that implements that interface.
+            ///  Creates a connection point to of the given interface type.
+            ///  which will call on a managed code sink that implements that interface.
             /// </summary>
             public ConnectionPointCookie(object source, object sink, Type eventInterface)
                 : this(source, sink, eventInterface, true)
@@ -3890,8 +3890,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Disconnect the current connection point.  If the object is not connected,
-            /// this method will do nothing.
+            ///  Disconnect the current connection point.  If the object is not connected,
+            ///  this method will do nothing.
             /// </summary>
             public void Disconnect()
             {
@@ -7291,7 +7291,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// ISerializable private implementation
+            ///  ISerializable private implementation
             /// </summary>
             void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
             {
@@ -7684,9 +7684,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Called externally to update the editor or type converter.
-            /// This simply sets flags so this will happen, it doesn't actually to the update...
-            /// we wait and do that on-demand for perf.
+            ///  Called externally to update the editor or type converter.
+            ///  This simply sets flags so this will happen, it doesn't actually to the update...
+            ///  we wait and do that on-demand for perf.
             /// </summary>
             internal void UpdateTypeConverterAndTypeEditor(bool force)
             {
@@ -7699,9 +7699,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Called externally to update the editor or type converter.
-            /// This simply sets flags so this will happen, it doesn't actually to the update...
-            /// we wait and do that on-demand for perf.
+            ///  Called externally to update the editor or type converter.
+            ///  This simply sets flags so this will happen, it doesn't actually to the update...
+            ///  we wait and do that on-demand for perf.
             /// </summary>
             internal void UpdateTypeConverterAndTypeEditorInternal(bool force, int dispid)
             {
@@ -7876,8 +7876,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// simple derivation of the com2enumconverter that allows us to intercept
-        /// the call to GetStandardValues so we can on-demand update the enum values.
+        ///  simple derivation of the com2enumconverter that allows us to intercept
+        ///  the call to GetStandardValues so we can on-demand update the enum values.
         /// </summary>
         private class AxEnumConverter : Com2EnumConverter
         {
@@ -7923,7 +7923,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Retrieve a copy of the value array
+            ///  Retrieve a copy of the value array
             /// </summary>
             public override object[] Values
             {
@@ -7935,7 +7935,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Retrieve a copy of the nme array.
+            ///  Retrieve a copy of the nme array.
             /// </summary>
             public override string[] Names
             {

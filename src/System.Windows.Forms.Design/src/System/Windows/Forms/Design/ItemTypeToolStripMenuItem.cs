@@ -8,7 +8,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-	/// Associates Type with ToolStripMenuItem.
+	///  Associates Type with ToolStripMenuItem.
 	/// </summary>
 	internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
     {

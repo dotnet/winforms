@@ -12,9 +12,9 @@ namespace System.Windows.Forms
     public partial class ListBox
     {
         /// <summary>
-        /// ListBox control accessible object with UI Automation provider functionality.
-        /// This inherits from the base ListBoxExAccessibleObject and ListBoxAccessibleObject
-        /// to have all base functionality.
+        ///  ListBox control accessible object with UI Automation provider functionality.
+        ///  This inherits from the base ListBoxExAccessibleObject and ListBoxAccessibleObject
+        ///  to have all base functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ListBoxAccessibleObject : ControlAccessibleObject
@@ -24,7 +24,7 @@ namespace System.Windows.Forms
             private readonly IAccessible _systemIAccessible;
 
             /// <summary>
-            /// Initializes new instance of ListBoxAccessibleObject.
+            ///  Initializes new instance of ListBoxAccessibleObject.
             /// </summary>
             /// <param name="owningListBox">The owning ListBox control.</param>
             public ListBoxAccessibleObject(ListBox owningListBox) : base(owningListBox)
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Return the child object at the given screen coordinates.
+            ///  Return the child object at the given screen coordinates.
             /// </summary>
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>

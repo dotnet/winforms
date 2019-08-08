@@ -5,12 +5,12 @@
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This EventArgs class is used by the DesignerActionService to signify that there has been a change in DesignerActionLists (added or removed) on the related object.
+    ///  This EventArgs class is used by the DesignerActionService to signify that there has been a change in DesignerActionLists (added or removed) on the related object.
     /// </summary>
     public class DesignerActionListsChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Constructor that requires the object in question, the type of change and the remaining actionlists left for the object. on the related object.
+        ///  Constructor that requires the object in question, the type of change and the remaining actionlists left for the object. on the related object.
         /// </summary>
         public DesignerActionListsChangedEventArgs(object relatedObject, DesignerActionListsChangedType changeType, DesignerActionListCollection actionLists)
         {
@@ -20,17 +20,17 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// The object this change is related to.
+        ///  The object this change is related to.
         /// </summary>
         public object RelatedObject { get; }
 
         /// <summary>
-        /// The type of changed that caused the related event to be thrown.
+        ///  The type of changed that caused the related event to be thrown.
         /// </summary>
         public DesignerActionListsChangedType ChangeType { get; }
 
         /// <summary>
-        /// The remaining actionlists left for the related object.
+        ///  The remaining actionlists left for the related object.
         /// </summary>
         public DesignerActionListCollection ActionLists { get; }
     }

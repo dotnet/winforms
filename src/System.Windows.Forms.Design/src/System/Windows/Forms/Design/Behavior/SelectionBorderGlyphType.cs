@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// Describes the type of SelectionBorder the SelectionBorderGlyph represents.
+    ///  Describes the type of SelectionBorder the SelectionBorderGlyph represents.
     /// </summary>
     internal enum SelectionBorderGlyphType
     {

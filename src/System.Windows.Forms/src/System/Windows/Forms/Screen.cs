@@ -328,14 +328,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves a <see cref='Screen'/> for the monitor that contains
-        /// the largest region of the window of the control.
+        ///  Retrieves a <see cref='Screen'/> for the monitor that contains
+        ///  the largest region of the window of the control.
         /// </summary>
         public static Screen FromControl(Control control) => FromHandle(control.Handle);
 
         /// <summary>
-        /// Retrieves a <see cref='Screen'/> for the monitor that contains
-        /// the largest region of the window.
+        ///  Retrieves a <see cref='Screen'/> for the monitor that contains
+        ///  the largest region of the window.
         /// </summary>
         public static Screen FromHandle(IntPtr hwnd)
         {
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Computes and retrieves a hash code for an object.
+        ///  Computes and retrieves a hash code for an object.
         /// </summary>
         public override int GetHashCode() => (int)hmonitor;
 

@@ -5,24 +5,24 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies a standard interface for retrieving feature information from the current system.
+    ///  Specifies a standard interface for retrieving feature information from the current system.
     /// </summary>
     public interface IFeatureSupport
     {
         /// <summary>
-        /// Determines whether any version of the specified feature is currently available
-        /// on the system.
+        ///  Determines whether any version of the specified feature is currently available
+        ///  on the system.
         /// </summary>
         bool IsPresent(object feature);
 
         /// <summary>
-        /// Determines whether the specified or newer version of the specified feature
-        /// is currently available on the system.
+        ///  Determines whether the specified or newer version of the specified feature
+        ///  is currently available on the system.
         /// </summary>
         bool IsPresent(object feature, Version minimumVersion);
 
         /// <summary>
-        /// Retrieves the version of the specified feature.
+        ///  Retrieves the version of the specified feature.
         /// </summary>
         Version GetVersionPresent(object feature);
     }

@@ -14,7 +14,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Designer for ToolStripMenuItems.
+    ///  Designer for ToolStripMenuItems.
     /// </summary>
     internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     {
@@ -68,8 +68,8 @@ namespace System.Windows.Forms.Design
         private bool dropDownSetFailed = false;
 
         /// <summary>
-        /// The ToolStripDropDownItems are the associated components.
-        /// We want those to come with in any cut, copy opreations.
+        ///  The ToolStripDropDownItems are the associated components.
+        ///  We want those to come with in any cut, copy opreations.
         /// </summary>
         public override ICollection AssociatedComponents
         {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ShadowProperty.
+        ///  ShadowProperty.
         /// </summary>
         private bool CheckOnClick
         {
@@ -188,8 +188,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ToolStripEditorManager used this internal property to
-        /// Activate the editor.
+        ///  ToolStripEditorManager used this internal property to
+        ///  Activate the editor.
         /// </summary>
         internal override ToolStripTemplateNode Editor
         {
@@ -209,7 +209,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// True if the MenuItem is on ContextMenu.
+        ///  True if the MenuItem is on ContextMenu.
         /// </summary>
         private bool IsOnContextMenu
         {
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Easy method for getting to the ToolStripDropDownItem
+        ///  Easy method for getting to the ToolStripDropDownItem
         /// </summary>
         private ToolStripDropDownItem MenuItem
         {
@@ -233,7 +233,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This property is true when the OwnerItem is selected during COPY & PASTE operations.
+        ///  This property is true when the OwnerItem is selected during COPY & PASTE operations.
         /// </summary>
         private bool MenuItemSelected
         {
@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ParentComponent in case of MenuItems on the DropDown is the OwnerItem of the DropDown and not the ToolStripDropDown (since the DropDowns are not sited)
+        ///  ParentComponent in case of MenuItems on the DropDown is the OwnerItem of the DropDown and not the ToolStripDropDown (since the DropDowns are not sited)
         /// </summary>
         protected override IComponent ParentComponent
         {
@@ -335,7 +335,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Adds the dummy node for InSitu Edit.
+        ///  Adds the dummy node for InSitu Edit.
         /// </summary>
         internal void AddNewTemplateNode(ToolStripDropDown dropDown)
         {
@@ -401,7 +401,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is called by the TemplateNode to Commit the Edit. This function creates a NEW ToolStripDropDownItem if we are committing a dummy node or else just replaces the TEXT and IMAGE if we are changing  an existing MenuItem.
+        ///  This is called by the TemplateNode to Commit the Edit. This function creates a NEW ToolStripDropDownItem if we are committing a dummy node or else just replaces the TEXT and IMAGE if we are changing  an existing MenuItem.
         /// </summary>
         internal override void CommitEdit(Type type, string text, bool commit, bool enterKeyPressed, bool tabKeyPressed)
         {
@@ -416,7 +416,7 @@ namespace System.Windows.Forms.Design
                 bool dummyItem = dummyItemAdded;
                 dummyItemAdded = false;
                 MenuItem.DropDown.SuspendLayout();
-                if (commitedEditorNode != null) /// this means we have a valid node and we just changed some properties..
+                if (commitedEditorNode != null) ///  this means we have a valid node and we just changed some properties..
                 {
                     index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
                     ToolStripItem editedItem = (ToolStripItem)MenuItem.DropDownItems[index + 1];
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.Design
             }
             else  //we come here if we have not committed so revert our state...
             {
-                if (commitedEditorNode != null) /// we just changed some properties which we want to revert...
+                if (commitedEditorNode != null) ///  we just changed some properties which we want to revert...
                 {
                     MenuItem.DropDown.SuspendLayout();
                     bool dummyItem = dummyItemAdded;
@@ -665,8 +665,8 @@ namespace System.Windows.Forms.Design
                     if (dummyItem)
                     {
                         SelectionManager selMgr = (SelectionManager)GetService(typeof(SelectionManager));
-                        /// Since the operation is cancelled and there is no change of glyphs, Set SelectionManager.NeedRefresh to false so that it doesnt REFRESH,
-                        /// when the transaction is cancelled.
+                        ///  Since the operation is cancelled and there is no change of glyphs, Set SelectionManager.NeedRefresh to false so that it doesnt REFRESH,
+                        ///  when the transaction is cancelled.
                         selMgr.NeedRefresh = false;
                         if (newMenuItemTransaction != null)
                         {
@@ -694,7 +694,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Creates the dummy node for InSitu Edit.
+        ///  Creates the dummy node for InSitu Edit.
         /// </summary>
         private void CreatetypeHereNode()
         {
@@ -718,7 +718,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This Function is called by EnterInSituEdit where in we Swap the typeHereNode by  the TemplateNode (the Insitu Editor). Since the TemplateNode had a EditorToolStrip we can just HOST that ToolStrip as a ToolStripContorlHost and add it to the DropDown.
+        ///  This Function is called by EnterInSituEdit where in we Swap the typeHereNode by  the TemplateNode (the Insitu Editor). Since the TemplateNode had a EditorToolStrip we can just HOST that ToolStrip as a ToolStripContorlHost and add it to the DropDown.
         /// </summary>
         private void CreateDummyMenuItem(ToolStripItem item, string text, Image image)
         {
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This helper function creates a dummyItem for Insitu editing.
+        ///  This helper function creates a dummyItem for Insitu editing.
         /// </summary>
         private ToolStripItem CreateDummyItem(Type t, int dummyIndex)
         {
@@ -811,7 +811,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Asks the host to create a new DropDownItem, inserts the item into the collection & selects it.
+        ///  Asks the host to create a new DropDownItem, inserts the item into the collection & selects it.
         /// </summary>
         private ToolStripItem CreateNewItem(Type t, int dummyIndex, string newText)
         {
@@ -899,7 +899,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Helper function to find whether the passed in DropDownItems have same owner.
+        ///  Helper function to find whether the passed in DropDownItems have same owner.
         /// </summary>
         private bool CheckSameOwner(ToolStripDropDownItem lastSelected, ToolStripDropDownItem currentSelected)
         {
@@ -952,7 +952,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this designer.
+        ///  Disposes of this designer.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -1180,7 +1180,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a menuItem wants to go into InSitu Editing Mode.
+        ///  Called when a menuItem wants to go into InSitu Editing Mode.
         /// </summary>
         internal void EditTemplateNode(bool clicked)
         {
@@ -1284,7 +1284,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called from OnDoubleClickTimerTick to Enter in InsituMode
+        ///  Called from OnDoubleClickTimerTick to Enter in InsituMode
         /// </summary>
         private void EnterInSituMode()
         {
@@ -1307,7 +1307,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method replaces the menItem with an in-situ TemplateNode.
+        ///  This method replaces the menItem with an in-situ TemplateNode.
         /// </summary>
         internal void EnterInSituEdit(ToolStripItem toolItem)
         {
@@ -1350,7 +1350,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Get the Insertion Index to drop the current drag-drop item.
+        ///  Get the Insertion Index to drop the current drag-drop item.
         /// </summary)
         private int GetItemInsertionIndex(ToolStripDropDown wb, Point ownerClientAreaRelativeDropPoint)
         {
@@ -1367,7 +1367,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the DropDown for this MenuItem else returns the Parent(Owner).
+        ///  Returns the DropDown for this MenuItem else returns the Parent(Owner).
         /// </summary>
         protected override Component GetOwnerForActionList()
         {
@@ -1387,7 +1387,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Helper function to Hide the Active Dropdown from the given DropDownItem.
+        ///  Helper function to Hide the Active Dropdown from the given DropDownItem.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
         private void HideAllDropDowns(ToolStripDropDownItem item)
@@ -1424,7 +1424,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Helper function to Hide the Active Dropdown for all the siblings of the given DropDownItem.
+        ///  Helper function to Hide the Active Dropdown for all the siblings of the given DropDownItem.
         /// </summary>
         private void HideSiblingDropDowns(ToolStripDropDownItem item)
         {
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will listen to the necessary dropDown events... now we add the events on selection and unhook when the dropDown is closed.
+        ///  This will listen to the necessary dropDown events... now we add the events on selection and unhook when the dropDown is closed.
         /// </summary>
         internal void HookEvents()
         {
@@ -1473,7 +1473,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Initializes the ToolStripDropDownItem Designer.
+        ///  Initializes the ToolStripDropDownItem Designer.
         /// </summary>
         public override void Initialize(IComponent component)
         {
@@ -1519,7 +1519,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Important function that initializes the dropDown with the typeHereNode , hooks the events and then shows the dropDown.
+        ///  Important function that initializes the dropDown with the typeHereNode , hooks the events and then shows the dropDown.
         /// </summary>
         internal void InitializeDropDown()
         {
@@ -1613,7 +1613,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will morph the current item to the provided type "t" of the item...
+        ///  This will morph the current item to the provided type "t" of the item...
         /// </summary>
         internal override ToolStripItem MorphCurrentItem(Type t)
         {
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
+        ///  Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
         /// </summary>
         private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
         {
@@ -1804,7 +1804,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Checks if the component being added is a child ToolStripItem.
+        ///  Checks if the component being added is a child ToolStripItem.
         /// </summary>
         private void ComponentChangeSvc_ComponentAdding(object sender, ComponentEventArgs e)
         {
@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// After a ToolStripItem is removed, remove it from the ToolStrip and select the next item.
+        ///  After a ToolStripItem is removed, remove it from the ToolStrip and select the next item.
         /// </summary>
         private void ComponentChangeSvc_ComponentRemoved(object sender, ComponentEventArgs e)
         {
@@ -1918,7 +1918,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Before a ToolStripItem is removed, open a transaction to batch the operation.
+        ///  Before a ToolStripItem is removed, open a transaction to batch the operation.
         /// </summary>
         private void ComponentChangeSvc_ComponentRemoving(object sender, ComponentEventArgs e)
         {
@@ -1963,7 +1963,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Controls the dismissal of the drop down, here - we just cancel it
+        ///  Controls the dismissal of the drop down, here - we just cancel it
         /// </summary>
         private void OnDropDownClosing(object sender, ToolStripDropDownClosingEventArgs e)
         {
@@ -1972,7 +1972,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When DropDown is disposed; nullify the dropDown.
+        ///  When DropDown is disposed; nullify the dropDown.
         /// </summary>
         private void OnDropDownDisposed(object sender, EventArgs e)
         {
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When a item is added, re-arrange the elements to make sure that the templateNode is at the end..
+        ///  When a item is added, re-arrange the elements to make sure that the templateNode is at the end..
         /// </summary>
         private void OnItemAdded(object sender, ToolStripItemEventArgs e)
         {
@@ -2017,7 +2017,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called during Undo (this is used for DropDown Property)
+        ///  Called during Undo (this is used for DropDown Property)
         /// </summary>
         private void OnUndone(object source, EventArgs e)
         {
@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called during Undo (this is used for DropDown Property)
+        ///  Called during Undo (this is used for DropDown Property)
         /// </summary>
         private void OnUndoing(object source, EventArgs e)
         {
@@ -2082,7 +2082,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Once a menuitem designer has selection - be sure to expand and collapse all necessary child/parent items Implements the Selection Paint Logic by adding Text to Tag property. Also Hides Unnecessary DropDowns.
+        ///  Once a menuitem designer has selection - be sure to expand and collapse all necessary child/parent items Implements the Selection Paint Logic by adding Text to Tag property. Also Hides Unnecessary DropDowns.
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
@@ -2213,7 +2213,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -2286,7 +2286,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This private function is called to ROLLBACK the current Insitu editing mode.
+        ///  This private function is called to ROLLBACK the current Insitu editing mode.
         /// </summary>
         private void RollBack()
         {
@@ -2315,7 +2315,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Remove Body glyphs when the dropDown is closed.
+        ///  Remove Body glyphs when the dropDown is closed.
         /// </summary>
         private void RemoveBodyGlyphs(ToolStripDropDownItem item)
         {
@@ -2338,7 +2338,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Remove glyphs per item
+        ///  Remove glyphs per item
         /// </summary>
         internal void RemoveItemBodyGlyph(ToolStripItem item)
         {
@@ -2358,7 +2358,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Helper function to remove and then re-add the glyphs.
+        ///  Helper function to remove and then re-add the glyphs.
         /// </summary>
         internal void ResetGlyphs(ToolStripDropDownItem item)
         {
@@ -2371,7 +2371,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Set the Selection after a insitu edit is complete.
+        ///  Set the Selection after a insitu edit is complete.
         /// </summary>
         internal override bool SetSelection(bool enterKeyPressed)
         {
@@ -2407,27 +2407,27 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns true if the visible property should be persisted in code gen.
+        ///  Returns true if the visible property should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeDoubleClickEnabled() => (bool)ShadowProperties["DoubleClickEnabled"];
 
         /// <summary>
-        /// Returns true if the CheckOnClick property should be persisted in code gen.
+        ///  Returns true if the CheckOnClick property should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeCheckOnClick() => (bool)ShadowProperties["CheckOnClick"];
 
         /// <summary>
-        /// Returns true if the CheckOnClick property should be persisted in code gen.
+        ///  Returns true if the CheckOnClick property should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeDropDown() => (customDropDown != null);
 
         /// <summary>
-        /// Returns true if the visible property should be persisted in code gen.
+        ///  Returns true if the visible property should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeVisible() => !Visible;
 
         /// <summary>
-        /// This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.
+        ///  This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.
         /// </summary>
         internal override void ShowEditNode(bool clicked)
         {
@@ -2471,7 +2471,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This Function would select all items starting form oldSelection to the Current MenuItem.
+        ///  This Function would select all items starting form oldSelection to the Current MenuItem.
         /// </summary>
         private void SelectItems(ToolStripDropDownItem oldSelection, ISelectionService selSvc)
         {
@@ -2491,7 +2491,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Shows ALL the owner DropDowns if passed in MenuItem is Selected
+        ///  Shows ALL the owner DropDowns if passed in MenuItem is Selected
         /// </summary>
         internal void ShowOwnerDropDown(ToolStripDropDownItem currentSelection)
         {
@@ -2520,7 +2520,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will listen to the necessary dropDown events... now we add the events on selection and unhook when the dropDown is closed.
+        ///  This will listen to the necessary dropDown events... now we add the events on selection and unhook when the dropDown is closed.
         /// </summary>
         internal void UnHookEvents()
         {
@@ -2539,7 +2539,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The glyph we put over the items. Basically this sets the hit-testable area of the item itself.
+        ///  The glyph we put over the items. Basically this sets the hit-testable area of the item itself.
         /// </summary>
         internal class ToolStripDropDownGlyph : Glyph
         {
@@ -2550,7 +2550,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Abstract method that forces Glyph implementations to provide hit test logic. Given any point - if the Glyph has decided to be involved with that location, the Glyph will need to return a valid Cursor. Otherwise, returning null will cause the  the BehaviorService to simply ignore it.
+            ///  Abstract method that forces Glyph implementations to provide hit test logic. Given any point - if the Glyph has decided to be involved with that location, the Glyph will need to return a valid Cursor. Otherwise, returning null will cause the  the BehaviorService to simply ignore it.
             /// </summary>
             public override Cursor GetHitTest(Point p)
             {
@@ -2562,7 +2562,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Overrides Glyph::Paint - this implementation does nothing.
+            ///  Overrides Glyph::Paint - this implementation does nothing.
             /// </summary>
             public override void Paint(PaintEventArgs pe)
             {
@@ -2570,12 +2570,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The transparent behavior on top of the DropDownGlyphs.
+        ///  The transparent behavior on top of the DropDownGlyphs.
         /// </summary>
         internal class DropDownBehavior : ControlDesigner.TransparentBehavior
         {
             /// <summary>
-            /// Constructor that accepts the related ControlDesigner.
+            ///  Constructor that accepts the related ControlDesigner.
             /// </summary>
             private readonly ToolStripMenuItemDesigner menuItemDesigner;
 
@@ -2585,7 +2585,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Drag drop support on the DropDown...
+            ///  Drag drop support on the DropDown...
             /// </summary>
             public override void OnDragEnter(Glyph g, DragEventArgs e)
             {
@@ -2600,7 +2600,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Drag drop support on the DropDown...
+            ///  Drag drop support on the DropDown...
             /// </summary>
             public override void OnDragOver(Glyph g, DragEventArgs e)
             {
@@ -2615,7 +2615,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Drag drop support on the DropDown...
+            ///  Drag drop support on the DropDown...
             /// </summary>
             public override void OnDragDrop(Glyph g, DragEventArgs e)
             {

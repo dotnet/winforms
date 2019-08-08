@@ -2823,7 +2823,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Pastes the contents of the clipboard in the given clipboard format.
+        ///  Pastes the contents of the clipboard in the given clipboard format.
         /// </summary>
         public void Paste(DataFormats.Format clipFormat)
         {

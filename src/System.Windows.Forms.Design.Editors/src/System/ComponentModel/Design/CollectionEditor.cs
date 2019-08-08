@@ -17,7 +17,7 @@ using System.Windows.Forms.VisualStyles;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// Provides a generic editor for most any collection.
+    ///  Provides a generic editor for most any collection.
     /// </summary>
     public class CollectionEditor : UITypeEditor
     {
@@ -29,7 +29,7 @@ namespace System.ComponentModel.Design
         private bool _ignoreChangingEvents;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor'/> class using the specified collection type.
+        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor'/> class using the specified collection type.
         /// </summary>
         public CollectionEditor(Type type)
         {
@@ -37,7 +37,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets the data type of each item in the collection.
+        ///  Gets or sets the data type of each item in the collection.
         /// </summary>
         protected Type CollectionItemType
         {
@@ -45,27 +45,27 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets the type of the collection.
+        ///  Gets or sets the type of the collection.
         /// </summary>
         protected Type CollectionType { get; }
 
         /// <summary>
-        /// Gets or sets a type descriptor that indicates the current context.
+        ///  Gets or sets a type descriptor that indicates the current context.
         /// </summary>
         protected ITypeDescriptorContext Context => _currentContext;
 
         /// <summary>
-        /// Gets or sets the available item types that can be created for this collection.
+        ///  Gets or sets the available item types that can be created for this collection.
         /// </summary>
         protected Type[] NewItemTypes => _newItemTypes ?? (_newItemTypes = CreateNewItemTypes());
 
         /// <summary>
-        /// Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
+        ///  Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
         /// </summary>
         protected virtual string HelpTopic => "net.ComponentModel.CollectionEditor";
 
         /// <summary>
-        /// Gets or sets a value indicating whether original members of the collection can be removed.
+        ///  Gets or sets a value indicating whether original members of the collection can be removed.
         /// </summary>
         protected virtual bool CanRemoveInstance(object value)
         {
@@ -83,24 +83,24 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Useful for derived classes to do processing when cancelling changes
+        ///  Useful for derived classes to do processing when cancelling changes
         /// </summary>
         protected virtual void CancelChanges()
         {
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether multiple collection members can be selected.
+        ///  Gets or sets a value indicating whether multiple collection members can be selected.
         /// </summary>
         protected virtual bool CanSelectMultipleInstances() => true;
 
         /// <summary>
-        /// Creates a new form to show the current collection.
+        ///  Creates a new form to show the current collection.
         /// </summary>
         protected virtual CollectionForm CreateCollectionForm() => new CollectionEditorCollectionForm(this);
 
         /// <summary>
-        /// Creates a new instance of the specified collection item type.
+        ///  Creates a new instance of the specified collection item type.
         /// </summary>
         protected virtual object CreateInstance(Type itemType)
         {
@@ -125,13 +125,13 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This Function gets the object from the givem object. The input is an arrayList returned as an Object.
-        /// The output is a arraylist which contains the individual objects that need to be created.
+        ///  This Function gets the object from the givem object. The input is an arrayList returned as an Object.
+        ///  The output is a arraylist which contains the individual objects that need to be created.
         /// </summary>
         protected virtual IList GetObjectsFromInstance(object instance) => new ArrayList { instance };
 
         /// <summary>
-        /// Retrieves the display text for the given list item.
+        ///  Retrieves the display text for the given list item.
         /// </summary>
         protected virtual string GetDisplayText(object value)
         {
@@ -172,7 +172,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets an instance of the data type this collection contains.
+        ///  Gets an instance of the data type this collection contains.
         /// </summary>
         protected virtual Type CreateCollectionItemType()
         {
@@ -190,12 +190,12 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the data types this collection editor can create.
+        ///  Gets the data types this collection editor can create.
         /// </summary>
         protected virtual Type[] CreateNewItemTypes() => new Type[] { CollectionItemType };
 
         /// <summary>
-        /// Destroys the specified instance of the object.
+        ///  Destroys the specified instance of the object.
         /// </summary>
         protected virtual void DestroyInstance(object instance)
         {
@@ -217,7 +217,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
+        ///  Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -294,7 +294,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the editing style of the Edit method.
+        ///  Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -334,7 +334,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Converts the specified collection into an array of objects.
+        ///  Converts the specified collection into an array of objects.
         /// </summary>
         protected virtual object[] GetItems(object editValue)
         {
@@ -356,12 +356,12 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the requested service, if it is available.
+        ///  Gets the requested service, if it is available.
         /// </summary>
         protected object GetService(Type serviceType) => Context?.GetService(serviceType);
 
         /// <summary>
-        /// Reflect any change events to the instance object
+        ///  Reflect any change events to the instance object
         /// </summary>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
@@ -373,7 +373,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Reflect any changed events to the instance object
+        ///  Reflect any changed events to the instance object
         /// </summary>
         private void OnComponentChanging(object sender, ComponentChangingEventArgs e)
         {
@@ -385,14 +385,14 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes the item from the column header from the listview column header collection
+        ///  Removes the item from the column header from the listview column header collection
         /// </summary>
         internal virtual void OnItemRemoving(object item)
         {
         }
 
         /// <summary>
-        /// Sets the specified collection to have the specified array of items.
+        ///  Sets the specified collection to have the specified array of items.
         /// </summary>
         protected virtual object SetItems(object editValue, object[] value)
         {
@@ -413,7 +413,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when the help button is clicked.
+        ///  Called when the help button is clicked.
         /// </summary>
         protected virtual void ShowHelp()
         {
@@ -717,7 +717,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This is the collection editor's default implementation of a collection form.
+        ///  This is the collection editor's default implementation of a collection form.
         /// </summary>
         private class CollectionEditorCollectionForm : CollectionForm
         {
@@ -805,7 +805,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Adds a new element to the collection.
+            ///  Adds a new element to the collection.
             /// </summary>
             private void AddButton_click(object sender, EventArgs e)
             {
@@ -813,7 +813,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Processes a click of the drop down type menu. This creates a new instance.
+            ///  Processes a click of the drop down type menu. This creates a new instance.
             /// </summary>
             private void AddDownMenu_click(object sender, EventArgs e)
             {
@@ -824,7 +824,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// This Function adds the individual objects to the ListBox.
+            ///  This Function adds the individual objects to the ListBox.
             /// </summary>
             private void AddItems(IList instances)
             {
@@ -895,10 +895,10 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Determines whether removal of a specific list item should be permitted.
-            /// Used to determine enabled/disabled state of the Remove (X) button.
-            /// Items added after editor was opened may always be removed.
-            /// Items that existed before editor was opened require a call to CanRemoveInstance.
+            ///  Determines whether removal of a specific list item should be permitted.
+            ///  Used to determine enabled/disabled state of the Remove (X) button.
+            ///  Items added after editor was opened may always be removed.
+            ///  Items that existed before editor was opened require a call to CanRemoveInstance.
             /// </summary>
             private bool AllowRemoveInstance(object value)
             {
@@ -931,7 +931,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Aborts changes made in the editor.
+            ///  Aborts changes made in the editor.
             /// </summary>
             private void CancelButton_click(object sender, EventArgs e)
             {
@@ -997,7 +997,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Performs a create instance and then adds the instance to the list box.
+            ///  Performs a create instance and then adds the instance to the list box.
             /// </summary>
             private void CreateAndAddInstance(Type type)
             {
@@ -1018,7 +1018,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Moves the selected item down one.
+            ///  Moves the selected item down one.
             /// </summary>
             private void DownButton_click(object sender, EventArgs e)
             {
@@ -1071,10 +1071,10 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Retrieves the display text for the given list item (if any). The item determines its own display text
-            /// through its ToString() method, which delegates to the GetDisplayText() override on the parent CollectionEditor.
-            /// This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
-            /// The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
+            ///  Retrieves the display text for the given list item (if any). The item determines its own display text
+            ///  through its ToString() method, which delegates to the GetDisplayText() override on the parent CollectionEditor.
+            ///  This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
+            ///  The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
             /// </summary>
             private string GetDisplayText(ListItem item)
             {
@@ -1247,7 +1247,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// This draws a row of the listbox.
+            ///  This draws a row of the listbox.
             /// </summary>
             private void Listbox_drawItem(object sender, DrawItemEventArgs e)
             {
@@ -1338,7 +1338,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Handles keypress events for the list box.
+            ///  Handles keypress events for the list box.
             /// </summary>
             private void Listbox_keyDown(object sender, KeyEventArgs kevent)
             {
@@ -1354,7 +1354,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Event that fires when the selected list box index changes.
+            ///  Event that fires when the selected list box index changes.
             /// </summary>
             private void Listbox_SelectedIndexChanged(object sender, EventArgs e)
             {
@@ -1362,7 +1362,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Event that fires when the list box's window handle is created.
+            ///  Event that fires when the list box's window handle is created.
             /// </summary>
             private void Listbox_HandleCreated(object sender, EventArgs e)
             {
@@ -1370,7 +1370,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Commits the changes to the editor.
+            ///  Commits the changes to the editor.
             /// </summary>
             private void OKButton_Click(object sender, EventArgs e)
             {
@@ -1419,7 +1419,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Reflect any change events to the instance object
+            ///  Reflect any change events to the instance object
             /// </summary>
             private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
             {
@@ -1438,8 +1438,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// This is called when the value property in the CollectionForm has changed.
-            /// In it you should update your user interface to reflect the current value.
+            ///  This is called when the value property in the CollectionForm has changed.
+            ///  In it you should update your user interface to reflect the current value.
             /// </summary>
             protected override void OnEditValueChanged()
             {
@@ -1496,8 +1496,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Performs the actual add of new items. This is invoked by the add button
-            /// as well as the insert key on the list box.
+            ///  Performs the actual add of new items. This is invoked by the add button
+            ///  as well as the insert key on the list box.
             /// </summary>
             private void PerformAdd()
             {
@@ -1505,8 +1505,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Performs a remove by deleting all items currently selected in the list box.
-            /// This is called by the delete button as well as the delete key on the list box.
+            ///  Performs a remove by deleting all items currently selected in the list box.
+            ///  This is called by the delete button as well as the delete key on the list box.
             /// </summary>
             private void PerformRemove()
             {
@@ -1546,7 +1546,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// When something in the properties window changes, we update pertinent text here.
+            ///  When something in the properties window changes, we update pertinent text here.
             /// </summary>
             private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
             {
@@ -1577,7 +1577,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Used to actually remove the items, one by one.
+            ///  Used to actually remove the items, one by one.
             /// </summary>
             private void RemoveInternal(ListItem item)
             {
@@ -1623,7 +1623,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Removes the selected item.
+            ///  Removes the selected item.
             /// </summary>
             private void RemoveButton_Click(object sender, EventArgs e)
             {
@@ -1638,8 +1638,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// used to prevent flicker when playing with the list box selection call resume when done.
-            /// Calls to UpdateEnabled will return silently until Resume is called
+            ///  used to prevent flicker when playing with the list box selection call resume when done.
+            ///  Calls to UpdateEnabled will return silently until Resume is called
             /// </summary>
             private void ResumeEnabledUpdates(bool updateNow)
             {
@@ -1657,13 +1657,13 @@ namespace System.ComponentModel.Design
                 }
             }
             /// <summary>
-            /// Used to prevent flicker when playing with the list box selection call resume when done.
-            /// Calls to UpdateEnabled will return silently until Resume is called
+            ///  Used to prevent flicker when playing with the list box selection call resume when done.
+            ///  Calls to UpdateEnabled will return silently until Resume is called
             /// </summary>
             private void SuspendEnabledUpdates() => _suspendEnabledCount++;
 
             /// <summary>
-            /// Called to show the dialog via the IWindowsFormsEditorService
+            ///  Called to show the dialog via the IWindowsFormsEditorService
             /// </summary>
             protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
@@ -1692,7 +1692,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Moves an item up one in the list box.
+            ///  Moves an item up one in the list box.
             /// </summary>
             private void UpButton_Click(object sender, EventArgs e)
             {
@@ -1735,7 +1735,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Updates the set of enabled buttons.
+            ///  Updates the set of enabled buttons.
             /// </summary>
             private void UpdateEnabled()
             {
@@ -1805,7 +1805,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// When the form is first shown, update controls due to the edit value changes which happened when the form is invisible.
+            ///  When the form is first shown, update controls due to the edit value changes which happened when the form is invisible.
             /// </summary>
             private void Form_Shown(object sender, EventArgs e)
             {
@@ -1813,9 +1813,9 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// This class implements a custom type descriptor that is used to provide
-            /// properties for the set of selected items in the collection editor.
-            /// It provides a single property that is equivalent to the editor's collection item type.
+            ///  This class implements a custom type descriptor that is used to provide
+            ///  properties for the set of selected items in the collection editor.
+            ///  It provides a single property that is equivalent to the editor's collection item type.
             /// </summary>
             private class SelectionWrapper : PropertyDescriptor, ICustomTypeDescriptor
             {
@@ -1875,39 +1875,39 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// When overridden in a derived class, gets the type of the component this property is bound to.
+                ///  When overridden in a derived class, gets the type of the component this property is bound to.
                 /// </summary>
                 public override Type ComponentType { get; }
 
                 /// <summary>
-                /// When overridden in a derived class, gets a value indicating whether this property is read-only.
+                ///  When overridden in a derived class, gets a value indicating whether this property is read-only.
                 /// </summary>
                 public override bool IsReadOnly => false;
 
                 /// <summary>
-                /// When overridden in a derived class, gets the type of the property.
+                ///  When overridden in a derived class, gets the type of the property.
                 /// </summary>
                 public override Type PropertyType { get; }
 
                 /// <summary>
-                /// When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
+                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
                 /// </summary>
                 public override bool CanResetValue(object component) => false;
 
                 /// <summary>
-                /// When overridden in a derived class, gets the current value of the property on a component.
+                ///  When overridden in a derived class, gets the current value of the property on a component.
                 /// </summary>
                 public override object GetValue(object component) => _value;
 
                 /// <summary>
-                /// When overridden in a derived class, resets the value for this property of the component.
+                ///  When overridden in a derived class, resets the value for this property of the component.
                 /// </summary>
                 public override void ResetValue(object component)
                 {
                 }
 
                 /// <summary>
-                /// When overridden in a derived class, sets the value of the component to a different value.
+                ///  When overridden in a derived class, sets the value of the component to a different value.
                 /// </summary>
                 public override void SetValue(object component, object value)
                 {
@@ -1922,12 +1922,12 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// When overridden in a derived class, indicates whether the value of this property needs to be persisted.
+                ///  When overridden in a derived class, indicates whether the value of this property needs to be persisted.
                 /// </summary>
                 public override bool ShouldSerializeValue(object component) => false;
 
                 /// <summary>
-                /// Retrieves an array of member attributes for the given object.
+                ///  Retrieves an array of member attributes for the given object.
                 /// </summary>
                 AttributeCollection ICustomTypeDescriptor.GetAttributes()
                 {
@@ -1935,39 +1935,39 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Retrieves the class name for this object. If null is returned, the type name is used.
+                ///  Retrieves the class name for this object. If null is returned, the type name is used.
                 /// </summary>
                 string ICustomTypeDescriptor.GetClassName() => PropertyType.Name;
 
                 /// <summary>
-                /// Retrieves the name for this object. If null is returned, the default is used.
+                ///  Retrieves the name for this object. If null is returned, the default is used.
                 /// </summary>
                 string ICustomTypeDescriptor.GetComponentName() => null;
 
                 /// <summary>
-                /// Retrieves the type converter for this object.
+                ///  Retrieves the type converter for this object.
                 /// </summary>
                 TypeConverter ICustomTypeDescriptor.GetConverter() => null;
 
                 /// <summary>
-                /// Retrieves the default event.
+                ///  Retrieves the default event.
                 /// </summary>
                 EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() => null;
 
                 /// <summary>
-                /// Retrieves the default property.
+                ///  Retrieves the default property.
                 /// </summary>
                 PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() => this;
 
                 /// <summary>
-                /// Retrieves the an editor for this object.
+                ///  Retrieves the an editor for this object.
                 /// </summary>
                 object ICustomTypeDescriptor.GetEditor(Type editorBaseType) => null;
 
                 /// <summary>
-                /// Retrieves an array of events that the given component instance provides.
-                /// This may differ from the set of events the class provides.
-                /// If the component is sited, the site may add or remove additional events.
+                ///  Retrieves an array of events that the given component instance provides.
+                ///  This may differ from the set of events the class provides.
+                ///  If the component is sited, the site may add or remove additional events.
                 /// </summary>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
                 {
@@ -1975,10 +1975,10 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Retrieves an array of events that the given component instance provides.
-                /// This may differ from the set of events the class provides.
-                /// If the component is sited, the site may add or remove additional events.
-                /// The returned array of events will be filtered by the given set of attributes.
+                ///  Retrieves an array of events that the given component instance provides.
+                ///  This may differ from the set of events the class provides.
+                ///  If the component is sited, the site may add or remove additional events.
+                ///  The returned array of events will be filtered by the given set of attributes.
                 /// </summary>
                 EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
                 {
@@ -1986,9 +1986,9 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Retrieves an array of properties that the given component instance provides.
-                /// This may differ from the set of properties the class provides.
-                /// If the component is sited, the site may add or remove additional properties.
+                ///  Retrieves an array of properties that the given component instance provides.
+                ///  This may differ from the set of properties the class provides.
+                ///  If the component is sited, the site may add or remove additional properties.
                 /// </summary>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
                 {
@@ -1996,10 +1996,10 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Retrieves an array of properties that the given component instance provides.
-                /// This may differ from the set of properties the class provides.
-                /// If the component is sited, the site may add or remove additional properties.
-                /// The returned array of properties will be filtered by the given set of attributes.
+                ///  Retrieves an array of properties that the given component instance provides.
+                ///  This may differ from the set of properties the class provides.
+                ///  If the component is sited, the site may add or remove additional properties.
+                ///  The returned array of properties will be filtered by the given set of attributes.
                 /// </summary>
                 PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
                 {
@@ -2007,10 +2007,10 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Retrieves the object that directly depends on this value being edited.
-                /// This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
-                /// If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object,
-                /// that is the main object that exposes the properties and attributes
+                ///  Retrieves the object that directly depends on this value being edited.
+                ///  This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
+                ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object,
+                ///  that is the main object that exposes the properties and attributes
                 /// </summary>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
                 {
@@ -2019,8 +2019,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// ListItem class. This is a single entry in our list box.
-            /// It contains the value we're editing as well as accessors for the type
+            ///  ListItem class. This is a single entry in our list box.
+            ///  It contains the value we're editing as well as accessors for the type
             // converter and UI editor.
             /// </summary>
             private class ListItem
@@ -2074,7 +2074,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Menu items we attach to the drop down menu if there are multiple types the collection editor can create.
+            ///  Menu items we attach to the drop down menu if there are multiple types the collection editor can create.
             /// </summary>
             private class TypeMenuItem : ToolStripMenuItem
             {
@@ -2088,7 +2088,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// List box filled with ListItem objects representing the collection.
+        ///  List box filled with ListItem objects representing the collection.
         /// </summary>
         internal class FilterListBox : ListBox
         {
@@ -2117,7 +2117,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Expose the protected RefreshItem() method so that CollectionEditor can use it
+            ///  Expose the protected RefreshItem() method so that CollectionEditor can use it
             /// </summary>
             public new void RefreshItem(int index) => base.RefreshItem(index);
 
@@ -2185,7 +2185,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
+        ///  The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
         /// </summary>
         protected abstract class CollectionForm : Form
         {
@@ -2198,7 +2198,7 @@ namespace System.ComponentModel.Design
             private const short EditableNo = 2;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
+            ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
@@ -2206,12 +2206,12 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Gets or sets the data type of each item in the collection.
+            ///  Gets or sets the data type of each item in the collection.
             /// </summary>
             protected Type CollectionItemType => _editor.CollectionItemType;
 
             /// <summary>
-            /// Gets or sets the type of the collection.
+            ///  Gets or sets the type of the collection.
             /// </summary>
             protected Type CollectionType => _editor.CollectionType;
 
@@ -2240,12 +2240,12 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Gets or sets a type descriptor that indicates the current context.
+            ///  Gets or sets a type descriptor that indicates the current context.
             /// </summary>
             protected ITypeDescriptorContext Context => _editor.Context;
 
             /// <summary>
-            /// Gets or sets the value of the item being edited.
+            ///  Gets or sets the value of the item being edited.
             /// </summary>
             public object EditValue
             {
@@ -2258,7 +2258,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Gets or sets the array of items this form is to display.
+            ///  Gets or sets the array of items this form is to display.
             /// </summary>
             protected object[] Items
             {
@@ -2293,32 +2293,32 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Gets or sets the available item types that can be created for this collection.
+            ///  Gets or sets the available item types that can be created for this collection.
             /// </summary>
             protected Type[] NewItemTypes => _editor.NewItemTypes;
 
             /// <summary>
-            /// Gets or sets a value indicating whether original members of the collection can be removed.
+            ///  Gets or sets a value indicating whether original members of the collection can be removed.
             /// </summary>
             protected bool CanRemoveInstance(object value) => _editor.CanRemoveInstance(value);
 
             /// <summary>
-            /// Gets or sets a value indicating whether multiple collection members can be selected.
+            ///  Gets or sets a value indicating whether multiple collection members can be selected.
             /// </summary>
             protected virtual bool CanSelectMultipleInstances() => _editor.CanSelectMultipleInstances();
 
             /// <summary>
-            /// Creates a new instance of the specified collection item type.
+            ///  Creates a new instance of the specified collection item type.
             /// </summary>
             protected object CreateInstance(Type itemType) => _editor.CreateInstance(itemType);
 
             /// <summary>
-            /// Destroys the specified instance of the object.
+            ///  Destroys the specified instance of the object.
             /// </summary>
             protected void DestroyInstance(object instance) => _editor.DestroyInstance(instance);
 
             /// <summary>
-            /// Displays the given exception to the user.
+            ///  Displays the given exception to the user.
             /// </summary>
             protected virtual void DisplayError(Exception e)
             {
@@ -2339,12 +2339,12 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Gets the requested service, if it is available.
+            ///  Gets the requested service, if it is available.
             /// </summary>
             protected override object GetService(Type serviceType) => _editor.GetService(serviceType);
 
             /// <summary>
-            /// Called to show the dialog via the IWindowsFormsEditorService
+            ///  Called to show the dialog via the IWindowsFormsEditorService
             /// </summary>
             protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
@@ -2357,7 +2357,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
+            ///  This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
             /// </summary>
             protected abstract void OnEditValueChanged();
         }
