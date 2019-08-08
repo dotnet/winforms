@@ -4933,18 +4933,14 @@ namespace System.Windows.Forms
             if (me.Y <= 1 || (size.Height - me.Y) <= 1)
             {
                 // convert the coordinates to
-                NativeMethods.POINT temp = new NativeMethods.POINT
-                {
-                    x = me.X,
-                    y = me.Y
-                };
-                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), temp, 1);
+                var temp = new Point(me.X, me.Y);
+                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref temp, 1);
 
                 // forward the message
-                pt.X = temp.x;
-                pt.Y = temp.y;
+                pt = temp;
                 return true;
             }
+
             return false;
         }
 

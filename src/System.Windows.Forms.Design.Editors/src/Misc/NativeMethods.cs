@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Design
@@ -50,23 +51,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class POINT
-        {
-            public int x;
-            public int y;
-
-            public POINT()
-            {
-            }
-
-            public POINT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
         public class TV_ITEM
         {
@@ -100,7 +84,7 @@ namespace System.Windows.Forms.Design
             public readonly TV_ITEM itemNew = null;
             public readonly TV_ITEM itemOld = null;
             public readonly NMHDR nmhdr = null;
-            public readonly POINT ptDrag = null;
+            public readonly Point ptDrag;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -153,9 +137,7 @@ namespace System.Windows.Forms.Design
 
             public int time;
 
-            // pt was a by-value POINT structure
-            public int pt_x;
-            public int pt_y;
+            public Point pt;
         }
 
         [StructLayout(LayoutKind.Sequential)]

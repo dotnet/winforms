@@ -1787,7 +1787,7 @@ namespace System.Windows.Forms
             internal IntPtr hinst = IntPtr.Zero;
             internal int idString = 0;
             internal IntPtr pszText;
-            internal POINT pt;
+            internal Point pt;
             internal int clrForeground = -1;
             internal int clrBackground = -1;
             internal Interop.RECT rcMargins = new Interop.RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
@@ -2052,30 +2052,6 @@ namespace System.Windows.Forms
             public int dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class POINT
-        {
-            public int x;
-            public int y;
-
-            public POINT()
-            {
-            }
-
-            public POINT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-
-#if DEBUG
-            public override string ToString()
-            {
-                return "{x=" + x + ", y=" + y + "}";
-            }
-#endif
-        }
-
         // use this in cases where the Native API takes a POINT not a POINT*
         // classes marshal by ref.
         [StructLayout(LayoutKind.Sequential)]
@@ -2136,9 +2112,7 @@ namespace System.Windows.Forms
             public IntPtr wParam;
             public IntPtr lParam;
             public int time;
-            // pt was a by-value POINT structure
-            public int pt_x;
-            public int pt_y;
+            public Point pt;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2213,12 +2187,8 @@ namespace System.Windows.Forms
             public int length;
             public int flags;
             public int showCmd;
-            // ptMinPosition was a by-value POINT structure
-            public int ptMinPosition_x;
-            public int ptMinPosition_y;
-            // ptMaxPosition was a by-value POINT structure
-            public int ptMaxPosition_x;
-            public int ptMaxPosition_y;
+            public Point ptMinPosition;
+            public Point ptMaxPosition;
             // rcNormalPosition was a by-value RECT structure
             public int rcNormalPosition_left;
             public int rcNormalPosition_top;
@@ -2257,10 +2227,7 @@ namespace System.Windows.Forms
             public IntPtr hDevMode;
             public IntPtr hDevNames;
             public int Flags;
-
-            //POINT           ptPaperSize;
-            public int paperSizeX = 0;
-            public int paperSizeY = 0;
+            public Point paperSize;
 
             // RECT            rtMinMargin;
             public int minMarginLeft;
@@ -3558,11 +3525,7 @@ namespace System.Windows.Forms
             public int action;
             public TV_ITEM itemOld;
             public TV_ITEM itemNew;
-            public int ptDrag_X; // This should be declared as POINT
-            public int ptDrag_Y; // we use unsafe blocks to manipulate
-                                 // NMTREEVIEW quickly, and POINT is declared
-                                 // as a class.  Too much churn to change POINT
-                                 // now.
+            public Point ptDrag;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3759,7 +3722,7 @@ namespace System.Windows.Forms
             public int iCtrlId = 0;
             public IntPtr hItemHandle = IntPtr.Zero;
             public IntPtr dwContextId = IntPtr.Zero;
-            public POINT MousePos = null;
+            public Point MousePos;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3773,11 +3736,11 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class MINMAXINFO
         {
-            public POINT ptReserved = null;
-            public POINT ptMaxSize = null;
-            public POINT ptMaxPosition = null;
-            public POINT ptMinTrackSize = null;
-            public POINT ptMaxTrackSize = null;
+            public Point ptReserved;
+            public Point ptMaxSize;
+            public Point ptMaxPosition;
+            public Point ptMinTrackSize;
+            public Point ptMaxTrackSize;
         }
 
         [ComImport]
@@ -4039,8 +4002,7 @@ namespace System.Windows.Forms
             public int flags;
             public string psz;
             public IntPtr lParam;
-            public int ptX; // was POINT pt
-            public int ptY;
+            public Point pt;
             public int vkDirection;
         }
 
@@ -4230,9 +4192,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class MOUSEHOOKSTRUCT
         {
-            // pt was a by-value POINT structure
-            public int pt_x = 0;
-            public int pt_y = 0;
+            public Point pt;
             public IntPtr hWnd = IntPtr.Zero;
             public int wHitTestCode = 0;
             public int dwExtraInfo = 0;
@@ -5364,7 +5324,7 @@ namespace System.Windows.Forms
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Interop.RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] POINT pt, int cPoints);
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point pt, uint cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr WindowFromPoint(int x, int y);
@@ -5391,7 +5351,7 @@ namespace System.Windows.Forms
         public static extern IntPtr GetCursor();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos([In, Out] POINT pt);
+        public static extern bool GetCursorPos(out Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);

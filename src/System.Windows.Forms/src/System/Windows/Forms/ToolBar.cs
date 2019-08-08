@@ -1770,31 +1770,31 @@ namespace System.Windows.Forms
                                 // We'll need screen coordinates of this position for setting the tooltip's position
                                 int x = Location.X + buttonRight + 1;
                                 int y = Location.Y + (ButtonSize.Height / 2);
-                                NativeMethods.POINT leftTop = new NativeMethods.POINT(x, y);
-                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), leftTop);
+                                var leftTop = new Point(x, y);
+                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
 
                                 // Will the tooltip bleed off the top?
-                                if (leftTop.y < SystemInformation.WorkingArea.Y)
+                                if (leftTop.Y < SystemInformation.WorkingArea.Y)
                                 {
                                     // Reposition the tooltip to be displayed below the button
-                                    leftTop.y += (ButtonSize.Height / 2) + 1;
+                                    leftTop.Y += (ButtonSize.Height / 2) + 1;
                                 }
 
                                 // Will the tooltip bleed off the bottom?
-                                if (leftTop.y + tooltipHeight > SystemInformation.WorkingArea.Height)
+                                if (leftTop.Y + tooltipHeight > SystemInformation.WorkingArea.Height)
                                 {
                                     // Reposition the tooltip to be displayed above the button
-                                    leftTop.y -= ((ButtonSize.Height / 2) + tooltipHeight + 1);
+                                    leftTop.Y -= ((ButtonSize.Height / 2) + tooltipHeight + 1);
                                 }
 
                                 // Will the tooltip bleed off the right edge?
-                                if (leftTop.x + tooltipWidth > SystemInformation.WorkingArea.Right)
+                                if (leftTop.X + tooltipWidth > SystemInformation.WorkingArea.Right)
                                 {
                                     // Move the tooltip far enough left that it will display in the working area
-                                    leftTop.x -= (ButtonSize.Width + tooltipWidth + 2);
+                                    leftTop.X -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
-                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.x, leftTop.y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.X, leftTop.Y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
                                 m.Result = (IntPtr)1;
                                 return;
                             }

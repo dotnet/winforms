@@ -121,15 +121,8 @@ namespace System.Windows.Forms
         ///
         public int NearestIndex(Point pt)
         {
-            NativeMethods.POINT point = new NativeMethods.POINT
-            {
-                x = pt.X,
-                y = pt.Y
-            };
-
             NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_INSERTMARKHITTEST, point, lvInsertMark);
-
+            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_INSERTMARKHITTEST, ref pt, lvInsertMark);
             return lvInsertMark.iItem;
         }
 

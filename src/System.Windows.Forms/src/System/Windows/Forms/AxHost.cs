@@ -2043,10 +2043,8 @@ namespace System.Windows.Forms
                         lParam = (IntPtr)0x20180001,
                         time = SafeNativeMethods.GetTickCount()
                     };
-                    NativeMethods.POINT p = new NativeMethods.POINT();
-                    UnsafeNativeMethods.GetCursorPos(p);
-                    msg.pt_x = p.x;
-                    msg.pt_y = p.y;
+                    UnsafeNativeMethods.GetCursorPos(out Point p);
+                    msg.pt = p;
                     if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
                         GetOleControl().OnMnemonic(ref msg);

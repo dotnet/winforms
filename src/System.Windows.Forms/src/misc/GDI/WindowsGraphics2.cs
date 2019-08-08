@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Internal
 
         /// Drawing methods.
 
-        public void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
+        public unsafe void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
         {
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Internal
             int radius = sideLength / 2;
             IntUnsafeNativeMethods.BeginPath(hdc);
             Point oldPoint = default;
-            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, ref oldPoint);
+            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, &oldPoint);
             IntUnsafeNativeMethods.AngleArc(hdc, p.X, p.Y, radius, startAngle, sweepAngle);
             IntUnsafeNativeMethods.LineTo(hdc, p.X, p.Y);
             IntUnsafeNativeMethods.EndPath(hdc);
@@ -558,7 +558,7 @@ namespace System.Windows.Forms.Internal
             DrawLine(pen, p1.X, p1.Y, p2.X, p2.Y);
         }
 
-        public void DrawLine(WindowsPen pen, int x1, int y1, int x2, int y2)
+        public unsafe void DrawLine(WindowsPen pen, int x1, int y1, int x2, int y2)
         {
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
 
@@ -582,7 +582,7 @@ namespace System.Windows.Forms.Internal
 
             Point oldPoint = new Point();
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, ref oldPoint);
+            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, &oldPoint);
             IntUnsafeNativeMethods.LineTo(hdc, x2, y2);
 
             if (bckMode != DeviceContextBackgroundMode.Transparent)
@@ -595,7 +595,7 @@ namespace System.Windows.Forms.Internal
                 dc.SetRasterOperation(rasterOp);
             }
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.X, oldPoint.Y, ref oldPoint);
+            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
         }
 
         /// <summary>

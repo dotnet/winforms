@@ -2462,8 +2462,8 @@ namespace System.Windows.Forms
         /// </summary>
         public override int GetCharIndexFromPosition(Point pt)
         {
-            NativeMethods.POINT wpt = new NativeMethods.POINT(pt.X, pt.Y);
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_CHARFROMPOS, 0, wpt);
+            var wpt = new Point(pt.X, pt.Y);
+            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_CHARFROMPOS, 0, ref wpt);
 
             string t = Text;
             // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
@@ -2518,9 +2518,9 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            NativeMethods.POINT pt = new NativeMethods.POINT();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_POSFROMCHAR, pt, index);
-            return new Point(pt.x, pt.y);
+            var pt = new Point();
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_POSFROMCHAR, ref pt, index);
+            return pt;
         }
 
         private bool GetProtectedError()

@@ -284,15 +284,15 @@ namespace System.Windows.Forms.Design
 
         internal Point GetOffsetToClientArea()
         {
-            NativeMethods.POINT nativeOffset = new NativeMethods.POINT(0, 0);
-            NativeMethods.MapWindowPoints(Control.Handle, Control.Parent.Handle, nativeOffset, 1);
+            var nativeOffset = new Point();
+            NativeMethods.MapWindowPoints(Control.Handle, Control.Parent.Handle, ref nativeOffset, 1);
             Point offset = Control.Location;
             // If the 2 controls do not have the same orientation, then force one to make sure we calculate the correct offset
             if (Control.IsMirrored != Control.Parent.IsMirrored)
             {
                 offset.Offset(Control.Width, 0);
             }
-            return (new Point(Math.Abs(nativeOffset.x - offset.X), nativeOffset.y - offset.Y));
+            return (new Point(Math.Abs(nativeOffset.X - offset.X), nativeOffset.Y - offset.Y));
         }
 
         private bool IsResizableConsiderAutoSize(PropertyDescriptor autoSizeProp, PropertyDescriptor autoSizeModeProp)
@@ -1743,14 +1743,14 @@ namespace System.Windows.Forms.Design
 
             if (m.Msg >= Interop.WindowMessages.WM_MOUSEFIRST && m.Msg <= Interop.WindowMessages.WM_MOUSELAST)
             {
-                NativeMethods.POINT pt = new NativeMethods.POINT
+                var pt = new Point
                 {
-                    x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam)),
-                    y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam))
+                    X = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam)),
+                    Y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam))
                 };
-                NativeMethods.MapWindowPoints(m.HWnd, IntPtr.Zero, pt, 1);
-                x = pt.x;
-                y = pt.y;
+                NativeMethods.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
+                x = pt.X;
+                y = pt.Y;
             }
             else if (m.Msg >= Interop.WindowMessages.WM_NCMOUSEMOVE && m.Msg <= Interop.WindowMessages.WM_NCMBUTTONDBLCLK)
             {
@@ -2059,13 +2059,9 @@ namespace System.Windows.Forms.Design
                             if (m.HWnd != Control.Handle)
                             {
                                 // Re-map the clip rect we pass to the paint event args to our child coordinates.
-                                NativeMethods.POINT pt = new NativeMethods.POINT
-                                {
-                                    x = 0,
-                                    y = 0
-                                };
-                                NativeMethods.MapWindowPoints(m.HWnd, Control.Handle, pt, 1);
-                                gr.TranslateTransform(-pt.x, -pt.y);
+                                var pt = new Point();
+                                NativeMethods.MapWindowPoints(m.HWnd, Control.Handle, ref pt, 1);
+                                gr.TranslateTransform(-pt.X, -pt.Y);
                                 NativeMethods.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
                             }
                             paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);

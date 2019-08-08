@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             {
                 pop.pszText = pszText;
                 pop.idString = 0;
-                pop.pt = new NativeMethods.POINT(location.X, location.Y);
+                pop.pt = location;
 
                 // Looks like a windows
 

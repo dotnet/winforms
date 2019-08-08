@@ -870,25 +870,24 @@ namespace System.Windows.Forms.PropertyGridInternal
             Rectangle rect = GetRectangle(row, ROWVALUE | ROWLABEL);
 
             // Translate rect to screen coordinates
-            //
-            NativeMethods.POINT pt = new NativeMethods.POINT(rect.X, rect.Y);
-            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), pt);
+            var pt = new Point(rect.X, rect.Y);
+            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref pt);
 
             Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
 
             int propertyGridViewBottom = parent.Bottom - 1; // - 1 is PropertyGridView bottom border
 
-            if (pt.y > propertyGridViewBottom)
+            if (pt.Y > propertyGridViewBottom)
             {
                 return Rectangle.Empty;
             }
 
-            if (pt.y + rect.Height > propertyGridViewBottom)
+            if (pt.Y + rect.Height > propertyGridViewBottom)
             {
-                rect.Height = propertyGridViewBottom - pt.y;
+                rect.Height = propertyGridViewBottom - pt.Y;
             }
 
-            return new Rectangle(pt.x, pt.y, rect.Width, rect.Height);
+            return new Rectangle(pt.X, pt.Y, rect.Width, rect.Height);
         }
 
         internal int AccessibilityGetGridEntryChildID(GridEntry gridEntry)
@@ -8194,7 +8193,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             case Interop.WindowMessages.WM_NCMBUTTONDOWN:
                             case Interop.WindowMessages.WM_NCRBUTTONDOWN:
                             case Interop.WindowMessages.WM_MOUSEACTIVATE:
-                                if (ProcessMouseDown(mhs.hWnd, mhs.pt_x, mhs.pt_y))
+                                if (ProcessMouseDown(mhs.hWnd, mhs.pt.X, mhs.pt.Y))
                                 {
                                     return (IntPtr)1;
                                 }
@@ -8808,15 +8807,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public override AccessibleObject HitTest(int x, int y)
             {
-
                 // Convert to client coordinates
-                //
-                NativeMethods.POINT pt = new NativeMethods.POINT(x, y);
-                UnsafeNativeMethods.ScreenToClient(new HandleRef(Owner, Owner.Handle), pt);
+                var pt = new Point(x, y);
+                UnsafeNativeMethods.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref pt);
 
                 // Find the grid entry at the given client coordinates
                 //
-                Point pos = ((PropertyGridView)Owner).FindPosition(pt.x, pt.y);
+                Point pos = ((PropertyGridView)Owner).FindPosition(pt.X, pt.Y);
                 if (pos != PropertyGridView.InvalidPosition)
                 {
                     GridEntry gridEntry = ((PropertyGridView)Owner).GetGridEntryFromRow(pos.Y);

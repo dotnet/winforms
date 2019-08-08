@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Internal
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool MoveToEx(HandleRef hdc, int x, int y, ref Point pt);
+        public static unsafe extern bool MoveToEx(HandleRef hdc, int x, int y, Point *lppt);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "Rectangle", CharSet = CharSet.Auto)]
         public static extern bool IntRectangle(HandleRef hdc, int left, int top, int right, int bottom);
@@ -130,13 +130,13 @@ namespace System.Windows.Forms.Internal
         public static extern bool GetViewportExtEx(HandleRef hdc, ref Size lpSize);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool GetViewportOrgEx(HandleRef hdc, ref Point lpPoint);
+        public static extern bool GetViewportOrgEx(HandleRef hdc, out Point lpPoint);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern bool SetViewportExtEx(HandleRef hDC, int x, int y, ref Size size);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, ref Point point);
+        public static unsafe extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, Point *point);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern int GetTextMetricsW(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm);

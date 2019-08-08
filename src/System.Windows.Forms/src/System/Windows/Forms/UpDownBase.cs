@@ -1129,9 +1129,9 @@ namespace System.Windows.Forms
             {
                 // same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
-                NativeMethods.POINT point = new NativeMethods.POINT(e.X, e.Y);
-                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), point, 1);
-                return new MouseEventArgs(e.Button, e.Clicks, point.x, point.y, e.Delta);
+                var point = new Point(e.X, e.Y);
+                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref point, 1);
+                return new MouseEventArgs(e.Button, e.Clicks, point.X, point.Y, e.Delta);
             }
             return e;
         }

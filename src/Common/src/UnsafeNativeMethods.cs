@@ -255,7 +255,7 @@ namespace System.Windows.Forms
         public static extern IntPtr CallNextHookEx(HandleRef hhook, int code, IntPtr wparam, IntPtr lparam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ScreenToClient(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);
+        public static extern int ScreenToClient(HandleRef hWnd, ref Point pt);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
         public static extern IntPtr GetFocus();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos([In, Out] NativeMethods.POINT pt);
+        public static extern bool GetCursorPos(out Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
         public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Interop.RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, [In, Out] NativeMethods.POINT pt, int cPoints);
+        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Point pt, uint cPoints);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, bool wParam, int lParam);
@@ -542,10 +542,10 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TEXTRANGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.POINT lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Point lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, int lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, int lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
@@ -582,7 +582,7 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVGROUP lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, [In, Out] NativeMethods.LVINSERTMARK lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, [In, Out] NativeMethods.LVINSERTMARK lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVINSERTMARK lParam);
@@ -781,7 +781,7 @@ namespace System.Windows.Forms
         public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ClientToScreen(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);
+        public static extern int ClientToScreen(HandleRef hWnd, ref Point lpPoint);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetForegroundWindow();
@@ -1495,10 +1495,8 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
             int ShowContextMenu(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwID,
-                [In]
-                NativeMethods.POINT pt,
+                uint dwID,
+                ref Point pt,
                 [In, MarshalAs(UnmanagedType.Interface)]
                 object pcmdtReserved,
                 [In, MarshalAs(UnmanagedType.Interface)]

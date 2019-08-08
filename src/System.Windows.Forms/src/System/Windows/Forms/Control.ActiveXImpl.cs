@@ -360,24 +360,24 @@ namespace System.Windows.Forms
                             {
                                 // Must translate message coordniates over to our HWND.  We first try
                                 IntPtr hwndMap = msg.hwnd == IntPtr.Zero ? hwndParent : msg.hwnd;
-                                NativeMethods.POINT pt = new NativeMethods.POINT
+                                var pt = new Point
                                 {
-                                    x = NativeMethods.Util.LOWORD(msg.lParam),
-                                    y = NativeMethods.Util.HIWORD(msg.lParam)
+                                    X = NativeMethods.Util.LOWORD(msg.lParam),
+                                    Y = NativeMethods.Util.HIWORD(msg.lParam)
                                 };
-                                UnsafeNativeMethods.MapWindowPoints(new HandleRef(null, hwndMap), new HandleRef(_control, _control.Handle), pt, 1);
+                                UnsafeNativeMethods.MapWindowPoints(new HandleRef(null, hwndMap), new HandleRef(_control, _control.Handle), ref pt, 1);
 
                                 // check to see if this message should really go to a child
                                 //  control, and if so, map the point into that child's window
                                 //  coordinates
-                                Control realTarget = target.GetChildAtPoint(new Point(pt.x, pt.y));
+                                Control realTarget = target.GetChildAtPoint(pt);
                                 if (realTarget != null && realTarget != target)
                                 {
-                                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(target, target.Handle), new HandleRef(realTarget, realTarget.Handle), pt, 1);
+                                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(target, target.Handle), new HandleRef(realTarget, realTarget.Handle), ref pt, 1);
                                     target = realTarget;
                                 }
 
-                                msg.lParam = NativeMethods.Util.MAKELPARAM(pt.x, pt.y);
+                                msg.lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
                             }
 
 #if DEBUG
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal void Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
+            internal unsafe void Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                              IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT prcBounds, NativeMethods.COMRECT lprcWBounds,
                              IntPtr pfnContinue, int dwContinue)
             {
@@ -450,8 +450,8 @@ namespace System.Windows.Forms
                 }
 
                 Interop.RECT rc;
-                NativeMethods.POINT pVp = new NativeMethods.POINT();
-                NativeMethods.POINT pW = new NativeMethods.POINT();
+                var pVp = new Point();
+                var pW = new Point();
                 NativeMethods.SIZE sWindowExt = new NativeMethods.SIZE();
                 NativeMethods.SIZE sViewportExt = new NativeMethods.SIZE();
                 int iMode = NativeMethods.MM_TEXT;
@@ -475,9 +475,9 @@ namespace System.Windows.Forms
                     SafeNativeMethods.LPtoDP(new HandleRef(null, hdcDraw), ref rc, 2);
 
                     iMode = SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), NativeMethods.MM_ANISOTROPIC);
-                    SafeNativeMethods.SetWindowOrgEx(new HandleRef(null, hdcDraw), 0, 0, pW);
+                    SafeNativeMethods.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
                     SafeNativeMethods.SetWindowExtEx(new HandleRef(null, hdcDraw), _control.Width, _control.Height, sWindowExt);
-                    SafeNativeMethods.SetViewportOrgEx(new HandleRef(null, hdcDraw), rc.left, rc.top, pVp);
+                    SafeNativeMethods.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
                     SafeNativeMethods.SetViewportExtEx(new HandleRef(null, hdcDraw), rc.right - rc.left, rc.bottom - rc.top, sViewportExt);
                 }
 
@@ -503,9 +503,9 @@ namespace System.Windows.Forms
                     // And clean up the DC
                     if (prcBounds != null)
                     {
-                        SafeNativeMethods.SetWindowOrgEx(new HandleRef(null, hdcDraw), pW.x, pW.y, null);
+                        SafeNativeMethods.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
                         SafeNativeMethods.SetWindowExtEx(new HandleRef(null, hdcDraw), sWindowExt.cx, sWindowExt.cy, null);
-                        SafeNativeMethods.SetViewportOrgEx(new HandleRef(null, hdcDraw), pVp.x, pVp.y, null);
+                        SafeNativeMethods.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
                         SafeNativeMethods.SetViewportExtEx(new HandleRef(null, hdcDraw), sViewportExt.cx, sViewportExt.cy, null);
                         SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), iMode);
                     }

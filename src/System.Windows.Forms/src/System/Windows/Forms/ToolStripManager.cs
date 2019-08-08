@@ -1169,13 +1169,9 @@ namespace System.Windows.Forms
 
                     if (activeToolStrip != null)
                     {
-                        NativeMethods.POINT pt = new NativeMethods.POINT
-                        {
-                            x = x,
-                            y = y
-                        };
-                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), pt, 1);
-                        if (!activeToolStrip.ClientRectangle.Contains(pt.x, pt.y))
+                        var pt = new Point(x, y);
+                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), ref pt, 1);
+                        if (!activeToolStrip.ClientRectangle.Contains(pt.X, pt.Y))
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {

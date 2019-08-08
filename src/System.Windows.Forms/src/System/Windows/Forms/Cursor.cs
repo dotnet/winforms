@@ -234,14 +234,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.POINT p = new NativeMethods.POINT();
-                UnsafeNativeMethods.GetCursorPos(p);
-                return new Point(p.x, p.y);
+                UnsafeNativeMethods.GetCursorPos(out Point p);
+                return p;
             }
-            set
-            {
-                UnsafeNativeMethods.SetCursorPos(value.X, value.Y);
-            }
+            set => UnsafeNativeMethods.SetCursorPos(value.X, value.Y);
         }
 
         /// <summary>

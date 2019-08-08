@@ -97,9 +97,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public Point AdornerWindowPointToScreen(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT(p.X, p.Y);
-            NativeMethods.MapWindowPoints(_toolStripAdornerWindow.Handle, IntPtr.Zero, offset, 1);
-            return new Point(offset.x, offset.y);
+            NativeMethods.MapWindowPoints(_toolStripAdornerWindow.Handle, IntPtr.Zero, ref p, 1);
+            return p;
         }
 
         /// <summary>
@@ -120,13 +119,10 @@ namespace System.Windows.Forms.Design
             {
                 return Point.Empty;
             }
-            NativeMethods.POINT pt = new NativeMethods.POINT
-            {
-                x = c.Left,
-                y = c.Top
-            };
-            NativeMethods.MapWindowPoints(c.Parent.Handle, _toolStripAdornerWindow.Handle, pt, 1);
-            return new Point(pt.x, pt.y);
+
+            var pt = new Point(c.Left, c.Top);
+            NativeMethods.MapWindowPoints(c.Parent.Handle, _toolStripAdornerWindow.Handle, ref pt, 1);
+            return pt;
         }
 
         /// <summary>

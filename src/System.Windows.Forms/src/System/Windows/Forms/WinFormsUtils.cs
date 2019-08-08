@@ -311,9 +311,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
-            NativeMethods.POINT pt = new NativeMethods.POINT(point.X, point.Y);
-            UnsafeNativeMethods.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), pt, 1);
-            return new Point(pt.x, pt.y);
+            UnsafeNativeMethods.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), ref point, 1);
+            return point;
         }
 
         /// <summary>
@@ -570,7 +569,7 @@ namespace System.Windows.Forms
             private Graphics _graphics;
             private Rectangle _translatedBounds;
 
-            public DCMapping(HandleRef hDC, Rectangle bounds)
+            public unsafe DCMapping(HandleRef hDC, Rectangle bounds)
             {
                 if (hDC.Handle == IntPtr.Zero)
                 {
@@ -578,7 +577,6 @@ namespace System.Windows.Forms
                 }
 
                 bool success;
-                NativeMethods.POINT viewportOrg = new NativeMethods.POINT();
                 IntPtr hOriginalClippingRegion = IntPtr.Zero;
 
                 _translatedBounds = bounds;
@@ -587,11 +585,11 @@ namespace System.Windows.Forms
                 _dc.SaveHdc();
 
                 // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-                success = SafeNativeMethods.GetViewportOrgEx(hDC, viewportOrg);
+                success = SafeNativeMethods.GetViewportOrgEx(hDC, out Point viewportOrg);
                 Debug.Assert(success, "GetViewportOrgEx() failed.");
 
                 // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
-                IntPtr hClippingRegion = Interop.Gdi32.CreateRectRgn(viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, viewportOrg.x + bounds.Right, viewportOrg.y + bounds.Bottom);
+                IntPtr hClippingRegion = Interop.Gdi32.CreateRectRgn(viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, viewportOrg.X + bounds.Right, viewportOrg.Y + bounds.Bottom);
                 Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
                 try
@@ -605,8 +603,8 @@ namespace System.Windows.Forms
                     Debug.Assert(result != -1, "GetClipRgn() failed.");
 
                     // Shift the viewpoint origint by coordinates specified in "bounds".
-                    NativeMethods.POINT lastViewPort = new NativeMethods.POINT();
-                    success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, lastViewPort);
+                    var lastViewPort = new Point();
+                    success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, &lastViewPort);
                     Debug.Assert(success, "SetViewportOrgEx() failed.");
 
                     Interop.RegionType originalRegionType;

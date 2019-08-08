@@ -2138,10 +2138,9 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmWindowFromPoint(ref Message msg)
         {
-            NativeMethods.POINT sc = (NativeMethods.POINT)msg.GetLParam(typeof(NativeMethods.POINT));
-            Point screenCoords = new Point(sc.x, sc.y);
+            var sc = (Point)msg.GetLParam(typeof(Point));
             bool result = false;
-            msg.Result = GetWindowFromPoint(screenCoords, ref result);
+            msg.Result = GetWindowFromPoint(sc, ref result);
         }
 
         /// <summary>

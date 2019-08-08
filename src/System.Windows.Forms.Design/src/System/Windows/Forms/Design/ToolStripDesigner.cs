@@ -1813,26 +1813,25 @@ namespace System.Windows.Forms.Design
             // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyhs" so if the drop point falls in this drop region we should insert the items at the head instead of the tail of the toolStrip.
             bool dropAtHead = false;
             ToolStrip parentToolStrip = ToolStrip;
-            NativeMethods.POINT offset = new NativeMethods.POINT(de.X, de.Y);
-            NativeMethods.MapWindowPoints(IntPtr.Zero, parentToolStrip.Handle, offset, 1);
-            Point dropPoint = new Point(offset.x, offset.y);
+            var offset = new Point(de.X, de.Y);
+            NativeMethods.MapWindowPoints(IntPtr.Zero, parentToolStrip.Handle, ref offset, 1);
             if (ToolStrip.Orientation == Orientation.Horizontal)
             {
                 if (ToolStrip.RightToLeft == RightToLeft.Yes)
                 {
-                    if (dropPoint.X >= parentToolStrip.Items[0].Bounds.X)
+                    if (offset.X >= parentToolStrip.Items[0].Bounds.X)
                     {
                         dropAtHead = true;
                     }
                 }
-                else if (dropPoint.X <= parentToolStrip.Items[0].Bounds.X)
+                else if (offset.X <= parentToolStrip.Items[0].Bounds.X)
                 {
                     dropAtHead = true;
                 }
             }
             else
             {
-                if (dropPoint.Y <= parentToolStrip.Items[0].Bounds.Y)
+                if (offset.Y <= parentToolStrip.Items[0].Bounds.Y)
                 {
                     dropAtHead = true;
                 }
