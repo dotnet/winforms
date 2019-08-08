@@ -331,7 +331,15 @@ namespace System.Windows.Forms
         ///  Retrieves a <see cref='Screen'/> for the monitor that contains
         ///  the largest region of the window of the control.
         /// </summary>
-        public static Screen FromControl(Control control) => FromHandle(control.Handle);
+        public static Screen FromControl(Control control)
+        {
+            if (control == null)
+            {
+                throw new ArgumentNullException(nameof(control));
+            }
+
+            return FromHandle(control.Handle);
+        }
 
         /// <summary>
         ///  Retrieves a <see cref='Screen'/> for the monitor that contains
