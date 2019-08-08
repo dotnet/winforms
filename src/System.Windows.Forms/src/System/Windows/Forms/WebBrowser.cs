@@ -280,7 +280,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    UnsafeNativeMethods.IPersistStreamInit psi = htmlDocument.DomDocument as UnsafeNativeMethods.IPersistStreamInit;
+                    Interop.Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Interop.Ole32.IPersistStreamInit;
                     Debug.Assert(psi != null, "Object isn't an IPersistStreamInit!");
                     if (psi == null)
                     {
@@ -289,8 +289,8 @@ namespace System.Windows.Forms
                     else
                     {
                         MemoryStream memoryStream = new MemoryStream();
-                        UnsafeNativeMethods.IStream iStream = (UnsafeNativeMethods.IStream)new UnsafeNativeMethods.ComStreamFromDataStream(memoryStream);
-                        psi.Save(iStream, false);
+                        Interop.Ole32.IStream iStream = (Interop.Ole32.IStream)new Interop.Ole32.GPStream(memoryStream);
+                        psi.Save(iStream, Interop.BOOL.FALSE);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                     }
                 }
@@ -1773,9 +1773,9 @@ namespace System.Windows.Forms
                     HtmlDocument htmlDocument = parent.Document;
                     if (htmlDocument != null)
                     {
-                        UnsafeNativeMethods.IPersistStreamInit psi = htmlDocument.DomDocument as UnsafeNativeMethods.IPersistStreamInit;
+                        Interop.Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Interop.Ole32.IPersistStreamInit;
                         Debug.Assert(psi != null, "The Document does not implement IPersistStreamInit");
-                        UnsafeNativeMethods.IStream iStream = (UnsafeNativeMethods.IStream)new UnsafeNativeMethods.ComStreamFromDataStream(
+                        Interop.Ole32.IStream iStream = (Interop.Ole32.IStream)new Interop.Ole32.GPStream(
                                                     parent.documentStreamToSetOnLoad);
                         psi.Load(iStream);
                         htmlDocument.Encoding = "unicode";

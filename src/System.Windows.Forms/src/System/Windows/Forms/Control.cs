@@ -49,9 +49,9 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,
         UnsafeNativeMethods.IPersist,
-        UnsafeNativeMethods.IPersistStreamInit,
+        Interop.Ole32.IPersistStreamInit,
         UnsafeNativeMethods.IPersistPropertyBag,
-        UnsafeNativeMethods.IPersistStorage,
+        Interop.Ole32.IPersistStorage,
         UnsafeNativeMethods.IQuickActivate,
         ISupportOleDropSource,
         IDropTarget,
@@ -14255,7 +14255,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties)
+        void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
@@ -14263,33 +14263,33 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistStorage.GetClassID(out Guid pClassID)
+        void Interop.Ole32.IPersistStorage.GetClassID(out Guid pClassID)
         {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        int UnsafeNativeMethods.IPersistStorage.IsDirty()
+        Interop.HRESULT Interop.Ole32.IPersistStorage.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        void UnsafeNativeMethods.IPersistStorage.InitNew(UnsafeNativeMethods.IStorage pstg)
+        void Interop.Ole32.IPersistStorage.InitNew(Interop.Ole32.IStorage pstg)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
         }
 
-        int UnsafeNativeMethods.IPersistStorage.Load(UnsafeNativeMethods.IStorage pstg)
+        Interop.HRESULT Interop.Ole32.IPersistStorage.Load(Interop.Ole32.IStorage pstg)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
             ActiveXInstance.Load(pstg);
             Debug.Unindent();
-            return NativeMethods.S_OK;
+            return Interop.HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistStorage.Save(UnsafeNativeMethods.IStorage pstg, bool fSameAsLoad)
+        void Interop.Ole32.IPersistStorage.Save(Interop.Ole32.IStorage pstg, Interop.BOOL fSameAsLoad)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Save");
             Debug.Indent();
@@ -14297,29 +14297,29 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistStorage.SaveCompleted(UnsafeNativeMethods.IStorage pStgNew)
+        void Interop.Ole32.IPersistStorage.SaveCompleted(Interop.Ole32.IStorage pStgNew)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.SaveCompleted");
         }
 
-        void UnsafeNativeMethods.IPersistStorage.HandsOffStorage()
+        void Interop.Ole32.IPersistStorage.HandsOffStorage()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         }
 
-        void UnsafeNativeMethods.IPersistStreamInit.GetClassID(out Guid pClassID)
+        void Interop.Ole32.IPersistStreamInit.GetClassID(out Guid pClassID)
         {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        int UnsafeNativeMethods.IPersistStreamInit.IsDirty()
+        Interop.HRESULT Interop.Ole32.IPersistStreamInit.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        void UnsafeNativeMethods.IPersistStreamInit.Load(UnsafeNativeMethods.IStream pstm)
+        void Interop.Ole32.IPersistStreamInit.Load(Interop.Ole32.IStream pstm)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Load");
             Debug.Indent();
@@ -14327,7 +14327,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistStreamInit.Save(UnsafeNativeMethods.IStream pstm, bool fClearDirty)
+        void Interop.Ole32.IPersistStreamInit.Save(Interop.Ole32.IStream pstm, Interop.BOOL fClearDirty)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Save");
             Debug.Indent();
@@ -14335,12 +14335,12 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistStreamInit.GetSizeMax(long pcbSize)
+        unsafe void Interop.Ole32.IPersistStreamInit.GetSizeMax(ulong* pcbSize)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetSizeMax");
         }
 
-        void UnsafeNativeMethods.IPersistStreamInit.InitNew()
+        void Interop.Ole32.IPersistStreamInit.InitNew()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }

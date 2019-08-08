@@ -536,22 +536,6 @@ namespace System.Windows.Forms
         public const int CSC_NAVIGATEFORWARD = 0x00000001,
         CSC_NAVIGATEBACK = 0x00000002;
 
-        public const int STG_E_INVALIDFUNCTION = unchecked((int)0x80030001);
-        public const int STG_E_FILENOTFOUND = unchecked((int)0x80030002);
-        public const int STG_E_PATHNOTFOUND = unchecked((int)0x80030003);
-        public const int STG_E_TOOMANYOPENFILES = unchecked((int)0x80030004);
-        public const int STG_E_ACCESSDENIED = unchecked((int)0x80030005);
-        public const int STG_E_INVALIDHANDLE = unchecked((int)0x80030006);
-        public const int STG_E_INSUFFICIENTMEMORY = unchecked((int)0x80030008);
-        public const int STG_E_INVALIDPOINTER = unchecked((int)0x80030009);
-        public const int STG_E_NOMOREFILES = unchecked((int)0x80030012);
-        public const int STG_E_DISKISWRITEPROTECTED = unchecked((int)0x80030013);
-        public const int STG_E_SEEKERROR = unchecked((int)0x80030019);
-        public const int STG_E_WRITEFAULT = unchecked((int)0x8003001D);
-        public const int STG_E_READFAULT = unchecked((int)0x8003001E);
-        public const int STG_E_SHAREVIOLATION = unchecked((int)0x80030020);
-        public const int STG_E_LOCKVIOLATION = unchecked((int)0x80030021);
-
         public const int INPUT_KEYBOARD = 1;
 
         public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
@@ -1092,15 +1076,6 @@ namespace System.Windows.Forms
             RB_INSERTBANDW = (0x0400 + 10);
 
         public const int stc4 = 0x0443,
-        SHGFP_TYPE_CURRENT = 0,
-        STGM_READ = 0x00000000,
-        STGM_WRITE = 0x00000001,
-        STGM_READWRITE = 0x00000002,
-        STGM_SHARE_EXCLUSIVE = 0x00000010,
-        STGM_CREATE = 0x00001000,
-        STGM_TRANSACTED = 0x00010000,
-        STGM_CONVERT = 0x00020000,
-        STGM_DELETEONRELEASE = 0x04000000,
         STARTF_USESHOWWINDOW = 0x00000001,
         SB_HORZ = 0,
         SB_VERT = 1,
@@ -1231,17 +1206,7 @@ namespace System.Windows.Forms
         SBT_NOBORDERS = 0x0100,
         SBT_POPOUT = 0x0200,
         SBT_RTLREADING = 0x0400,
-        SRCCOPY = 0x00CC0020,
-        STATFLAG_DEFAULT = 0x0,
-        STATFLAG_NONAME = 0x1,
-        STATFLAG_NOOPEN = 0x2,
-        STGC_DEFAULT = 0x0,
-        STGC_OVERWRITE = 0x1,
-        STGC_ONLYIFCURRENT = 0x2,
-        STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE = 0x4,
-        STREAM_SEEK_SET = 0x0,
-        STREAM_SEEK_CUR = 0x1,
-        STREAM_SEEK_END = 0x2;
+        SRCCOPY = 0x00CC0020;
 
         public const int S_OK = 0x00000000;
         public const int S_FALSE = 0x00000001;
@@ -2842,62 +2807,6 @@ namespace System.Windows.Forms
             public const int PICTYPE_METAFILE = 2;
             public const int PICTYPE_ICON = 3;
             public const int PICTYPE_ENHMETAFILE = 4;
-            public const int STATFLAG_DEFAULT = 0;
-            public const int STATFLAG_NONAME = 1;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class STATSTG
-        {
-            [MarshalAs(UnmanagedType.LPWStr)]
-            public string pwcsName = null;
-
-            public int type;
-            [MarshalAs(UnmanagedType.I8)]
-            public long cbSize;
-            [MarshalAs(UnmanagedType.I8)]
-            public long mtime = 0;
-            [MarshalAs(UnmanagedType.I8)]
-            public long ctime = 0;
-            [MarshalAs(UnmanagedType.I8)]
-            public long atime = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int grfMode = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int grfLocksSupported;
-
-            public int clsid_data1 = 0;
-            [MarshalAs(UnmanagedType.I2)]
-            public short clsid_data2 = 0;
-            [MarshalAs(UnmanagedType.I2)]
-            public short clsid_data3 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b0 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b1 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b2 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b3 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b4 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b5 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b6 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b7 = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int grfStateBits = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int reserved = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class FILETIME
-        {
-            public uint dwLowDateTime = 0;
-            public uint dwHighDateTime = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4382,13 +4291,6 @@ namespace System.Windows.Forms
 
         #endregion
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class CHARRANGE
-        {
-            public int cpMin;
-            public int cpMax;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct CHARFORMATW
         {
@@ -4459,7 +4361,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class TEXTRANGE
         {
-            public CHARRANGE chrg;
+            public Interop.Richedit.CHARRANGE chrg;
             public IntPtr lpstrText; /* allocated by caller, zero terminated by RichEdit */
         }
 
@@ -4474,7 +4376,7 @@ namespace System.Windows.Forms
         public class SELCHANGE
         {
             public NMHDR nmhdr;
-            public CHARRANGE chrg = null;
+            public Interop.Richedit.CHARRANGE chrg;
             public int seltyp = 0;
         }
 
@@ -4498,7 +4400,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class FINDTEXT
         {
-            public CHARRANGE chrg;
+            public Interop.Richedit.CHARRANGE chrg;
             public string lpstrText;
         }
 
@@ -4509,7 +4411,7 @@ namespace System.Windows.Forms
             public int msg = 0;
             public IntPtr wParam = IntPtr.Zero;
             public IntPtr lParam = IntPtr.Zero;
-            public CHARRANGE charrange = null;
+            public Interop.Richedit.CHARRANGE charrange;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4638,7 +4540,7 @@ namespace System.Windows.Forms
             public int msg;
             public IntPtr wParam;
             public IntPtr lParam;
-            public CHARRANGE chrg;
+            public Interop.Richedit.CHARRANGE chrg;
         }
 
         [StructLayout(LayoutKind.Sequential)]

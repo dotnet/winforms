@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests
         public void Write_ThrowsInvalidCount(int bufferSize, int index, int count)
         {
             // The mock should never be called in outlier cases
-            var comStreamMock = new Mock<UnsafeNativeMethods.IStream>(MockBehavior.Strict);
+            var comStreamMock = new Mock<Interop.Ole32.IStream>(MockBehavior.Strict);
             var dataStream = new DataStreamFromComStream(comStreamMock.Object);
             Assert.Throws<IOException>(() => dataStream.Write(new byte[bufferSize], index, count));
         }
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
         public void Write_DoesNotThrowCountZeroOrLess(int bufferSize, int index, int count)
         {
             // The mock should never be called in outlier cases
-            var comStreamMock = new Mock<UnsafeNativeMethods.IStream>(MockBehavior.Strict);
+            var comStreamMock = new Mock<Interop.Ole32.IStream>(MockBehavior.Strict);
             var dataStream = new DataStreamFromComStream(comStreamMock.Object);
             dataStream.Write(new byte[bufferSize], index, count);
         }

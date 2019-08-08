@@ -1020,16 +1020,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStreamInit::IsDirty.
             /// </summary>
-            internal int IsDirty()
+            internal Interop.HRESULT IsDirty()
             {
                 if (_activeXState[s_isDirty])
                 {
-                    return NativeMethods.S_OK;
+                    return Interop.HRESULT.S_OK;
                 }
-                else
-                {
-                    return NativeMethods.S_FALSE;
-                }
+                
+                return Interop.HRESULT.S_FALSE;
             }
 
             /// <summary>
@@ -1059,25 +1057,26 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Load
             /// </summary>
-            internal void Load(UnsafeNativeMethods.IStorage stg)
+            internal void Load(Interop.Ole32.IStorage stg)
             {
-                UnsafeNativeMethods.IStream stream;
+                Interop.Ole32.IStream stream;
                 try
                 {
-                    stream = stg.OpenStream(GetStreamName(), IntPtr.Zero, NativeMethods.STGM_READ | NativeMethods.STGM_SHARE_EXCLUSIVE, 0);
+                    stream = stg.OpenStream(
+                        GetStreamName(),
+                        IntPtr.Zero,
+                        Interop.Ole32.STGM.STGM_READ | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                        0);
                 }
-                catch (COMException e)
+                catch (COMException e) when (e.ErrorCode == (int)Interop.HRESULT.STG_E_FILENOTFOUND)
                 {
-                    if (e.ErrorCode == NativeMethods.STG_E_FILENOTFOUND)
-                    {
-                        // For backward compatibility: We were earlier using GetType().FullName
-                        // as the stream name in v1. Lets see if a stream by that name exists.
-                        stream = stg.OpenStream(GetType().FullName, IntPtr.Zero, NativeMethods.STGM_READ | NativeMethods.STGM_SHARE_EXCLUSIVE, 0);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    // For backward compatibility: We were earlier using GetType().FullName
+                    // as the stream name in v1. Lets see if a stream by that name exists.
+                    stream = stg.OpenStream(
+                        GetType().FullName,
+                        IntPtr.Zero,
+                        Interop.Ole32.STGM.STGM_READ | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                        0);
                 }
 
                 Load(stream);
@@ -1090,7 +1089,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStreamInit::Load
             /// </summary>
-            internal void Load(UnsafeNativeMethods.IStream stream)
+            internal void Load(Interop.Ole32.IStream stream)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, load through that method.
@@ -1782,23 +1781,28 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Save
             /// </summary>
-            internal void Save(UnsafeNativeMethods.IStorage stg, bool fSameAsLoad)
+            internal void Save(Interop.Ole32.IStorage stg, Interop.BOOL fSameAsLoad)
             {
-                UnsafeNativeMethods.IStream stream = stg.CreateStream(GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
+                Interop.Ole32.IStream stream = stg.CreateStream(
+                    GetStreamName(),
+                    Interop.Ole32.STGM.STGM_WRITE | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE | Interop.Ole32.STGM.STGM_CREATE,
+                    0,
+                    0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
-                Save(stream, true);
+
+                Save(stream, Interop.BOOL.TRUE);
                 Marshal.ReleaseComObject(stream);
             }
 
             /// <summary>
             ///  Implements IPersistStreamInit::Save
             /// </summary>
-            internal void Save(UnsafeNativeMethods.IStream stream, bool fClearDirty)
+            internal void Save(Interop.Ole32.IStream stream, Interop.BOOL fClearDirty)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, save through that method.
                 PropertyBagStream bag = new PropertyBagStream();
-                Save(bag, fClearDirty, false);
+                Save(bag, fClearDirty, Interop.BOOL.FALSE);
                 bag.Write(stream);
 
                 if (Marshal.IsComObject(stream))
@@ -1810,14 +1814,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties)
+            internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
 
                 for (int i = 0; i < props.Count; i++)
                 {
-                    if (fSaveAllProperties || props[i].ShouldSerializeValue(_control))
+                    if (fSaveAllProperties != Interop.BOOL.FALSE || props[i].ShouldSerializeValue(_control))
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Saving property " + props[i].Name);
 
@@ -1861,7 +1865,7 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(pPropBag);
                 }
 
-                if (fClearDirty)
+                if (fClearDirty != Interop.BOOL.FALSE)
                 {
                     _activeXState[s_isDirty] = false;
                 }
@@ -2535,7 +2539,7 @@ namespace System.Windows.Forms
             {
                 private Hashtable _bag = new Hashtable();
 
-                internal void Read(UnsafeNativeMethods.IStream istream)
+                internal void Read(Interop.Ole32.IStream istream)
                 {
                     // visual basic's memory streams don't support seeking, so we have to
                     // work around this limitation here.  We do this by copying
@@ -2595,7 +2599,7 @@ namespace System.Windows.Forms
                     return NativeMethods.S_OK;
                 }
 
-                internal void Write(UnsafeNativeMethods.IStream istream)
+                internal void Write(Interop.Ole32.IStream istream)
                 {
                     Stream stream = new DataStreamFromComStream(istream);
                     BinaryFormatter formatter = new BinaryFormatter();

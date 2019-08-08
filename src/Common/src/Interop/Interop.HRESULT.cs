@@ -4,8 +4,20 @@
 
 internal static partial class Interop
 {
-    public static class HRESULT
+    internal enum HRESULT : int
     {
-        public const int S_OK = 0;
+        S_OK = 0,
+        S_FALSE = 1,
+        E_NOTIMPL = unchecked((int)0x80004001),
+        E_NOINTERFACE = unchecked((int)0x80004002),
+        E_POINTER = unchecked((int)0x80004003),
+        E_FAIL = unchecked((int)0x80004005),
+        STG_E_INVALIDFUNCTION = unchecked((int)0x80030001L),
+        STG_E_FILENOTFOUND = unchecked((int)0x80030002),
+        STG_E_ACCESSDENIED = unchecked((int)0x80030005),
+        STG_E_INVALIDPARAMETER = unchecked((int)0x80030057),
+        STG_E_INVALIDFLAG = unchecked((int)0x800300FF),
+        E_ACCESSDENIED = unchecked((int)0x80070005L),
+        E_INVALIDARG = unchecked((int)0x80070057),
     }
 }

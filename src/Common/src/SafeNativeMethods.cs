@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop.Ole32;
 
 namespace System.Windows.Forms
 {
@@ -213,9 +214,9 @@ namespace System.Windows.Forms
 
 #if DEBUG
         [DllImport(ExternDll.Comctl32, EntryPoint = "ImageList_Read")]
-        private static extern IntPtr IntImageList_Read(UnsafeNativeMethods.IStream pstm);
+        private static extern IntPtr IntImageList_Read(IStream pstm);
 
-        public static IntPtr ImageList_Read(UnsafeNativeMethods.IStream pstm)
+        public static IntPtr ImageList_Read(IStream pstm)
         {
             IntPtr newHandle = IntImageList_Read(pstm);
             validImageListHandles.Add(newHandle);
@@ -223,14 +224,14 @@ namespace System.Windows.Forms
         }
 #else
         [DllImport(ExternDll.Comctl32)]
-        public static extern IntPtr ImageList_Read(UnsafeNativeMethods.IStream pstm);
+        public static extern IntPtr ImageList_Read(IStream pstm);
 #endif
 
         [DllImport(ExternDll.Comctl32)]
-        public static extern bool ImageList_Write(HandleRef himl, UnsafeNativeMethods.IStream pstm);
+        public static extern bool ImageList_Write(HandleRef himl, IStream pstm);
 
         [DllImport(ExternDll.Comctl32)]
-        public static extern int ImageList_WriteEx(HandleRef himl, int dwFlags, UnsafeNativeMethods.IStream pstm);
+        public static extern int ImageList_WriteEx(HandleRef himl, int dwFlags, IStream pstm);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool TrackPopupMenuEx(HandleRef hmenu, int fuFlags, int x, int y, HandleRef hwnd, NativeMethods.TPMPARAMS tpm);

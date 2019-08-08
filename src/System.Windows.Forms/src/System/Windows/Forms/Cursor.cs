@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             Debug.Assert(stream != null, "couldn't get stream for resource " + resource);
             cursorData = new byte[stream.Length];
             stream.Read(cursorData, 0, Convert.ToInt32(stream.Length)); // we assume that a cursor is less than 4gig big
-            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(resource));
+            LoadPicture(new Interop.Ole32.GPStream(new MemoryStream(cursorData)), nameof(resource));
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
             {
                 f.Close();
             }
-            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(fileName));
+            LoadPicture(new Interop.Ole32.GPStream(new MemoryStream(cursorData)), nameof(fileName));
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
 
             cursorData = new byte[stream.Length];
             stream.Read(cursorData, 0, Convert.ToInt32(stream.Length));// assume that a cursor is less than 4gig...
-            LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)), nameof(stream));
+            LoadPicture(new Interop.Ole32.GPStream(new MemoryStream(cursorData)), nameof(stream));
         }
 
         /// <summary>
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Loads a picture from the requested stream.
         /// </summary>
-        private void LoadPicture(UnsafeNativeMethods.IStream stream, string paramName)
+        private void LoadPicture(Interop.Ole32.IStream stream, string paramName)
         {
             Debug.Assert(stream != null, "Stream should be validated before this method is called.");
 
@@ -549,7 +549,7 @@ namespace System.Windows.Forms
                 try
                 {
                     picture = UnsafeNativeMethods.OleCreateIPictureIndirect(null, ref g, true);
-                    UnsafeNativeMethods.IPersistStream ipictureAsIPersist = (UnsafeNativeMethods.IPersistStream)picture;
+                    Interop.Ole32.IPersistStream ipictureAsIPersist = (Interop.Ole32.IPersistStream)picture;
                     ipictureAsIPersist.Load(stream);
 
                     if (picture != null && picture.GetPictureType() == NativeMethods.Ole.PICTYPE_ICON)

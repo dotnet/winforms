@@ -2032,7 +2032,7 @@ namespace System.Windows.Forms
             bool selectWord = true;
             NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT
             {
-                chrg = new NativeMethods.CHARRANGE(),
+                chrg = new Interop.Richedit.CHARRANGE(),
 
                 // set up the default values for the FINDTEXT structure, that is
                 // the given string and the whole range of the text stream
@@ -2111,7 +2111,7 @@ namespace System.Windows.Forms
             if (position != -1 && selectWord)
             {
                 // Select the string found, this is done in ubyte units
-                NativeMethods.CHARRANGE chrg = new NativeMethods.CHARRANGE
+                var chrg = new Interop.Richedit.CHARRANGE
                 {
                     cpMin = position
                 };
@@ -2144,7 +2144,7 @@ namespace System.Windows.Forms
                     chrg.cpMax = foundCursor;
                 }
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.RichEditMessages.EM_EXSETSEL, 0, chrg);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.RichEditMessages.EM_EXSETSEL, 0, ref chrg);
                 SendMessage(Interop.EditMessages.EM_SCROLLCARET, 0, 0);
 
             }
@@ -2213,14 +2213,14 @@ namespace System.Windows.Forms
                 end = textLen;
             }
 
-            NativeMethods.CHARRANGE chrg = new NativeMethods.CHARRANGE(); // The range of characters we have searched
+            var chrg = new Interop.Richedit.CHARRANGE(); // The range of characters we have searched
             chrg.cpMax = chrg.cpMin = start;
 
             // Use the TEXTRANGE to move our text buffer forward
             // or backwards within the main text
             NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
             {
-                chrg = new NativeMethods.CHARRANGE
+                chrg = new Interop.Richedit.CHARRANGE
                 {
                     cpMin = chrg.cpMin,
                     cpMax = chrg.cpMax
@@ -3114,8 +3114,8 @@ namespace System.Windows.Forms
             //
             if ((flags & RichTextBoxConstants.SFF_SELECTION) == 0)
             {
-                NativeMethods.CHARRANGE cr = new NativeMethods.CHARRANGE();
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.RichEditMessages.EM_EXSETSEL, 0, cr);
+                var cr = new Interop.Richedit.CHARRANGE();
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.RichEditMessages.EM_EXSETSEL, 0, ref cr);
             }
 
             try
@@ -3398,7 +3398,7 @@ namespace System.Windows.Forms
                     IntPtr punk = Marshal.GetIUnknownForObject(oleCallback);
                     try
                     {
-                        Guid iidRichEditOleCallback = typeof(UnsafeNativeMethods.IRichEditOleCallback).GUID;
+                        Guid iidRichEditOleCallback = typeof(Interop.Richedit.IRichEditOleCallback).GUID;
                         Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out IntPtr pRichEditOleCallback);
                         try
                         {
@@ -3487,7 +3487,7 @@ namespace System.Windows.Forms
         ///  class name being used. We have to create a CharBuffer of the type of RichTextBox DLL we're using,
         ///  not based on the SystemCharWidth.
         /// </summary>
-        private string CharRangeToString(NativeMethods.CHARRANGE c)
+        private string CharRangeToString(Interop.Richedit.CHARRANGE c)
         {
             NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
             {
@@ -3698,7 +3698,7 @@ namespace System.Windows.Forms
             fixed (byte* es64p = &es64.contents[0])
             {
                 es.nmhdr = new NativeMethods.NMHDR();
-                es.chrg = new NativeMethods.CHARRANGE();
+                es.chrg = new Interop.Richedit.CHARRANGE();
 
                 es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
                 es.nmhdr.idFrom = Marshal.ReadIntPtr((IntPtr)(es64p + 8));
@@ -3720,7 +3720,7 @@ namespace System.Windows.Forms
             fixed (byte* es64p = &es64.contents[0])
             {
                 es.nmhdr = new NativeMethods.NMHDR();
-                es.charrange = new NativeMethods.CHARRANGE();
+                es.charrange = new Interop.Richedit.CHARRANGE();
 
                 es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
                 es.nmhdr.idFrom = Marshal.ReadIntPtr((IntPtr)(es64p + 8));
@@ -3913,7 +3913,7 @@ namespace System.Windows.Forms
         }
 
         // I used the visual basic 6 RichText (REOleCB.CPP) as a guide for this
-        private class OleCallback : UnsafeNativeMethods.IRichEditOleCallback
+        private class OleCallback : Interop.Richedit.IRichEditOleCallback
         {
             private readonly RichTextBox owner;
             IDataObject lastDataObject;
@@ -3924,59 +3924,56 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            public int GetNewStorage(out UnsafeNativeMethods.IStorage storage)
+            public Interop.HRESULT GetNewStorage(out Interop.Ole32.IStorage storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetNewStorage");
                 if (!owner.AllowOleObjects)
                 {
                     storage = null;
-                    return NativeMethods.E_FAIL;
+                    return Interop.HRESULT.E_FAIL;
                 }
-                // Debug.WriteLine("get new storage");
-                UnsafeNativeMethods.ILockBytes pLockBytes = UnsafeNativeMethods.CreateILockBytesOnHGlobal(NativeMethods.NullHandleRef, true);
 
+                Interop.Ole32.ILockBytes pLockBytes = Interop.Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
                 Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
 
-                storage = UnsafeNativeMethods.StgCreateDocfileOnILockBytes(pLockBytes,
-                                                                           NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE | NativeMethods.STGM_READWRITE,
-                                                                           0);
+                storage = Interop.Ole32.StgCreateDocfileOnILockBytes(
+                    pLockBytes,
+                    Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE | Interop.Ole32.STGM.STGM_CREATE | Interop.Ole32.STGM.STGM_READWRITE,
+                    0);
                 Debug.Assert(storage != null, "storage is NULL!");
 
-                return NativeMethods.S_OK;
+                return Interop.HRESULT.S_OK;
             }
 
-            public int GetInPlaceContext(IntPtr lplpFrame,
+            public Interop.HRESULT GetInPlaceContext(IntPtr lplpFrame,
                                          IntPtr lplpDoc,
                                          IntPtr lpFrameInfo)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetInPlaceContext");
-                return NativeMethods.E_NOTIMPL;
+                return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public int ShowContainerUI(int fShow)
+            public Interop.HRESULT ShowContainerUI(Interop.BOOL fShow)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ShowContainerUI");
                 // Do nothing
-                return NativeMethods.S_OK;
+                return Interop.HRESULT.S_OK;
             }
 
-            public int QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
+            public Interop.HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
-
-                return NativeMethods.S_OK;
+                return Interop.HRESULT.S_OK;
             }
 
-            public int DeleteObject(IntPtr lpoleobj)
+            public Interop.HRESULT DeleteObject(IntPtr lpoleobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::DeleteObject");
                 // Do nothing
-                return NativeMethods.S_OK;
+                return Interop.HRESULT.S_OK;
             }
 
-            public int QueryAcceptData(IComDataObject lpdataobj,
-                                       /* CLIPFORMAT* */ IntPtr lpcfFormat, int reco,
-                                       int fReally, IntPtr hMetaPict)
+            public Interop.HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, uint reco, Interop.BOOL fReally, IntPtr hMetaPict)
             {
 
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryAcceptData(reco=" + reco + ")");
@@ -4057,48 +4054,47 @@ namespace System.Windows.Forms
                         if (e.Effect == DragDropEffects.None)
                         {
                             Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data");
-                            return NativeMethods.E_FAIL;
+                            return Interop.HRESULT.E_FAIL;
                         }
                         else
                         {
                             Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tAccept data");
-                            return NativeMethods.S_OK;
+                            return Interop.HRESULT.S_OK;
                         }
                     }
                     else
                     {
                         Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data, allowdrop == false");
                         lastDataObject = null;
-                        return NativeMethods.E_FAIL;
+                        return Interop.HRESULT.E_FAIL;
                     }
                 }
                 else
                 {
-                    return NativeMethods.E_NOTIMPL;
+                    return Interop.HRESULT.E_NOTIMPL;
                 }
             }
 
-            public int ContextSensitiveHelp(int fEnterMode)
+            public Interop.HRESULT ContextSensitiveHelp(Interop.BOOL fEnterMode)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ContextSensitiveHelp");
-                return NativeMethods.E_NOTIMPL;
+                return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public int GetClipboardData(NativeMethods.CHARRANGE lpchrg, int reco,
-                                        IntPtr lplpdataobj)
+            public Interop.HRESULT GetClipboardData(ref Interop.Richedit.CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetClipboardData");
-                return NativeMethods.E_NOTIMPL;
+                return Interop.HRESULT.E_NOTIMPL;
             }
 
-            public int GetDragDropEffect(bool fDrag, int grfKeyState, ref int pdwEffect)
+            public Interop.HRESULT GetDragDropEffect(Interop.BOOL fDrag, int grfKeyState, ref int pdwEffect)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
 
                 if (owner.AllowDrop || owner.EnableAutoDragDrop)
                 {
 
-                    if (fDrag && grfKeyState == 0)
+                    if (fDrag != Interop.BOOL.FALSE && grfKeyState == 0)
                     {
                         // This is the very first call we receive in a Drag-Drop operation,
                         // so we will let the control know what we support.
@@ -4128,7 +4124,7 @@ namespace System.Windows.Forms
                         // We only care about the drag.
                         //
                         // When we drop, lastEffect will have the right state
-                        if (!fDrag && lastDataObject != null && grfKeyState != 0)
+                        if (fDrag == Interop.BOOL.FALSE && lastDataObject != null && grfKeyState != 0)
                         {
 
                             DragEventArgs e = new DragEventArgs(lastDataObject,
@@ -4156,10 +4152,10 @@ namespace System.Windows.Forms
                 {
                     pdwEffect = (int)DragDropEffects.None;
                 }
-                return NativeMethods.S_OK;
+                return Interop.HRESULT.S_OK;
             }
 
-            public int GetContextMenu(short seltype, IntPtr lpoleobj, NativeMethods.CHARRANGE lpchrg, out IntPtr hmenu)
+            public Interop.HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Interop.Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetContextMenu");
                 ContextMenu cm = owner.ContextMenu;
@@ -4207,7 +4203,7 @@ namespace System.Windows.Forms
                     hmenu = handle;
                 }
 
-                return NativeMethods.S_OK;
+                return Interop.HRESULT.S_OK;
             }
         }
     }

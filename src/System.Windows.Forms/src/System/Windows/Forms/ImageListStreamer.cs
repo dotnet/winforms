@@ -57,7 +57,7 @@ namespace System.Windows.Forms
                                 {
                                     SafeNativeMethods.InitCommonControls();
                                     nativeImageList = new ImageList.NativeImageList(
-                                        SafeNativeMethods.ImageList_Read(new UnsafeNativeMethods.ComStreamFromDataStream(ms)));
+                                        SafeNativeMethods.ImageList_Read(new Interop.Ole32.GPStream(ms)));
                                 }
                             }
                             finally
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
 
             try
             {
-                int hResult = SafeNativeMethods.ImageList_WriteEx(new HandleRef(this, imagelistHandle), NativeMethods.ILP_DOWNLEVEL, new UnsafeNativeMethods.ComStreamFromDataStream(stream));
+                int hResult = SafeNativeMethods.ImageList_WriteEx(new HandleRef(this, imagelistHandle), NativeMethods.ILP_DOWNLEVEL, new Interop.Ole32.GPStream(stream));
                 return (hResult == NativeMethods.S_OK);
             }
             catch (EntryPointNotFoundException)
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
                 // WriteEx wasn't found - that's fine - we will use Write.
             }
 
-            return SafeNativeMethods.ImageList_Write(new HandleRef(this, imagelistHandle), new UnsafeNativeMethods.ComStreamFromDataStream(stream));
+            return SafeNativeMethods.ImageList_Write(new HandleRef(this, imagelistHandle), new Interop.Ole32.GPStream(stream));
         }
 
         /// <summary>
