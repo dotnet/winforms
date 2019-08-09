@@ -66,7 +66,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This will happen after showing or navigating the dialog.
         /// </remarks>
-        public event EventHandler Created;
+        public event EventHandler? Created;
 
         /// <summary>
         /// Occurs when the task dialog is about to destroy the GUI elements represented
@@ -76,13 +76,13 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This will happen when closing or navigating the dialog.
         /// </remarks>
-        public event EventHandler Destroyed;
+        public event EventHandler? Destroyed;
 
         /// <summary>
         /// Occurs when the user presses F1 while the task dialog has focus, or when the
         /// user clicks the <see cref="TaskDialogResult.Help"/> button.
         /// </summary>
-        public event EventHandler HelpRequest;
+        public event EventHandler? HelpRequest;
 
         /// <summary>
         /// Occurs when the user has clicked on a hyperlink.
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This event will only be raised if <see cref="EnableHyperlinks"/> is set to <see langword="true"/>.
         /// </remarks>
-        public event EventHandler<TaskDialogHyperlinkClickedEventArgs> HyperlinkClicked;
+        public event EventHandler<TaskDialogHyperlinkClickedEventArgs>? HyperlinkClicked;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskDialogPage"/> class.

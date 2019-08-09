@@ -210,12 +210,12 @@ namespace System.Windows.Forms
         /// Note: The dialog will not show until this handler returns (even if the
         /// handler would run the message loop).
         /// </remarks>
-        public event EventHandler Opened;
+        public event EventHandler? Opened;
 
         /// <summary>
         /// Occurs when the task dialog is first displayed.
         /// </summary>
-        public event EventHandler Shown;
+        public event EventHandler? Shown;
 
         /// <summary>
         /// Occurs when the task dialog closing.
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
         /// dialog fails; however, the <see cref="Closed"/> event will always be
         /// called.
         /// </remarks>
-        public event EventHandler<TaskDialogClosingEventArgs> Closing;
+        public event EventHandler<TaskDialogClosingEventArgs>? Closing;
 
         /// <summary>
         /// Occurs when the task dialog is closed.
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
         /// task dialog window handle, as it is the last event where
         /// <see cref="Handle"/> is available.
         /// </remarks>
-        public event EventHandler Closed;
+        public event EventHandler? Closed;
 
         static TaskDialog()
         {

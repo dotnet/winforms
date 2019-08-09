@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         /// <see langword="true"/>, the <see cref="TaskDialog.Closing"/> event will occur afterwards which
         /// also allows you to prevent the dialog from closing.
         /// </remarks>
-        public event EventHandler<TaskDialogButtonClickedEventArgs> Click;
+        public event EventHandler<TaskDialogButtonClickedEventArgs>? Click;
 
         // Disallow inheritance by specifying a private protected constructor.
         private protected TaskDialogButton()

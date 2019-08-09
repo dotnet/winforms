@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         /// because it is not possible to programmatically change the <see cref="Expanded"/>
         /// property while this control is shown in a task dialog.
         /// </remarks>
-        public event EventHandler ExpandedChanged;
+        public event EventHandler? ExpandedChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskDialogExpander"/> class.

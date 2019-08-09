@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         /// Occurs when the value of the <see cref="Checked"/> property changes
         /// while this control is shown in a task dialog.
         /// </summary>
-        public event EventHandler CheckedChanged;
+        public event EventHandler? CheckedChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class.
