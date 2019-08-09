@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         Height = 0x8,
 
         /// <summary>
-        ///  Both <see langword='X'/> and <see langword='Y'/> coordinates of the
+        ///  Both <see cref='X'/> and <see cref='Y'/> coordinates of the
         ///  control are defined.
         /// </summary>
         Location = X | Y,

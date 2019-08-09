@@ -349,7 +349,7 @@ namespace System.Windows.Forms
 
         // used for Alt0 functionality
         /// <summary>
-        ///  Enters a <see langword='null '/>in the column.
+        ///  Enters a <see langword='null'/> in the column.
         /// </summary>
         protected internal override void EnterNullValue()
         {

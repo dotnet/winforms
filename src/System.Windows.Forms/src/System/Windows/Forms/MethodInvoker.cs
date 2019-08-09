@@ -5,8 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the
-    ///  <see langword='Invoke '/> event for a method.
+    ///  Represents a delegate that can execute any method in managed code that is declared void and takes no parameters.
     /// </summary>
     public delegate void MethodInvoker();
 }
