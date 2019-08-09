@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  An enum that defines what time of action happend to the  related object's DesignerActionLists collection.
+    ///  An enum that defines what type of action happend to the related object's <see cref="DesignerActionListCollection">designer action lists collection</see>.
     /// </summary>
     [Runtime.InteropServices.ComVisible(true)]
     public enum DesignerActionListsChangedType

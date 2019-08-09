@@ -367,8 +367,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the current HighDpi mode for the process.
+        ///  Gets the current high DPI mode for the application.
         /// </summary>
+        /// <value>One of the enumeration values that indicates the high DPI mode.</value>
         public static HighDpiMode HighDpiMode
         {
             get
@@ -378,10 +379,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the HighDpi mode for process.
+        ///  Sets the high DPI mode of the process.
         /// </summary>
-        /// <param name="highDpiMode">The HighDpi mode to set.</param>
-        /// <returns></returns>
+        /// <param name="highDpiMode">One of the enumeration values that specifies the high DPI mode to set.</param>
+        /// <returns><see langword="true" /> if the high DPI mode was set; otherwise, <see langword="false" />.</returns>
         public static bool SetHighDpiMode(HighDpiMode highDpiMode)
         {
             if (DpiHelper.FirstParkingWindowCreated)
@@ -669,6 +670,14 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets a value that indicates whether visual styles are enabled for the application.
+        /// </summary>
+        /// <value><see langword="true" /> if visual styles are enabled; otherwise, <see langword="false" />.</value>
+        /// <remarks>
+        ///  The visual styles can be enabled by calling <see cref="EnableVisualStyles"/>.
+        ///  The visual styles will not be enabled if the OS does not support them, or theming is disabled at the OS level.
+        /// </remarks>
         public static bool UseVisualStyles { get; private set; } = false;
 
         /// <remarks>

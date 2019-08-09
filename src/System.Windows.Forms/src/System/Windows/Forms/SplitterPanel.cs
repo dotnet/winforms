@@ -39,7 +39,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Override AutoSize to make it hidden from the user in the designer
+        ///  Gets or sets a value that indicates whether the <see cref="SplitterPanel" /> is automatically
+        ///  resized to display its entire contents. This property is not relevant to this class.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -58,6 +59,10 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Occurs when the value of the <see cref="AutoSize" /> property has changed.
+        ///  This event is not relevant to this class.
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
@@ -68,6 +73,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
+        /// <value>One of the <see cref="AutoSizeMode" /> values. </value>
+
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -127,11 +134,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The dock property. The dock property controls to which edge
-        ///  of the container this control is docked to. For example, when docked to
-        ///  the top of the container, the control will be displayed flush at the
-        ///  top of the container, extending the length of the container.
+        ///  Gets or sets which edge of the <see cref="SplitContainer" /> that the
+        ///  <see cref="SplitterPanel" /> is docked to.
+        ///  This property is not relevant to this class.
         /// </summary>
+        /// <value>
+        ///  One of the enumeration values that specifies which edge of the <see cref="SplitContainer" />
+        ///  that the <see cref="SplitterPanel" /> is docked to.
+        /// </value>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -223,9 +233,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Deriving classes can override this to configure a default size for their control.
-        ///  This is more efficient than setting the size in the control's constructor.
+        ///  Gets the default space, in pixels, that separates the controls.
         /// </summary>
+        /// <value>
+        ///  A new instance of the <see cref="Padding" /> struct with the padding set to 0 for all edges.
+        /// </value>
         protected override Padding DefaultMargin
         {
             get
@@ -275,10 +287,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Name of this control. The designer will set this to the same
-        ///  as the programatic Id "(name)" of the control.  The name can be
-        ///  used as a key into the ControlCollection.
+        ///  The name of this <see cref="SplitterPanel" />.
+        ///  This property is not relevant to this class.
         /// </summary>
+        /// <value>The name of this <see cref="SplitterPanel" />.</value>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -308,8 +320,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The parent of this control.
+        ///  Gets or sets the <see cref="SplitContainer" /> that contains this <see cref="SplitterPanel" />.
+        ///  This property is not relevant to this class.
         /// </summary>
+        /// <value>
+        ///  A control representing the <see cref="SplitContainer" /> that contains this <see cref="SplitterPanel" />.
+        /// </value>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -372,7 +388,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Override TabStop to make it hidden from the user in the designer
+        ///  Gets or sets a value that indicates whether the user can give the focus to this
+        ///  <see cref="SplitterPanel" /> using the TAB key.
+        ///  This property is not relevant to this class.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
@@ -392,7 +410,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Override Visible to make it hidden from the user in the designer
+        ///  Gets or sets a value that indicates whether the <see cref=SplitterPanel" /> is displayed.
+        ///  This property is not relevant to this class.
         /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
