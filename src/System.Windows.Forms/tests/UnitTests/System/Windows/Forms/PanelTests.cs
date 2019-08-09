@@ -40,8 +40,8 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(panel.Controls);
             Assert.Same(panel.Controls, panel.Controls);
             Assert.False(panel.Created);
-            Assert.Same(Cursors.Default, panel.Cursor);
-            Assert.Same(Cursors.Default, panel.DefaultCursor);
+            Assert.Equal(Cursors.Default, panel.Cursor);
+            Assert.Equal(Cursors.Default, panel.DefaultCursor);
             Assert.Equal(ImeMode.Inherit, panel.DefaultImeMode);
             Assert.Equal(new Padding(3), panel.DefaultMargin);
             Assert.Equal(Size.Empty, panel.DefaultMaximumSize);
