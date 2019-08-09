@@ -66,7 +66,7 @@ namespace System.Windows.Forms
         // controls should not attempt to raise it.
         private static bool notificationEventAvailable = true;
 
-        protected const int RuntimeIDFirstItem = 0x2a;
+        internal const int RuntimeIDFirstItem = 0x2a;
 
         public AccessibleObject()
         {
