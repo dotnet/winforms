@@ -791,10 +791,8 @@ namespace System.Windows.Forms.Tests
         public void SystemInformation_VirtualScreen_Get_ReturnsExpected()
         {
             Rectangle screen = SystemInformation.VirtualScreen;
-            Assert.True(screen.X >= 0);
-            Assert.True(screen.Y >= 0);
-            Assert.True(screen.Width > 0);
-            Assert.True(screen.Height > 0);
+            Assert.True(screen.Width != 0);
+            Assert.True(screen.Height != 0);
             Assert.Equal(screen, SystemInformation.VirtualScreen);
         }
 

@@ -206,16 +206,12 @@ namespace System.Windows.Forms.Tests
         private static void VerifyScreen(Screen screen)
         {
             Assert.Contains(screen.BitsPerPixel, new int[] { 1, 2, 4, 8, 16, 24, 32, 48, 64 });
-            Assert.True(screen.Bounds.X >= 0);
-            Assert.True(screen.Bounds.Y >= 0);
-            Assert.True(screen.Bounds.Width > 0);
-            Assert.True(screen.Bounds.Height > 0);
+            Assert.True(screen.Bounds.Width != 0);
+            Assert.True(screen.Bounds.Height != 0);
             Assert.InRange(screen.DeviceName.Length, 1, 32);
             Assert.Equal(screen.DeviceName, screen.DeviceName.Trim('\0'));
-            Assert.True(screen.WorkingArea.X >= 0);
-            Assert.True(screen.WorkingArea.Y >= 0);
-            Assert.InRange(screen.WorkingArea.Width, 1, screen.Bounds.Width);
-            Assert.InRange(screen.WorkingArea.Height, 1, screen.Bounds.Height);
+            Assert.InRange(screen.WorkingArea.Width, screen.Bounds.X, screen.Bounds.Width);
+            Assert.InRange(screen.WorkingArea.Height, screen.Bounds.Y, screen.Bounds.Height);
         }
     }
 }
