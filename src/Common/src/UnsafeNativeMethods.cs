@@ -114,15 +114,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreateFontIndirect", ExactSpelling = true, PreserveSig = false)]
         public static extern IFont OleCreateIFontIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
 
-        [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreatePictureIndirect", ExactSpelling = true, PreserveSig = false)]
-        public static extern IPicture OleCreateIPictureIndirect([MarshalAs(UnmanagedType.AsAny)]object pictdesc, ref Guid iid, bool fOwn);
-
-        [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreatePictureIndirect", ExactSpelling = true, PreserveSig = false)]
-        public static extern IPictureDisp OleCreateIPictureDispIndirect([MarshalAs(UnmanagedType.AsAny)] object pictdesc, ref Guid iid, bool fOwn);
-
-        // cpb: #8309 -- next two methods, refiid arg must be IPicture.iid
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern IPicture OleCreatePictureIndirect(NativeMethods.PICTDESC pictdesc, [In]ref Guid refiid, bool fOwn);
 
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
         public static extern IFont OleCreateFontIndirect(NativeMethods.tagFONTDESC fontdesc, [In]ref Guid refiid);
@@ -321,14 +312,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
 
-        // GetObject stuff
-        [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.BITMAP bm);
-
-        //HPALETTE
-        [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern int GetObject(HandleRef hObject, int nSize, ref int nEntries);
-
         [DllImport(ExternDll.User32)]
         public static extern IntPtr CreateAcceleratorTable(/*ACCEL*/ HandleRef pentries, int cCount);
 
@@ -346,9 +329,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetFocus();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos(out Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
@@ -931,24 +911,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ClipCursor(ref Interop.RECT rcClip);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ClipCursor(NativeMethods.COMRECT rcClip);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetCursor(HandleRef hcursor);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetCursorPos(int x, int y);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public extern static int ShowCursor(bool bShow);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DestroyCursor(HandleRef hCurs);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindow(HandleRef hWnd);
@@ -3815,66 +3777,6 @@ namespace System.Windows.Forms
 
             void SetHdc(
                     IntPtr hdc);
-        }
-
-        [ComImport(), Guid("7BF80980-BF32-101A-8BBB-00AA00300CAB"), InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPicture
-        {
-            IntPtr GetHandle();
-
-            IntPtr GetHPal();
-
-            [return: MarshalAs(UnmanagedType.I2)]
-            short GetPictureType();
-
-            int GetWidth();
-
-            int GetHeight();
-
-            void Render(
-               IntPtr hDC,
-               int x,
-               int y,
-               int cx,
-               int cy,
-               int xSrc,
-               int ySrc,
-               int cxSrc,
-               int cySrc,
-               IntPtr rcBounds
-               );
-
-            void SetHPal(
-                    IntPtr phpal);
-
-            IntPtr GetCurDC();
-
-            void SelectPicture(
-                    IntPtr hdcIn,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                     IntPtr[] phdcOut,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                     IntPtr[] phbmpOut);
-
-            [return: MarshalAs(UnmanagedType.Bool)]
-            bool GetKeepOriginalFormat();
-
-            void SetKeepOriginalFormat(
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                     bool pfkeep);
-
-            void PictureChanged();
-
-            [PreserveSig]
-            int SaveAsFile(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     IStream pstm,
-
-                    int fSaveMemCopy,
-                   [Out]
-                     out int pcbSize);
-
-            int GetAttributes();
         }
 
         [ComImport(), Guid("7BF80981-BF32-101A-8BBB-00AA00300CAB"), InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIDispatch)]

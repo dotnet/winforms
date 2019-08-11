@@ -5317,7 +5317,7 @@ namespace System.Windows.Forms
             }
 
             CaptureInternal = true;
-            Cursor.ClipInternal = RectangleToScreen(clip);
+            Cursor.Clip = RectangleToScreen(clip);
             gridState[GRIDSTATE_trackColResize] = true;
             trackColAnchor = x;
             trackColumn = col;
@@ -5438,7 +5438,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Cursor.ClipInternal = Rectangle.Empty;
+                Cursor.Clip = Rectangle.Empty;
                 CaptureInternal = false;
                 gridState[GRIDSTATE_layoutSuspended] = false;
             }
@@ -5555,7 +5555,7 @@ namespace System.Windows.Forms
             clip.Height = layout.Data.Y + layout.Data.Height - topEdge - 2;
 
             CaptureInternal = true;
-            Cursor.ClipInternal = RectangleToScreen(clip);
+            Cursor.Clip = RectangleToScreen(clip);
             gridState[GRIDSTATE_trackRowResize] = true;
             trackRowAnchor = y;
             trackRow = row;
@@ -5608,7 +5608,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Cursor.ClipInternal = Rectangle.Empty;
+                Cursor.Clip = Rectangle.Empty;
                 CaptureInternal = false;
             }
             // OnRowResize(EventArgs.Empty);

@@ -20,41 +20,25 @@ namespace System.Windows.Forms
     /// </summary>
     [TypeConverter(typeof(CursorConverter))]
     [Editor("System.Drawing.Design.CursorEditor, " + AssemblyRef.SystemDrawingDesign, typeof(UITypeEditor))]
-    public sealed class Cursor : IDisposable, ISerializable
+    public sealed class Cursor : IDisposable, ISerializable, IHandle
     {
-        private static Size cursorSize = System.Drawing.Size.Empty;
+        private static Size s_cursorSize = Size.Empty;
 
-        private readonly byte[] cursorData;
-        private IntPtr handle = IntPtr.Zero;       // handle to loaded image
-        private bool ownHandle = true;
-        private int resourceId = 0;
-
-        private object userData;
+        private readonly byte[] _cursorData;
+        private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
+        private bool _ownHandle = true;
+        private readonly int _resourceId = 0;
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the
         ///  definitions in the Cursors class.
         /// </summary>
-        //
-        internal Cursor(int nResourceId, int dummy)
+        internal Cursor(int nResourceId)
         {
-            LoadFromResourceId(nResourceId, nameof(nResourceId));
-        }
-
-        // Private constructor.  We have a private constructor here for
-        // static cursors that are loaded through resources.  The only reason
-        // to use the private constructor is so that we can assert, rather
-        // than throw, if the cursor couldn't be loaded.  Why?  Because
-        // throwing in <clinit/> is really rude and will prevent any of windows forms
-        // from initializing.  This seems extreme just because we fail to
-        // load a cursor.
-        internal Cursor(string resource, int dummy)
-        {
-            Stream stream = typeof(Cursor).Module.Assembly.GetManifestResourceStream(typeof(Cursor), resource);
-            Debug.Assert(stream != null, "couldn't get stream for resource " + resource);
-            cursorData = new byte[stream.Length];
-            stream.Read(cursorData, 0, Convert.ToInt32(stream.Length)); // we assume that a cursor is less than 4gig big
-            LoadPicture(new Ole32.GPStream(new MemoryStream(cursorData)), nameof(resource));
+            // We don't delete stock cursors.
+            _ownHandle = false;
+            _resourceId = nResourceId;
+            _handle = User32.LoadCursorW(IntPtr.Zero, nResourceId);
         }
 
         /// <summary>
@@ -67,36 +51,27 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name), nameof(handle));
             }
 
-            this.handle = handle;
-            ownHandle = false;
+            _handle = handle;
+            _ownHandle = false;
         }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='Cursor'/>
-        ///  class with
-        ///  the specified filename.
+        ///  class with the specified filename.
         /// </summary>
         public Cursor(string fileName)
         {
-            //Filestream demands the correct FILEIO access here
-            //
-            FileStream f = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            try
-            {
-                cursorData = new byte[f.Length];
-                f.Read(cursorData, 0, Convert.ToInt32(f.Length)); // assume that a cursor is less than 4gig...
-            }
-            finally
-            {
-                f.Close();
-            }
-            LoadPicture(new Ole32.GPStream(new MemoryStream(cursorData)), nameof(fileName));
+            _cursorData = File.ReadAllBytes(fileName);
+            LoadPicture(
+                new Ole32.GPStream(new MemoryStream(_cursorData)),
+                nameof(fileName));
         }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
         /// </summary>
-        public Cursor(Type type, string resource) : this((type?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource))
+        public Cursor(Type type, string resource) 
+            : this((type?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource))
         {
         }
 
@@ -111,63 +86,48 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(stream));
             }
 
-            cursorData = new byte[stream.Length];
-            stream.Read(cursorData, 0, Convert.ToInt32(stream.Length));// assume that a cursor is less than 4gig...
-            LoadPicture(new Ole32.GPStream(new MemoryStream(cursorData)), nameof(stream));
+            int length = checked((int)stream.Length);
+            _cursorData = new byte[length];
+            stream.Read(_cursorData, 0, length);
+            LoadPicture(
+                new Ole32.GPStream(new MemoryStream(_cursorData)),
+                nameof(stream));
         }
 
         /// <summary>
-        ///  Gets or
-        ///  sets a <see cref='Rectangle'/> that represents the current clipping rectangle for this <see cref='Cursor'/> in
-        ///  screen coordinates.
+        ///  Gets or sets a <see cref='Rectangle'/> that represents the current clipping
+        ///  rectangle for this <see cref='Cursor'/> in screen coordinates.
         /// </summary>
-        public static Rectangle Clip
+        public unsafe static Rectangle Clip
         {
             get
             {
-                return ClipInternal;
-            }
-            set
-            {
-                ClipInternal = value;
-            }
-        }
-
-        /// <summary>
-        ///  Implemented separately to be used internally from safe places.
-        /// </summary>
-        internal static Rectangle ClipInternal
-        {
-            get
-            {
-                RECT r = new RECT();
-                SafeNativeMethods.GetClipCursor(ref r);
-                return r;
+                User32.GetClipCursor(out RECT rect);
+                return rect;
             }
             set
             {
                 if (value.IsEmpty)
                 {
-                    UnsafeNativeMethods.ClipCursor(null);
+                    User32.ClipCursor(null);
                 }
                 else
                 {
-                    RECT rcClip = value;
-                    UnsafeNativeMethods.ClipCursor(ref rcClip);
+                    RECT rect = value;
+                    User32.ClipCursor(&rect);
                 }
             }
         }
 
         /// <summary>
-        ///  Gets or
-        ///  sets a <see cref='Cursor'/> that
-        ///  represents the current mouse cursor. The value is NULL if the current mouse cursor is not visible.
+        ///  Gets or sets a <see cref='Cursor'/> that represents the current mouse cursor.
+        ///  The value is <see langword="null"/> if the current mouse cursor is not visible.
         /// </summary>
         public static Cursor Current
         {
             get
             {
-                IntPtr curHandle = SafeNativeMethods.GetCursor();
+                IntPtr curHandle = User32.GetCursor();
                 if (curHandle == IntPtr.Zero)
                 {
                     return null;
@@ -175,26 +135,21 @@ namespace System.Windows.Forms
 
                 return new Cursor(curHandle);
             }
-            set
-            {
-                IntPtr handle = (value == null) ? IntPtr.Zero : value.handle;
-                UnsafeNativeMethods.SetCursor(new HandleRef(value, handle));
-            }
+            set => User32.SetCursor(value);
         }
 
         /// <summary>
-        ///  Gets
-        ///  the Win32 handle for this <see cref='Cursor'/> .
+        ///  Gets the Win32 handle for this <see cref='Cursor'/>.
         /// </summary>
         public IntPtr Handle
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (_handle == IntPtr.Zero)
                 {
                     throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name));
                 }
-                return handle;
+                return _handle;
             }
         }
 
@@ -205,25 +160,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.ICONINFO info = default;
-                SafeNativeMethods.GetIconInfo(new HandleRef(this, Handle), ref info);
-
-                // GetIconInfo creates bitmaps for the hbmMask and hbmColor members of ICONINFO.
-                // The calling application must manage these bitmaps and delete them when they are no longer necessary.
-
-                if (info.hbmMask != IntPtr.Zero)
-                {
-                    Gdi32.DeleteObject(info.hbmMask);
-                    info.hbmMask = IntPtr.Zero;
-                }
-
-                if (info.hbmColor != IntPtr.Zero)
-                {
-                    Gdi32.DeleteObject(info.hbmColor);
-                    info.hbmColor = IntPtr.Zero;
-                }
-
-                return new Point(info.xHotspot, info.yHotspot);
+                using User32.ICONINFO info = User32.GetIconInfo(this);
+                return new Point((int)info.xHotspot, (int)info.yHotspot);
             }
         }
 
@@ -235,28 +173,27 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.GetCursorPos(out Point p);
+                User32.GetCursorPos(out Point p);
                 return p;
             }
-            set => UnsafeNativeMethods.SetCursorPos(value.X, value.Y);
+            set => User32.SetCursorPos(value.X, value.Y);
         }
 
         /// <summary>
-        ///  Gets
-        ///  the size of this <see cref='Cursor'/> object.
+        ///  Gets the size of this <see cref='Cursor'/> object.
         /// </summary>
         public Size Size
         {
             get
             {
-                if (cursorSize.IsEmpty)
+                if (s_cursorSize.IsEmpty)
                 {
-                    cursorSize = new Size(
+                    s_cursorSize = new Size(
                         User32.GetSystemMetrics(User32.SystemMetric.SM_CXCURSOR),
                         User32.GetSystemMetrics(User32.SystemMetric.SM_CYCURSOR));
                 }
 
-                return cursorSize;
+                return s_cursorSize;
             }
         }
 
@@ -268,17 +205,7 @@ namespace System.Windows.Forms
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
-        public object Tag
-        {
-            get
-            {
-                return userData;
-            }
-            set
-            {
-                userData = value;
-            }
-        }
+        public object Tag { get; set; }
 
         /// <summary>
         ///  Duplicates this the Win32 handle of this <see cref='Cursor'/>.
@@ -286,20 +213,7 @@ namespace System.Windows.Forms
         public IntPtr CopyHandle()
         {
             Size sz = Size;
-            return SafeNativeMethods.CopyImage(new HandleRef(this, Handle), NativeMethods.IMAGE_CURSOR, sz.Width, sz.Height, 0);
-        }
-
-        /// <summary>
-        ///  Destroys the Win32 handle of this <see cref='Cursor'/>, if the
-        /// <see cref='Cursor'/>
-        ///  owns the handle
-        /// </summary>
-        private void DestroyHandle()
-        {
-            if (ownHandle)
-            {
-                UnsafeNativeMethods.DestroyCursor(new HandleRef(this, handle));
-            }
+            return User32.CopyImage(this, User32.IMAGE.CURSOR, sz.Width, sz.Height, User32.LR.DEFAULTCOLOR);
         }
 
         /// <summary>
@@ -314,10 +228,13 @@ namespace System.Windows.Forms
 
         private void Dispose(bool disposing)
         {
-            if (handle != IntPtr.Zero)
+            if (_handle != IntPtr.Zero)
             {
-                DestroyHandle();
-                handle = IntPtr.Zero;
+                if (_ownHandle)
+                {
+                    User32.DestroyCursor(_handle);
+                }
+                _handle = IntPtr.Zero;
             }
         }
 
@@ -339,11 +256,11 @@ namespace System.Windows.Forms
             targetRect.X += (int)graphics.Transform.OffsetX;
             targetRect.Y += (int)graphics.Transform.OffsetY;
 
-            int rop = 0xcc0020; // RasterOp.SOURCE.GetRop();
             IntPtr dc = graphics.GetHdc();
 
+            // want finally clause to release dc
             try
-            { // want finally clause to release dc
+            {
                 int imageX = 0;
                 int imageY = 0;
                 int imageWidth;
@@ -356,7 +273,6 @@ namespace System.Windows.Forms
                 Size cursorSize = Size;
 
                 // compute the dimensions of the icon, if needed
-                //
                 if (!imageRect.IsEmpty)
                 {
                     imageX = imageRect.X;
@@ -388,14 +304,12 @@ namespace System.Windows.Forms
 
                 if (stretch)
                 {
-                    // Short circuit the simple case of blasting an icon to the
-                    // screen
-                    //
+                    // Short circuit the simple case of blasting an icon to the screen
                     if (targetWidth == imageWidth && targetHeight == imageHeight
-                        && imageX == 0 && imageY == 0 && rop == NativeMethods.SRCCOPY
+                        && imageX == 0 && imageY == 0
                         && imageWidth == cursorSize.Width && imageHeight == cursorSize.Height)
                     {
-                        SafeNativeMethods.DrawIcon(new HandleRef(graphics, dc), targetX, targetY, new HandleRef(this, handle));
+                        User32.DrawIcon(dc, targetX, targetY, this);
                         return;
                     }
 
@@ -406,14 +320,12 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // Short circuit the simple case of blasting an icon to the
-                    // screen
-                    //
-                    if (imageX == 0 && imageY == 0 && rop == NativeMethods.SRCCOPY
+                    // Short circuit the simple case of blasting an icon to the screen
+                    if (imageX == 0 && imageY == 0
                         && cursorSize.Width <= targetWidth && cursorSize.Height <= targetHeight
                         && cursorSize.Width == imageWidth && cursorSize.Height == imageHeight)
                     {
-                        SafeNativeMethods.DrawIcon(new HandleRef(graphics, dc), targetX, targetY, new HandleRef(this, handle));
+                        User32.DrawIcon(dc, targetX, targetY, this);
                         return;
                     }
 
@@ -423,20 +335,20 @@ namespace System.Windows.Forms
                     clipHeight = targetHeight < imageHeight ? targetHeight : imageHeight;
                 }
 
-                if (rop == NativeMethods.SRCCOPY)
-                {
-                    // The ROP is SRCCOPY, so we can be simple here and take
-                    // advantage of clipping regions.  Drawing the cursor
-                    // is merely a matter of offsetting and clipping.
-                    //
-                    SafeNativeMethods.IntersectClipRect(new HandleRef(this, Handle), targetX, targetY, targetX + clipWidth, targetY + clipHeight);
-                    SafeNativeMethods.DrawIconEx(new HandleRef(graphics, dc), targetX - imageX, targetY - imageY,
-                                       new HandleRef(this, handle), drawWidth, drawHeight, 0, NativeMethods.NullHandleRef, NativeMethods.DI_NORMAL);
-                    // Let GDI+ restore clipping
-                    return;
-                }
+                // The ROP is SRCCOPY, so we can be simple here and take
+                // advantage of clipping regions.  Drawing the cursor
+                // is merely a matter of offsetting and clipping.
+                Gdi32.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
+                User32.DrawIconEx(
+                    dc,
+                    targetX - imageX,
+                    targetY - imageY,
+                    this,
+                    drawWidth,
+                    drawHeight);
 
-                Debug.Fail("Cursor.Draw does not support raster ops.  How did you even pass one in?");
+                // Let GDI+ restore clipping
+                return;
             }
             finally
             {
@@ -480,55 +392,26 @@ namespace System.Windows.Forms
         ///  Hides the cursor. For every call to Cursor.hide() there must be a
         ///  balancing call to Cursor.show().
         /// </summary>
-        public static void Hide()
-        {
-            UnsafeNativeMethods.ShowCursor(false);
-        }
-
-        private void LoadFromResourceId(int nResourceId, string paramName)
-        {
-            // We don't delete stock cursors.
-            ownHandle = false;
-
-            // This constructor is used during class initialization. By catching this
-            // exception we prevent WinForms from failing to initialize if an error occurs.
-            try
-            {
-                resourceId = nResourceId;
-                handle = User32.LoadCursorW(IntPtr.Zero, nResourceId);
-            }
-            catch
-            {
-                handle = IntPtr.Zero;
-            }
-        }
+        public static void Hide() => User32.ShowCursor(BOOL.FALSE);
 
         // this code is adapted from Icon.GetIconSize please take this into account when changing this
         private Size GetIconSize(IntPtr iconHandle)
         {
-            Size iconSize = Size;
-
-            NativeMethods.ICONINFO info = default;
-            SafeNativeMethods.GetIconInfo(new HandleRef(this, iconHandle), ref info);
-            NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
-
+            using User32.ICONINFO info = User32.GetIconInfo(iconHandle);
             if (info.hbmColor != IntPtr.Zero)
             {
-                UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmColor), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
-                Gdi32.DeleteObject(info.hbmColor);
-                iconSize = new Size(bmp.bmWidth, bmp.bmHeight);
+                Gdi32.GetObject(info.hbmColor, out Gdi32.BITMAP bitmap);
+                return new Size(bitmap.bmWidth, bitmap.bmHeight);
             }
             else if (info.hbmMask != IntPtr.Zero)
             {
-                UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmMask), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
-                iconSize = new Size(bmp.bmWidth, bmp.bmHeight / 2);
+                Gdi32.GetObject(info.hbmMask, out Gdi32.BITMAP bitmap);
+                return new Size(bitmap.bmWidth, bitmap.bmHeight / 2);
             }
-
-            if (info.hbmMask != IntPtr.Zero)
+            else
             {
-                Gdi32.DeleteObject(info.hbmMask);
+                return Size;
             }
-            return iconSize;
         }
 
         /// <summary>
@@ -540,45 +423,32 @@ namespace System.Windows.Forms
 
             try
             {
-                Guid g = typeof(UnsafeNativeMethods.IPicture).GUID;
-                UnsafeNativeMethods.IPicture picture = null;
+                Guid iid = typeof(Ole32.IPicture).GUID;
+                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(ref iid);
+                Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
+                ipictureAsIPersist.Load(stream);
 
-                try
+                if (picture != null && picture.Type == (short)Ole32.PICTYPE.ICON)
                 {
-                    picture = UnsafeNativeMethods.OleCreateIPictureIndirect(null, ref g, true);
-                    Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
-                    ipictureAsIPersist.Load(stream);
-
-                    if (picture != null && picture.GetPictureType() == NativeMethods.Ole.PICTYPE_ICON)
+                    IntPtr cursorHandle = picture.Handle;
+                    Size picSize = GetIconSize(cursorHandle);
+                    if (DpiHelper.IsScalingRequired)
                     {
-                        IntPtr cursorHandle = picture.GetHandle();
-                        Size picSize = GetIconSize(cursorHandle);
-                        if (DpiHelper.IsScalingRequired)
-                        {
-                            picSize = DpiHelper.LogicalToDeviceUnits(picSize);
-                        }
-
-                        handle = SafeNativeMethods.CopyImage(
-                            new HandleRef(this, cursorHandle),
-                            NativeMethods.IMAGE_CURSOR,
-                            picSize.Width,
-                            picSize.Height,
-                            0);
-
-                        ownHandle = true;
+                        picSize = DpiHelper.LogicalToDeviceUnits(picSize);
                     }
-                    else
-                    {
-                        throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
-                    }
+
+                    _handle = User32.CopyImage(
+                        cursorHandle,
+                        User32.IMAGE.CURSOR,
+                        picSize.Width,
+                        picSize.Height,
+                        User32.LR.DEFAULTCOLOR);
+
+                    _ownHandle = true;
                 }
-                finally
+                else
                 {
-                    // destroy the picture...
-                    if (picture != null)
-                    {
-                        Marshal.ReleaseComObject(picture);
-                    }
+                    throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
                 }
             }
             catch (COMException e)
@@ -592,37 +462,32 @@ namespace System.Windows.Forms
         /// </summary>
         internal byte[] GetData()
         {
-            if (resourceId != 0)
+            if (_resourceId != 0)
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
-            if (cursorData == null)
+            if (_cursorData == null)
             {
                 throw new InvalidOperationException(SR.InvalidPictureFormat);
             }
 
-            return (byte[])cursorData.Clone();
+            return (byte[])_cursorData.Clone();
         }
 
         /// <summary>
         ///  Displays the cursor. For every call to Cursor.show() there must have been
         ///  a previous call to Cursor.hide().
         /// </summary>
-        public static void Show()
-        {
-            UnsafeNativeMethods.ShowCursor(true);
-        }
+        public static void Show() => User32.ShowCursor(BOOL.TRUE);
 
         /// <summary>
-        ///  Retrieves a human readable string representing this
-        ///  <see cref='Cursor'/>
-        ///  .
+        ///  Retrieves a human readable string representing this <see cref='Cursor'/>.
         /// </summary>
         public override string ToString()
         {
             string s = null;
 
-            if (!ownHandle)
+            if (!_ownHandle)
             {
                 s = TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this);
             }
@@ -631,7 +496,7 @@ namespace System.Windows.Forms
                 s = base.ToString();
             }
 
-            return "[Cursor: " + s + "]";
+            return $"[Cursor: {s}]";
         }
 
         public static bool operator ==(Cursor left, Cursor right)
@@ -643,7 +508,7 @@ namespace System.Windows.Forms
 
             if (!(left is null))
             {
-                return (left.handle == right.handle);
+                return (left._handle == right._handle);
             }
             else
             {
@@ -659,7 +524,7 @@ namespace System.Windows.Forms
         public override int GetHashCode()
         {
             // Handle is a 64-bit value in 64-bit machines, uncheck here to avoid overflow exceptions.
-            return unchecked((int)handle);
+            return unchecked((int)_handle);
         }
 
         public override bool Equals(object obj)

@@ -3830,7 +3830,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     if (LinkCursor && !Cursor.Equals(Cursors.WaitCursor))
                     {
-                        UnsafeNativeMethods.SetCursor(new HandleRef(Cursors.Hand, Cursors.Hand.Handle));
+                        Cursor.Current = Cursors.Hand;
                         m.Result = (IntPtr)1;
                     }
                     else

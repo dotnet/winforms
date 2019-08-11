@@ -1003,7 +1003,12 @@ namespace System.Windows.Forms
                         {
                             ControlItem item = (ControlItem)items[i];
                             Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                            SafeNativeMethods.DrawIconEx(new HandleRef(this, _mirrordc.Hdc), bounds.X - _windowBounds.X, bounds.Y - _windowBounds.Y, new HandleRef(_provider.Region, _provider.Region.IconHandle), bounds.Width, bounds.Height, 0, NativeMethods.NullHandleRef, NativeMethods.DI_NORMAL);
+                            User32.DrawIconEx(
+                                _mirrordc,
+                                bounds.X - _windowBounds.X,
+                                bounds.Y - _windowBounds.Y,
+                                _provider.Region,
+                                bounds.Width, bounds.Height);
                         }
                     }
                     finally
@@ -1569,7 +1574,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This represents the HRGN of icon. The region is calculate from the icon's mask.
         /// </summary>
-        internal class IconRegion
+        internal class IconRegion : IHandle
         {
             private Region region;
             private readonly Icon icon;
@@ -1585,7 +1590,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns the handle of the icon.
             /// </summary>
-            public IntPtr IconHandle => icon.Handle;
+            public IntPtr Handle => icon.Handle;
 
             /// <summary>
             ///  Returns the handle of the region.

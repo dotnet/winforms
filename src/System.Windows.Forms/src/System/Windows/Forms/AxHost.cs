@@ -110,8 +110,8 @@ namespace System.Windows.Forms
         private static Guid icf2_Guid = typeof(UnsafeNativeMethods.IClassFactory2).GUID;
         private static Guid ifont_Guid = typeof(UnsafeNativeMethods.IFont).GUID;
         private static Guid ifontDisp_Guid = typeof(SafeNativeMethods.IFontDisp).GUID;
-        private static Guid ipicture_Guid = typeof(UnsafeNativeMethods.IPicture).GUID;
-        private static Guid ipictureDisp_Guid = typeof(UnsafeNativeMethods.IPictureDisp).GUID;
+        private static Guid ipicture_Guid = typeof(Ole32.IPicture).GUID;
+        private static Guid ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
         private static Guid ivbformat_Guid = typeof(UnsafeNativeMethods.IVBFormat).GUID;
         private static Guid ioleobject_Guid = typeof(UnsafeNativeMethods.IOleObject).GUID;
         private static Guid dataSource_Guid = new Guid("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
@@ -2025,7 +2025,7 @@ namespace System.Windows.Forms
                         lParam = (IntPtr)0x20180001,
                         time = SafeNativeMethods.GetTickCount()
                     };
-                    UnsafeNativeMethods.GetCursorPos(out Point p);
+                    User32.GetCursorPos(out Point p);
                     msg.pt = p;
                     if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
@@ -4988,18 +4988,19 @@ namespace System.Windows.Forms
         }
 
         // Mapping functions:
-        private static object GetPICTDESCFromPicture(Image image)
+        private static Ole32.PICTDESC GetPICTDESCFromPicture(Image image)
         {
             if (image is Bitmap bmp)
             {
-                return new NativeMethods.PICTDESCbmp(bmp);
+                return Ole32.PICTDESC.FromBitmap(bmp);
             }
 
             if (image is Metafile mf)
             {
-                return new NativeMethods.PICTDESCemf(mf);
+                return Ole32.PICTDESC.FromMetafile(mf);
             }
-            throw new ArgumentException(SR.AXUnknownImage, "image");
+
+            throw new ArgumentException(SR.AXUnknownImage, nameof(image));
         }
 
         /// <summary>
@@ -5013,8 +5014,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            object pictdesc = GetPICTDESCFromPicture(image);
-            return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
+            Ole32.PICTDESC pictdesc = GetPICTDESCFromPicture(image);
+            return Ole32.OleCreatePictureIndirect(ref pictdesc, ref ipicture_Guid, fOwn: BOOL.TRUE);
         }
 
         /// <summary>
@@ -5028,8 +5029,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            NativeMethods.PICTDESCicon pictdesc = new NativeMethods.PICTDESCicon(Icon.FromHandle(cursor.Handle));
-            return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
+            Ole32.PICTDESC desc = Ole32.PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
+            return Ole32.OleCreatePictureIndirect(ref desc, ref ipicture_Guid, fOwn: BOOL.TRUE);
         }
 
         /// <summary>
@@ -5043,8 +5044,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            object pictdesc = GetPICTDESCFromPicture(image);
-            return UnsafeNativeMethods.OleCreateIPictureDispIndirect(pictdesc, ref ipictureDisp_Guid, true);
+            Ole32.PICTDESC desc = GetPICTDESCFromPicture(image);
+            return Ole32.OleCreatePictureIndirect(ref desc, ref ipictureDisp_Guid, fOwn: BOOL.TRUE);
         }
 
         /// <summary>
@@ -5059,19 +5060,20 @@ namespace System.Windows.Forms
             }
 
             IntPtr hPal = IntPtr.Zero;
-            UnsafeNativeMethods.IPicture pict = (UnsafeNativeMethods.IPicture)picture;
-            int type = pict.GetPictureType();
-            if (type == NativeMethods.Ole.PICTYPE_BITMAP)
+            Ole32.IPicture pict = (Ole32.IPicture)picture;
+            Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
+            if (type == Ole32.PICTYPE.BITMAP)
             {
                 try
                 {
-                    hPal = pict.GetHPal();
+                    hPal = pict.hPal;
                 }
                 catch (COMException)
                 {
                 }
             }
-            return GetPictureFromParams(pict, pict.GetHandle(), type, hPal, pict.GetWidth(), pict.GetHeight());
+
+            return GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
         }
 
         /// <summary>
@@ -5086,46 +5088,56 @@ namespace System.Windows.Forms
             }
 
             IntPtr hPal = IntPtr.Zero;
-            UnsafeNativeMethods.IPictureDisp pict = (UnsafeNativeMethods.IPictureDisp)picture;
-            int type = pict.PictureType;
-            if (type == NativeMethods.Ole.PICTYPE_BITMAP)
+            Ole32.IPictureDisp pict = (Ole32.IPictureDisp)picture;
+            Ole32.PICTYPE type = pict.Type;
+            if (type == Ole32.PICTYPE.BITMAP)
             {
                 try
                 {
-                    hPal = pict.HPal;
+                    hPal = pict.hPal;
                 }
                 catch (COMException)
                 {
                 }
             }
-            return GetPictureFromParams(pict, pict.Handle, type, hPal, pict.Width, pict.Height);
+
+            Image image = GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
+            GC.KeepAlive(pict);
+            return image;
         }
 
-        private static Image GetPictureFromParams(object pict, IntPtr handle, int type, IntPtr paletteHandle, int width, int height)
+        private static Image GetPictureFromParams(IntPtr handle, Ole32.PICTYPE type, IntPtr paletteHandle, int width, int height)
         {
             switch (type)
             {
-                case NativeMethods.Ole.PICTYPE_ICON:
+                case Ole32.PICTYPE.ICON:
                     return (Image)(Icon.FromHandle(handle)).Clone();
-                case NativeMethods.Ole.PICTYPE_METAFILE:
+                case Ole32.PICTYPE.METAFILE:
                     WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
                     {
                         BboxRight = (short)width,
                         BboxBottom = (short)height
                     };
-                    return (Image)(new Metafile(handle, header, false)).Clone();
-                case NativeMethods.Ole.PICTYPE_ENHMETAFILE:
-                    return (Image)(new Metafile(handle, false)).Clone();
-                case NativeMethods.Ole.PICTYPE_BITMAP:
+
+                    using (var metafile = new Metafile(handle, header, deleteWmf: false))
+                    {
+                        return (Image)metafile.Clone();
+                    }
+                case Ole32.PICTYPE.ENHMETAFILE:
+                    using (var metafile = new Metafile(handle, deleteEmf: false))
+                    {
+                        return (Image)metafile.Clone();
+                    }
+                case Ole32.PICTYPE.BITMAP:
                     return Image.FromHbitmap(handle, paletteHandle);
-                case NativeMethods.Ole.PICTYPE_NONE:
-                    // MSDN sez this should not be a valid value, but comctl32 returns it...
+                case Ole32.PICTYPE.NONE:
+                    // MSDN says this should not be a valid value, but comctl32 returns it...
                     return null;
-                case NativeMethods.Ole.PICTYPE_UNINITIALIZED:
+                case Ole32.PICTYPE.UNINITIALIZED:
                     return null;
                 default:
-                    Debug.Fail("Invalid image type " + type.ToString(CultureInfo.InvariantCulture));
-                    throw new ArgumentException(SR.AXUnknownImage, "type");
+                    Debug.Fail($"Invalid image type {type}");
+                    throw new ArgumentException(SR.AXUnknownImage, nameof(type));
             }
         }
 

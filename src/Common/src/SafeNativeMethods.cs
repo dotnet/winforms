@@ -266,9 +266,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr /*HPALETTE*/ CreateHalftonePalette(HandleRef hdc);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetPaletteEntries(HandleRef hpal, int iStartIndex, int nEntries, int[] lppe);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern int GetTextMetricsW(HandleRef hDC, ref NativeMethods.TEXTMETRIC lptm);
 
@@ -298,21 +295,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
         public static unsafe extern bool SetViewportExtEx(IntPtr hDC, int x, int y, Size *size);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public extern static bool GetClipCursor(ref Interop.RECT lpRect);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetCursor();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetIconInfo(HandleRef hIcon, ref NativeMethods.ICONINFO info);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int IntersectClipRect(HandleRef hDC, int x1, int y1, int x2, int y2);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr CopyImage(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool AdjustWindowRectEx(ref Interop.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle);
@@ -510,12 +492,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern int SetROP2(IntPtr hDC, int nDrawMode);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool DrawIcon(HandleRef hDC, int x, int y, HandleRef hIcon);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool DrawIconEx(HandleRef hDC, int x, int y, HandleRef hIcon, int width, int height, int iStepIfAniCursor, HandleRef hBrushFlickerFree, int diFlags);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int SetBkMode(HandleRef hDC, int nBkMode);

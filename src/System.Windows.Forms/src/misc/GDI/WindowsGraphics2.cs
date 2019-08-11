@@ -16,13 +16,13 @@ namespace System.Windows.Forms.Internal
     {
         // Flag used by TextRenderer to clear the TextRenderer specific flags.
         public const int GdiUnsupportedFlagMask = (unchecked((int)0xFF000000));
-        public static readonly Size MaxSize = new Size(int.MaxValue, int.MaxValue);
+        public static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
 
         // The value of the ItalicPaddingFactor comes from several tests using different fonts & drawing
         // flags and some benchmarking with GDI+.
         private const float ItalicPaddingFactor = 1 / 2f;
 
-        private TextPaddingOptions paddingFlags;
+        private TextPaddingOptions _paddingFlags;
 
         /// <summary>
         ///  The padding options to be applied to the text bounding box internally.
@@ -31,15 +31,15 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), paddingFlags));
-                return paddingFlags;
+                Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), _paddingFlags));
+                return _paddingFlags;
             }
             set
             {
                 Debug.Assert(Enum.IsDefined(typeof(TextPaddingOptions), value));
-                if (paddingFlags != value)
+                if (_paddingFlags != value)
                 {
-                    paddingFlags = value;
+                    _paddingFlags = value;
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Internal
 
         public unsafe void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
         {
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             if (pen != null)
             {
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Internal
             int nBottomRect)
         {
             // y-coord of lower-right corner of rectangle
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             if (pen != null)
             {
@@ -98,77 +98,62 @@ namespace System.Windows.Forms.Internal
         }
 
         public void DrawAndFillEllipse(WindowsPen pen, WindowsBrush brush, Rectangle bounds)
-        {
-            DrawEllipse(pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
-        }
+            => DrawEllipse(pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
         ///  Text rendering methods
-        ///
+
         /// <summary>
         ///  Draws the text at the specified point, using the given Font and foreColor.
         ///  CR/LF are honored.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor)
-        {
-            DrawText(text, font, pt, foreColor, Color.Empty, User32.TextFormatFlags.DT_DEFAULT);
-        }
+            => DrawText(text, font, pt, foreColor, Color.Empty, User32.TextFormatFlags.DT_DEFAULT);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font, foreColor and backColor.
         ///  CR/LF are honored.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor)
-        {
-            DrawText(text, font, pt, foreColor, backColor, User32.TextFormatFlags.DT_DEFAULT);
-        }
+            =>  DrawText(text, font, pt, foreColor, backColor, User32.TextFormatFlags.DT_DEFAULT);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font and foreColor, and according to the
         ///  specified flags.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, User32.TextFormatFlags flags)
-        {
-            DrawText(text, font, pt, foreColor, Color.Empty, flags);
-        }
+            => DrawText(text, font, pt, foreColor, Color.Empty, flags);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font, foreColor and backColor, and according
         ///  to the specified flags.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, User32.TextFormatFlags flags)
-        {
-            Rectangle bounds = new Rectangle(pt.X, pt.Y, int.MaxValue, int.MaxValue);
-            DrawText(text, font, bounds, foreColor, backColor, flags);
-        }
+            =>  DrawText(text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
 
         /// <summary>
         ///  Draws the text centered in the given rectangle and using the given Font and foreColor.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor)
-        {
-            DrawText(text, font, bounds, foreColor, Color.Empty);
-        }
+            => DrawText(text, font, bounds, foreColor, Color.Empty);
 
         /// <summary>
         ///  Draws the text centered in the given rectangle and using the given Font, foreColor and backColor.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor)
-        {
-            DrawText(text, font, bounds, foreColor, backColor, User32.TextFormatFlags.DT_CENTER | User32.TextFormatFlags.DT_VCENTER);
-        }
+            => DrawText(text, font, bounds, foreColor, backColor, User32.TextFormatFlags.DT_CENTER | User32.TextFormatFlags.DT_VCENTER);
 
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color color, User32.TextFormatFlags flags)
-        {
-            DrawText(text, font, bounds, color, Color.Empty, flags);
-        }
+            => DrawText(text, font, bounds, color, Color.Empty, flags);
 
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font, foreColor and backColor, and according to the specified
         ///  TextFormatFlags flags.
+        ///  
         ///  If font is null, the font currently selected in the hdc is used.
+        ///  
         ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, User32.TextFormatFlags flags)
@@ -181,38 +166,38 @@ namespace System.Windows.Forms.Internal
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
             Debug.Assert((flags & User32.TextFormatFlags.DT_CALCRECT) == 0, "DT_CALCRECT flag is set, text won't be drawn");
 
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             // DrawText requires default text alignment.
-            if (dc.TextAlignment != DeviceContextTextAlignment.Default)
+            if (DeviceContext.TextAlignment != DeviceContextTextAlignment.Default)
             {
-                dc.SetTextAlignment(DeviceContextTextAlignment.Default);
+                DeviceContext.TextAlignment = DeviceContextTextAlignment.Default;
             }
 
             // color empty means use the one currently selected in the dc.
 
-            if (!foreColor.IsEmpty && foreColor != dc.TextColor)
+            if (!foreColor.IsEmpty && foreColor != DeviceContext.TextColor)
             {
-                dc.SetTextColor(foreColor);
+                DeviceContext.TextColor = foreColor;
             }
 
             if (font != null)
             {
-                dc.SelectFont(font);
+                DeviceContext.SelectFont(font);
             }
 
             DeviceContextBackgroundMode newBackGndMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
                 DeviceContextBackgroundMode.Transparent :
                 DeviceContextBackgroundMode.Opaque;
 
-            if (dc.BackgroundMode != newBackGndMode)
+            if (DeviceContext.BackgroundMode != newBackGndMode)
             {
-                dc.SetBackgroundMode(newBackGndMode);
+                DeviceContext.SetBackgroundMode(newBackGndMode);
             }
 
-            if (newBackGndMode != DeviceContextBackgroundMode.Transparent && backColor != dc.BackgroundColor)
+            if (newBackGndMode != DeviceContextBackgroundMode.Transparent && backColor != DeviceContext.BackgroundColor)
             {
-                dc.SetBackgroundColor(backColor);
+                DeviceContext.BackgroundColor = backColor;
             }
 
             User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
@@ -237,7 +222,7 @@ namespace System.Windows.Forms.Internal
 
         public Color GetNearestColor(Color color)
         {
-            HandleRef hdc = new HandleRef(null, dc.Hdc);
+            HandleRef hdc = new HandleRef(null, DeviceContext.Hdc);
             int colorResult = IntUnsafeNativeMethods.GetNearestColor(hdc, ColorTranslator.ToWin32(color));
             return ColorTranslator.FromWin32(colorResult);
         }
@@ -254,7 +239,7 @@ namespace System.Windows.Forms.Internal
 
             if (tmpfont == null)
             {
-                tmpfont = dc.Font;
+                tmpfont = DeviceContext.Font;
             }
 
             float overhangPadding = tmpfont.Height / 6f;
@@ -277,7 +262,7 @@ namespace System.Windows.Forms.Internal
 
             int leftMargin = 0;
             int rightMargin = 0;
-            float overhangPadding = 0;
+            float overhangPadding;
 
             switch (TextPadding)
             {
@@ -325,16 +310,16 @@ namespace System.Windows.Forms.Internal
             Size size = new Size();
             if (font != null)
             {
-                dc.SelectFont(font);
+                DeviceContext.SelectFont(font);
             }
 
-            Gdi32.GetTextExtentPoint32W(dc.Hdc, text, text.Length, ref size);
+            Gdi32.GetTextExtentPoint32W(DeviceContext.Hdc, text, text.Length, ref size);
 
             // Unselect, but not from Measurement DC as it keeps the same
             // font selected for perf reasons.
-            if (font != null && !MeasurementDCInfo.IsMeasurementDC(dc))
+            if (font != null && !MeasurementDCInfo.IsMeasurementDC(DeviceContext))
             {
-                dc.ResetFont();
+                DeviceContext.ResetFont();
             }
 
             return new Size(size.Width, size.Height);
@@ -345,9 +330,7 @@ namespace System.Windows.Forms.Internal
         ///  CR/LF/TAB are taken into account.
         /// </summary>
         public Size MeasureText(string text, WindowsFont font)
-        {
-            return MeasureText(text, font, MaxSize, User32.TextFormatFlags.DT_BOTTOM);
-        }
+            => MeasureText(text, font, MaxSize, User32.TextFormatFlags.DT_BOTTOM);
 
         /// <summary>
         ///  Returns the Size in logical units of the given text using the given Font and using the specified rectangle
@@ -355,9 +338,7 @@ namespace System.Windows.Forms.Internal
         ///  TAB/CR/LF are taken into account.
         /// </summary>
         public Size MeasureText(string text, WindowsFont font, Size proposedSize)
-        {
-            return MeasureText(text, font, proposedSize, User32.TextFormatFlags.DT_BOTTOM);
-        }
+            =>  MeasureText(text, font, proposedSize, User32.TextFormatFlags.DT_BOTTOM);
 
         /// <summary>
         ///  Returns the Size in logical units of the given text using the given Font, and according to the formatting flags.
@@ -387,6 +368,7 @@ namespace System.Windows.Forms.Internal
             // DrawText returns a rectangle useful for aligning, but not guaranteed to encompass all
             // pixels (its not a FitBlackBox, if the text is italicized, it will overhang on the right.)
             // So we need to account for this.
+
 #if OPTIMIZED_MEASUREMENTDC
             User32.DRAWTEXTPARAMS dtparams;
             // use the cache if we've got it
@@ -399,7 +381,6 @@ namespace System.Windows.Forms.Internal
                 dtparams = GetTextMargins(font);
             }
 #else
-
             User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
 #endif
 
@@ -419,7 +400,7 @@ namespace System.Windows.Forms.Internal
             var rect = new RECT(0, 0, proposedSize.Width, proposedSize.Height);
             if (font != null)
             {
-                dc.SelectFont(font);
+                DeviceContext.SelectFont(font);
             }
 
             // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain DT_SINGLELINE and
@@ -440,7 +421,7 @@ namespace System.Windows.Forms.Internal
             }
 
             flags |= User32.TextFormatFlags.DT_CALCRECT;
-            User32.DrawTextExW(dc.Hdc, text, text.Length, ref rect, flags, ref dtparams);
+            User32.DrawTextExW(DeviceContext.Hdc, text, text.Length, ref rect, flags, ref dtparams);
 
             return rect.Size;
         }
@@ -456,11 +437,16 @@ namespace System.Windows.Forms.Internal
         ///  If the text is multiline and it does not fit inside the bounds passed in, then return the bounds that were passed in.
         ///  This way we paint the top of the text at the top of the bounds passed in.
         /// </summary>
-        public static Rectangle AdjustForVerticalAlignment(HandleRef hdc, string text, Rectangle bounds, User32.TextFormatFlags flags, ref User32.DRAWTEXTPARAMS dtparams)
+        public static Rectangle AdjustForVerticalAlignment(
+            HandleRef hdc,
+            string text,
+            Rectangle bounds,
+            User32.TextFormatFlags flags,
+            ref User32.DRAWTEXTPARAMS dtparams)
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
 
-            // Ok if any Top (Cannot test User32.TextFormatFlags.Top because it is 0), single line text or measuring text.
+            // Ok if any Top (Cannot test Interop.User32.TextFormatFlags.Top because it is 0), single line text or measuring text.
             bool isTop = (flags & User32.TextFormatFlags.DT_BOTTOM) == 0 && (flags & User32.TextFormatFlags.DT_VCENTER) == 0;
             if (isTop || ((flags & User32.TextFormatFlags.DT_SINGLELINE) != 0) || ((flags & User32.TextFormatFlags.DT_CALCRECT) != 0))
             {
@@ -504,27 +490,28 @@ namespace System.Windows.Forms.Internal
         {
             Debug.Assert(pen != null, "pen == null");
 
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             if (pen != null)
             {
-                dc.SelectObject(pen.HPen, GdiObjectType.Pen);
+                DeviceContext.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
 
-            DeviceContextBinaryRasterOperationFlags rasterOp = dc.BinaryRasterOperation;
+            DeviceContextBinaryRasterOperationFlags rasterOp = DeviceContext.BinaryRasterOperation;
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                rasterOp = dc.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
+                rasterOp = DeviceContext.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
             }
 
             Gdi32.SelectObject(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
-            // Add 1 to widht and height to create the 'bounding box' (convert from point to size).
+
+            // Add 1 to width and height to create the 'bounding box' (convert from point to size).
             IntUnsafeNativeMethods.Rectangle(hdc, x, y, x + width, y + height);
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                dc.SetRasterOperation(rasterOp);
+                DeviceContext.SetRasterOperation(rasterOp);
             }
         }
 
@@ -539,7 +526,7 @@ namespace System.Windows.Forms.Internal
         {
             Debug.Assert(brush != null, "brush == null");
 
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
             IntPtr hBrush = brush.HBrush;  // We don't delete this handle since we didn't create it.
             RECT rect = new RECT(x, y, x + width, y + height);
 
@@ -554,30 +541,28 @@ namespace System.Windows.Forms.Internal
         ///  times turning them back to the background color.
         /// </summary>
         public void DrawLine(WindowsPen pen, Point p1, Point p2)
-        {
-            DrawLine(pen, p1.X, p1.Y, p2.X, p2.Y);
-        }
+            => DrawLine(pen, p1.X, p1.Y, p2.X, p2.Y);
 
         public unsafe void DrawLine(WindowsPen pen, int x1, int y1, int x2, int y2)
         {
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
-            DeviceContextBinaryRasterOperationFlags rasterOp = dc.BinaryRasterOperation;
-            DeviceContextBackgroundMode bckMode = dc.BackgroundMode;
+            DeviceContextBinaryRasterOperationFlags rasterOp = DeviceContext.BinaryRasterOperation;
+            DeviceContextBackgroundMode bckMode = DeviceContext.BackgroundMode;
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                rasterOp = dc.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
+                rasterOp = DeviceContext.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
             }
 
             if (bckMode != DeviceContextBackgroundMode.Transparent)
             {
-                bckMode = dc.SetBackgroundMode(DeviceContextBackgroundMode.Transparent);
+                bckMode = DeviceContext.SetBackgroundMode(DeviceContextBackgroundMode.Transparent);
             }
 
             if (pen != null)
             {
-                dc.SelectObject(pen.HPen, GdiObjectType.Pen);
+                DeviceContext.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
 
             Point oldPoint = new Point();
@@ -587,12 +572,12 @@ namespace System.Windows.Forms.Internal
 
             if (bckMode != DeviceContextBackgroundMode.Transparent)
             {
-                dc.SetBackgroundMode(bckMode);
+                DeviceContext.SetBackgroundMode(bckMode);
             }
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
-                dc.SetRasterOperation(rasterOp);
+                DeviceContext.SetRasterOperation(rasterOp);
             }
 
             IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
@@ -605,10 +590,10 @@ namespace System.Windows.Forms.Internal
         public IntNativeMethods.TEXTMETRIC GetTextMetrics()
         {
             IntNativeMethods.TEXTMETRIC tm = new IntNativeMethods.TEXTMETRIC();
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             // Set the mapping mode to MM_TEXT so we deal with units of pixels.
-            DeviceContextMapMode mapMode = dc.MapMode;
+            DeviceContextMapMode mapMode = DeviceContext.MapMode;
 
             bool setupDC = mapMode != DeviceContextMapMode.Text;
 
@@ -616,14 +601,14 @@ namespace System.Windows.Forms.Internal
             {
                 // Changing the MapMode will affect viewport and window extent and origin, we save the dc
                 // state so all those properties can be properly restored once done.
-                dc.SaveHdc();
+                DeviceContext.SaveHdc();
             }
 
             try
             {
                 if (setupDC)
                 {
-                    mapMode = dc.SetMapMode(DeviceContextMapMode.Text);
+                    mapMode = DeviceContext.SetMapMode(DeviceContextMapMode.Text);
                 }
 
                 IntUnsafeNativeMethods.GetTextMetrics(hdc, ref tm);
@@ -632,7 +617,7 @@ namespace System.Windows.Forms.Internal
             {
                 if (setupDC)
                 {
-                    dc.RestoreHdc();
+                    DeviceContext.RestoreHdc();
                 }
             }
 

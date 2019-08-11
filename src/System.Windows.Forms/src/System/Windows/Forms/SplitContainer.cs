@@ -585,7 +585,7 @@ namespace System.Windows.Forms
                     {
                         // We want to instantly change the cursor if the mouse is within our bounds.
                         var r = new RECT();
-                        UnsafeNativeMethods.GetCursorPos(out Point p);
+                        User32.GetCursorPos(out Point p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                         {

@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using static Interop;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
@@ -132,7 +134,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 [typeof(SafeNativeMethods.IFontDisp).GUID] = typeof(Com2FontConverter),
                 [typeof(UnsafeNativeMethods.IFont).GUID] = typeof(Com2FontConverter),
                 [typeof(UnsafeNativeMethods.IPictureDisp).GUID] = typeof(Com2PictureConverter),
-                [typeof(UnsafeNativeMethods.IPicture).GUID] = typeof(Com2PictureConverter)
+                [typeof(Ole32.IPicture).GUID] = typeof(Com2PictureConverter)
             };
         }
 

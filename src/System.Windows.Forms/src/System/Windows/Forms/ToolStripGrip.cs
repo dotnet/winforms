@@ -227,7 +227,7 @@ namespace System.Windows.Forms
             if ((ParentInternal != null) && (ToolStripPanelRow != null) && (!ParentInternal.IsInDesignMode))
             {
                 oldCursor = ParentInternal.Cursor;
-                SetCursor(ParentInternal, Cursors.SizeAll);
+                ParentInternal.Cursor = Cursors.SizeAll;
             }
             else
             {
@@ -244,7 +244,7 @@ namespace System.Windows.Forms
         {
             if (oldCursor != null && !ParentInternal.IsInDesignMode)
             {
-                SetCursor(ParentInternal, oldCursor);
+                ParentInternal.Cursor = oldCursor;
             }
             if (!MovingToolStrip && LeftMouseButtonIsDown())
             {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
 
             if (!ParentInternal.IsInDesignMode)
             {
-                SetCursor(ParentInternal, oldCursor);
+                ParentInternal.Cursor = oldCursor;
             }
             ToolStripPanel.ClearDragFeedback();
             MovingToolStrip = false;
@@ -280,10 +280,6 @@ namespace System.Windows.Forms
             gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;
 
             OnFontChanged(EventArgs.Empty);
-        }
-
-        private static void SetCursor(Control control, Cursor cursor) {
-            control.Cursor = cursor;
         }
 
         internal class ToolStripGripAccessibleObject : ToolStripButtonAccessibleObject
