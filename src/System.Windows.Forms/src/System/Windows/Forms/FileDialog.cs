@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -125,7 +126,7 @@ namespace System.Windows.Forms
             set => SetOption(NativeMethods.OFN_NODEREFERENCELINKS, !value);
         }
 
-        private protected string DialogCaption => Interop.User32.GetWindowText(new HandleRef(this, _dialogHWnd));
+        private protected string DialogCaption => User32.GetWindowText(new HandleRef(this, _dialogHWnd));
 
         /// <summary>
         ///  Gets or sets a string containing the file name selected in the file dialog box.
@@ -262,7 +263,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Win32 instance handle for the application.
         /// </summary>
-        protected virtual IntPtr Instance => Interop.Kernel32.GetModuleHandleW(null);
+        protected virtual IntPtr Instance => Kernel32.GetModuleHandleW(null);
 
         /// <summary>
         ///  Gets the Win32 common Open File Dialog OFN_* option flags.
@@ -474,7 +475,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == Interop.WindowMessages.WM_NOTIFY)
+            if (msg == WindowMessages.WM_NOTIFY)
             {
                 _dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
                 try

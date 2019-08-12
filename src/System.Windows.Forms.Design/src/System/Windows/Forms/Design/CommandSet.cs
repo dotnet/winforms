@@ -7,12 +7,12 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Design
                     IntPtr hwnd = NativeMethods.WindowFromPoint(p.X, p.Y);
                     if (hwnd != IntPtr.Zero)
                     {
-                        NativeMethods.SendMessage(hwnd, Interop.WindowMessages.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
+                        NativeMethods.SendMessage(hwnd, WindowMessages.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
                     }
                     else
                     {

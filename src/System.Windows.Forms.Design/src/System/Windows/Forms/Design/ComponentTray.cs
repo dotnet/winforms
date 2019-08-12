@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
@@ -15,6 +14,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -1603,15 +1603,15 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_CANCELMODE:
+                case WindowMessages.WM_CANCELMODE:
                     // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel any pending drag operation!
                     OnLostCapture();
                     break;
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     OnSetCursor();
                     return;
-                case Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_VSCROLL:
                     // When we scroll, we reposition a control without causing a property change event.  Therefore, we must tell the selection UI service to sync itself.
                     base.WndProc(ref m);
                     if (selectionUISvc != null)
@@ -1619,11 +1619,11 @@ namespace System.Windows.Forms.Design
                         selectionUISvc.SyncSelection();
                     }
                     return;
-                case Interop.WindowMessages.WM_STYLECHANGED:
+                case WindowMessages.WM_STYLECHANGED:
                     // When the scroll bars first appear, we need to invalidate so we properly paint our grid.
                     Invalidate();
                     break;
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     // Pop a context menu for the composition designer.
                     int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
                     int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms.Design
                     }
                     OnContextMenu(x, y, true);
                     break;
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     if (glyphManager != null)
                     {
                         // Get a hit test on any glyhs that we are managing this way - we know where to route appropriate  messages
@@ -2550,11 +2550,11 @@ namespace System.Windows.Forms.Design
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_SETCURSOR:
+                    case WindowMessages.WM_SETCURSOR:
                         // We always handle setting the cursor ourselves.
                         OnSetCursor();
                         break;
-                    case Interop.WindowMessages.WM_CONTEXTMENU:
+                    case WindowMessages.WM_CONTEXTMENU:
                         // We must handle this ourselves.  Control only allows regular Windows Forms context menus, which doesn't do us much good.  Also, control's button up processing calls DefwndProc first, which causes a right mouse up to be routed as a WM_CONTEXTMENU.  If we don't respond to it here, this message will be bubbled up to our parent, which would pop up a container context menu instead of our own.
                         int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
                         int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
@@ -2567,7 +2567,7 @@ namespace System.Windows.Forms.Design
                         }
                         OnContextMenu(x, y);
                         break;
-                    case Interop.WindowMessages.WM_NCHITTEST:
+                    case WindowMessages.WM_NCHITTEST:
                         if (_tray.glyphManager != null)
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too

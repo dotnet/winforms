@@ -6,9 +6,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -836,14 +836,14 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
                     if (_mouseDragAnchor != s_invalidPoint)
                     {
                         _ignoreCaptureChanged = true;
                     }
                     break;
-                case Interop.WindowMessages.WM_CAPTURECHANGED:
+                case WindowMessages.WM_CAPTURECHANGED:
                     if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
                     {
                         EndMouseDrag(MousePosition);

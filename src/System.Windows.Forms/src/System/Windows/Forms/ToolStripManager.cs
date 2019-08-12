@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1365,15 +1366,15 @@ namespace System.Windows.Forms
             {
                 bool filterMessage = false;
 
-                if (m.Msg >= Interop.WindowMessages.WM_MOUSEFIRST && m.Msg <= Interop.WindowMessages.WM_MOUSELAST)
+                if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= Interop.WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= Interop.WindowMessages.WM_NCMBUTTONDBLCLK)
+                else if (m.Msg >= WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                else if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                 {
                     filterMessage = true;
                 }
@@ -1438,8 +1439,8 @@ namespace System.Windows.Forms
                 {
                     switch (m.Msg)
                     {
-                        case Interop.WindowMessages.WM_MOUSEMOVE:
-                        case Interop.WindowMessages.WM_NCMOUSEMOVE:
+                        case WindowMessages.WM_MOUSEMOVE:
+                        case WindowMessages.WM_NCMOUSEMOVE:
                             // Mouse move messages should be eaten if they arent for a dropdown.
                             // this prevents things like ToolTips and mouse over highlights from
                             // being processed.
@@ -1479,9 +1480,9 @@ namespace System.Windows.Forms
                                 }
                             }
                             break;
-                        case Interop.WindowMessages.WM_LBUTTONDOWN:
-                        case Interop.WindowMessages.WM_RBUTTONDOWN:
-                        case Interop.WindowMessages.WM_MBUTTONDOWN:
+                        case WindowMessages.WM_LBUTTONDOWN:
+                        case WindowMessages.WM_RBUTTONDOWN:
+                        case WindowMessages.WM_MBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1491,9 +1492,9 @@ namespace System.Windows.Forms
                                 /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
 
                             break;
-                        case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                        case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                        case Interop.WindowMessages.WM_NCMBUTTONDOWN:
+                        case WindowMessages.WM_NCLBUTTONDOWN:
+                        case WindowMessages.WM_NCRBUTTONDOWN:
+                        case WindowMessages.WM_NCMBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1503,14 +1504,14 @@ namespace System.Windows.Forms
                                 /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
                             break;
 
-                        case Interop.WindowMessages.WM_KEYDOWN:
-                        case Interop.WindowMessages.WM_KEYUP:
-                        case Interop.WindowMessages.WM_CHAR:
-                        case Interop.WindowMessages.WM_DEADCHAR:
-                        case Interop.WindowMessages.WM_SYSKEYDOWN:
-                        case Interop.WindowMessages.WM_SYSKEYUP:
-                        case Interop.WindowMessages.WM_SYSCHAR:
-                        case Interop.WindowMessages.WM_SYSDEADCHAR:
+                        case WindowMessages.WM_KEYDOWN:
+                        case WindowMessages.WM_KEYUP:
+                        case WindowMessages.WM_CHAR:
+                        case WindowMessages.WM_DEADCHAR:
+                        case WindowMessages.WM_SYSKEYDOWN:
+                        case WindowMessages.WM_SYSKEYUP:
+                        case WindowMessages.WM_SYSCHAR:
+                        case WindowMessages.WM_SYSDEADCHAR:
 
                             if (!activeToolStrip.ContainsFocus)
                             {
@@ -1617,7 +1618,7 @@ namespace System.Windows.Forms
                                 // the message filters and preprocess message.
                                 if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                                 {
-                                    msg->message = Interop.WindowMessages.WM_NULL;
+                                    msg->message = WindowMessages.WM_NULL;
                                 }
                             }
                         }
@@ -1735,7 +1736,7 @@ namespace System.Windows.Forms
 
                 return ToolStripManager.ProcessShortcut(ref m, keyData);
             }
-            if (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
+            if (m.Msg == WindowMessages.WM_SYSKEYDOWN)
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
                 ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);

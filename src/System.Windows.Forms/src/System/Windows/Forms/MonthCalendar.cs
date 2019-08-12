@@ -11,6 +11,7 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using ArrayList = System.Collections.ArrayList;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -976,7 +977,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Interop.RECT rect = new Interop.RECT();
+                RECT rect = new RECT();
 
                 if (IsHandleCreated)
                 {
@@ -2442,21 +2443,21 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     Focus();
                     if (!ValidationCancelled)
                     {
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_GETDLGCODE:
+                case WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
                     base.WndProc(ref m);
                     break;
                 default:

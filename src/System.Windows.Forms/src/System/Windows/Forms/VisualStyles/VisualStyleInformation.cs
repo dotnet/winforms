@@ -4,13 +4,15 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.VisualStyles
 {
     /// <summary>
-    ///
     ///  Provides information about the current visual style.
+    ///  
     ///  NOTE:
+    ///  
     ///  1) These properties (except SupportByOS, which is always meaningful) are meaningful only
     ///  if visual styles are supported and have currently been applied by the user.
     ///  2) A subset of these use VisualStyleRenderer objects, so they are
@@ -43,7 +45,7 @@ namespace System.Windows.Forms.VisualStyles
                     Span<char> filename = stackalloc char[512];
                     fixed (char* pFilename = filename)
                     {
-                        Interop.UxTheme.GetCurrentThemeName(pFilename, filename.Length, null, 0, null, 0);
+                        UxTheme.GetCurrentThemeName(pFilename, filename.Length, null, 0, null, 0);
                     }
 
                     return filename.ToString();
@@ -65,7 +67,7 @@ namespace System.Windows.Forms.VisualStyles
                     Span<char> colorScheme = stackalloc char[512];
                     fixed (char* pColorScheme = colorScheme)
                     {
-                        Interop.UxTheme.GetCurrentThemeName(null, 0, pColorScheme, colorScheme.Length, null, 0);
+                        UxTheme.GetCurrentThemeName(null, 0, pColorScheme, colorScheme.Length, null, 0);
                     }
 
                     return colorScheme.ToString();
@@ -87,7 +89,7 @@ namespace System.Windows.Forms.VisualStyles
                     Span<char> size = stackalloc char[512];
                     fixed (char* pSize = size)
                     {
-                        Interop.UxTheme.GetCurrentThemeName(null, 0, null, 0, pSize, size.Length);
+                        UxTheme.GetCurrentThemeName(null, 0, null, 0, pSize, size.Length);
                     }
 
                     return size.ToString();
@@ -106,7 +108,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.DisplayName);
+                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.DisplayName);
                 }
 
                 return string.Empty;
@@ -122,7 +124,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Company);
+                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Company);
                 }
 
                 return string.Empty;
@@ -138,7 +140,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Author);
+                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Author);
                 }
 
                 return string.Empty;
@@ -154,7 +156,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Copyright);
+                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Copyright);
                 }
 
                 return string.Empty;
@@ -170,7 +172,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Url);
+                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Url);
                 }
 
                 return string.Empty;
@@ -186,7 +188,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Version);
+                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Version);
                 }
 
                 return string.Empty;
@@ -202,7 +204,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Description);
+                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Description);
                 }
 
                 return string.Empty;

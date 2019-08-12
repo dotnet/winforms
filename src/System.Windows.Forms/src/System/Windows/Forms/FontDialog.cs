@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -449,11 +450,11 @@ namespace System.Windows.Forms
         {
             switch (msg)
             {
-                case Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_COMMAND:
                     if ((int)wparam == 0x402)
                     {
                         NativeMethods.LOGFONTW logFont = new NativeMethods.LOGFONTW();
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), Interop.WindowMessages.WM_CHOOSEFONT_GETLOGFONT, 0, ref logFont);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), WindowMessages.WM_CHOOSEFONT_GETLOGFONT, 0, ref logFont);
                         UpdateFont(ref logFont);
                         int index = (int)UnsafeNativeMethods.SendDlgItemMessage(new HandleRef(null, hWnd), 0x473, NativeMethods.CB_GETCURSEL, IntPtr.Zero, IntPtr.Zero);
                         if (index != NativeMethods.CB_ERR)
@@ -478,7 +479,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_INITDIALOG:
+                case WindowMessages.WM_INITDIALOG:
                     if (!showColor)
                     {
                         IntPtr hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.cmb4);
@@ -542,7 +543,7 @@ namespace System.Windows.Forms
                 lpLogFont = new IntPtr(&logFont),
                 Flags = Options | NativeMethods.CF_INITTOLOGFONTSTRUCT | NativeMethods.CF_ENABLEHOOK,
                 lpfnHook = hookProcPtr,
-                hInstance = Interop.Kernel32.GetModuleHandleW(null),
+                hInstance = Kernel32.GetModuleHandleW(null),
                 nSizeMin = minSize,
                 nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
                 rgbColors = ShowColor || ShowEffects

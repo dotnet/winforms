@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -583,12 +584,12 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         // We want to instantly change the cursor if the mouse is within our bounds.
-                        var r = new Interop.RECT();
+                        var r = new RECT();
                         UnsafeNativeMethods.GetCursorPos(out Point p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                         {
-                            SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                            SendMessage(WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
                         }
                     }
                 }
@@ -1692,11 +1693,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
+            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            Interop.Gdi32.SelectObject(dc, saveBrush);
-            Interop.Gdi32.DeleteObject(halftone);
-            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Gdi32.SelectObject(dc, saveBrush);
+            Gdi32.DeleteObject(halftone);
+            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -2623,14 +2624,14 @@ namespace System.Windows.Forms
         {
             switch (msg.Msg)
             {
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     splitterFocused = true;
                     base.WndProc(ref msg);
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     splitterFocused = false;
                     base.WndProc(ref msg);
                     break;
@@ -2665,10 +2666,10 @@ namespace System.Windows.Forms
             /// </summary>
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                 {
-                    if ((m.Msg == Interop.WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
-                        || (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN))
+                    if ((m.Msg == WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
+                        || (m.Msg == WindowMessages.WM_SYSKEYDOWN))
                     {
                         //Notify that splitMOVE was reverted ..
                         //this is used in ONKEYUP!!

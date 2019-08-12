@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -784,8 +785,8 @@ namespace System.Windows.Forms
 
             if (xDelta != 0 || yDelta != 0 && IsHandleCreated)
             {
-                Interop.RECT rcClip = ClientRectangle;
-                Interop.RECT rcUpdate = ClientRectangle;
+                RECT rcClip = ClientRectangle;
+                RECT rcUpdate = ClientRectangle;
                 SafeNativeMethods.ScrollWindowEx(new HandleRef(this, Handle), xDelta, yDelta,
                                                  null,
                                                  ref rcClip,
@@ -1209,7 +1210,7 @@ namespace System.Windows.Forms
         {
             if (!IsMirrored)
             {
-                SendMessage(Interop.WindowMessages.WM_HSCROLL,
+                SendMessage(WindowMessages.WM_HSCROLL,
                             NativeMethods.Util.MAKELPARAM((RightToLeft == RightToLeft.Yes) ? NativeMethods.SB_RIGHT : NativeMethods.SB_LEFT, 0), 0);
             }
         }
@@ -1430,13 +1431,13 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case Interop.WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
-                case Interop.WindowMessages.WM_SETTINGCHANGE:
+                case WindowMessages.WM_SETTINGCHANGE:
                     WmSettingChange(ref m);
                     break;
                 default:

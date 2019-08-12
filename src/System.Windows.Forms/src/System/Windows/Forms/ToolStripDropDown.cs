@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -2190,14 +2191,14 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_NCACTIVATE:
+                case WindowMessages.WM_NCACTIVATE:
                     // if someone clicks on a child control of the toolstrip dropdown, we want
                     // the title bar to continue appearing active.  Normally we just show without
                     // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
                     // child controls from taking focus.
                     WmNCActivate(ref m);
                     return;
-                case Interop.WindowMessages.WM_ACTIVATE:
+                case WindowMessages.WM_ACTIVATE:
                     // This is the Chrome Panel collection editor scenario
                     // we had focus, then the Chrome panel was activated and we never went away
                     // when we get focus again, we should reactivate our message filter.
@@ -2293,7 +2294,7 @@ namespace System.Windows.Forms
                         // we're activating - notify the previous guy that we're activating.
                         HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        UnsafeNativeMethods.SendMessage(activeHwndHandleRef, Interop.WindowMessages.WM_NCACTIVATE, (IntPtr)1, NativeMethods.InvalidIntPtr);
+                        UnsafeNativeMethods.SendMessage(activeHwndHandleRef, WindowMessages.WM_NCACTIVATE, (IntPtr)1, NativeMethods.InvalidIntPtr);
                         SafeNativeMethods.RedrawWindow(activeHwndHandleRef, null, NativeMethods.NullHandleRef, NativeMethods.RDW_FRAME | NativeMethods.RDW_INVALIDATE);
                         m.WParam = (IntPtr)1;
                     }

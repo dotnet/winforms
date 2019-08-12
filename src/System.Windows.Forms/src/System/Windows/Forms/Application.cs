@@ -17,6 +17,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using Directory = System.IO.Directory;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -130,20 +131,20 @@ namespace System.Windows.Forms
             // cached.
             // GetModuleHandle  returns a handle to a mapped module without incrementing its
             // reference count.
-            IntPtr hModule = Interop.Kernel32.GetModuleHandleW(Interop.Libraries.Comctl32);
+            IntPtr hModule = Kernel32.GetModuleHandleW(Libraries.Comctl32);
             if (hModule != IntPtr.Zero)
             {
-                return Interop.Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+                return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
             }
 
             // Load comctl since GetModuleHandle failed to find it
-            hModule = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable(Interop.Libraries.Comctl32);
+            hModule = Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Comctl32);
             if (hModule == IntPtr.Zero)
             {
                 return false;
             }
 
-            return Interop.Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+            return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
         }
 
         /// <summary>
@@ -757,7 +758,7 @@ namespace System.Windows.Forms
                 NativeMethods.NullHandleRef);
 
             //then do myself.
-            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), WindowMessages.WM_THEMECHANGED, 0, 0);
 
             return true;
         }
@@ -1921,7 +1922,7 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.GetMessageA(ref msg, NativeMethods.NullHandleRef, 0, 0);
                                 }
 
-                                if (msg.message == Interop.WindowMessages.WM_QUIT)
+                                if (msg.message == WindowMessages.WM_QUIT)
                                 {
                                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Normal message loop termination");
 
@@ -3191,7 +3192,7 @@ namespace System.Windows.Forms
                 // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
                 // to.
                 //
-                UnsafeNativeMethods.PostThreadMessage(id, Interop.WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.PostThreadMessage(id, WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
             }
 
@@ -3574,10 +3575,10 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (msg.message >= Interop.WindowMessages.WM_KEYFIRST
-                        && msg.message <= Interop.WindowMessages.WM_KEYLAST)
+                if (msg.message >= WindowMessages.WM_KEYFIRST
+                        && msg.message <= WindowMessages.WM_KEYLAST)
                 {
-                    if (msg.message == Interop.WindowMessages.WM_CHAR)
+                    if (msg.message == WindowMessages.WM_CHAR)
                     {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                         if (unchecked((int)(long)msg.wParam) == 3 && (unchecked((int)(long)msg.lParam) & breakLParamMask) == breakLParamMask)
@@ -4036,7 +4037,7 @@ namespace System.Windows.Forms
             //   in whidbey we now aggressively tear down the parking window
             //   when the last control has been removed off of it.
 
-            private const int WM_CHECKDESTROY = Interop.WindowMessages.WM_USER + 0x01;
+            private const int WM_CHECKDESTROY = WindowMessages.WM_USER + 0x01;
 
             private int childCount = 0;
 
@@ -4159,12 +4160,12 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg != Interop.WindowMessages.WM_SHOWWINDOW)
+                if (m.Msg != WindowMessages.WM_SHOWWINDOW)
                 {
                     base.WndProc(ref m);
-                    if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY)
+                    if (m.Msg == WindowMessages.WM_PARENTNOTIFY)
                     {
-                        if (NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == Interop.WindowMessages.WM_DESTROY)
+                        if (NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == WindowMessages.WM_DESTROY)
                         {
                             UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
                         }

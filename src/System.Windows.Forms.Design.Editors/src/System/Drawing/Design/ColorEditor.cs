@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Drawing.Design
 {
@@ -1112,13 +1113,13 @@ namespace System.Drawing.Design
             {
                 switch (msg)
                 {
-                    case Interop.WindowMessages.WM_INITDIALOG:
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                    case WindowMessages.WM_INITDIALOG:
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
                         NativeMethods.EnableWindow(hwndCtl, false);
                         NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
@@ -1127,7 +1128,7 @@ namespace System.Drawing.Design
                         NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
-                    case Interop.WindowMessages.WM_COMMAND:
+                    case WindowMessages.WM_COMMAND:
                         switch (NativeMethods.Util.LOWORD(unchecked((int)(long)wParam)))
                         {
                             case COLOR_ADD:
@@ -1140,7 +1141,7 @@ namespace System.Drawing.Design
                                 blue = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                NativeMethods.PostMessage(hwnd, Interop.WindowMessages.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
+                                NativeMethods.PostMessage(hwnd, WindowMessages.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
                                 break;
                         }
                         break;

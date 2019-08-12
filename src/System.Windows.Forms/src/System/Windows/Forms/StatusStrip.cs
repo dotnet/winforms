@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -612,7 +613,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == Interop.WindowMessages.WM_NCHITTEST) && SizingGrip)
+            if ((m.Msg == WindowMessages.WM_NCHITTEST) && SizingGrip)
             {
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
@@ -630,7 +631,7 @@ namespace System.Windows.Forms
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
-                        Interop.RECT rootHwndClientArea = new Interop.RECT();
+                        RECT rootHwndClientArea = new RECT();
                         UnsafeNativeMethods.GetClientRect(rootHwnd, ref rootHwndClientArea);
 
                         // map the size grip FROM statusStrip coords TO the toplevel window coords.
@@ -683,7 +684,7 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == Interop.WindowMessages.WM_NCHITTEST)
+                if (m.Msg == WindowMessages.WM_NCHITTEST)
                 {
                     int x = NativeMethods.Util.LOWORD(m.LParam);
                     int y = NativeMethods.Util.HIWORD(m.LParam);

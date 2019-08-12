@@ -17,7 +17,7 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -136,23 +136,23 @@ namespace System.Windows.Forms
             IntPtr hBitmap = bm.GetHbitmap();
 
             // Create a compatible DC to render the source bitmap.
-            IntPtr dcSrc = Interop.Gdi32.CreateCompatibleDC(hDC);
-            IntPtr srcOld = Interop.Gdi32.SelectObject(dcSrc, hBitmap);
+            IntPtr dcSrc = Gdi32.CreateCompatibleDC(hDC);
+            IntPtr srcOld = Gdi32.SelectObject(dcSrc, hBitmap);
 
             // Create a compatible DC and a new compatible bitmap.
-            IntPtr dcDest = Interop.Gdi32.CreateCompatibleDC(hDC);
+            IntPtr dcDest = Gdi32.CreateCompatibleDC(hDC);
             IntPtr hBitmapNew = SafeNativeMethods.CreateCompatibleBitmap(new HandleRef(null, hDC), bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            IntPtr destOld = Interop.Gdi32.SelectObject(dcDest, hBitmapNew);
+            IntPtr destOld = Gdi32.SelectObject(dcDest, hBitmapNew);
             SafeNativeMethods.BitBlt(new HandleRef(null, dcDest), 0, 0, bm.Size.Width, bm.Size.Height, new HandleRef(null, dcSrc), 0, 0, 0x00CC0020);
 
             // Clear the source and destination compatible DCs.
-            Interop.Gdi32.SelectObject(dcSrc, srcOld);
-            Interop.Gdi32.SelectObject(dcDest, destOld);
+            Gdi32.SelectObject(dcSrc, srcOld);
+            Gdi32.SelectObject(dcDest, destOld);
 
-            Interop.Gdi32.DeleteDC(dcSrc);
-            Interop.Gdi32.DeleteDC(dcDest);
+            Gdi32.DeleteDC(dcSrc);
+            Gdi32.DeleteDC(dcDest);
 
             return hBitmapNew;
         }
@@ -1321,9 +1321,9 @@ namespace System.Windows.Forms
 
                 if (medium.unionmember != IntPtr.Zero)
                 {
-                    Interop.Ole32.IStream pStream = (Interop.Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
+                    Ole32.IStream pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
                     Marshal.Release(medium.unionmember);
-                    pStream.Stat(out Interop.Ole32.STATSTG sstg, Interop.Ole32.STATFLAG.STATFLAG_DEFAULT);
+                    pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.STATFLAG_DEFAULT);
 
                     IntPtr hglobal = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE
                                                       | NativeMethods.GMEM_DDESHARE
@@ -1494,7 +1494,7 @@ namespace System.Windows.Forms
                         {
                             Image firstImage = clipboardImage;
                             clipboardImage = (Image)clipboardImage.Clone();
-                            Interop.Gdi32.DeleteObject(medium.unionmember);
+                            Gdi32.DeleteObject(medium.unionmember);
                             firstImage.Dispose();
                         }
                         data = clipboardImage;
@@ -1626,7 +1626,7 @@ namespace System.Windows.Forms
             {
 
                 string[] files = null;
-                StringBuilder sb = new StringBuilder(Interop.Kernel32.MAX_PATH);
+                StringBuilder sb = new StringBuilder(Kernel32.MAX_PATH);
 
                 int count = UnsafeNativeMethods.DragQueryFile(new HandleRef(null, hdrop), unchecked((int)0xFFFFFFFF), null, 0);
                 if (count > 0)

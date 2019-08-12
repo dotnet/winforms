@@ -17,6 +17,7 @@ using System.Windows.Forms.ComponentModel.Com2Interop;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.PropertyGridInternal;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -779,7 +780,7 @@ namespace System.Windows.Forms
                 {
                     if (0 == paintFrozen++)
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
+                        SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
                     }
                 }
                 if (!value)
@@ -791,7 +792,7 @@ namespace System.Windows.Forms
 
                     if (0 == --paintFrozen)
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
+                        SendMessage(WindowMessages.WM_SETREDRAW, 1, 0);
                         Invalidate(true);
                     }
 
@@ -5149,7 +5150,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_UNDO:
+                case WindowMessages.WM_UNDO:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoUndoCommand();
@@ -5159,7 +5160,7 @@ namespace System.Windows.Forms
                         m.Result = CanUndo ? (IntPtr)1 : (IntPtr)0;
                     }
                     return;
-                case Interop.WindowMessages.WM_CUT:
+                case WindowMessages.WM_CUT:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoCutCommand();
@@ -5170,7 +5171,7 @@ namespace System.Windows.Forms
                     }
                     return;
 
-                case Interop.WindowMessages.WM_COPY:
+                case WindowMessages.WM_COPY:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoCopyCommand();
@@ -5181,7 +5182,7 @@ namespace System.Windows.Forms
                     }
                     return;
 
-                case Interop.WindowMessages.WM_PASTE:
+                case WindowMessages.WM_PASTE:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoPasteCommand();
@@ -5192,7 +5193,7 @@ namespace System.Windows.Forms
                     }
                     return;
 
-                case Interop.WindowMessages.WM_COPYDATA:
+                case WindowMessages.WM_COPYDATA:
                     GetDataFromCopyData(m.LParam);
                     m.Result = (IntPtr)1;
                     return;
@@ -5624,16 +5625,16 @@ namespace System.Windows.Forms
 
     internal static class AutomationMessages
     {
-        internal const int PGM_GETBUTTONCOUNT = Interop.WindowMessages.WM_USER + 0x50;
-        internal const int PGM_GETBUTTONSTATE = Interop.WindowMessages.WM_USER + 0x52;
-        internal const int PGM_SETBUTTONSTATE = Interop.WindowMessages.WM_USER + 0x51;
-        internal const int PGM_GETBUTTONTEXT = Interop.WindowMessages.WM_USER + 0x53;
-        internal const int PGM_GETBUTTONTOOLTIPTEXT = Interop.WindowMessages.WM_USER + 0x54;
-        internal const int PGM_GETROWCOORDS = Interop.WindowMessages.WM_USER + 0x55;
-        internal const int PGM_GETVISIBLEROWCOUNT = Interop.WindowMessages.WM_USER + 0x56;
-        internal const int PGM_GETSELECTEDROW = Interop.WindowMessages.WM_USER + 0x57;
-        internal const int PGM_SETSELECTEDTAB = Interop.WindowMessages.WM_USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
-        internal const int PGM_GETTESTINGINFO = Interop.WindowMessages.WM_USER + 0x59;
+        internal const int PGM_GETBUTTONCOUNT = WindowMessages.WM_USER + 0x50;
+        internal const int PGM_GETBUTTONSTATE = WindowMessages.WM_USER + 0x52;
+        internal const int PGM_SETBUTTONSTATE = WindowMessages.WM_USER + 0x51;
+        internal const int PGM_GETBUTTONTEXT = WindowMessages.WM_USER + 0x53;
+        internal const int PGM_GETBUTTONTOOLTIPTEXT = WindowMessages.WM_USER + 0x54;
+        internal const int PGM_GETROWCOORDS = WindowMessages.WM_USER + 0x55;
+        internal const int PGM_GETVISIBLEROWCOUNT = WindowMessages.WM_USER + 0x56;
+        internal const int PGM_GETSELECTEDROW = WindowMessages.WM_USER + 0x57;
+        internal const int PGM_SETSELECTEDTAB = WindowMessages.WM_USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
+        internal const int PGM_GETTESTINGINFO = WindowMessages.WM_USER + 0x59;
 
         /// <summary>
         ///  Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where

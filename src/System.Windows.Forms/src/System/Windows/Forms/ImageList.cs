@@ -12,7 +12,7 @@ using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.InteropServices;
-
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -547,8 +547,8 @@ namespace System.Windows.Forms
             IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);   // Calls GDI to create Bitmap.
             IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask); // Calls GDI+ to create Bitmap. Need to add handle to HandleCollector.
             int index = SafeNativeMethods.ImageList_Add(new HandleRef(this, Handle), hBitmap, hMask);
-            Interop.Gdi32.DeleteObject(hBitmap);
-            Interop.Gdi32.DeleteObject(hMask);
+            Gdi32.DeleteObject(hBitmap);
+            Gdi32.DeleteObject(hMask);
 
             if (index == -1)
             {
@@ -1281,8 +1281,8 @@ namespace System.Windows.Forms
                         IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                         IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
                         bool ok = SafeNativeMethods.ImageList_Replace(new HandleRef(owner, owner.Handle), index, hBitmap, hMask);
-                        Interop.Gdi32.DeleteObject(hBitmap);
-                        Interop.Gdi32.DeleteObject(hMask);
+                        Gdi32.DeleteObject(hBitmap);
+                        Gdi32.DeleteObject(hMask);
 
                         if (!ok)
                         {

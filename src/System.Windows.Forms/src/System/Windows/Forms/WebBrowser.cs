@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms
@@ -280,7 +281,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Interop.Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Interop.Ole32.IPersistStreamInit;
+                    Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
                     Debug.Assert(psi != null, "Object isn't an IPersistStreamInit!");
                     if (psi == null)
                     {
@@ -289,8 +290,8 @@ namespace System.Windows.Forms
                     else
                     {
                         MemoryStream memoryStream = new MemoryStream();
-                        Interop.Ole32.IStream iStream = (Interop.Ole32.IStream)new Interop.Ole32.GPStream(memoryStream);
-                        psi.Save(iStream, Interop.BOOL.FALSE);
+                        Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(memoryStream);
+                        psi.Save(iStream, BOOL.FALSE);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                     }
                 }
@@ -1468,7 +1469,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     int y = NativeMethods.Util.SignedHIWORD(m.LParam);
 
@@ -1651,7 +1652,7 @@ namespace System.Windows.Forms
                 {
                     int keyCode = (int)msg.wParam | (int)Control.ModifierKeys;
 
-                    if (msg.message != Interop.WindowMessages.WM_CHAR
+                    if (msg.message != WindowMessages.WM_CHAR
                             && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                     {
                         return NativeMethods.S_OK;
@@ -1773,9 +1774,9 @@ namespace System.Windows.Forms
                     HtmlDocument htmlDocument = parent.Document;
                     if (htmlDocument != null)
                     {
-                        Interop.Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Interop.Ole32.IPersistStreamInit;
+                        Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
                         Debug.Assert(psi != null, "The Document does not implement IPersistStreamInit");
-                        Interop.Ole32.IStream iStream = (Interop.Ole32.IStream)new Interop.Ole32.GPStream(
+                        Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(
                                                     parent.documentStreamToSetOnLoad);
                         psi.Load(iStream);
                         htmlDocument.Encoding = "unicode";

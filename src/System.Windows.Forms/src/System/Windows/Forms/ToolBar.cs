@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -704,7 +705,7 @@ namespace System.Windows.Forms
                 {
                     // get the first visible button and get it's height
                     //
-                    Interop.RECT rect = new Interop.RECT();
+                    RECT rect = new RECT();
                     int firstVisible;
 
                     for (firstVisible = 0; firstVisible < buttons.Length; firstVisible++)
@@ -785,7 +786,7 @@ namespace System.Windows.Forms
                     else
                     {
 
-                        Interop.RECT rect = new Interop.RECT();
+                        RECT rect = new RECT();
 
                         for (int x = 0; x < buttonCount; x++)
                         {
@@ -1595,7 +1596,7 @@ namespace System.Windows.Forms
             Menu menu = tbb.DropDownMenu;
             if (menu != null)
             {
-                Interop.RECT rc = new Interop.RECT();
+                RECT rc = new RECT();
                 NativeMethods.TPMPARAMS tpm = new NativeMethods.TPMPARAMS();
 
                 SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);
@@ -1722,12 +1723,12 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
+                case WindowMessages.WM_COMMAND + WindowMessages.WM_REFLECT:
                     WmReflectCommand(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFY:
-                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
+                case WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code)
                     {

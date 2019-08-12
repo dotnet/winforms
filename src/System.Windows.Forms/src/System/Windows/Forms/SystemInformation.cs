@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
+using static Interop;
 using static Interop.User32;
 
 namespace System.Windows.Forms
@@ -235,7 +236,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                var rect = new Interop.RECT();
+                var rect = new RECT();
                 UnsafeNativeMethods.SystemParametersInfoW(NativeMethods.SPI_GETWORKAREA, ref rect);
                 return rect;
             }

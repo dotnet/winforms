@@ -8,6 +8,8 @@
 #define GDI_FONT_CACHE_TRACK
 #endif
 
+using static Interop;
+
 namespace System.Windows.Forms.Internal
 {
     internal static class MeasurementDCInfo
@@ -53,7 +55,7 @@ namespace System.Windows.Forms.Internal
         ///  GetTextMargins - checks to see if we have cached information about the current font,
         ///  returns info about it.
         ///  An MRU of Font margins was considered, but seems like overhead.
-        internal static Interop.User32.DRAWTEXTPARAMS GetTextMargins(WindowsGraphics wg, WindowsFont font)
+        internal static User32.DRAWTEXTPARAMS GetTextMargins(WindowsGraphics wg, WindowsFont font)
         {
             // PERF: operate on a local reference rather than party directly on the thread static one.
             CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
@@ -61,7 +63,7 @@ namespace System.Windows.Forms.Internal
             if (currentCachedInfo != null && currentCachedInfo.LeftTextMargin > 0 && currentCachedInfo.RightTextMargin > 0 && font == currentCachedInfo.LastUsedFont)
             {
                 // we have to return clones as DrawTextEx will modify this struct
-                return new Interop.User32.DRAWTEXTPARAMS
+                return new User32.DRAWTEXTPARAMS
                 {
                     iLeftMargin = currentCachedInfo.LeftTextMargin,
                     iRightMargin = currentCachedInfo.RightTextMargin
@@ -72,12 +74,12 @@ namespace System.Windows.Forms.Internal
                 currentCachedInfo = new CachedInfo();
                 cachedMeasurementDCInfo = currentCachedInfo;
             }
-            Interop.User32.DRAWTEXTPARAMS drawTextParams = wg.GetTextMargins(font);
+            User32.DRAWTEXTPARAMS drawTextParams = wg.GetTextMargins(font);
             currentCachedInfo.LeftTextMargin = drawTextParams.iLeftMargin;
             currentCachedInfo.RightTextMargin = drawTextParams.iRightMargin;
 
             // returning a copy here to be consistent with the return value from the cache.
-            return new Interop.User32.DRAWTEXTPARAMS
+            return new User32.DRAWTEXTPARAMS
             {
                 iLeftMargin = currentCachedInfo.LeftTextMargin,
                 iRightMargin = currentCachedInfo.RightTextMargin

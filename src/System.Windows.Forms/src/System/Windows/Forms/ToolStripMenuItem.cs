@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -942,14 +943,14 @@ namespace System.Windows.Forms
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_SYSCOMMAND, nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_SYSCOMMAND, nativeMenuCommandID, 0);
                 }
                 else
                 {
                     // These are user added items like ".Net Window..."
 
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
                 }
                 Invalidate();
             }

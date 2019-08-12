@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1240,7 +1241,7 @@ namespace System.Windows.Forms
                     windowRegion.Dispose();
                     if (windowRegionHandle != IntPtr.Zero)
                     {
-                        Interop.Gdi32.DeleteObject(windowRegionHandle);
+                        Gdi32.DeleteObject(windowRegionHandle);
                     }
                 }
 
@@ -1256,16 +1257,16 @@ namespace System.Windows.Forms
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_NOTIFY:
+                    case WindowMessages.WM_NOTIFY:
                         NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                         if (nmhdr.code == NativeMethods.TTN_SHOW || nmhdr.code == NativeMethods.TTN_POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr.idFrom, nmhdr.code == NativeMethods.TTN_SHOW);
                         }
                         break;
-                    case Interop.WindowMessages.WM_ERASEBKGND:
+                    case WindowMessages.WM_ERASEBKGND:
                         break;
-                    case Interop.WindowMessages.WM_PAINT:
+                    case WindowMessages.WM_PAINT:
                         OnPaint(ref m);
                         break;
                     default:
@@ -1644,7 +1645,7 @@ namespace System.Windows.Forms
                         {
                             if (mask != IntPtr.Zero)
                             {
-                                Interop.Gdi32.DeleteObject(mask);
+                                Gdi32.DeleteObject(mask);
                             }
                         }
                     }

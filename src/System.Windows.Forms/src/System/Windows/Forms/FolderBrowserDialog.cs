@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -227,10 +228,10 @@ namespace System.Windows.Forms
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
-            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
+            Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
             if (listHandle.IsInvalid)
             {
-                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
+                Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
                 if (listHandle.IsInvalid)
                 {
                     throw new InvalidOperationException(SR.FolderBrowserDialogNoRootFolder);
@@ -239,10 +240,10 @@ namespace System.Windows.Forms
 
             using (listHandle)
             {
-                uint mergedOptions = Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
+                uint mergedOptions = Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
                 if (!ShowNewFolderButton)
                 {
-                    mergedOptions |= Interop.Shell32.BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
+                    mergedOptions |= Shell32.BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
                 }
 
                 // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
@@ -254,13 +255,13 @@ namespace System.Windows.Forms
                     throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
-                var callback = new Interop.Shell32.BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
-                char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
+                var callback = new Shell32.BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
+                char[] displayName = ArrayPool<char>.Shared.Rent(Kernel32.MAX_PATH + 1);
                 try
                 {
                     fixed (char* pDisplayName = displayName)
                     {
-                        var bi = new Interop.Shell32.BROWSEINFO
+                        var bi = new Shell32.BROWSEINFO
                         {
                             pidlRoot = listHandle,
                             hwndOwner = hWndOwner,
@@ -273,7 +274,7 @@ namespace System.Windows.Forms
                         };
 
                         // Show the dialog
-                        using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))
+                        using (CoTaskMemSafeHandle browseHandle = Shell32.SHBrowseForFolderW(ref bi))
                         {
                             if (browseHandle.IsInvalid)
                             {
@@ -281,7 +282,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
+                            Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
                             GC.KeepAlive(callback);
                             return true;
                         }
@@ -316,7 +317,7 @@ namespace System.Windows.Forms
                     if (selectedPidl != IntPtr.Zero)
                     {
                         // Try to retrieve the path from the IDList
-                        bool isFileSystemFolder = Interop.Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
+                        bool isFileSystemFolder = Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
                         UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_ENABLEOK, 0, isFileSystemFolder ? 1 : 0);
                     }
                     break;

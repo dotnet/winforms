@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -414,8 +415,8 @@ namespace System.Windows.Forms
 
             Graphics tempGraphics = CreateGraphicsInternal();
             IntPtr dc = tempGraphics.GetHdc();
-            screendpi = new Point(Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX),
-                                  Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY));
+            screendpi = new Point(Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX),
+                                  Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY));
             tempGraphics.ReleaseHdcInternal(dc);
             tempGraphics.Dispose();
 
@@ -774,7 +775,7 @@ namespace System.Windows.Forms
                 position.Y = 0;
             }
 
-            Interop.RECT scroll = ClientRectangle;
+            RECT scroll = ClientRectangle;
             SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
                                  current.X - position.X,
                                  current.Y - position.Y,
@@ -962,15 +963,15 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case Interop.WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
                 //added case to handle keyboard events
                 //
-                case Interop.WindowMessages.WM_KEYDOWN:
+                case WindowMessages.WM_KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:

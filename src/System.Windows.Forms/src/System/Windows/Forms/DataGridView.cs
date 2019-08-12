@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -376,7 +377,7 @@ namespace System.Windows.Forms
         private Hashtable pens;
         private Hashtable brushes;
 
-        private Interop.RECT[] cachedScrollableRegion;
+        private RECT[] cachedScrollableRegion;
 
         // DataBinding
         private DataGridViewDataConnection dataConnection;
@@ -3204,7 +3205,7 @@ namespace System.Windows.Forms
                     scrollEventType = Columns.GetColumnCount(DataGridViewElementStates.Visible, displayedBandsInfo.FirstDisplayedScrollingCol, oldFirstVisibleScrollingCol) > 1 ? ScrollEventType.LargeDecrement : ScrollEventType.SmallDecrement;
                 }
 
-                Interop.RECT[] rects = CreateScrollableRegion(rectTmp);
+                RECT[] rects = CreateScrollableRegion(rectTmp);
                 if (RightToLeftInternal)
                 {
                     change = -change;

@@ -12,9 +12,9 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
-using System.Windows.Forms.Internal;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return false;
                 }
-                return (0 != (int)Edit.SendMessage(Interop.EditMessages.EM_CANUNDO, 0, 0));
+                return (0 != (int)Edit.SendMessage(EditMessages.EM_CANUNDO, 0, 0));
             }
         }
 
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (CanUndo && Edit.Visible)
             {
-                Edit.SendMessage(Interop.WindowMessages.WM_UNDO, 0, 0);
+                Edit.SendMessage(WindowMessages.WM_UNDO, 0, 0);
             }
         }
 
@@ -1985,7 +1985,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool FilterEditWndProc(ref Message m)
         {
             // if it's the TAB key, we keep it since we'll give them focus with it.
-            if (dropDownHolder != null && dropDownHolder.Visible && m.Msg == Interop.WindowMessages.WM_KEYDOWN && (int)m.WParam != (int)Keys.Tab)
+            if (dropDownHolder != null && dropDownHolder.Visible && m.Msg == WindowMessages.WM_KEYDOWN && (int)m.WParam != (int)Keys.Tab)
             {
                 Control ctl = dropDownHolder.Component;
                 if (ctl != null)
@@ -3211,7 +3211,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Math.Abs(screenPoint.Y - rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(selectedRow, false, ROWVALUE);
-                    Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONUP, 0, (int)(me.Y << 16 | (me.X & 0xFFFF)));
+                    Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, (int)(me.Y << 16 | (me.X & 0xFFFF)));
                     Edit.SelectAll();
                 }
                 rowSelectPos = Point.Empty;
@@ -4160,8 +4160,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(lastMouseDown);
                 editPoint = Edit.PointToClient(editPoint);
-                Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
-                Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
+                Edit.SendMessage(WindowMessages.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
+                Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
             }
 
             if (setSelectTime)
@@ -4180,12 +4180,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (_baseHfont != IntPtr.Zero)
             {
-                Interop.Gdi32.DeleteObject(_baseHfont);
+                Gdi32.DeleteObject(_baseHfont);
                 _baseHfont = IntPtr.Zero;
             }
             if (_boldHfont != IntPtr.Zero)
             {
-                Interop.Gdi32.DeleteObject(_boldHfont);
+                Gdi32.DeleteObject(_boldHfont);
                 _boldHfont = IntPtr.Zero;
             }
         }
@@ -4422,7 +4422,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // The listbox draws with GDI, not GDI+.  So, we
                     // use a normal DC here.
 
-                    IntPtr hdc = Interop.User32.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
+                    IntPtr hdc = User32.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
 
                     // This creates a copy of the given Font, and as such we need to 
                     IntPtr hFont = Font.ToHfont();
@@ -4431,7 +4431,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     int iSel = -1;
                     try
                     {
-                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
+                        hFont = Gdi32.SelectObject(hdc, hFont);
 
                         iSel = GetCurrentValueIndex(gridEntry);
                         if (rgItems != null && rgItems.Length > 0)
@@ -4443,7 +4443,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 s = gridEntry.GetPropertyTextValue(rgItems[i]);
                                 DropDownListBox.Items.Add(s);
-                                Interop.Gdi32.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), s, s.Length, ref textSize);
+                                Gdi32.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), s, s.Length, ref textSize);
                                 maxWidth = Math.Max(textSize.Width, maxWidth);
                             }
                         }
@@ -4452,12 +4452,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
 
-                        hFont = Interop.Gdi32.SelectObject(hdc, hFont);
+                        hFont = Gdi32.SelectObject(hdc, hFont);
                     }
                     finally
                     {
-                        Interop.Gdi32.DeleteObject(hFont);
-                        Interop.User32.ReleaseDC(new HandleRef(DropDownListBox, DropDownListBox.Handle), hdc);
+                        Gdi32.DeleteObject(hFont);
+                        User32.ReleaseDC(new HandleRef(DropDownListBox, DropDownListBox.Handle), hdc);
                     }
 
                     // Microsoft, 4/25/1998 - must check for -1 and not call the set...
@@ -4525,7 +4525,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             ToolTip.Visible = false;
 
-            Interop.RECT rect = itemRect;
+            RECT rect = itemRect;
 
             ToolTip.SendMessage(NativeMethods.TTM_ADJUSTRECT, 1, ref rect);
 
@@ -5745,8 +5745,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
             while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
                                                    NativeMethods.NullHandleRef,
-                                                   Interop.WindowMessages.WM_MOUSEFIRST,
-                                                   Interop.WindowMessages.WM_MOUSELAST,
+                                                   WindowMessages.WM_MOUSEFIRST,
+                                                   WindowMessages.WM_MOUSELAST,
                                                    NativeMethods.PM_REMOVE))
             {
                 ;
@@ -5831,8 +5831,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
             while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
                                                    NativeMethods.NullHandleRef,
-                                                   Interop.WindowMessages.WM_MOUSEFIRST,
-                                                   Interop.WindowMessages.WM_MOUSELAST,
+                                                   WindowMessages.WM_MOUSEFIRST,
+                                                   WindowMessages.WM_MOUSELAST,
                                                    NativeMethods.PM_REMOVE))
             {
                 ;
@@ -6160,7 +6160,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             switch (m.Msg)
             {
 
-                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
+                case WindowMessages.WM_SYSCOLORCHANGE:
                     Invalidate();
                     break;
 
@@ -6169,7 +6169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Edit or bad bad things can happen with
                 // our state...
                 //
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     if (!GetInPropertySet() && Edit.Visible && (errorState != ERROR_NONE || !Commit()))
                     {
                         base.WndProc(ref m);
@@ -6178,18 +6178,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     break;
 
-                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
+                case WindowMessages.WM_IME_STARTCOMPOSITION:
                     Edit.Focus();
                     Edit.Clear();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_STARTCOMPOSITION, 0, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), WindowMessages.WM_IME_STARTCOMPOSITION, 0, 0);
                     return;
 
-                case Interop.WindowMessages.WM_IME_COMPOSITION:
+                case WindowMessages.WM_IME_COMPOSITION:
                     Edit.Focus();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_COMPOSITION, m.WParam, m.LParam);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), WindowMessages.WM_IME_COMPOSITION, m.WParam, m.LParam);
                     return;
 
-                case Interop.WindowMessages.WM_GETDLGCODE:
+                case WindowMessages.WM_GETDLGCODE:
 
                     int flags = NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTARROWS;
 
@@ -6209,7 +6209,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     m.Result = (IntPtr)(flags);
                     return;
 
-                case Interop.WindowMessages.WM_MOUSEMOVE:
+                case WindowMessages.WM_MOUSEMOVE:
 
                     // check if it's the same position, of so eat the message
                     if (unchecked((int)(long)m.LParam) == lastMouseMove)
@@ -6219,7 +6219,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     lastMouseMove = unchecked((int)(long)m.LParam);
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY:
                     if (WmNotify(ref m))
                     {
                         return;
@@ -6987,7 +6987,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             protected override void WndProc(ref Message m)
             {
 
-                if (m.Msg == Interop.WindowMessages.WM_ACTIVATE)
+                if (m.Msg == WindowMessages.WM_ACTIVATE)
                 {
                     SetState(STATE_MODAL, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
@@ -7002,7 +7002,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //Active = ((int)m.WParam & 0x0000FFFF) != NativeMethods.WA_INACTIVE;
                     //return;
                 }
-                else if (m.Msg == Interop.WindowMessages.WM_CLOSE)
+                else if (m.Msg == WindowMessages.WM_CLOSE)
                 {
                     // don't let an ALT-F4 get you down
                     //
@@ -7012,7 +7012,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     return;
                 }
-                else if (m.Msg == Interop.WindowMessages.WM_DPICHANGED)
+                else if (m.Msg == WindowMessages.WM_DPICHANGED)
                 {
                     // Dropdownholder in PropertyGridView is already scaled based on parent font and other properties that were already set for new DPI
                     // This case is to avoid rescaling(double scaling) of this form
@@ -7599,7 +7599,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Focus();
                     SelectAll();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
                 }
             }
 
@@ -7852,29 +7852,29 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_STYLECHANGED:
+                    case WindowMessages.WM_STYLECHANGED:
                         if ((unchecked((int)(long)m.WParam) & NativeMethods.GWL_EXSTYLE) != 0)
                         {
                             psheet.Invalidate();
                         }
                         break;
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case WindowMessages.WM_MOUSEMOVE:
                         if (unchecked((int)(long)m.LParam) == lastMove)
                         {
                             return;
                         }
                         lastMove = unchecked((int)(long)m.LParam);
                         break;
-                    case Interop.WindowMessages.WM_DESTROY:
+                    case WindowMessages.WM_DESTROY:
                         mouseHook.HookMouseDown = false;
                         break;
-                    case Interop.WindowMessages.WM_SHOWWINDOW:
+                    case WindowMessages.WM_SHOWWINDOW:
                         if (IntPtr.Zero == m.WParam)
                         {
                             mouseHook.HookMouseDown = false;
                         }
                         break;
-                    case Interop.WindowMessages.WM_PASTE:
+                    case WindowMessages.WM_PASTE:
                         /*if (!this.ReadOnly) {
                             IDataObject dataObject = Clipboard.GetDataObject();
                             Debug.Assert(dataObject != null, "Failed to get dataObject from clipboard");
@@ -7894,7 +7894,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_GETDLGCODE:
+                    case WindowMessages.WM_GETDLGCODE:
 
                         m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTCHARS);
                         if (psheet.NeedsCommit || WantsTab((ModifierKeys & Keys.Shift) == 0))
@@ -7903,7 +7903,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         return;
 
-                    case Interop.WindowMessages.WM_NOTIFY:
+                    case WindowMessages.WM_NOTIFY:
                         if (WmNotify(ref m))
                         {
                             return;
@@ -8186,13 +8186,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         switch (unchecked((int)(long)wparam))
                         {
-                            case Interop.WindowMessages.WM_LBUTTONDOWN:
-                            case Interop.WindowMessages.WM_MBUTTONDOWN:
-                            case Interop.WindowMessages.WM_RBUTTONDOWN:
-                            case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                            case Interop.WindowMessages.WM_NCMBUTTONDOWN:
-                            case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                            case Interop.WindowMessages.WM_MOUSEACTIVATE:
+                            case WindowMessages.WM_LBUTTONDOWN:
+                            case WindowMessages.WM_MBUTTONDOWN:
+                            case WindowMessages.WM_RBUTTONDOWN:
+                            case WindowMessages.WM_NCLBUTTONDOWN:
+                            case WindowMessages.WM_NCMBUTTONDOWN:
+                            case WindowMessages.WM_NCRBUTTONDOWN:
+                            case WindowMessages.WM_MOUSEACTIVATE:
                                 if (ProcessMouseDown(mhs.hWnd, mhs.pt.X, mhs.pt.Y))
                                 {
                                     return (IntPtr)1;

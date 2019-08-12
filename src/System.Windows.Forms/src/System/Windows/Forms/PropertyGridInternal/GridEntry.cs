@@ -14,8 +14,8 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
-using System.Windows.Forms.Internal;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -2475,7 +2475,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Matrix m = g.Transform;
                 IntPtr hdc = g.GetHdc();
-                Interop.RECT lpRect = new Rectangle(rect.X + (int)m.OffsetX + 2, rect.Y + (int)m.OffsetY - 1, rect.Width - 4, rect.Height);
+                RECT lpRect = new Rectangle(rect.X + (int)m.OffsetX + 2, rect.Y + (int)m.OffsetY - 1, rect.Width - 4, rect.Height);
                 IntPtr hfont = GetHfont(valueModified);
 
                 int oldTextColor = 0;
@@ -2487,11 +2487,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     oldTextColor = SafeNativeMethods.SetTextColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(textColor.ToArgb()));
                     oldBkColor = SafeNativeMethods.SetBkColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(bkColor.ToArgb()));
-                    hfont = Interop.Gdi32.SelectObject(hdc, hfont);
-                    Interop.User32.TextFormatFlags format = Interop.User32.TextFormatFlags.DT_EDITCONTROL | Interop.User32.TextFormatFlags.DT_EXPANDTABS | Interop.User32.TextFormatFlags.DT_NOCLIP | Interop.User32.TextFormatFlags.DT_SINGLELINE | Interop.User32.TextFormatFlags.DT_NOPREFIX;
+                    hfont = Gdi32.SelectObject(hdc, hfont);
+                    User32.TextFormatFlags format = User32.TextFormatFlags.DT_EDITCONTROL | User32.TextFormatFlags.DT_EXPANDTABS | User32.TextFormatFlags.DT_NOCLIP | User32.TextFormatFlags.DT_SINGLELINE | User32.TextFormatFlags.DT_NOPREFIX;
                     if (gridHost.DrawValuesRightToLeft)
                     {
-                        format |= Interop.User32.TextFormatFlags.DT_RIGHT | Interop.User32.TextFormatFlags.DT_RTLREADING;
+                        format |= User32.TextFormatFlags.DT_RIGHT | User32.TextFormatFlags.DT_RTLREADING;
                     }
 
                     // For password mode, replace the string value with a bullet.
@@ -2506,13 +2506,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                         strValue = new string(passwordReplaceChar, strValue.Length);
                     }
 
-                    Interop.User32.DrawTextW(new HandleRef(g, hdc), strValue, strValue.Length, ref lpRect, format);
+                    User32.DrawTextW(new HandleRef(g, hdc), strValue, strValue.Length, ref lpRect, format);
                 }
                 finally
                 {
                     SafeNativeMethods.SetTextColor(new HandleRef(g, hdc), oldTextColor);
                     SafeNativeMethods.SetBkColor(new HandleRef(g, hdc), oldBkColor);
-                    hfont = Interop.Gdi32.SelectObject(hdc, hfont);
+                    hfont = Gdi32.SelectObject(hdc, hfont);
                     g.ReleaseHdcInternal(hdc);
                 }
 

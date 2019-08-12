@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -284,7 +285,7 @@ namespace System.Windows.Forms
                 {
                     return Rectangle.Empty;
                 }
-                Interop.RECT rc = new Interop.RECT();
+                RECT rc = new RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
@@ -307,7 +308,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                Interop.RECT rc = new Interop.RECT();
+                RECT rc = new RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
@@ -713,7 +714,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                Interop.RECT rc = new Interop.RECT();
+                RECT rc = new RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 
@@ -1995,7 +1996,7 @@ namespace System.Windows.Forms
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), Interop.WindowMessages.WM_SETREDRAW, 1, 0);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), WindowMessages.WM_SETREDRAW, 1, 0);
                     nodesCleared = false;
                 }
 

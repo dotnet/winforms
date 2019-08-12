@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1165,7 +1166,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     if (!HostedInWin32DialogManager)
                     {
                         if (ActiveControl == null)
@@ -1186,7 +1187,7 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     DefWndProc(ref m);
                     break;
                 default:

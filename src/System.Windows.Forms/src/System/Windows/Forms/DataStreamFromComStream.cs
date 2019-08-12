@@ -3,14 +3,15 @@
 // See the LICENSE file in the project root for more information.
 
 using System.IO;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     internal class DataStreamFromComStream : Stream
     {
-        private Interop.Ole32.IStream comStream;
+        private Ole32.IStream comStream;
 
-        public DataStreamFromComStream(Interop.Ole32.IStream comStream) : base()
+        public DataStreamFromComStream(Ole32.IStream comStream) : base()
         {
             this.comStream = comStream;
         }
@@ -176,7 +177,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        comStream.Commit(Interop.Ole32.STGC.STGC_DEFAULT);
+                        comStream.Commit(Ole32.STGC.STGC_DEFAULT);
                     }
                     catch (Exception)
                     {

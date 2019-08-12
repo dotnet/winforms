@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1721,18 +1722,18 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     Focus();
                     if (!ValidationCancelled)
                     {
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     UpdateUpDown();
                     break;

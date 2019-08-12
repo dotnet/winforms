@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -154,7 +155,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Our HINSTANCE from Windows.
         /// </summary>
-        protected virtual IntPtr Instance => Interop.Kernel32.GetModuleHandleW(null);
+        protected virtual IntPtr Instance => Kernel32.GetModuleHandleW(null);
 
         /// <summary>
         ///  Returns our CHOOSECOLOR options.

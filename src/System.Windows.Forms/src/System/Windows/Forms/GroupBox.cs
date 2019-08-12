@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -309,7 +310,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
+                        SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
                     }
                     base.Text = value;
                 }
@@ -317,7 +318,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
+                        SendMessage(WindowMessages.WM_SETREDRAW, 1, 0);
                     }
                 }
                 Invalidate(true);
@@ -545,17 +546,17 @@ namespace System.Windows.Forms
                 {
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
                     {
-                        Interop.User32.TextFormatFlags flags = Interop.User32.TextFormatFlags.DT_WORDBREAK | Interop.User32.TextFormatFlags.DT_EDITCONTROL;
+                        User32.TextFormatFlags flags = User32.TextFormatFlags.DT_WORDBREAK | User32.TextFormatFlags.DT_EDITCONTROL;
 
                         if (!ShowKeyboardCues)
                         {
-                            flags |= Interop.User32.TextFormatFlags.DT_HIDEPREFIX;
+                            flags |= User32.TextFormatFlags.DT_HIDEPREFIX;
                         }
 
                         if (RightToLeft == RightToLeft.Yes)
                         {
-                            flags |= Interop.User32.TextFormatFlags.DT_RTLREADING;
-                            flags |= Interop.User32.TextFormatFlags.DT_RIGHT;
+                            flags |= User32.TextFormatFlags.DT_RTLREADING;
+                            flags |= User32.TextFormatFlags.DT_RIGHT;
                         }
 
                         using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font))
@@ -722,7 +723,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
             using (Graphics graphics = Graphics.FromHdcInternal(m.WParam))
             {
@@ -745,11 +746,11 @@ namespace System.Windows.Forms
 
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_ERASEBKGND:
-                case Interop.WindowMessages.WM_PRINTCLIENT:
+                case WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_PRINTCLIENT:
                     WmEraseBkgnd(ref m);
                     break;
-                case Interop.WindowMessages.WM_GETOBJECT:
+                case WindowMessages.WM_GETOBJECT:
                     base.WndProc(ref m);
 
                     // Force MSAA to always treat a group box as a custom window. This ensures its child controls

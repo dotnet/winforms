@@ -11,6 +11,7 @@ using Xunit;
 using static System.Windows.Forms.ImageList;
 using static System.Windows.Forms.ListViewItem;
 using static System.Windows.Forms.TableLayoutSettings;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.Serialization
 {
@@ -42,7 +43,7 @@ namespace System.Windows.Forms.Tests.Serialization
             Assert.Equal(1, result.Type);
             Assert.True(result._GetManualUpdate());
             Assert.Equal("licenseKey", result._GetLicenseKey());
-            var streamOut = result.GetStream() as Interop.Ole32.GPStream;
+            var streamOut = result.GetStream() as Ole32.GPStream;
             Assert.NotNull(streamOut);
             Stream bufferStream = streamOut.GetDataStream();
             byte[] buffer = new byte[3];

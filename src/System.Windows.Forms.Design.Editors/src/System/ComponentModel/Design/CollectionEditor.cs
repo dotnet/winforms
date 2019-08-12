@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -2125,7 +2126,7 @@ namespace System.ComponentModel.Design
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_KEYDOWN:
+                    case WindowMessages.WM_KEYDOWN:
                         _lastKeyDown = m;
 
                         // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
@@ -2145,12 +2146,12 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // recreate the keystroke to the newly activated window
-                                NativeMethods.SendMessage(UnsafeNativeMethods.GetFocus(), Interop.WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                                NativeMethods.SendMessage(UnsafeNativeMethods.GetFocus(), WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_CHAR:
+                    case WindowMessages.WM_CHAR:
 
                         if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                         {
@@ -2172,8 +2173,8 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             IntPtr hWnd = UnsafeNativeMethods.GetFocus();
-                            NativeMethods.SendMessage(hWnd, Interop.WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
-                            NativeMethods.SendMessage(hWnd, Interop.WindowMessages.WM_CHAR, m.WParam, m.LParam);
+                            NativeMethods.SendMessage(hWnd, WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                            NativeMethods.SendMessage(hWnd, WindowMessages.WM_CHAR, m.WParam, m.LParam);
                             return;
                         }
                         break;

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -61,7 +62,7 @@ namespace System.Windows.Forms
                         _stackOnDispose = new StackTrace().ToString();
                     }
 #endif
-                    Interop.Gdi32.DeleteObject(_handle);
+                    Gdi32.DeleteObject(_handle);
                     _handle = IntPtr.Zero;
                 }
             }

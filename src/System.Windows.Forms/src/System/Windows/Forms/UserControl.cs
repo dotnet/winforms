@@ -2,14 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Layout;
 
     /// <summary>
     ///  Represents an empty control that can be used in the Forms Designer to create other  controls.   By extending form, UserControl inherits all of
@@ -358,7 +360,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                 default:

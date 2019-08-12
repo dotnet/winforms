@@ -24,6 +24,7 @@ using Accessibility;
 using Microsoft.Win32;
 using Encoding = System.Text.Encoding;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -49,9 +50,9 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,
         UnsafeNativeMethods.IPersist,
-        Interop.Ole32.IPersistStreamInit,
+        Ole32.IPersistStreamInit,
         UnsafeNativeMethods.IPersistPropertyBag,
-        Interop.Ole32.IPersistStorage,
+        Ole32.IPersistStorage,
         UnsafeNativeMethods.IQuickActivate,
         ISupportOleDropSource,
         IDropTarget,
@@ -481,7 +482,7 @@ namespace System.Windows.Forms
 
             if (_width != 0 && _height != 0)
             {
-                Interop.RECT rect = new Interop.RECT();
+                RECT rect = new RECT();
                 rect.left = rect.right = rect.top = rect.bottom = 0;
 
                 CreateParams cp = CreateParams;
@@ -1643,15 +1644,15 @@ namespace System.Windows.Forms
                 // CLR4.0 or later, comctl32.dll needs to be loaded explicitly.
                 if (s_needToLoadComCtl)
                 {
-                    if ((Interop.Kernel32.GetModuleHandleW(Interop.Libraries.Comctl32) != IntPtr.Zero)
-                        || (Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable(Interop.Libraries.Comctl32) != IntPtr.Zero))
+                    if ((Kernel32.GetModuleHandleW(Libraries.Comctl32) != IntPtr.Zero)
+                        || (Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Comctl32) != IntPtr.Zero))
                     {
                         s_needToLoadComCtl = false;
                     }
                     else
                     {
                         int lastWin32Error = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Interop.Libraries.Comctl32));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Libraries.Comctl32));
                     }
                 }
 
@@ -1896,13 +1897,13 @@ namespace System.Windows.Forms
                 {
                     // We want to instantly change the cursor if the mouse is within our bounds.
                     // This includes the case where the mouse is over one of our children
-                    var r = new Interop.RECT();
+                    var r = new RECT();
                     UnsafeNativeMethods.GetCursorPos(out Point p);
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
                     if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                        SendMessage(WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                     }
                 }
 
@@ -2753,7 +2754,7 @@ namespace System.Windows.Forms
 
                 bool emptyRegion = false;
 
-                Interop.RECT temp = new Interop.RECT();
+                RECT temp = new RECT();
                 Region working;
                 Control parent = ParentInternal;
                 if (parent != null)
@@ -3328,7 +3329,7 @@ namespace System.Windows.Forms
                         {
                             if (regionHandle != IntPtr.Zero)
                             {
-                                Interop.Gdi32.DeleteObject(regionHandle);
+                                Gdi32.DeleteObject(regionHandle);
                             }
                         }
                     }
@@ -3869,7 +3870,7 @@ namespace System.Windows.Forms
                         // The side effect of this initial state is that adding new controls may clear the accelerator
                         // state (has been this way forever)
                         UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
-                                Interop.WindowMessages.WM_CHANGEUISTATE,
+                                WindowMessages.WM_CHANGEUISTATE,
                                 (IntPtr)(actionMask | NativeMethods.UIS_SET),
                                 IntPtr.Zero);
                     }
@@ -3913,7 +3914,7 @@ namespace System.Windows.Forms
                         // The side effect of this initial state is that adding new controls may clear the focus cue state
                         // state (has been this way forever)
                         UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
-                                Interop.WindowMessages.WM_CHANGEUISTATE,
+                                WindowMessages.WM_CHANGEUISTATE,
                                 (IntPtr)(actionMask | NativeMethods.UIS_SET),
                                 IntPtr.Zero);
 
@@ -4180,7 +4181,7 @@ namespace System.Windows.Forms
 
                 using (new MultithreadSafeCallScope())
                 {
-                    return Interop.User32.GetWindowText(new HandleRef(_window, Handle));
+                    return User32.GetWindowText(new HandleRef(_window, Handle));
                 }
             }
             set
@@ -4194,7 +4195,7 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        Interop.User32.SetWindowTextW(new HandleRef(_window, Handle), value);
+                        User32.SetWindowTextW(new HandleRef(_window, Handle), value);
                     }
                     else
                     {
@@ -4869,7 +4870,7 @@ namespace System.Windows.Forms
             }
             if (_updateCount == 0)
             {
-                SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
+                SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
             }
 
             _updateCount++;
@@ -5279,7 +5280,7 @@ namespace System.Windows.Forms
 
             if (0 != (NativeMethods.WS_EX_MDICHILD & (int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(_window, InternalHandle), NativeMethods.GWL_EXSTYLE)))
             {
-                UnsafeNativeMethods.DefMDIChildProc(InternalHandle, Interop.WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.DefMDIChildProc(InternalHandle, WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
             else
             {
@@ -5303,7 +5304,7 @@ namespace System.Windows.Forms
                     IntPtr p = (IntPtr)backBrush;
                     if (p != IntPtr.Zero)
                     {
-                        Interop.Gdi32.DeleteObject(p);
+                        Gdi32.DeleteObject(p);
                     }
                     Properties.SetObject(s_backBrushProperty, null);
                 }
@@ -5494,7 +5495,7 @@ namespace System.Windows.Forms
                 {
                     IntPtr hDc = g.GetHdc();
                     //send the actual wm_print message
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)hDc,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)hDc,
                         (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                     //now BLT the result to the destination bitmap.
@@ -5570,7 +5571,7 @@ namespace System.Windows.Forms
                 _updateCount--;
                 if (_updateCount == 0)
                 {
-                    SendMessage(Interop.WindowMessages.WM_SETREDRAW, -1, 0);
+                    SendMessage(WindowMessages.WM_SETREDRAW, -1, 0);
                     if (invalidate)
                     {
                         Invalidate();
@@ -5886,7 +5887,7 @@ namespace System.Windows.Forms
         {
             // We should not include the window adornments in our calculation,
             // because windows scales them for us.
-            Interop.RECT adornments = new Interop.RECT(0, 0, 0, 0);
+            RECT adornments = new RECT(0, 0, 0, 0);
             CreateParams cp = CreateParams;
             AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
 
@@ -6464,7 +6465,7 @@ namespace System.Windows.Forms
                 return BackColorBrush;
             }
             
-            return Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH);
+            return Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH);
         }
 
         /// <summary>
@@ -6518,7 +6519,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Interop.Gdi32.DeleteObject(regionHandle);
+                    Gdi32.DeleteObject(regionHandle);
                 }
 
                 Rectangle bounds = Rectangle.Empty;
@@ -6602,7 +6603,7 @@ namespace System.Windows.Forms
             {
                 if (invalidateChildren)
                 {
-                    Interop.RECT rcArea = rc;
+                    RECT rcArea = rc;
                     SafeNativeMethods.RedrawWindow(
                         new HandleRef(_window, Handle),
                         ref rcArea,
@@ -6611,7 +6612,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Interop.RECT rcArea = new Interop.RECT(rc);
+                    RECT rcArea = new RECT(rc);
 
                     // It's safe to invoke InvalidateRect from a separate thread.
                     using (new MultithreadSafeCallScope())
@@ -6934,7 +6935,7 @@ namespace System.Windows.Forms
             {
                 mask = NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS;
             }
-            return (unchecked((int)(long)SendMessage(Interop.WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
+            return (unchecked((int)(long)SendMessage(WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
         }
 
         /// <summary>
@@ -6972,7 +6973,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                return (unchecked((int)(long)SendMessage(Interop.WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
+                return (unchecked((int)(long)SendMessage(WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
             }
             else
             {
@@ -7090,7 +7091,7 @@ namespace System.Windows.Forms
             DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, DeviceDpi);
         }
 
-        internal void AdjustWindowRectEx(ref Interop.RECT rect, int style, bool bMenu, int exStyle)
+        internal void AdjustWindowRectEx(ref RECT rect, int style, bool bMenu, int exStyle)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
@@ -7303,7 +7304,7 @@ namespace System.Windows.Forms
                     IntPtr p = (IntPtr)backBrush;
                     if (p != IntPtr.Zero)
                     {
-                        Interop.Gdi32.DeleteObject(p);
+                        Gdi32.DeleteObject(p);
                     }
                 }
                 Properties.SetObject(s_backBrushProperty, null);
@@ -7818,7 +7819,7 @@ namespace System.Windows.Forms
                         hdc = e.Graphics.GetHdc();
                         releaseDC = true;
                     }
-                    m = Message.Create(Handle, Interop.WindowMessages.WM_PRINTCLIENT, hdc, flags);
+                    m = Message.Create(Handle, WindowMessages.WM_PRINTCLIENT, hdc, flags);
                 }
                 else
                 {
@@ -8045,7 +8046,7 @@ namespace System.Windows.Forms
                     {
                         if (regionHandle != IntPtr.Zero)
                         {
-                            Interop.Gdi32.DeleteObject(regionHandle);
+                            Gdi32.DeleteObject(regionHandle);
                         }
                     }
                 }
@@ -8065,7 +8066,7 @@ namespace System.Windows.Forms
                 // Set the window text from the Text property.
                 if (_text != null && _text.Length != 0)
                 {
-                    Interop.User32.SetWindowTextW(new HandleRef(this, Handle), _text);
+                    User32.SetWindowTextW(new HandleRef(this, Handle), _text);
                 }
 
                 if (!(this is ScrollableControl) && !IsMirrored && GetState2(STATE2_SETSCROLLPOS) && !GetState2(STATE2_HAVEINVOKED))
@@ -8114,7 +8115,7 @@ namespace System.Windows.Forms
                 if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, si) != false)
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    SendMessage(Interop.WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
+                    SendMessage(WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
                 }
             }
         }
@@ -8153,7 +8154,7 @@ namespace System.Windows.Forms
                         IntPtr p = (IntPtr)backBrush;
                         if (p != IntPtr.Zero)
                         {
-                            Interop.Gdi32.DeleteObject(p);
+                            Gdi32.DeleteObject(p);
                         }
                     }
                 }
@@ -8612,7 +8613,7 @@ namespace System.Windows.Forms
         {
             // We need the true client rectangle as clip rectangle causes
             // problems on "Windows Classic" theme.
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
 
             PaintBackground(pevent, new Rectangle(rect.left, rect.top, rect.right, rect.bottom));
@@ -9278,7 +9279,7 @@ namespace System.Windows.Forms
 
             bool ret;
 
-            if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
+            if (msg.Msg == WindowMessages.WM_KEYDOWN || msg.Msg == WindowMessages.WM_SYSKEYDOWN)
             {
                 if (!GetState2(STATE2_UICUES))
                 {
@@ -9300,9 +9301,9 @@ namespace System.Windows.Forms
                     ret = ProcessDialogKey(keyData);
                 }
             }
-            else if (msg.Msg == Interop.WindowMessages.WM_CHAR || msg.Msg == Interop.WindowMessages.WM_SYSCHAR)
+            else if (msg.Msg == WindowMessages.WM_CHAR || msg.Msg == WindowMessages.WM_SYSCHAR)
             {
-                if (msg.Msg == Interop.WindowMessages.WM_CHAR && IsInputChar((char)msg.WParam))
+                if (msg.Msg == WindowMessages.WM_CHAR && IsInputChar((char)msg.WParam))
                 {
                     SetState2(STATE2_INPUTCHAR, true);
                     ret = false;
@@ -9367,7 +9368,7 @@ namespace System.Windows.Forms
                 Keys keyData = (Keys)(unchecked((int)(long)msg.WParam) | (int)ModifierKeys);
 
                 // Allow control to preview key down message.
-                if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
+                if (msg.Msg == WindowMessages.WM_KEYDOWN || msg.Msg == WindowMessages.WM_SYSKEYDOWN)
                 {
                     target.ProcessUICues(ref msg);
 
@@ -9386,7 +9387,7 @@ namespace System.Windows.Forms
 
                 if (!target.PreProcessMessage(ref msg))
                 {
-                    if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
+                    if (msg.Msg == WindowMessages.WM_KEYDOWN || msg.Msg == WindowMessages.WM_SYSKEYDOWN)
                     {
                         // check if IsInputKey has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
@@ -9396,7 +9397,7 @@ namespace System.Windows.Forms
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
-                    else if (msg.Msg == Interop.WindowMessages.WM_CHAR || msg.Msg == Interop.WindowMessages.WM_SYSCHAR)
+                    else if (msg.Msg == WindowMessages.WM_CHAR || msg.Msg == WindowMessages.WM_SYSCHAR)
                     {
                         // check if IsInputChar has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
@@ -9455,7 +9456,7 @@ namespace System.Windows.Forms
 
         private void PrintToMetaFile(HandleRef hDC, IntPtr lParam)
         {
-            Debug.Assert(Interop.Gdi32.GetObjectType(hDC) == Interop.Gdi32.ObjectType.OBJ_ENHMETADC,
+            Debug.Assert(Gdi32.GetObjectType(hDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                 "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
             Debug.Assert(((long)lParam & NativeMethods.PRF_CHILDREN) != 0,
                 "PrintToMetaFile() called without PRF_CHILDREN.");
@@ -9468,22 +9469,22 @@ namespace System.Windows.Forms
             bool success = SafeNativeMethods.GetViewportOrgEx(hDC, out Point viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-            IntPtr hClippingRegion = Interop.Gdi32.CreateRectRgn(viewportOrg.X, viewportOrg.Y, viewportOrg.X + Width, viewportOrg.Y + Height);
+            IntPtr hClippingRegion = Gdi32.CreateRectRgn(viewportOrg.X, viewportOrg.Y, viewportOrg.X + Width, viewportOrg.Y + Height);
             Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
             try
             {
                 // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                Interop.RegionType selectResult = Interop.Gdi32.SelectClipRgn(hDC, hClippingRegion);
-                Debug.Assert((selectResult == Interop.RegionType.SIMPLEREGION ||
-                              selectResult == Interop.RegionType.NULLREGION),
+                RegionType selectResult = Gdi32.SelectClipRgn(hDC, hClippingRegion);
+                Debug.Assert((selectResult == RegionType.SIMPLEREGION ||
+                              selectResult == RegionType.NULLREGION),
                               "SIMPLEREGION or NULLLREGION expected.");
 
                 PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
             }
             finally
             {
-                success = Interop.Gdi32.DeleteObject(hClippingRegion) != Interop.BOOL.FALSE;
+                success = Gdi32.DeleteObject(hClippingRegion) != BOOL.FALSE;
                 Debug.Assert(success, "DeleteObject() failed.");
             }
         }
@@ -9498,7 +9499,7 @@ namespace System.Windows.Forms
                 PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_CLIENT));
 
                 // figure out mapping for the client area
-                Interop.RECT windowRect = new Interop.RECT();
+                RECT windowRect = new RECT();
                 bool success = UnsafeNativeMethods.GetWindowRect(new HandleRef(null, Handle), ref windowRect);
                 Debug.Assert(success, "GetWindowRect() failed.");
                 Point clientOffset = PointToScreen(Point.Empty);
@@ -9529,7 +9530,7 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.UserPaint))
             {
                 // We let user paint controls paint directly into the metafile
-                SendMessage(Interop.WindowMessages.WM_PRINT, hDC.Handle, lParam);
+                SendMessage(WindowMessages.WM_PRINT, hDC.Handle, lParam);
             }
             else
             {
@@ -9547,7 +9548,7 @@ namespace System.Windows.Forms
                 // is 1px thin, which causes borders to disappear, etc.)
                 using (MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size))
                 {
-                    SendMessage(Interop.WindowMessages.WM_PRINT, dcWrapper.HDC, lParam);
+                    SendMessage(WindowMessages.WM_PRINT, dcWrapper.HDC, lParam);
                 }
             }
         }
@@ -9614,7 +9615,7 @@ namespace System.Windows.Forms
             KeyPressEventArgs kpe = null;
             IntPtr newWParam = IntPtr.Zero;
 
-            if (m.Msg == Interop.WindowMessages.WM_CHAR || m.Msg == Interop.WindowMessages.WM_SYSCHAR)
+            if (m.Msg == WindowMessages.WM_CHAR || m.Msg == WindowMessages.WM_SYSCHAR)
             {
                 int charsToIgnore = ImeWmCharsToIgnore;
 
@@ -9633,7 +9634,7 @@ namespace System.Windows.Forms
                     newWParam = (IntPtr)kpe.KeyChar;
                 }
             }
-            else if (m.Msg == Interop.WindowMessages.WM_IME_CHAR)
+            else if (m.Msg == WindowMessages.WM_IME_CHAR)
             {
                 int charsToIgnore = ImeWmCharsToIgnore;
 
@@ -9658,7 +9659,7 @@ namespace System.Windows.Forms
             else
             {
                 ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
-                if (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
+                if (m.Msg == WindowMessages.WM_KEYDOWN || m.Msg == WindowMessages.WM_SYSKEYDOWN)
                 {
                     OnKeyDown(ke);
                 }
@@ -9679,9 +9680,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress)
                 {
-                    RemovePendingMessages(Interop.WindowMessages.WM_CHAR, Interop.WindowMessages.WM_CHAR);
-                    RemovePendingMessages(Interop.WindowMessages.WM_SYSCHAR, Interop.WindowMessages.WM_SYSCHAR);
-                    RemovePendingMessages(Interop.WindowMessages.WM_IME_CHAR, Interop.WindowMessages.WM_IME_CHAR);
+                    RemovePendingMessages(WindowMessages.WM_CHAR, WindowMessages.WM_CHAR);
+                    RemovePendingMessages(WindowMessages.WM_SYSCHAR, WindowMessages.WM_SYSCHAR);
+                    RemovePendingMessages(WindowMessages.WM_IME_CHAR, WindowMessages.WM_IME_CHAR);
                 }
                 return ke.Handled;
             }
@@ -9776,14 +9777,14 @@ namespace System.Windows.Forms
             }
 
             Control topMostParent = null;
-            int current = unchecked((int)(long)SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0));
+            int current = unchecked((int)(long)SendMessage(WindowMessages.WM_QUERYUISTATE, 0, 0));
 
             // dont trust when a control says the accelerators are showing.
             // make sure the topmost parent agrees with this as we could be in a mismatched state.
             if (current == 0 /*accelerator and focus cues are showing*/)
             {
                 topMostParent = TopMostParent;
-                current = (int)topMostParent.SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0);
+                current = (int)topMostParent.SendMessage(WindowMessages.WM_QUERYUISTATE, 0, 0);
             }
             int toClear = 0;
 
@@ -9831,7 +9832,7 @@ namespace System.Windows.Forms
                 //           (we're in charge here, we've got to change the state of the root window)
                 UnsafeNativeMethods.SendMessage(
                     new HandleRef(topMostParent, topMostParent.Handle),
-                    UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? Interop.WindowMessages.WM_CHANGEUISTATE : Interop.WindowMessages.WM_UPDATEUISTATE,
+                    UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? WindowMessages.WM_CHANGEUISTATE : WindowMessages.WM_UPDATEUISTATE,
                     (IntPtr)(NativeMethods.UIS_CLEAR | (toClear << 16)),
                     IntPtr.Zero);
             }
@@ -10076,7 +10077,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle RectangleToClient(Rectangle r)
         {
-            Interop.RECT rect = r;
+            RECT rect = r;
             UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
@@ -10086,7 +10087,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle RectangleToScreen(Rectangle r)
         {
-            Interop.RECT rect = r;
+            RECT rect = r;
             UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
@@ -10103,7 +10104,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+            m.Result = control.SendMessage(WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
             return true;
         }
 
@@ -10518,7 +10519,7 @@ namespace System.Windows.Forms
         protected virtual void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             CreateParams cp = CreateParams;
-            Interop.RECT adornments = new Interop.RECT(0, 0, 0, 0);
+            RECT adornments = new RECT(0, 0, 0, 0);
             AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
             Size minSize = MinimumSize;
             Size maxSize = MaximumSize;
@@ -10822,7 +10823,7 @@ namespace System.Windows.Forms
         ///  Sends a Win32 message to this control.  If the control does not yet
         ///  have a handle, it will be created.
         /// </summary>
-        internal IntPtr SendMessage(int msg, int wparam, ref Interop.RECT lparam)
+        internal IntPtr SendMessage(int msg, int wparam, ref RECT lparam)
         {
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, ref lparam);
         }
@@ -11059,7 +11060,7 @@ namespace System.Windows.Forms
 
         internal Size SizeFromClientSize(int width, int height)
         {
-            Interop.RECT rect = new Interop.RECT(0, 0, width, height);
+            RECT rect = new RECT(0, 0, width, height);
             CreateParams cp = CreateParams;
             AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
             return rect.Size;
@@ -11521,7 +11522,7 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            SendMessage(Interop.WindowMessages.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
+            SendMessage(WindowMessages.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
         }
 
         private void SetWindowStyle(int flag, bool value)
@@ -11627,7 +11628,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void UpdateBounds()
         {
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
             int clientWidth = rect.right;
             int clientHeight = rect.bottom;
@@ -11651,7 +11652,7 @@ namespace System.Windows.Forms
 
             // reverse-engineer the AdjustWindowRectEx call to figure out
             // the appropriate clientWidth and clientHeight
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             rect.left = rect.right = rect.top = rect.bottom = 0;
 
             CreateParams cp = CreateParams;
@@ -11960,7 +11961,7 @@ namespace System.Windows.Forms
 
                 if (lastParentHandle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(null, lastParentHandle), Interop.WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(null, lastParentHandle), WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
             }
 
@@ -12137,7 +12138,7 @@ namespace System.Windows.Forms
                         m.Result = (IntPtr)0;
                         return;
                     }
-                    Interop.RECT rc = new Interop.RECT();
+                    RECT rc = new RECT();
                     UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rc);
                     using (PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom)))
                     {
@@ -12214,7 +12215,7 @@ namespace System.Windows.Forms
 
             InternalAccessibleObject intAccessibleObject = null;
 
-            if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && SupportsUiaProviders)
+            if (m.Msg == WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && SupportsUiaProviders)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
@@ -12694,7 +12695,7 @@ namespace System.Windows.Forms
                     // we have to do it ourselves.
                     if (button == MouseButtons.Right)
                     {
-                        SendMessage(Interop.WindowMessages.WM_CONTEXTMENU, Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
+                        SendMessage(WindowMessages.WM_CONTEXTMENU, Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
                     }
                 }
 
@@ -12785,12 +12786,12 @@ namespace System.Windows.Forms
             {
                 if (nmhdr->code == NativeMethods.TTN_SHOW)
                 {
-                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                     return;
                 }
                 if (nmhdr->code == NativeMethods.TTN_POP)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                 }
 
                 DefWndProc(ref m);
@@ -12834,7 +12835,7 @@ namespace System.Windows.Forms
                     Control control = FromHandle(handle);
                     if (control != null)
                     {
-                        m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, handle, m.LParam);
+                        m.Result = control.SendMessage(WindowMessages.WM_REFLECT + m.Msg, handle, m.LParam);
                         reflectCalled = true;
                     }
                 }
@@ -13030,7 +13031,7 @@ namespace System.Windows.Forms
         private void WmQueryNewPalette(ref Message m)
         {
             Debug.WriteLineIf(s_paletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
-            IntPtr dc = Interop.User32.GetDC(new HandleRef(this, Handle));
+            IntPtr dc = User32.GetDC(new HandleRef(this, Handle));
             try
             {
                 SetUpPalette(dc, true /*force*/, true/*realize*/);
@@ -13038,7 +13039,7 @@ namespace System.Windows.Forms
             finally
             {
                 // Let WmPaletteChanged do any necessary invalidation
-                Interop.User32.ReleaseDC(new HandleRef(this, Handle), dc);
+                User32.ReleaseDC(new HandleRef(this, Handle), dc);
             }
             Invalidate(true);
             m.Result = (IntPtr)1;
@@ -13107,10 +13108,10 @@ namespace System.Windows.Forms
             IntPtr hWnd = IntPtr.Zero;
             switch (msg)
             {
-                case Interop.WindowMessages.WM_CREATE:
+                case WindowMessages.WM_CREATE:
                     hWnd = m.LParam;
                     break;
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
                     break;
                 default:
                     hWnd = UnsafeNativeMethods.GetDlgItem(new HandleRef(this, Handle), NativeMethods.Util.HIWORD(m.WParam));
@@ -13366,47 +13367,47 @@ namespace System.Windows.Forms
             */
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_CAPTURECHANGED:
+                case WindowMessages.WM_CAPTURECHANGED:
                     WmCaptureChanged(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_GETOBJECT:
+                case WindowMessages.WM_GETOBJECT:
                     WmGetObject(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_COMMAND:
                     WmCommand(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_CLOSE:
+                case WindowMessages.WM_CLOSE:
                     WmClose(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     WmContextMenu(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_DISPLAYCHANGE:
+                case WindowMessages.WM_DISPLAYCHANGE:
                     WmDisplayChange(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_EXITMENULOOP:
+                case WindowMessages.WM_EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_HELP:
+                case WindowMessages.WM_HELP:
                     WmHelp(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_PAINT:
+                case WindowMessages.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint))
                     {
                         WmPaint(ref m);
@@ -13417,7 +13418,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_PRINTCLIENT:
+                case WindowMessages.WM_PRINTCLIENT:
                     if (GetStyle(ControlStyles.UserPaint))
                     {
                         WmPrintClient(ref m);
@@ -13428,11 +13429,11 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_INITMENUPOPUP:
+                case WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_SYSCOMMAND:
+                case WindowMessages.WM_SYSCOMMAND:
                     if ((unchecked((int)(long)m.WParam) & 0xFFF0) == NativeMethods.SC_KEYMENU)
                     {
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
@@ -13447,108 +13448,108 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
+                case WindowMessages.WM_INPUTLANGCHANGE:
                     WmInputLangChange(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_INPUTLANGCHANGEREQUEST:
+                case WindowMessages.WM_INPUTLANGCHANGEREQUEST:
                     WmInputLangChangeRequest(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_MEASUREITEM:
+                case WindowMessages.WM_MEASUREITEM:
                     WmMeasureItem(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_MENUCHAR:
+                case WindowMessages.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_MENUSELECT:
+                case WindowMessages.WM_MENUSELECT:
                     WmMenuSelect(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                case WindowMessages.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_CHAR:
-                case Interop.WindowMessages.WM_KEYDOWN:
-                case Interop.WindowMessages.WM_SYSKEYDOWN:
-                case Interop.WindowMessages.WM_KEYUP:
-                case Interop.WindowMessages.WM_SYSKEYUP:
+                case WindowMessages.WM_CHAR:
+                case WindowMessages.WM_KEYDOWN:
+                case WindowMessages.WM_SYSKEYDOWN:
+                case WindowMessages.WM_KEYUP:
+                case WindowMessages.WM_SYSKEYUP:
                     WmKeyChar(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_CREATE:
+                case WindowMessages.WM_CREATE:
                     WmCreate(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
                     WmDestroy(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_CTLCOLOR:
-                case Interop.WindowMessages.WM_CTLCOLORBTN:
-                case Interop.WindowMessages.WM_CTLCOLORDLG:
-                case Interop.WindowMessages.WM_CTLCOLORMSGBOX:
-                case Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
-                case Interop.WindowMessages.WM_CTLCOLOREDIT:
-                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
-                case Interop.WindowMessages.WM_CTLCOLORSTATIC:
+                case WindowMessages.WM_CTLCOLOR:
+                case WindowMessages.WM_CTLCOLORBTN:
+                case WindowMessages.WM_CTLCOLORDLG:
+                case WindowMessages.WM_CTLCOLORMSGBOX:
+                case WindowMessages.WM_CTLCOLORSCROLLBAR:
+                case WindowMessages.WM_CTLCOLOREDIT:
+                case WindowMessages.WM_CTLCOLORLISTBOX:
+                case WindowMessages.WM_CTLCOLORSTATIC:
 
                 // this is for the trinity guys.  The case is if you've got a windows
                 // forms edit or something hosted as an AX control somewhere, there isn't anyone to reflect
                 // these back.  If they went ahead and just sent them back, some controls don't like that
                 // and end up recursing.  Our code handles it fine because we just pick the HWND out of the LPARAM.
                 //
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOR:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORBTN:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORDLG:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORMSGBOX:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOREDIT:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORLISTBOX:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSTATIC:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLOR:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLORBTN:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLORDLG:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLORMSGBOX:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLORSCROLLBAR:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLOREDIT:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLORLISTBOX:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CTLCOLORSTATIC:
                     WmCtlColorControl(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_VSCROLL:
-                case Interop.WindowMessages.WM_DELETEITEM:
-                case Interop.WindowMessages.WM_VKEYTOITEM:
-                case Interop.WindowMessages.WM_CHARTOITEM:
-                case Interop.WindowMessages.WM_COMPAREITEM:
+                case WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_DELETEITEM:
+                case WindowMessages.WM_VKEYTOITEM:
+                case WindowMessages.WM_CHARTOITEM:
+                case WindowMessages.WM_COMPAREITEM:
                     if (!ReflectMessage(m.LParam, ref m))
                     {
                         DefWndProc(ref m);
                     }
                     break;
 
-                case Interop.WindowMessages.WM_IME_CHAR:
+                case WindowMessages.WM_IME_CHAR:
                     WmImeChar(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
+                case WindowMessages.WM_IME_STARTCOMPOSITION:
                     WmImeStartComposition(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
+                case WindowMessages.WM_IME_ENDCOMPOSITION:
                     WmImeEndComposition(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_IME_NOTIFY:
+                case WindowMessages.WM_IME_NOTIFY:
                     WmImeNotify(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     WmKillFocus(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
@@ -13556,15 +13557,15 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Left, 1);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Left, 1);
                     break;
 
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
@@ -13572,23 +13573,23 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     break;
 
-                case Interop.WindowMessages.WM_MBUTTONUP:
+                case WindowMessages.WM_MBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Middle, 1);
                     break;
 
-                case Interop.WindowMessages.WM_XBUTTONDOWN:
+                case WindowMessages.WM_XBUTTONDOWN:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
 
-                case Interop.WindowMessages.WM_XBUTTONUP:
+                case WindowMessages.WM_XBUTTONUP:
                     WmMouseUp(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
 
-                case Interop.WindowMessages.WM_XBUTTONDBLCLK:
+                case WindowMessages.WM_XBUTTONDBLCLK:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
@@ -13596,49 +13597,49 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case WindowMessages.WM_MOUSELEAVE:
                     WmMouseLeave(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_DPICHANGED_BEFOREPARENT:
+                case WindowMessages.WM_DPICHANGED_BEFOREPARENT:
                     WmDpiChangedBeforeParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
 
-                case Interop.WindowMessages.WM_DPICHANGED_AFTERPARENT:
+                case WindowMessages.WM_DPICHANGED_AFTERPARENT:
                     WmDpiChangedAfterParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
 
-                case Interop.WindowMessages.WM_MOUSEMOVE:
+                case WindowMessages.WM_MOUSEMOVE:
                     WmMouseMove(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_MOUSEWHEEL:
+                case WindowMessages.WM_MOUSEWHEEL:
                     WmMouseWheel(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_MOVE:
+                case WindowMessages.WM_MOVE:
                     WmMove(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY:
                     WmNotify(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFYFORMAT:
+                case WindowMessages.WM_NOTIFYFORMAT:
                     WmNotifyFormat(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFYFORMAT:
                     m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
 
-                case Interop.WindowMessages.WM_SHOWWINDOW:
+                case WindowMessages.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick))
                     {
@@ -13646,35 +13647,35 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Right, 1);
                     break;
 
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_MOUSEHOVER:
+                case WindowMessages.WM_MOUSEHOVER:
                     WmMouseHover(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_QUERYNEWPALETTE:
+                case WindowMessages.WM_QUERYNEWPALETTE:
                     WmQueryNewPalette(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_UPDATEUISTATE:
+                case WindowMessages.WM_UPDATEUISTATE:
                     WmUpdateUIState(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_PARENTNOTIFY:
+                case WindowMessages.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
 
@@ -14250,7 +14251,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties)
+        void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
@@ -14258,33 +14259,33 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void Interop.Ole32.IPersistStorage.GetClassID(out Guid pClassID)
+        void Ole32.IPersistStorage.GetClassID(out Guid pClassID)
         {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        Interop.HRESULT Interop.Ole32.IPersistStorage.IsDirty()
+        HRESULT Ole32.IPersistStorage.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        void Interop.Ole32.IPersistStorage.InitNew(Interop.Ole32.IStorage pstg)
+        void Ole32.IPersistStorage.InitNew(Ole32.IStorage pstg)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
         }
 
-        Interop.HRESULT Interop.Ole32.IPersistStorage.Load(Interop.Ole32.IStorage pstg)
+        HRESULT Ole32.IPersistStorage.Load(Ole32.IStorage pstg)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
             ActiveXInstance.Load(pstg);
             Debug.Unindent();
-            return Interop.HRESULT.S_OK;
+            return HRESULT.S_OK;
         }
 
-        void Interop.Ole32.IPersistStorage.Save(Interop.Ole32.IStorage pstg, Interop.BOOL fSameAsLoad)
+        void Ole32.IPersistStorage.Save(Ole32.IStorage pstg, BOOL fSameAsLoad)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Save");
             Debug.Indent();
@@ -14292,29 +14293,29 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void Interop.Ole32.IPersistStorage.SaveCompleted(Interop.Ole32.IStorage pStgNew)
+        void Ole32.IPersistStorage.SaveCompleted(Ole32.IStorage pStgNew)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.SaveCompleted");
         }
 
-        void Interop.Ole32.IPersistStorage.HandsOffStorage()
+        void Ole32.IPersistStorage.HandsOffStorage()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         }
 
-        void Interop.Ole32.IPersistStreamInit.GetClassID(out Guid pClassID)
+        void Ole32.IPersistStreamInit.GetClassID(out Guid pClassID)
         {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        Interop.HRESULT Interop.Ole32.IPersistStreamInit.IsDirty()
+        HRESULT Ole32.IPersistStreamInit.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        void Interop.Ole32.IPersistStreamInit.Load(Interop.Ole32.IStream pstm)
+        void Ole32.IPersistStreamInit.Load(Ole32.IStream pstm)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Load");
             Debug.Indent();
@@ -14322,7 +14323,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void Interop.Ole32.IPersistStreamInit.Save(Interop.Ole32.IStream pstm, Interop.BOOL fClearDirty)
+        void Ole32.IPersistStreamInit.Save(Ole32.IStream pstm, BOOL fClearDirty)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Save");
             Debug.Indent();
@@ -14330,12 +14331,12 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        unsafe void Interop.Ole32.IPersistStreamInit.GetSizeMax(ulong* pcbSize)
+        unsafe void Ole32.IPersistStreamInit.GetSizeMax(ulong* pcbSize)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetSizeMax");
         }
 
-        void Interop.Ole32.IPersistStreamInit.InitNew()
+        void Ole32.IPersistStreamInit.InitNew()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }
@@ -14610,7 +14611,7 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle GetToolNativeScreenRectangle()
         {
-            Interop.RECT rectangle = new Interop.RECT();
+            RECT rectangle = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rectangle);
             return Rectangle.FromLTRB(rectangle.left, rectangle.top, rectangle.right, rectangle.bottom);
         }

@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1562,7 +1563,7 @@ namespace System.Windows.Forms
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             int result = SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect).ToInt32();
 
             if (result == 0)
@@ -1633,7 +1634,7 @@ namespace System.Windows.Forms
             //NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
             //call Sendmessage.
             //
-            Interop.RECT r = new Interop.RECT();
+            RECT r = new RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
@@ -2537,26 +2538,26 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     if (selectedItems != null)
                     {
                         selectedItems.Dirty();
                     }
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -2603,7 +2604,7 @@ namespace System.Windows.Forms
                     doubleClickFired = false;
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
                     // Get the mouse location
                     //
                     int rx = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -2621,7 +2622,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //the first WM_LBUTTONUP, resets the flag for Doubleclick
@@ -2630,7 +2631,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     if (integralHeight && fontIsChanged)
                     {

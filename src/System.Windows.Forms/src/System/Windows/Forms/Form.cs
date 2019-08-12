@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -384,7 +385,7 @@ namespace System.Windows.Forms
                     // If this.MdiClient != null it means this.IsMdiContainer == true.
                     if (ctlClient != null && ctlClient.IsHandleCreated)
                     {
-                        IntPtr hwnd = ctlClient.SendMessage(Interop.WindowMessages.WM_MDIGETACTIVE, 0, 0);
+                        IntPtr hwnd = ctlClient.SendMessage(WindowMessages.WM_MDIGETACTIVE, 0, 0);
                         mdiChild = Control.FromHandle(hwnd) as Form;
                     }
                 }
@@ -2562,7 +2563,7 @@ namespace System.Windows.Forms
                 //
                 if (0 == formState[FormStateSWCalled])
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_SHOWWINDOW, value ? 1 : 0, 0);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_SHOWWINDOW, value ? 1 : 0, 0);
                 }
             }
             else
@@ -2871,7 +2872,7 @@ namespace System.Windows.Forms
             {
                 if (IsMdiChild)
                 {
-                    MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                    MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
                 }
                 else
                 {
@@ -3184,7 +3185,7 @@ namespace System.Windows.Forms
             }
 
             IntPtr h = Handle;
-            Interop.RECT rc = new Interop.RECT();
+            RECT rc = new RECT();
             SafeNativeMethods.GetClientRect(new HandleRef(this, h), ref rc);
             Rectangle currentClient = Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
 
@@ -3329,7 +3330,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 closeReason = CloseReason.UserClosing;
-                SendMessage(Interop.WindowMessages.WM_CLOSE, 0, 0);
+                SendMessage(WindowMessages.WM_CLOSE, 0, 0);
             }
             else
             {
@@ -3355,7 +3356,7 @@ namespace System.Windows.Forms
         /// </summary>
         private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
         {
-            Interop.RECT result = new Interop.RECT(0, 0, clientSize.Width, clientSize.Height);
+            RECT result = new RECT(0, 0, clientSize.Width, clientSize.Height);
             AdjustWindowRectEx(ref result, style, HasMenu, exStyle);
             return new Size(result.right - result.left, result.bottom - result.top);
         }
@@ -3475,7 +3476,7 @@ namespace System.Windows.Forms
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.SendMessage(TaskbarOwner, Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                        UnsafeNativeMethods.SendMessage(TaskbarOwner, WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
                     }
                 }
 
@@ -3876,7 +3877,7 @@ namespace System.Windows.Forms
             // If this form is a MdiChild, then we need to set the focus differently.
             if (IsMdiChild)
             {
-                MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
                 return Focused;
             }
 
@@ -4070,7 +4071,7 @@ namespace System.Windows.Forms
                 {
                     Screen desktop = Screen.FromHandle(ownerHandle);
                     Rectangle screenRect = desktop.WorkingArea;
-                    Interop.RECT ownerRect = new Interop.RECT();
+                    RECT ownerRect = new RECT();
 
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(null, ownerHandle), ref ownerRect);
 
@@ -5329,7 +5330,7 @@ namespace System.Windows.Forms
             else if (IsMdiChild)
             {
                 UnsafeNativeMethods.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
-                MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
             }
             else
             {
@@ -5714,7 +5715,7 @@ namespace System.Windows.Forms
             IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
             if (hWndCapture != IntPtr.Zero)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), Interop.WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                 SafeNativeMethods.ReleaseCapture();
             }
             IntPtr hWndActive = UnsafeNativeMethods.GetActiveWindow();
@@ -6140,14 +6141,14 @@ namespace System.Windows.Forms
                         };
                         Properties.SetObject(PropDummyMenu, dummyMenu);
                     }
-                    UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), Interop.WindowMessages.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), WindowMessages.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
 
                     if (menu != null)
                     {
 
                         // Microsoft, 5/2/1998 - don't use Win32 native Mdi lists...
                         //
-                        UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), Interop.WindowMessages.WM_MDISETMENU, menu.Handle, IntPtr.Zero);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), WindowMessages.WM_MDISETMENU, menu.Handle, IntPtr.Zero);
                     }
                 }
 
@@ -6442,15 +6443,15 @@ namespace System.Windows.Forms
 
                     if (smallIcon != null)
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, smallIcon.Handle);
+                        SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, smallIcon.Handle);
                     }
 
-                    SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
                 }
                 else
                 {
-                    SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, 0);
-                    SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, 0);
+                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, 0);
+                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, 0);
                 }
 
                 if (redrawFrame)
@@ -6640,7 +6641,7 @@ namespace System.Windows.Forms
 
             // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
             //
-            if (m.Msg != Interop.WindowMessages.WM_ENDSESSION)
+            if (m.Msg != WindowMessages.WM_ENDSESSION)
             {
                 if (Modal)
                 {
@@ -6714,7 +6715,7 @@ namespace System.Windows.Forms
                     OnFormClosing(e);
                 }
 
-                if (m.Msg == Interop.WindowMessages.WM_QUERYENDSESSION)
+                if (m.Msg == WindowMessages.WM_QUERYENDSESSION)
                 {
                     m.Result = (IntPtr)(e.Cancel ? 0 : 1);
                 }
@@ -6737,7 +6738,7 @@ namespace System.Windows.Forms
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
             // event on all mdi children and ourselves
             //
-            if (m.Msg != Interop.WindowMessages.WM_QUERYENDSESSION)
+            if (m.Msg != WindowMessages.WM_QUERYENDSESSION)
             {
                 FormClosedEventArgs fc;
                 if (!e.Cancel)
@@ -6917,7 +6918,7 @@ namespace System.Windows.Forms
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                 if (formMdiParent != null && formMdiParent.Menu != null)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), Interop.WindowMessages.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), WindowMessages.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
                     m.Result = (IntPtr)NativeMethods.Util.MAKELONG(0, 1);
                     return;
                 }
@@ -7181,22 +7182,22 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_NCACTIVATE:
+                case WindowMessages.WM_NCACTIVATE:
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                case Interop.WindowMessages.WM_NCMBUTTONDOWN:
-                case Interop.WindowMessages.WM_NCXBUTTONDOWN:
+                case WindowMessages.WM_NCLBUTTONDOWN:
+                case WindowMessages.WM_NCRBUTTONDOWN:
+                case WindowMessages.WM_NCMBUTTONDOWN:
+                case WindowMessages.WM_NCXBUTTONDOWN:
                     WmNcButtonDown(ref m);
                     break;
-                case Interop.WindowMessages.WM_ACTIVATE:
+                case WindowMessages.WM_ACTIVATE:
                     WmActivate(ref m);
                     break;
-                case Interop.WindowMessages.WM_MDIACTIVATE:
+                case WindowMessages.WM_MDIACTIVATE:
                     WmMdiActivate(ref m);
                     break;
-                case Interop.WindowMessages.WM_CLOSE:
+                case WindowMessages.WM_CLOSE:
                     if (CloseReason == CloseReason.None)
                     {
                         CloseReason = CloseReason.TaskManagerClosing;
@@ -7204,66 +7205,66 @@ namespace System.Windows.Forms
                     WmClose(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_QUERYENDSESSION:
-                case Interop.WindowMessages.WM_ENDSESSION:
+                case WindowMessages.WM_QUERYENDSESSION:
+                case WindowMessages.WM_ENDSESSION:
                     CloseReason = CloseReason.WindowsShutDown;
                     WmClose(ref m);
                     break;
-                case Interop.WindowMessages.WM_ENTERSIZEMOVE:
+                case WindowMessages.WM_ENTERSIZEMOVE:
                     WmEnterSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_EXITSIZEMOVE:
+                case WindowMessages.WM_EXITSIZEMOVE:
                     WmExitSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_CREATE:
+                case WindowMessages.WM_CREATE:
                     WmCreate(ref m);
                     break;
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_INITMENUPOPUP:
+                case WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
-                case Interop.WindowMessages.WM_UNINITMENUPOPUP:
+                case WindowMessages.WM_UNINITMENUPOPUP:
                     WmUnInitMenuPopup(ref m);
                     break;
-                case Interop.WindowMessages.WM_MENUCHAR:
+                case WindowMessages.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
-                case Interop.WindowMessages.WM_NCDESTROY:
+                case WindowMessages.WM_NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case Interop.WindowMessages.WM_SHOWWINDOW:
+                case WindowMessages.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
-                case Interop.WindowMessages.WM_SIZE:
+                case WindowMessages.WM_SIZE:
                     WmSize(ref m);
                     break;
-                case Interop.WindowMessages.WM_SYSCOMMAND:
+                case WindowMessages.WM_SYSCOMMAND:
                     WmSysCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_GETMINMAXINFO:
+                case WindowMessages.WM_GETMINMAXINFO:
                     WmGetMinMaxInfo(ref m);
                     break;
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
-                //case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                //case WindowMessages.WM_WINDOWPOSCHANGING:
                 //    WmWindowPosChanging(ref m);
                 //    break;
-                case Interop.WindowMessages.WM_ENTERMENULOOP:
+                case WindowMessages.WM_ENTERMENULOOP:
                     WmEnterMenuLoop(ref m);
                     break;
-                case Interop.WindowMessages.WM_EXITMENULOOP:
+                case WindowMessages.WM_EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
-                case Interop.WindowMessages.WM_CAPTURECHANGED:
+                case WindowMessages.WM_CAPTURECHANGED:
                     base.WndProc(ref m);
                     // This is a work-around for the Win32 scroll bar; it
                     // doesn't release it's capture in response to a CAPTURECHANGED
@@ -7274,11 +7275,11 @@ namespace System.Windows.Forms
                         CaptureInternal = false;
                     }
                     break;
-                case Interop.WindowMessages.WM_GETDPISCALEDSIZE:
+                case WindowMessages.WM_GETDPISCALEDSIZE:
                     Debug.Assert(NativeMethods.Util.SignedLOWORD(m.WParam) == NativeMethods.Util.SignedHIWORD(m.WParam), "Non-square pixels!");
                     WmGetDpiScaledSize(ref m);
                     break;
-                case Interop.WindowMessages.WM_DPICHANGED:
+                case WindowMessages.WM_DPICHANGED:
                     WmDpiChanged(ref m);
                     break;
                 default:

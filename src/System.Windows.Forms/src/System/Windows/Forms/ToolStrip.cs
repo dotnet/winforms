@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -3093,7 +3094,7 @@ namespace System.Windows.Forms
             {
                 IntPtr imageHdc = g.GetHdc();
                 //send the actual wm_print message
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)imageHdc,
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
                     (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                 //now BLT the result to the destination bitmap.
@@ -5129,11 +5130,11 @@ namespace System.Windows.Forms
         /// <param name=m></param>
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == Interop.WindowMessages.WM_SETFOCUS)
+            if (m.Msg == WindowMessages.WM_SETFOCUS)
             {
                 SnapFocus(m.WParam);
             }
-            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE)
+            if (m.Msg == WindowMessages.WM_MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                 // itself.  the mouse message will still go through, but focus wont be taken.
@@ -5186,7 +5187,7 @@ namespace System.Windows.Forms
 
             base.WndProc(ref m);
 
-            if (m.Msg == Interop.WindowMessages.WM_NCDESTROY)
+            if (m.Msg == WindowMessages.WM_NCDESTROY)
             {
                 // Destroy the owner window, if we created one.  We
                 // cannot do this in OnHandleDestroyed, because at
@@ -5638,12 +5639,12 @@ namespace System.Windows.Forms
                 switch (m.Msg)
                 {
 
-                    case Interop.WindowMessages.WM_LBUTTONDOWN:
-                    case Interop.WindowMessages.WM_RBUTTONDOWN:
-                    case Interop.WindowMessages.WM_MBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCMBUTTONDOWN:
+                    case WindowMessages.WM_LBUTTONDOWN:
+                    case WindowMessages.WM_RBUTTONDOWN:
+                    case WindowMessages.WM_MBUTTONDOWN:
+                    case WindowMessages.WM_NCLBUTTONDOWN:
+                    case WindowMessages.WM_NCRBUTTONDOWN:
+                    case WindowMessages.WM_NCMBUTTONDOWN:
                         if (ownerToolStrip.ContainsFocus)
                         {
                             // if we've clicked on something that's not a child of the toolstrip and we
@@ -5713,18 +5714,18 @@ namespace System.Windows.Forms
                 if (_cachedItemHDC == IntPtr.Zero)
                 {
                     // create a new DC - we dont have one yet.
-                    IntPtr compatibleHDC = Interop.Gdi32.CreateCompatibleDC(toolStripHDC.Handle);
+                    IntPtr compatibleHDC = Gdi32.CreateCompatibleDC(toolStripHDC.Handle);
                     _cachedItemHDC = compatibleHDC;
                 }
 
                 // create compatible bitmap with the correct size.
                 _cachedItemBitmap = SafeNativeMethods.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
-                IntPtr oldBitmap = Interop.Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
+                IntPtr oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // delete the old bitmap
                 if (oldBitmap != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(oldBitmap);
+                    Gdi32.DeleteObject(oldBitmap);
                 }
 
                 // remember what size we created.
@@ -5741,12 +5742,12 @@ namespace System.Windows.Forms
                 // delete the bitmap
                 if (_cachedItemBitmap != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(_cachedItemBitmap);
+                    Gdi32.DeleteObject(_cachedItemBitmap);
                     _cachedItemBitmap = IntPtr.Zero;
                 }
 
                 // delete the DC itself.
-                Interop.Gdi32.DeleteDC(_cachedItemHDC);
+                Gdi32.DeleteDC(_cachedItemHDC);
             }
 
             _cachedItemHDC = IntPtr.Zero;
