@@ -9,6 +9,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -307,16 +308,16 @@ namespace System.ComponentModel.Design
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_GETDLGCODE:
+                    case WindowMessages.WM_GETDLGCODE:
                         m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTALLKEYS);
                         return;
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case WindowMessages.WM_MOUSEMOVE:
                         if (clickSeen)
                         {
                             clickSeen = false;
                         }
                         break;
-                    case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                    case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                         NativeMethods.NMTREEVIEW nmtv = Marshal.PtrToStructure<NativeMethods.NMTREEVIEW>(m.LParam);
                         if (nmtv.nmhdr.code == NativeMethods.NM_CLICK)
                         {

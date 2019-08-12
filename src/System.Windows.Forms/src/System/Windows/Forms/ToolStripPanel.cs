@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -911,7 +912,7 @@ namespace System.Windows.Forms
                             {
                                 NativeMethods.MSG msg = new NativeMethods.MSG();
                                 while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, IntPtr.Zero),
-                                                           Interop.WindowMessages.WM_PAINT, Interop.WindowMessages.WM_PAINT,
+                                                           WindowMessages.WM_PAINT, WindowMessages.WM_PAINT,
                                                            NativeMethods.PM_REMOVE))
                                 {
                                     SafeNativeMethods.UpdateWindow(new HandleRef(null, msg.hwnd));
@@ -957,7 +958,7 @@ namespace System.Windows.Forms
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m.Msg == Interop.WindowMessages.WM_NCHITTEST)
+                    if (m.Msg == WindowMessages.WM_NCHITTEST)
                     {
                         m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
                     }

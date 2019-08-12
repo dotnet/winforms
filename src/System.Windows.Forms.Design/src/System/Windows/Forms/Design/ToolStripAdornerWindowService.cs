@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -291,7 +291,7 @@ namespace System.Windows.Forms.Design
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_NCHITTEST:
+                    case WindowMessages.WM_NCHITTEST:
                         m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
                         break;
                     default:

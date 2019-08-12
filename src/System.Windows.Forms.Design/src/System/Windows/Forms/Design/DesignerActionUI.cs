@@ -6,10 +6,10 @@ using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -1000,7 +1000,7 @@ namespace System.ComponentModel.Design
                 return string.Empty;
             }
 
-            string windowText = Interop.User32.GetWindowText(hwnd);
+            string windowText = User32.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
             string nameOfControl = string.Empty;
             Control c = Control.FromHandle(hwnd);
@@ -1063,7 +1063,7 @@ namespace System.ComponentModel.Design
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_ACTIVATE:
+                case WindowMessages.WM_ACTIVATE:
                     WmActivate(ref m);
                     return;
             }

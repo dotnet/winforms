@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
+
 
 namespace System.Windows.Forms.Tests.InteropTests
 {
@@ -11,7 +13,7 @@ namespace System.Windows.Forms.Tests.InteropTests
         [Fact]
         public void BasicFunctionality()
         {
-            Interop.NtDll.RtlGetVersion(out var info);
+            NtDll.RtlGetVersion(out var info);
 
             // Windows 7 was 6.1, 8 is 6.2, 8.1 is 6.3, 10 is 10
             switch (info.dwMajorVersion)

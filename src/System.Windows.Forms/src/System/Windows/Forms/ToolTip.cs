@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1381,7 +1382,7 @@ namespace System.Windows.Forms
 
             if (window is Control associatedControl)
             {
-                var r = new Interop.RECT();
+                var r = new RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
 
                 Cursor currentCursor = Cursor.Current;
@@ -1396,7 +1397,7 @@ namespace System.Windows.Forms
                 {
                     // Calculate the dimensions of the visible rectangle which
                     // is used to estimate the upper x,y of the tooltip placement
-                    Interop.RECT visibleRect = new Interop.RECT
+                    RECT visibleRect = new RECT
                     {
                         left = (r.left < screen.WorkingArea.Left) ? screen.WorkingArea.Left : r.left,
                         top = (r.top < screen.WorkingArea.Top) ? screen.WorkingArea.Top : r.top,
@@ -1490,7 +1491,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new Interop.RECT();
+                var r = new RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
@@ -1517,7 +1518,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new Interop.RECT();
+                var r = new RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
@@ -1539,7 +1540,7 @@ namespace System.Windows.Forms
 
             if (IsWindowActive(window))
             {
-                var r = new Interop.RECT();
+                var r = new RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
@@ -1564,7 +1565,7 @@ namespace System.Windows.Forms
 
             if (IsWindowActive(window))
             {
-                var r = new Interop.RECT();
+                var r = new RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
@@ -2050,7 +2051,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmMove()
         {
-            var r = new Interop.RECT();
+            var r = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
             var ti = new NativeMethods.TOOLINFO_TOOLTIP
             {
@@ -2119,7 +2120,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var r = new Interop.RECT();
+                var r = new RECT();
                 UnsafeNativeMethods.GetWindowRect(new HandleRef(win, Control.GetSafeHandle(win)), ref r);
                 Point cursorLocation = Cursor.Position;
 
@@ -2149,7 +2150,7 @@ namespace System.Windows.Forms
         private void WmShow()
         {
             // Get the bounds.
-            var r = new Interop.RECT();
+            var r = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
             var ti = new NativeMethods.TOOLINFO_TOOLTIP
@@ -2430,7 +2431,7 @@ namespace System.Windows.Forms
         {
             switch (msg.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)msg.GetLParam(typeof(NativeMethods.NMHDR));
                     if (nmhdr.code == NativeMethods.TTN_SHOW && !_trackPosition)
                     {
@@ -2443,22 +2444,22 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                case WindowMessages.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref msg);
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     if (!WmWindowPosChanged() && _window != null)
                     {
                         _window.DefWndProc(ref msg);
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSEACTIVATE:
+                case WindowMessages.WM_MOUSEACTIVATE:
                     WmMouseActivate(ref msg);
                     break;
 
-                case Interop.WindowMessages.WM_MOVE:
+                case WindowMessages.WM_MOVE:
                     WmMove();
                     break;
 
@@ -2466,10 +2467,10 @@ namespace System.Windows.Forms
                     WmWindowFromPoint(ref msg);
                     break;
 
-                case Interop.WindowMessages.WM_PRINTCLIENT:
-                    goto case Interop.WindowMessages.WM_PAINT;
+                case WindowMessages.WM_PRINTCLIENT:
+                    goto case WindowMessages.WM_PAINT;
 
-                case Interop.WindowMessages.WM_PAINT:
+                case WindowMessages.WM_PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
                         NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
@@ -2500,7 +2501,7 @@ namespace System.Windows.Forms
                                 Font font;
                                 try
                                 {
-                                    font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_GETFONT, 0, 0));
+                                    font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_GETFONT, 0, 0));
                                 }
                                 catch (ArgumentException)
                                 {

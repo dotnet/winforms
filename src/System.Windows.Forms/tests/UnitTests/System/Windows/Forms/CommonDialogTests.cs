@@ -8,6 +8,8 @@ using System.Reflection;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
+
 
 namespace System.Windows.Forms.Tests
 {
@@ -72,10 +74,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> HookProc_TestData()
         {
-            yield return new object[] { Interop.WindowMessages.WM_INITDIALOG };
-            yield return new object[] { Interop.WindowMessages.WM_SETFOCUS };
+            yield return new object[] { WindowMessages.WM_INITDIALOG };
+            yield return new object[] { WindowMessages.WM_SETFOCUS };
 
-            const int CDM_SETDEFAULTFOCUS = Interop.WindowMessages.WM_USER + 0x51;
+            const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
             yield return new object[] { CDM_SETDEFAULTFOCUS };
 
             yield return new object[] { 0 };

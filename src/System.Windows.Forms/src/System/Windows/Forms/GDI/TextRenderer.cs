@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -197,15 +198,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private static Interop.User32.TextFormatFlags GetTextFormatFlags(TextFormatFlags flags)
+        private static User32.TextFormatFlags GetTextFormatFlags(TextFormatFlags flags)
         {
             if (((uint)flags & WindowsGraphics.GdiUnsupportedFlagMask) == 0)
             {
-                return (Interop.User32.TextFormatFlags)flags;
+                return (User32.TextFormatFlags)flags;
             }
 
             // Clear TextRenderer custom flags.
-            Interop.User32.TextFormatFlags windowsGraphicsSupportedFlags = (Interop.User32.TextFormatFlags)(((uint)flags) & ~WindowsGraphics.GdiUnsupportedFlagMask);
+            User32.TextFormatFlags windowsGraphicsSupportedFlags = (User32.TextFormatFlags)(((uint)flags) & ~WindowsGraphics.GdiUnsupportedFlagMask);
 
             return windowsGraphicsSupportedFlags;
         }

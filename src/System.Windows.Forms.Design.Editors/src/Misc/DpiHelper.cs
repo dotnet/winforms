@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using CAPS = System.Windows.Forms.Design.NativeMethods;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -33,7 +34,7 @@ namespace System.Windows.Forms
             }
 
             using ScreenDC dc = ScreenDC.Create();
-            deviceDpi = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+            deviceDpi = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
             isInitialized = true;
         }
 

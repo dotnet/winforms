@@ -19,6 +19,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -198,9 +199,9 @@ namespace System.Windows.Forms
         private NativeMethods.IPerPropertyBrowsing iPerPropertyBrowsing;
         private NativeMethods.ICategorizeProperties iCategorizeProperties;
         private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
-        private Interop.Ole32.IPersistStream iPersistStream;
-        private Interop.Ole32.IPersistStreamInit iPersistStreamInit;
-        private Interop.Ole32.IPersistStorage iPersistStorage;
+        private Ole32.IPersistStream iPersistStream;
+        private Ole32.IPersistStreamInit iPersistStreamInit;
+        private Ole32.IPersistStorage iPersistStorage;
 
         private AboutBoxDelegate aboutBoxDelegate = null;
         private readonly EventHandler selectionChangeHandler;
@@ -1286,8 +1287,8 @@ namespace System.Windows.Forms
                     return NativeMethods.E_FAIL;
                 }
 
-                logPixelsX = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
-                logPixelsY = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
+                logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
+                logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, $"log pixels are: {logPixelsX} {logPixelsY}");
             }
 
@@ -2038,7 +2039,7 @@ namespace System.Windows.Forms
                         // A bit of ugliness here (a bit?  more like a bucket...)
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
                         hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
-                        message = Interop.WindowMessages.WM_SYSKEYDOWN,
+                        message = WindowMessages.WM_SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = (IntPtr)0x20180001,
                         time = SafeNativeMethods.GetTickCount()
@@ -2160,7 +2161,7 @@ namespace System.Windows.Forms
                     if (iPersistPropBag != null)
                     {
                         propBag = new PropertyBagStream();
-                        iPersistPropBag.Save(propBag, Interop.BOOL.TRUE, Interop.BOOL.TRUE);
+                        iPersistPropBag.Save(propBag, BOOL.TRUE, BOOL.TRUE);
                     }
 
                     MemoryStream ms = null;
@@ -2171,11 +2172,11 @@ namespace System.Windows.Forms
                             ms = new MemoryStream();
                             if (storageType == STG_STREAM)
                             {
-                                iPersistStream.Save(new Interop.Ole32.GPStream(ms), Interop.BOOL.TRUE);
+                                iPersistStream.Save(new Ole32.GPStream(ms), BOOL.TRUE);
                             }
                             else
                             {
-                                iPersistStreamInit.Save(new Interop.Ole32.GPStream(ms), Interop.BOOL.TRUE);
+                                iPersistStreamInit.Save(new Ole32.GPStream(ms), BOOL.TRUE);
                             }
                             break;
                         case STG_STORAGE:
@@ -2324,7 +2325,7 @@ namespace System.Windows.Forms
                 return true;
             }
 #endif
-            Interop.HRESULT hr = Interop.HRESULT.E_FAIL;
+            HRESULT hr = HRESULT.E_FAIL;
             switch (storageType)
             {
                 case STG_STREAM:
@@ -2349,7 +2350,7 @@ namespace System.Windows.Forms
             // Sadly, some controls lie and never say that they are dirty...
             // SO, we don't believe them unless they told us that they were
             // dirty at least once...
-            return hr != Interop.HRESULT.S_FALSE;
+            return hr != HRESULT.S_FALSE;
         }
 
         internal bool IsUserMode()
@@ -3085,19 +3086,19 @@ namespace System.Windows.Forms
             iPersistPropBag.Load(propBag, null);
         }
 
-        private void DepersistFromIStream(Interop.Ole32.IStream istream)
+        private void DepersistFromIStream(Ole32.IStream istream)
         {
             storageType = STG_STREAM;
             iPersistStream.Load(istream);
         }
 
-        private void DepersistFromIStreamInit(Interop.Ole32.IStream istream)
+        private void DepersistFromIStreamInit(Ole32.IStream istream)
         {
             storageType = STG_STREAMINIT;
             iPersistStreamInit.Load(istream);
         }
 
-        private void DepersistFromIStorage(Interop.Ole32.IStorage storage)
+        private void DepersistFromIStorage(Ole32.IStorage storage)
         {
             storageType = STG_STORAGE;
 
@@ -3108,8 +3109,8 @@ namespace System.Windows.Forms
             //
             if (storage != null)
             {
-                Interop.HRESULT hr =  iPersistStorage.Load(storage);
-                if (hr != Interop.HRESULT.S_OK)
+                HRESULT hr =  iPersistStorage.Load(storage);
+                if (hr != HRESULT.S_OK)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Error trying load depersist from IStorage: " + hr);
                 }
@@ -3124,9 +3125,9 @@ namespace System.Windows.Forms
             {
                 // must init new:
                 //
-                if (instance is Interop.Ole32.IPersistStreamInit)
+                if (instance is Ole32.IPersistStreamInit)
                 {
-                    iPersistStreamInit = (Interop.Ole32.IPersistStreamInit)instance;
+                    iPersistStreamInit = (Ole32.IPersistStreamInit)instance;
                     try
                     {
                         storageType = STG_STREAMINIT;
@@ -3138,17 +3139,17 @@ namespace System.Windows.Forms
                     }
                     return;
                 }
-                if (instance is Interop.Ole32.IPersistStream)
+                if (instance is Ole32.IPersistStream)
                 {
                     storageType = STG_STREAM;
-                    iPersistStream = (Interop.Ole32.IPersistStream)instance;
+                    iPersistStream = (Ole32.IPersistStream)instance;
                     return;
                 }
-                if (instance is Interop.Ole32.IPersistStorage)
+                if (instance is Ole32.IPersistStorage)
                 {
                     storageType = STG_STORAGE;
                     ocxState = new State(this);
-                    iPersistStorage = (Interop.Ole32.IPersistStorage)instance;
+                    iPersistStorage = (Ole32.IPersistStorage)instance;
                     try
                     {
                         iPersistStorage.InitNew(ocxState.GetStorage());
@@ -3183,7 +3184,7 @@ namespace System.Windows.Forms
                 case STG_STREAM:
                     try
                     {
-                        iPersistStream = (Interop.Ole32.IPersistStream)instance;
+                        iPersistStream = (Ole32.IPersistStream)instance;
                         DepersistFromIStream(ocxState.GetStream());
                     }
                     catch (Exception e)
@@ -3192,11 +3193,11 @@ namespace System.Windows.Forms
                     }
                     break;
                 case STG_STREAMINIT:
-                    if (instance is Interop.Ole32.IPersistStreamInit)
+                    if (instance is Ole32.IPersistStreamInit)
                     {
                         try
                         {
-                            iPersistStreamInit = (Interop.Ole32.IPersistStreamInit)instance;
+                            iPersistStreamInit = (Ole32.IPersistStreamInit)instance;
                             DepersistFromIStreamInit(ocxState.GetStream());
                         }
                         catch (Exception e)
@@ -3215,7 +3216,7 @@ namespace System.Windows.Forms
                 case STG_STORAGE:
                     try
                     {
-                        iPersistStorage = (Interop.Ole32.IPersistStorage)instance;
+                        iPersistStorage = (Ole32.IPersistStorage)instance;
                         DepersistFromIStorage(ocxState.GetStorage());
                     }
                     catch (Exception e)
@@ -3512,31 +3513,31 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 // Things we explicitly ignore and pass to the ocx's windproc
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
 
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFYFORMAT:
 
-                case Interop.WindowMessages.WM_SETCURSOR:
-                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
+                case WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SYSCOLORCHANGE:
 
                 // Some of the MSComCtl controls respond to this message
                 // to do some custom painting. So, we should just pass this message
                 // through.
                 //
-                case Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_DRAWITEM:
 
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_MBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONUP:
+                case WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONUP:
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
                     if (IsUserMode())
                     {
                         Focus();
@@ -3544,7 +3545,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     {
                         hwndFocus = m.WParam;
                         try
@@ -3558,18 +3559,18 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_COMMAND:
                     if (!ReflectMessage(m.LParam, ref m))
                     {
                         DefWndProc(ref m);
                     }
                     break;
 
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
 #if DEBUG
                     if (!OwnWindow())
                     {
@@ -3603,13 +3604,13 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case Interop.WindowMessages.WM_HELP:
+                case WindowMessages.WM_HELP:
                     // We want to both fire the event, and let the ocx have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_KEYUP:
+                case WindowMessages.WM_KEYUP:
                     if (axState[processingKeyUp])
                     {
                         break;
@@ -3630,7 +3631,7 @@ namespace System.Windows.Forms
 
                     break;
 
-                case Interop.WindowMessages.WM_NCDESTROY:
+                case WindowMessages.WM_NCDESTROY:
 #if DEBUG
                     if (!OwnWindow())
                     {
@@ -6959,8 +6960,8 @@ namespace System.Windows.Forms
             private byte[] buffer;
             internal int type;
             private MemoryStream ms;
-            private Interop.Ole32.IStorage storage;
-            private Interop.Ole32.ILockBytes iLockBytes;
+            private Ole32.IStorage storage;
+            private Ole32.ILockBytes iLockBytes;
             private bool manualUpdate = false;
             private string licenseKey = null;
 #pragma warning disable IDE1006
@@ -7105,20 +7106,20 @@ namespace System.Windows.Forms
                 bool failed = false;
                 try
                 {
-                    iLockBytes = Interop.Ole32.CreateILockBytesOnHGlobal(hglobal, true);
+                    iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, true);
                     if (buffer == null)
                     {
-                        storage = Interop.Ole32.StgCreateDocfileOnILockBytes(
+                        storage = Ole32.StgCreateDocfileOnILockBytes(
                             iLockBytes,
-                            Interop.Ole32.STGM.STGM_CREATE | Interop.Ole32.STGM.STGM_READWRITE | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                            Ole32.STGM.STGM_CREATE | Ole32.STGM.STGM_READWRITE | Ole32.STGM.STGM_SHARE_EXCLUSIVE,
                             0);
                     }
                     else
                     {
-                        storage = Interop.Ole32.StgOpenStorageOnILockBytes(
+                        storage = Ole32.StgOpenStorageOnILockBytes(
                             iLockBytes,
                             null,
-                            Interop.Ole32.STGM.STGM_READWRITE | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                            Ole32.STGM.STGM_READWRITE | Ole32.STGM.STGM_SHARE_EXCLUSIVE,
                             IntPtr.Zero,
                             0);
                     }
@@ -7147,7 +7148,7 @@ namespace System.Windows.Forms
                 return PropertyBagBinary;
             }
 
-            internal Interop.Ole32.IStorage GetStorage()
+            internal Ole32.IStorage GetStorage()
             {
                 if (storage == null)
                 {
@@ -7157,7 +7158,7 @@ namespace System.Windows.Forms
                 return storage;
             }
 
-            internal Interop.Ole32.IStream GetStream()
+            internal Ole32.IStream GetStream()
             {
                 if (ms == null)
                 {
@@ -7173,7 +7174,7 @@ namespace System.Windows.Forms
                 {
                     ms.Seek(0, SeekOrigin.Begin);
                 }
-                return new Interop.Ole32.GPStream(ms);
+                return new Ole32.GPStream(ms);
             }
 
             private void InitializeFromStream(Stream ids)
@@ -7212,7 +7213,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal State RefreshStorage(Interop.Ole32.IPersistStorage iPersistStorage)
+            internal State RefreshStorage(Ole32.IPersistStorage iPersistStorage)
             {
                 Debug.Assert(storage != null, "how can we not have a storage object?");
                 Debug.Assert(iLockBytes != null, "how can we have a storage w/o ILockBytes?");
@@ -7221,17 +7222,17 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                iPersistStorage.Save(storage, Interop.BOOL.TRUE);
+                iPersistStorage.Save(storage, BOOL.TRUE);
                 storage.Commit(0);
                 iPersistStorage.HandsOffStorage();
                 try
                 {
                     buffer = null;
                     ms = null;
-                    iLockBytes.Stat(out Interop.Ole32.STATSTG stat, Interop.Ole32.STATFLAG.STATFLAG_NONAME);
+                    iLockBytes.Stat(out Ole32.STATSTG stat, Ole32.STATFLAG.STATFLAG_NONAME);
                     length = (int)stat.cbSize;
                     buffer = new byte[length];
-                    IntPtr hglobal = Interop.Ole32.GetHGlobalFromILockBytes(iLockBytes);
+                    IntPtr hglobal = Ole32.GetHGlobalFromILockBytes(iLockBytes);
                     IntPtr pointer = UnsafeNativeMethods.GlobalLock(new HandleRef(null, hglobal));
                     try
                     {

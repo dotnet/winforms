@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -225,13 +226,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             switch (msg.Msg)
             {
-                case Interop.WindowMessages.WM_SHOWWINDOW:
+                case WindowMessages.WM_SHOWWINDOW:
                     if (unchecked((int)(long)msg.WParam) != 0 && dontShow)
                     {
                         msg.WParam = IntPtr.Zero;
                     }
                     break;
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     // When using v6 common controls, the native
                     // tooltip does not end up returning HTTRANSPARENT all the time, so its TTF_TRANSPARENT
                     // behavior does not work, ie. mouse events do not fall thru to controls underneath. This

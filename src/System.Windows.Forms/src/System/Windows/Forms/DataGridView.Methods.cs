@@ -13,6 +13,7 @@ using System.Text;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -5354,7 +5355,7 @@ namespace System.Windows.Forms
             return new DataGridViewRowCollection(this);
         }
 
-        private Interop.RECT[] CreateScrollableRegion(Rectangle scroll)
+        private RECT[] CreateScrollableRegion(Rectangle scroll)
         {
             if (cachedScrollableRegion != null)
             {
@@ -5681,16 +5682,16 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
+            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
 
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
 
-            Interop.Gdi32.SelectObject(dc, saveBrush);
-            Interop.Gdi32.DeleteObject(halftone);
-            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Gdi32.SelectObject(dc, saveBrush);
+            Gdi32.DeleteObject(halftone);
+            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -5702,11 +5703,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
+            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            Interop.Gdi32.SelectObject(dc, saveBrush);
-            Interop.Gdi32.DeleteObject(halftone);
-            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Gdi32.SelectObject(dc, saveBrush);
+            Gdi32.DeleteObject(halftone);
+            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
@@ -21769,7 +21770,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            if (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN || m.Msg == Interop.WindowMessages.WM_KEYDOWN)
+            if (m.Msg == WindowMessages.WM_SYSKEYDOWN || m.Msg == WindowMessages.WM_KEYDOWN)
             {
                 if (ptCurrentCell.X != -1)
                 {
@@ -21814,7 +21815,7 @@ namespace System.Windows.Forms
                 }
             }
             else if (dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] &&
-                     (m.Msg == Interop.WindowMessages.WM_SYSCHAR || m.Msg == Interop.WindowMessages.WM_CHAR || m.Msg == Interop.WindowMessages.WM_IME_CHAR))
+                     (m.Msg == WindowMessages.WM_SYSCHAR || m.Msg == WindowMessages.WM_CHAR || m.Msg == WindowMessages.WM_IME_CHAR))
             {
                 dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = false;
                 if (editingControl != null)
@@ -21836,7 +21837,7 @@ namespace System.Windows.Forms
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
             // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
-            if (m.Msg == Interop.WindowMessages.WM_CHAR)
+            if (m.Msg == WindowMessages.WM_CHAR)
             {
                 switch (ke.KeyCode)
                 {
@@ -21878,7 +21879,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (editingControl != null && (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN))
+            if (editingControl != null && (m.Msg == WindowMessages.WM_KEYDOWN || m.Msg == WindowMessages.WM_SYSKEYDOWN))
             {
                 dataGridViewState2[DATAGRIDVIEWSTATE2_currentCellWantsInputKey] = ((IDataGridViewEditingControl)editingControl).EditingControlWantsInputKey(ke.KeyData, dataGridViewWantsInputKey);
             }
@@ -21890,7 +21891,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewWantsInputKey)
             {
-                if (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
+                if (m.Msg == WindowMessages.WM_KEYDOWN || m.Msg == WindowMessages.WM_SYSKEYDOWN)
                 {
                     if (ProcessDataGridViewKey(ke))
                     {
@@ -25760,7 +25761,7 @@ namespace System.Windows.Forms
             return ScrollRowIntoView(columnIndex, rowIndex, committed, forCurrentCellChange);
         }
 
-        private void ScrollRectangles(Interop.RECT[] rects, int change)
+        private void ScrollRectangles(RECT[] rects, int change)
         {
             if (rects != null)
             {
@@ -25769,7 +25770,7 @@ namespace System.Windows.Forms
                     dataGridViewState1[DATAGRIDVIEWSTATE1_scrolledSinceMouseDown] = true;
                 }
 
-                Interop.RECT scroll;
+                RECT scroll;
                 for (int r = 0; r < rects.Length; r++)
                 {
                     scroll = rects[r];
@@ -25883,7 +25884,7 @@ namespace System.Windows.Forms
             // The mouse probably is not over the same cell after the scroll.
             UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
 
-            Interop.RECT scrollArea = rowsRect;
+            RECT scrollArea = rowsRect;
             SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, deltaY, ref scrollArea, ref scrollArea);
             if (invalidateTopOfRowHeaders)
             {
@@ -29294,11 +29295,11 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_GETDLGCODE:
+                case WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     return;
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDOWN:
                     // If the OnEnter procedure is called, it's because of a mouse down event, and not a TAB key.
                     dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = true;
                     try
@@ -29310,7 +29311,7 @@ namespace System.Windows.Forms
                         dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = false;
                     }
                     return;
-                case Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY:
                     if (WmNotify(ref m))
                     {
                         // we are done - skip default handling
@@ -29318,8 +29319,8 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
-                case Interop.WindowMessages.WM_IME_COMPOSITION:
+                case WindowMessages.WM_IME_STARTCOMPOSITION:
+                case WindowMessages.WM_IME_COMPOSITION:
                     if (editingControl != null)
                     {
                         // Make sure that the first character is forwarded to the editing control.

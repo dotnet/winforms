@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -2623,7 +2624,7 @@ namespace System.Windows.Forms
                             odCacheFont = new Font(odCacheFont, FontStyle.Bold);
                             odCacheFontHandleWrapper = new FontHandleWrapper(odCacheFont);
                             odCacheFontHandle = odCacheFontHandleWrapper.Handle;
-                            Interop.Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                             m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
                         }
                         return;
@@ -2944,7 +2945,7 @@ namespace System.Windows.Forms
                             // safety net code just in case
                             if (odCacheFont != null)
                             {
-                                Interop.Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), odCacheFontHandle);
+                                Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), odCacheFontHandle);
                             }
                         }
                         else
@@ -2954,7 +2955,7 @@ namespace System.Windows.Forms
                                 odCacheFontHandleWrapper.Dispose();
                             }
                             odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
-                            Interop.Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                         }
 
                         if (!dontmess)
@@ -3598,7 +3599,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            Interop.RECT itemrect = new Interop.RECT
+            RECT itemrect = new RECT
             {
                 left = (int)portion
             };
@@ -3626,7 +3627,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            Interop.RECT itemrect = new Interop.RECT
+            RECT itemrect = new RECT
             {
                 left = 0
             };
@@ -3708,7 +3709,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            Interop.RECT itemrect = new Interop.RECT
+            RECT itemrect = new RECT
             {
                 left = (int)portion,
                 top = subItemIndex
@@ -4833,7 +4834,7 @@ namespace System.Windows.Forms
                 IntPtr prc = IntPtr.Zero;
                 IntPtr pwpos = IntPtr.Zero;
 
-                prc = Marshal.AllocHGlobal(Marshal.SizeOf<Interop.RECT>());
+                prc = Marshal.AllocHGlobal(Marshal.SizeOf<RECT>());
                 if (prc == IntPtr.Zero)
                 {
                     return;
@@ -6177,7 +6178,7 @@ namespace System.Windows.Forms
         private Font GetListHeaderFont()
         {
             IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
-            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), Interop.WindowMessages.WM_GETFONT, 0, 0);
+            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), WindowMessages.WM_GETFONT, 0, 0);
             return Font.FromHfont(hFont);
         }
 
@@ -6641,10 +6642,10 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     WmReflectNotify(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDBLCLK:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.
@@ -6653,7 +6654,7 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.
@@ -6662,9 +6663,9 @@ namespace System.Windows.Forms
                     downButton = MouseButtons.Left;
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONUP:
-                case Interop.WindowMessages.WM_MBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_MBUTTONUP:
 
                     // see the mouse is on item
                     //
@@ -6688,21 +6689,21 @@ namespace System.Windows.Forms
                     listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     CaptureInternal = false;
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                case Interop.WindowMessages.WM_MOUSEMOVE:
+                case WindowMessages.WM_MOUSEMOVE:
                     if (listViewState[LISTVIEWSTATE_expectingMouseUp] && !listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                     {
                         OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
@@ -6711,7 +6712,7 @@ namespace System.Windows.Forms
                     CaptureInternal = false;
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_MOUSEHOVER:
+                case WindowMessages.WM_MOUSEHOVER:
                     if (HoverSelection)
                     {
                         base.WndProc(ref m);
@@ -6722,7 +6723,7 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY:
                     if (WmNotify(ref m))
                     {
                         break; // we are done - skip default handling
@@ -6731,7 +6732,7 @@ namespace System.Windows.Forms
                     {
                         goto default;  //default handling needed
                     }
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     base.WndProc(ref m);
 
                     if (!RecreatingHandle && !ListViewHandleDestroyed)
@@ -6748,23 +6749,23 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case WindowMessages.WM_MOUSELEAVE:
                     // if the mouse leaves and then re-enters the ListView
                     // ItemHovered events should be raised.
                     prevHoveredItem = null;
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_PAINT:
+                case WindowMessages.WM_PAINT:
                     base.WndProc(ref m);
 
                     // win32 ListView
                     BeginInvoke(new MethodInvoker(CleanPreviousBackgroundImageFiles));
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case Interop.WindowMessages.WM_TIMER:
+                case WindowMessages.WM_TIMER:
                     if (unchecked((int)(long)m.WParam) != LVTOOLTIPTRACKING || !ComctlSupportsVisualStyles)
                     {
                         base.WndProc(ref m);

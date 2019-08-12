@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -22,7 +23,7 @@ namespace System.Windows.Forms
             DeviceDpiOld = old;
             DeviceDpiNew = NativeMethods.Util.SignedLOWORD(m.WParam);
             Debug.Assert(NativeMethods.Util.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
-            Interop.RECT suggestedRect = Marshal.PtrToStructure<Interop.RECT>(m.LParam);
+            RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 

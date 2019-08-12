@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -196,7 +197,7 @@ namespace System.Windows.Forms
 
                     if (s_oleAccAvailable == NativeMethods.InvalidIntPtr)
                     {
-                        s_oleAccAvailable = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
+                        s_oleAccAvailable = Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
                         freeLib = (s_oleAccAvailable != IntPtr.Zero);
                     }
 
@@ -212,7 +213,7 @@ namespace System.Windows.Forms
 
                     if (freeLib)
                     {
-                        Interop.Kernel32.FreeLibrary(s_oleAccAvailable);
+                        Kernel32.FreeLibrary(s_oleAccAvailable);
                     }
                 }
             }

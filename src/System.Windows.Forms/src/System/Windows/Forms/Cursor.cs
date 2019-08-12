@@ -9,6 +9,7 @@ using System.Drawing.Design;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -53,7 +54,7 @@ namespace System.Windows.Forms
             Debug.Assert(stream != null, "couldn't get stream for resource " + resource);
             cursorData = new byte[stream.Length];
             stream.Read(cursorData, 0, Convert.ToInt32(stream.Length)); // we assume that a cursor is less than 4gig big
-            LoadPicture(new Interop.Ole32.GPStream(new MemoryStream(cursorData)), nameof(resource));
+            LoadPicture(new Ole32.GPStream(new MemoryStream(cursorData)), nameof(resource));
         }
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace System.Windows.Forms
             {
                 f.Close();
             }
-            LoadPicture(new Interop.Ole32.GPStream(new MemoryStream(cursorData)), nameof(fileName));
+            LoadPicture(new Ole32.GPStream(new MemoryStream(cursorData)), nameof(fileName));
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace System.Windows.Forms
 
             cursorData = new byte[stream.Length];
             stream.Read(cursorData, 0, Convert.ToInt32(stream.Length));// assume that a cursor is less than 4gig...
-            LoadPicture(new Interop.Ole32.GPStream(new MemoryStream(cursorData)), nameof(stream));
+            LoadPicture(new Ole32.GPStream(new MemoryStream(cursorData)), nameof(stream));
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Interop.RECT r = new Interop.RECT();
+                RECT r = new RECT();
                 SafeNativeMethods.GetClipCursor(ref r);
                 return r;
             }
@@ -151,7 +152,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Interop.RECT rcClip = value;
+                    RECT rcClip = value;
                     UnsafeNativeMethods.ClipCursor(ref rcClip);
                 }
             }
@@ -212,13 +213,13 @@ namespace System.Windows.Forms
 
                 if (info.hbmMask != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(info.hbmMask);
+                    Gdi32.DeleteObject(info.hbmMask);
                     info.hbmMask = IntPtr.Zero;
                 }
 
                 if (info.hbmColor != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(info.hbmColor);
+                    Gdi32.DeleteObject(info.hbmColor);
                     info.hbmColor = IntPtr.Zero;
                 }
 
@@ -251,8 +252,8 @@ namespace System.Windows.Forms
                 if (cursorSize.IsEmpty)
                 {
                     cursorSize = new Size(
-                        Interop.User32.GetSystemMetrics(Interop.User32.SystemMetric.SM_CXCURSOR),
-                        Interop.User32.GetSystemMetrics(Interop.User32.SystemMetric.SM_CYCURSOR));
+                        User32.GetSystemMetrics(User32.SystemMetric.SM_CXCURSOR),
+                        User32.GetSystemMetrics(User32.SystemMetric.SM_CYCURSOR));
                 }
 
                 return cursorSize;
@@ -494,7 +495,7 @@ namespace System.Windows.Forms
             try
             {
                 resourceId = nResourceId;
-                handle = Interop.User32.LoadCursorW(IntPtr.Zero, nResourceId);
+                handle = User32.LoadCursorW(IntPtr.Zero, nResourceId);
             }
             catch
             {
@@ -514,7 +515,7 @@ namespace System.Windows.Forms
             if (info.hbmColor != IntPtr.Zero)
             {
                 UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmColor), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
-                Interop.Gdi32.DeleteObject(info.hbmColor);
+                Gdi32.DeleteObject(info.hbmColor);
                 iconSize = new Size(bmp.bmWidth, bmp.bmHeight);
             }
             else if (info.hbmMask != IntPtr.Zero)
@@ -525,7 +526,7 @@ namespace System.Windows.Forms
 
             if (info.hbmMask != IntPtr.Zero)
             {
-                Interop.Gdi32.DeleteObject(info.hbmMask);
+                Gdi32.DeleteObject(info.hbmMask);
             }
             return iconSize;
         }
@@ -533,7 +534,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Loads a picture from the requested stream.
         /// </summary>
-        private void LoadPicture(Interop.Ole32.IStream stream, string paramName)
+        private void LoadPicture(Ole32.IStream stream, string paramName)
         {
             Debug.Assert(stream != null, "Stream should be validated before this method is called.");
 
@@ -545,7 +546,7 @@ namespace System.Windows.Forms
                 try
                 {
                     picture = UnsafeNativeMethods.OleCreateIPictureIndirect(null, ref g, true);
-                    Interop.Ole32.IPersistStream ipictureAsIPersist = (Interop.Ole32.IPersistStream)picture;
+                    Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
                     ipictureAsIPersist.Load(stream);
 
                     if (picture != null && picture.GetPictureType() == NativeMethods.Ole.PICTYPE_ICON)

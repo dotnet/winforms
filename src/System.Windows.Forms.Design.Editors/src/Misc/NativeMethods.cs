@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -336,11 +337,11 @@ namespace System.Windows.Forms.Design
 
             void SaveViewState(
                 [In] [MarshalAs(UnmanagedType.Interface)]
-                Interop.Ole32.IStream pstm);
+                Ole32.IStream pstm);
 
             void ApplyViewState(
                 [In] [MarshalAs(UnmanagedType.Interface)]
-                Interop.Ole32.IStream pstm);
+                Ole32.IStream pstm);
 
             void Clone(
                 [In] [MarshalAs(UnmanagedType.Interface)]

@@ -3,21 +3,22 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
     public sealed class HtmlHistory : IDisposable
     {
-        private Interop.Mshtml.IOmHistory htmlHistory;
+        private IOmHistory htmlHistory;
         private bool disposed;
 
-        internal HtmlHistory(Interop.Mshtml.IOmHistory history)
+        internal HtmlHistory(IOmHistory history)
         {
             htmlHistory = history;
             Debug.Assert(NativeOmHistory != null, "The history object should implement IOmHistory");
         }
 
-        private Interop.Mshtml.IOmHistory NativeOmHistory
+        private IOmHistory NativeOmHistory
         {
             get
             {

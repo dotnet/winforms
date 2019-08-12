@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -667,7 +668,7 @@ namespace System.Windows.Forms
 
                 if (style == StatusBarPanelStyle.OwnerDraw)
                 {
-                    Interop.RECT rect = new Interop.RECT();
+                    RECT rect = new RECT();
                     result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_GETRECT, (IntPtr)GetIndex(), ref rect);
 
                     if (result != 0)

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms

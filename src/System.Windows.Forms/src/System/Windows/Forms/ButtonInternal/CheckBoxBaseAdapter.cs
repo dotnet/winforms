@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -293,7 +294,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
             // and compensate below
-            Interop.RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
+            RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
             Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
             Graphics offscreen = Graphics.FromImage(bitmap);
             offscreen.Clear(Color.Transparent);

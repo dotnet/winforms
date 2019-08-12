@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -53,7 +54,7 @@ namespace System.Windows.Forms
         private const int MONITOR_DEFAULTTONEAREST = 0x00000002;
         private const int MONITORINFOF_PRIMARY = 0x00000001;
 
-        private static readonly bool multiMonitorSupport = (Interop.User32.GetSystemMetrics(Interop.User32.SystemMetric.SM_CMONITORS) != 0);
+        private static readonly bool multiMonitorSupport = (User32.GetSystemMetrics(User32.SystemMetric.SM_CMONITORS) != 0);
         private static Screen[] screens;
 
         internal Screen(IntPtr monitor) : this(monitor, IntPtr.Zero)
@@ -85,17 +86,17 @@ namespace System.Windows.Forms
 
                 if (hdc == IntPtr.Zero)
                 {
-                    screenDC = Interop.Gdi32.CreateDC(deviceName, null, null, IntPtr.Zero);
+                    screenDC = Gdi32.CreateDC(deviceName, null, null, IntPtr.Zero);
                 }
             }
             hmonitor = monitor;
 
-            bitDepth = Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.DeviceCapability.BITSPIXEL);
-            bitDepth *= Interop.Gdi32.GetDeviceCaps(screenDC, Interop.Gdi32.DeviceCapability.PLANES);
+            bitDepth = Gdi32.GetDeviceCaps(screenDC, Gdi32.DeviceCapability.BITSPIXEL);
+            bitDepth *= Gdi32.GetDeviceCaps(screenDC, Gdi32.DeviceCapability.PLANES);
 
             if (hdc != screenDC)
             {
-                Interop.Gdi32.DeleteDC(screenDC);
+                Gdi32.DeleteDC(screenDC);
             }
         }
 
@@ -318,7 +319,7 @@ namespace System.Windows.Forms
         {
             if (multiMonitorSupport)
             {
-                Interop.RECT rc = rect;
+                RECT rc = rect;
                 return new Screen(SafeNativeMethods.MonitorFromRect(ref rc, MONITOR_DEFAULTTONEAREST));
             }
             else

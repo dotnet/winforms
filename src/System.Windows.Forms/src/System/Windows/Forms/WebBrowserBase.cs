@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -346,7 +347,7 @@ namespace System.Windows.Forms
                         NativeMethods.MSG msg = new NativeMethods.MSG
                         {
                             hwnd = IntPtr.Zero,
-                            message = Interop.WindowMessages.WM_SYSKEYDOWN,
+                            message = WindowMessages.WM_SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
                             time = SafeNativeMethods.GetTickCount()
@@ -385,25 +386,25 @@ namespace System.Windows.Forms
                 //
                 // Things we explicitly ignore and pass to the ActiveX's windproc
                 //
-                case Interop.WindowMessages.WM_ERASEBKGND:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
-                case Interop.WindowMessages.WM_SETCURSOR:
-                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_MBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_RBUTTONUP:
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFYFORMAT:
+                case WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SYSCOLORCHANGE:
+                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONUP:
+                case WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_CONTEXTMENU:
                 //
                 // Some of the MSComCtl controls respond to this message to do some
                 // custom painting. So, we should just pass this message through.
-                case Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_DRAWITEM:
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_COMMAND:
                     if (!ReflectMessage(m.LParam, ref m))
                     {
                         DefWndProc(ref m);
@@ -411,16 +412,16 @@ namespace System.Windows.Forms
 
                     break;
 
-                case Interop.WindowMessages.WM_HELP:
+                case WindowMessages.WM_HELP:
                     // We want to both fire the event, and let the ActiveX have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
-                case Interop.WindowMessages.WM_MOUSEACTIVATE:
+                case WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_MOUSEACTIVATE:
                     if (!DesignMode)
                     {
                         if (containingControl != null && containingControl.ActiveControl != this)
@@ -431,7 +432,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     hwndFocus = (IntPtr)m.WParam;
                     try
                     {
@@ -443,7 +444,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
                     //
                     // If we are currently in a state of InPlaceActive or above,
                     // we should first reparent the ActiveX control to our parking
@@ -1877,7 +1878,7 @@ namespace System.Windows.Forms
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                    case WindowMessages.WM_WINDOWPOSCHANGING:
                         WmWindowPosChanging(ref m);
                         break;
                     default:

@@ -3,14 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using static Interop;
+
 
 namespace WinformsControlsTest
 {
@@ -39,13 +37,13 @@ namespace WinformsControlsTest
         {
             x = LogicalDpi;
             y = LogicalDpi;
-            IntPtr hDC = Interop.User32.GetDC(handleRef);
+            IntPtr hDC = User32.GetDC(handleRef);
             if (hDC != IntPtr.Zero)
             {
-                x = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
-                y = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
+                x = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSX);
+                y = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSY);
 
-                Interop.User32.ReleaseDC(handleRef, new HandleRef(null, hDC));
+                User32.ReleaseDC(handleRef, new HandleRef(null, hDC));
             }
         }
 
@@ -83,7 +81,7 @@ namespace WinformsControlsTest
             base.WndProc(ref m);
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_DPICHANGED:
+                case WindowMessages.WM_DPICHANGED:
                     int x = LOWORD(m.WParam);
                     int y = HIWORD(m.WParam);
                     if (x != deviceDpiX || y != deviceDpiY)
@@ -122,13 +120,13 @@ namespace WinformsControlsTest
             uint dpi;
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_DPICHANGED_BEFOREPARENT:
+                case WindowMessages.WM_DPICHANGED_BEFOREPARENT:
                     dpi = GetDpiForWindow(new HandleRef(this, Handle));
                     Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                     m.Result = (IntPtr)1;
                     break;
-                case Interop.WindowMessages.WM_DPICHANGED_AFTERPARENT:
+                case WindowMessages.WM_DPICHANGED_AFTERPARENT:
                     dpi = GetDpiForWindow(new HandleRef(this, Handle));
                     Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                     m.Result = (IntPtr)1;

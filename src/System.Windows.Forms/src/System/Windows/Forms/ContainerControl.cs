@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -687,7 +688,7 @@ namespace System.Windows.Forms
             if (GetTopLevel())
             {
                 // Get window's client rectangle (i.e. without chrome) expressed in screen coordinates
-                var clientRectangle = new Interop.RECT();
+                var clientRectangle = new RECT();
                 UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
                 var topLeftPoint = new Point();
                 UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
@@ -706,7 +707,7 @@ namespace System.Windows.Forms
 
             // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
             // the monitor the application is currently on.
-            IntPtr dc = Interop.Gdi32.CreateCompatibleDC(IntPtr.Zero);
+            IntPtr dc = Gdi32.CreateCompatibleDC(IntPtr.Zero);
             if (dc == IntPtr.Zero)
             {
                 throw new Win32Exception();
@@ -724,7 +725,7 @@ namespace System.Windows.Forms
                 // similar fashion.
 
                 HandleRef hfont = new HandleRef(this, FontHandle);
-                IntPtr hfontOld = Interop.Gdi32.SelectObject(hdc, hfont);
+                IntPtr hfontOld = Gdi32.SelectObject(hdc, hfont);
 
                 try
                 {
@@ -736,7 +737,7 @@ namespace System.Windows.Forms
                     if ((tm.tmPitchAndFamily & NativeMethods.TMPF_FIXED_PITCH) != 0)
                     {
                         var size = new Size();
-                        Interop.Gdi32.GetTextExtentPoint32W(hdc, FontMeasureString, FontMeasureString.Length, ref size);
+                        Gdi32.GetTextExtentPoint32W(hdc, FontMeasureString, FontMeasureString.Length, ref size);
                         // Note: intentional integer round off here for Win32 compat
                         retval.Width = (int)Math.Round(size.Width / ((float)FontMeasureString.Length));
                     }
@@ -747,12 +748,12 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Interop.Gdi32.SelectObject(dc, hfontOld);
+                    Gdi32.SelectObject(dc, hfontOld);
                 }
             }
             finally
             {
-                Interop.Gdi32.DeleteDC(dc);
+                Gdi32.DeleteDC(dc);
             }
 
             return retval;
@@ -1961,7 +1962,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                 default:

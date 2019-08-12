@@ -7,11 +7,11 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -2517,7 +2517,7 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     int y = NativeMethods.Util.SignedHIWORD(m.LParam);
                     bool inBounds = GetHitTest(new Point(x, y));
@@ -2527,8 +2527,8 @@ namespace System.Windows.Forms.Design
                     }
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
                     // commit any insitu if any...
                     Commit();
                     base.WndProc(ref m);

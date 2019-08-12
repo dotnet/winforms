@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -556,11 +557,11 @@ namespace System.Windows.Forms
             }
 
             // returns the distance from the client rect to the upper left hand corner of the control
-            private Interop.RECT AbsoluteClientRECT
+            private RECT AbsoluteClientRECT
             {
                 get
                 {
-                    Interop.RECT rect = new Interop.RECT();
+                    RECT rect = new RECT();
                     CreateParams cp = CreateParams;
 
                     AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
@@ -584,7 +585,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Interop.RECT rect = AbsoluteClientRECT;
+                    RECT rect = AbsoluteClientRECT;
                     return Rectangle.FromLTRB(rect.top, rect.top, rect.right, rect.bottom);
                 }
             }
@@ -650,17 +651,17 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                Interop.RECT absoluteClientRectangle = AbsoluteClientRECT;
+                RECT absoluteClientRectangle = AbsoluteClientRECT;
 
                 // Get the total client area, then exclude the client by using XOR
-                IntPtr hTotalRegion = Interop.Gdi32.CreateRectRgn(0, 0, Width, Height);
-                IntPtr hClientRegion = Interop.Gdi32.CreateRectRgn(absoluteClientRectangle.left, absoluteClientRectangle.top, absoluteClientRectangle.right, absoluteClientRectangle.bottom);
-                IntPtr hNonClientRegion = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
+                IntPtr hTotalRegion = Gdi32.CreateRectRgn(0, 0, Width, Height);
+                IntPtr hClientRegion = Gdi32.CreateRectRgn(absoluteClientRectangle.left, absoluteClientRectangle.top, absoluteClientRectangle.right, absoluteClientRectangle.bottom);
+                IntPtr hNonClientRegion = Gdi32.CreateRectRgn(0, 0, 0, 0);
 
-                Interop.Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Interop.Gdi32.CombineMode.RGN_XOR);
+                Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.CombineMode.RGN_XOR);
 
                 // Call RedrawWindow with the region.
-                Interop.RECT ignored = default;
+                RECT ignored = default;
                 SafeNativeMethods.RedrawWindow(
                     new HandleRef(this, Handle),
                     ref ignored,
@@ -670,15 +671,15 @@ namespace System.Windows.Forms
 
                 if (hNonClientRegion != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(hNonClientRegion);
+                    Gdi32.DeleteObject(hNonClientRegion);
                 }
                 if (hClientRegion != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(hClientRegion);
+                    Gdi32.DeleteObject(hClientRegion);
                 }
                 if (hTotalRegion != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(hTotalRegion);
+                    Gdi32.DeleteObject(hTotalRegion);
                 }
             }
 
@@ -827,7 +828,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Interop.User32.ReleaseDC(new HandleRef(this, Handle), hdc);
+                    User32.ReleaseDC(new HandleRef(this, Handle), hdc);
                 }
                 // we've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
@@ -835,7 +836,7 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == Interop.WindowMessages.WM_NCPAINT)
+                if (m.Msg == WindowMessages.WM_NCPAINT)
                 {
                     WmNCPaint(ref m);
                     return;

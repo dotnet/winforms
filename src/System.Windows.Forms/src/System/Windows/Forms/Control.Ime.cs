@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -24,9 +25,9 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,
         UnsafeNativeMethods.IPersist,
-        Interop.Ole32.IPersistStreamInit,
+        Ole32.IPersistStreamInit,
         UnsafeNativeMethods.IPersistPropertyBag,
-        Interop.Ole32.IPersistStorage,
+        Ole32.IPersistStorage,
         UnsafeNativeMethods.IQuickActivate,
         ISupportOleDropSource,
         IDropTarget,

@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -368,7 +369,7 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
-                return (char)SendMessage(Interop.EditMessages.EM_GETPASSWORDCHAR, 0, 0);
+                return (char)SendMessage(EditMessages.EM_GETPASSWORDCHAR, 0, 0);
             }
             set
             {
@@ -380,7 +381,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessage(Interop.EditMessages.EM_SETPASSWORDCHAR, value, 0);
+                            SendMessage(EditMessages.EM_SETPASSWORDCHAR, value, 0);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -644,7 +645,7 @@ namespace System.Windows.Forms
             {
                 if (!useSystemPasswordChar)
                 {
-                    SendMessage(Interop.EditMessages.EM_SETPASSWORDCHAR, passwordChar, 0);
+                    SendMessage(EditMessages.EM_SETPASSWORDCHAR, passwordChar, 0);
                 }
             }
 
@@ -942,7 +943,7 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 // Work around a very obscure Windows issue.
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     MouseButtons realState = MouseButtons;
                     bool wasValidationCancelled = ValidationCancelled;
                     Focus();
@@ -954,10 +955,10 @@ namespace System.Windows.Forms
                     break;
                 //for readability ... so that we know whats happening ...
                 // case WM_LBUTTONUP is included here eventhough it just calls the base.
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
                 default:
@@ -976,7 +977,7 @@ namespace System.Windows.Forms
 
         private bool ShouldRenderPlaceHolderText(in Message m) =>
                     !string.IsNullOrEmpty(PlaceholderText) &&
-                    (m.Msg == Interop.WindowMessages.WM_PAINT || m.Msg == Interop.WindowMessages.WM_KILLFOCUS) &&
+                    (m.Msg == WindowMessages.WM_PAINT || m.Msg == WindowMessages.WM_KILLFOCUS) &&
                     !GetStyle(ControlStyles.UserPaint) &&
                     !Focused &&
                     TextLength == 0;

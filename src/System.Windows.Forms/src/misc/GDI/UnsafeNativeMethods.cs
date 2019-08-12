@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Internal
         ///  point I'm leaving it here.
         /// </remarks>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = false, CharSet = CharSet.Auto)]
-        internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref Interop.RECT rect, string str, int length, int[] spacing);
+        internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref RECT rect, string str, int length, int[] spacing);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "LineTo", CharSet = CharSet.Auto)]
         public static extern bool IntLineTo(HandleRef hdc, int x, int y);
@@ -97,9 +97,9 @@ namespace System.Windows.Forms.Internal
         }
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, EntryPoint = "FillRect", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern bool IntFillRect(HandleRef hdc, [In] ref Interop.RECT rect, HandleRef hbrush);
+        public static extern bool IntFillRect(HandleRef hdc, [In] ref RECT rect, HandleRef hbrush);
 
-        public static bool FillRect(HandleRef hDC, [In] ref Interop.RECT rect, HandleRef hbrush)
+        public static bool FillRect(HandleRef hDC, [In] ref RECT rect, HandleRef hbrush)
         {
             bool retVal = IntFillRect(hDC, ref rect, hbrush);
             DbgUtil.AssertWin32(retVal, "FillRect(hdc=[0x{0:X8}], rect=[{1}], hbrush=[{2}]", hDC.Handle, rect, hbrush.Handle);

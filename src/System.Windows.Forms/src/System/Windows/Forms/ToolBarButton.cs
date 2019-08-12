@@ -9,6 +9,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Text;
 using Marshal = System.Runtime.InteropServices.Marshal;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -352,7 +353,7 @@ namespace System.Windows.Forms
             {
                 if (parent != null)
                 {
-                    Interop.RECT rc = new Interop.RECT();
+                    RECT rc = new RECT();
                     UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.TB_GETRECT, FindButtonIndex(), ref rc);
                     return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
                 }

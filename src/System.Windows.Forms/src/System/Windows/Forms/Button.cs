@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -370,7 +371,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
                     if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED)
                     {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
@@ -380,7 +381,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
                     DefWndProc(ref m);
                     break;
                 default:

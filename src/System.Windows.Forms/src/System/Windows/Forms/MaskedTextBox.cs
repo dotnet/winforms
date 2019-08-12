@@ -10,6 +10,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1196,7 +1197,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // This message does not return a value.
-                SendMessage(Interop.EditMessages.EM_SETPASSWORDCHAR, pwdChar, 0);
+                SendMessage(EditMessages.EM_SETPASSWORDCHAR, pwdChar, 0);
                 Invalidate();
             }
         }
@@ -2593,7 +2594,7 @@ namespace System.Windows.Forms
             // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed
             // the corresponding WM_IME_CHAR message.
 
-            if (m.Msg == Interop.WindowMessages.WM_CHAR && base.ImeWmCharsToIgnore > 0)
+            if (m.Msg == WindowMessages.WM_CHAR && base.ImeWmCharsToIgnore > 0)
             {
                 return true;    // meaning, we handled the message so it is not passed to the default WndProc.
             }
@@ -3062,19 +3063,19 @@ namespace System.Windows.Forms
             // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     return;
-                case Interop.WindowMessages.WM_CONTEXTMENU:
-                case Interop.EditMessages.EM_CANUNDO:
+                case WindowMessages.WM_CONTEXTMENU:
+                case EditMessages.EM_CANUNDO:
                     base.ClearUndo(); // resets undo buffer.
                     base.WndProc(ref m);
                     return;
 
-                case Interop.EditMessages.EM_SCROLLCARET:  // No scroll for single-line control.
-                case Interop.EditMessages.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
-                case Interop.EditMessages.EM_UNDO:
-                case Interop.WindowMessages.WM_UNDO:
+                case EditMessages.EM_SCROLLCARET:  // No scroll for single-line control.
+                case EditMessages.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
+                case EditMessages.EM_UNDO:
+                case WindowMessages.WM_UNDO:
                     return;
 
                 default:
@@ -3089,49 +3090,49 @@ namespace System.Windows.Forms
 
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
+                case WindowMessages.WM_IME_STARTCOMPOSITION:
                     if (WmImeStartComposition())
                     {
                         break;
                     }
                     goto default;
 
-                case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
+                case WindowMessages.WM_IME_ENDCOMPOSITION:
                     flagState[IME_ENDING_COMPOSITION] = true;
                     goto default;
 
-                case Interop.WindowMessages.WM_IME_COMPOSITION:
+                case WindowMessages.WM_IME_COMPOSITION:
                     if (WmImeComposition(ref m))
                     {
                         break;
                     }
                     goto default;
 
-                case Interop.WindowMessages.WM_CUT:
+                case WindowMessages.WM_CUT:
                     if (!ReadOnly && WmCopy())
                     {
                         WmClear();
                     }
                     break;
 
-                case Interop.WindowMessages.WM_COPY:
+                case WindowMessages.WM_COPY:
                     WmCopy();
                     break;
 
-                case Interop.WindowMessages.WM_PASTE:
+                case WindowMessages.WM_PASTE:
                     WmPaste();
                     break;
 
-                case Interop.WindowMessages.WM_CLEAR:
+                case WindowMessages.WM_CLEAR:
                     WmClear();
                     break;
 
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     base.WndProc(ref m);
                     WmKillFocus();
                     break;
 
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     WmSetFocus();
                     base.WndProc(ref m);
                     break;

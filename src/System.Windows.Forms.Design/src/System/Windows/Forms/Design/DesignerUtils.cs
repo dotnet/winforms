@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -201,16 +202,16 @@ namespace System.Windows.Forms.Design
             s_selectionBorderBrush.Dispose();
             s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
 
-            Interop.Gdi32.DeleteObject(s_grabHandleFillBrushPrimary);
+            Gdi32.DeleteObject(s_grabHandleFillBrushPrimary);
             s_grabHandleFillBrushPrimary = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
 
-            Interop.Gdi32.DeleteObject(s_grabHandleFillBrush);
+            Gdi32.DeleteObject(s_grabHandleFillBrush);
             s_grabHandleFillBrush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Interop.Gdi32.DeleteObject(s_grabHandlePenPrimary);
+            Gdi32.DeleteObject(s_grabHandlePenPrimary);
             s_grabHandlePenPrimary = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Interop.Gdi32.DeleteObject(s_grabHandlePen);
+            Gdi32.DeleteObject(s_grabHandlePen);
             s_grabHandlePen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
         }
 
@@ -286,15 +287,15 @@ namespace System.Windows.Forms.Design
             try
             {
                 //set our pen and brush based on primary selection
-                IntPtr oldBrush = Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                IntPtr oldPen = Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
+                IntPtr oldBrush = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+                IntPtr oldPen = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
                 //draw our rounded rect grabhandle
                 SafeNativeMethods.RoundRect(new HandleRef(glyph, hDC), bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
 
                 //restore old pen and brush
-                Interop.Gdi32.SelectObject(hDC, oldBrush);
-                Interop.Gdi32.SelectObject(hDC, oldPen);
+                Gdi32.SelectObject(hDC, oldBrush);
+                Gdi32.SelectObject(hDC, oldPen);
             }
             finally
             {
@@ -311,14 +312,14 @@ namespace System.Windows.Forms.Design
             try
             {
                 //set our pen and brush based on primary selection
-                IntPtr oldBrush = Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                IntPtr oldPen = Interop.Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
+                IntPtr oldBrush = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+                IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
 
                 //draw our rect no-resize handle
                 SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
                 //restore old pen and brush
-                Interop.Gdi32.SelectObject(hDC, oldBrush);
-                Interop.Gdi32.SelectObject(hDC, oldPen);
+                Gdi32.SelectObject(hDC, oldBrush);
+                Gdi32.SelectObject(hDC, oldPen);
             }
             finally
             {
@@ -334,18 +335,18 @@ namespace System.Windows.Forms.Design
             IntPtr hDC = graphics.GetHdc();
             try
             {
-                IntPtr oldPen = Interop.Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
+                IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
                 // Upper rect - upper rect is always filled with the primary brush
-                IntPtr oldBrush = Interop.Gdi32.SelectObject(hDC, s_grabHandleFillBrushPrimary);
+                IntPtr oldBrush = Gdi32.SelectObject(hDC, s_grabHandleFillBrushPrimary);
                 SafeNativeMethods.RoundRect(new HandleRef(glyph, hDC), bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top,
                                             bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
                 // Lower rect - its fillbrush depends on the primary selection
-                Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+                Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
                 SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
 
                 //restore old pen and brush
-                Interop.Gdi32.SelectObject(hDC, oldBrush);
-                Interop.Gdi32.SelectObject(hDC, oldPen);
+                Gdi32.SelectObject(hDC, oldBrush);
+                Gdi32.SelectObject(hDC, oldPen);
             }
             finally
             {
@@ -457,7 +458,7 @@ namespace System.Windows.Forms.Design
         {
             //get the DC's and create our image
             HandleRef hWnd = new HandleRef(control, control.Handle);
-            IntPtr controlDC = Interop.User32.GetDC(hWnd);
+            IntPtr controlDC = User32.GetDC(hWnd);
             image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
 
             using (Graphics gDest = Graphics.FromImage(image))
@@ -498,7 +499,7 @@ namespace System.Windows.Forms.Design
             {
                 IntPtr hDc = g.GetHdc();
                 //send the actual wm_print message
-                NativeMethods.SendMessage(hWnd, Interop.WindowMessages.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                NativeMethods.SendMessage(hWnd, WindowMessages.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -604,17 +605,17 @@ namespace System.Windows.Forms.Design
                 IntPtr hFontOld;
                 try
                 {
-                    hFontOld = Interop.Gdi32.SelectObject(dc, hFont);
+                    hFontOld = Gdi32.SelectObject(dc, hFont);
                     NativeMethods.TEXTMETRIC metrics = new NativeMethods.TEXTMETRIC();
                     UnsafeNativeMethods.GetTextMetrics(new HandleRef(ctrl, dc), metrics);
                     //add the font ascent to the baseline
                     fontAscent = metrics.tmAscent + 1;
                     fontHeight = metrics.tmHeight;
-                    Interop.Gdi32.SelectObject(dc, hFontOld);
+                    Gdi32.SelectObject(dc, hFontOld);
                 }
                 finally
                 {
-                    Interop.Gdi32.DeleteObject(hFont);
+                    Gdi32.DeleteObject(hFont);
                     g.ReleaseHdc(dc);
                 }
             }

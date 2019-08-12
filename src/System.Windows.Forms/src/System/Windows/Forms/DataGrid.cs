@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -131,7 +132,7 @@ namespace System.Windows.Forms
 
         private DataGridAddNewRow addNewRow = null;
         private LayoutData layout = new LayoutData();
-        private Interop.RECT[] cachedScrollableRegion = null;
+        private RECT[] cachedScrollableRegion = null;
 
         // header namespace goo
         //
@@ -2495,17 +2496,17 @@ namespace System.Windows.Forms
                     EndEdit();
                 }
 
-                Interop.RECT[] rects = CreateScrollableRegion(scroll);
+                RECT[] rects = CreateScrollableRegion(scroll);
                 ScrollRectangles(rects, change);
                 OnScroll(EventArgs.Empty);
             }
         }
 
-        private void ScrollRectangles(Interop.RECT[] rects, int change)
+        private void ScrollRectangles(RECT[] rects, int change)
         {
             if (rects != null)
             {
-                Interop.RECT scroll;
+                RECT scroll;
                 if (isRightToLeft())
                 {
                     change = -change;
@@ -6311,7 +6312,7 @@ namespace System.Windows.Forms
         ///  This method is invoked whenever the DataGrid needs
         ///  this scrollable region.
         /// </summary>
-        private Interop.RECT[] CreateScrollableRegion(Rectangle scroll)
+        private RECT[] CreateScrollableRegion(Rectangle scroll)
         {
             if (cachedScrollableRegion != null)
             {
@@ -6425,11 +6426,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
+            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            Interop.Gdi32.SelectObject(dc, saveBrush);
-            Interop.Gdi32.DeleteObject(halftone);
-            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Gdi32.SelectObject(dc, saveBrush);
+            Gdi32.DeleteObject(halftone);
+            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -9165,7 +9166,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessKeyPreview(ref Message m)
         {
-            if (m.Msg == Interop.WindowMessages.WM_KEYDOWN)
+            if (m.Msg == WindowMessages.WM_KEYDOWN)
             {
                 KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
                 switch (ke.KeyCode)
@@ -9194,7 +9195,7 @@ namespace System.Windows.Forms
                 // Ctrl-Tab will be sent as a tab paired w/ a control on the KeyUp message
                 //
             }
-            else if (m.Msg == Interop.WindowMessages.WM_KEYUP)
+            else if (m.Msg == WindowMessages.WM_KEYUP)
             {
                 KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
                 if (ke.KeyCode == Keys.Tab)
@@ -9604,7 +9605,7 @@ namespace System.Windows.Forms
                     rowsRect = Rectangle.Union(rowsRect, layout.RowHeaders);
                 }
 
-                Interop.RECT scrollArea = rowsRect;
+                RECT scrollArea = rowsRect;
                 SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, deltaY, ref scrollArea, ref scrollArea);
                 OnScroll(EventArgs.Empty);
 
@@ -9900,7 +9901,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Interop.RECT scrollRECT = new Rectangle(underParentRows.X, underParentRows.Y - layout.ParentRows.Height, underParentRows.Width, underParentRows.Height + layout.ParentRows.Height);
+                RECT scrollRECT = new Rectangle(underParentRows.X, underParentRows.Y - layout.ParentRows.Height, underParentRows.Width, underParentRows.Height + layout.ParentRows.Height);
 
                 SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, -parentRowsRect.Height, ref scrollRECT, ref scrollRECT);
 

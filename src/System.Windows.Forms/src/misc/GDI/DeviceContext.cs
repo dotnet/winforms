@@ -9,6 +9,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
@@ -148,10 +149,10 @@ namespace System.Windows.Forms.Internal
         private void CacheInitialState()
         {
             Debug.Assert(hDC != IntPtr.Zero, "Cannot get initial state without a valid HDC");
-            hCurrentPen = hInitialPen = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_PEN);
-            hCurrentBrush = hInitialBrush = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_BRUSH);
-            hCurrentBmp = hInitialBmp = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_BITMAP);
-            hCurrentFont = hInitialFont = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_FONT);
+            hCurrentPen = hInitialPen = Gdi32.GetCurrentObject(new HandleRef(this, hDC), Gdi32.ObjectType.OBJ_PEN);
+            hCurrentBrush = hInitialBrush = Gdi32.GetCurrentObject(new HandleRef(this, hDC), Gdi32.ObjectType.OBJ_BRUSH);
+            hCurrentBmp = hInitialBmp = Gdi32.GetCurrentObject(new HandleRef(this, hDC), Gdi32.ObjectType.OBJ_BITMAP);
+            hCurrentFont = hInitialFont = Gdi32.GetCurrentObject(new HandleRef(this, hDC), Gdi32.ObjectType.OBJ_FONT);
         }
 
         public void DeleteObject(IntPtr handle, GdiObjectType type)
@@ -162,7 +163,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Pen:
                     if (handle == hCurrentPen)
                     {
-                        IntPtr currentPen = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialPen);
+                        IntPtr currentPen = Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialPen);
                         Debug.Assert(currentPen == hCurrentPen, "DeviceContext thinks a different pen is selected than the HDC");
                         hCurrentPen = IntPtr.Zero;
                     }
@@ -171,7 +172,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Brush:
                     if (handle == hCurrentBrush)
                     {
-                        IntPtr currentBrush = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialBrush);
+                        IntPtr currentBrush = Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialBrush);
                         Debug.Assert(currentBrush == hCurrentBrush, "DeviceContext thinks a different brush is selected than the HDC");
                         hCurrentBrush = IntPtr.Zero;
                     }
@@ -180,7 +181,7 @@ namespace System.Windows.Forms.Internal
                 case GdiObjectType.Bitmap:
                     if (handle == hCurrentBmp)
                     {
-                        IntPtr currentBmp = Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialBmp);
+                        IntPtr currentBmp = Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialBmp);
                         Debug.Assert(currentBmp == hCurrentBmp, "DeviceContext thinks a different brush is selected than the HDC");
                         hCurrentBmp = IntPtr.Zero;
                     }
@@ -188,7 +189,7 @@ namespace System.Windows.Forms.Internal
                     break;
             }
 
-            Interop.Gdi32.DeleteObject(handleToDelete);
+            Gdi32.DeleteObject(handleToDelete);
         }
 
         //
@@ -225,7 +226,7 @@ namespace System.Windows.Forms.Internal
 
             if (dcType == DeviceContextType.Display)
             {
-                hWnd = Interop.User32.WindowFromDC(new HandleRef(this, this.hDC));
+                hWnd = User32.WindowFromDC(new HandleRef(this, this.hDC));
             }
 #if TRACK_HDC
             Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DeviceContext( hDC=0x{0:X8}, Type={1} )", unchecked((int) hDC), dcType) ));
@@ -241,7 +242,7 @@ namespace System.Windows.Forms.Internal
             // In this case the thread that calls CreateCompatibleDC owns the HDC that is created. When this thread is destroyed,
             // the HDC is no longer valid.
 
-            IntPtr compatibleDc = Interop.Gdi32.CreateCompatibleDC(hdc);
+            IntPtr compatibleDc = Gdi32.CreateCompatibleDC(hdc);
             return new DeviceContext(compatibleDc, DeviceContextType.Memory);
         }
 
@@ -304,7 +305,7 @@ namespace System.Windows.Forms.Internal
                     Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteHDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
 #endif
 
-                    Interop.Gdi32.DeleteDC(hDC);
+                    Gdi32.DeleteDC(hDC);
                     hDC = IntPtr.Zero;
                     break;
 
@@ -315,7 +316,7 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                     Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
 #endif
-                    Interop.Gdi32.DeleteDC(hDC);
+                    Gdi32.DeleteDC(hDC);
                     hDC = IntPtr.Zero;
                     break;
 
@@ -342,7 +343,7 @@ namespace System.Windows.Forms.Internal
 
                 // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved.
                 // For example, the default font is System.
-                hDC = Interop.User32.GetDC(new HandleRef(this, hWnd));
+                hDC = User32.GetDC(new HandleRef(this, hWnd));
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("hdc[0x{0:x8}]=DC.GetHdc(hWnd=0x{1:x8})", unchecked((int) this.hDC), unchecked((int) this.hWnd))));
 #endif
@@ -362,7 +363,7 @@ namespace System.Windows.Forms.Internal
 #if TRACK_HDC
                 int retVal =
 #endif
-                Interop.User32.ReleaseDC(new HandleRef(this, hWnd), hDC);
+                User32.ReleaseDC(new HandleRef(this, hWnd), hDC);
                 // Note: retVal == 0 means it was not released but doesn't necessarily means an error; class or private DCs are never released.
 #if TRACK_HDC
                 Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("[ret={0}]=DC.ReleaseDC(hDc=0x{1:x8}, hWnd=0x{2:x8})", retVal, unchecked((int) this.hDC), unchecked((int) this.hWnd))));
@@ -388,7 +389,7 @@ namespace System.Windows.Forms.Internal
             bool result =
 #endif
             // Note: Don't use the Hdc property here, it would force handle creation.
-            Interop.Gdi32.RestoreDC(new HandleRef(this, hDC), -1);
+            Gdi32.RestoreDC(new HandleRef(this, hDC), -1);
 #if TRACK_HDC
             // Note: Winforms may call this method during app exit at which point the DC may have been finalized already causing this assert to popup.
             Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("ret[0]=DC.RestoreHdc(hDc=0x{1:x8})", result, unchecked((int) this.hDC)) ));
@@ -439,7 +440,7 @@ namespace System.Windows.Forms.Internal
         public int SaveHdc()
         {
             HandleRef hdc = new HandleRef(this, Hdc);
-            int state = Interop.Gdi32.SaveDC(hdc);
+            int state = Gdi32.SaveDC(hdc);
 
             if (contextStack == null)
             {
@@ -473,7 +474,7 @@ namespace System.Windows.Forms.Internal
         {
             HandleRef hdc = new HandleRef(this, Hdc);
             HandleRef hRegion = new HandleRef(region, region.HRegion);
-            Interop.Gdi32.SelectClipRgn(hdc, hRegion);
+            Gdi32.SelectClipRgn(hdc, hRegion);
         }
 
         ///<summary>
@@ -491,13 +492,13 @@ namespace System.Windows.Forms.Internal
             WindowsRegion clip = new WindowsRegion(0, 0, 0, 0);
             try
             {
-                int result = Interop.Gdi32.GetClipRgn(new HandleRef(this, Hdc), new HandleRef(clip, clip.HRegion));
+                int result = Gdi32.GetClipRgn(new HandleRef(this, Hdc), new HandleRef(clip, clip.HRegion));
 
                 // If the function succeeds and there is a clipping region for the given device context, the return value is 1.
                 if (result == 1)
                 {
                     Debug.Assert(clip.HRegion != IntPtr.Zero);
-                    wr.CombineRegion(clip, wr, Interop.Gdi32.CombineMode.RGN_AND);
+                    wr.CombineRegion(clip, wr, Gdi32.CombineMode.RGN_AND);
                 }
 
                 SetClip(wr);
@@ -514,7 +515,7 @@ namespace System.Windows.Forms.Internal
         public void TranslateTransform(int dx, int dy)
         {
             var origin = new Point();
-            Interop.Gdi32.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, ref origin);
+            Gdi32.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, ref origin);
         }
 
         public override bool Equals(object obj)

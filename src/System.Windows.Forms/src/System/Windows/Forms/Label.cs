@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1343,7 +1344,7 @@ namespace System.Windows.Forms
 
                 using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                 {
-                    Interop.User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
+                    User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
 
                     // This is actually leading margin.
                     return dtParams.iLeftMargin;
@@ -1704,7 +1705,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     // label returns HT_TRANSPARENT for everything, so all messages get
                     // routed to the parent.  Change this so we can tell what's going on.
                     //

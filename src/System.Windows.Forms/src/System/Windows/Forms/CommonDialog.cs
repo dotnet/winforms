@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,7 +17,7 @@ namespace System.Windows.Forms
     public abstract class CommonDialog : Component
     {
         private static readonly object s_helpRequestEvent = new object();
-        private const int CDM_SETDEFAULTFOCUS = Interop.WindowMessages.WM_USER + 0x51;
+        private const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
         private static int s_helpMsg;
 
         private IntPtr _defOwnerWndProc;
@@ -57,7 +58,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == Interop.WindowMessages.WM_INITDIALOG)
+            if (msg == WindowMessages.WM_INITDIALOG)
             {
                 MoveToScreenCenter(hWnd);
 
@@ -66,7 +67,7 @@ namespace System.Windows.Forms
                 _defaultControlHwnd = wparam;
                 UnsafeNativeMethods.SetFocus(new HandleRef(null, wparam));
             }
-            else if (msg == Interop.WindowMessages.WM_SETFOCUS)
+            else if (msg == WindowMessages.WM_SETFOCUS)
             {
                 UnsafeNativeMethods.PostMessage(new HandleRef(null, hWnd), CDM_SETDEFAULTFOCUS, 0, 0);
             }
@@ -88,7 +89,7 @@ namespace System.Windows.Forms
         /// </summary>
         private protected static void MoveToScreenCenter(IntPtr hWnd)
         {
-            Interop.RECT r = new Interop.RECT();
+            RECT r = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(null, hWnd), ref r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;

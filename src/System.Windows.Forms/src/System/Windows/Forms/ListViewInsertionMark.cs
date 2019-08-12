@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -58,7 +59,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Interop.RECT rect = new Interop.RECT();
+                RECT rect = new RECT();
                 listView.SendMessage(NativeMethods.LVM_GETINSERTMARKRECT, 0, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }

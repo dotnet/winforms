@@ -25,6 +25,7 @@ namespace System.Windows.Forms
         protected HtmlShim()
         {
         }
+
         ~HtmlShim()
         {
             Dispose(false);

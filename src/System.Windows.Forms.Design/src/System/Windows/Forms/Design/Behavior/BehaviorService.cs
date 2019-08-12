@@ -7,12 +7,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
 {
@@ -900,12 +899,12 @@ namespace System.Windows.Forms.Design.Behavior
 
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_PAINT:
+                    case WindowMessages.WM_PAINT:
                         // Stash off the region we have to update
-                        IntPtr hrgn = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
-                        Interop.User32.GetUpdateRgn(m.HWnd, hrgn, Interop.BOOL.TRUE);
+                        IntPtr hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
+                        User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
                         // The region we have to update in terms of the smallest rectangle that completely encloses the update region of the window gives us the clip rectangle
-                        Interop.RECT clip = new Interop.RECT();
+                        RECT clip = new RECT();
                         NativeMethods.GetUpdateRect(m.HWnd, ref clip, true);
                         Rectangle paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
 
@@ -928,11 +927,11 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         finally
                         {
-                            Interop.Gdi32.DeleteObject(hrgn);
+                            Gdi32.DeleteObject(hrgn);
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_NCHITTEST:
+                    case WindowMessages.WM_NCHITTEST:
                         Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)),
                                              (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
                         var pt1 = new Point();
@@ -948,7 +947,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_CAPTURECHANGED:
+                    case WindowMessages.WM_CAPTURECHANGED:
                         base.WndProc(ref m);
                         _behaviorService.OnLoseCapture();
                         break;
@@ -969,56 +968,56 @@ namespace System.Windows.Forms.Design.Behavior
                 _behaviorService.PropagateHitTest(mouseLoc);
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_LBUTTONDOWN:
+                    case WindowMessages.WM_LBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_RBUTTONDOWN:
+                    case WindowMessages.WM_RBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Right, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case WindowMessages.WM_MOUSEMOVE:
                         if (_behaviorService.OnMouseMove(Control.MouseButtons, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_LBUTTONUP:
+                    case WindowMessages.WM_LBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Left))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_RBUTTONUP:
+                    case WindowMessages.WM_RBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Right))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_MOUSEHOVER:
+                    case WindowMessages.WM_MOUSEHOVER:
                         if (_behaviorService.OnMouseHover(mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                    case WindowMessages.WM_LBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                    case WindowMessages.WM_RBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Right, mouseLoc))
                         {
                             return false;
@@ -1183,11 +1182,11 @@ namespace System.Windows.Forms.Design.Behavior
                                 NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, ref pt, 1);
                                 Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.Y, pt.X));
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
-                                if (m.Msg == Interop.WindowMessages.WM_LBUTTONDOWN)
+                                if (m.Msg == WindowMessages.WM_LBUTTONDOWN)
                                 {
                                     _lastLButtonDownTimeStamp = UnsafeNativeMethods.GetMessageTime();
                                 }
-                                else if (m.Msg == Interop.WindowMessages.WM_LBUTTONDBLCLK)
+                                else if (m.Msg == WindowMessages.WM_LBUTTONDBLCLK)
                                 {
                                     int lButtonDoubleClickTimeStamp = UnsafeNativeMethods.GetMessageTime();
                                     if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)

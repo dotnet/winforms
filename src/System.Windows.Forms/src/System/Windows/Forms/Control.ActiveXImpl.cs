@@ -17,6 +17,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -264,7 +265,7 @@ namespace System.Windows.Forms
                         {
                             // Now check for IHTMLDocument2
 
-                            if (NativeMethods.Succeeded(_clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)) && container is Interop.Mshtml.IHTMLDocument)
+                            if (NativeMethods.Succeeded(_clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)) && container is Mshtml.IHTMLDocument)
                             {
                                 s_isIE = true;
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:IsIE running under IE");
@@ -295,8 +296,8 @@ namespace System.Windows.Forms
                     {
                         s_logPixels = new Point();
                         using ScreenDC dc = ScreenDC.Create();
-                        s_logPixels.X = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
-                        s_logPixels.Y = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
+                        s_logPixels.X = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
+                        s_logPixels.Y = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                     }
                     return s_logPixels;
                 }
@@ -356,7 +357,7 @@ namespace System.Windows.Forms
                             NativeMethods.MSG msg = Marshal.PtrToStructure<NativeMethods.MSG>(lpmsg);
                             Control target = _control;
 
-                            if (msg.hwnd != _control.Handle && msg.message >= Interop.WindowMessages.WM_MOUSEFIRST && msg.message <= Interop.WindowMessages.WM_MOUSELAST)
+                            if (msg.hwnd != _control.Handle && msg.message >= WindowMessages.WM_MOUSEFIRST && msg.message <= WindowMessages.WM_MOUSELAST)
                             {
                                 // Must translate message coordniates over to our HWND.  We first try
                                 IntPtr hwndMap = msg.hwnd == IntPtr.Zero ? hwndParent : msg.hwnd;
@@ -388,7 +389,7 @@ namespace System.Windows.Forms
                             }
 #endif
 
-                            if (msg.message == Interop.WindowMessages.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB)
+                            if (msg.message == WindowMessages.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB)
                             {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
@@ -443,13 +444,13 @@ namespace System.Windows.Forms
                 // supported on classic metafiles.  We throw VIEW_E_DRAW in the hope that
                 // the caller figures it out and sends us a different DC.
                 //
-                Interop.Gdi32.ObjectType hdcType = Interop.Gdi32.GetObjectType(hdcDraw);
-                if (hdcType == Interop.Gdi32.ObjectType.OBJ_METADC)
+                Gdi32.ObjectType hdcType = Gdi32.GetObjectType(hdcDraw);
+                if (hdcType == Gdi32.ObjectType.OBJ_METADC)
                 {
                     ThrowHr(NativeMethods.VIEW_E_DRAW);
                 }
 
-                Interop.RECT rc;
+                RECT rc;
                 var pVp = new Point();
                 var pW = new Point();
                 NativeMethods.SIZE sWindowExt = new NativeMethods.SIZE();
@@ -465,7 +466,7 @@ namespace System.Windows.Forms
                 //
                 if (prcBounds != null)
                 {
-                    rc = new Interop.RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
+                    rc = new RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
 
                     // To draw to a given rect, we scale the DC in such a way as to
                     // make the values it takes match our own happy MM_TEXT.  Then,
@@ -489,9 +490,9 @@ namespace System.Windows.Forms
                                     | NativeMethods.PRF_ERASEBKGND
                                     | NativeMethods.PRF_NONCLIENT);
 
-                    if (hdcType != Interop.Gdi32.ObjectType.OBJ_ENHMETADC)
+                    if (hdcType != Gdi32.ObjectType.OBJ_ENHMETADC)
                     {
-                        _control.SendMessage(Interop.WindowMessages.WM_PRINT, hdcDraw, flags);
+                        _control.SendMessage(WindowMessages.WM_PRINT, hdcDraw, flags);
                     }
                     else
                     {
@@ -1020,14 +1021,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStreamInit::IsDirty.
             /// </summary>
-            internal Interop.HRESULT IsDirty()
+            internal HRESULT IsDirty()
             {
                 if (_activeXState[s_isDirty])
                 {
-                    return Interop.HRESULT.S_OK;
+                    return HRESULT.S_OK;
                 }
                 
-                return Interop.HRESULT.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             /// <summary>
@@ -1057,25 +1058,25 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Load
             /// </summary>
-            internal void Load(Interop.Ole32.IStorage stg)
+            internal void Load(Ole32.IStorage stg)
             {
-                Interop.Ole32.IStream stream;
+                Ole32.IStream stream;
                 try
                 {
                     stream = stg.OpenStream(
                         GetStreamName(),
                         IntPtr.Zero,
-                        Interop.Ole32.STGM.STGM_READ | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                        Ole32.STGM.STGM_READ | Ole32.STGM.STGM_SHARE_EXCLUSIVE,
                         0);
                 }
-                catch (COMException e) when (e.ErrorCode == (int)Interop.HRESULT.STG_E_FILENOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.STG_E_FILENOTFOUND)
                 {
                     // For backward compatibility: We were earlier using GetType().FullName
                     // as the stream name in v1. Lets see if a stream by that name exists.
                     stream = stg.OpenStream(
                         GetType().FullName,
                         IntPtr.Zero,
-                        Interop.Ole32.STGM.STGM_READ | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                        Ole32.STGM.STGM_READ | Ole32.STGM.STGM_SHARE_EXCLUSIVE,
                         0);
                 }
 
@@ -1089,7 +1090,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStreamInit::Load
             /// </summary>
-            internal void Load(Interop.Ole32.IStream stream)
+            internal void Load(Ole32.IStream stream)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, load through that method.
@@ -1257,9 +1258,9 @@ namespace System.Windows.Forms
                     return _clipRegion;
                 }
 
-                IntPtr newRegion = Interop.Gdi32.CreateRectRgn(0, 0, 0, 0);
-                Interop.Gdi32.CombineRgn(newRegion, region, _clipRegion, Interop.Gdi32.CombineMode.RGN_DIFF);
-                Interop.Gdi32.DeleteObject(region);
+                IntPtr newRegion = Gdi32.CreateRectRgn(0, 0, 0, 0);
+                Gdi32.CombineRgn(newRegion, region, _clipRegion, Gdi32.CombineMode.RGN_DIFF);
+                Gdi32.DeleteObject(region);
                 return newRegion;
             }
 
@@ -1781,28 +1782,28 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Save
             /// </summary>
-            internal void Save(Interop.Ole32.IStorage stg, Interop.BOOL fSameAsLoad)
+            internal void Save(Ole32.IStorage stg, BOOL fSameAsLoad)
             {
-                Interop.Ole32.IStream stream = stg.CreateStream(
+                Ole32.IStream stream = stg.CreateStream(
                     GetStreamName(),
-                    Interop.Ole32.STGM.STGM_WRITE | Interop.Ole32.STGM.STGM_SHARE_EXCLUSIVE | Interop.Ole32.STGM.STGM_CREATE,
+                    Ole32.STGM.STGM_WRITE | Ole32.STGM.STGM_SHARE_EXCLUSIVE | Ole32.STGM.STGM_CREATE,
                     0,
                     0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
 
-                Save(stream, Interop.BOOL.TRUE);
+                Save(stream, BOOL.TRUE);
                 Marshal.ReleaseComObject(stream);
             }
 
             /// <summary>
             ///  Implements IPersistStreamInit::Save
             /// </summary>
-            internal void Save(Interop.Ole32.IStream stream, Interop.BOOL fClearDirty)
+            internal void Save(Ole32.IStream stream, BOOL fClearDirty)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, save through that method.
                 PropertyBagStream bag = new PropertyBagStream();
-                Save(bag, fClearDirty, Interop.BOOL.FALSE);
+                Save(bag, fClearDirty, BOOL.FALSE);
                 bag.Write(stream);
 
                 if (Marshal.IsComObject(stream))
@@ -1814,14 +1815,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties)
+            internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
 
                 for (int i = 0; i < props.Count; i++)
                 {
-                    if (fSaveAllProperties != Interop.BOOL.FALSE || props[i].ShouldSerializeValue(_control))
+                    if (fSaveAllProperties != BOOL.FALSE || props[i].ShouldSerializeValue(_control))
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Saving property " + props[i].Name);
 
@@ -1865,7 +1866,7 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(pPropBag);
                 }
 
-                if (fClearDirty != Interop.BOOL.FALSE)
+                if (fClearDirty != BOOL.FALSE)
                 {
                     _activeXState[s_isDirty] = false;
                 }
@@ -2191,7 +2192,7 @@ namespace System.Windows.Forms
                     if (!intersect.Equals(posRect))
                     {
                         // Offset the rectangle back to client coordinates
-                        Interop.RECT rcIntersect = intersect;
+                        RECT rcIntersect = intersect;
                         IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(_control, _control.Handle));
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
@@ -2202,7 +2203,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
 
                         // Create a Win32 region for it
-                        _clipRegion = Interop.Gdi32.CreateRectRgn(rcIntersect.left, rcIntersect.top,
+                        _clipRegion = Gdi32.CreateRectRgn(rcIntersect.left, rcIntersect.top,
                                                                  rcIntersect.right, rcIntersect.bottom);
                         setRegion = true;
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Created clipping region");
@@ -2264,10 +2265,10 @@ namespace System.Windows.Forms
 
                 switch (lpmsg.message)
                 {
-                    case Interop.WindowMessages.WM_KEYDOWN:
-                    case Interop.WindowMessages.WM_SYSKEYDOWN:
-                    case Interop.WindowMessages.WM_CHAR:
-                    case Interop.WindowMessages.WM_SYSCHAR:
+                    case WindowMessages.WM_KEYDOWN:
+                    case WindowMessages.WM_SYSKEYDOWN:
+                    case WindowMessages.WM_CHAR:
+                    case WindowMessages.WM_SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
@@ -2514,15 +2515,15 @@ namespace System.Windows.Forms
             {
                 if (_activeXState[s_uiDead])
                 {
-                    if (m.Msg >= Interop.WindowMessages.WM_MOUSEFIRST && m.Msg <= Interop.WindowMessages.WM_MOUSELAST)
+                    if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
                     {
                         return;
                     }
-                    if (m.Msg >= Interop.WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= Interop.WindowMessages.WM_NCMBUTTONDBLCLK)
+                    if (m.Msg >= WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
                     {
                         return;
                     }
-                    if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                    if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                     {
                         return;
                     }
@@ -2539,7 +2540,7 @@ namespace System.Windows.Forms
             {
                 private Hashtable _bag = new Hashtable();
 
-                internal void Read(Interop.Ole32.IStream istream)
+                internal void Read(Ole32.IStream istream)
                 {
                     // visual basic's memory streams don't support seeking, so we have to
                     // work around this limitation here.  We do this by copying
@@ -2599,7 +2600,7 @@ namespace System.Windows.Forms
                     return NativeMethods.S_OK;
                 }
 
-                internal void Write(Interop.Ole32.IStream istream)
+                internal void Write(Ole32.IStream istream)
                 {
                     Stream stream = new DataStreamFromComStream(istream);
                     BinaryFormatter formatter = new BinaryFormatter();

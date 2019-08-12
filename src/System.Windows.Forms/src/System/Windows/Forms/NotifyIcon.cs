@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -33,7 +34,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_BALLOONTIPCLICKED = new object();
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
-        private const int WM_TRAYMOUSEMESSAGE = Interop.WindowMessages.WM_USER + 1024;
+        private const int WM_TRAYMOUSEMESSAGE = WindowMessages.WM_USER + 1024;
         private static readonly int WM_TASKBARCREATED = SafeNativeMethods.RegisterWindowMessage("TaskbarCreated");
 
         private readonly object syncObj = new object();
@@ -443,7 +444,7 @@ namespace System.Windows.Forms
                 //
                 if (window != null && window.Handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), WindowMessages.WM_CLOSE, 0, 0);
                     window.ReleaseHandle();
                 }
             }
@@ -663,7 +664,7 @@ namespace System.Windows.Forms
                                              null);
 
                     // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), Interop.WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
                 }
                 else if (contextMenuStrip != null)
                 {
@@ -785,34 +786,34 @@ namespace System.Windows.Forms
                 case WM_TRAYMOUSEMESSAGE:
                     switch ((int)msg.LParam)
                     {
-                        case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                        case WindowMessages.WM_LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
                             break;
-                        case Interop.WindowMessages.WM_LBUTTONDOWN:
+                        case WindowMessages.WM_LBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Left, 1);
                             break;
-                        case Interop.WindowMessages.WM_LBUTTONUP:
+                        case WindowMessages.WM_LBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Left);
                             break;
-                        case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                        case WindowMessages.WM_MBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Middle, 2);
                             break;
-                        case Interop.WindowMessages.WM_MBUTTONDOWN:
+                        case WindowMessages.WM_MBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Middle, 1);
                             break;
-                        case Interop.WindowMessages.WM_MBUTTONUP:
+                        case WindowMessages.WM_MBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Middle);
                             break;
-                        case Interop.WindowMessages.WM_MOUSEMOVE:
+                        case WindowMessages.WM_MOUSEMOVE:
                             WmMouseMove(ref msg);
                             break;
-                        case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                        case WindowMessages.WM_RBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Right, 2);
                             break;
-                        case Interop.WindowMessages.WM_RBUTTONDOWN:
+                        case WindowMessages.WM_RBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
-                        case Interop.WindowMessages.WM_RBUTTONUP:
+                        case WindowMessages.WM_RBUTTONUP:
                             if (contextMenu != null || contextMenuStrip != null)
                             {
                                 ShowContextMenu();
@@ -833,7 +834,7 @@ namespace System.Windows.Forms
                             break;
                     }
                     break;
-                case Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_COMMAND:
                     if (IntPtr.Zero == msg.LParam)
                     {
                         if (Command.DispatchID((int)msg.WParam & 0xFFFF))
@@ -846,7 +847,7 @@ namespace System.Windows.Forms
                         window.DefWndProc(ref msg);
                     }
                     break;
-                case Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_DRAWITEM:
                     // If the wparam is zero, then the message was sent by a menu.
                     // See WM_DRAWITEM in MSDN.
                     if (msg.WParam == IntPtr.Zero)
@@ -854,7 +855,7 @@ namespace System.Windows.Forms
                         WmDrawItemMenuItem(ref msg);
                     }
                     break;
-                case Interop.WindowMessages.WM_MEASUREITEM:
+                case WindowMessages.WM_MEASUREITEM:
                     // If the wparam is zero, then the message was sent by a menu.
                     if (msg.WParam == IntPtr.Zero)
                     {
@@ -862,11 +863,11 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_INITMENUPOPUP:
+                case WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref msg);
                     break;
 
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
                     // Remove the icon from the taskbar
                     UpdateIcon(false);
                     break;
@@ -954,7 +955,7 @@ namespace System.Windows.Forms
                 //
                 if (Handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_CLOSE, 0, 0);
                 }
 
                 // This releases the handle from our window proc, re-routing it back to

@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -728,21 +729,21 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL:
                     WmReflectScroll(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
                     break;
 
-                case Interop.WindowMessages.WM_SIZE:
+                case WindowMessages.WM_SIZE:
                     // Fixes the scrollbar focus rect
                     if (UnsafeNativeMethods.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
-                        SendMessage(Interop.WindowMessages.WM_KILLFOCUS, 0, 0);
-                        SendMessage(Interop.WindowMessages.WM_SETFOCUS, 0, 0);
+                        SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
+                        SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
                     }
                     break;
 

@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -151,16 +152,16 @@ namespace System.Windows.Forms
             switch (value)
             {
                 case MdiLayout.Cascade:
-                    SendMessage(Interop.WindowMessages.WM_MDICASCADE, 0, 0);
+                    SendMessage(WindowMessages.WM_MDICASCADE, 0, 0);
                     break;
                 case MdiLayout.TileVertical:
-                    SendMessage(Interop.WindowMessages.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
+                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
                     break;
                 case MdiLayout.TileHorizontal:
-                    SendMessage(Interop.WindowMessages.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
+                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    SendMessage(Interop.WindowMessages.WM_MDIICONARRANGE, 0, 0);
+                    SendMessage(WindowMessages.WM_MDIICONARRANGE, 0, 0);
                     break;
             }
         }
@@ -277,16 +278,16 @@ namespace System.Windows.Forms
         {
             IntPtr rgn1 = IntPtr.Zero;
             IntPtr rgn2 = IntPtr.Zero;
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             CreateParams cp = CreateParams;
 
             AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
 
             Rectangle bounds = Bounds;
-            rgn1 = Interop.Gdi32.CreateRectRgn(0, 0, bounds.Width, bounds.Height);
+            rgn1 = Gdi32.CreateRectRgn(0, 0, bounds.Width, bounds.Height);
             try
             {
-                rgn2 = Interop.Gdi32.CreateRectRgn(
+                rgn2 = Gdi32.CreateRectRgn(
                     -rect.left,
                     -rect.top,
                     bounds.Width - rect.right,
@@ -299,7 +300,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
 
-                    if (Interop.Gdi32.CombineRgn(rgn1, rgn1, rgn2, Interop.Gdi32.CombineMode.RGN_DIFF) == 0)
+                    if (Gdi32.CombineRgn(rgn1, rgn1, rgn2, Gdi32.CombineMode.RGN_DIFF) == 0)
                     {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
@@ -318,7 +319,7 @@ namespace System.Windows.Forms
                 {
                     if (rgn2 != IntPtr.Zero)
                     {
-                        Interop.Gdi32.DeleteObject(rgn2);
+                        Gdi32.DeleteObject(rgn2);
                     }
                 }
             }
@@ -326,7 +327,7 @@ namespace System.Windows.Forms
             {
                 if (rgn1 != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(rgn1);
+                    Gdi32.DeleteObject(rgn1);
                 }
             }
         }
@@ -351,14 +352,14 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
 
-                case Interop.WindowMessages.WM_CREATE:
+                case WindowMessages.WM_CREATE:
                     if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {
                         SetWindowRgn();
                     }
                     break;
 
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
                     Form childForm = null;
                     if (ParentInternal is Form)
@@ -380,7 +381,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     InvokeGotFocus(this, EventArgs.Empty);
                     return;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }

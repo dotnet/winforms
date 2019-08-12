@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -1805,7 +1806,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
-            foreach (int msg in new int[] { Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_HSCROLL /*, Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VSCROLL  */ })
+            foreach (int msg in new int[] { WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL /*, WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL  */ })
             {
                 yield return new object[] { msg, RightToLeft.No, 100, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
                 yield return new object[] { msg, RightToLeft.No, 99, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };

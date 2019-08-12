@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -87,11 +88,11 @@ namespace System.Windows.Forms
                 // to occur within control.
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_MOUSELEAVE:
+                    case WindowMessages.WM_MOUSELEAVE:
                         _control.UnhookMouseEvent();
                         break;
 
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case WindowMessages.WM_MOUSEMOVE:
                         if (!_control.GetState(STATE_TRACKINGMOUSEEVENT))
                         {
                             _control.HookMouseEvent();
@@ -106,7 +107,7 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_MOUSEWHEEL:
+                    case WindowMessages.WM_MOUSEWHEEL:
                         // TrackMouseEvent's mousehover implementation doesn't watch the wheel
                         // correctly...
                         _control.ResetMouseEventArgs();

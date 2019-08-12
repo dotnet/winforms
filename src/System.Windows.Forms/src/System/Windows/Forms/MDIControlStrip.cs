@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -124,7 +125,7 @@ namespace System.Windows.Forms
         private Image GetTargetWindowIcon()
         {
             Image systemIcon = null;
-            IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), Interop.WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);
+            IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);
             Icon icon = (hIcon != IntPtr.Zero) ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
