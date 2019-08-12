@@ -12,9 +12,9 @@ using System.Threading;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
-    /// do not have HWNDS, this guy's got to figure out who the event was really supposed
-    /// to go to and pass it on to it.
+    ///  RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
+    ///  do not have HWNDS, this guy's got to figure out who the event was really supposed
+    ///  to go to and pass it on to it.
     /// </summary>
     internal class ToolStripDropTargetManager : IDropTarget
     {
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        /// Summary of ToolStripDropTargetManager.
+        ///  Summary of ToolStripDropTargetManager.
         /// </summary>
         /// <param name=owner></param>	
         public ToolStripDropTargetManager(ToolStrip owner)
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of EnsureRegistered.
+        ///  Summary of EnsureRegistered.
         /// </summary>
         /// <param name=dropTarget></param>	
         public void EnsureRegistered(IDropTarget dropTarget)
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of EnsureUnRegistered.
+        ///  Summary of EnsureUnRegistered.
         /// </summary>
         /// <param name=dropTarget></param>	
         public void EnsureUnRegistered(IDropTarget dropTarget)
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Takes a screen point and converts it into an item. May return null.
+        ///  Takes a screen point and converts it into an item. May return null.
         /// </summary>
         /// <param name=x></param>
         /// <param name=y></param>	
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
             return owner.GetItemAt(owner.PointToClient(new Point(x, y)));
         }
         /// <summary>
-        /// Summary of OnDragEnter.
+        ///  Summary of OnDragEnter.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragEnter(DragEventArgs e)
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnDragOver.
+        ///  Summary of OnDragOver.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragOver(DragEventArgs e)
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnDragLeave.
+        ///  Summary of OnDragLeave.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragLeave(EventArgs e)
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnDragDrop.
+        ///  Summary of OnDragDrop.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragDrop(DragEventArgs e)
@@ -300,10 +300,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// if we have a new active item, fire drag leave and
-        /// enter.  This corresponds to the case where you
-        /// are dragging between items and havent actually
-        /// left the ToolStrip's client area.
+        ///  if we have a new active item, fire drag leave and
+        ///  enter.  This corresponds to the case where you
+        ///  are dragging between items and havent actually
+        ///  left the ToolStrip's client area.
         /// </summary>
         /// <param name=newTarget></param>
         /// <param name=e></param>	

@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -27,7 +28,7 @@ namespace System.ComponentModel.Design
             [DllImport(ProductDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void ProductDllPerfCodeMarkerString(int nTimerID, [MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] string aUserParams, int cbParams);
 
-            /// global native method imports
+            ///  global native method imports
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
             public static extern ushort FindAtom([MarshalAs(UnmanagedType.LPWStr)] string lpString);
         }
@@ -44,17 +45,17 @@ namespace System.ComponentModel.Design
         enum State
         {
             /// <summary>
-            /// The atom is present. CodeMarkers are enabled.
+            ///  The atom is present. CodeMarkers are enabled.
             /// </summary>
             Enabled,
 
             /// <summary>
-            /// The atom is not present, but InitPerformanceDll has not yet been called.
+            ///  The atom is not present, but InitPerformanceDll has not yet been called.
             /// </summary>
             Disabled,
 
             /// <summary>
-            /// Disabled because the CodeMarkers transport DLL could not be found or an import failed to resolve.
+            ///  Disabled because the CodeMarkers transport DLL could not be found or an import failed to resolve.
             /// </summary>
             DisabledDueToDllImportException
         }
@@ -62,7 +63,7 @@ namespace System.ComponentModel.Design
         private State _state;
 
         /// <summary>
-        /// Are CodeMarkers enabled? Note that even if IsEnabled returns false, CodeMarkers may still be enabled later in another component.
+        ///  Are CodeMarkers enabled? Note that even if IsEnabled returns false, CodeMarkers may still be enabled later in another component.
         /// </summary>
         public bool IsEnabled
         {
@@ -94,7 +95,7 @@ namespace System.ComponentModel.Design
                         // in the AttachPerf context we should see which module is already loaded
                         if (_regroot == null)
                         {
-                            _shouldUseTestDll = Interop.Kernel32.GetModuleHandleW(ProductDllName) == IntPtr.Zero;
+                            _shouldUseTestDll = Kernel32.GetModuleHandleW(ProductDllName) == IntPtr.Zero;
                         }
                         else
                         {
@@ -120,7 +121,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sends a code marker event
+        ///  Sends a code marker event
         /// </summary>
         /// <param name="nTimerID">The code marker event ID</param>
         /// <returns>true if the code marker was successfully sent, false if code markers are not enabled or an error occurred.</returns>
@@ -153,7 +154,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sends a code marker event with additional user data
+        ///  Sends a code marker event with additional user data
         /// </summary>
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="aBuff">User data buffer. May not be null.</param>
@@ -196,7 +197,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Used by ManagedPerfTrack.cs to report errors accessing the DLL.
+        ///  Used by ManagedPerfTrack.cs to report errors accessing the DLL.
         /// </summary>
         public void SetStateDLLException()
         {
@@ -204,7 +205,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sends a code marker event with additional Guid user data
+        ///  Sends a code marker event with additional Guid user data
         /// </summary>
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="guidData">The additional Guid to include with the event</param>
@@ -215,7 +216,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sends a code marker event with additional String user data
+        ///  Sends a code marker event with additional String user data
         /// </summary>
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="stringData">The additional String to include with the event</param>
@@ -257,7 +258,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Converts a string into a byte buffer including a zero terminator (needed for proper ETW message formatting)
+        ///  Converts a string into a byte buffer including a zero terminator (needed for proper ETW message formatting)
         /// </summary>
         /// <param name="stringData">String to be converted to bytes</param>
         internal static byte[] StringToBytesZeroTerminated(string stringData)
@@ -289,7 +290,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sends a code marker event with additional DWORD user data
+        ///  Sends a code marker event with additional DWORD user data
         /// </summary>
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="uintData">The additional DWORD to include with the event</param>
@@ -300,7 +301,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sends a code marker event with additional QWORD user data
+        ///  Sends a code marker event with additional QWORD user data
         /// </summary>
         /// <param name="nTimerID">The code marker event ID</param>
         /// <param name="ulongData">The additional QWORD to include with the event</param>
@@ -311,7 +312,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Checks the registry to see if code markers are enabled
+        ///  Checks the registry to see if code markers are enabled
         /// </summary>
         /// <param name="regRoot">The registry root</param>
         /// <param name="registryView">The registry view.</param>
@@ -341,39 +342,39 @@ namespace System.ComponentModel.Design
 
 #if Codemarkers_IncludeAppEnum
         /// <summary>
-        /// Check the registry and, if appropriate, loads and initializes the code markers dll.
-        /// InitPerformanceDll may be called more than once, but only the first successful call will do anything.
-        /// Subsequent calls will be ignored.
-        /// For 32-bit processes on a 64-bit machine, the 32-bit (Wow6432Node) registry will be used.
-        /// For 64-bit processes, the 64-bit registry will be used. If you need to use the Wow6432Node in this case
-        /// then use the overload of InitPerformanceDll that takes a RegistryView parameter.
+        ///  Check the registry and, if appropriate, loads and initializes the code markers dll.
+        ///  InitPerformanceDll may be called more than once, but only the first successful call will do anything.
+        ///  Subsequent calls will be ignored.
+        ///  For 32-bit processes on a 64-bit machine, the 32-bit (Wow6432Node) registry will be used.
+        ///  For 64-bit processes, the 64-bit registry will be used. If you need to use the Wow6432Node in this case
+        ///  then use the overload of InitPerformanceDll that takes a RegistryView parameter.
         /// </summary>
         /// <param name="iApp">The application ID value that distinguishes these code marker events from other applications.</param>
         /// <param name="strRegRoot">The registry root of the application. The default value of the "Performance" subkey under this
-        /// root will be checked to determine if CodeMarkers should be enabled.</param>
+        ///  root will be checked to determine if CodeMarkers should be enabled.</param>
         /// <returns>true if CodeMarkers were initialized successfully, or if InitPerformanceDll has already been called
-        /// successfully once.
-        /// false indicates that either CodeMarkers are not enabled in the registry, or that the CodeMarkers transport
-        /// DLL failed to load.</returns>
+        ///  successfully once.
+        ///  false indicates that either CodeMarkers are not enabled in the registry, or that the CodeMarkers transport
+        ///  DLL failed to load.</returns>
         public bool InitPerformanceDll(int iApp, string strRegRoot)
         {
             return InitPerformanceDll(iApp, strRegRoot, RegistryView.Default);
         }
 
         /// <summary>
-        /// Check the registry and, if appropriate, loads and initializes the code markers dll.
-        /// InitPerformanceDll may be called more than once, but only the first successful call will do anything.
-        /// Subsequent calls will be ignored.
+        ///  Check the registry and, if appropriate, loads and initializes the code markers dll.
+        ///  InitPerformanceDll may be called more than once, but only the first successful call will do anything.
+        ///  Subsequent calls will be ignored.
         /// </summary>
         /// <param name="iApp">The application ID value that distinguishes these code marker events from other applications.</param>
         /// <param name="strRegRoot">The registry root of the application. The default value of the "Performance" subkey under this
-        /// root will be checked to determine if CodeMarkers should be enabled.</param>
+        ///  root will be checked to determine if CodeMarkers should be enabled.</param>
         /// <param name="registryView">Specify RegistryView.Registry32 to use the 32-bit registry even if the calling application
-        /// is 64-bit</param>
+        ///  is 64-bit</param>
         /// <returns>true if CodeMarkers were initialized successfully, or if InitPerformanceDll has already been called
-        /// successfully once.
-        /// false indicates that either CodeMarkers are not enabled in the registry, or that the CodeMarkers transport
-        /// DLL failed to load.</returns>
+        ///  successfully once.
+        ///  false indicates that either CodeMarkers are not enabled in the registry, or that the CodeMarkers transport
+        ///  DLL failed to load.</returns>
         public bool InitPerformanceDll(int iApp, string strRegRoot, RegistryView registryView)
         {
             // Prevent multiple initializations.
@@ -467,7 +468,7 @@ namespace System.ComponentModel.Design
 
 #if !Codemarkers_NoCodeMarkerStartEnd
     /// <summary>
-    /// Use CodeMarkerStartEnd in a using clause when you need to bracket an operation with a start/end CodeMarker event pair.  If you are using correlated codemarkers and providing your own event manifest, include two GUIDs (the correlation "marker" and the correlation ID itself) as the very first fields.
+    ///  Use CodeMarkerStartEnd in a using clause when you need to bracket an operation with a start/end CodeMarker event pair.  If you are using correlated codemarkers and providing your own event manifest, include two GUIDs (the correlation "marker" and the correlation ID itself) as the very first fields.
     /// </summary>
     internal struct CodeMarkerStartEnd : IDisposable
     {
@@ -509,7 +510,7 @@ namespace System.ComponentModel.Design
     }
 
     /// <summary>
-    /// Use CodeMarkerExStartEnd in a using clause when you need to bracket an operation with a start/end CodeMarker event pair.  If you are using correlated codemarkers and providing your own event manifest, include two GUIDs (the correlation "marker" and the correlation ID itself) as the very first fields.
+    ///  Use CodeMarkerExStartEnd in a using clause when you need to bracket an operation with a start/end CodeMarker event pair.  If you are using correlated codemarkers and providing your own event manifest, include two GUIDs (the correlation "marker" and the correlation ID itself) as the very first fields.
     /// </summary>
     internal struct CodeMarkerExStartEnd : IDisposable
     {

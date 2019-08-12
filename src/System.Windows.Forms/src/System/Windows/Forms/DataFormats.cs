@@ -9,139 +9,139 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Translates between WinForms text-based <see cref='Clipboard'/>
-    /// formats and <see langword='Microsoft.Win32'/> 32-bit signed integer-based clipboard
-    /// formats. Provides <see langword='static '/> methods to create new
+    ///  Translates between WinForms text-based <see cref='Clipboard'/>
+    ///  formats and <see langword='Microsoft.Win32'/> 32-bit signed integer-based clipboard
+    ///  formats. Provides <see langword='static '/> methods to create new
     /// <see cref='Clipboard'/> formats and add them to the Windows Registry.
     /// </summary>
     public static class DataFormats
     {
         /// <summary>
-        /// Specifies the standard ANSI text format. This <see langword='static '/>
-        /// field is read-only.
+        ///  Specifies the standard ANSI text format. This <see langword='static '/>
+        ///  field is read-only.
         /// </summary>
         public static readonly string Text = "Text";
 
         /// <summary>
-        /// Specifies the standard Windows Unicode text format.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the standard Windows Unicode text format.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string UnicodeText = "UnicodeText";
 
         /// <summary>
-        /// Specifies the Windows Device Independent Bitmap (DIB) format.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows Device Independent Bitmap (DIB) format.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Dib = "DeviceIndependentBitmap";
 
         /// <summary>
-        /// Specifies a Windows bitmap format.
-        /// This <see langword='static '/> field is read-only. </summary>
+        ///  Specifies a Windows bitmap format.
+        ///  This <see langword='static '/> field is read-only. </summary>
         public static readonly string Bitmap = "Bitmap";
 
         /// <summary>
-        /// Specifies the Windows enhanced metafile format.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows enhanced metafile format.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string EnhancedMetafile = "EnhancedMetafile";
 
         /// <summary>
-        /// Specifies the Windows metafile format, which WinForms does not directly use.
-        /// This <see langword='static'/> field is read-only.
+        ///  Specifies the Windows metafile format, which WinForms does not directly use.
+        ///  This <see langword='static'/> field is read-only.
         /// </summary>
         public static readonly string MetafilePict = "MetaFilePict";
 
         /// <summary>
-        /// Specifies the Windows symbolic link format, which WinForms does not directly use.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows symbolic link format, which WinForms does not directly use.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string SymbolicLink = "SymbolicLink";
 
         /// <summary>
-        /// Specifies the Windows data interchange format, which WinForms does not directly use.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows data interchange format, which WinForms does not directly use.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Dif = "DataInterchangeFormat";
 
         /// <summary>
-        /// Specifies the Tagged Image File Format (TIFF), which WinForms does not directly use.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Tagged Image File Format (TIFF), which WinForms does not directly use.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Tiff = "TaggedImageFileFormat";
 
         /// <summary>
-        /// Specifies the standard Windows original equipment manufacturer (OEM) text format.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the standard Windows original equipment manufacturer (OEM) text format.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string OemText = "OEMText";
 
         /// <summary>
-        /// Specifies the Windows palette format.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows palette format.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Palette = "Palette";
 
         /// <summary>
-        /// Specifies the Windows pen data format, which consists of pen strokes for handwriting
-        /// software; Win Formsdoes not use this format.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows pen data format, which consists of pen strokes for handwriting
+        ///  software; Win Formsdoes not use this format.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string PenData = "PenData";
 
         /// <summary>
-        /// Specifies the Resource Interchange File Format (RIFF) audio format, which WinForms
-        /// does not directly use.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Resource Interchange File Format (RIFF) audio format, which WinForms
+        ///  does not directly use.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Riff = "RiffAudio";
 
         /// <summary>
-        /// Specifies the wave audio format, which Win Forms does not
+        ///  Specifies the wave audio format, which Win Forms does not
         ///  directly use. This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string WaveAudio = "WaveAudio";
 
         /// <summary>
-        /// Specifies the Windows file drop format, which WinForms does not directly use.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows file drop format, which WinForms does not directly use.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string FileDrop = "FileDrop";
 
         /// <summary>
-        /// Specifies the Windows culture format, which WinForms does not directly use.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Windows culture format, which WinForms does not directly use.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Locale = "Locale";
 
         /// <summary>
-        /// Specifies text consisting of HTML data.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies text consisting of HTML data.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Html = "HTML Format";
 
         /// <summary>
-        /// Specifies text consisting of Rich Text Format (RTF) data.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies text consisting of Rich Text Format (RTF) data.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Rtf = "Rich Text Format";
 
         /// <summary>
-        /// Specifies a comma-separated value (CSV) format, which is a common interchange format
-        /// used by spreadsheets. This format is not used directly by WinForms.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies a comma-separated value (CSV) format, which is a common interchange format
+        ///  used by spreadsheets. This format is not used directly by WinForms.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string CommaSeparatedValue = "Csv";
 
         /// <summary>
-        /// Specifies the Win Forms string class format, which WinForms uses to store string
-        /// objects.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies the Win Forms string class format, which WinForms uses to store string
+        ///  objects.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string StringFormat = typeof(string).FullName;
 
         /// <summary>
-        /// Specifies a format that encapsulates any type of WinForms object.
-        /// This <see langword='static '/> field is read-only.
+        ///  Specifies a format that encapsulates any type of WinForms object.
+        ///  This <see langword='static '/> field is read-only.
         /// </summary>
         public static readonly string Serializable = Application.WindowsFormsVersion + "PersistentObject";
 
@@ -151,8 +151,8 @@ namespace System.Windows.Forms
         private static readonly object s_internalSyncObject = new object();
 
         /// <summary>
-        /// Gets a <see cref='Format'/> with the Windows
-        /// Clipboard numeric ID and name for the specified format.
+        ///  Gets a <see cref='Format'/> with the Windows
+        ///  Clipboard numeric ID and name for the specified format.
         /// </summary>
         public static Format GetFormat(string format)
         {
@@ -192,8 +192,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a <see cref='Format'/> with the Windows
-        /// Clipboard numeric ID and name for the specified ID.
+        ///  Gets a <see cref='Format'/> with the Windows
+        ///  Clipboard numeric ID and name for the specified ID.
         /// </summary>
         public static Format GetFormat(int id)
         {
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Ensures that we have enough room in our format list
+        ///  Ensures that we have enough room in our format list
         /// </summary>
         private static void EnsureFormatSpace(int size)
         {
@@ -254,8 +254,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Ensures that the Win32 predefined formats are setup in our format list.
-        /// This is called anytime we need to search the list
+        ///  Ensures that the Win32 predefined formats are setup in our format list.
+        ///  This is called anytime we need to search the list
         /// </summary>
         private static void EnsurePredefined()
         {
@@ -287,13 +287,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents a format type.
+        ///  Represents a format type.
         /// </summary>
         public class Format
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref='Format'/>
-            /// class and specifies whether a <see langword='Win32 '/> handle is expected with this format.
+            ///  Initializes a new instance of the <see cref='Format'/>
+            ///  class and specifies whether a <see langword='Win32 '/> handle is expected with this format.
             /// </summary>
             public Format(string name, int id)
             {
@@ -302,12 +302,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Specifies the name of this format.
+            ///  Specifies the name of this format.
             /// </summary>
             public string Name { get; }
 
             /// <summary>
-            /// Specifies the ID number for this format.
+            ///  Specifies the ID number for this format.
             /// </summary>
             public int Id { get; }
         }

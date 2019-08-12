@@ -17,7 +17,7 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         private static readonly byte[] serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IDataObject'/>.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IDataObject'/>.
         /// </summary>
         internal DataObject(IDataObject data)
         {
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see langword='IComDataObject'/>.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see langword='IComDataObject'/>.
         /// </summary>
         internal DataObject(IComDataObject data)
         {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data.
         /// </summary>
         public DataObject(object data)
         {
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data and its
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data and its
         ///  associated format.
         /// </summary>
         public DataObject(string format, object data) : this()
@@ -136,23 +136,23 @@ namespace System.Windows.Forms
             IntPtr hBitmap = bm.GetHbitmap();
 
             // Create a compatible DC to render the source bitmap.
-            IntPtr dcSrc = Interop.Gdi32.CreateCompatibleDC(hDC);
-            IntPtr srcOld = Interop.Gdi32.SelectObject(dcSrc, hBitmap);
+            IntPtr dcSrc = Gdi32.CreateCompatibleDC(hDC);
+            IntPtr srcOld = Gdi32.SelectObject(dcSrc, hBitmap);
 
             // Create a compatible DC and a new compatible bitmap.
-            IntPtr dcDest = Interop.Gdi32.CreateCompatibleDC(hDC);
+            IntPtr dcDest = Gdi32.CreateCompatibleDC(hDC);
             IntPtr hBitmapNew = SafeNativeMethods.CreateCompatibleBitmap(new HandleRef(null, hDC), bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            IntPtr destOld = Interop.Gdi32.SelectObject(dcDest, hBitmapNew);
+            IntPtr destOld = Gdi32.SelectObject(dcDest, hBitmapNew);
             SafeNativeMethods.BitBlt(new HandleRef(null, dcDest), 0, 0, bm.Size.Width, bm.Size.Height, new HandleRef(null, dcSrc), 0, 0, 0x00CC0020);
 
             // Clear the source and destination compatible DCs.
-            Interop.Gdi32.SelectObject(dcSrc, srcOld);
-            Interop.Gdi32.SelectObject(dcDest, destOld);
+            Gdi32.SelectObject(dcSrc, srcOld);
+            Gdi32.SelectObject(dcDest, destOld);
 
-            Interop.Gdi32.DeleteDC(dcSrc);
-            Interop.Gdi32.DeleteDC(dcDest);
+            Gdi32.DeleteDC(dcSrc);
+            Gdi32.DeleteDC(dcDest);
 
             return hBitmapNew;
         }
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We are restricting serialization of formats that represent strings, bitmaps or OLE types.
+        ///  We are restricting serialization of formats that represent strings, bitmaps or OLE types.
         /// </summary>
         /// <param name="format">format name</param>
         /// <returns>true - serialize only safe types, strings or bitmaps.</returns>
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Uses IStream and retrieves the specified format from the bound IComDataObject.
             /// </summary>
-            private object GetDataFromOleIStream(string format)
+            private unsafe object GetDataFromOleIStream(string format)
             {
 
                 FORMATETC formatetc = new FORMATETC();
@@ -1321,18 +1321,16 @@ namespace System.Windows.Forms
 
                 if (medium.unionmember != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.IStream pStream = (UnsafeNativeMethods.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
+                    Ole32.IStream pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
                     Marshal.Release(medium.unionmember);
-                    NativeMethods.STATSTG sstg = new NativeMethods.STATSTG();
-                    pStream.Stat(sstg, NativeMethods.STATFLAG_DEFAULT);
-                    int size = (int)sstg.cbSize;
+                    pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.STATFLAG_DEFAULT);
 
                     IntPtr hglobal = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE
                                                       | NativeMethods.GMEM_DDESHARE
                                                       | NativeMethods.GMEM_ZEROINIT,
-                                                      size);
+                                                      (int)sstg.cbSize);
                     IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(innerData, hglobal));
-                    pStream.Read(ptr, size);
+                    pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
                     UnsafeNativeMethods.GlobalUnlock(new HandleRef(innerData, hglobal));
 
                     return GetDataFromHGLOBAL(format, hglobal);
@@ -1496,7 +1494,7 @@ namespace System.Windows.Forms
                         {
                             Image firstImage = clipboardImage;
                             clipboardImage = (Image)clipboardImage.Clone();
-                            Interop.Gdi32.DeleteObject(medium.unionmember);
+                            Gdi32.DeleteObject(medium.unionmember);
                             firstImage.Dispose();
                         }
                         data = clipboardImage;
@@ -1628,7 +1626,7 @@ namespace System.Windows.Forms
             {
 
                 string[] files = null;
-                StringBuilder sb = new StringBuilder(Interop.Kernel32.MAX_PATH);
+                StringBuilder sb = new StringBuilder(Kernel32.MAX_PATH);
 
                 int count = UnsafeNativeMethods.DragQueryFile(new HandleRef(null, hdrop), unchecked((int)0xFFFFFFFF), null, 0);
                 if (count > 0)
@@ -2147,9 +2145,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Binder that restricts DataObject content deserialization to Bitmap type and
-        /// serialization to strings and Bitmaps.
-        /// Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
+        ///  Binder that restricts DataObject content deserialization to Bitmap type and
+        ///  serialization to strings and Bitmaps.
+        ///  Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
         /// </summary>
         private class BitmapBinder : SerializationBinder
         {
@@ -2213,7 +2211,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Bitmap and string types are safe type to serialize/deserialize.
+            ///  Bitmap and string types are safe type to serialize/deserialize.
             /// </summary>
             /// <param name="serializedType"></param>
             /// <param name="assemblyName"></param>
@@ -2231,8 +2229,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This exception is used to indicate that clipboard contains a serialized
-        /// managed object that contains unexpected types and that we should stop processing this data.
+        ///  This exception is used to indicate that clipboard contains a serialized
+        ///  managed object that contains unexpected types and that we should stop processing this data.
         /// </summary>
         private class RestrictedTypeDeserializationException : Exception
         {

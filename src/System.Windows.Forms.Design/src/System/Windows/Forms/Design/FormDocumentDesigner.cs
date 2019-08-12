@@ -9,11 +9,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// The FormDocumentDesigner class builds on the DocumentDesigner.  It adds shadowing for form properties that need to be shadowed and it also adds logic to properly paint the form's title bar to match the active document window.
+    ///  The FormDocumentDesigner class builds on the DocumentDesigner.  It adds shadowing for form properties that need to be shadowed and it also adds logic to properly paint the form's title bar to match the active document window.
     /// </summary>
     internal class FormDocumentDesigner : DocumentDesigner
     {
@@ -28,7 +29,7 @@ namespace System.Windows.Forms.Design
         private ToolStripAdornerWindowService _toolStripAdornerWindowService = null;
 
         /// <summary>
-        /// Shadow the AcceptButton property at design-time so that we can preserve it when the form is rebuilt.  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
+        ///  Shadow the AcceptButton property at design-time so that we can preserve it when the form is rebuilt.  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
         /// </summary>
         private IButtonControl AcceptButton
         {
@@ -41,7 +42,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Shadow the CancelButton property at design-time so that we can preserve it when the form is rebuilt.  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
+        ///  Shadow the CancelButton property at design-time so that we can preserve it when the form is rebuilt.  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
         /// </summary>
         private IButtonControl CancelButton
         {
@@ -54,7 +55,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Shadowed version of the AutoScaleBaseSize property.  We shadow this so that it always persists.  Normally only properties that differ from the default values at instantiation are persisted, but this should always be written.  So, we shadow it and add our own ShouldSerialize method.
+        ///  Shadowed version of the AutoScaleBaseSize property.  We shadow this so that it always persists.  Normally only properties that differ from the default values at instantiation are persisted, but this should always be written.  So, we shadow it and add our own ShouldSerialize method.
         /// </summary>
         private Size AutoScaleBaseSize
         {
@@ -75,7 +76,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We shadow the AutoSize property at design-time so that the form doesn't grow and shrink as users fiddle with  autosize related properties.
+        ///  We shadow the AutoSize property at design-time so that the form doesn't grow and shrink as users fiddle with  autosize related properties.
         /// </summary>
         private bool AutoSize
         {
@@ -93,7 +94,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Shadow property for the ClientSize property -- this allows us to intercept client size changes and apply the new menu height if necessary
+        ///  Shadow property for the ClientSize property -- this allows us to intercept client size changes and apply the new menu height if necessary
         /// </summary>
         private Size ClientSize
         {
@@ -137,7 +138,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Shadow property for the IsMDIContainer property on a form.
+        ///  Shadow property for the IsMDIContainer property on a form.
         /// </summary>
         private bool IsMdiContainer
         {
@@ -157,7 +158,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns true if the active menu is an inherited component.  We use this to determine if we need to resize the base control or not.
+        ///  Returns true if the active menu is an inherited component.  We use this to determine if we need to resize the base control or not.
         /// </summary>
         private bool IsMenuInherited
         {
@@ -180,7 +181,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor method for the menu property on control.  We shadow this property at design time.
+        ///  Accessor method for the menu property on control.  We shadow this property at design time.
         /// </summary>
         internal MainMenu Menu
         {
@@ -210,7 +211,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Opacity property on control.  We shadow this property at design time.
+        ///  Opacity property on control.  We shadow this property at design time.
         /// </summary>
         private double Opacity
         {
@@ -227,7 +228,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overrides the default implementation of ParentControlDesigner SnapLines.  Note that if the Padding property is not set on our Form - we'll special case this and add default Padding values to our SnapLines. This was a usability request specific to the Form itself. Note that a Form only has Padding SnapLines.
+        ///  Overrides the default implementation of ParentControlDesigner SnapLines.  Note that if the Padding property is not set on our Form - we'll special case this and add default Padding values to our SnapLines. This was a usability request specific to the Form itself. Note that a Form only has Padding SnapLines.
         /// </summary>
         public override IList SnapLines
         {
@@ -294,7 +295,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor method for the showInTaskbar property on control.  We shadow this property at design time.
+        ///  Accessor method for the showInTaskbar property on control.  We shadow this property at design time.
         /// </summary>
         private bool ShowInTaskbar
         {
@@ -303,7 +304,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor method for the windowState property on control.  We shadow this property at design time.
+        ///  Accessor method for the windowState property on control.  We shadow this property at design time.
         /// </summary>
         private FormWindowState WindowState
         {
@@ -343,7 +344,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this designer.
+        ///  Disposes of this designer.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -402,13 +403,13 @@ namespace System.Windows.Forms.Design
                     {
                         menuEditorService.SetMenu(Menu);
                     }
-                    NativeMethods.SendMessage(Control.Handle, Interop.WindowMessages.WM_NCACTIVATE, 1, 0);
+                    NativeMethods.SendMessage(Control.Handle, WindowMessages.WM_NCACTIVATE, 1, 0);
                 }
             }
         }
 
         /// <summary>
-        /// Determines if a MenuEditorService has already been started. If not, this method will create a new instance of the service.  We override  this because we want to allow any kind of menu to start the service, not just ContextMenus.
+        ///  Determines if a MenuEditorService has already been started. If not, this method will create a new instance of the service.  We override  this because we want to allow any kind of menu to start the service, not just ContextMenus.
         /// </summary>
         protected override void EnsureMenuEditorService(IComponent c)
         {
@@ -427,7 +428,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the current menu height so we know how much to increment the form size by
+        ///  Gets the current menu height so we know how much to increment the form size by
         /// </summary>
         private int GetMenuHeight()
         {
@@ -450,7 +451,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Initializes the designer with the given component.  The designer can get the component's site and request services from it in this call.
+        ///  Initializes the designer with the given component.  The designer can get the component's site and request services from it in this call.
         /// </summary>
         public override void Initialize(IComponent component)
         {
@@ -474,7 +475,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a component is added to the design container. If the component isn't a control, this will demand create the component tray and add the component to it.
+        ///  Called when a component is added to the design container. If the component isn't a control, this will demand create the component tray and add the component to it.
         /// </summary>
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
@@ -504,7 +505,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a component is removed from the design container. Here, we check if a menu is being removed and handle removing the Form's mainmenu vs. other menus properly.
+        ///  Called when a component is removed from the design container. Here, we check if a menu is being removed and handle removing the Form's mainmenu vs. other menus properly.
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
@@ -541,7 +542,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We're watching the handle creation in case we have a menu editor. If we do, the menu editor will have to be torn down and recreated.
+        ///  We're watching the handle creation in case we have a menu editor. If we do, the menu editor will have to be torn down and recreated.
         /// </summary>
         protected override void OnCreateHandle()
         {
@@ -565,26 +566,26 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                NativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_NCACTIVATE, 1, 0);
+                NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 1, 0);
                 SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
             }
         }
 
         /// <summary>
-        /// Called by the host when we become inactive.  Here we update the title bar of our form so it's the inactive color.
+        ///  Called by the host when we become inactive.  Here we update the title bar of our form so it's the inactive color.
         /// </summary>
         private void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                NativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_NCACTIVATE, 0, 0);
+                NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 0, 0);
                 SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
             }
         }
 
         /// <summary>
-        /// Called when our code loads.  Here we connect us as the selection UI handler for ourselves.  This is a special case because for the top level document, we are our own selection UI handler.
+        ///  Called when our code loads.  Here we connect us as the selection UI handler for ourselves.  This is a special case because for the top level document, we are our own selection UI handler.
         /// </summary>
         private void OnLoadComplete(object source, EventArgs evevent)
         {
@@ -634,7 +635,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -668,7 +669,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Handles the WM_WINDOWPOSCHANGING message
+        ///  Handles the WM_WINDOWPOSCHANGING message
         /// </summary>
         private unsafe void WmWindowPosChanging(ref Message m)
         {
@@ -692,13 +693,13 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overrides our base class WndProc to provide support for the menu editor service.
+        ///  Overrides our base class WndProc to provide support for the menu editor service.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                case WindowMessages.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
             }

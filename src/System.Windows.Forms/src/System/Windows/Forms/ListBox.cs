@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -51,8 +52,8 @@ namespace System.Windows.Forms
         public const int NoMatches = NativeMethods.LB_ERR;
 
         /// <summary>
-        /// The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
-        /// item height is 13 for the default font on Windows.
+        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
+        ///  item height is 13 for the default font on Windows.
         /// </summary>
         public const int DefaultItemHeight = 13;
 
@@ -114,17 +115,17 @@ namespace System.Windows.Forms
         private IntegerCollection customTabOffsets;
 
         /// <summary>
-        /// Default start position of items in the checked list box
+        ///  Default start position of items in the checked list box
         /// </summary>
         private const int defaultListItemStartPos = 1;
 
         /// <summary>
-        /// Borders are 1 pixel height.
+        ///  Borders are 1 pixel height.
         /// </summary>
         private const int defaultListItemBorderHeight = 1;
 
         /// <summary>
-        /// Borders are 1 pixel width and a pixel buffer
+        ///  Borders are 1 pixel width and a pixel buffer
         /// </summary>
         private const int defaultListItemPaddingBuffer = 3;
 
@@ -1476,14 +1477,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the list box that starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item in the list box that starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s) => FindString(s, startIndex: -1);
 
         /// <summary>
-        /// Finds the first item after the given index which starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item after the given index which starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s, int startIndex)
         {
@@ -1491,14 +1492,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the list box that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item in the list box that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s) => FindStringExact(s, startIndex: -1);
 
         /// <summary>
-        /// Finds the first item after the given index that matches the given string.
-        /// The strings must match excatly, except for differences in casing.
+        ///  Finds the first item after the given index that matches the given string.
+        ///  The strings must match excatly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {
@@ -1562,7 +1563,7 @@ namespace System.Windows.Forms
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             int result = SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect).ToInt32();
 
             if (result == 0)
@@ -1633,7 +1634,7 @@ namespace System.Windows.Forms
             //NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
             //call Sendmessage.
             //
-            Interop.RECT r = new Interop.RECT();
+            RECT r = new RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
@@ -2087,7 +2088,7 @@ namespace System.Windows.Forms
             base.Refresh();
         }
         /// <summary>
-        /// Reparses the objects, getting new text strings for them.
+        ///  Reparses the objects, getting new text strings for them.
         /// </summary>
         protected override void RefreshItems()
         {
@@ -2159,7 +2160,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reparses the object at the given index, getting new text string for it.
+        ///  Reparses the object at the given index, getting new text string for it.
         /// </summary>
         protected override void RefreshItem(int index)
         {
@@ -2537,26 +2538,26 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     if (selectedItems != null)
                     {
                         selectedItems.Dirty();
                     }
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -2603,7 +2604,7 @@ namespace System.Windows.Forms
                     doubleClickFired = false;
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
                     // Get the mouse location
                     //
                     int rx = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -2621,7 +2622,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //the first WM_LBUTTONUP, resets the flag for Doubleclick
@@ -2630,7 +2631,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     if (integralHeight && fontIsChanged)
                     {

@@ -50,8 +50,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This routine returns the correct typename given a CodeTypeReference.  It expands the child typenames
-        /// and builds up the clr formatted generic name.  If its not a generic, it just returns BaseType.
+        ///  This routine returns the correct typename given a CodeTypeReference.  It expands the child typenames
+        ///  and builds up the clr formatted generic name.  If its not a generic, it just returns BaseType.
         /// </summary>
         internal static string GetTypeNameFromCodeTypeReference(IDesignerSerializationManager manager, CodeTypeReference typeref)
         {

@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='Control.ChangeUICues'/> event.
+    ///  Provides data for the <see cref='Control.ChangeUICues'/> event.
     /// </summary>
     public class UICuesEventArgs : EventArgs
     {
@@ -17,22 +17,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Focus rectangles are shown after the change.
+        ///  Focus rectangles are shown after the change.
         /// </summary>
         public bool ShowFocus => (_uicues & UICues.ShowFocus) != 0;
 
         /// <summary>
-        /// Keyboard cues are underlined after the change.
+        ///  Keyboard cues are underlined after the change.
         /// </summary>
         public bool ShowKeyboard => (_uicues & UICues.ShowKeyboard) != 0;
 
         /// <summary>
-        /// The state of the focus cues has changed.
+        ///  The state of the focus cues has changed.
         /// </summary>
         public bool ChangeFocus => (_uicues & UICues.ChangeFocus) != 0;
 
         /// <summary>
-        /// The state of the keyboard cues has changed.
+        ///  The state of the keyboard cues has changed.
         /// </summary>
         public bool ChangeKeyboard => (_uicues & UICues.ChangeKeyboard) != 0;
 

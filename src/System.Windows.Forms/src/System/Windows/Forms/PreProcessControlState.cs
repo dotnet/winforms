@@ -7,18 +7,18 @@ namespace System.Windows.Forms
     public enum PreProcessControlState
     {
         /// <summary>
-        /// Indicates the message has been processed, and no further processing
-        /// is necessary
+        ///  Indicates the message has been processed, and no further processing
+        ///  is necessary
         /// </summary>
         MessageProcessed = 0x00,
 
         /// <summary>
-        /// Indicates the control wants the message and processing should continue
+        ///  Indicates the control wants the message and processing should continue
         /// </summary>
         MessageNeeded = 0x01,
 
         /// <summary>
-        /// Indicates the control doesn't care about the message
+        ///  Indicates the control doesn't care about the message
         /// </summary>
         MessageNotNeeded = 0x02
     }

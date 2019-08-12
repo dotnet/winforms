@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -163,7 +164,7 @@ namespace System.Windows.Forms
                   + (entry & 0x00ff0000) >> 4 // blue
                   + (entry & 0x0000ff00) >> 2; // green
             }
-            Interop.Gdi32.DeleteObject(palette);
+            Gdi32.DeleteObject(palette);
 
             IntPtr address = Marshal.AllocCoTaskMem(Marshal.SizeOf(header) + entryCount * 4);
             Marshal.StructureToPtr(header, address, false);
@@ -204,13 +205,13 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        IntPtr previousBitmap = Interop.Gdi32.SelectObject(dc, hBitmap);
+                        IntPtr previousBitmap = Gdi32.SelectObject(dc, hBitmap);
                         if (previousBitmap == IntPtr.Zero)
                         {
                             throw new Win32Exception();
                         }
 
-                        Interop.Gdi32.DeleteObject(previousBitmap);
+                        Gdi32.DeleteObject(previousBitmap);
 
                         using (Graphics graphics = Graphics.FromHdcInternal(dc))
                         {
@@ -223,7 +224,7 @@ namespace System.Windows.Forms
                     }
                     catch
                     {
-                        Interop.Gdi32.DeleteObject(hBitmap);
+                        Gdi32.DeleteObject(hBitmap);
                         throw;
                     }
                 }
@@ -302,12 +303,12 @@ namespace System.Windows.Forms
             Size size = bitmap.Size;
 
             IntPtr colorMask = bitmap.GetHbitmap();
-            IntPtr hdcS = Interop.User32.GetDC(IntPtr.Zero);
-            IntPtr source = Interop.Gdi32.CreateCompatibleDC(hdcS);
-            IntPtr target = Interop.Gdi32.CreateCompatibleDC(hdcS);
-            Interop.User32.ReleaseDC(IntPtr.Zero, hdcS);
-            IntPtr previousSourceBitmap = Interop.Gdi32.SelectObject(source, monochromeMask);
-            IntPtr previousTargetBitmap = Interop.Gdi32.SelectObject(target, colorMask);
+            IntPtr hdcS = User32.GetDC(IntPtr.Zero);
+            IntPtr source = Gdi32.CreateCompatibleDC(hdcS);
+            IntPtr target = Gdi32.CreateCompatibleDC(hdcS);
+            User32.ReleaseDC(IntPtr.Zero, hdcS);
+            IntPtr previousSourceBitmap = Gdi32.SelectObject(source, monochromeMask);
+            IntPtr previousTargetBitmap = Gdi32.SelectObject(target, colorMask);
 
             // Now the trick is to make colorBitmap black wherever the transparent
             // color is located, but keep the original color everywhere else.
@@ -321,10 +322,10 @@ namespace System.Windows.Forms
             SafeNativeMethods.BitBlt(new HandleRef(null, target), 0, 0, size.Width, size.Height, new HandleRef(null, source),
                                      0, 0, 0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
-            Interop.Gdi32.SelectObject(source, previousSourceBitmap);
-            Interop.Gdi32.SelectObject(target, previousTargetBitmap);
-            Interop.Gdi32.DeleteDC(source);
-            Interop.Gdi32.DeleteDC(target);
+            Gdi32.SelectObject(source, previousSourceBitmap);
+            Gdi32.SelectObject(target, previousTargetBitmap);
+            Gdi32.DeleteDC(source);
+            Gdi32.DeleteDC(target);
 
             return colorMask;
         }
@@ -347,7 +348,7 @@ namespace System.Windows.Forms
             };
             IntPtr brush = SafeNativeMethods.CreateBrushIndirect(ref lb);
 
-            Interop.Gdi32.DeleteObject(hBitmap);
+            Gdi32.DeleteObject(hBitmap);
             return brush;
         }
 
@@ -1073,7 +1074,7 @@ namespace System.Windows.Forms
             int edge = ((int)style) & 0x0F;
             int flags = ((int)sides) | (((int)style) & ~0x0F);
 
-            Interop.RECT rc = new Rectangle(x, y, width, height);
+            RECT rc = new Rectangle(x, y, width, height);
 
             // Windows just draws the border to size, and then
             // shrinks the rectangle so the user can paint the
@@ -1425,7 +1426,7 @@ namespace System.Windows.Forms
 
                     // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
                     // and compensate below
-                    Interop.RECT rcCheck = new Interop.RECT(0, 0, rectangle.Width, rectangle.Height);
+                    RECT rcCheck = new RECT(0, 0, rectangle.Width, rectangle.Height);
                     Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
                     using (Graphics g2 = Graphics.FromImage(bitmap))
                     {
@@ -1515,7 +1516,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(height));
             }
 
-            Interop.RECT rcFrame = new Interop.RECT(0, 0, width, height);
+            RECT rcFrame = new RECT(0, 0, width, height);
             using (Bitmap bitmap = new Bitmap(width, height))
             {
                 using (Graphics g2 = Graphics.FromImage(bitmap))
@@ -1994,28 +1995,28 @@ namespace System.Windows.Forms
             }
 
             int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
-            IntPtr oldBrush = Interop.Gdi32.SelectObject(dc, Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH));
-            IntPtr oldPen = Interop.Gdi32.SelectObject(dc, pen);
+            IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+            IntPtr oldPen = Gdi32.SelectObject(dc, pen);
             SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(graphicsColor));
             SafeNativeMethods.Rectangle(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
 
             SafeNativeMethods.SetROP2(dc, prevRop2);
-            Interop.Gdi32.SelectObject(dc, oldBrush);
-            Interop.Gdi32.SelectObject(dc, oldPen);
+            Gdi32.SelectObject(dc, oldBrush);
+            Gdi32.SelectObject(dc, oldPen);
 
             if (pen != IntPtr.Zero)
             {
-                Interop.Gdi32.DeleteObject(pen);
+                Gdi32.DeleteObject(pen);
             }
 
-            Interop.User32.ReleaseDC(IntPtr.Zero, dc);
+            User32.ReleaseDC(IntPtr.Zero, dc);
         }
 
         /// <summary>
         ///  Draws a reversible line on the screen. A reversible line can
         ///  be erased by just drawing over it again.
         /// </summary>
-        public static void DrawReversibleLine(Point start, Point end, Color backColor)
+        public static unsafe void DrawReversibleLine(Point start, Point end, Color backColor)
         {
             int rop2 = GetColorRop(backColor,
                                    0xA, // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET),
@@ -2025,17 +2026,17 @@ namespace System.Windows.Forms
             IntPtr pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(backColor));
 
             int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
-            IntPtr oldBrush = Interop.Gdi32.SelectObject(dc, Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH));
-            IntPtr oldPen = Interop.Gdi32.SelectObject(dc, pen);
+            IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+            IntPtr oldPen = Gdi32.SelectObject(dc, pen);
 
             SafeNativeMethods.MoveToEx(new HandleRef(null, dc), start.X, start.Y, null);
             SafeNativeMethods.LineTo(new HandleRef(null, dc), end.X, end.Y);
 
             SafeNativeMethods.SetROP2(dc, prevRop2);
-            Interop.Gdi32.SelectObject(dc, oldBrush);
-            Interop.Gdi32.SelectObject(dc, oldPen);
-            Interop.Gdi32.DeleteObject(pen);
-            Interop.User32.ReleaseDC(IntPtr.Zero, dc);
+            Gdi32.SelectObject(dc, oldBrush);
+            Gdi32.SelectObject(dc, oldPen);
+            Gdi32.DeleteObject(pen);
+            User32.ReleaseDC(IntPtr.Zero, dc);
         }
 
         /// <summary>
@@ -2218,15 +2219,15 @@ namespace System.Windows.Forms
             IntPtr brush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
 
             int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
-            IntPtr oldBrush = Interop.Gdi32.SelectObject(dc, brush);
+            IntPtr oldBrush = Gdi32.SelectObject(dc, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
             SafeNativeMethods.PatBlt(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
 
             SafeNativeMethods.SetROP2(dc, prevRop2);
-            Interop.Gdi32.SelectObject(dc, oldBrush);
-            Interop.Gdi32.DeleteObject(brush);
-            Interop.User32.ReleaseDC(IntPtr.Zero, dc);
+            Gdi32.SelectObject(dc, oldBrush);
+            Gdi32.DeleteObject(brush);
+            User32.ReleaseDC(IntPtr.Zero, dc);
         }
 
         // Converts the font into one where Font.Unit = Point.
@@ -3068,7 +3069,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Logic copied from Windows sources to copy the lightening and darkening of colors.
+        ///  Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </summary>
         private struct HLSColor
         {

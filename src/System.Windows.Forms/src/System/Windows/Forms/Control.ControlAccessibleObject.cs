@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -196,7 +197,7 @@ namespace System.Windows.Forms
 
                     if (s_oleAccAvailable == NativeMethods.InvalidIntPtr)
                     {
-                        s_oleAccAvailable = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
+                        s_oleAccAvailable = Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
                         freeLib = (s_oleAccAvailable != IntPtr.Zero);
                     }
 
@@ -212,7 +213,7 @@ namespace System.Windows.Forms
 
                     if (freeLib)
                     {
-                        Interop.Kernel32.FreeLibrary(s_oleAccAvailable);
+                        Kernel32.FreeLibrary(s_oleAccAvailable);
                     }
                 }
             }
@@ -422,9 +423,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Raises the LiveRegionChanged UIA event.
-            /// To make this method effective, the control must implement System.Windows.Forms.Automation.IAutomationLiveRegion interface
-            /// and its LiveSetting property must return either AutomationLiveSetting.Polite or AutomationLiveSetting.Assertive value.
+            ///  Raises the LiveRegionChanged UIA event.
+            ///  To make this method effective, the control must implement System.Windows.Forms.Automation.IAutomationLiveRegion interface
+            ///  and its LiveSetting property must return either AutomationLiveSetting.Polite or AutomationLiveSetting.Assertive value.
             /// </summary>
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()

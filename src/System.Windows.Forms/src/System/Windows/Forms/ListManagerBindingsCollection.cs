@@ -8,8 +8,8 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
-    /// as well as an All array property, enumeration, etc.
+    ///  BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
+    ///  as well as an All array property, enumeration, etc.
     /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     internal class ListManagerBindingsCollection : BindingsCollection
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         private readonly BindingManagerBase _bindingManagerBase;
 
         /// <summary>
-        /// ColumnsCollection constructor.  Used only by DataSource.
+        ///  ColumnsCollection constructor.  Used only by DataSource.
         /// </summary>
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
         {

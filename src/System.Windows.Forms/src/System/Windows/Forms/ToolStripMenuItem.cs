@@ -9,11 +9,12 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// ToolStripMenuItem
+    ///  ToolStripMenuItem
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     [DesignerSerializer("System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
@@ -195,8 +196,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Deriving classes can override this to configure a default size for their control.
-        /// This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
         protected override Size DefaultSize {
             get {
@@ -254,7 +255,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Gets or sets a value indicating whether the item is checked.
+            ///  Gets or sets a value indicating whether the item is checked.
             /// </summary>
         [
         Bindable(true),
@@ -281,8 +282,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Keeps a shared copy of the checked image between all menu items
-        /// Fishes out the appropriate one based on CheckState.
+        ///  Keeps a shared copy of the checked image between all menu items
+        ///  Fishes out the appropriate one based on CheckState.
         /// </summary>
         internal Image CheckedImage
         {
@@ -397,8 +398,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets
-        /// or sets a value indicating whether the check box is checked.
+        ///  Gets
+        ///  or sets a value indicating whether the check box is checked.
         /// </summary>
         [
         Bindable(true),
@@ -433,9 +434,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the
-        /// value of the <see cref='CheckBox.Checked'/>
-        /// property changes.
+        ///  Occurs when the
+        ///  value of the <see cref='CheckBox.Checked'/>
+        ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged
@@ -444,9 +445,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventCheckedChanged, value);
         }
         /// <summary>
-        /// Occurs when the
-        /// value of the <see cref='CheckBox.CheckState'/>
-        /// property changes.
+        ///  Occurs when the
+        ///  value of the <see cref='CheckBox.CheckState'/>
+        ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged
@@ -456,8 +457,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies whether or not the item is glued to the ToolStrip or overflow or
-        /// can float between the two.
+        ///  Specifies whether or not the item is glued to the ToolStrip or overflow or
+        ///  can float between the two.
         /// </summary>
         [
         DefaultValue(ToolStripItemOverflow.Never),
@@ -477,8 +478,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Gets or sets the shortcut keys associated with the menu
-        /// item.
+            ///  Gets or sets the shortcut keys associated with the menu
+        ///  item.
             /// </summary>
         [
         Localizable(true),
@@ -567,10 +568,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Gets or sets a value that indicates whether the shortcut
-        /// keys that are assocaited
-        /// with the menu item are displayed next to the menu item
-        /// caption.
+            ///  Gets or sets a value that indicates whether the shortcut
+        ///  keys that are assocaited
+        ///  with the menu item are displayed next to the menu item
+        ///  caption.
             /// </summary>
         [
         DefaultValue(true),
@@ -600,8 +601,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An item is toplevel if it is parented to anything other than a ToolStripDropDownMenu
-        /// This implies that a ToolStripMenuItem in an overflow IS a toplevel item
+        ///  An item is toplevel if it is parented to anything other than a ToolStripDropDownMenu
+        ///  This implies that a ToolStripMenuItem in an overflow IS a toplevel item
         /// </summary>
         internal bool IsTopLevel
         {
@@ -942,14 +943,14 @@ namespace System.Windows.Forms
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_SYSCOMMAND, nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_SYSCOMMAND, nativeMenuCommandID, 0);
                 }
                 else
                 {
                     // These are user added items like ".Net Window..."
 
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
                 }
                 Invalidate();
             }
@@ -957,8 +958,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='CheckedChanged'/>
-        /// event.
+        ///  Raises the <see cref='CheckedChanged'/>
+        ///  event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
         {
@@ -966,7 +967,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='CheckStateChanged'/> event.
+        ///  Raises the <see cref='CheckStateChanged'/> event.
         /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e)
         {
@@ -1230,7 +1231,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// handle shortcut keys here.
+        ///  handle shortcut keys here.
         /// </summary>
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
@@ -1322,7 +1323,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An implementation of AccessibleChild for use with ToolStripItems
+        ///  An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
         [ComVisible(true)]
         internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject

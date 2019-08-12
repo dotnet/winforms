@@ -11,6 +11,7 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using ArrayList = System.Collections.ArrayList;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -160,7 +161,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// MonthCalendar control  accessbile object.
+        ///  MonthCalendar control  accessbile object.
         /// </summary>
         /// <returns></returns>
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -976,7 +977,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Interop.RECT rect = new Interop.RECT();
+                RECT rect = new RECT();
 
                 if (IsHandleCreated)
                 {
@@ -2442,21 +2443,21 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     Focus();
                     if (!ValidationCancelled)
                     {
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_GETDLGCODE:
+                case WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
                     base.WndProc(ref m);
                     break;
                 default:
@@ -2537,94 +2538,94 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This enumeration has specific areas of the MonthCalendar control as
-        /// its enumerated values. The hitArea member of System.Windows.Forms.Win32.HitTestInfo
-        /// will be one of these enumerated values, and indicates which portion of
-        /// a month calendar is under a specific point.
+        ///  This enumeration has specific areas of the MonthCalendar control as
+        ///  its enumerated values. The hitArea member of System.Windows.Forms.Win32.HitTestInfo
+        ///  will be one of these enumerated values, and indicates which portion of
+        ///  a month calendar is under a specific point.
         /// </summary>
         public enum HitArea
         {
             /// <summary>
-            /// The given point was not on the month calendar control, or it was
-            /// in an inactive portion of the control.
+            ///  The given point was not on the month calendar control, or it was
+            ///  in an inactive portion of the control.
             /// </summary>
             Nowhere = 0,
 
             /// <summary>
-            /// The given point was over the background of a month's title
+            ///  The given point was over the background of a month's title
             /// </summary>
             TitleBackground = 1,
 
             /// <summary>
-            /// The given point was in a month's title bar, over a month name
+            ///  The given point was in a month's title bar, over a month name
             /// </summary>
             TitleMonth = 2,
 
             /// <summary>
-            /// The given point was in a month's title bar, over the year value
+            ///  The given point was in a month's title bar, over the year value
             /// </summary>
             TitleYear = 3,
 
             /// <summary>
-            /// The given point was over the button at the top right corner of
-            /// the control. If the user clicks here, the month calendar will
-            /// scroll its display to the next month or set of months
+            ///  The given point was over the button at the top right corner of
+            ///  the control. If the user clicks here, the month calendar will
+            ///  scroll its display to the next month or set of months
             /// </summary>
             NextMonthButton = 4,
 
             /// <summary>
-            /// The given point was over the button at the top left corner of
-            /// the control. If the user clicks here, the month calendar will
-            /// scroll its display to the previous month or set of months
+            ///  The given point was over the button at the top left corner of
+            ///  the control. If the user clicks here, the month calendar will
+            ///  scroll its display to the previous month or set of months
             /// </summary>
             PrevMonthButton = 5,
 
             /// <summary>
-            /// The given point was in the calendar's background
+            ///  The given point was in the calendar's background
             /// </summary>
             CalendarBackground = 6,
 
             /// <summary>
-            /// The given point was on a particular date within the calendar,
-            /// and the time member of HitTestInfo will be set to the date at
-            /// the given point.
+            ///  The given point was on a particular date within the calendar,
+            ///  and the time member of HitTestInfo will be set to the date at
+            ///  the given point.
             /// </summary>
             Date = 7,
 
             /// <summary>
-            /// The given point was over a date from the next month (partially
-            /// displayed at the end of the currently displayed month). If the
-            /// user clicks here, the month calendar will scroll its display to
-            /// the next month or set of months.
+            ///  The given point was over a date from the next month (partially
+            ///  displayed at the end of the currently displayed month). If the
+            ///  user clicks here, the month calendar will scroll its display to
+            ///  the next month or set of months.
             /// </summary>
             NextMonthDate = 8,
 
             /// <summary>
-            /// The given point was over a date from the previous month (partially
-            /// displayed at the end of the currently displayed month). If the
-            /// user clicks here, the month calendar will scroll its display to
-            /// the previous month or set of months.
+            ///  The given point was over a date from the previous month (partially
+            ///  displayed at the end of the currently displayed month). If the
+            ///  user clicks here, the month calendar will scroll its display to
+            ///  the previous month or set of months.
             /// </summary>
             PrevMonthDate = 9,
 
             /// <summary>
-            /// The given point was over a day abbreviation ("Fri", for example).
-            /// The time member of HitTestInfo will be set to the corresponding
-            /// date on the top row.
+            ///  The given point was over a day abbreviation ("Fri", for example).
+            ///  The time member of HitTestInfo will be set to the corresponding
+            ///  date on the top row.
             /// </summary>
             DayOfWeek = 10,
 
             /// <summary>
-            /// The given point was over a week number.  This will only occur if
-            /// the showWeekNumbers property of MonthCalendar is enabled. The
-            /// time member of HitTestInfo will be set to the corresponding date
-            /// in the leftmost column.
+            ///  The given point was over a week number.  This will only occur if
+            ///  the showWeekNumbers property of MonthCalendar is enabled. The
+            ///  time member of HitTestInfo will be set to the corresponding date
+            ///  in the leftmost column.
             /// </summary>
             WeekNumbers = 11,
 
             /// <summary>
-            /// The given point was on the "today" link at the bottom of the
-            /// month calendar control
+            ///  The given point was on the "today" link at the bottom of the
+            ///  month calendar control
             /// </summary>
             TodayLink = 12,
         }

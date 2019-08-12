@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -51,42 +52,42 @@ namespace System.Windows.Forms.Tests
         {
             // Test PlaceholderText
             var tb = new SubTextBox() { PlaceholderText = "", IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            var msg = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
+            var msg = new Message() { Msg = WindowMessages.WM_PAINT };
             yield return new object[] { tb, msg, false };
 
             // Test PlaceholderText
             tb = new SubTextBox() { PlaceholderText = null, IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            msg = new Message() { Msg = Interop.WindowMessages.WM_PAINT };
+            msg = new Message() { Msg = WindowMessages.WM_PAINT };
             yield return new object[] { tb, msg, false };
 
             // Test Message
-            msg.Msg = Interop.WindowMessages.WM_USER;
+            msg.Msg = WindowMessages.WM_USER;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
             yield return new object[] { tb, msg, false };
 
             // Test UserPaint
-            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            msg.Msg = WindowMessages.WM_PAINT;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = true, IsFocused = false, TextCount = 0 };
             yield return new object[] { tb, msg, false };
 
             // Test Focused
-            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            msg.Msg = WindowMessages.WM_PAINT;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = true, TextCount = 0 };
             yield return new object[] { tb, msg, false };
 
             // Test TextLength
-            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            msg.Msg = WindowMessages.WM_PAINT;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 1 };
             yield return new object[] { tb, msg, false };
 
             // Test WM_PAINT
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            msg.Msg = Interop.WindowMessages.WM_PAINT;
+            msg.Msg = WindowMessages.WM_PAINT;
             yield return new object[] { tb, msg, true };
 
             // Test WM_KILLFOCUS
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            msg.Msg = Interop.WindowMessages.WM_KILLFOCUS;
+            msg.Msg = WindowMessages.WM_KILLFOCUS;
             yield return new object[] { tb, msg, true };
         }
 
@@ -129,11 +130,11 @@ namespace System.Windows.Forms.Tests
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
 
             //Cover the Placeholder draw code path
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Center;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Right;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
@@ -150,11 +151,11 @@ namespace System.Windows.Forms.Tests
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
 
             //Cover the Placeholder draw code path in RightToLeft scenario
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Center;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Right;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }

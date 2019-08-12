@@ -10,7 +10,7 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides an editor that can perform default file searching for cursor (.cur) files.
+    ///  Provides an editor that can perform default file searching for cursor (.cur) files.
     /// </summary>
     [CLSCompliant(false)]
     public class CursorEditor : UITypeEditor
@@ -18,13 +18,13 @@ namespace System.Drawing.Design
         private CursorUI _cursorUI;
 
         /// <summary>
-        /// Returns true, indicating that this drop-down control can be resized.
+        ///  Returns true, indicating that this drop-down control can be resized.
         /// </summary>
         public override bool IsDropDownResizable => true;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by GetEditorStyle. A service
-        /// provider is provided so that any required editing services can be obtained.
+        ///  Edits the given object value using the editor style provided by GetEditorStyle. A service
+        ///  provider is provided so that any required editing services can be obtained.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -51,7 +51,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Retrieves the editing style of the Edit method.
+        ///  Retrieves the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -59,7 +59,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// The user interface for the cursor drop-down. This is just an owner-drawn list box.
+        ///  The user interface for the cursor drop-down. This is just an owner-drawn list box.
         /// </summary>
         private class CursorUI : ListBox
         {

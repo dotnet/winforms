@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -131,7 +132,7 @@ namespace System.Windows.Forms
 
         private DataGridAddNewRow addNewRow = null;
         private LayoutData layout = new LayoutData();
-        private Interop.RECT[] cachedScrollableRegion = null;
+        private RECT[] cachedScrollableRegion = null;
 
         // header namespace goo
         //
@@ -306,8 +307,8 @@ namespace System.Windows.Forms
         // =-----------------------------------------------------------------
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGrid'/>
-        /// class.
+        ///  Initializes a new instance of the <see cref='DataGrid'/>
+        ///  class.
         /// </summary>
         public DataGrid() : base()
         {
@@ -1379,7 +1380,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='BackColor'/> property should be
+        ///  Indicates whether the <see cref='BackColor'/> property should be
         ///  persisted.
         /// </summary>
         internal override bool ShouldSerializeBackColor()
@@ -2495,17 +2496,17 @@ namespace System.Windows.Forms
                     EndEdit();
                 }
 
-                Interop.RECT[] rects = CreateScrollableRegion(scroll);
+                RECT[] rects = CreateScrollableRegion(scroll);
                 ScrollRectangles(rects, change);
                 OnScroll(EventArgs.Empty);
             }
         }
 
-        private void ScrollRectangles(Interop.RECT[] rects, int change)
+        private void ScrollRectangles(RECT[] rects, int change)
         {
             if (rects != null)
             {
-                Interop.RECT scroll;
+                RECT scroll;
                 if (isRightToLeft())
                 {
                     change = -change;
@@ -3248,7 +3249,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the value of a specified <see cref='DataGridCell'/>.
+        ///  Gets or sets the value of a specified <see cref='DataGridCell'/>.
         /// </summary>
         public object this[DataGridCell cell]
         {
@@ -3772,7 +3773,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='RowHeaderClick'/> event.
+        ///  Raises the <see cref='RowHeaderClick'/> event.
         /// </summary>
         protected void OnRowHeaderClick(EventArgs e)
         {
@@ -4180,8 +4181,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Enter'/>
-        /// event.
+        ///  Raises the <see cref='Control.Enter'/>
+        ///  event.
         /// </summary>
         protected override void OnEnter(EventArgs e)
         {
@@ -4196,8 +4197,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Leave'/>
-        /// event.
+        ///  Raises the <see cref='Control.Leave'/>
+        ///  event.
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
@@ -4254,7 +4255,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyPress'/> event.
+        ///  Raises the <see cref='Control.KeyPress'/> event.
         /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs kpe)
         {
@@ -4275,7 +4276,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseDown'/> event.
+        ///  Raises the <see cref='Control.MouseDown'/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -4481,8 +4482,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates the <see cref='Control.MouseLeave'/>
-        /// event.
+        ///  Creates the <see cref='Control.MouseLeave'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -4506,8 +4507,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseMove'/>
-        /// event.
+        ///  Raises the <see cref='Control.MouseMove'/>
+        ///  event.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -4626,7 +4627,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseUp'/> event.
+        ///  Raises the <see cref='Control.MouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
@@ -4670,7 +4671,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseWheel'/> event.
+        ///  Raises the <see cref='Control.MouseWheel'/> event.
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -4730,8 +4731,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Paint'/>
-        /// event.
+        ///  Raises the <see cref='Control.Paint'/>
+        ///  event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs pe)
         {
@@ -4817,7 +4818,7 @@ namespace System.Windows.Forms
         // Since Win32 only invalidates the area that gets uncovered,
         // we have to manually invalidate the old border area
         /// <summary>
-        /// Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -6311,7 +6312,7 @@ namespace System.Windows.Forms
         ///  This method is invoked whenever the DataGrid needs
         ///  this scrollable region.
         /// </summary>
-        private Interop.RECT[] CreateScrollableRegion(Rectangle scroll)
+        private RECT[] CreateScrollableRegion(Rectangle scroll)
         {
             if (cachedScrollableRegion != null)
             {
@@ -6425,11 +6426,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
+            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            Interop.Gdi32.SelectObject(dc, saveBrush);
-            Interop.Gdi32.DeleteObject(halftone);
-            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Gdi32.SelectObject(dc, saveBrush);
+            Gdi32.DeleteObject(halftone);
+            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -7059,8 +7060,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a <see cref='T:System.Drawing.Rectangle'/>
-        /// that specifies the four corners of the selected cell.
+        ///  Gets a <see cref='T:System.Drawing.Rectangle'/>
+        ///  that specifies the four corners of the selected cell.
         /// </summary>
         public Rectangle GetCurrentCellBounds()
         {
@@ -7069,7 +7070,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by row and column number.
+        ///  Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by row and column number.
         /// </summary>
         public Rectangle GetCellBounds(int row, int col)
         {
@@ -7082,7 +7083,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by <see cref='DataGridCell'/>.
+        ///  Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by <see cref='DataGridCell'/>.
         /// </summary>
         public Rectangle GetCellBounds(DataGridCell dgc)
         {
@@ -9165,7 +9166,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessKeyPreview(ref Message m)
         {
-            if (m.Msg == Interop.WindowMessages.WM_KEYDOWN)
+            if (m.Msg == WindowMessages.WM_KEYDOWN)
             {
                 KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
                 switch (ke.KeyCode)
@@ -9194,7 +9195,7 @@ namespace System.Windows.Forms
                 // Ctrl-Tab will be sent as a tab paired w/ a control on the KeyUp message
                 //
             }
-            else if (m.Msg == Interop.WindowMessages.WM_KEYUP)
+            else if (m.Msg == WindowMessages.WM_KEYUP)
             {
                 KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
                 if (ke.KeyCode == Keys.Tab)
@@ -9604,7 +9605,7 @@ namespace System.Windows.Forms
                     rowsRect = Rectangle.Union(rowsRect, layout.RowHeaders);
                 }
 
-                Interop.RECT scrollArea = rowsRect;
+                RECT scrollArea = rowsRect;
                 SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, deltaY, ref scrollArea, ref scrollArea);
                 OnScroll(EventArgs.Empty);
 
@@ -9900,7 +9901,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Interop.RECT scrollRECT = new Rectangle(underParentRows.X, underParentRows.Y - layout.ParentRows.Height, underParentRows.Width, underParentRows.Height + layout.ParentRows.Height);
+                RECT scrollRECT = new Rectangle(underParentRows.X, underParentRows.Y - layout.ParentRows.Height, underParentRows.Width, underParentRows.Height + layout.ParentRows.Height);
 
                 SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, -parentRowsRect.Height, ref scrollRECT, ref scrollRECT);
 
@@ -10415,7 +10416,7 @@ namespace System.Windows.Forms
             internal int col;
 
             /// <summary>
-            /// Allows the <see cref='HitTestInfo'/> object to inform you the
+            ///  Allows the <see cref='HitTestInfo'/> object to inform you the
             ///  extent of the grid.
             /// </summary>
             public static readonly HitTestInfo Nowhere = new HitTestInfo();
@@ -10456,7 +10457,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the part of the <see cref='DataGrid'/> control, other than the row or column, that was
+            ///  Gets the part of the <see cref='DataGrid'/> control, other than the row or column, that was
             ///  clicked.
             /// </summary>
             public HitTestType Type
@@ -10482,7 +10483,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the hash code for the <see cref='HitTestInfo'/> instance.
+            ///  Gets the hash code for the <see cref='HitTestInfo'/> instance.
             /// </summary>
             public override int GetHashCode() => HashCode.Combine(type, row, col);
 
@@ -10496,8 +10497,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the part of the <see cref='DataGrid'/>
-        /// control the user has clicked.<
+        ///  Specifies the part of the <see cref='DataGrid'/>
+        ///  control the user has clicked.<
         /// </summary>
         [Flags]
         public enum HitTestType

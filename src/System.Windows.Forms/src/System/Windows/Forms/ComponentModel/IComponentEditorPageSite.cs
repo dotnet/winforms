@@ -5,17 +5,17 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// The site for a ComponentEditorPage.
+    ///  The site for a ComponentEditorPage.
     /// </summary>
     public interface IComponentEditorPageSite
     {
         /// <summary>
-        /// Returns the parent control for the page window.
+        ///  Returns the parent control for the page window.
         /// </summary>
         Control GetControl();
 
         /// <summary>
-        /// Notifies the site that the editor is in dirty state.
+        ///  Notifies the site that the editor is in dirty state.
         /// </summary>
         void SetDirty();
     }

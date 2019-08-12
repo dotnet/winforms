@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Custom ContextMenu section for ToolStripMenuItems.
+    ///  Custom ContextMenu section for ToolStripMenuItems.
     /// </summary>
     internal class TemplateNodeCustomMenuItemCollection : CustomMenuItemCollection
     {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Immediate parent - can be ToolStrip if the Item is on the toplevel
+        ///  Immediate parent - can be ToolStrip if the Item is on the toplevel
         /// </summary>
         private ToolStrip ParentTool
         {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Insert Item into ToolStrip.
+        ///  Insert Item into ToolStrip.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
         private void InsertToolStripItem(Type t)

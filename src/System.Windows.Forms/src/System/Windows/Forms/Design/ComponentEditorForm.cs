@@ -9,11 +9,12 @@ using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
+    ///  Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
     /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch)
@@ -697,16 +698,16 @@ namespace System.Windows.Forms.Design
                     Debug.Assert(_hbrushDither != IntPtr.Zero,
                                  "Unable to created dithered brush. Page selector UI will not be correct");
 
-                    Interop.Gdi32.DeleteObject(hbitmapTemp);
+                    Gdi32.DeleteObject(hbitmapTemp);
                 }
             }
 
-            private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, Interop.RECT rcIn,
+            private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, RECT rcIn,
                                         int state, int backColor, int textColor)
             {
                 Size size = new Size();
-                var rc2 = new Interop.RECT();
-                var rc = new Interop.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
+                var rc2 = new RECT();
+                var rc = new RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
                 ImageList imagelist = ImageList;
                 IntPtr hfontOld = IntPtr.Zero;
 
@@ -714,7 +715,7 @@ namespace System.Windows.Forms.Design
                 // when the item is being tracked
                 if ((state & STATE_HOT) != 0)
                 {
-                    hfontOld = Interop.Gdi32.SelectObject(dc, Parent.FontHandle);
+                    hfontOld = Gdi32.SelectObject(dc, Parent.FontHandle);
                     GC.KeepAlive(Parent);
                 }
 
@@ -731,7 +732,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Get the height of the font
-                Interop.Gdi32.GetTextExtentPoint32W(dc, itemText, itemText.Length, ref size);
+                Gdi32.GetTextExtentPoint32W(dc, itemText, itemText.Length, ref size);
 
                 // Draw the caption
                 rc2.left = rc.left + SIZE_ICON_X + 2 * PADDING_HORZ;
@@ -739,12 +740,12 @@ namespace System.Windows.Forms.Design
                 rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), textColor);
-                Interop.User32.DrawTextW(
+                User32.DrawTextW(
                     dc,
                     itemText,
                     itemText.Length,
                     ref rc2,
-                    Interop.User32.TextFormatFlags.DT_LEFT | Interop.User32.TextFormatFlags.DT_VCENTER | Interop.User32.TextFormatFlags.DT_END_ELLIPSIS | Interop.User32.TextFormatFlags.DT_NOPREFIX);
+                    User32.TextFormatFlags.DT_LEFT | User32.TextFormatFlags.DT_VCENTER | User32.TextFormatFlags.DT_END_ELLIPSIS | User32.TextFormatFlags.DT_NOPREFIX);
 
                 SafeNativeMethods.ImageList_Draw(new HandleRef(imagelist, imagelist.Handle), imageIndex, new HandleRef(null, dc),
                                        PADDING_HORZ, rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
@@ -782,7 +783,7 @@ namespace System.Windows.Forms.Design
 
                 if (hfontOld != IntPtr.Zero)
                 {
-                    Interop.Gdi32.SelectObject(dc, hfontOld);
+                    Gdi32.SelectObject(dc, hfontOld);
                 }
             }
 
@@ -853,14 +854,14 @@ namespace System.Windows.Forms.Design
 
                 if (!RecreatingHandle && (_hbrushDither != IntPtr.Zero))
                 {
-                    Interop.Gdi32.DeleteObject(_hbrushDither);
+                    Gdi32.DeleteObject(_hbrushDither);
                     _hbrushDither = IntPtr.Zero;
                 }
             }
 
-            private void FillRectDither(IntPtr dc, Interop.RECT rc)
+            private void FillRectDither(IntPtr dc, RECT rc)
             {
-                IntPtr hbrushOld = Interop.Gdi32.SelectObject(dc, _hbrushDither);
+                IntPtr hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
 
                 if (hbrushOld != IntPtr.Zero)
                 {
@@ -877,7 +878,7 @@ namespace System.Windows.Forms.Design
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY)
+                if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
                 {
                     NativeMethods.NMHDR nmh = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     if (nmh.code == NativeMethods.NM_CUSTOMDRAW)

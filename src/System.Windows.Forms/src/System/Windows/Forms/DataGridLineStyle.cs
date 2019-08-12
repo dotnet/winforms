@@ -5,17 +5,17 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the style of gridlines in a <see cref='DataGrid'/>.
+    ///  Specifies the style of gridlines in a <see cref='DataGrid'/>.
     /// </summary>
     public enum DataGridLineStyle
     {
         /// <summary>
-        /// No gridlines between cells.
+        ///  No gridlines between cells.
         /// </summary>
         None,
 
         /// <summary>
-        /// Solid gridlines between cells.
+        ///  Solid gridlines between cells.
         /// </summary>
         Solid
     }

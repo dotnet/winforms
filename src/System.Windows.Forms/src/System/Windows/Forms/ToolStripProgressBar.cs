@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Create a strongly typed accessor for the class
+        ///  Create a strongly typed accessor for the class
         /// </summary>
         /// <value></value>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specify what size you want the item to start out at
+        ///  Specify what size you want the item to start out at
         /// </summary>
         /// <value></value>
         protected override Size DefaultSize
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specify how far from the edges you want to be
+        ///  Specify how far from the edges you want to be
         /// </summary>
         /// <value></value>
         protected internal override Padding DefaultMargin
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Wrap some commonly used properties
+        ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
         [
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Wrap some commonly used properties
+        ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
         [
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the property.
+        ///  Hide the property.
         /// </summary>
         [
         Browsable(false),
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Wrap some commonly used properties
+        ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
         [
@@ -315,7 +315,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
             remove => base.KeyUp -= value;
         }
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -366,7 +366,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -386,7 +386,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),

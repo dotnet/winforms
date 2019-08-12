@@ -9,7 +9,7 @@ using System.Windows.Forms.Design;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// ToolStripOverflowButton
+    ///  ToolStripOverflowButton
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.None)]
     public class ToolStripOverflowButton : ToolStripDropDownButton

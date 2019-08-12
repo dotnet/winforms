@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         private static readonly object EventCheckStateChanged = new object();
 
         /// <summary>
-        /// Summary of ToolStripButton.
+        ///  Summary of ToolStripButton.
         /// </summary>
         public ToolStripButton()
         {
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of CanSelect.
+        ///  Summary of CanSelect.
         /// </summary>
         public override bool CanSelect
         {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Gets or sets a value indicating whether the item is checked.
+            ///  Gets or sets a value indicating whether the item is checked.
             /// </summary>
         [
         DefaultValue(false),
@@ -117,8 +117,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets
-        /// or sets a value indicating whether the check box is checked.
+        ///  Gets
+        ///  or sets a value indicating whether the check box is checked.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -151,9 +151,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the
-        /// value of the <see cref='CheckBox.Checked'/>
-        /// property changes.
+        ///  Occurs when the
+        ///  value of the <see cref='CheckBox.Checked'/>
+        ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged
@@ -162,9 +162,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventCheckedChanged, value);
         }
         /// <summary>
-        /// Occurs when the
-        /// value of the <see cref='CheckBox.CheckState'/>
-        /// property changes.
+        ///  Occurs when the
+        ///  value of the <see cref='CheckBox.CheckState'/>
+        ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged
@@ -200,8 +200,8 @@ namespace System.Windows.Forms
 
         /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CreateAccessibilityInstance"]/*' />
         /// <devdoc>
-        /// constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
-        /// should not call base.CreateAccessibilityObject.
+        ///  constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
+        ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called by all constructors of ToolStripButton.
+        ///  Called by all constructors of ToolStripButton.
         /// </summary>
         private void Initialize()
         {
@@ -229,8 +229,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ToolStripMenuItem.CheckedChanged'/>
-        /// event.
+        ///  Raises the <see cref='ToolStripMenuItem.CheckedChanged'/>
+        ///  event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
         {
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ToolStripMenuItem.CheckStateChanged'/> event.
+        ///  Raises the <see cref='ToolStripMenuItem.CheckStateChanged'/> event.
         /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e)
         {
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
+        ///  Inheriting classes should override this method to handle this event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// An implementation of AccessibleChild for use with ToolStripItems
+        ///  An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
         [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripButtonAccessibleObject : ToolStripItemAccessibleObject

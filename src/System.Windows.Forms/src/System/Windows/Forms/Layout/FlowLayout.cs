@@ -87,8 +87,8 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Both LayoutCore and GetPreferredSize forward to this method.
-        /// The measureOnly flag determines which behavior we get.
+        ///  Both LayoutCore and GetPreferredSize forward to this method.
+        ///  The measureOnly flag determines which behavior we get.
         /// </summary>
         private Size TryCalculatePreferredSize(IArrangedElement container, Rectangle displayRect, bool measureOnly)
         {
@@ -147,9 +147,9 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Just forwards to TryCalculatePreferredSizeRow. This will layout elements from the start index to the end
-        /// index. RowBounds was computed by a call to measure row and is used for alignment/boxstretch.
-        /// See the ElementProxy class for an explaination of the elementProxy parameter.
+        ///  Just forwards to TryCalculatePreferredSizeRow. This will layout elements from the start index to the end
+        ///  index. RowBounds was computed by a call to measure row and is used for alignment/boxstretch.
+        ///  See the ElementProxy class for an explaination of the elementProxy parameter.
         /// </summary>
         private void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
         {
@@ -158,10 +158,10 @@ namespace System.Windows.Forms.Layout
         }
 
         // <summary>
-        /// Just forwards to TryCalculatePreferredSizeRow. breakIndex is the index of the first control not to
-        /// fit in the displayRectangle. The returned Size is the size required to layout the
-        /// controls from startIndex up to but not including breakIndex. See the ElementProxy
-        /// class for an explaination of the elementProxy parameter.
+        ///  Just forwards to TryCalculatePreferredSizeRow. breakIndex is the index of the first control not to
+        ///  fit in the displayRectangle. The returned Size is the size required to layout the
+        ///  controls from startIndex up to but not including breakIndex. See the ElementProxy
+        ///  class for an explaination of the elementProxy parameter.
         /// <summary>
         private Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
         {
@@ -169,8 +169,8 @@ namespace System.Windows.Forms.Layout
         }
 
         // <summary>
-        /// LayoutRow and MeasureRow both forward to this method. The measureOnly flag
-        /// determines which behavior we get.
+        ///  LayoutRow and MeasureRow both forward to this method. The measureOnly flag
+        ///  determines which behavior we get.
         /// </summary>
         private Size TryCalculatePreferredSizeRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds, out int breakIndex, bool measureOnly)
         {
@@ -321,21 +321,21 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// The goal of the FlowLayout Engine is to always layout from left to right. In order to achieve different
-        /// flow directions we have "Proxies" for the Container (the thing laying out) and for setting the bounds of the
-        /// child elements.
+        ///  The goal of the FlowLayout Engine is to always layout from left to right. In order to achieve different
+        ///  flow directions we have "Proxies" for the Container (the thing laying out) and for setting the bounds of the
+        ///  child elements.
         ///
-        /// We have a base ContainerProxy, and derived proxies for all of the flow directions. In order to achieve flow direction of RightToLeft,
-        /// the RightToLeft container proxy detects when we're going to set the bounds and translates it to the right.
+        ///  We have a base ContainerProxy, and derived proxies for all of the flow directions. In order to achieve flow direction of RightToLeft,
+        ///  the RightToLeft container proxy detects when we're going to set the bounds and translates it to the right.
         ///
-        /// In order to do a vertical flow, such as TopDown, we pretend we're laying out horizontally. The main way this is
-        /// achieved is through the use of the VerticalElementProxy, which flips all rectangles and sizes.
+        ///  In order to do a vertical flow, such as TopDown, we pretend we're laying out horizontally. The main way this is
+        ///  achieved is through the use of the VerticalElementProxy, which flips all rectangles and sizes.
         ///
-        /// In order to do BottomUp, we combine the same techniques of TopDown with the RightToLeft flow. That is,
-        /// we override the bounds, and translate from left to right, AND use the VerticalElementProxy.
+        ///  In order to do BottomUp, we combine the same techniques of TopDown with the RightToLeft flow. That is,
+        ///  we override the bounds, and translate from left to right, AND use the VerticalElementProxy.
         ///
-        /// A final note: This layout engine does all its RightToLeft translation itself. It does not support
-        /// WS_EX_LAYOUTRTL (OS mirroring).
+        ///  A final note: This layout engine does all its RightToLeft translation itself. It does not support
+        ///  WS_EX_LAYOUTRTL (OS mirroring).
         /// </summary>
         private class ContainerProxy
         {
@@ -398,8 +398,8 @@ namespace System.Windows.Forms.Layout
             public IArrangedElement Container => _container;
 
             /// <summary>
-            /// Specifies if we're TopDown or BottomUp and should use the VerticalElementProxy to
-            /// translate
+            ///  Specifies if we're TopDown or BottomUp and should use the VerticalElementProxy to
+            ///  translate
             /// </summary>
             protected virtual bool IsVertical => false;
 
@@ -407,7 +407,7 @@ namespace System.Windows.Forms.Layout
 
             /// <summary>
             // Returns the display rectangle of the container - this will be flipped if the
-            /// layout is a vertical layout.
+            ///  layout is a vertical layout.
             /// </summary>
             public Rectangle DisplayRect
             {
@@ -425,9 +425,9 @@ namespace System.Windows.Forms.Layout
             }
 
             /// <summary>
-            /// Returns the element proxy to use. A vertical element proxy will typically flip
-            /// all the sizes and rectangles so that it can fake being laid out in a
-            /// horizontal manner.
+            ///  Returns the element proxy to use. A vertical element proxy will typically flip
+            ///  all the sizes and rectangles so that it can fake being laid out in a
+            ///  horizontal manner.
             /// </summary>
             public ElementProxy ElementProxy
             {
@@ -443,8 +443,8 @@ namespace System.Windows.Forms.Layout
             }
 
             /// <summary>
-            /// Used when you want to translate from right to left, but preserve Margin.Righ
-            /// and Margin.Left.
+            ///  Used when you want to translate from right to left, but preserve Margin.Righ
+            ///  and Margin.Left.
             /// </summary>
             protected Rectangle RTLTranslateNoMarginSwap(Rectangle bounds)
             {
@@ -502,11 +502,11 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// For TopDown we're really still laying out horizontally. The element proxy is the one
-        /// which flips all the rectangles and rotates itself into the vertical orientation.
-        /// to achieve right to left, we actually have to do something non-intuitive - instead of
-        /// sending the control to the right, we have to send the control to the bottom. When the rotation
-        /// is complete - that's equivilant to pushing it to the right.
+        ///  For TopDown we're really still laying out horizontally. The element proxy is the one
+        ///  which flips all the rectangles and rotates itself into the vertical orientation.
+        ///  to achieve right to left, we actually have to do something non-intuitive - instead of
+        ///  sending the control to the right, we have to send the control to the bottom. When the rotation
+        ///  is complete - that's equivilant to pushing it to the right.
         /// </summary>
         private class TopDownProxy : ContainerProxy
         {
@@ -526,15 +526,15 @@ namespace System.Windows.Forms.Layout
             protected override bool IsVertical => true;
 
             /// <summary>
-            /// For BottomUp we're really still laying out horizontally. The element proxy is the one
-            /// which flips all the rectangles and rotates itself into the vertical orientation.
-            /// BottomUp is the analog of RightToLeft - meaning, in order to place a control at the bottom,
-            /// the control has to be placed to the right. When the rotation is complete, that's the equivilant of
-            /// pushing it to the right. This must be done all the time.
+            ///  For BottomUp we're really still laying out horizontally. The element proxy is the one
+            ///  which flips all the rectangles and rotates itself into the vertical orientation.
+            ///  BottomUp is the analog of RightToLeft - meaning, in order to place a control at the bottom,
+            ///  the control has to be placed to the right. When the rotation is complete, that's the equivilant of
+            ///  pushing it to the right. This must be done all the time.
             ///
-            /// To achieve right to left, we actually have to do something non-intuitive - instead of
-            /// sending the control to the right, we have to send the control to the bottom. When the rotation
-            /// is complete - that's equivilant to pushing it to the right.
+            ///  To achieve right to left, we actually have to do something non-intuitive - instead of
+            ///  sending the control to the right, we have to send the control to the bottom. When the rotation
+            ///  is complete - that's equivilant to pushing it to the right.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -548,9 +548,9 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// ElementProxy inserts a level of indirection between the LayoutEngine
-        /// and the IArrangedElement that allows us to use the same code path
-        /// for Vertical and Horizontal flow layout. (see VerticalElementProxy)
+        ///  ElementProxy inserts a level of indirection between the LayoutEngine
+        ///  and the IArrangedElement that allows us to use the same code path
+        ///  for Vertical and Horizontal flow layout. (see VerticalElementProxy)
         /// </summary>
         private class ElementProxy
         {
@@ -625,9 +625,9 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// VerticalElementProxy swaps Top/Left, Bottom/Right, and other properties
-        /// so that the same code path used for horizantal flow can be applied to
-        /// vertical flow.
+        ///  VerticalElementProxy swaps Top/Left, Bottom/Right, and other properties
+        ///  so that the same code path used for horizantal flow can be applied to
+        ///  vertical flow.
         /// </summary>
         private class VerticalElementProxy : ElementProxy
         {

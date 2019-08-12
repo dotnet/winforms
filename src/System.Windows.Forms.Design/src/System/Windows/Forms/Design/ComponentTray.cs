@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
@@ -15,11 +14,12 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides the component tray UI for the form designer.
+    ///  Provides the component tray UI for the form designer.
     /// </summary>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         private IToolboxService toolboxService; // cached for drag/drop
 
         /// <summary>
-        /// Provides drag and drop functionality through OLE.
+        ///  Provides drag and drop functionality through OLE.
         /// </summary>
         internal OleDragDropHandler oleDragDropHandler; // handler class for ole drag drop operations.
 
@@ -73,9 +73,9 @@ namespace System.Windows.Forms.Design
         // Empty class for build time dependancy
 
         /// <summary>
-        /// Creates a new component tray.  The component tray
-        /// will monitor component additions and removals and create
-        /// appropriate UI objects in its space.
+        ///  Creates a new component tray.  The component tray
+        ///  will monitor component additions and removals and create
+        ///  appropriate UI objects in its space.
         /// </summary>
         public ComponentTray(IDesigner mainDesigner, IServiceProvider serviceProvider)
         {
@@ -444,7 +444,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the number of compnents contained within this tray.
+        ///  Gets the number of compnents contained within this tray.
         /// </summary>
         public int ComponentCount
         {
@@ -467,7 +467,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines whether the tray will show large icon view or not.
+        ///  Determines whether the tray will show large icon view or not.
         /// </summary>
         public bool ShowLargeIcons
         {
@@ -678,7 +678,7 @@ namespace System.Windows.Forms.Design
         void ISelectionUIHandler.OleDragLeave() => GetOleDragHandler().DoOleDragLeave();
 
         /// <summary>
-        /// Adds a component to the tray.
+        ///  Adds a component to the tray.
         /// </summary>
         public virtual void AddComponent(IComponent component)
         {
@@ -803,10 +803,10 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method determines if a UI representation for the given component should be provided.
-        /// If it returns true, then the component will get a glyph in the tray area.  If it returns
-        /// false, then the component will not actually be added to the tray.  The default
-        /// implementation looks for DesignTimeVisibleAttribute.Yes on the component's class.
+        ///  This method determines if a UI representation for the given component should be provided.
+        ///  If it returns true, then the component will get a glyph in the tray area.  If it returns
+        ///  false, then the component will not actually be added to the tray.  The default
+        ///  implementation looks for DesignTimeVisibleAttribute.Yes on the component's class.
         /// </summary>
         protected virtual bool CanDisplayComponent(IComponent component)
         {
@@ -825,7 +825,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Displays the given exception to the user.
+        ///  Displays the given exception to the user.
         /// </summary>
         protected void DisplayError(Exception e)
         {
@@ -846,7 +846,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of the resources (other than memory) used by the component tray object.
+        ///  Disposes of the resources (other than memory) used by the component tray object.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -920,10 +920,10 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Similar to GetNextControl on Control, this method returns the next
-        /// component in the tray, given a starting component.  It will return
-        /// null if the end (or beginning, if forward is false) of the list
-        /// is encountered.
+        ///  Similar to GetNextControl on Control, this method returns the next
+        ///  component in the tray, given a starting component.  It will return
+        ///  null if the end (or beginning, if forward is false) of the list
+        ///  is encountered.
         /// </summary>
         public IComponent GetNextComponent(IComponent component, bool forward)
         {
@@ -951,8 +951,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor method for the location extender property.  We offer this extender
-        /// to all non-visual components.
+        ///  Accessor method for the location extender property.  We offer this extender
+        ///  to all non-visual components.
         /// </summary>
         [Category("Layout")]
         [Localizable(false)]
@@ -976,8 +976,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor method for the location extender property.  We offer this extender
-        /// to all non-visual components.
+        ///  Accessor method for the location extender property.  We offer this extender
+        ///  to all non-visual components.
         /// </summary>
         [Category("Layout")]
         [Localizable(false)]
@@ -998,7 +998,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the requsted service type.
+        ///  Gets the requsted service type.
         /// </summary>
         protected override object GetService(Type serviceType)
         {
@@ -1012,7 +1012,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns true if the given componenent is being shown on the tray.
+        ///  Returns true if the given componenent is being shown on the tray.
         /// </summary>
         public bool IsTrayComponent(IComponent comp)
         {
@@ -1052,8 +1052,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
-        /// Call base.onGiveFeedback to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.onGiveFeedback to send this event to any registered event listeners.
         /// </summary>
         protected override void OnGiveFeedback(GiveFeedbackEventArgs gfevent)
         {
@@ -1062,8 +1062,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called in response to a drag drop for OLE drag and drop.  Here we
-        /// drop a toolbox component on our parent control.
+        ///  Called in response to a drag drop for OLE drag and drop.  Here we
+        ///  drop a toolbox component on our parent control.
         /// </summary>
         protected override void OnDragDrop(DragEventArgs de)
         {
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called in response to a drag enter for OLE drag and drop.
+        ///  Called in response to a drag enter for OLE drag and drop.
         /// </summary>
         protected override void OnDragEnter(DragEventArgs de)
         {
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a drag-drop operation leaves the control designer view
+        ///  Called when a drag-drop operation leaves the control designer view
         /// </summary>
         protected override void OnDragLeave(EventArgs e)
         {
@@ -1155,7 +1155,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when a drag drop object is dragged over the control designer view
+        ///  Called when a drag drop object is dragged over the control designer view
         /// </summary>
         protected override void OnDragOver(DragEventArgs de)
         {
@@ -1171,7 +1171,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Forces the layout of any docked or anchored child controls.
+        ///  Forces the layout of any docked or anchored child controls.
         /// </summary>
         protected override void OnLayout(LayoutEventArgs levent)
         {
@@ -1182,9 +1182,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is called when we lose capture.  Here we get rid of any
-        /// rubber band we were drawing.  You should put any cleanup
-        /// code in here.
+        ///  This is called when we lose capture.  Here we get rid of any
+        ///  rubber band we were drawing.  You should put any cleanup
+        ///  code in here.
         /// </summary>
         protected virtual void OnLostCapture()
         {
@@ -1211,8 +1211,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
-        /// Call base.onMouseDown to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.onMouseDown to send this event to any registered event listeners.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -1288,8 +1288,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
-        /// Call base.onMouseMove to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.onMouseMove to send this event to any registered event listeners.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -1319,8 +1319,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event.
-        /// Call base.onMouseUp to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event.
+        ///  Call base.onMouseUp to send this event to any registered event listeners.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
@@ -1492,8 +1492,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Sets the cursor.  You may override this to set your own
-        /// cursor.
+        ///  Sets the cursor.  You may override this to set your own
+        ///  cursor.
         /// </summary>
         protected virtual void OnSetCursor()
         {
@@ -1508,7 +1508,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Removes a component from the tray.
+        ///  Removes a component from the tray.
         /// </summary>
         public virtual void RemoveComponent(IComponent component)
         {
@@ -1539,8 +1539,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor method for the location extender property.  We offer this extender
-        /// to all non-visual components.
+        ///  Accessor method for the location extender property.  We offer this extender
+        ///  to all non-visual components.
         /// </summary>
         public void SetLocation(IComponent receiver, Point location)
         {
@@ -1569,8 +1569,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Accessor method for the location extender property.  We offer this extender
-        /// to all non-visual components.
+        ///  Accessor method for the location extender property.  We offer this extender
+        ///  to all non-visual components.
         /// </summary>
         public void SetTrayLocation(IComponent receiver, Point location)
         {
@@ -1597,21 +1597,21 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We override our base class's WndProc to monitor certain messages.
+        ///  We override our base class's WndProc to monitor certain messages.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_CANCELMODE:
+                case WindowMessages.WM_CANCELMODE:
                     // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel any pending drag operation!
                     OnLostCapture();
                     break;
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     OnSetCursor();
                     return;
-                case Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_VSCROLL:
                     // When we scroll, we reposition a control without causing a property change event.  Therefore, we must tell the selection UI service to sync itself.
                     base.WndProc(ref m);
                     if (selectionUISvc != null)
@@ -1619,11 +1619,11 @@ namespace System.Windows.Forms.Design
                         selectionUISvc.SyncSelection();
                     }
                     return;
-                case Interop.WindowMessages.WM_STYLECHANGED:
+                case WindowMessages.WM_STYLECHANGED:
                     // When the scroll bars first appear, we need to invalidate so we properly paint our grid.
                     Invalidate();
                     break;
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     // Pop a context menu for the composition designer.
                     int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
                     int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
@@ -1636,18 +1636,14 @@ namespace System.Windows.Forms.Design
                     }
                     OnContextMenu(x, y, true);
                     break;
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     if (glyphManager != null)
                     {
                         // Get a hit test on any glyhs that we are managing this way - we know where to route appropriate  messages
                         Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
-                        NativeMethods.POINT pt1 = new NativeMethods.POINT
-                        {
-                            x = 0,
-                            y = 0
-                        };
-                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt1, 1);
-                        pt.Offset(pt1.x, pt1.y);
+                        var pt1 = new Point();
+                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        pt.Offset(pt1.X, pt1.Y);
                         glyphManager.GetHitTest(pt);
                     }
                     base.WndProc(ref m);
@@ -1924,7 +1920,7 @@ namespace System.Windows.Forms.Design
             internal bool _fRecompute = false; // This flag tells the TrayControl that it needs to retrieve the font and the background color before painting.
 
             /// <summary>
-            /// Creates a new TrayControl based on the component.
+            ///  Creates a new TrayControl based on the component.
             /// </summary>
             public TrayControl(ComponentTray tray, IComponent component)
             {
@@ -1968,7 +1964,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the compnent this control is representing.
+            ///  Retrieves the compnent this control is representing.
             /// </summary>
             public IComponent Component
             {
@@ -1992,7 +1988,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Adjusts the size of the control based on the contents.
+            ///  Adjusts the size of the control based on the contents.
             /// </summary>
             // CONSIDER: this method gets called three or four times per component, and is even reentrant (CreateGraphics can force handle creation, and OnCreateHandle calls this method).  There's probably a better way to do this, but since this doesn't seem to be on the critical path, I'm not going to lose sleep over it.
             private void AdjustSize()
@@ -2037,7 +2033,7 @@ namespace System.Windows.Forms.Design
             protected override AccessibleObject CreateAccessibilityInstance() => new TrayControlAccessibleObject(this, _tray);
 
             /// <summary>
-            /// Destroys this control. Views automatically destroy themselves when they are removed from the design container.
+            ///  Destroys this control. Views automatically destroy themselves when they are removed from the design container.
             /// </summary>
             protected override void Dispose(bool disposing)
             {
@@ -2065,7 +2061,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the tray control object for the given component.
+            ///  Retrieves the tray control object for the given component.
             /// </summary>
             public static TrayControl FromComponent(IComponent component)
             {
@@ -2089,7 +2085,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Delegate that is called in response to a name change.  Here we update our own stashed version of the name, recalcuate our size and repaint.
+            ///  Delegate that is called in response to a name change.  Here we update our own stashed version of the name, recalcuate our size and repaint.
             /// </summary>
             private void OnComponentRename(object sender, ComponentRenameEventArgs e)
             {
@@ -2101,7 +2097,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Overrides handle creation notification for a control.  Here we just ensure that we're the proper size.
+            ///  Overrides handle creation notification for a control.  Here we just ensure that we're the proper size.
             /// </summary>
             protected override void OnHandleCreated(EventArgs e)
             {
@@ -2110,7 +2106,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called in response to a double-click of the left mouse button.  The default behavior here calls onDoubleClick on IMouseHandler
+            ///  Called in response to a double-click of the left mouse button.  The default behavior here calls onDoubleClick on IMouseHandler
             /// </summary>
             protected override void OnDoubleClick(EventArgs e)
             {
@@ -2138,7 +2134,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Terminates our drag operation.
+            ///  Terminates our drag operation.
             /// </summary>
             private void OnEndDrag(bool cancel)
             {
@@ -2170,7 +2166,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the mouse button is pressed down.  Here, we provide drag support for the component.
+            ///  Called when the mouse button is pressed down.  Here, we provide drag support for the component.
             /// </summary>
             protected override void OnMouseDown(MouseEventArgs me)
             {
@@ -2200,7 +2196,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the mouse is moved over the component.  We update our drag information here if we're dragging the component around.
+            ///  Called when the mouse is moved over the component.  We update our drag information here if we're dragging the component around.
             /// </summary>
             protected override void OnMouseMove(MouseEventArgs me)
             {
@@ -2255,7 +2251,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the mouse button is released.  Here, we finish our drag if one was started.
+            ///  Called when the mouse button is released.  Here, we finish our drag if one was started.
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs me)
             {
@@ -2264,7 +2260,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when we are to display our context menu for this component.
+            ///  Called when we are to display our context menu for this component.
             /// </summary>
             private void OnContextMenu(int x, int y)
             {
@@ -2288,7 +2284,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Painting for our control.
+            ///  Painting for our control.
             /// </summary>
             protected override void OnPaint(PaintEventArgs e)
             {
@@ -2359,7 +2355,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Overrides control's FontChanged.  Here we re-adjust our size if the font changes.
+            ///  Overrides control's FontChanged.  Here we re-adjust our size if the font changes.
             /// </summary>
             protected override void OnFontChanged(EventArgs e)
             {
@@ -2368,7 +2364,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Overrides control's LocationChanged.  Here, we make sure that any glyphs associated with us are also relocated.
+            ///  Overrides control's LocationChanged.  Here, we make sure that any glyphs associated with us are also relocated.
             /// </summary>
             protected override void OnLocationChanged(EventArgs e)
             {
@@ -2379,7 +2375,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Overrides control's TextChanged.  Here we re-adjust our size if the font changes.
+            ///  Overrides control's TextChanged.  Here we re-adjust our size if the font changes.
             /// </summary>
             protected override void OnTextChanged(EventArgs e)
             {
@@ -2388,10 +2384,10 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called each time the cursor needs to be set.  The ControlDesigner behavior here will set the cursor to one of three things:
-            /// 1.  If the selection UI service shows a locked selection, or if there is no location property on the control, then the default arrow will be set.
-            /// 2.  Otherwise, the four headed arrow will be set to indicate that the component can be clicked and moved.
-            /// 3.  If the user is currently dragging a component, the crosshair cursor will be used instead of the four headed arrow.
+            ///  Called each time the cursor needs to be set.  The ControlDesigner behavior here will set the cursor to one of three things:
+            ///  1.  If the selection UI service shows a locked selection, or if there is no location property on the control, then the default arrow will be set.
+            ///  2.  Otherwise, the four headed arrow will be set to indicate that the component can be clicked and moved.
+            ///  3.  If the user is currently dragging a component, the crosshair cursor will be used instead of the four headed arrow.
             /// </summary>
             private void OnSetCursor()
             {
@@ -2490,7 +2486,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// This creates a method signature in the source code file for the default event on the component and navigates the user's cursor to that location.
+            ///  This creates a method signature in the source code file for the default event on the component and navigates the user's cursor to that location.
             /// </summary>
             public virtual void ViewDefaultEvent(IComponent component)
             {
@@ -2548,17 +2544,17 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// This method should be called by the extending designer for each message the control would normally receive.  This allows the designer to pre-process messages before allowing them to be routed to the control.
+            ///  This method should be called by the extending designer for each message the control would normally receive.  This allows the designer to pre-process messages before allowing them to be routed to the control.
             /// </summary>
             protected override void WndProc(ref Message m)
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_SETCURSOR:
+                    case WindowMessages.WM_SETCURSOR:
                         // We always handle setting the cursor ourselves.
                         OnSetCursor();
                         break;
-                    case Interop.WindowMessages.WM_CONTEXTMENU:
+                    case WindowMessages.WM_CONTEXTMENU:
                         // We must handle this ourselves.  Control only allows regular Windows Forms context menus, which doesn't do us much good.  Also, control's button up processing calls DefwndProc first, which causes a right mouse up to be routed as a WM_CONTEXTMENU.  If we don't respond to it here, this message will be bubbled up to our parent, which would pop up a container context menu instead of our own.
                         int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
                         int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
@@ -2571,18 +2567,14 @@ namespace System.Windows.Forms.Design
                         }
                         OnContextMenu(x, y);
                         break;
-                    case Interop.WindowMessages.WM_NCHITTEST:
+                    case WindowMessages.WM_NCHITTEST:
                         if (_tray.glyphManager != null)
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
                             Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
-                            NativeMethods.POINT pt1 = new NativeMethods.POINT
-                            {
-                                x = 0,
-                                y = 0
-                            };
-                            NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt1, 1);
-                            pt.Offset(pt1.x, pt1.y);
+                            var pt1 = new Point();
+                            NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                            pt.Offset(pt1.X, pt1.Y);
                             pt.Offset(Location.X, Location.Y);//offset the loc of the traycontrol -so now we're in comptray coords
                             _tray.glyphManager.GetHitTest(pt);
                         }
@@ -2638,7 +2630,7 @@ namespace System.Windows.Forms.Design
             private readonly BehaviorService _behaviorSvc;
 
             /// <summary>
-            /// Constructor that simply creates an empty adorner.
+            ///  Constructor that simply creates an empty adorner.
             /// </summary>
             public ComponentTrayGlyphManager(ISelectionService selSvc, BehaviorService behaviorSvc)
             {
@@ -2648,7 +2640,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// This is how we publically expose our glyph collection so that other designer services can 'add value'.
+            ///  This is how we publically expose our glyph collection so that other designer services can 'add value'.
             /// </summary>
             public GlyphCollection SelectionGlyphs
             {
@@ -2656,7 +2648,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Clears teh adorner of glyphs.
+            ///  Clears teh adorner of glyphs.
             /// </summary>
             public void Dispose()
             {
@@ -2668,7 +2660,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves a list of glyphs associated with the component.
+            ///  Retrieves a list of glyphs associated with the component.
             /// </summary>
             public GlyphCollection GetGlyphsForComponent(IComponent comp)
             {
@@ -2688,7 +2680,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called from the tray's NCHITTEST message in the WndProc. We use this to loop through our glyphs and identify which one is successfully hit tested.  From here, we know where to send our messages.
+            ///  Called from the tray's NCHITTEST message in the WndProc. We use this to loop through our glyphs and identify which one is successfully hit tested.  From here, we know where to send our messages.
             /// </summary>
             public Cursor GetHitTest(Point p)
             {
@@ -2706,7 +2698,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseDoubleClick(MouseEventArgs e)
             {
@@ -2718,7 +2710,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseDown(MouseEventArgs e)
             {
@@ -2730,7 +2722,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseMove(MouseEventArgs e)
             {
@@ -2742,7 +2734,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseUp(MouseEventArgs e)
             {
@@ -2754,7 +2746,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the comp tray or any tray control paints. This will simply enumerate through the glyphs in our  Adorner and ask them to paint
+            ///  Called when the comp tray or any tray control paints. This will simply enumerate through the glyphs in our  Adorner and ask them to paint
             /// </summary>
             public void OnPaintGlyphs(PaintEventArgs pe)
             {
@@ -2766,7 +2758,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when a tray control's location has changed. We'll loop through our glyphs and invalidate any that are associated with the component.
+            ///  Called when a tray control's location has changed. We'll loop through our glyphs and invalidate any that are associated with the component.
             /// </summary>
             public void UpdateLocation(TrayControl trayControl)
             {
@@ -2815,7 +2807,7 @@ namespace System.Windows.Forms.Design
             private Size _snapSize = Size.Empty;
 
             /// <summary>
-            /// Creates a new selection UI handler for the given component tray.
+            ///  Creates a new selection UI handler for the given component tray.
             /// </summary>
             public TraySelectionUIHandler(ComponentTray tray)
             {
@@ -2824,7 +2816,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the user has started the drag.
+            ///  Called when the user has started the drag.
             /// </summary>
             public override bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
             {
@@ -2834,7 +2826,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Called when the user has completed the drag.  The designer should remove any UI feedback it may be providing.
+            ///  Called when the user has completed the drag.  The designer should remove any UI feedback it may be providing.
             /// </summary>
             public override void EndDrag(object[] components, bool cancel)
             {
@@ -2843,7 +2835,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the base component for the selection handler.
+            ///  Retrieves the base component for the selection handler.
             /// </summary>
             protected override IComponent GetComponent()
             {
@@ -2851,7 +2843,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the base component's UI control for the selection handler.
+            ///  Retrieves the base component's UI control for the selection handler.
             /// </summary>
             protected override Control GetControl()
             {
@@ -2859,7 +2851,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the UI control for the given component.
+            ///  Retrieves the UI control for the given component.
             /// </summary>
             protected override Control GetControl(IComponent component)
             {
@@ -2867,7 +2859,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the current grid snap size we should snap objects to.
+            ///  Retrieves the current grid snap size we should snap objects to.
             /// </summary>
             protected override Size GetCurrentSnapSize()
             {
@@ -2875,7 +2867,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// We use this to request often-used services.
+            ///  We use this to request often-used services.
             /// </summary>
             protected override object GetService(Type serviceType)
             {
@@ -2883,7 +2875,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Determines if the selection UI handler should attempt to snap objects to a grid.
+            ///  Determines if the selection UI handler should attempt to snap objects to a grid.
             /// </summary>
             protected override bool GetShouldSnapToGrid()
             {
@@ -2891,7 +2883,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Given a rectangle, this updates the dimensions of it with any grid snaps and returns a new rectangle.  If no changes to the rectangle's size were needed, this may return the same rectangle.
+            ///  Given a rectangle, this updates the dimensions of it with any grid snaps and returns a new rectangle.  If no changes to the rectangle's size were needed, this may return the same rectangle.
             /// </summary>
             public override Rectangle GetUpdatedRect(Rectangle originalRect, Rectangle dragRect, bool updateSize)
             {
@@ -2899,7 +2891,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Asks the handler to set the appropriate cursor
+            ///  Asks the handler to set the appropriate cursor
             /// </summary>
             public override void SetCursor()
             {

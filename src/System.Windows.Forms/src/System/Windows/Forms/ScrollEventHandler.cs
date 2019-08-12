@@ -5,9 +5,9 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that handles the <see langword='Scroll'/> event
-    /// of a <see cref='ScrollBar'/>, <see cref='TrackBar'/>,
-    /// or <see cref='DataGrid'/>.
+    ///  Represents the method that handles the <see langword='Scroll'/> event
+    ///  of a <see cref='ScrollBar'/>, <see cref='TrackBar'/>,
+    ///  or <see cref='DataGrid'/>.
     /// </summary>
     public delegate void ScrollEventHandler(object sender, ScrollEventArgs e);
 }

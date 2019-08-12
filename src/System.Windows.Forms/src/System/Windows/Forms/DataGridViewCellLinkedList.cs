@@ -8,7 +8,7 @@ using System.Collections;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a linked list of <see cref='DataGridViewCell'/> objects
+    ///  Represents a linked list of <see cref='DataGridViewCell'/> objects
     /// </summary>
     internal class DataGridViewCellLinkedList : IEnumerable
     {
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// Represents an emunerator of elements in a <see cref='DataGridViewCellLinkedList'/>  linked list.
+    ///  Represents an emunerator of elements in a <see cref='DataGridViewCellLinkedList'/>  linked list.
     /// </summary>
     internal class DataGridViewCellLinkedListEnumerator : IEnumerator
     {
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// Represents an element in a <see cref='DataGridViewCellLinkedList'/> linked list.
+    ///  Represents an element in a <see cref='DataGridViewCellLinkedList'/> linked list.
     /// </summary>
     internal class DataGridViewCellLinkedListElement
     {

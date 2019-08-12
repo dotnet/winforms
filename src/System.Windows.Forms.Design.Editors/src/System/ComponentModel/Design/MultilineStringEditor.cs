@@ -15,18 +15,19 @@ using System.Windows.Forms.Design;
 using Microsoft.Win32;
 
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop;
 
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// An editor for editing strings that supports multiple lines of text and is resizable.
+    ///  An editor for editing strings that supports multiple lines of text and is resizable.
     /// </summary>
     public sealed class MultilineStringEditor : UITypeEditor
     {
         private MultilineStringEditorUI _editorUI;
 
         /// <summary>
-        /// Edits the given value, returning the editing results.
+        ///  Edits the given value, returning the editing results.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -53,7 +54,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// The MultilineStringEditor is a drop down editor, so this returns UITypeEditorEditStyle.DropDown.
+        ///  The MultilineStringEditor is a drop down editor, so this returns UITypeEditorEditStyle.DropDown.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -61,7 +62,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns false; no extra painting is performed.
+        ///  Returns false; no extra painting is performed.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
@@ -228,19 +229,19 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    Interop.RECT rect = new Interop.RECT();
+                    RECT rect = new RECT();
                     using ScreenDC hdc = ScreenDC.Create();
                     IntPtr hRtbFont = Font.ToHfont();
-                    IntPtr hOldFont = Interop.Gdi32.SelectObject(hdc, hRtbFont);
+                    IntPtr hOldFont = Gdi32.SelectObject(hdc, hRtbFont);
 
                     try
                     {
-                        Interop.User32.DrawTextW(hdc, Text, Text.Length, ref rect, Interop.User32.TextFormatFlags.DT_CALCRECT);
+                        User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.TextFormatFlags.DT_CALCRECT);
                     }
                     finally
                     {
-                        Interop.Gdi32.DeleteObject(hRtbFont);
-                        Interop.Gdi32.SelectObject(hdc, hOldFont);
+                        Gdi32.DeleteObject(hRtbFont);
+                        Gdi32.SelectObject(hdc, hOldFont);
                     }
                     return new Size(rect.right - rect.left + _caretPadding, rect.bottom - rect.top);
                 }
@@ -363,7 +364,7 @@ namespace System.ComponentModel.Design
                 {
                     if (IsHandleCreated)
                     {
-                        string windowText = Interop.User32.GetWindowText(new HandleRef(this, Handle));
+                        string windowText = User32.GetWindowText(new HandleRef(this, Handle));
                         if (!_ctrlEnterPressed)
                         {
                             return windowText;
@@ -439,7 +440,7 @@ namespace System.ComponentModel.Design
                 base.WndProc(ref m);
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_PAINT:
+                    case WindowMessages.WM_PAINT:
                         {
                             if (ShouldShowWatermark)
                             {
@@ -454,7 +455,7 @@ namespace System.ComponentModel.Design
         }
 
         // I used the visual basic 6 RichText (REOleCB.CPP) as a guide for this
-        private class OleCallback : UnsafeNativeMethods.IRichTextBoxOleCallback
+        private class OleCallback : Richedit.IRichEditOleCallback
         {
             private readonly RichTextBox _owner;
             readonly bool _unrestricted = false;
@@ -474,36 +475,40 @@ namespace System.ComponentModel.Design
                 _owner = owner;
             }
 
-            public int GetNewStorage(out UnsafeNativeMethods.IStorage storage)
+            public HRESULT GetNewStorage(out Ole32.IStorage storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
-                UnsafeNativeMethods.ILockBytes pLockBytes = UnsafeNativeMethods.CreateILockBytesOnHGlobal(NativeMethods.NullHandleRef, true);
-
+    
+                Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
                 Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
-                storage = UnsafeNativeMethods.StgCreateDocfileOnILockBytes(pLockBytes, NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE | NativeMethods.STGM_READWRITE, 0);
+
+                storage = Ole32.StgCreateDocfileOnILockBytes(
+                    pLockBytes,
+                    Ole32.STGM.STGM_SHARE_EXCLUSIVE | Ole32.STGM.STGM_CREATE | Ole32.STGM.STGM_READWRITE,
+                    0);
                 Debug.Assert(storage != null, "storage is NULL!");
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            public int GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo)
+            public HRESULT GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetInPlaceContext");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            public int ShowContainerUI(int fShow)
+            public HRESULT ShowContainerUI(BOOL fShow)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::ShowContainerUI");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            public int QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
+            public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
                 if (_unrestricted)
                 {
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
                 else
                 {
@@ -513,7 +518,7 @@ namespace System.ComponentModel.Design
 
                     if (!NativeMethods.Succeeded(hr))
                     {
-                        return NativeMethods.S_FALSE;
+                        return HRESULT.S_FALSE;
                     }
 
                     if (realClsid == Guid.Empty)
@@ -527,21 +532,21 @@ namespace System.ComponentModel.Design
                         case "00000316-0000-0000-C000-000000000046": // DIB
                         case "00000319-0000-0000-C000-000000000046": // EMF
                         case "0003000A-0000-0000-C000-000000000046": //BMP
-                            return NativeMethods.S_OK;
+                            return HRESULT.S_OK;
                         default:
                             Debug.WriteLineIf(RichTextDbg.TraceVerbose, "   denying '" + lpclsid.ToString() + "' from being inserted due to security restrictions");
-                            return NativeMethods.S_FALSE;
+                            return HRESULT.S_FALSE;
                     }
                 }
             }
 
-            public int DeleteObject(IntPtr lpoleobj)
+            public HRESULT DeleteObject(IntPtr lpoleobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::DeleteObject");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            public int QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, int reco, int fReally, IntPtr hMetaPict)
+            public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, uint reco, BOOL fReally, IntPtr hMetaPict)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryAcceptData(reco=" + reco + ")");
                 if (reco == NativeMethods.RECO_PASTE)
@@ -550,35 +555,34 @@ namespace System.ComponentModel.Design
                     if (dataObj != null &&
                         (dataObj.GetDataPresent(DataFormats.Text) || dataObj.GetDataPresent(DataFormats.UnicodeText)))
                     {
-                        return NativeMethods.S_OK;
+                        return HRESULT.S_OK;
                     }
-                    return NativeMethods.E_FAIL;
+
+                    return HRESULT.E_FAIL;
                 }
-                else
-                {
-                    return NativeMethods.E_NOTIMPL;
-                }
+                
+                return HRESULT.E_NOTIMPL;
             }
 
-            public int ContextSensitiveHelp(int fEnterMode)
+            public HRESULT ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::ContextSensitiveHelp");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            public int GetClipboardData(NativeMethods.CHARRANGE lpchrg, int reco, IntPtr lplpdataobj)
+            public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetClipboardData");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            public int GetDragDropEffect(bool fDrag, int grfKeyState, ref int pdwEffect)
+            public HRESULT GetDragDropEffect(BOOL fDrag, int grfKeyState, ref int pdwEffect)
             {
                 pdwEffect = (int)DragDropEffects.None;
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            public int GetContextMenu(short seltype, IntPtr lpoleobj, NativeMethods.CHARRANGE lpchrg, out IntPtr hmenu)
+            public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
                 TextBox tb = new TextBox
                 {
@@ -593,7 +597,8 @@ namespace System.ComponentModel.Design
                 {
                     hmenu = cm.Handle;
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
         }
     }

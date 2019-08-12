@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.VisualStyles
 {
@@ -38,7 +39,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        /// Check if visual styles is supported for client area.
+        ///  Check if visual styles is supported for client area.
         /// </summary>
         private static bool AreClientAreaVisualStylesSupported
         {
@@ -600,7 +601,7 @@ namespace System.Windows.Forms.VisualStyles
             // From the GDI+ sources it doesn't appear as if they take ownership of the hRegion, so this is safe to do.
             // We need to DeleteObject in order to not leak.
             Region region = Region.FromHrgn(hRegion);
-            Interop.Gdi32.DeleteObject(hRegion);
+            Gdi32.DeleteObject(hRegion);
             return region;
 
         }
@@ -813,9 +814,8 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(PointProperty));
             }
 
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            lastHResult = SafeNativeMethods.GetThemePosition(new HandleRef(this, Handle), part, state, (int)prop, point);
-            return new Point(point.x, point.y);
+            lastHResult = SafeNativeMethods.GetThemePosition(new HandleRef(this, Handle), part, state, (int)prop, out Point point);
+            return point;
         }
 
         /// <summary>

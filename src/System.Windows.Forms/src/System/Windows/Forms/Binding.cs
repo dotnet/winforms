@@ -9,7 +9,7 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a simple binding of a value in a list and the property of a control.
+    ///  Represents a simple binding of a value in a list and the property of a control.
     /// </summary>
     [TypeConverter(typeof(ListBindingConverter))]
     public class Binding
@@ -49,8 +49,8 @@ namespace System.Windows.Forms
         private BindingCompleteEventHandler _onComplete = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Binding'/> class
-        /// that binds a property on the owning control to a property on a data source.
+        ///  Initializes a new instance of the <see cref='Binding'/> class
+        ///  that binds a property on the owning control to a property on a data source.
         /// </summary>
         public Binding(string propertyName, object dataSource, string dataMember) : this(propertyName, dataSource, dataMember, false, 0, null, string.Empty, null)
         {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Binding'/> class.
+        ///  Initializes a new instance of the <see cref='Binding'/> class.
         /// </summary>
         private Binding()
         {
@@ -101,21 +101,21 @@ namespace System.Windows.Forms
         public BindingMemberInfo BindingMemberInfo { get; }
 
         /// <summary>
-        /// Gets the control to which the binding belongs.
+        ///  Gets the control to which the binding belongs.
         /// </summary>
         [DefaultValue(null)]
         public IBindableComponent BindableComponent => _control;
 
         /// <summary>
-        /// Gets the control to which the binding belongs.
+        ///  Gets the control to which the binding belongs.
         /// </summary>
         [DefaultValue(null)]
         public Control Control => _control as Control;
 
         /// <summary>
-        /// Is the binadable component in a 'created' (ready-to-use) state? For controls,
-        /// this depends on whether the window handle has been created yet. For everything
-        /// else, we'll assume they are always in a created state.
+        ///  Is the binadable component in a 'created' (ready-to-use) state? For controls,
+        ///  this depends on whether the window handle has been created yet. For everything
+        ///  else, we'll assume they are always in a created state.
         /// </summary>
         internal static bool IsComponentCreated(IBindableComponent component)
         {
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         }
 
         // <summary>
-        /// Instance-specific property equivalent to the static method above
+        ///  Instance-specific property equivalent to the static method above
         // </summary>
         internal bool ComponentCreated => IsComponentCreated(_control);
 
@@ -165,13 +165,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating whether the binding is active.
+        ///  Gets a value indicating whether the binding is active.
         /// </summary>
         public bool IsBinding => _bound;
 
         /// <summary>
-        /// Gets the <see cref='Forms.BindingManagerBase'/> of this binding that
-        /// allows enumeration of a set of bindings.
+        ///  Gets the <see cref='Forms.BindingManagerBase'/> of this binding that
+        ///  allows enumeration of a set of bindings.
         /// </summary>
         public BindingManagerBase BindingManagerBase
         {
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the property on the control to bind to.
+        ///  Gets or sets the property on the control to bind to.
         /// </summary>
         [DefaultValue("")]
         public string PropertyName { get; } = string.Empty;
@@ -736,13 +736,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Pulls data from control property into data source. Returns bool indicating whether caller
-        /// should cancel the higher level operation. Raises a BindingComplete event regardless of
-        /// success or failure.
+        ///  Pulls data from control property into data source. Returns bool indicating whether caller
+        ///  should cancel the higher level operation. Raises a BindingComplete event regardless of
+        ///  success or failure.
         ///
-        /// When the user leaves the control, it will raise a Validating event, calling the Binding.Target_Validate
-        /// method, which in turn calls PullData. PullData is also called by the binding manager when pulling data
-        /// from all bounds properties in one go.
+        ///  When the user leaves the control, it will raise a Validating event, calling the Binding.Target_Validate
+        ///  method, which in turn calls PullData. PullData is also called by the binding manager when pulling data
+        ///  from all bounds properties in one go.
         /// </summary>
         internal bool PullData() => PullData(reformat: true, force: false);
 
@@ -878,9 +878,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Pushes data from data source into control property. Returns bool indicating whether caller
-        /// should cancel the higher level operation. Raises a BindingComplete event regardless of
-        /// success or failure.
+        ///  Pushes data from data source into control property. Returns bool indicating whether caller
+        ///  should cancel the higher level operation. Raises a BindingComplete event regardless of
+        ///  success or failure.
         /// </summary>
         internal bool PushData() => PushData(force: false);
 
@@ -944,12 +944,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reads current value from data source, and sends this to the control.
+        ///  Reads current value from data source, and sends this to the control.
         /// </summary>
         public void ReadValue() => PushData(force: true);
 
         /// <summary>
-        /// Takes current value from control, and writes this out to the data source.
+        ///  Takes current value from control, and writes this out to the data source.
         /// </summary>
         public void WriteValue() => PullData(reformat: true, force: true);
 
@@ -1030,14 +1030,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Event handler for the Control.Validating event on the control that we are bound to.
+        ///  Event handler for the Control.Validating event on the control that we are bound to.
         ///
-        /// If value in control has changed, we want to send that value back up to the data source
-        /// when the control undergoes validation (eg. on loss of focus). If an error occurs, we
-        /// will set e.Cancel=true to make validation fail and force focus to remain on the control.
+        ///  If value in control has changed, we want to send that value back up to the data source
+        ///  when the control undergoes validation (eg. on loss of focus). If an error occurs, we
+        ///  will set e.Cancel=true to make validation fail and force focus to remain on the control.
         ///
-        /// NOTE: If no error occurs, we MUST leave e.Cancel alone, to respect any value put in there
-        /// by event handlers high up the event chain.
+        ///  NOTE: If no error occurs, we MUST leave e.Cancel alone, to respect any value put in there
+        ///  by event handlers high up the event chain.
         /// </summary>
         private void Target_Validate(object sender, CancelEventArgs e)
         {
@@ -1170,8 +1170,8 @@ namespace System.Windows.Forms
             internal string DataErrorText => _errorText;
 
             /// <summary>
-            /// Returns any data error info on the data source for the bound data field
-            /// in the current row
+            ///  Returns any data error info on the data source for the bound data field
+            ///  in the current row
             /// </summary>
             private string GetErrorText(object value)
             {

@@ -5,11 +5,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Implements the basic functionality of a scroll bar control.
+    ///  Implements the basic functionality of a scroll bar control.
     /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -30,7 +31,7 @@ namespace System.Windows.Forms
         private bool _scaleScrollBarForDpiChange = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='ScrollBar'/> class.
+        ///  Initializes a new instance of the <see cref='ScrollBar'/> class.
         /// </summary>
         public ScrollBar() : base()
         {
@@ -51,7 +52,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide AutoSize: it doesn't make sense for this control
+        ///  Hide AutoSize: it doesn't make sense for this control
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never),
@@ -146,7 +147,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the foreground color of the scroll bar control.
+        ///  Gets or sets the foreground color of the scroll bar control.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -197,8 +198,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value to be added or subtracted to the <see cref='Value'/>
-        /// property when the scroll box is moved a large distance.
+        ///  Gets or sets a value to be added or subtracted to the <see cref='Value'/>
+        ///  property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(10)]
@@ -231,7 +232,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the upper limit of values of the scrollable range.
+        ///  Gets or sets the upper limit of values of the scrollable range.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(100)]
@@ -260,7 +261,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the lower limit of values of the scrollable range.
+        ///  Gets or sets the lower limit of values of the scrollable range.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(0)]
@@ -289,8 +290,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the value to be added or subtracted to the <see cref='Value'/>
-        /// property when the scroll box is moved a small distance.
+        ///  Gets or sets the value to be added or subtracted to the <see cref='Value'/>
+        ///  property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(1)]
@@ -345,8 +346,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a numeric value that represents the current position of the scroll box
-        /// on the scroll bar control.
+        ///  Gets or sets a numeric value that represents the current position of the scroll box
+        ///  on the scroll bar control.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(0)]
@@ -372,7 +373,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Get/Set flag to let scrollbar scale according to the DPI of the window.
+        ///  Get/Set flag to let scrollbar scale according to the DPI of the window.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
@@ -450,7 +451,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the scroll box has been moved by either a mouse or keyboard action.
+        ///  Occurs when the scroll box has been moved by either a mouse or keyboard action.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
@@ -461,9 +462,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the <see cref='Value'/> property has
-        /// changed, either by a <see cref='OnScroll'/> event
-        /// or programatically.
+        ///  Occurs when the <see cref='Value'/> property has
+        ///  changed, either by a <see cref='OnScroll'/> event
+        ///  or programatically.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.valueChangedEventDescr))]
@@ -474,12 +475,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is a helper method that is called by ScaleControl to retrieve the bounds
-        /// that the control should be scaled by. You may override this method if you
-        /// wish to reuse ScaleControl's scaling logic but you need to supply your own
-        /// bounds. The default implementation returns scaled bounds that take into
-        /// account the BoundsSpecified, whether the control is top level, and whether
-        /// the control is fixed width or auto size, and any adornments the control may have.
+        ///  This is a helper method that is called by ScaleControl to retrieve the bounds
+        ///  that the control should be scaled by. You may override this method if you
+        ///  wish to reuse ScaleControl's scaling logic but you need to supply your own
+        ///  bounds. The default implementation returns scaled bounds that take into
+        ///  account the BoundsSpecified, whether the control is top level, and whether
+        ///  the control is fixed width or auto size, and any adornments the control may have.
         /// </summary>
         protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified)
         {
@@ -509,7 +510,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates the handle. overridden to help set up scrollbar information.
+        ///  Creates the handle. overridden to help set up scrollbar information.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -518,7 +519,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ValueChanged'/> event.
+        ///  Raises the <see cref='ValueChanged'/> event.
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
         {
@@ -527,11 +528,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Converts mouse wheel movements into scrolling, when scrollbar has the focus.
-        /// Typically one wheel step will cause one small scroll increment, in either
-        /// direction. A single wheel message could represent either one wheel step, multiple
-        /// wheel steps (fast wheeling), or even a fraction of a step (smooth-wheeled mice).
-        /// So we accumulate the total wheel delta, and consume it in whole numbers of steps.
+        ///  Converts mouse wheel movements into scrolling, when scrollbar has the focus.
+        ///  Typically one wheel step will cause one small scroll increment, in either
+        ///  direction. A single wheel message could represent either one wheel step, multiple
+        ///  wheel steps (fast wheeling), or even a fraction of a step (smooth-wheeled mice).
+        ///  So we accumulate the total wheel delta, and consume it in whole numbers of steps.
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -575,7 +576,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ValueChanged'/> event.
+        ///  Raises the <see cref='ValueChanged'/> event.
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {
@@ -728,21 +729,21 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL:
                     WmReflectScroll(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
                     break;
 
-                case Interop.WindowMessages.WM_SIZE:
+                case WindowMessages.WM_SIZE:
                     // Fixes the scrollbar focus rect
                     if (UnsafeNativeMethods.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
-                        SendMessage(Interop.WindowMessages.WM_KILLFOCUS, 0, 0);
-                        SendMessage(Interop.WindowMessages.WM_SETFOCUS, 0, 0);
+                        SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
+                        SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
                     }
                     break;
 

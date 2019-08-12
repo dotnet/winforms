@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
+    ///  Class used to pass new font/color information around for "partial" ownerdraw list/treeview items.
     /// </summary>
     [Serializable] // This class is participating in resx serialization scenarios for listview/treeview items.
     public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
@@ -59,12 +59,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns whether or not this property bag contains all default values (is empty)
+        ///  Returns whether or not this property bag contains all default values (is empty)
         /// </summary>
         public virtual bool IsEmpty() => Font == null && ForeColor.IsEmpty && BackColor.IsEmpty;
 
         /// <summary>
-        /// Copies the bag. Always returns a valid ODPB object
+        ///  Copies the bag. Always returns a valid ODPB object
         /// </summary>
         public static OwnerDrawPropertyBag Copy(OwnerDrawPropertyBag value)
         {

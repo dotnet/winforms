@@ -11,8 +11,8 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of <see cref='DataGridViewColumn'/> objects in the <see cref='DataGrid'/>
-    /// control.
+    ///  Represents a collection of <see cref='DataGridViewColumn'/> objects in the <see cref='DataGrid'/>
+    ///  control.
     /// </summary>
     [ListBindable(false)]
     public class DataGridViewColumnCollection : BaseCollection, IList
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a <see cref='DataGridViewColumn'/> to this collection.
+        ///  Adds a <see cref='DataGridViewColumn'/> to this collection.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(string columnName, string headerText)
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a <see cref='DataGridViewColumn'/> to this collection.
+        ///  Adds a <see cref='DataGridViewColumn'/> to this collection.
         /// </summary>
         public virtual int Add(DataGridViewColumn dataGridViewColumn)
         {
@@ -888,7 +888,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inserts a <see cref='DataGridViewColumn'/> in this collection.
+        ///  Inserts a <see cref='DataGridViewColumn'/> in this collection.
         /// </summary>
         public virtual void Insert(int columnIndex, DataGridViewColumn dataGridViewColumn)
         {

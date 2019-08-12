@@ -215,15 +215,15 @@ namespace System
         }
 
         /// <summary>
-        /// Tests whether the specified string contains the specified substring
-        /// and throws an exception if the substring does not occur within the
-        /// test string or if either string or substring is null.
+        ///  Tests whether the specified string contains the specified substring
+        ///  and throws an exception if the substring does not occur within the
+        ///  test string or if either string or substring is null.
         /// </summary>
         /// <param name="value">
-        /// The string that is expected to contain <paramref name="substring"/>.
+        ///  The string that is expected to contain <paramref name="substring"/>.
         /// </param>
         /// <param name="substring">
-        /// The string expected to occur within <paramref name="value"/>.
+        ///  The string expected to occur within <paramref name="value"/>.
         /// </param>
         public static void Contains(string value, string substring)
         {
@@ -233,7 +233,7 @@ namespace System
         }
 
         /// <summary>
-        /// Validate that a given value is greater than another value.
+        ///  Validate that a given value is greater than another value.
         /// </summary>
         /// <param name="actual">The value that should be greater than <paramref name="greaterThan"/>.</param>
         /// <param name="greaterThan">The value that <paramref name="actual"/> should be greater than.</param>
@@ -254,7 +254,7 @@ namespace System
         }
 
         /// <summary>
-        /// Validate that a given value is less than another value.
+        ///  Validate that a given value is less than another value.
         /// </summary>
         /// <param name="actual">The value that should be less than <paramref name="lessThan"/>.</param>
         /// <param name="lessThan">The value that <paramref name="actual"/> should be less than.</param>
@@ -280,7 +280,7 @@ namespace System
         }
 
         /// <summary>
-        /// Validate that a given value is less than or equal to another value.
+        ///  Validate that a given value is less than or equal to another value.
         /// </summary>
         /// <param name="actual">The value that should be less than or equal to <paramref name="lessThanOrEqualTo"/></param>
         /// <param name="lessThanOrEqualTo">The value that <paramref name="actual"/> should be less than or equal to.</param>
@@ -299,7 +299,7 @@ namespace System
         }
 
         /// <summary>
-        /// Validate that a given value is greater than or equal to another value.
+        ///  Validate that a given value is greater than or equal to another value.
         /// </summary>
         /// <param name="actual">The value that should be greater than or equal to <paramref name="greaterThanOrEqualTo"/></param>
         /// <param name="greaterThanOrEqualTo">The value that <paramref name="actual"/> should be greater than or equal to.</param>
@@ -327,8 +327,8 @@ namespace System
         }
 
         /// <summary>
-        /// Validates that the actual byte array is equal to the expected byte array. XUnit only displays the first 5 values
-        /// of each collection if the test fails. This doesn't display at what point or how the equality assertion failed.
+        ///  Validates that the actual byte array is equal to the expected byte array. XUnit only displays the first 5 values
+        ///  of each collection if the test fails. This doesn't display at what point or how the equality assertion failed.
         /// </summary>
         /// <param name="expected">The byte array that <paramref name="actual"/> should be equal to.</param>
         /// <param name="actual"></param>

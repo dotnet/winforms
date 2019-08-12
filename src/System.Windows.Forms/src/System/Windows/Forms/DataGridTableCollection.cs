@@ -9,8 +9,8 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of <see cref='DataGridTableStyle'/> objects in the <see cref='DataGrid'/>
-    /// control.
+    ///  Represents a collection of <see cref='DataGridTableStyle'/> objects in the <see cref='DataGrid'/>
+    ///  control.
     /// </summary>
     [ListBindable(false)]
     public class GridTableStylesCollection : BaseCollection, IList
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a <see cref='DataGridTableStyle'/> to this collection.
+        ///  Adds a <see cref='DataGridTableStyle'/> to this collection.
         /// </summary>
         public virtual int Add(DataGridTableStyle table)
         {
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Checks to see if a <see cref='DataGridTableStyle'/> with the given name
+        ///  Checks to see if a <see cref='DataGridTableStyle'/> with the given name
         ///  is contained in this collection.
         /// </summary>
         public bool Contains(string name)

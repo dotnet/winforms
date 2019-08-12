@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -154,7 +155,7 @@ namespace System.Windows.Forms
         internal Action<int, int> rescaleConstsCallbackDelegate;
 
         /// <summary>
-        /// Summary of ToolStrip.
+        ///  Summary of ToolStrip.
         /// </devdoc>
         public ToolStrip()
         {
@@ -341,7 +342,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of AllowDrop.
+        ///  Summary of AllowDrop.
         /// </summary>
         public override bool AllowDrop
         {
@@ -448,7 +449,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Just here so we can implement ShouldSerializeBackColor
+        ///  Just here so we can implement ShouldSerializeBackColor
         /// </summary>
         [
         SRDescription(nameof(SR.ToolStripBackColorDescr)),
@@ -507,7 +508,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of CanOverflow.
+        ///  Summary of CanOverflow.
         /// </summary>
         [
         DefaultValue(true),
@@ -647,8 +648,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Deriving classes can override this to configure a default size for their control.
-        /// This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
         protected override Size DefaultSize
             => DpiHelper.IsPerMonitorV2Awareness ?
@@ -775,7 +776,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// Just here so we can add the default value attribute
+        ///  Just here so we can add the default value attribute
         /// </summary>
         [DefaultValue(DockStyle.Top)]
         public override DockStyle Dock
@@ -831,9 +832,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the drop target manager that all the hwndless
-        /// items and this ToolStrip share.  this is necessary as
-        /// RegisterDragDrop requires an HWND.
+        ///  Returns the drop target manager that all the hwndless
+        ///  items and this ToolStrip share.  this is necessary as
+        ///  RegisterDragDrop requires an HWND.
         /// </summary>
         internal ToolStripDropTargetManager DropTargetManager
         {
@@ -853,7 +854,7 @@ namespace System.Windows.Forms
 
         }
         /// <summary>
-        /// Just here so we can add the default value attribute
+        ///  Just here so we can add the default value attribute
         /// </summary>
         protected internal virtual ToolStripItemCollection DisplayedItems
         {
@@ -868,10 +869,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Retreives the current display rectangle. The display rectangle
-        /// is the virtual display area that is used to layout components.
-        /// The position and dimensions of the Form's display rectangle
-        /// change during autoScroll.
+            ///  Retreives the current display rectangle. The display rectangle
+        ///  is the virtual display area that is used to layout components.
+        ///  The position and dimensions of the Form's display rectangle
+        ///  change during autoScroll.
             /// </summary>
         public override Rectangle DisplayRectangle
         {
@@ -902,7 +903,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Forecolor really has no meaning for ToolStrips - so lets hide it
+        ///  Forecolor really has no meaning for ToolStrips - so lets hide it
         /// </summary>
         [Browsable(false)]
         public new Color ForeColor
@@ -938,7 +939,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of ToolStripGrip.
+        ///  Summary of ToolStripGrip.
         /// </summary>
         internal ToolStripGrip Grip
         {
@@ -959,7 +960,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// Summary of GripStyle.
+        ///  Summary of GripStyle.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -990,7 +991,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of GripStyle.
+        ///  Summary of GripStyle.
         /// </summary>
         [
         Browsable(false)
@@ -1005,7 +1006,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The external spacing between the grip and the padding of the ToolStrip and the first item in the collection
+        ///  The external spacing between the grip and the padding of the ToolStrip and the first item in the collection
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -1024,7 +1025,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The boundaries of the grip on the ToolStrip.  If it is invisible - returns Rectangle.Empty.
+        ///  The boundaries of the grip on the ToolStrip.  If it is invisible - returns Rectangle.Empty.
         /// </summary>
         [
         Browsable(false)
@@ -1129,7 +1130,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control.
+        ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control.
         /// </summary>
         [
         DefaultValue(null),
@@ -1219,13 +1220,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The items that belong to this ToolStrip.
-        /// Note - depending on space and layout preferences, not all items
-        /// in this collection will be displayed.  They may not even be displayed
-        /// on this ToolStrip (say in the case where we're overflowing the item).
-        /// The collection of _Displayed_ items is the DisplayedItems collection.
-        /// The displayed items collection also includes things like the OverflowButton
-        /// and the Grip.
+        ///  The items that belong to this ToolStrip.
+        ///  Note - depending on space and layout preferences, not all items
+        ///  in this collection will be displayed.  They may not even be displayed
+        ///  on this ToolStrip (say in the case where we're overflowing the item).
+        ///  The collection of _Displayed_ items is the DisplayedItems collection.
+        ///  The displayed items collection also includes things like the OverflowButton
+        ///  and the Grip.
         /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -1253,7 +1254,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the control is clicked.
+        ///  Occurs when the control is clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
         public event ToolStripItemClickedEventHandler ItemClicked
@@ -1309,10 +1310,10 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// The OnDrag[blah] methods that will be called if AllowItemReorder is true.
+        ///  The OnDrag[blah] methods that will be called if AllowItemReorder is true.
         ///
-        /// This allows us to have methods that handle drag/drop of the ToolStrip items
-        /// without calling back on the user's code
+        ///  This allows us to have methods that handle drag/drop of the ToolStrip items
+        ///  without calling back on the user's code
         /// </summary>
         internal IDropTarget ItemReorderDropTarget
         {
@@ -1327,11 +1328,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The OnQueryContinueDrag and OnGiveFeedback methods that will be called if
-        /// AllowItemReorder is true.
+        ///  The OnQueryContinueDrag and OnGiveFeedback methods that will be called if
+        ///  AllowItemReorder is true.
         ///
-        /// This allows us to have methods that handle drag/drop of the ToolStrip items
-        /// without calling back on the user's code
+        ///  This allows us to have methods that handle drag/drop of the ToolStrip items
+        ///  without calling back on the user's code
         /// </summary>
         internal ISupportOleDropSource ItemReorderDropSource
         {
@@ -1391,7 +1392,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies whether we're horizontal or vertical
+        ///  Specifies whether we're horizontal or vertical
         /// </summary>
         [
         SRDescription(nameof(SR.ToolStripLayoutStyle)),
@@ -1582,7 +1583,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OverflowButton.
+        ///  Summary of OverflowButton.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public ToolStripOverflowButton OverflowButton
@@ -1752,10 +1753,10 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        /// The renderer is used to paint the hwndless ToolStrip items.  If someone wanted to
-        /// change the "Hot" look of all of their buttons to be a green triangle, they should
-        /// create a class that derives from ToolStripRenderer, assign it to this property and call
-        /// invalidate.
+        ///  The renderer is used to paint the hwndless ToolStrip items.  If someone wanted to
+        ///  change the "Hot" look of all of their buttons to be a green triangle, they should
+        ///  create a class that derives from ToolStripRenderer, assign it to this property and call
+        ///  invalidate.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1869,9 +1870,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// ToolStripItems need to access this to determine if they should be showing underlines
-        /// for their accelerators.  Since they are not HWNDs, and this method is protected on control
-        /// we need a way for them to get at it.
+        ///  ToolStripItems need to access this to determine if they should be showing underlines
+        ///  for their accelerators.  Since they are not HWNDs, and this method is protected on control
+        ///  we need a way for them to get at it.
         /// </summary>
         internal bool ShowKeyboardCuesInternal
         {
@@ -1938,8 +1939,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the user can give the focus to this control using the TAB
-        /// key. This property is read-only.
+        ///  Indicates whether the user can give the focus to this control using the TAB
+        ///  key. This property is read-only.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -2108,7 +2109,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of ClearAllSelections.
+        ///  Summary of ClearAllSelections.
         /// </summary>
         private void ClearAllSelections()
         {
@@ -2116,7 +2117,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of ClearAllSelectionsExcept.
+        ///  Summary of ClearAllSelectionsExcept.
         /// </summary>
         /// <param name=item></param>
         private void ClearAllSelectionsExcept(ToolStripItem item)
@@ -2219,7 +2220,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Clean up any resources being used.
+        ///  Clean up any resources being used.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -2398,7 +2399,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the next item from the given start item in the direction specified.
+        ///  Gets the next item from the given start item in the direction specified.
         ///  - This function wraps if at the end
         ///  - This function will only surf the items in the current container
         ///  - Overriding this function will change the tab ordering and accessible child ordering.
@@ -2423,7 +2424,7 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        /// Helper function for GetNextItem - do not directly call this.
+        ///  Helper function for GetNextItem - do not directly call this.
         /// </remarks>
         private ToolStripItem GetNextItemHorizontal(ToolStripItem start, bool forward)
         {
@@ -2803,7 +2804,7 @@ namespace System.Windows.Forms
         }
         #endregion
         /// <summary>
-        /// Summary of GetSelectedItem.
+        ///  Summary of GetSelectedItem.
         /// </summary>
         internal ToolStripItem GetSelectedItem()
         {
@@ -2832,7 +2833,7 @@ namespace System.Windows.Forms
             return this;
         }
 
-        /// In the case of a
+        ///  In the case of a
         ///  toolstrip -> toolstrip
         ///  contextmenustrip -> the control that is showing it
         ///  toolstripdropdown -> top most toolstrip
@@ -2866,7 +2867,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of HandleItemClick.
+        ///  Summary of HandleItemClick.
         /// </summary>
         internal void HandleItemClick(ToolStripItem dismissingItem)
         {
@@ -2963,7 +2964,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// Summary of IsInputKey.
+        ///  Summary of IsInputKey.
         /// </summary>
         /// <param name=keyData></param>
         protected override bool IsInputKey(Keys keyData)
@@ -2976,7 +2977,7 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
         /// <summary>
-        /// Summary of IsInputChar.
+        ///  Summary of IsInputChar.
         /// </summary>
         /// <param name=charCode></param>
         protected override bool IsInputChar(char charCode)
@@ -3093,7 +3094,7 @@ namespace System.Windows.Forms
             {
                 IntPtr imageHdc = g.GetHdc();
                 //send the actual wm_print message
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)imageHdc,
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
                     (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                 //now BLT the result to the destination bitmap.
@@ -3105,7 +3106,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of ProcessCmdKey.
+        ///  Summary of ProcessCmdKey.
         /// </summary>
         /// <param name=m></param>
         /// <param name=keyData></param>
@@ -3172,13 +3173,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Processes a dialog key. Overrides Control.processDialogKey(). This
-        /// method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
-        /// keys in dialogs.
-        /// The method performs no processing on keys that include the ALT or
-        /// CONTROL modifiers. For the TAB key, the method selects the next control
-        /// on the form. For the arrow keys,
-        /// !!!
+        ///  Processes a dialog key. Overrides Control.processDialogKey(). This
+        ///  method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
+        ///  keys in dialogs.
+        ///  The method performs no processing on keys that include the ALT or
+        ///  CONTROL modifiers. For the TAB key, the method selects the next control
+        ///  on the form. For the arrow keys,
+        ///  !!!
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -3436,7 +3437,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of ProcessTabKey.
+        ///  Summary of ProcessTabKey.
         /// </summary>
         /// <param name=forward></param>
         private bool ProcessTabKey(bool forward)
@@ -3466,11 +3467,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of ProcessArrowKey: this is more useful than overriding ProcessDialogKey because usually
-        /// the difference between ToolStrip/ToolStripDropDown is arrow key handling.  ProcessDialogKey first gives
-        /// the selected ToolStripItem the chance to process the message... so really a proper inheritor would
-        /// call down to the base first. Unfortunately doing this would cause the the arrow keys would be eaten
-        /// in the base class.  Instead we're providing a separate place to override all arrow key handling.
+        ///  Summary of ProcessArrowKey: this is more useful than overriding ProcessDialogKey because usually
+        ///  the difference between ToolStrip/ToolStripDropDown is arrow key handling.  ProcessDialogKey first gives
+        ///  the selected ToolStripItem the chance to process the message... so really a proper inheritor would
+        ///  call down to the base first. Unfortunately doing this would cause the the arrow keys would be eaten
+        ///  in the base class.  Instead we're providing a separate place to override all arrow key handling.
         /// </summary>
         internal virtual bool ProcessArrowKey(Keys keyCode)
         {
@@ -3525,7 +3526,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of NotifySelectionChange.
+        ///  Summary of NotifySelectionChange.
         /// </summary>
         /// <param name=item></param>
         internal void NotifySelectionChange(ToolStripItem item)
@@ -3584,7 +3585,7 @@ namespace System.Windows.Forms
             ((EventHandler)Events[EventRendererChanged])?.Invoke(this, e);
         }
         /// <summary>
-        /// Summary of OnEnabledChanged.
+        ///  Summary of OnEnabledChanged.
         /// </summary>
         protected override void OnEnabledChanged(EventArgs e)
         {
@@ -3648,7 +3649,7 @@ namespace System.Windows.Forms
 #endif
         }
         /// <summary>
-        /// Summary of OnHandleCreated.
+        ///  Summary of OnHandleCreated.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -3663,7 +3664,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnHandleDestroyed.
+        ///  Summary of OnHandleDestroyed.
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
@@ -3689,7 +3690,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when an item has been clicked on the ToolStrip.
+        ///  Called when an item has been clicked on the ToolStrip.
         /// </summary>
         protected virtual void OnItemClicked(ToolStripItemClickedEventArgs e)
         {
@@ -3786,7 +3787,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Delegate mouse down to the ToolStrip and its affected items
+        ///  Delegate mouse down to the ToolStrip and its affected items
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs mea)
         {
@@ -3823,7 +3824,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Delegate mouse moves to the ToolStrip and its affected items
+        ///  Delegate mouse moves to the ToolStrip and its affected items
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs mea)
         {
@@ -3888,7 +3889,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Delegate mouse leave to the ToolStrip and its affected items
+        ///  Delegate mouse leave to the ToolStrip and its affected items
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -3909,7 +3910,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Delegate mouse up to the ToolStrip and its affected items
+        ///  Delegate mouse up to the ToolStrip and its affected items
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mea)
         {
@@ -4141,10 +4142,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle the erase
-        /// background request from windows. It is not necessary to call
-        /// base.onPaintBackground, however if you do not want the default
-        /// Windows behavior you must set event.handled to true.
+        ///  Inheriting classes should override this method to handle the erase
+        ///  background request from windows. It is not necessary to call
+        ///  base.onPaintBackground, however if you do not want the default
+        ///  Windows behavior you must set event.handled to true.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -4193,7 +4194,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnPaint.
+        ///  Summary of OnPaint.
         /// </summary>
         internal protected virtual void OnPaintGrip(PaintEventArgs e)
         {
@@ -4235,10 +4236,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
-        /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
+        ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
+        ///  Must call the base class method to get the current DPI values. This method is invoked only when
+        ///  Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
+        ///  EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
         /// <param name="deviceDpiNew">New DPI value</param>
@@ -4269,8 +4270,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Resets the scaling (only in PerMonitorV2 scenarios).
-        /// Do only call from code which is quirked with PerMonitorV2 quirks for the ToolStrip.
+        ///  Resets the scaling (only in PerMonitorV2 scenarios).
+        ///  Do only call from code which is quirked with PerMonitorV2 quirks for the ToolStrip.
         /// </summary>
         /// <param name="newDpi">The new DPI passed by WmDpiChangedBeforeParent.</param>
         internal virtual void ResetScaling(int newDpi)
@@ -4284,7 +4285,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        /// Paints the I beam when items are being reordered
+        ///  Paints the I beam when items are being reordered
         /// </summary>
         internal void PaintInsertionMark(Graphics g)
         {
@@ -4340,7 +4341,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Paints the I beam when items are being reordered
+        ///  Paints the I beam when items are being reordered
         /// </summary>
         internal void PaintInsertionMark(Rectangle insertionRect)
         {
@@ -4372,8 +4373,8 @@ namespace System.Windows.Forms
             return null;
         }
         /// <summary>
-        /// Finds the ToolStripItem contained within a specified client coordinate point
-        /// If item not found - returns null
+        ///  Finds the ToolStripItem contained within a specified client coordinate point
+        ///  If item not found - returns null
         /// </summary>
         public ToolStripItem GetItemAt(int x, int y)
         {
@@ -4381,8 +4382,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the ToolStripItem contained within a specified client coordinate point
-        /// If item not found - returns null
+        ///  Finds the ToolStripItem contained within a specified client coordinate point
+        ///  If item not found - returns null
         /// </summary>
         public ToolStripItem GetItemAt(Point point)
         {
@@ -4547,7 +4548,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of SetItemLocation
+        ///  Summary of SetItemLocation
         /// </summary>
         /// <param name=m></param>
         protected internal void SetItemLocation(ToolStripItem item, Point location)
@@ -4564,7 +4565,7 @@ namespace System.Windows.Forms
             item.SetBounds(new Rectangle(location, item.Size));
         }
         /// <summary>
-        /// This is needed so that people doing custom layout engines can change the "Parent" property of the item.
+        ///  This is needed so that people doing custom layout engines can change the "Parent" property of the item.
         /// </summary>
         protected static void SetItemParent(ToolStripItem item, ToolStrip parent)
         {
@@ -4624,7 +4625,7 @@ namespace System.Windows.Forms
             return false;
         }
         /// <summary>
-        /// Summary of Select.
+        ///  Summary of Select.
         /// </summary>
         /// <param name=directed></param>
         /// <param name=forward></param>
@@ -4648,12 +4649,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of SelectNextToolStripItem.
+        ///  Summary of SelectNextToolStripItem.
         /// </summary>
         /// <param name=start></param>
         /// <param name=forward></param>
         ///
-
         internal ToolStripItem SelectNextToolStripItem(ToolStripItem start, bool forward)
         {
             ToolStripItem nextItem = GetNextItem(start, (forward) ? ArrowDirection.Right : ArrowDirection.Left, /*RTLAware=*/true);
@@ -4742,8 +4742,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Afer we've performed a layout we need to reset the DisplayedItems and the OverflowItems collection.
-        /// OverflowItems are not supported in layouts other than ToolStripSplitStack
+        ///  Afer we've performed a layout we need to reset the DisplayedItems and the OverflowItems collection.
+        ///  OverflowItems are not supported in layouts other than ToolStripSplitStack
         /// </summary>
         protected virtual void SetDisplayedItems()
         {
@@ -5125,16 +5125,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of WndProc.
+        ///  Summary of WndProc.
         /// </summary>
         /// <param name=m></param>
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == Interop.WindowMessages.WM_SETFOCUS)
+            if (m.Msg == WindowMessages.WM_SETFOCUS)
             {
                 SnapFocus(m.WParam);
             }
-            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE)
+            if (m.Msg == WindowMessages.WM_MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                 // itself.  the mouse message will still go through, but focus wont be taken.
@@ -5187,7 +5187,7 @@ namespace System.Windows.Forms
 
             base.WndProc(ref m);
 
-            if (m.Msg == Interop.WindowMessages.WM_NCDESTROY)
+            if (m.Msg == WindowMessages.WM_NCDESTROY)
             {
                 // Destroy the owner window, if we created one.  We
                 // cannot do this in OnHandleDestroyed, because at
@@ -5256,7 +5256,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Return the child object at the given screen coordinates.
+            ///  Return the child object at the given screen coordinates.
             /// </summary>
             public override AccessibleObject HitTest(int x, int y)
             {
@@ -5269,8 +5269,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// When overridden in a derived class, gets the accessible child corresponding to the specified
-            /// index.
+            ///  When overridden in a derived class, gets the accessible child corresponding to the specified
+            ///  index.
             /// </summary>
             //
             public override AccessibleObject GetChild(int index)
@@ -5347,7 +5347,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  When overridden in a derived class, gets the number of children
-            /// belonging to an accessible object.
+            ///  belonging to an accessible object.
             /// </summary>
             public override int GetChildCount()
             {
@@ -5639,12 +5639,12 @@ namespace System.Windows.Forms
                 switch (m.Msg)
                 {
 
-                    case Interop.WindowMessages.WM_LBUTTONDOWN:
-                    case Interop.WindowMessages.WM_RBUTTONDOWN:
-                    case Interop.WindowMessages.WM_MBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                    case Interop.WindowMessages.WM_NCMBUTTONDOWN:
+                    case WindowMessages.WM_LBUTTONDOWN:
+                    case WindowMessages.WM_RBUTTONDOWN:
+                    case WindowMessages.WM_MBUTTONDOWN:
+                    case WindowMessages.WM_NCLBUTTONDOWN:
+                    case WindowMessages.WM_NCRBUTTONDOWN:
+                    case WindowMessages.WM_NCMBUTTONDOWN:
                         if (ownerToolStrip.ContainsFocus)
                         {
                             // if we've clicked on something that's not a child of the toolstrip and we
@@ -5714,18 +5714,18 @@ namespace System.Windows.Forms
                 if (_cachedItemHDC == IntPtr.Zero)
                 {
                     // create a new DC - we dont have one yet.
-                    IntPtr compatibleHDC = Interop.Gdi32.CreateCompatibleDC(toolStripHDC.Handle);
+                    IntPtr compatibleHDC = Gdi32.CreateCompatibleDC(toolStripHDC.Handle);
                     _cachedItemHDC = compatibleHDC;
                 }
 
                 // create compatible bitmap with the correct size.
                 _cachedItemBitmap = SafeNativeMethods.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
-                IntPtr oldBitmap = Interop.Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
+                IntPtr oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // delete the old bitmap
                 if (oldBitmap != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(oldBitmap);
+                    Gdi32.DeleteObject(oldBitmap);
                 }
 
                 // remember what size we created.
@@ -5742,12 +5742,12 @@ namespace System.Windows.Forms
                 // delete the bitmap
                 if (_cachedItemBitmap != IntPtr.Zero)
                 {
-                    Interop.Gdi32.DeleteObject(_cachedItemBitmap);
+                    Gdi32.DeleteObject(_cachedItemBitmap);
                     _cachedItemBitmap = IntPtr.Zero;
                 }
 
                 // delete the DC itself.
-                Interop.Gdi32.DeleteDC(_cachedItemHDC);
+                Gdi32.DeleteDC(_cachedItemHDC);
             }
 
             _cachedItemHDC = IntPtr.Zero;

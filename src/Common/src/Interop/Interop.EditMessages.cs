@@ -5,8 +5,8 @@
 internal static partial class Interop
 {
     /// <summary>
-    /// Edit Control Messages.
-    /// Copied form winuser.h
+    ///  Edit Control Messages.
+    ///  Copied form winuser.h
     /// </summary>
     public static class EditMessages
     {

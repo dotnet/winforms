@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -151,7 +152,6 @@ namespace System.Windows.Forms
         //PROPERTIES START IN ALPHABETICAL ORDER                                                   //
         //                                                                                         //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  This property is overridden to allow the AutoScroll to be set on all the panels when
         ///  The autoScroll on SplitContainer is shown.
@@ -492,7 +492,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This property determines whether the the splitter can move.
+        ///  This property determines whether the the splitter can move.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -540,7 +540,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This Property sets or gets if the splitter is vertical or horizontal.
+        ///  This Property sets or gets if the splitter is vertical or horizontal.
         /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -584,13 +584,12 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         // We want to instantly change the cursor if the mouse is within our bounds.
-                        NativeMethods.POINT p = new NativeMethods.POINT();
-                        Interop.RECT r = new Interop.RECT();
-                        UnsafeNativeMethods.GetCursorPos(p);
+                        var r = new RECT();
+                        UnsafeNativeMethods.GetCursorPos(out Point p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
-                        if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                         {
-                            SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                            SendMessage(WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
                         }
                     }
                 }
@@ -598,7 +597,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        /// Indicates if either panel is collapsed
+        ///  Indicates if either panel is collapsed
         ///</summary>
         private bool CollapsedMode
         {
@@ -609,7 +608,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The Left or Top panel in the SplitContainer.
+        ///  The Left or Top panel in the SplitContainer.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -666,7 +665,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Collapses or restores panel1
+        ///  Collapses or restores panel1
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -693,7 +692,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Collapses or restores panel2
+        ///  Collapses or restores panel2
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -720,7 +719,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This property determines the minimum distance of pixels of the splitter from the left or the top edge of Panel1.
+        ///  This property determines the minimum distance of pixels of the splitter from the left or the top edge of Panel1.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -746,7 +745,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is the Right or Bottom panel in the SplitContainer.
+        ///  This is the Right or Bottom panel in the SplitContainer.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -763,7 +762,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This property determines the minimum distance of pixels of the splitter from the right or the bottom edge of Panel2
+        ///  This property determines the minimum distance of pixels of the splitter from the right or the bottom edge of Panel2
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -789,7 +788,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This property determines pixel distance of the splitter from the left or top edge.
+        ///  This property determines pixel distance of the splitter from the left or top edge.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -898,7 +897,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This determines the number of pixels the splitter moves in increments.This is defaulted to 1.
+        ///  This determines the number of pixels the splitter moves in increments.This is defaulted to 1.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -925,7 +924,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This property determines the rectangle bounds of the splitter.
+        ///  This property determines the rectangle bounds of the splitter.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -944,7 +943,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This property determines the thickness of the splitter.
+        ///  This property determines the thickness of the splitter.
         /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -1025,13 +1024,11 @@ namespace System.Windows.Forms
         //END PROPERTIES                                                              //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
         /////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                            //
         //Start PUBLIC FUNCTIONS                                                      //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  ISupportInitialize support. Disables splitter panel min size and splitter width
         ///  validation during initialization.
@@ -1069,13 +1066,11 @@ namespace System.Windows.Forms
         //End PUBLIC FUNCTIONS                                                        //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
         /////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                            //
         //Start EVENT HANDLERS                                                        //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler BackgroundImageChanged
         {
@@ -1116,13 +1111,11 @@ namespace System.Windows.Forms
         //End EVENT HANDLERS                                                          //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
         /////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                            //
         //start EVENT Delegates                                                       //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Overides the Control.OnGotFocus to Invalidate...
         /// </summary>
@@ -1272,7 +1265,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='SplitContainer.MouseMove'/> event.
+        ///  Raises the <see cref='SplitContainer.MouseMove'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseMove(MouseEventArgs e)
@@ -1330,7 +1323,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='OnMouseLeave'/> event.
+        ///  Raises the <see cref='OnMouseLeave'/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -1343,7 +1336,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='OnMouseDown'/> event.
+        ///  Raises the <see cref='OnMouseDown'/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -1381,7 +1374,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='OnMouseUp'/> event.
+        ///  Raises the <see cref='OnMouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
@@ -1456,7 +1449,6 @@ namespace System.Windows.Forms
         ///END DELEGATES                                                                              //
         //                                                                                            //
         ////////////////////////////////////////////////////////////////////////////////////////////////
-
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnRightToLeftChanged(EventArgs e)
         {
@@ -1472,7 +1464,6 @@ namespace System.Windows.Forms
         ///START PRIVATE FUNCTIONS                                                                    //
         //                                                                                            //
         ////////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Validate and set the minimum size for Panel1.
         /// </summary>
@@ -1702,11 +1693,11 @@ namespace System.Windows.Forms
             IntPtr parentHandle = Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Interop.Gdi32.SelectObject(dc, halftone);
+            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            Interop.Gdi32.SelectObject(dc, saveBrush);
-            Interop.Gdi32.DeleteObject(halftone);
-            Interop.User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            Gdi32.SelectObject(dc, saveBrush);
+            Gdi32.DeleteObject(halftone);
+            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
         }
 
         /// <summary>
@@ -2493,13 +2484,11 @@ namespace System.Windows.Forms
         // END PRIVATE FUNCTIONS ...                                                                     //
         //                                                                                               //
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                                               //
         // Start PROTECTED OVERRIDE FUNCTIONS                                                            //
         //                                                                                               //
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-
         internal override Rectangle GetToolNativeScreenRectangle()
         {
             // Return splitter rectangle instead of the whole container rectangle to be consistent with the mouse ToolTip
@@ -2568,7 +2557,7 @@ namespace System.Windows.Forms
             return base.ProcessDialogKey(keyData);
         }
 
-        /// /// <summary>
+        ///  /// <summary>
         ///  This will process the TabKey for the SplitContainer. The Focus needs to Shift from controls to the Left of the Splitter
         ///  to the splitter and then to the controls on the right of the splitter. This override implements this Logic.
         /// </summary>
@@ -2635,14 +2624,14 @@ namespace System.Windows.Forms
         {
             switch (msg.Msg)
             {
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     splitterFocused = true;
                     base.WndProc(ref msg);
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     splitterFocused = false;
                     base.WndProc(ref msg);
                     break;
@@ -2664,7 +2653,6 @@ namespace System.Windows.Forms
         // End   PROTECTED OVERRIDE FUNCTIONS                                              //
         //                                                                                 //
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-
         private class SplitContainerMessageFilter : IMessageFilter
         {
             private readonly SplitContainer owner = null;
@@ -2678,10 +2666,10 @@ namespace System.Windows.Forms
             /// </summary>
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                 {
-                    if ((m.Msg == Interop.WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
-                        || (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN))
+                    if ((m.Msg == WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
+                        || (m.Msg == WindowMessages.WM_SYSKEYDOWN))
                     {
                         //Notify that splitMOVE was reverted ..
                         //this is used in ONKEYUP!!
@@ -2697,8 +2685,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This control collection only allows a specific type of control
-        /// into the controls collection.  It optionally supports readonlyness.
+        ///  This control collection only allows a specific type of control
+        ///  into the controls collection.  It optionally supports readonlyness.
         /// </summary>
         internal class SplitContainerTypedControlCollection : WindowsFormsUtils.TypedControlCollection
         {

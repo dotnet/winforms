@@ -9,7 +9,7 @@ using System.Drawing;
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// This class maps an OLE_COLOR to a managed Color editor.
+    ///  This class maps an OLE_COLOR to a managed Color editor.
     /// </summary>
     internal class Com2ColorConverter : Com2DataTypeToManagedDataTypeConverter
     {

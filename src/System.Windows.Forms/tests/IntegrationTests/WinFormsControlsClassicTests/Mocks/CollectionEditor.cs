@@ -7,7 +7,7 @@ using System.Drawing.Design;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// Mock for the editor that is not accessible in .NET 4.x
+    ///  Mock for the editor that is not accessible in .NET 4.x
     /// </summary>
     public class CollectionEditor : UITypeEditor
     {

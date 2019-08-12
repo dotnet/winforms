@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1134,14 +1135,14 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_NOTIFY:
-                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
+                case WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code)
                     {
@@ -1909,7 +1910,7 @@ namespace System.Windows.Forms
             {
                 switch (msg.Msg)
                 {
-                    case Interop.WindowMessages.WM_SETFOCUS:
+                    case WindowMessages.WM_SETFOCUS:
                         return;
                     default:
                         window.DefWndProc(ref msg);

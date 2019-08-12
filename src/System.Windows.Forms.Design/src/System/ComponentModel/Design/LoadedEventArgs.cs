@@ -7,12 +7,12 @@ using System.Collections;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// Provides additional information for the Loaded event.
+    ///  Provides additional information for the Loaded event.
     /// </summary>
     public sealed class LoadedEventArgs : EventArgs
     {
         /// <summary>
-        /// Creates a new LoadedEventArgs object.
+        ///  Creates a new LoadedEventArgs object.
         /// </summary>
         public LoadedEventArgs(bool succeeded, ICollection errors)
         {
@@ -21,12 +21,12 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// True to indicate the designer load was successful. Even successful loads can have errors, if the errors were not too servere to prevent the designer from loading.
+        ///  True to indicate the designer load was successful. Even successful loads can have errors, if the errors were not too servere to prevent the designer from loading.
         /// </summary>
         public bool HasSucceeded { get; }
 
         /// <summary>
-        /// A collection of errors that occurred while the designer was loading.
+        ///  A collection of errors that occurred while the designer was loading.
         /// </summary>
         public ICollection Errors { get; }
     }

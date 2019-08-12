@@ -169,19 +169,15 @@ namespace System.Windows.Forms.Tests
                 Assert.True(Cursor.Clip.Width >= 0);
                 Assert.True(Cursor.Clip.Height >= 0);
 
+                Rectangle virtualScreen = SystemInformation.VirtualScreen;
+
                 // Set empty.
                 Cursor.Clip = new Rectangle(0, 0, 0, 0);
-                Assert.True(Cursor.Clip.X >= 0);
-                Assert.True(Cursor.Clip.Y >= 0);
-                Assert.True(Cursor.Clip.Width >= 0);
-                Assert.True(Cursor.Clip.Height >= 0);
+                Assert.Equal(virtualScreen, Cursor.Clip);
 
-                // Set negative.
-                Cursor.Clip = new Rectangle(-1, -2, -3, -4);
-                Assert.True(Cursor.Clip.X >= 0);
-                Assert.True(Cursor.Clip.Y >= 0);
-                Assert.True(Cursor.Clip.Width >= 0);
-                Assert.True(Cursor.Clip.Height >= 0);
+                // Set outside normal bounds.
+                Cursor.Clip = Rectangle.Inflate(virtualScreen, 10, 10);
+                Assert.Equal(virtualScreen, Cursor.Clip);
             }
             finally
             {
@@ -227,8 +223,12 @@ namespace System.Windows.Forms.Tests
         public void Cursor_Position_Get_ReturnsExpected()
         {
             Point position = Cursor.Position;
-            Assert.True(position.X >= 0);
-            Assert.True(position.Y >= 0);
+            Rectangle virtualScreen = SystemInformation.VirtualScreen;
+
+            Assert.True(position.X >= virtualScreen.X);
+            Assert.True(position.Y >= virtualScreen.Y);
+            Assert.True(position.X <= virtualScreen.Right);
+            Assert.True(position.Y <= virtualScreen.Bottom);
         }
 
         [Fact]
@@ -238,12 +238,15 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Cursor.Position = new Point(1, 2);
+                position = Cursor.Position;
                 Assert.True(position.X >= 0);
                 Assert.True(position.Y >= 0);
 
-                Cursor.Position = new Point(-2, -3);
-                Assert.True(position.X >= 0);
-                Assert.True(position.Y >= 0);
+                Rectangle virtualScreen = SystemInformation.VirtualScreen;
+                Cursor.Position = new Point(virtualScreen.X - 1, virtualScreen.Y - 1);
+                position = Cursor.Position;
+                Assert.True(position.X >= virtualScreen.X);
+                Assert.True(position.Y >= virtualScreen.Y);
             }
             finally
             {

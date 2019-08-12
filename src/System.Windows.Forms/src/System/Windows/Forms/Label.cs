@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -71,7 +72,6 @@ namespace System.Windows.Forms
 
         // } End Members
         ///////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Initializes a new instance of the <see cref='Label'/> class.
         /// </summary>
@@ -676,8 +676,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the "politeness" level that a client should use
-        /// to notify the user of changes to the live region.
+        ///  Indicates the "politeness" level that a client should use
+        ///  to notify the user of changes to the live region.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAccessibility)),
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms
 
                 using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                 {
-                    Interop.User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
+                    User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
 
                     // This is actually leading margin.
                     return dtParams.iLeftMargin;
@@ -1372,10 +1372,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This method is required because the Label constructor needs to know if the control is
-        /// OwnerDraw but it should not call the virtual property because if a derived class has
-        /// overridden the method, the derived class version will be called (before the derived
-        /// class constructor is called).
+        ///  This method is required because the Label constructor needs to know if the control is
+        ///  OwnerDraw but it should not call the virtual property because if a derived class has
+        ///  overridden the method, the derived class version will be called (before the derived
+        ///  class constructor is called).
         /// </summary>
         private bool IsOwnerDraw() => FlatStyle != FlatStyle.System;
 
@@ -1705,7 +1705,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     // label returns HT_TRANSPARENT for everything, so all messages get
                     // routed to the parent.  Change this so we can tell what's going on.
                     //

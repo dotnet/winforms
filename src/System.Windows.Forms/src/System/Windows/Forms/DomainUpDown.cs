@@ -33,7 +33,6 @@ namespace System.Windows.Forms
         // Member variables
         //
         //////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Allowable strings for the domain updown.
         /// </summary>
@@ -236,7 +235,6 @@ namespace System.Windows.Forms
         // Methods
         //
         //////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Occurs when the <see cref='SelectedItem'/> property has
         ///  been changed.
@@ -394,9 +392,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Handles the <see cref='Control.KeyPress'/>
-        /// event, using the input character to find the next matching item in our
-        /// item collection.
+        ///  Handles the <see cref='Control.KeyPress'/>
+        ///  event, using the input character to find the next matching item in our
+        ///  item collection.
         /// </summary>
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
@@ -608,8 +606,8 @@ namespace System.Windows.Forms
         // DomainUpDown collection class
 
         /// <summary>
-        /// Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
-        /// class.
+        ///  Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
+        ///  class.
         /// </summary>
         public class DomainUpDownItemCollection : ArrayList
         {
@@ -739,7 +737,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible name.
+            ///  Gets or sets the accessible name.
             /// </summary>
             public override string Name
             {

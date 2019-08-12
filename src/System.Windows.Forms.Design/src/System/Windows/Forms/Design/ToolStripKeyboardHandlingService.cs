@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
         private object _ownerItemAfterCut = null; // This value is set only of the ToolStripMenuItem is cut and now we need to reopen the dropDown which was closed in the previous CUT operation.
 
         /// <summary>
-        /// This creates a service for handling the keyboard navigation at desgin time.
+        ///  This creates a service for handling the keyboard navigation at desgin time.
         /// </summary>
         public ToolStripKeyboardHandlingService(IServiceProvider serviceProvider)
         {
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
         /// </summary>
         private IDesignerHost Host
         {
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the menu editor service, which we cache for speed.
+        ///  Retrieves the menu editor service, which we cache for speed.
         /// </summary>
         private IMenuCommandService MenuService
         {
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
         /// </summary>
         private ISelectionService SelectionService
         {
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the private helper function which gets the next control in the TabOrder..
+        ///  This is the private helper function which gets the next control in the TabOrder..
         /// </summary>
         private Control GetNextControlInTab(Control basectl, Control ctl, bool forward)
         {
@@ -884,7 +884,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is a function which gets called when the item goes into InSitu Edit mode.
+        ///  This is a function which gets called when the item goes into InSitu Edit mode.
         /// </summary>
         private void OnKeyEdit(object sender, EventArgs e)
         {
@@ -944,7 +944,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is a function which gets called when the arrow keys are used at design time on ToolStrips.
+        ///  This is a function which gets called when the arrow keys are used at design time on ToolStrips.
         /// </summary>
         private void OnKeyMove(object sender, EventArgs e)
         {
@@ -1017,7 +1017,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is a function which gets called when Cancel is pressed when we are on ToolStripItem.
+        ///  This is a function which gets called when Cancel is pressed when we are on ToolStripItem.
         /// </summary>
         private void OnKeyCancel(object sender, EventArgs e)
         {
@@ -1053,7 +1053,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This function allows the CommandSet to select the right item when the Tab and Arrow keys are used.
+        ///  This function allows the CommandSet to select the right item when the Tab and Arrow keys are used.
         /// </summary>
         private void OnKeySelect(object sender, EventArgs e)
         {
@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the current selection changes.  Here we determine what commands can and can't be enabled.
+        ///  Called when the current selection changes.  Here we determine what commands can and can't be enabled.
         /// </summary>
         private void OnSelectionChanging(object sender, EventArgs e)
         {
@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the current selection changes.  Here we determine what commands can and can't be enabled.
+        ///  Called when the current selection changes.  Here we determine what commands can and can't be enabled.
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the private helper function which is used to select the toolStripItem in the 'right' direction.
+        ///  This is the private helper function which is used to select the toolStripItem in the 'right' direction.
         /// </summary>
         private bool ProcessRightLeft(bool right)
         {
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the private helper function which is used to select the toolStripItem in the 'down' direction.
+        ///  This is the private helper function which is used to select the toolStripItem in the 'down' direction.
         /// </summary>
         public void ProcessUpDown(bool down)
         {
@@ -1586,7 +1586,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this object, removing all commands from the menu service.
+        ///  Disposes of this object, removing all commands from the menu service.
         /// </summary>
         public void RemoveCommands()
         {
@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This function allows the service to select the parent for the selected Item.
+        ///  This function allows the service to select the parent for the selected Item.
         /// </summary>
         private void RotateParent(bool backwards)
         {
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This function allows the service to rotate the TabSelection when TAB key is pressed.
+        ///  This function allows the service to rotate the TabSelection when TAB key is pressed.
         /// </summary>
         // Okay to suppress because of complex code path
         public void RotateTab(bool backwards)

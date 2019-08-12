@@ -14,7 +14,7 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Provides an editor for visually picking an image.
+    ///  Provides an editor for visually picking an image.
     /// </summary>
     [CLSCompliant(false)]
     public class ImageEditor : UITypeEditor
@@ -68,9 +68,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by
-        /// GetEditorStyle. A service provider is provided so that any
-        /// required editing services can be obtained.
+        ///  Edits the given object value using the editor style provided by
+        ///  GetEditorStyle. A service provider is provided so that any
+        ///  required editing services can be obtained.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -126,8 +126,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Retrieves the editing style of the Edit method. If the method is not supported,
-        /// this will return None.
+        ///  Retrieves the editing style of the Edit method. If the method is not supported,
+        ///  this will return None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -162,8 +162,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Determines if this editor supports the painting of a representation
-        /// of an object's value.
+        ///  Determines if this editor supports the painting of a representation
+        ///  of an object's value.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
 
@@ -183,9 +183,9 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Paints a representative value of the given object to the provided
-        /// canvas. Painting should be done within the boundaries of the
-        /// provided rectangle.
+        ///  Paints a representative value of the given object to the provided
+        ///  canvas. Painting should be done within the boundaries of the
+        ///  provided rectangle.
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)
         {

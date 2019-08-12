@@ -5,8 +5,8 @@
 namespace System.Configuration
 {
     /// <summary>
-    /// These configuration file values are added in .NET FX 4.7 and above frameworks only.
-    /// Sample usage:
+    ///  These configuration file values are added in .NET FX 4.7 and above frameworks only.
+    ///  Sample usage:
     ///  <System.Windows.Forms.ApplicationConfigurationSection>
     ///  <add key="DpiAwareness" value="PerMonitorV2" />
     ///  <add key="ToolStrip.DisableHighDpiImprovements" value="false" />

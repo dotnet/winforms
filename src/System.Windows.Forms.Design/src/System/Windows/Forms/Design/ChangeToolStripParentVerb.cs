@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         private readonly IServiceProvider _provider;
 
         /// <summary>
-        /// Create one of these things...
+        ///  Create one of these things...
         /// </summary>
         internal ChangeToolStripParentVerb(string text, ToolStripDesigner designer)
         {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When the verb is invoked, change the parent of the ToolStrip.
+        ///  When the verb is invoked, change the parent of the ToolStrip.
         /// </summary>
         // This is actually called...
         public void ChangeParent()

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1336,7 +1337,7 @@ namespace System.Windows.Forms
 
                                     // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
                                     // and compensate below
-                                    Interop.RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
+                                    RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
                                     Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
                                     using (Graphics offscreen = Graphics.FromImage(bitmap))
                                     {

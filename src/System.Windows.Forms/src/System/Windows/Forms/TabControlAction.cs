@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This enum is used to specify the action that caused a TreeViewEventArgs.
+    ///  This enum is used to specify the action that caused a TreeViewEventArgs.
     /// </summary>
     public enum TabControlAction
     {

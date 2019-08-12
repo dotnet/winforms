@@ -7,14 +7,15 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
+using static Interop;
+
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class contains static properties/methods that are internal.
-    /// It also has types that make sense only for ActiveX hosting classes.
-    /// In other words, this is a helper class for the ActiveX hosting classes.
+    ///  This class contains static properties/methods that are internal.
+    ///  It also has types that make sense only for ActiveX hosting classes.
+    ///  In other words, this is a helper class for the ActiveX hosting classes.
     /// </summary>
     internal static class WebBrowserHelper
     {
@@ -96,7 +97,7 @@ namespace System.Windows.Forms
                 if (logPixelsX == -1)
                 {
                     using ScreenDC dc = ScreenDC.Create();
-                    logPixelsX = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+                    logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
                 }
                 return logPixelsX;
             }
@@ -110,7 +111,7 @@ namespace System.Windows.Forms
                 if (logPixelsY == -1)
                 {
                     using ScreenDC dc = ScreenDC.Create();
-                    logPixelsY = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
+                    logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                 }
                 return logPixelsY;
             }

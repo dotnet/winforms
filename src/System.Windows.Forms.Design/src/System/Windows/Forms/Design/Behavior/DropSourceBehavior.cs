@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The DropSourceBehavior is created by ControlDesigner when it detects that  a drag operation has started.  This object is passed to the BehaviorService and is used to route GiveFeedback and QueryContinueDrag drag/drop messages. In response to GiveFeedback messages, this class will render the dragging controls in real-time with the help of the DragAssistanceManager (Snaplines) object or by simply snapping to grid dots.
+    ///  The DropSourceBehavior is created by ControlDesigner when it detects that  a drag operation has started.  This object is passed to the BehaviorService and is used to route GiveFeedback and QueryContinueDrag drag/drop messages. In response to GiveFeedback messages, this class will render the dragging controls in real-time with the help of the DragAssistanceManager (Snaplines) object or by simply snapping to grid dots.
     /// </summary>
     internal sealed class DropSourceBehavior : Behavior, IComparer
     {
@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Design.Behavior
         private int primaryComponentIndex = -1; // Index of the primary component (control) in dragComponents
 
         /// <summary>
-        /// Constuctor that caches all needed vars for perf reasons.
+        ///  Constuctor that caches all needed vars for perf reasons.
         /// </summary>
         internal DropSourceBehavior(ICollection dragComponents, Control source, Point initialMouseLocation)
         {
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This is the initial allowed Effect to start the drag operation with.
+        ///  This is the initial allowed Effect to start the drag operation with.
         /// </summary>
         internal DragDropEffects AllowedEffects
         {
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This is the DataObject this DropSourceBehavior represents.
+        ///  This is the DataObject this DropSourceBehavior represents.
         /// </summary>
         internal DataObject DataObject
         {
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Here, during our drag operation, we need to determine the offset from the dragging control's position 'dragLoc' and the parent's grid. We'll return an offset for the image to 'snap to'.
+        ///  Here, during our drag operation, we need to determine the offset from the dragging control's position 'dragLoc' and the parent's grid. We'll return an offset for the image to 'snap to'.
         /// </summary>
         private Point AdjustToGrid(Point dragLoc)
         {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This is used to clear the drag images.
+        ///  This is used to clear the drag images.
         /// </summary>
         private void ClearAllDragImages()
         {
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This is where we end the drag and commit the new control locations. To do this correctly, we loop through every control and find its propertyDescriptor for the Location.  Then call SetValue().  After this we re-enable the adorners.  Finally, we pop ourselves from the BehaviorStack.
+        ///  This is where we end the drag and commit the new control locations. To do this correctly, we loop through every control and find its propertyDescriptor for the Location.  Then call SetValue().  After this we re-enable the adorners.  Finally, we pop ourselves from the BehaviorStack.
         /// </summary>
         private void EndDragDrop(bool allowSetChildIndexOnDrop)
         {
@@ -589,7 +589,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the BehaviorService when the GiveFeedback event is fired. Here, we attempt to render all of our dragging control snapshots.  *After, of course, we let the DragAssistanceManager adjust the position due to any SnapLine activity.
+        ///  Called by the BehaviorService when the GiveFeedback event is fired. Here, we attempt to render all of our dragging control snapshots.  *After, of course, we let the DragAssistanceManager adjust the position due to any SnapLine activity.
         /// </summary>
         internal void GiveFeedback(object sender, GiveFeedbackEventArgs e)
         {
@@ -837,7 +837,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// We want to sort the dragComponents in descending z-order. We want to  make sure that we draw the control lowest in the z-order first, and drawing the control at the top of the z-order last. Remember that z-order indices are in reverse order. I.e. the control that is at the top of the z-order list has the lowest z-order index.
+        ///  We want to sort the dragComponents in descending z-order. We want to  make sure that we draw the control lowest in the z-order first, and drawing the control at the top of the z-order last. Remember that z-order indices are in reverse order. I.e. the control that is at the top of the z-order list has the lowest z-order index.
         /// </summary>
         int IComparer.Compare(object x, object y)
         {
@@ -912,7 +912,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called when the ContolDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
+        ///  Called when the ContolDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
         /// </summary>
         private void InitiateDrag(Point initialMouseLocation, ICollection dragComps)
         {
@@ -1050,7 +1050,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the BehaviorService in response to QueryContinueDrag notifications.
+        ///  Called by the BehaviorService in response to QueryContinueDrag notifications.
         /// </summary>
         internal void QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Changes the Visible state of the controls we are dragging. Returns whether we change state or not.
+        ///  Changes the Visible state of the controls we are dragging. Returns whether we change state or not.
         /// </summary>
         internal bool ShowHideDragControls(bool show)
         {
@@ -1174,7 +1174,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This class extends from DataObject and carries additional  information such as: the list of Controls currently being dragged and the drag 'Source'.
+        ///  This class extends from DataObject and carries additional  information such as: the list of Controls currently being dragged and the drag 'Source'.
         /// </summary>
         internal class BehaviorDataObject : DataObject
         {

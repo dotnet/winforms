@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that will handle the RetrieveVirtualItem event
-    /// of a ListView.
+    ///  Represents the method that will handle the RetrieveVirtualItem event
+    ///  of a ListView.
     /// </summary>
     public delegate void RetrieveVirtualItemEventHandler(object sender, RetrieveVirtualItemEventArgs e);
 }

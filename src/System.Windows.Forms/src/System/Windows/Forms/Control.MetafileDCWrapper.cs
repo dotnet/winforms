@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -26,11 +27,11 @@ namespace System.Windows.Forms
             private IntPtr _hBitmap = IntPtr.Zero;
             private IntPtr _hOriginalBmp = IntPtr.Zero;
             private readonly HandleRef _hMetafileDC;
-            private Interop.RECT _destRect;
+            private RECT _destRect;
 
             internal MetafileDCWrapper(HandleRef hOriginalDC, Size size)
             {
-                Debug.Assert(Interop.Gdi32.GetObjectType(hOriginalDC) == Interop.Gdi32.ObjectType.OBJ_ENHMETADC,
+                Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
 
                 if (size.Width < 0 || size.Height < 0)
@@ -39,13 +40,13 @@ namespace System.Windows.Forms
                 }
 
                 _hMetafileDC = hOriginalDC;
-                _destRect = new Interop.RECT(0, 0, size.Width, size.Height);
-                HDC = Interop.Gdi32.CreateCompatibleDC(IntPtr.Zero);
+                _destRect = new RECT(0, 0, size.Width, size.Height);
+                HDC = Gdi32.CreateCompatibleDC(IntPtr.Zero);
 
-                int planes = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.DeviceCapability.PLANES);
-                int bitsPixel = Interop.Gdi32.GetDeviceCaps(HDC, Interop.Gdi32.DeviceCapability.BITSPIXEL);
+                int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
+                int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);
                 _hBitmap = SafeNativeMethods.CreateBitmap(size.Width, size.Height, planes, bitsPixel, IntPtr.Zero);
-                _hOriginalBmp = Interop.Gdi32.SelectObject(HDC, _hBitmap);
+                _hOriginalBmp = Gdi32.SelectObject(HDC, _hBitmap);
             }
 
             ~MetafileDCWrapper()
@@ -66,10 +67,10 @@ namespace System.Windows.Forms
                 {
                     success = DICopy(_hMetafileDC, HDC, _destRect, true);
                     Debug.Assert(success, "DICopy() failed.");
-                    Interop.Gdi32.SelectObject(HDC, _hOriginalBmp);
-                    success = Interop.Gdi32.DeleteObject(_hBitmap) != Interop.BOOL.FALSE;
+                    Gdi32.SelectObject(HDC, _hOriginalBmp);
+                    success = Gdi32.DeleteObject(_hBitmap) != BOOL.FALSE;
                     Debug.Assert(success, "DeleteObject() failed.");
-                    success = Interop.Gdi32.DeleteDC(HDC);
+                    success = Gdi32.DeleteDC(HDC);
                     Debug.Assert(success, "DeleteObject() failed.");
                 }
                 finally
@@ -86,7 +87,7 @@ namespace System.Windows.Forms
             internal IntPtr HDC { get; private set; } = IntPtr.Zero;
 
             // ported form VB6 (Ctls\PortUtil\StdCtl.cpp:6176)
-            private unsafe bool DICopy(HandleRef hdcDest, IntPtr hdcSrc, Interop.RECT rect, bool bStretch)
+            private unsafe bool DICopy(HandleRef hdcDest, IntPtr hdcSrc, RECT rect, bool bStretch)
             {
                 long i;
 
@@ -99,14 +100,14 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    IntPtr hBitmap = Interop.Gdi32.SelectObject(hdcSrc, hNullBitmap);
+                    IntPtr hBitmap = Gdi32.SelectObject(hdcSrc, hNullBitmap);
                     if (hBitmap == IntPtr.Zero)
                     {
                         return false;
                     }
 
                     // Restore original bitmap
-                    Interop.Gdi32.SelectObject(hdcSrc, hBitmap);
+                    Gdi32.SelectObject(hdcSrc, hBitmap);
 
                     NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
                     if (UnsafeNativeMethods.GetObject(new HandleRef(null, hBitmap), Marshal.SizeOf(bmp), bmp) == 0)
@@ -198,7 +199,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Interop.Gdi32.DeleteObject(hNullBitmap);
+                    Gdi32.DeleteObject(hNullBitmap);
                 }
 
                 return true;

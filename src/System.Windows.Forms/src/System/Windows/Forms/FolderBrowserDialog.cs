@@ -8,12 +8,13 @@ using System.Drawing.Design;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a common dialog box that allows the user to specify options for
-    /// selecting a folder. This class cannot be inherited.
+    ///  Represents a common dialog box that allows the user to specify options for
+    ///  selecting a folder. This class cannot be inherited.
     /// </summary>
     [DefaultEvent(nameof(HelpRequest))]
     [DefaultProperty(nameof(SelectedPath))]
@@ -31,7 +32,7 @@ namespace System.Windows.Forms
         private string _selectedPath;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
+        ///  Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
         /// </summary>
         public FolderBrowserDialog()
         {
@@ -39,7 +40,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or Sets whether the dialog will be automatically upgraded to enable new features.
+        ///  Gets or Sets whether the dialog will be automatically upgraded to enable new features.
         /// </summary>
         [DefaultValue(true)]
         public bool AutoUpgradeEnabled { get; set; } = true;
@@ -53,8 +54,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if the 'New Folder' button should be exposed.
-        /// This property has no effect if the Vista style dialog is used; in that case, the New Folder button is always shown.
+        ///  Determines if the 'New Folder' button should be exposed.
+        ///  This property has no effect if the Vista style dialog is used; in that case, the New Folder button is always shown.
         /// </summary>
         [Browsable(true)]
         [DefaultValue(true)]
@@ -64,8 +65,8 @@ namespace System.Windows.Forms
         public bool ShowNewFolderButton { get; set; }
 
         /// <summary>
-        /// Gets the directory path of the folder the user picked.
-        /// Sets the directory path of the initial folder shown in the dialog box.
+        ///  Gets the directory path of the folder the user picked.
+        ///  Sets the directory path of the initial folder shown in the dialog box.
         /// </summary>
         [Browsable(true)]
         [DefaultValue("")]
@@ -80,7 +81,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets/sets the root node of the directory tree.
+        ///  Gets/sets the root node of the directory tree.
         /// </summary>
         [Browsable(true)]
         [DefaultValue(Environment.SpecialFolder.Desktop)]
@@ -103,8 +104,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a description to show above the folders. Here you can provide
-        /// instructions for selecting a folder.
+        ///  Gets or sets a description to show above the folders. Here you can provide
+        ///  instructions for selecting a folder.
         /// </summary>
         [Browsable(true)]
         [DefaultValue("")]
@@ -118,11 +119,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether to use the value of the <see cref="Description" /> property
-        /// as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.
+        ///  Gets or sets a value that indicates whether to use the value of the <see cref="Description" /> property
+        ///  as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.
         /// </summary>
         /// <value><see langword="true" /> to indicate that the value of the <see cref="Description" /> property is used as dialog title; <see langword="false" />
-        /// to indicate the value is added as additional text to the dialog. The default is <see langword="false" />.</value>
+        ///  to indicate the value is added as additional text to the dialog. The default is <see langword="false" />.</value>
         [Browsable(true)]
         [DefaultValue(false)]
         [Localizable(true)]
@@ -136,7 +137,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Resets all properties to their default values.
+        ///  Resets all properties to their default values.
         /// </summary>
         public override void Reset()
         {
@@ -147,7 +148,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implements running of a folder browser dialog.
+        ///  Implements running of a folder browser dialog.
         /// </summary>
         protected override bool RunDialog(IntPtr hWndOwner)
         {
@@ -227,10 +228,10 @@ namespace System.Windows.Forms
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
-            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
+            Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
             if (listHandle.IsInvalid)
             {
-                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
+                Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
                 if (listHandle.IsInvalid)
                 {
                     throw new InvalidOperationException(SR.FolderBrowserDialogNoRootFolder);
@@ -239,10 +240,10 @@ namespace System.Windows.Forms
 
             using (listHandle)
             {
-                uint mergedOptions = Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
+                uint mergedOptions = Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
                 if (!ShowNewFolderButton)
                 {
-                    mergedOptions |= Interop.Shell32.BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
+                    mergedOptions |= Shell32.BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
                 }
 
                 // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
@@ -254,13 +255,13 @@ namespace System.Windows.Forms
                     throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
-                var callback = new Interop.Shell32.BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
-                char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
+                var callback = new Shell32.BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
+                char[] displayName = ArrayPool<char>.Shared.Rent(Kernel32.MAX_PATH + 1);
                 try
                 {
                     fixed (char* pDisplayName = displayName)
                     {
-                        var bi = new Interop.Shell32.BROWSEINFO
+                        var bi = new Shell32.BROWSEINFO
                         {
                             pidlRoot = listHandle,
                             hwndOwner = hWndOwner,
@@ -273,7 +274,7 @@ namespace System.Windows.Forms
                         };
 
                         // Show the dialog
-                        using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))
+                        using (CoTaskMemSafeHandle browseHandle = Shell32.SHBrowseForFolderW(ref bi))
                         {
                             if (browseHandle.IsInvalid)
                             {
@@ -281,7 +282,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
+                            Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
                             GC.KeepAlive(callback);
                             return true;
                         }
@@ -295,8 +296,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Callback function used to enable/disable the OK button,
-        /// and select the initial folder.
+        ///  Callback function used to enable/disable the OK button,
+        ///  and select the initial folder.
         /// </summary>
         private int FolderBrowserDialog_BrowseCallbackProc(IntPtr hwnd, int msg, IntPtr lParam, IntPtr lpData)
         {
@@ -316,7 +317,7 @@ namespace System.Windows.Forms
                     if (selectedPidl != IntPtr.Zero)
                     {
                         // Try to retrieve the path from the IDList
-                        bool isFileSystemFolder = Interop.Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
+                        bool isFileSystemFolder = Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
                         UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_ENABLEOK, 0, isFileSystemFolder ? 1 : 0);
                     }
                     break;

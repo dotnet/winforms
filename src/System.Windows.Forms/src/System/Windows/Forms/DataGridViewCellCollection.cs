@@ -9,8 +9,8 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
-    /// control.
+    ///  Represents a collection of <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
+    ///  control.
     /// </summary>
     [ListBindable(false)]
     public class DataGridViewCellCollection : BaseCollection, IList
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a <see cref='DataGridViewCell'/> to this collection.
+        ///  Adds a <see cref='DataGridViewCell'/> to this collection.
         /// </summary>
         public virtual int Add(DataGridViewCell dataGridViewCell)
         {

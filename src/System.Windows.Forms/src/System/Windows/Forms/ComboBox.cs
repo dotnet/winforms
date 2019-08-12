@@ -15,6 +15,7 @@ using System.Threading;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Accessibility;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1212,7 +1213,7 @@ namespace System.Windows.Forms
                         Debug.Assert(childEdit != null);
                         if (childEdit != null)
                         {
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), EditMessages.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
                         }
                     }
                 }
@@ -1651,12 +1652,12 @@ namespace System.Windows.Forms
             }
             // Get the Combox Rect ...
             //
-            Interop.RECT comboRectMid = new Interop.RECT();
+            RECT comboRectMid = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref comboRectMid);
             //
             //Get the Edit Rectangle...
             //
-            Interop.RECT editRectMid = new Interop.RECT();
+            RECT editRectMid = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, childEdit.Handle), ref editRectMid);
 
             //get the delta
@@ -1675,7 +1676,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_CHAR:
+                case WindowMessages.WM_CHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
@@ -1692,7 +1693,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_SYSCHAR:
+                case WindowMessages.WM_SYSCHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
@@ -1709,8 +1710,8 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_KEYDOWN:
-                case Interop.WindowMessages.WM_SYSKEYDOWN:
+                case WindowMessages.WM_KEYDOWN:
+                case WindowMessages.WM_SYSKEYDOWN:
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive)
                     {
                         finder.FindDropDowns(false);
@@ -1748,12 +1749,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
+                case WindowMessages.WM_INPUTLANGCHANGE:
                     DefChildWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_KEYUP:
-                case Interop.WindowMessages.WM_SYSKEYUP:
+                case WindowMessages.WM_KEYUP:
+                case WindowMessages.WM_SYSKEYUP:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
@@ -1775,7 +1776,7 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
@@ -1797,7 +1798,7 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
 
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // set the status. Do we need to? This happens when we have a DropDownList.
@@ -1836,15 +1837,15 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_SETFONT:
+                case WindowMessages.WM_SETFONT:
                     DefChildWndProc(ref m);
                     if (childEdit != null && m.HWnd == childEdit.Handle)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), EditMessages.EM_SETMARGINS,
                                                   NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                     }
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1860,7 +1861,7 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptlc.X, Ptlc.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1876,7 +1877,7 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, Ptmc.X, Ptmc.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1892,7 +1893,7 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Ptrc.X, Ptrc.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1905,10 +1906,10 @@ namespace System.Windows.Forms
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    Interop.RECT r = new Interop.RECT();
+                    RECT r = new RECT();
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                     Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
                     // Get the mouse location
@@ -1947,7 +1948,7 @@ namespace System.Windows.Forms
 
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1960,7 +1961,7 @@ namespace System.Windows.Forms
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
 
@@ -1979,7 +1980,7 @@ namespace System.Windows.Forms
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_MBUTTONUP:
+                case WindowMessages.WM_MBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1988,7 +1989,7 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                     break;
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -2006,11 +2007,11 @@ namespace System.Windows.Forms
                     OnMouseUp(new MouseEventArgs(MouseButtons.Right, 1, ptRBtnUp.X, ptRBtnUp.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
                     if (ContextMenu != null || ContextMenuStrip != null)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }
                     else
                     {
@@ -2018,7 +2019,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSEMOVE:
+                case WindowMessages.WM_MOUSEMOVE:
                     Point point = EditToComboboxMapping(m);
                     //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
@@ -2027,7 +2028,7 @@ namespace System.Windows.Forms
                     OnMouseMove(new MouseEventArgs(MouseButtons, 0, point.X, point.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && NativeMethods.Util.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
                     {
                         Cursor.Current = Cursor;
@@ -2038,7 +2039,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case WindowMessages.WM_MOUSELEAVE:
                     DefChildWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
@@ -2050,7 +2051,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Helper to handle MouseEnter.
+        ///  Helper to handle MouseEnter.
         /// </summary>
         /// <param name="args"></param>
         private void OnMouseEnterInternal(EventArgs args)
@@ -2063,12 +2064,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Helper to handle mouseleave
+        ///  Helper to handle mouseleave
         /// </summary>
         /// <param name="args"></param>
         private void OnMouseLeaveInternal(EventArgs args)
         {
-            Interop.RECT rect = new Interop.RECT();
+            RECT rect = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
             Rectangle Rect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
             Point p = MousePosition;
@@ -2151,14 +2152,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the combo box that starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item in the combo box that starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s) => FindString(s, startIndex: -1);
 
         /// <summary>
-        /// Finds the first item after the given index which starts with the given string.
-        /// The search is not case sensitive.
+        ///  Finds the first item after the given index which starts with the given string.
+        ///  The search is not case sensitive.
         /// </summary>
         public int FindString(string s, int startIndex)
         {
@@ -2166,8 +2167,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item in the combo box that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item in the combo box that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s)
         {
@@ -2175,8 +2176,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item after the given index that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item after the given index that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {
@@ -2184,8 +2185,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the first item after the given index that matches the given string.
-        /// The strings must match exactly, except for differences in casing.
+        ///  Finds the first item after the given index that matches the given string.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         internal int FindStringExact(string s, int startIndex, bool ignoreCase)
         {
@@ -2267,14 +2268,14 @@ namespace System.Windows.Forms
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
         {
-            if ((msg == Interop.WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor())
+            if ((msg == WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor())
             {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
                 return IntPtr.Zero;
             }
-            else if ((msg == Interop.WindowMessages.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint))
+            else if ((msg == WindowMessages.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint))
             {
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
@@ -2293,7 +2294,7 @@ namespace System.Windows.Forms
         // auto-completion in DropDownList style.
         private bool InterceptAutoCompleteKeystroke(Message m)
         {
-            if (m.Msg == Interop.WindowMessages.WM_KEYDOWN)
+            if (m.Msg == WindowMessages.WM_KEYDOWN)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
@@ -2309,7 +2310,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
-            else if (m.Msg == Interop.WindowMessages.WM_CHAR)
+            else if (m.Msg == WindowMessages.WM_CHAR)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 char keyChar = unchecked((char)(long)m.WParam);
@@ -2556,7 +2557,7 @@ namespace System.Windows.Forms
 
                     // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
                     //
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), EditMessages.EM_SETMARGINS,
                                               NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                 }
             }
@@ -2670,7 +2671,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ComboBox.KeyDown'/> event.
+        ///  Raises the <see cref='ComboBox.KeyDown'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyDown(KeyEventArgs e)
@@ -2751,7 +2752,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This internal helper allows us to call the committed function multiple times without worrying about double firing.
+        ///  This internal helper allows us to call the committed function multiple times without worrying about double firing.
         /// </summary>
         private void OnSelectionChangeCommittedInternal(EventArgs e)
         {
@@ -2988,8 +2989,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ComboBox.Validating'/>
-        /// event.
+        ///  Raises the <see cref='ComboBox.Validating'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnValidating(CancelEventArgs e)
@@ -3026,7 +3027,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -3155,7 +3156,7 @@ namespace System.Windows.Forms
             prefHeightCache = -1;
         }
         /// <summary>
-        /// Reparses the objects, getting new text strings for them.
+        ///  Reparses the objects, getting new text strings for them.
         /// </summary>
         protected override void RefreshItems()
         {
@@ -3216,7 +3217,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reparses the object at the given index, getting new text string for it.
+        ///  Reparses the object at the given index, getting new text string for it.
         /// </summary>
         protected override void RefreshItem(int index)
         {
@@ -3612,7 +3613,7 @@ namespace System.Windows.Forms
             {
                 if (childEdit != null && childEdit.Handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.WindowMessages.WM_SETTEXT, IntPtr.Zero, s);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), WindowMessages.WM_SETTEXT, IntPtr.Zero, s);
                 }
             }
         }
@@ -3621,7 +3622,7 @@ namespace System.Windows.Forms
         {
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
             {
-                Interop.RECT rect = new Interop.RECT();
+                RECT rect = new RECT();
                 SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
                 Control p = ParentInternal;
                 Graphics graphics = Graphics.FromHdcInternal(m.WParam);
@@ -3647,7 +3648,7 @@ namespace System.Windows.Forms
         private void WmParentNotify(ref Message m)
         {
             base.WndProc(ref m);
-            if (unchecked((int)(long)m.WParam) == (Interop.WindowMessages.WM_CREATE | 1000 << 16))
+            if (unchecked((int)(long)m.WParam) == (WindowMessages.WM_CREATE | 1000 << 16))
             {
                 dropDownHandle = m.LParam;
 
@@ -3671,10 +3672,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Text change behavior.
-        /// Here are the window messages corresponding to each user event.
+        ///  Text change behavior.
+        ///  Here are the window messages corresponding to each user event.
         ///
-        /// DropDown (free text window):
+        ///  DropDown (free text window):
         ///  Type in Text Window:
         ///   CBN_EDITUPDATE
         ///   CBN_EDITCHANGE
@@ -3694,7 +3695,7 @@ namespace System.Windows.Forms
         ///   CBN_CLOSEUP
         ///   CBN_SELCHANGE (text changes here via selected item)
         ///
-        /// DropDownList (limited text window):
+        ///  DropDownList (limited text window):
         ///
         ///  Type text and arrow up/down:
         ///   CBN_SELENDOK  (text already changed)
@@ -3709,7 +3710,7 @@ namespace System.Windows.Forms
         ///   CBN_CLOSEUP
         ///   CBN_SELCHANGE
         ///
-        /// Simple (listbox visible):
+        ///  Simple (listbox visible):
         ///  Type in Text Window:
         ///   CBN_EDITUPDATE
         ///   CBN_EDITCHANGE
@@ -3721,15 +3722,15 @@ namespace System.Windows.Forms
         ///   CBN_SELCHANGE
         ///
         ///
-        /// What we do is fire textchange events in these messages:
+        ///  What we do is fire textchange events in these messages:
         ///  CBN_SELCHANGE
         ///  CBN_EDITCHANGE
         ///  CBN_CLOSEUP
         ///
-        /// and we only actually call the real event if the Text is different than currentText.
-        /// currentText is never changed outside this method.
-        /// This internal version can be called from anywhere we might suspect text has changed
-        /// it's fairly safe to call anywhere.
+        ///  and we only actually call the real event if the Text is different than currentText.
+        ///  currentText is never changed outside this method.
+        ///  This internal version can be called from anywhere we might suspect text has changed
+        ///  it's fairly safe to call anywhere.
 
         private void WmReflectCommand(ref Message m)
         {
@@ -3831,7 +3832,7 @@ namespace System.Windows.Forms
             {
                 // We don't want to fire the focus events twice -
                 // once in the combobox and once in the ChildWndProc.
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     try
                     {
                         fireSetFocus = false;
@@ -3843,7 +3844,7 @@ namespace System.Windows.Forms
                         fireSetFocus = true;
                     }
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     try
                     {
                         fireLostFocus = false;
@@ -3861,7 +3862,7 @@ namespace System.Windows.Forms
 
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                         {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_MOUSELEAVE, 0, 0);
+                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_MOUSELEAVE, 0, 0);
                         }
                     }
 
@@ -3870,33 +3871,33 @@ namespace System.Windows.Forms
                         fireLostFocus = true;
                     }
                     break;
-                case Interop.WindowMessages.WM_CTLCOLOREDIT:
-                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
+                case WindowMessages.WM_CTLCOLOREDIT:
+                case WindowMessages.WM_CTLCOLORLISTBOX:
                     m.Result = InitializeDCForWmCtlColor(m.WParam, m.Msg);
                     break;
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
-                case Interop.WindowMessages.WM_PARENTNOTIFY:
+                case WindowMessages.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     mouseEvents = true;
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    Interop.RECT r = new Interop.RECT();
+                    RECT r = new RECT();
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                     Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
 
@@ -3927,12 +3928,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case WindowMessages.WM_MOUSELEAVE:
                     DefWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
 
-                case Interop.WindowMessages.WM_PAINT:
+                case WindowMessages.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
                         using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
@@ -3940,9 +3941,9 @@ namespace System.Windows.Forms
                             using (WindowsRegion wr = new WindowsRegion(Bounds))
                             {
                                 // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                                Interop.RegionType updateRegionFlags = Interop.User32.GetUpdateRgn(Handle, wr.HRegion, Interop.BOOL.TRUE);
+                                RegionType updateRegionFlags = User32.GetUpdateRgn(Handle, wr.HRegion, BOOL.TRUE);
 
-                                dr.CombineRegion(wr, dr, Interop.Gdi32.CombineMode.RGN_DIFF);
+                                dr.CombineRegion(wr, dr, Gdi32.CombineMode.RGN_DIFF);
 
                                 Rectangle updateRegionBoundingRect = wr.ToRectangle();
                                 FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
@@ -3965,13 +3966,13 @@ namespace System.Windows.Forms
                                 {
                                     using (WindowsGraphics wg = new WindowsGraphics(mDC))
                                     {
-                                        if (updateRegionFlags != Interop.RegionType.ERROR)
+                                        if (updateRegionFlags != RegionType.ERROR)
                                         {
                                             wg.DeviceContext.SetClip(dr);
                                         }
                                         m.WParam = dc;
                                         DefWndProc(ref m);
-                                        if (updateRegionFlags != Interop.RegionType.ERROR)
+                                        if (updateRegionFlags != RegionType.ERROR)
                                         {
                                             wg.DeviceContext.SetClip(wr);
                                         }
@@ -3994,7 +3995,7 @@ namespace System.Windows.Forms
 
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINTCLIENT:
+                case WindowMessages.WM_PRINTCLIENT:
                     // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
                     if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
                     {
@@ -4014,11 +4015,11 @@ namespace System.Windows.Forms
                     }
                     base.WndProc(ref m);
                     return;
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_SETFONT:
+                case WindowMessages.WM_SETFONT:
                     //(
                     if (Width == 0)
                     {
@@ -4027,7 +4028,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     if (!suppressNextWindosPos)
                     {
                         base.WndProc(ref m);
@@ -4035,7 +4036,7 @@ namespace System.Windows.Forms
                     suppressNextWindosPos = false;
                     break;
 
-                case Interop.WindowMessages.WM_NCDESTROY:
+                case WindowMessages.WM_NCDESTROY:
                     base.WndProc(ref m);
                     ReleaseChildWindow();
                     break;
@@ -4069,10 +4070,10 @@ namespace System.Windows.Forms
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_GETOBJECT:
+                    case WindowMessages.WM_GETOBJECT:
                         WmGetObject(ref m);
                         return;
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case WindowMessages.WM_MOUSEMOVE:
                         if (_childWindowType == ChildWindowType.DropDownList)
                         {
 
@@ -4675,7 +4676,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox item accessible object.
+        ///  Represents the ComboBox item accessible object.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxItemAccessibleObject : AccessibleObject
@@ -4685,7 +4686,7 @@ namespace System.Windows.Forms
             private IAccessible _systemIAccessible;
 
             /// <summary>
-            /// Initializes new instance of ComboBox item accessible object.
+            ///  Initializes new instance of ComboBox item accessible object.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox.</param>
             /// <param name="owningItem">The owning ComboBox item.</param>
@@ -4698,7 +4699,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the ComboBox Item bounds.
+            ///  Gets the ComboBox Item bounds.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -4718,7 +4719,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the ComboBox item default action.
+            ///  Gets the ComboBox item default action.
             /// </summary>
             public override string DefaultAction
             {
@@ -4826,7 +4827,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the help text.
+            ///  Gets the help text.
             /// </summary>
             public override string Help
             {
@@ -4837,7 +4838,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether specified pattern is supported.
+            ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
@@ -4854,7 +4855,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible name.
+            ///  Gets or sets the accessible name.
             /// </summary>
             public override string Name
             {
@@ -4875,7 +4876,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible role.
+            ///  Gets the accessible role.
             /// </summary>
             public override AccessibleRole Role
             {
@@ -4886,7 +4887,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -4905,7 +4906,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -4994,9 +4995,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// ComboBox control accessible object with UI Automation provider functionality.
-        /// This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
-        /// to have all base functionality.
+        ///  ComboBox control accessible object with UI Automation provider functionality.
+        ///  This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
+        ///  to have all base functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxAccessibleObject : ControlAccessibleObject
@@ -5008,7 +5009,7 @@ namespace System.Windows.Forms
             private readonly ComboBox _owningComboBox;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxAccessibleObject.
+            ///  Initializes new instance of ComboBoxAccessibleObject.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox control.</param>
             public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
@@ -5123,7 +5124,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the collection of item accessible objects.
+            ///  Gets the collection of item accessible objects.
             /// </summary>
             public ComboBoxItemAccessibleObjectCollection ItemAccessibleObjects
             {
@@ -5134,7 +5135,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the DropDown button accessible object. (UI Automation provider)
+            ///  Gets the DropDown button accessible object. (UI Automation provider)
             /// </summary>
             public ComboBoxChildDropDownButtonUiaProvider DropDownButtonUiaProvider
             {
@@ -5150,7 +5151,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5197,12 +5198,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible child corresponding to the specified index.
+            ///  Gets the accessible child corresponding to the specified index.
             /// </summary>
             /// <param name="index">The child index.</param>
             /// <returns>The accessible child.</returns>
             /// <remarks>
-            /// GetChild method should be unchanged to not break the MSAA scenarios.
+            ///  GetChild method should be unchanged to not break the MSAA scenarios.
             /// </remarks>
             internal AccessibleObject GetChildFragment(int index)
             {
@@ -5225,11 +5226,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the number of children belonging to an accessible object.
+            ///  Gets the number of children belonging to an accessible object.
             /// </summary>
             /// <returns>The number of children.</returns>
             /// <remarks>
-            /// GetChildCount method should be unchanged to not break the MSAA scenarios.
+            ///  GetChildCount method should be unchanged to not break the MSAA scenarios.
             /// </remarks>
             internal int GetChildFragmentCount()
             {
@@ -5249,7 +5250,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5317,7 +5318,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox's child (inner) edit native window control accessible object with UI Automation provider functionality.
+        ///  Represents the ComboBox's child (inner) edit native window control accessible object with UI Automation provider functionality.
         /// </summary>
         internal class ComboBoxChildEditUiaProvider : ChildAccessibleObject
         {
@@ -5327,7 +5328,7 @@ namespace System.Windows.Forms
             private readonly IntPtr _handle;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildEditUiaProvider.
+            ///  Initializes new instance of ComboBoxChildEditUiaProvider.
             /// </summary>
             /// <param name="owner">The ComboBox owning control.</param>
             /// <param name="childEditControlhandle">The child edit native window handle.</param>
@@ -5338,7 +5339,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5383,7 +5384,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5394,7 +5395,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5446,7 +5447,7 @@ namespace System.Windows.Forms
             internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -5462,7 +5463,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox's child (inner) list native window control accessible object with UI Automation provider functionality.
+        ///  Represents the ComboBox's child (inner) list native window control accessible object with UI Automation provider functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxChildListUiaProvider : ChildAccessibleObject
@@ -5473,7 +5474,7 @@ namespace System.Windows.Forms
             private readonly IntPtr _childListControlhandle;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildListUiaProvider.
+            ///  Initializes new instance of ComboBoxChildListUiaProvider.
             /// </summary>
             /// <param name="childListControlhandle"></param>
             /// <param name="owner"></param>
@@ -5484,7 +5485,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Return the child object at the given screen coordinates.
+            ///  Return the child object at the given screen coordinates.
             /// </summary>
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
@@ -5509,7 +5510,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Request to return the element in the specified direction.
+            ///  Request to return the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5533,7 +5534,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5561,7 +5562,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5650,7 +5651,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether specified pattern is supported.
+            ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
@@ -5675,7 +5676,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -5691,7 +5692,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -5709,7 +5710,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList but not DropDown) accessible object.
+        ///  Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList but not DropDown) accessible object.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxChildTextUiaProvider : AccessibleObject
@@ -5719,7 +5720,7 @@ namespace System.Windows.Forms
             private readonly ComboBox _owner;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildTextUiaProvider.
+            ///  Initializes new instance of ComboBoxChildTextUiaProvider.
             /// </summary>
             /// <param name="owner">The owning ComboBox control.</param>
             public ComboBoxChildTextUiaProvider(ComboBox owner)
@@ -5728,7 +5729,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the bounds.
+            ///  Gets the bounds.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -5739,7 +5740,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the child ID.
+            ///  Gets the child ID.
             /// </summary>
             /// <returns>The child ID.</returns>
             internal override int GetChildId()
@@ -5748,7 +5749,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible Name of ComboBox's child text element.
+            ///  Gets or sets the accessible Name of ComboBox's child text element.
             /// </summary>
             public override string Name
             {
@@ -5763,7 +5764,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5802,7 +5803,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5813,7 +5814,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -5848,7 +5849,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -5866,7 +5867,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -5884,7 +5885,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox child (inner) DropDown button accessible object with UI Automation functionality.
+        ///  Represents the ComboBox child (inner) DropDown button accessible object with UI Automation functionality.
         /// </summary>
         [ComVisible(true)]
         internal class ComboBoxChildDropDownButtonUiaProvider : AccessibleObject
@@ -5893,7 +5894,7 @@ namespace System.Windows.Forms
             private readonly ComboBox _owner;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildDropDownButtonUiaProvider.
+            ///  Initializes new instance of ComboBoxChildDropDownButtonUiaProvider.
             /// </summary>
             /// <param name="owner">The owning ComboBox control.</param>
             /// <param name="comboBoxControlhandle">The owning ComboBox control's handle.</param>
@@ -5904,7 +5905,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible Name of ComboBox's child DropDown button. ("Open" or "Close" depending on stat of the DropDown)
+            ///  Gets or sets the accessible Name of ComboBox's child DropDown button. ("Open" or "Close" depending on stat of the DropDown)
             /// </summary>
             public override string Name
             {
@@ -5920,7 +5921,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the DropDown button bounds.
+            ///  Gets the DropDown button bounds.
             /// </summary>
             public override Rectangle Bounds
             {
@@ -5933,7 +5934,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the DropDown button default action.
+            ///  Gets the DropDown button default action.
             /// </summary>
             public override string DefaultAction
             {
@@ -5945,7 +5946,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
@@ -5973,7 +5974,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the top level element.
+            ///  Gets the top level element.
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5984,7 +5985,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the child accessible object ID.
+            ///  Gets the child accessible object ID.
             /// </summary>
             /// <returns>The child accessible object ID.</returns>
             internal override int GetChildId()
@@ -5993,7 +5994,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible property value.
+            ///  Gets the accessible property value.
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
@@ -6029,7 +6030,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the help text.
+            ///  Gets the help text.
             /// </summary>
             public override string Help
             {
@@ -6041,7 +6042,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the keyboard shortcut.
+            ///  Gets the keyboard shortcut.
             /// </summary>
             public override string KeyboardShortcut
             {
@@ -6053,7 +6054,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether specified pattern is supported.
+            ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
@@ -6069,7 +6070,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible role.
+            ///  Gets the accessible role.
             /// </summary>
             public override AccessibleRole Role
             {
@@ -6081,7 +6082,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the runtime ID.
+            ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
             {
@@ -6102,7 +6103,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the accessible state.
+            ///  Gets the accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -6181,7 +6182,7 @@ namespace System.Windows.Forms
                     inWndProcCnt--;
                 }
 
-                if (m.Msg == Interop.WindowMessages.WM_NCDESTROY)
+                if (m.Msg == WindowMessages.WM_NCDESTROY)
                 {
                     Debug.Assert(ACWindows.ContainsKey(Handle));
                     ACWindows.Remove(Handle);   //so we do not leak ac windows.
@@ -6212,8 +6213,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// This method clears out null entries so we get a clean BEFORE and AFTER snapshot
-            /// null entries are ACWindows that belong to someone else.
+            ///  This method clears out null entries so we get a clean BEFORE and AFTER snapshot
+            ///  null entries are ACWindows that belong to someone else.
             /// </summary>
             internal static void ClearNullACWindows()
             {
@@ -6505,7 +6506,7 @@ namespace System.Windows.Forms
             // this is just here so we can quickly eliminate rectangles that arent in the update region.
             public void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
-                Interop.RECT validRect;
+                RECT validRect;
                 if (comboBox != null)
                 { return; }
                 Rectangle topOwnerDrawArea = new Rectangle(0, 0, comboBox.Width, innerBorder.Top);
@@ -6515,25 +6516,25 @@ namespace System.Windows.Forms
 
                 if (topOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new Interop.RECT(topOwnerDrawArea);
+                    validRect = new RECT(topOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 
                 if (bottomOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new Interop.RECT(bottomOwnerDrawArea);
+                    validRect = new RECT(bottomOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 
                 if (leftOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new Interop.RECT(leftOwnerDrawArea);
+                    validRect = new RECT(leftOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 
                 if (rightOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new Interop.RECT(rightOwnerDrawArea);
+                    validRect = new RECT(rightOwnerDrawArea);
                     SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                 }
 
@@ -6541,7 +6542,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Represents the ComboBox child native window type.
+        ///  Represents the ComboBox child native window type.
         /// </summary>
         private enum ChildWindowType
         {

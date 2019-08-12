@@ -8,11 +8,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Control's IME feature.
+    ///  Control's IME feature.
     /// </summary>
     public partial class Control :
         Component,
@@ -24,9 +25,9 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,
         UnsafeNativeMethods.IPersist,
-        UnsafeNativeMethods.IPersistStreamInit,
+        Ole32.IPersistStreamInit,
         UnsafeNativeMethods.IPersistPropertyBag,
-        UnsafeNativeMethods.IPersistStorage,
+        Ole32.IPersistStorage,
         UnsafeNativeMethods.IQuickActivate,
         ISupportOleDropSource,
         IDropTarget,
@@ -660,8 +661,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='OnImeModeChanged'/>
-        /// event.
+        ///  Raises the <see cref='OnImeModeChanged'/>
+        ///  event.
         /// </summary>
         protected virtual void OnImeModeChanged(EventArgs e)
         {
@@ -920,8 +921,7 @@ namespace System.Windows.Forms
         }
     } // end class Control
 
-    ///////////////////////////////////////////////////////// ImeContext class /////////////////////////////////////////////////////////
-
+    /////////////////////////////////////////////////////////  ImeContext class /////////////////////////////////////////////////////////
     /// <summary>
     ///  Represents the native IME context.
     /// </summary>
@@ -1350,8 +1350,7 @@ namespace System.Windows.Forms
         }
     }// end ImeContext class
 
-    ///////////////////////////////////////////////////////// ImeModeConversion structure /////////////////////////////////////////////////////////
-
+    /////////////////////////////////////////////////////////  ImeModeConversion structure /////////////////////////////////////////////////////////
     /// <summary>
     ///  Helper class that provides information about IME convertion mode.  Convertion mode refers to how IME interprets input like
     ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME convertion window appropriately.
@@ -1379,9 +1378,9 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Supported input language ImeMode tables.
-        ///		WARNING: Do not try to map 'active' IME modes from one table to another since they can have a different
-        ///				 meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
-        ///				 but to Japanese it is 'alpha' and to Korean it has no meaning.
+        ///  	WARNING: Do not try to map 'active' IME modes from one table to another since they can have a different
+        ///  			 meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
+        ///  			 but to Japanese it is 'alpha' and to Korean it has no meaning.
         /// </summary>
         private static readonly ImeMode[] japaneseTable = {
             ImeMode.Inherit,

@@ -7,8 +7,8 @@ namespace System.Windows.Forms
     public static class GridTablesFactory
     {
         /// <summary>
-        /// Takes a DataView and creates an intelligent mapping of DataView storage
-        /// types into available DataColumn types.
+        ///  Takes a DataView and creates an intelligent mapping of DataView storage
+        ///  types into available DataColumn types.
         /// </summary>
         public static DataGridTableStyle[] CreateGridTables(DataGridTableStyle gridTable, object dataSource, string dataMember, BindingContext bindingManager)
         {

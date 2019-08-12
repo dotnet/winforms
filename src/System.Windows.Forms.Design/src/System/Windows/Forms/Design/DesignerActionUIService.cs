@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes all resources and unhooks all events.
+        ///  Disposes all resources and unhooks all events.
         /// </summary>
         public void Dispose()
         {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This event is thrown whenever a request is made to show/hide the ui
+        ///  This event is thrown whenever a request is made to show/hide the ui
         /// </summary>
         public event DesignerActionUIStateChangeEventHandler DesignerActionUIStateChange
         {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is a new Helper Method that the service provides to refresh the DesignerActionGlyph as well as DesignerActionPanels.
+        ///  This is a new Helper Method that the service provides to refresh the DesignerActionGlyph as well as DesignerActionPanels.
         /// </summary>
         public void Refresh(IComponent component)
         {
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This fires our DesignerActionsChanged event.
+        ///  This fires our DesignerActionsChanged event.
         /// </summary>
         private void OnDesignerActionUIStateChange(DesignerActionUIStateChangeEventArgs e)
         {

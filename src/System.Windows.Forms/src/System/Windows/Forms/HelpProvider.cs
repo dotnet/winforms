@@ -10,7 +10,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides pop-up or online Help for controls.
+    ///  Provides pop-up or online Help for controls.
     /// </summary>
     [ProvideProperty("HelpString", typeof(Control))]
     [ProvideProperty("HelpKeyword", typeof(Control))]
@@ -27,14 +27,14 @@ namespace System.Windows.Forms
         private readonly Hashtable _navigators = new Hashtable();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='HelpProvider'/> class.
+        ///  Initializes a new instance of the <see cref='HelpProvider'/> class.
         /// </summary>
         public HelpProvider()
         {
         }
 
         /// <summary>
-        /// Gets or sets a string indicating the name of the Help file associated with this
+        ///  Gets or sets a string indicating the name of the Help file associated with this
         /// <see cref='HelpProvider'/> object.
         /// </summary>
         [Localizable(true)]
@@ -52,13 +52,13 @@ namespace System.Windows.Forms
         public object Tag { get; set; }
 
         /// <summary>
-        /// Determines if the help provider can offer it's extender properties to the specified target
-        /// object.
+        ///  Determines if the help provider can offer it's extender properties to the specified target
+        ///  object.
         /// </summary>
         public virtual bool CanExtend(object target) => target is Control;
 
         /// <summary>
-        /// Retrieves the Help Keyword displayed when the user invokes Help for the specified control.
+        ///  Retrieves the Help Keyword displayed when the user invokes Help for the specified control.
         /// </summary>
         [DefaultValue(null)]
         [Localizable(true)]
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the contents of the pop-up help window for the specified control.
+        ///  Retrieves the contents of the pop-up help window for the specified control.
         /// </summary>
         [DefaultValue(HelpNavigator.AssociateIndex)]
         [Localizable(true)]
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the contents of the pop-up help window for the specified control.
+        ///  Retrieves the contents of the pop-up help window for the specified control.
         /// </summary>
         [DefaultValue(null)]
         [Localizable(true)]
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves a value indicating whether Help displays for the specified control.
+        ///  Retrieves a value indicating whether Help displays for the specified control.
         /// </summary>
         [Localizable(true)]
         [SRDescription(nameof(SR.HelpProviderShowHelpDescr))]
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Handles the help event for any bound controls.
+        ///  Handles the help event for any bound controls.
         /// </summary>
         private void OnControlHelp(object sender, HelpEventArgs hevent)
         {
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Handles the help event for any bound controls.
+        ///  Handles the help event for any bound controls.
         /// </summary>
         private void OnQueryAccessibilityHelp(object sender, QueryAccessibilityHelpEventArgs e)
         {
@@ -183,7 +183,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies a Help string associated with a control.
+        ///  Specifies a Help string associated with a control.
         /// </summary>
         public virtual void SetHelpString(Control ctl, string helpString)
         {
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the Help keyword to display when the user invokes Help for a control.
+        ///  Specifies the Help keyword to display when the user invokes Help for a control.
         /// </summary>
         public virtual void SetHelpKeyword(Control ctl, string keyword)
         {
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the Help keyword to display when the user invokes Help for a control.
+        ///  Specifies the Help keyword to display when the user invokes Help for a control.
         /// </summary>
         public virtual void SetHelpNavigator(Control ctl, HelpNavigator navigator)
         {
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies whether Help is displayed for a given control.
+        ///  Specifies whether Help is displayed for a given control.
         /// </summary>
         public virtual void SetShowHelp(Control ctl, bool value)
         {
@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Used by the designer
+        ///  Used by the designer
         /// </summary>
         internal bool ShouldSerializeShowHelp(Control ctl)
         {
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Used by the designer
+        ///  Used by the designer
         /// </summary>
         public virtual void ResetShowHelp(Control ctl)
         {
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Binds/unbinds event handlers to ctl
+        ///  Binds/unbinds event handlers to ctl
         /// </summary>
         private void UpdateEventBinding(Control ctl)
         {
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a string representation for this control.
+        ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString() => base.ToString() + ", HelpNamespace: " + HelpNamespace;
     }

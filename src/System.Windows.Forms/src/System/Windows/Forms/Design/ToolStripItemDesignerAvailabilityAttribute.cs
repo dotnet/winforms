@@ -10,8 +10,8 @@ namespace System.Windows.Forms.Design
         public static readonly ToolStripItemDesignerAvailabilityAttribute Default = new ToolStripItemDesignerAvailabilityAttribute();
 
         /// <summary>
-        /// Specifies which ToolStrip types the Item can appear in - ToolStrip,MenuStrip,StatusStrip,ContextMenuStrip
-        /// Adding this attribute over a class lets you add to the list of custom items in the ToolStrip design time.
+        ///  Specifies which ToolStrip types the Item can appear in - ToolStrip,MenuStrip,StatusStrip,ContextMenuStrip
+        ///  Adding this attribute over a class lets you add to the list of custom items in the ToolStrip design time.
         /// </summary>
         public ToolStripItemDesignerAvailabilityAttribute()
         {

@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that will handle the <see cref='Control.Invalidate'/>
-    /// event of a <see cref='Control'/>.
+    ///  Represents the method that will handle the <see cref='Control.Invalidate'/>
+    ///  event of a <see cref='Control'/>.
     /// </summary>
     public delegate void InvalidateEventHandler(object sender, InvalidateEventArgs e);
 }

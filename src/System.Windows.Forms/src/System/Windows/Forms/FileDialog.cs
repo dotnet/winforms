@@ -8,11 +8,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Displays a dialog window from which the user can select a file.
+    ///  Displays a dialog window from which the user can select a file.
     /// </summary>
     [DefaultEvent(nameof(FileOk))]
     [DefaultProperty(nameof(FileName))]
@@ -37,8 +38,8 @@ namespace System.Windows.Forms
         private IntPtr _dialogHWnd;
 
         /// <summary>
-        /// In an inherited class, initializes a new instance of the <see cref='FileDialog'/>
-        /// class.
+        ///  In an inherited class, initializes a new instance of the <see cref='FileDialog'/>
+        ///  class.
         /// </summary>
         internal FileDialog()
         {
@@ -46,8 +47,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the dialog box automatically adds an
-        /// extension to a file name if the user omits the extension.
+        ///  Gets or sets a value indicating whether the dialog box automatically adds an
+        ///  extension to a file name if the user omits the extension.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
@@ -59,8 +60,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the dialog box displays a warning
-        /// if the user specifies a file name that does not exist.
+        ///  Gets or sets a value indicating whether the dialog box displays a warning
+        ///  if the user specifies a file name that does not exist.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
@@ -72,8 +73,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the dialog box displays a warning if
-        /// the user specifies a path that does not exist.
+        ///  Gets or sets a value indicating whether the dialog box displays a warning if
+        ///  the user specifies a path that does not exist.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
@@ -85,7 +86,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the default file extension.
+        ///  Gets or sets the default file extension.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue("")]
@@ -112,9 +113,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the dialog box returns the location
-        /// of the file referenced by the shortcut or whether it returns the location
-        /// of the shortcut (.lnk).
+        ///  Gets or sets a value indicating whether the dialog box returns the location
+        ///  of the file referenced by the shortcut or whether it returns the location
+        ///  of the shortcut (.lnk).
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
@@ -125,10 +126,10 @@ namespace System.Windows.Forms
             set => SetOption(NativeMethods.OFN_NODEREFERENCELINKS, !value);
         }
 
-        private protected string DialogCaption => Interop.User32.GetWindowText(new HandleRef(this, _dialogHWnd));
+        private protected string DialogCaption => User32.GetWindowText(new HandleRef(this, _dialogHWnd));
 
         /// <summary>
-        /// Gets or sets a string containing the file name selected in the file dialog box.
+        ///  Gets or sets a string containing the file name selected in the file dialog box.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
@@ -148,7 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the file names of all selected files in the dialog box.
+        ///  Gets the file names of all selected files in the dialog box.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -159,8 +160,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the current file name filter string, which determines the choices
-        /// that appear in the "Save as file type" or "Files of type" box in the dialog box.
+        ///  Gets or sets the current file name filter string, which determines the choices
+        ///  that appear in the "Save as file type" or "Files of type" box in the dialog box.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue("")]
@@ -192,9 +193,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Extracts the file extensions specified by the current file filter into an
-        /// array of strings.  None of the extensions contain .'s, and the  default
-        /// extension is first.
+        ///  Extracts the file extensions specified by the current file filter into an
+        ///  array of strings.  None of the extensions contain .'s, and the  default
+        ///  extension is first.
         /// </summary>
         private string[] FilterExtensions
         {
@@ -240,7 +241,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the index of the filter currently selected in the file dialog box.
+        ///  Gets or sets the index of the filter currently selected in the file dialog box.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(1)]
@@ -248,7 +249,7 @@ namespace System.Windows.Forms
         public int FilterIndex { get; set; }
 
         /// <summary>
-        /// Gets or sets the initial directory displayed by the file dialog box.
+        ///  Gets or sets the initial directory displayed by the file dialog box.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
@@ -260,12 +261,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the Win32 instance handle for the application.
+        ///  Gets the Win32 instance handle for the application.
         /// </summary>
-        protected virtual IntPtr Instance => Interop.Kernel32.GetModuleHandleW(null);
+        protected virtual IntPtr Instance => Kernel32.GetModuleHandleW(null);
 
         /// <summary>
-        /// Gets the Win32 common Open File Dialog OFN_* option flags.
+        ///  Gets the Win32 common Open File Dialog OFN_* option flags.
         /// </summary>
         protected int Options
         {
@@ -279,8 +280,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the dialog box restores the current
-        /// directory before closing.
+        ///  Gets or sets a value indicating whether the dialog box restores the current
+        ///  directory before closing.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
@@ -292,8 +293,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether whether the Help button is displayed
-        /// in the file dialog.
+        ///  Gets or sets a value indicating whether whether the Help button is displayed
+        ///  in the file dialog.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
@@ -305,7 +306,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets whether def or abc.def is the extension of the file filename.abc.def
+        ///  Gets or sets whether def or abc.def is the extension of the file filename.abc.def
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
@@ -313,7 +314,7 @@ namespace System.Windows.Forms
         public bool SupportMultiDottedExtensions { get; set; }
 
         /// <summary>
-        /// Gets or sets the file dialog box title.
+        ///  Gets or sets the file dialog box title.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue("")]
@@ -326,8 +327,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the dialog box accepts only valid
-        /// Win32 file names.
+        ///  Gets or sets a value indicating whether the dialog box accepts only valid
+        ///  Win32 file names.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
@@ -339,10 +340,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the user clicks on the Open or Save button on a file dialog
-        /// box.
+        ///  Occurs when the user clicks on the Open or Save button on a file dialog
+        ///  box.
         /// <remarks>
-        /// For information about handling events, see <see topic='cpconEventsOverview'/>.
+        ///  For information about handling events, see <see topic='cpconEventsOverview'/>.
         /// </remarks>
         /// </summary>
         [SRDescription(nameof(SR.FDfileOkDescr))]
@@ -353,7 +354,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Processes the CDN_FILEOK notification.
+        ///  Processes the CDN_FILEOK notification.
         /// </summary>
         private bool DoFileOk(IntPtr lpOFN)
         {
@@ -430,7 +431,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Extracts the filename(s) returned by the file dialog.
+        ///  Extracts the filename(s) returned by the file dialog.
         /// </summary>
         private string[] GetMultiselectFiles(UnsafeNativeMethods.CharBuffer charBuffer)
         {
@@ -464,17 +465,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the state of the given option flag.
+        ///  Returns the state of the given option flag.
         /// </summary>
         private protected bool GetOption(int option) => (_options & option) != 0;
 
         /// <summary>
-        /// Defines the common dialog box hook procedure that is overridden to add
-        /// specific functionality to the file dialog box.
+        ///  Defines the common dialog box hook procedure that is overridden to add
+        ///  specific functionality to the file dialog box.
         /// </summary>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == Interop.WindowMessages.WM_NOTIFY)
+            if (msg == WindowMessages.WM_NOTIFY)
             {
                 _dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
                 try
@@ -561,8 +562,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Converts the given filter string to the format required in an OPENFILENAME_I
-        /// structure.
+        ///  Converts the given filter string to the format required in an OPENFILENAME_I
+        ///  structure.
         /// </summary>
         private static string MakeFilterString(string s, bool dereferenceLinks)
         {
@@ -594,7 +595,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='FileOk'/> event.
+        ///  Raises the <see cref='FileOk'/> event.
         /// </summary>
         protected void OnFileOk(CancelEventArgs e)
         {
@@ -603,9 +604,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Processes the filenames entered in the dialog according to the settings
-        /// of the "addExtension", "checkFileExists", "createPrompt", and
-        /// "overwritePrompt" properties.
+        ///  Processes the filenames entered in the dialog according to the settings
+        ///  of the "addExtension", "checkFileExists", "createPrompt", and
+        ///  "overwritePrompt" properties.
         /// </summary>
         private bool ProcessFileNames()
         {
@@ -656,9 +657,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Prompts the user with a <see cref='MessageBox'/> with the
-        /// given parameters. It also ensures that the focus is set back on the window that
-        /// had the focus to begin with (before we displayed the MessageBox).
+        ///  Prompts the user with a <see cref='MessageBox'/> with the
+        ///  given parameters. It also ensures that the focus is set back on the window that
+        ///  had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
         private protected bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
@@ -676,8 +677,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Prompts the user with a <see cref='MessageBox'/> when a
-        /// file does not exist.
+        ///  Prompts the user with a <see cref='MessageBox'/> when a
+        ///  file does not exist.
         /// </summary>
         private void PromptFileNotFound(string fileName)
         {
@@ -705,7 +706,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Resets all properties to their default values.
+        ///  Resets all properties to their default values.
         /// </summary>
         public override void Reset()
         {
@@ -722,7 +723,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implements running of a file dialog.
+        ///  Implements running of a file dialog.
         /// </summary>
         protected override bool RunDialog(IntPtr hWndOwner)
         {
@@ -782,12 +783,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implements the actual call to GetOPENFILENAME_I or GetSaveFileName.
+        ///  Implements the actual call to GetOPENFILENAME_I or GetSaveFileName.
         /// </summary>
         private protected abstract bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn);
 
         /// <summary>
-        /// Sets the given option to the given boolean value.
+        ///  Sets the given option to the given boolean value.
         /// </summary>
         private protected void SetOption(int option, bool value)
         {
@@ -802,7 +803,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Provides a string version of this Object.
+        ///  Provides a string version of this Object.
         /// </summary>
         public override string ToString()
         {

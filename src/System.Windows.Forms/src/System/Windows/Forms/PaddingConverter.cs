@@ -12,8 +12,8 @@ namespace System.Windows.Forms
     public class PaddingConverter : TypeConverter
     {
         /// <summary>
-        /// Determines if this converter can convert an object in the given source type to
-        /// the native type of the converter.
+        ///  Determines if this converter can convert an object in the given source type to
+        ///  the native type of the converter.
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Converts the given object to the converter's native type.
+        ///  Converts the given object to the converter's native type.
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {

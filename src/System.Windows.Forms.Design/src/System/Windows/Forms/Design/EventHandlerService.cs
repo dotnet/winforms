@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides a systematic way to manage event handlers for the current document.
+    ///  Provides a systematic way to manage event handlers for the current document.
     /// </summary>
     public sealed class EventHandlerService : IEventHandlerService
     {
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
         private HandlerEntry _handlerHead;
 
         /// <summary>
-        /// Initializes a new instance of the EventHandlerService class.
+        ///  Initializes a new instance of the EventHandlerService class.
         /// </summary>
         /// <param name="focusWnd">The <see cref="Control"/> which is being designed.</param>
         public EventHandlerService(Control focusWnd)
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Fires an OnEventHandlerChanged event.
+        ///  Fires an OnEventHandlerChanged event.
         /// </summary>
         public event EventHandler EventHandlerChanged
         {

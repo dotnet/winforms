@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms
@@ -633,7 +634,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        /// HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
+        ///  HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
         ///          and our CLR callbacks.
         ///
         ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
@@ -680,7 +681,7 @@ namespace System.Windows.Forms
                 get { return htmlDocument; }
             }
 
-            /// Support IHtmlDocument3.AttachHandler
+            ///  Support IHtmlDocument3.AttachHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
 
@@ -693,7 +694,7 @@ namespace System.Windows.Forms
                 Debug.Assert(success, "failed to add event");
             }
 
-            /// Support IHtmlDocument3.DetachHandler
+            ///  Support IHtmlDocument3.DetachHandler
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);

@@ -12,7 +12,7 @@ using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.InteropServices;
-
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -532,7 +532,7 @@ namespace System.Windows.Forms
             finally
             {
                 if ((original.options & OriginalOptions.OwnsImage) != 0)
-                { /// this is to handle the case were we clone the icon (see WHY WHY WHY below)
+                { ///  this is to handle the case were we clone the icon (see WHY WHY WHY below)
                     icon.Dispose();
                 }
             }
@@ -547,8 +547,8 @@ namespace System.Windows.Forms
             IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);   // Calls GDI to create Bitmap.
             IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask); // Calls GDI+ to create Bitmap. Need to add handle to HandleCollector.
             int index = SafeNativeMethods.ImageList_Add(new HandleRef(this, Handle), hBitmap, hMask);
-            Interop.Gdi32.DeleteObject(hBitmap);
-            Interop.Gdi32.DeleteObject(hMask);
+            Gdi32.DeleteObject(hBitmap);
+            Gdi32.DeleteObject(hMask);
 
             if (index == -1)
             {
@@ -1108,9 +1108,9 @@ namespace System.Windows.Forms
             private readonly ImageList owner;
             private readonly ArrayList imageInfoCollection = new ArrayList();
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /// <summary>
@@ -1281,8 +1281,8 @@ namespace System.Windows.Forms
                         IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                         IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
                         bool ok = SafeNativeMethods.ImageList_Replace(new HandleRef(owner, owner.Handle), index, hBitmap, hMask);
-                        Interop.Gdi32.DeleteObject(hBitmap);
-                        Interop.Gdi32.DeleteObject(hMask);
+                        Gdi32.DeleteObject(hBitmap);
+                        Gdi32.DeleteObject(hMask);
 
                         if (!ok)
                         {

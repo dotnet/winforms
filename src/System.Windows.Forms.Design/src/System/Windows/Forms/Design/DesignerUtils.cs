@@ -13,11 +13,12 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Contains designer utilities.
+    ///  Contains designer utilities.
     /// </summary>
     internal static class DesignerUtils
     {
@@ -105,7 +106,7 @@ namespace System.Windows.Forms.Design
         public static readonly ContentAlignment anyMiddleAlignment = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
         /// <summary>
-        /// Scale all hardcoded sizes if needed
+        ///  Scale all hardcoded sizes if needed
         /// </summary>
         static DesignerUtils()
         {
@@ -138,7 +139,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used when the user clicks and drags a toolbox item onto the documentdesigner - this is the small box that is painted beneath the mouse pointer.
+        ///  Used when the user clicks and drags a toolbox item onto the documentdesigner - this is the small box that is painted beneath the mouse pointer.
         /// </summary>
         public static Image BoxImage
         {
@@ -158,7 +159,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used by Designer action glyphs to render a 'mouse hover' state.
+        ///  Used by Designer action glyphs to render a 'mouse hover' state.
         /// </summary>
         public static Brush HoverBrush
         {
@@ -166,7 +167,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Demand created size used to determine how far the user needs to drag the mouse before a drag operation starts.
+        ///  Demand created size used to determine how far the user needs to drag the mouse before a drag operation starts.
         /// </summary>
         public static Size MinDragSize
         {
@@ -201,21 +202,21 @@ namespace System.Windows.Forms.Design
             s_selectionBorderBrush.Dispose();
             s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
 
-            Interop.Gdi32.DeleteObject(s_grabHandleFillBrushPrimary);
+            Gdi32.DeleteObject(s_grabHandleFillBrushPrimary);
             s_grabHandleFillBrushPrimary = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
 
-            Interop.Gdi32.DeleteObject(s_grabHandleFillBrush);
+            Gdi32.DeleteObject(s_grabHandleFillBrush);
             s_grabHandleFillBrush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Interop.Gdi32.DeleteObject(s_grabHandlePenPrimary);
+            Gdi32.DeleteObject(s_grabHandlePenPrimary);
             s_grabHandlePenPrimary = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Interop.Gdi32.DeleteObject(s_grabHandlePen);
+            Gdi32.DeleteObject(s_grabHandlePen);
             s_grabHandlePen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
         }
 
         /// <summary>
-        /// Draws a ControlDarkDark border around the given image.
+        ///  Draws a ControlDarkDark border around the given image.
         /// </summary>
         private static void DrawDragBorder(Graphics g, Size imageSize, int borderSize, Color backColor)
         {
@@ -239,7 +240,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used for drawing the borders around controls that are being resized
+        ///  Used for drawing the borders around controls that are being resized
         /// </summary>
         public static void DrawResizeBorder(Graphics g, Region resizeBorder, Color backColor)
         {
@@ -253,7 +254,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used for drawing the frame when doing a mouse drag
+        ///  Used for drawing the frame when doing a mouse drag
         /// </summary>
         public static void DrawFrame(Graphics g, Region resizeBorder, FrameStyle style, Color backColor)
         {
@@ -278,7 +279,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used for drawing the grabhandles around sizeable selected controls and components.
+        ///  Used for drawing the grabhandles around sizeable selected controls and components.
         /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
@@ -286,15 +287,15 @@ namespace System.Windows.Forms.Design
             try
             {
                 //set our pen and brush based on primary selection
-                IntPtr oldBrush = Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                IntPtr oldPen = Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
+                IntPtr oldBrush = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+                IntPtr oldPen = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
                 //draw our rounded rect grabhandle
                 SafeNativeMethods.RoundRect(new HandleRef(glyph, hDC), bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
 
                 //restore old pen and brush
-                Interop.Gdi32.SelectObject(hDC, oldBrush);
-                Interop.Gdi32.SelectObject(hDC, oldPen);
+                Gdi32.SelectObject(hDC, oldBrush);
+                Gdi32.SelectObject(hDC, oldPen);
             }
             finally
             {
@@ -303,7 +304,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used for drawing the no-resize handle for non-resizeable selected controls and components.
+        ///  Used for drawing the no-resize handle for non-resizeable selected controls and components.
         /// </summary>
         public static void DrawNoResizeHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
@@ -311,14 +312,14 @@ namespace System.Windows.Forms.Design
             try
             {
                 //set our pen and brush based on primary selection
-                IntPtr oldBrush = Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                IntPtr oldPen = Interop.Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
+                IntPtr oldBrush = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+                IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
 
                 //draw our rect no-resize handle
                 SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
                 //restore old pen and brush
-                Interop.Gdi32.SelectObject(hDC, oldBrush);
-                Interop.Gdi32.SelectObject(hDC, oldPen);
+                Gdi32.SelectObject(hDC, oldBrush);
+                Gdi32.SelectObject(hDC, oldPen);
             }
             finally
             {
@@ -327,25 +328,25 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used for drawing the lock handle for locked selected controls and components.
+        ///  Used for drawing the lock handle for locked selected controls and components.
         /// </summary>
         public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
             IntPtr hDC = graphics.GetHdc();
             try
             {
-                IntPtr oldPen = Interop.Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
+                IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
                 // Upper rect - upper rect is always filled with the primary brush
-                IntPtr oldBrush = Interop.Gdi32.SelectObject(hDC, s_grabHandleFillBrushPrimary);
+                IntPtr oldBrush = Gdi32.SelectObject(hDC, s_grabHandleFillBrushPrimary);
                 SafeNativeMethods.RoundRect(new HandleRef(glyph, hDC), bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top,
                                             bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
                 // Lower rect - its fillbrush depends on the primary selection
-                Interop.Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+                Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
                 SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
 
                 //restore old pen and brush
-                Interop.Gdi32.SelectObject(hDC, oldBrush);
-                Interop.Gdi32.SelectObject(hDC, oldPen);
+                Gdi32.SelectObject(hDC, oldBrush);
+                Gdi32.SelectObject(hDC, oldPen);
             }
             finally
             {
@@ -354,7 +355,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Uses the lockedBorderBrush to draw a 'locked' border on the given Graphics at the specified bounds.
+        ///  Uses the lockedBorderBrush to draw a 'locked' border on the given Graphics at the specified bounds.
         /// </summary>
         public static void DrawSelectionBorder(Graphics graphics, Rectangle bounds)
         {
@@ -362,7 +363,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used to generate an image that represents the given control.  First, this method will call the 'GenerateSnapShotWithWM_PRINT' method on the control.  If we believe that this method did not return us a valid image (caused by some comctl/ax controls not properly responding to a wm_print) then we will attempt to do a bitblt of the control instead.
+        ///  Used to generate an image that represents the given control.  First, this method will call the 'GenerateSnapShotWithWM_PRINT' method on the control.  If we believe that this method did not return us a valid image (caused by some comctl/ax controls not properly responding to a wm_print) then we will attempt to do a bitblt of the control instead.
         /// </summary>
         public static void GenerateSnapShot(Control control, ref Image image, int borderSize, double opacity, Color backColor)
         {
@@ -391,7 +392,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
+        ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
         /// </summary>
         public static Size GetAdornmentDimensions(AdornmentType adornmentType)
         {
@@ -451,13 +452,13 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Uses BitBlt to geta snapshot of the control
+        ///  Uses BitBlt to geta snapshot of the control
         /// </summary>
         public static void GenerateSnapShotWithBitBlt(Control control, ref Image image)
         {
             //get the DC's and create our image
             HandleRef hWnd = new HandleRef(control, control.Handle);
-            IntPtr controlDC = Interop.User32.GetDC(hWnd);
+            IntPtr controlDC = User32.GetDC(hWnd);
             image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
 
             using (Graphics gDest = Graphics.FromImage(image))
@@ -475,7 +476,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Uses WM_PRINT to get a snapshot of the control.  This method will return true if the control properly responded to the wm_print message.
+        ///  Uses WM_PRINT to get a snapshot of the control.  This method will return true if the control properly responded to the wm_print message.
         /// </summary>
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
@@ -498,7 +499,7 @@ namespace System.Windows.Forms.Design
             {
                 IntPtr hDc = g.GetHdc();
                 //send the actual wm_print message
-                NativeMethods.SendMessage(hWnd, Interop.WindowMessages.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                NativeMethods.SendMessage(hWnd, WindowMessages.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -512,7 +513,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
+        ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
         /// </summary>
         public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int borderSize)
         {
@@ -539,8 +540,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
-        /// Offset - how many pixels between the border glyph and the control
+        ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
+        ///  Offset - how many pixels between the border glyph and the control
         /// </summary>
         private static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int bordersize, int offset)
         {
@@ -574,7 +575,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
+        ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
         /// </summary>
         public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
         {
@@ -587,7 +588,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Identifes where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
+        ///  Identifes where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
         /// </summary>
         public static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
         {
@@ -604,17 +605,17 @@ namespace System.Windows.Forms.Design
                 IntPtr hFontOld;
                 try
                 {
-                    hFontOld = Interop.Gdi32.SelectObject(dc, hFont);
+                    hFontOld = Gdi32.SelectObject(dc, hFont);
                     NativeMethods.TEXTMETRIC metrics = new NativeMethods.TEXTMETRIC();
                     UnsafeNativeMethods.GetTextMetrics(new HandleRef(ctrl, dc), metrics);
                     //add the font ascent to the baseline
                     fontAscent = metrics.tmAscent + 1;
                     fontHeight = metrics.tmHeight;
-                    Interop.Gdi32.SelectObject(dc, hFontOld);
+                    Gdi32.SelectObject(dc, hFontOld);
                 }
                 finally
                 {
-                    Interop.Gdi32.DeleteObject(hFont);
+                    Gdi32.DeleteObject(hFont);
                     g.ReleaseHdc(dc);
                 }
             }
@@ -635,14 +636,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by the ParentControlDesigner when creating a new
-        /// control - this will update the new control's bounds with the
-        /// proper toolbox/snapline information that has been stored
-        /// off
+        ///  Called by the ParentControlDesigner when creating a new
+        ///  control - this will update the new control's bounds with the
+        ///  proper toolbox/snapline information that has been stored
+        ///  off
         //
-        /// isMirrored - Is the ParentControlDesigner mirrored? If so, we need
-        /// to offset for that. This is because all snapline stuff is done
-        /// using a LTR coordinate system
+        ///  isMirrored - Is the ParentControlDesigner mirrored? If so, we need
+        ///  to offset for that. This is because all snapline stuff is done
+        ///  using a LTR coordinate system
         /// </summary>
         public static Rectangle GetBoundsFromToolboxSnapDragDropInfo(ToolboxSnapDragDropEventArgs e, Rectangle originalBounds, bool isMirrored)
         {
@@ -694,7 +695,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determine a unique site name for a component, starting from a base name. Return value should be passed into the Container.Add() method. If null is returned, this just means "let container generate a default name based on component type".
+        ///  Determine a unique site name for a component, starting from a base name. Return value should be passed into the Container.Add() method. If null is returned, this just means "let container generate a default name based on component type".
         /// </summary>
         public static string GetUniqueSiteName(IDesignerHost host, string name)
         {
@@ -731,7 +732,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Applies the given opacity to the image
+        ///  Applies the given opacity to the image
         /// </summary>
         private static unsafe void SetImageAlpha(Bitmap b, double opacity)
         {
@@ -775,7 +776,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method removes types that are generics from the input collection
+        ///  This method removes types that are generics from the input collection
         /// </summary>
         public static ICollection FilterGenericTypes(ICollection types)
         {
@@ -797,7 +798,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Checks the given container, substituting any nested container with its owning container. Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components, since SplitContainer sites its two SplitterPanels inside a nested container.
+        ///  Checks the given container, substituting any nested container with its owning container. Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components, since SplitContainer sites its two SplitterPanels inside a nested container.
         /// </summary>
         public static IContainer CheckForNestedContainer(IContainer container)
         {
@@ -812,7 +813,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used to create copies of the objects that we are dragging in a drag operation
+        ///  Used to create copies of the objects that we are dragging in a drag operation
         /// </summary>
         public static ICollection CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
         {
@@ -923,7 +924,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Modify a WinForms TreeView control to use the new Explorer style theme
+        ///  Modify a WinForms TreeView control to use the new Explorer style theme
         /// </summary>
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
@@ -947,7 +948,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Modify a WinForms ListView control to use the new Explorer style theme
+        ///  Modify a WinForms ListView control to use the new Explorer style theme
         /// </summary>
         /// <param name="listView">The list view control to modify</param>
         public static void ApplyListViewThemeStyles(ListView listView)

@@ -45,7 +45,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// The set of attributes that will be used for browse filtering
+        ///  The set of attributes that will be used for browse filtering
         /// </summary>
         public override AttributeCollection BrowsableAttributes
         {
@@ -238,8 +238,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Gets or sets the value for the property that is represented
-        /// by this GridEntry.
+        ///  Gets or sets the value for the property that is represented
+        ///  by this GridEntry.
         /// </summary>
         public override object PropertyValue
         {
@@ -295,7 +295,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Reset the Browsable attributes to the default (BrowsableAttribute.Yes)
+        ///  Reset the Browsable attributes to the default (BrowsableAttribute.Yes)
         /// </summary>
         public void ResetBrowsableAttributes()
         {
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Sets the value of this GridEntry from text
+        ///  Sets the value of this GridEntry from text
         /// </summary>
         public virtual void ShowCategories(bool fCategories)
         {

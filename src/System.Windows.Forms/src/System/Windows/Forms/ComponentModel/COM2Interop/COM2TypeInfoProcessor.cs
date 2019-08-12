@@ -9,17 +9,18 @@ using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using Hashtable = System.Collections.Hashtable;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// This is the main worker class of Com2 property interop. It takes an IDispatch Object
-    /// and translates it's ITypeInfo into Com2PropertyDescriptor objects that are understandable
-    /// by managed code.
+    ///  This is the main worker class of Com2 property interop. It takes an IDispatch Object
+    ///  and translates it's ITypeInfo into Com2PropertyDescriptor objects that are understandable
+    ///  by managed code.
     ///
-    /// This class only knows how to process things that are natively in the typeinfo.  Other property
-    /// information such as IPerPropertyBrowsing is handled elsewhere.
+    ///  This class only knows how to process things that are natively in the typeinfo.  Other property
+    ///  information such as IPerPropertyBrowsing is handled elsewhere.
     /// </summary>
     internal class Com2TypeInfoProcessor
     {
@@ -52,7 +53,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static Hashtable processedLibraries;
 
         /// <summary>
-        /// Given an Object, this attempts to locate its type ifo
+        ///  Given an Object, this attempts to locate its type ifo
         /// </summary>
         public static UnsafeNativeMethods.ITypeInfo FindTypeInfo(object obj, bool wantCoClass)
         {
@@ -104,8 +105,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
-        /// all available type infos will be returned, otherwise the primary one will be alled.
+        ///  Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
+        ///  all available type infos will be returned, otherwise the primary one will be alled.
         /// </summary>
         public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
@@ -149,8 +150,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Retrieve the dispid of the property that we are to use as the name
-        /// member.  In this case, the grid will put parens around the name.
+        ///  Retrieve the dispid of the property that we are to use as the name
+        ///  member.  In this case, the grid will put parens around the name.
         /// </summary>
         public static int GetNameDispId(UnsafeNativeMethods.IDispatch obj)
         {
@@ -201,8 +202,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Gets the properties for a given Com2 Object.  The returned Com2Properties
-        /// Object contains the properties and relevant data about them.
+        ///  Gets the properties for a given Com2 Object.  The returned Com2Properties
+        ///  Object contains the properties and relevant data about them.
         /// </summary>
         public static Com2Properties GetProperties(object obj)
         {
@@ -324,9 +325,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Resolves a value type for a property from a TYPEDESC.  Value types can be
-        /// user defined, which and may be aliased into other type infos.  This function
-        /// will recusively walk the ITypeInfos to resolve the type to a clr Type.
+        ///  Resolves a value type for a property from a TYPEDESC.  Value types can be
+        ///  user defined, which and may be aliased into other type infos.  This function
+        ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
         private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData)
         {
@@ -741,8 +742,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// This converts a type info that describes a IDL defined enum
-        /// into one we can use
+        ///  This converts a type info that describes a IDL defined enum
+        ///  into one we can use
         /// </summary>
         private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo)
         {
@@ -1038,7 +1039,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return typeof(Guid);
 
                 case NativeMethods.tagVT.VT_FILETIME:
-                    return typeof(NativeMethods.FILETIME);
+                    return typeof(FILETIME);
 
                 case NativeMethods.tagVT.VT_USERDEFINED:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
@@ -1151,7 +1152,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     }
 
     /// <summary>
-    /// A class included so we can recognize a variant properly.
+    ///  A class included so we can recognize a variant properly.
     /// </summary>
     public class Com2Variant
     {

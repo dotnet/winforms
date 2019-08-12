@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Collection of child controls.
+        ///  Collection of child controls.
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr))]
         internal ToolStripPanelRowControlCollection ControlsInternal
@@ -294,8 +294,8 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        /// returns true if there is enough space to "raft" the control
-        /// ow returns false
+        ///  returns true if there is enough space to "raft" the control
+        ///  ow returns false
         /// </summary>
         public bool CanMove(ToolStrip toolStripToDrag)
         {
@@ -689,7 +689,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Should not be exposed as this returns an unexposed type.
+        ///  Should not be exposed as this returns an unexposed type.
         /// </summary>
         IArrangedElement IArrangedElement.Container
         {
@@ -937,8 +937,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// grows all controls after the index to be their preferred size.
-            /// reports back how much space was used.
+            ///  grows all controls after the index to be their preferred size.
+            ///  reports back how much space was used.
             /// </summary>
             protected virtual int GrowControlsAfter(int index, int growBy)
             {
@@ -969,8 +969,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// grows all controls before the index to be their preferred size.
-            /// reports back how much space was used.
+            ///  grows all controls before the index to be their preferred size.
+            ///  reports back how much space was used.
             /// </summary>
             protected virtual int GrowControlsBefore(int index, int growBy)
             {
@@ -2223,21 +2223,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// ToolStripPanelRowControlCollection
+        ///  ToolStripPanelRowControlCollection
         ///
-        /// this class represents the collection of controls on a particular row.
-        /// when you add and remove controls from this collection - you also add and remove
-        /// controls to and from the ToolStripPanel.Control's collection (which happens
-        /// to be externally readonly.)
+        ///  this class represents the collection of controls on a particular row.
+        ///  when you add and remove controls from this collection - you also add and remove
+        ///  controls to and from the ToolStripPanel.Control's collection (which happens
+        ///  to be externally readonly.)
         ///
-        /// This class is used to represent the IArrangedElement.Children for the ToolStripPanelRow -
-        /// which means that this collection represents the IArrangedElements to layout for
-        /// a particular ToolStripPanelRow.
+        ///  This class is used to represent the IArrangedElement.Children for the ToolStripPanelRow -
+        ///  which means that this collection represents the IArrangedElements to layout for
+        ///  a particular ToolStripPanelRow.
         ///
-        /// We need to keep copies of the controls in both the ToolStripPanelRowControlCollection and
-        /// the ToolStripPanel.Control collection  as the ToolStripPanel.Control collection
-        /// is responsible for parenting and unparenting the controls (ToolStripPanelRows do NOT derive from
-        /// Control and thus are NOT hwnd backed).
+        ///  We need to keep copies of the controls in both the ToolStripPanelRowControlCollection and
+        ///  the ToolStripPanel.Control collection  as the ToolStripPanel.Control collection
+        ///  is responsible for parenting and unparenting the controls (ToolStripPanelRows do NOT derive from
+        ///  Control and thus are NOT hwnd backed).
         /// </summary>
         internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
         {
@@ -2539,9 +2539,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// We want to pretend like we're only holding controls... so everywhere we've returned controls.
-            /// but the problem is if you do a foreach, you'll get the cells not the controls.  So we've got
-            /// to sort of write a wrapper class around the ArrayList enumerator.
+            ///  We want to pretend like we're only holding controls... so everywhere we've returned controls.
+            ///  but the problem is if you do a foreach, you'll get the cells not the controls.  So we've got
+            ///  to sort of write a wrapper class around the ArrayList enumerator.
             private class ToolStripPanelCellToControlEnumerator : IEnumerator, ICloneable
             {
                 private readonly IEnumerator arrayListEnumerator;

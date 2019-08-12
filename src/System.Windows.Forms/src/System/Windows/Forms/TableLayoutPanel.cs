@@ -122,9 +122,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This sets the maximum number of columns allowed on this table instead of allocating
-        /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
-        /// causing out of memory exception
+        ///  This sets the maximum number of columns allowed on this table instead of allocating
+        ///  actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
+        ///  causing out of memory exception
         /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -161,9 +161,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This sets the maximum number of rows allowed on this table instead of allocating
-        /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
-        /// causing out of memory exception
+        ///  This sets the maximum number of rows allowed on this table instead of allocating
+        ///  actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
+        ///  causing out of memory exception
         /// </summary>
         [SRDescription(nameof(SR.GridPanelRowsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// get the control which covers the specified row and column. return null if we can't find one
+        ///  get the control which covers the specified row and column. return null if we can't find one
         /// </summary>
         public Control GetControlFromPosition(int column, int row)
         {
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This returns an array representing the widths (in pixels) of the columns in the TableLayoutPanel.
+        ///  This returns an array representing the widths (in pixels) of the columns in the TableLayoutPanel.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetColumnWidths()
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This returns an array representing the heights (in pixels) of the rows in the TableLayoutPanel.
+        ///  This returns an array representing the heights (in pixels) of the rows in the TableLayoutPanel.
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetRowHeights()
@@ -568,7 +568,7 @@ namespace System.Windows.Forms
     }
 
     /// <summary>
-    /// Represents a collection of controls on the TableLayoutPanel.
+    ///  Represents a collection of controls on the TableLayoutPanel.
     /// </summary>
     [ListBindable(false)]
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
         public TableLayoutPanel Container { get; }
 
         /// <summary>
-        /// Add control to cell (x, y) on the table. The control becomes absolutely positioned if neither x nor y is equal to -1
+        ///  Add control to cell (x, y) on the table. The control becomes absolutely positioned if neither x nor y is equal to -1
         /// </summary>
         public virtual void Add(Control control, int column, int row)
         {

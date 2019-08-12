@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the UpDownEvent
+    ///  Provides data for the UpDownEvent
     /// </summary>
     public class UpDownEventArgs : EventArgs
     {

@@ -19,12 +19,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the index of the column header whose width is changing
+        ///  Returns the index of the column header whose width is changing
         /// </summary>
         public int ColumnIndex { get; }
 
         /// <summary>
-        /// Returns the new width for the column header who is changing
+        ///  Returns the new width for the column header who is changing
         /// </summary>
         public int NewWidth { get; set; }
     }

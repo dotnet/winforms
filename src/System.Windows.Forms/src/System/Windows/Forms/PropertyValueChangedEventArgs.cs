@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// The event class that is created when a property in the grid is modified by the user.
+    ///  The event class that is created when a property in the grid is modified by the user.
     /// </summary>
     [ComVisible(true)]
     public class PropertyValueChangedEventArgs : EventArgs

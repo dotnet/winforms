@@ -5,37 +5,37 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the border style for a button control.
+    ///  Specifies the border style for a button control.
     /// </summary>
     public enum ButtonBorderStyle
     {
         /// <summary>
-        /// No border.
+        ///  No border.
         /// </summary>
         None,
 
         /// <summary>
-        /// A dotted-line border.
+        ///  A dotted-line border.
         /// </summary>
         Dotted,
 
         /// <summary>
-        /// A dashed border.
+        ///  A dashed border.
         /// </summary>
         Dashed,
 
         /// <summary>
-        /// A solid border.
+        ///  A solid border.
         /// </summary>
         Solid,
 
         /// <summary>
-        /// A sunken border.
+        ///  A sunken border.
         /// </summary>
         Inset,
 
         /// <summary>
-        /// A raised border.
+        ///  A raised border.
         /// </summary>
         Outset,
     }

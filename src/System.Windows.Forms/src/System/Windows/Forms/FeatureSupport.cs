@@ -5,14 +5,14 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides <see langword='static'/> methods for retrieving feature information from the
-    /// current system.
+    ///  Provides <see langword='static'/> methods for retrieving feature information from the
+    ///  current system.
     /// </summary>
     public abstract class FeatureSupport : IFeatureSupport
     {
         /// <summary>
-        /// Determines whether any version of the specified feature is installed in the system.
-        /// This method is <see langword='static'/>.
+        ///  Determines whether any version of the specified feature is installed in the system.
+        ///  This method is <see langword='static'/>.
         /// </summary>
         public static bool IsPresent(string featureClassName, string featureConstName)
         {
@@ -20,8 +20,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines whether the specified or newer version of the specified feature is
-        /// installed in the system. This method is <see langword='static'/>.
+        ///  Determines whether the specified or newer version of the specified feature is
+        ///  installed in the system. This method is <see langword='static'/>.
         /// </summary>
         public static bool IsPresent(string featureClassName, string featureConstName, Version minimumVersion)
         {
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the version of the specified feature that is available on the system.
+        ///  Gets the version of the specified feature that is available on the system.
         /// </summary>
         public static Version GetVersionPresent(string featureClassName, string featureConstName)
         {
@@ -69,13 +69,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines whether any version of the specified feature is installed in the system.
+        ///  Determines whether any version of the specified feature is installed in the system.
         /// </summary>
         public virtual bool IsPresent(object feature) => IsPresent(feature, new Version(0, 0, 0, 0));
 
         /// <summary>
-        /// Determines whether the specified or newer version of the specified feature is
-        /// installed in the system.
+        ///  Determines whether the specified or newer version of the specified feature is
+        ///  installed in the system.
         /// </summary>
         public virtual bool IsPresent(object feature, Version minimumVersion)
         {
@@ -89,8 +89,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, gets the version of the specified feature that
-        /// is available on the system.
+        ///  When overridden in a derived class, gets the version of the specified feature that
+        ///  is available on the system.
         /// </summary>
         public abstract Version GetVersionPresent(object feature);
     }

@@ -9,7 +9,7 @@ using System.Text;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Identifies a band or column in the dataGridView.
+    ///  Identifies a band or column in the dataGridView.
     /// </summary>
     public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private int _minimumThickness;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataGridViewBand'/> class.
+        ///  Initializes a new instance of the <see cref='DataGridViewBand'/> class.
         /// </summary>
         internal DataGridViewBand()
         {
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Contains all properties that are not always set.
+        ///  Contains all properties that are not always set.
         /// </summary>
         private protected PropertyStore Properties { get; private set; } = new PropertyStore();
 

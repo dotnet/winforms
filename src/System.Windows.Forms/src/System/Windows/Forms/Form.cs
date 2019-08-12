@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -170,7 +171,7 @@ namespace System.Windows.Forms
         private VisualStyleRenderer sizeGripRenderer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Form'/> class.
+        ///  Initializes a new instance of the <see cref='Form'/> class.
         /// </summary>
         public Form() : base()
         {
@@ -251,7 +252,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the <see cref='Button'/> control on the form that is clicked when
+        ///  Indicates the <see cref='Button'/> control on the form that is clicked when
         ///  the user presses the ENTER key.
         /// </summary>
         [
@@ -283,7 +284,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves true if this form is currently active.
+        ///  Retrieves true if this form is currently active.
         /// </summary>
         internal bool Active
         {
@@ -384,7 +385,7 @@ namespace System.Windows.Forms
                     // If this.MdiClient != null it means this.IsMdiContainer == true.
                     if (ctlClient != null && ctlClient.IsHandleCreated)
                     {
-                        IntPtr hwnd = ctlClient.SendMessage(Interop.WindowMessages.WM_MDIGETACTIVE, 0, 0);
+                        IntPtr hwnd = ctlClient.SendMessage(WindowMessages.WM_MDIGETACTIVE, 0, 0);
                         mdiChild = Control.FromHandle(hwnd) as Form;
                     }
                 }
@@ -759,7 +760,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the border style of the form.
+        ///  Gets or sets the border style of the form.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(FormBorderStyle.Sizable)]
@@ -862,8 +863,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether a control box is displayed in the
-        /// caption bar of the form.
+        ///  Gets or sets a value indicating whether a control box is displayed in the
+        ///  caption bar of the form.
         /// </summary>
         [SRCategory(nameof(SR.CatWindowStyle))]
         [DefaultValue(true)]
@@ -1176,7 +1177,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the icon for the form.
+        ///  Gets or sets the icon for the form.
         /// </summary>
         [AmbientValue(null)]
         [Localizable(true)]
@@ -1326,8 +1327,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if this form should display a warning banner when the form is
-        /// displayed in an unsecure mode.
+        ///  Determines if this form should display a warning banner when the form is
+        ///  displayed in an unsecure mode.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1571,7 +1572,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the minimum size the form can be resized to.
+        ///  Gets the minimum size the form can be resized to.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
@@ -1929,8 +1930,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines the opacity of the form. This can only be set on top level controls.
-        /// Opacity requires Windows 2000 or later, and is ignored on earlier operating systems.
+        ///  Determines the opacity of the form. This can only be set on top level controls.
+        ///  Opacity requires Windows 2000 or later, and is ignored on earlier operating systems.
         /// </summary>
         [SRCategory(nameof(SR.CatWindowStyle))]
         [TypeConverter(typeof(OpacityConverter))]
@@ -2002,7 +2003,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets an array of <see cref='Form'/> objects that represent all forms that are owned by this form.
+        ///  Gets an array of <see cref='Form'/> objects that represent all forms that are owned by this form.
         /// </summary>
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -2159,7 +2160,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
+        ///  If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
         /// </summary>
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatWindowStyle))]
@@ -2181,10 +2182,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether an icon is displayed in the
-        /// caption bar of the form.
-        /// If ControlBox == false, then the icon won't be shown no matter what
-        /// the value of ShowIcon is
+        ///  Gets or sets a value indicating whether an icon is displayed in the
+        ///  caption bar of the form.
+        ///  If ControlBox == false, then the icon won't be shown no matter what
+        ///  the value of ShowIcon is
         /// </summary>
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatWindowStyle))]
@@ -2437,8 +2438,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the form should be displayed as the
-        /// top-most form of the application.
+        ///  Gets or sets a value indicating whether the form should be displayed as the
+        ///  top-most form of the application.
         /// </summary>
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatWindowStyle))]
@@ -2562,7 +2563,7 @@ namespace System.Windows.Forms
                 //
                 if (0 == formState[FormStateSWCalled])
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_SHOWWINDOW, value ? 1 : 0, 0);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_SHOWWINDOW, value ? 1 : 0, 0);
                 }
             }
             else
@@ -2630,7 +2631,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the form's window state.
+        ///  Gets or sets the form's window state.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(FormWindowState.Normal)]
@@ -2681,7 +2682,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the text to display in the caption bar of the form.
+        ///  Gets or sets the text to display in the caption bar of the form.
         /// </summary>
         internal override string WindowText
         {
@@ -2871,7 +2872,7 @@ namespace System.Windows.Forms
             {
                 if (IsMdiChild)
                 {
-                    MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                    MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
                 }
                 else
                 {
@@ -3184,7 +3185,7 @@ namespace System.Windows.Forms
             }
 
             IntPtr h = Handle;
-            Interop.RECT rc = new Interop.RECT();
+            RECT rc = new RECT();
             SafeNativeMethods.GetClientRect(new HandleRef(this, h), ref rc);
             Rectangle currentClient = Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
 
@@ -3329,7 +3330,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 closeReason = CloseReason.UserClosing;
-                SendMessage(Interop.WindowMessages.WM_CLOSE, 0, 0);
+                SendMessage(WindowMessages.WM_CLOSE, 0, 0);
             }
             else
             {
@@ -3355,7 +3356,7 @@ namespace System.Windows.Forms
         /// </summary>
         private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
         {
-            Interop.RECT result = new Interop.RECT(0, 0, clientSize.Width, clientSize.Height);
+            RECT result = new RECT(0, 0, clientSize.Width, clientSize.Height);
             AdjustWindowRectEx(ref result, style, HasMenu, exStyle);
             return new Size(result.right - result.left, result.bottom - result.top);
         }
@@ -3475,7 +3476,7 @@ namespace System.Windows.Forms
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.SendMessage(TaskbarOwner, Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                        UnsafeNativeMethods.SendMessage(TaskbarOwner, WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
                     }
                 }
 
@@ -3691,7 +3692,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the window style of the CreateParams to reflect the bordericons.
+        ///  Adjusts the window style of the CreateParams to reflect the bordericons.
         /// </summary>
         private void FillInCreateParamsBorderIcons(CreateParams cp)
         {
@@ -3745,7 +3746,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the window style of the CreateParams to reflect the borderstyle.
+        ///  Adjusts the window style of the CreateParams to reflect the borderstyle.
         /// </summary>
         private void FillInCreateParamsBorderStyles(CreateParams cp)
         {
@@ -3779,7 +3780,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the CreateParams to reflect the window bounds and start position.
+        ///  Adjusts the CreateParams to reflect the window bounds and start position.
         /// </summary>
         private void FillInCreateParamsStartPosition(CreateParams cp)
         {
@@ -3851,7 +3852,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the Createparams to reflect the window state.
+        ///  Adjusts the Createparams to reflect the window state.
         /// </summary>
         private void FillInCreateParamsWindowState(CreateParams cp)
         {
@@ -3867,7 +3868,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Attempts to set focus to this Form.
+        ///  Attempts to set focus to this Form.
         /// </summary>
         private protected override bool FocusInternal()
         {
@@ -3876,7 +3877,7 @@ namespace System.Windows.Forms
             // If this form is a MdiChild, then we need to set the focus differently.
             if (IsMdiChild)
             {
-                MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
                 return Focused;
             }
 
@@ -4070,7 +4071,7 @@ namespace System.Windows.Forms
                 {
                     Screen desktop = Screen.FromHandle(ownerHandle);
                     Rectangle screenRect = desktop.WorkingArea;
-                    Interop.RECT ownerRect = new Interop.RECT();
+                    RECT ownerRect = new RECT();
 
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(null, ownerHandle), ref ownerRect);
 
@@ -4243,8 +4244,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Override of AutoScaleModeChange method from ContainerControl. We use this to keep our
-        /// own AutoScale property in sync.
+        ///  Override of AutoScaleModeChange method from ContainerControl. We use this to keep our
+        ///  own AutoScale property in sync.
         /// </summary>
         private protected override void OnAutoScaleModeChanged()
         {
@@ -4336,7 +4337,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the Deactivate event.
+        ///  Raises the Deactivate event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDeactivate(EventArgs e)
@@ -4345,7 +4346,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the EnabledChanged event.
+        ///  Raises the EnabledChanged event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnEnabledChanged(EventArgs e)
@@ -4403,9 +4404,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to find out when the
-        /// handle is about to be destroyed.
-        /// Call base.OnHandleDestroyed last.
+        ///  Inheriting classes should override this method to find out when the
+        ///  handle is about to be destroyed.
+        ///  Call base.OnHandleDestroyed last.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnHandleDestroyed(EventArgs e)
@@ -4480,7 +4481,6 @@ namespace System.Windows.Forms
 
             /*
                         ///
-
             */
 
             // Also, at this time we can now locate the form the the correct
@@ -4558,8 +4558,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='InputLanguageChanged'/>
-        /// event.
+        ///  Raises the <see cref='InputLanguageChanged'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanged(InputLanguageChangedEventArgs e)
@@ -4568,8 +4568,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='InputLanguageChanging'/>
-        /// event.
+        ///  Raises the <see cref='InputLanguageChanging'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanging(InputLanguageChangingEventArgs e)
@@ -4601,20 +4601,17 @@ namespace System.Windows.Forms
             {
 
                 Control button = AcceptButton as Control;
-                NativeMethods.POINT ptToSnap = new NativeMethods.POINT(
-                    button.Left + button.Width / 2,
-                    button.Top + button.Height / 2);
-
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ptToSnap);
+                var ptToSnap = new Point(button.Left + button.Width / 2, button.Top + button.Height / 2);
+                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref ptToSnap);
                 if (!button.IsWindowObscured)
                 {
-                    Cursor.Position = new Point(ptToSnap.x, ptToSnap.y);
+                    Cursor.Position = ptToSnap;
                 }
             }
         }
 
         /// <summary>
-        /// Raises the <see cref='MdiChildActivate'/> event.
+        ///  Raises the <see cref='MdiChildActivate'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMdiChildActivate(EventArgs e)
@@ -4625,7 +4622,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='MenuStart'/> event.
+        ///  Raises the <see cref='MenuStart'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuStart(EventArgs e)
@@ -4635,7 +4632,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the MenuComplete event.
+        ///  Raises the MenuComplete event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuComplete(EventArgs e)
@@ -4905,7 +4902,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Processes a dialog key. Overrides Control.processDialogKey(). This
         ///  method implements handling of the RETURN, and ESCAPE keys in dialogs.
-        /// The method performs no processing on keys that include the ALT or
+        ///  The method performs no processing on keys that include the ALT or
         ///  CONTROL modifiers.
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
@@ -5317,7 +5314,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Selects this form, and optionally selects the next/previous control.
+        ///  Selects this form, and optionally selects the next/previous control.
         /// </summary>
         protected override void Select(bool directed, bool forward)
         {
@@ -5333,7 +5330,7 @@ namespace System.Windows.Forms
             else if (IsMdiChild)
             {
                 UnsafeNativeMethods.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
-                MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
             }
             else
             {
@@ -5718,7 +5715,7 @@ namespace System.Windows.Forms
             IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
             if (hWndCapture != IntPtr.Zero)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), Interop.WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                 SafeNativeMethods.ReleaseCapture();
             }
             IntPtr hWndActive = UnsafeNativeMethods.GetActiveWindow();
@@ -5826,7 +5823,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='AutoScaleBaseSize'/> property should be
+        ///  Indicates whether the <see cref='AutoScaleBaseSize'/> property should be
         ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5841,7 +5838,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Icon'/> property should be persisted.
+        ///  Indicates whether the <see cref='Icon'/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeIcon()
         {
@@ -5858,7 +5855,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='Size'/> property should be persisted.
+        ///  Indicates whether the <see cref='Size'/> property should be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeSize()
@@ -5867,7 +5864,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='TransparencyKey'/> property should be
+        ///  Indicates whether the <see cref='TransparencyKey'/> property should be
         ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -6144,14 +6141,14 @@ namespace System.Windows.Forms
                         };
                         Properties.SetObject(PropDummyMenu, dummyMenu);
                     }
-                    UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), Interop.WindowMessages.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), WindowMessages.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
 
                     if (menu != null)
                     {
 
                         // Microsoft, 5/2/1998 - don't use Win32 native Mdi lists...
                         //
-                        UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), Interop.WindowMessages.WM_MDISETMENU, menu.Handle, IntPtr.Zero);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), WindowMessages.WM_MDISETMENU, menu.Handle, IntPtr.Zero);
                     }
                 }
 
@@ -6379,8 +6376,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ResizeBegin'/>
-        /// event.
+        ///  Raises the <see cref='ResizeBegin'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResizeBegin(EventArgs e)
@@ -6392,8 +6389,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ResizeEnd'/>
-        /// event.
+        ///  Raises the <see cref='ResizeEnd'/>
+        ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResizeEnd(EventArgs e)
@@ -6412,7 +6409,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Updates the window icon.
+        ///  Updates the window icon.
         /// </summary>
         private void UpdateWindowIcon(bool redrawFrame)
         {
@@ -6446,15 +6443,15 @@ namespace System.Windows.Forms
 
                     if (smallIcon != null)
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, smallIcon.Handle);
+                        SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, smallIcon.Handle);
                     }
 
-                    SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
                 }
                 else
                 {
-                    SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, 0);
-                    SendMessage(Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, 0);
+                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, 0);
+                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, 0);
                 }
 
                 if (redrawFrame)
@@ -6644,7 +6641,7 @@ namespace System.Windows.Forms
 
             // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
             //
-            if (m.Msg != Interop.WindowMessages.WM_ENDSESSION)
+            if (m.Msg != WindowMessages.WM_ENDSESSION)
             {
                 if (Modal)
                 {
@@ -6718,7 +6715,7 @@ namespace System.Windows.Forms
                     OnFormClosing(e);
                 }
 
-                if (m.Msg == Interop.WindowMessages.WM_QUERYENDSESSION)
+                if (m.Msg == WindowMessages.WM_QUERYENDSESSION)
                 {
                     m.Result = (IntPtr)(e.Cancel ? 0 : 1);
                 }
@@ -6741,7 +6738,7 @@ namespace System.Windows.Forms
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
             // event on all mdi children and ourselves
             //
-            if (m.Msg != Interop.WindowMessages.WM_QUERYENDSESSION)
+            if (m.Msg != WindowMessages.WM_QUERYENDSESSION)
             {
                 FormClosedEventArgs fc;
                 if (!e.Cancel)
@@ -6813,7 +6810,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// WM_GETMINMAXINFO handler
+        ///  WM_GETMINMAXINFO handler
         /// </summary>
         private void WmGetMinMaxInfo(ref Message m)
         {
@@ -6843,8 +6840,8 @@ namespace System.Windows.Forms
 
             if (!minTrack.IsEmpty)
             {
-                mmi.ptMinTrackSize.x = minTrack.Width;
-                mmi.ptMinTrackSize.y = minTrack.Height;
+                mmi.ptMinTrackSize.X = minTrack.Width;
+                mmi.ptMinTrackSize.Y = minTrack.Height;
 
                 // When the MinTrackSize is set to a value larger than the screen
                 // size but the MaxTrackSize is not set to a value equal to or greater than the
@@ -6861,11 +6858,11 @@ namespace System.Windows.Forms
                     Size virtualScreen = SystemInformation.VirtualScreen.Size;
                     if (minTrack.Height > virtualScreen.Height)
                     {
-                        mmi.ptMaxTrackSize.y = int.MaxValue;
+                        mmi.ptMaxTrackSize.Y = int.MaxValue;
                     }
                     if (minTrack.Width > virtualScreen.Width)
                     {
-                        mmi.ptMaxTrackSize.x = int.MaxValue;
+                        mmi.ptMaxTrackSize.X = int.MaxValue;
                     }
                 }
             }
@@ -6874,16 +6871,16 @@ namespace System.Windows.Forms
             {
                 // Is the specified MaxTrackSize smaller than the smallest allowable Window size?
                 Size minTrackWindowSize = SystemInformation.MinWindowTrackSize;
-                mmi.ptMaxTrackSize.x = Math.Max(maxTrack.Width, minTrackWindowSize.Width);
-                mmi.ptMaxTrackSize.y = Math.Max(maxTrack.Height, minTrackWindowSize.Height);
+                mmi.ptMaxTrackSize.X = Math.Max(maxTrack.Width, minTrackWindowSize.Width);
+                mmi.ptMaxTrackSize.Y = Math.Max(maxTrack.Height, minTrackWindowSize.Height);
             }
 
             if (!maximizedBounds.IsEmpty)
             {
-                mmi.ptMaxPosition.x = maximizedBounds.X;
-                mmi.ptMaxPosition.y = maximizedBounds.Y;
-                mmi.ptMaxSize.x = maximizedBounds.Width;
-                mmi.ptMaxSize.y = maximizedBounds.Height;
+                mmi.ptMaxPosition.X = maximizedBounds.X;
+                mmi.ptMaxPosition.Y = maximizedBounds.Y;
+                mmi.ptMaxSize.X = maximizedBounds.Width;
+                mmi.ptMaxSize.Y = maximizedBounds.Height;
             }
 
             Marshal.StructureToPtr(mmi, m.LParam, false);
@@ -6921,7 +6918,7 @@ namespace System.Windows.Forms
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                 if (formMdiParent != null && formMdiParent.Menu != null)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), Interop.WindowMessages.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), WindowMessages.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
                     m.Result = (IntPtr)NativeMethods.Util.MAKELONG(0, 1);
                     return;
                 }
@@ -7038,9 +7035,8 @@ namespace System.Windows.Forms
                 int y = NativeMethods.Util.HIWORD(m.LParam);
 
                 // Convert to client coordinates
-                //
-                NativeMethods.POINT pt = new NativeMethods.POINT(x, y);
-                UnsafeNativeMethods.ScreenToClient(new HandleRef(this, Handle), pt);
+                var pt = new Point(x, y);
+                UnsafeNativeMethods.ScreenToClient(new HandleRef(this, Handle), ref pt);
 
                 Size clientSize = ClientSize;
 
@@ -7048,8 +7044,8 @@ namespace System.Windows.Forms
                 // the grip area in this case not to get in the way of the control box.  We only need to check for the client's
                 // height since the window width will be at least the size of the control box which is always bigger than the
                 // grip width.
-                if (pt.x >= (clientSize.Width - SizeGripSize) &&
-                    pt.y >= (clientSize.Height - SizeGripSize) &&
+                if (pt.X >= (clientSize.Width - SizeGripSize) &&
+                    pt.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
                     m.Result = IsMirrored ? (IntPtr)NativeMethods.HTBOTTOMLEFT : (IntPtr)NativeMethods.HTBOTTOMRIGHT;
@@ -7186,22 +7182,22 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_NCACTIVATE:
+                case WindowMessages.WM_NCACTIVATE:
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                case Interop.WindowMessages.WM_NCMBUTTONDOWN:
-                case Interop.WindowMessages.WM_NCXBUTTONDOWN:
+                case WindowMessages.WM_NCLBUTTONDOWN:
+                case WindowMessages.WM_NCRBUTTONDOWN:
+                case WindowMessages.WM_NCMBUTTONDOWN:
+                case WindowMessages.WM_NCXBUTTONDOWN:
                     WmNcButtonDown(ref m);
                     break;
-                case Interop.WindowMessages.WM_ACTIVATE:
+                case WindowMessages.WM_ACTIVATE:
                     WmActivate(ref m);
                     break;
-                case Interop.WindowMessages.WM_MDIACTIVATE:
+                case WindowMessages.WM_MDIACTIVATE:
                     WmMdiActivate(ref m);
                     break;
-                case Interop.WindowMessages.WM_CLOSE:
+                case WindowMessages.WM_CLOSE:
                     if (CloseReason == CloseReason.None)
                     {
                         CloseReason = CloseReason.TaskManagerClosing;
@@ -7209,66 +7205,66 @@ namespace System.Windows.Forms
                     WmClose(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_QUERYENDSESSION:
-                case Interop.WindowMessages.WM_ENDSESSION:
+                case WindowMessages.WM_QUERYENDSESSION:
+                case WindowMessages.WM_ENDSESSION:
                     CloseReason = CloseReason.WindowsShutDown;
                     WmClose(ref m);
                     break;
-                case Interop.WindowMessages.WM_ENTERSIZEMOVE:
+                case WindowMessages.WM_ENTERSIZEMOVE:
                     WmEnterSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_EXITSIZEMOVE:
+                case WindowMessages.WM_EXITSIZEMOVE:
                     WmExitSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_CREATE:
+                case WindowMessages.WM_CREATE:
                     WmCreate(ref m);
                     break;
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_INITMENUPOPUP:
+                case WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
-                case Interop.WindowMessages.WM_UNINITMENUPOPUP:
+                case WindowMessages.WM_UNINITMENUPOPUP:
                     WmUnInitMenuPopup(ref m);
                     break;
-                case Interop.WindowMessages.WM_MENUCHAR:
+                case WindowMessages.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
-                case Interop.WindowMessages.WM_NCDESTROY:
+                case WindowMessages.WM_NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case Interop.WindowMessages.WM_SHOWWINDOW:
+                case WindowMessages.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
-                case Interop.WindowMessages.WM_SIZE:
+                case WindowMessages.WM_SIZE:
                     WmSize(ref m);
                     break;
-                case Interop.WindowMessages.WM_SYSCOMMAND:
+                case WindowMessages.WM_SYSCOMMAND:
                     WmSysCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_GETMINMAXINFO:
+                case WindowMessages.WM_GETMINMAXINFO:
                     WmGetMinMaxInfo(ref m);
                     break;
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
-                //case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                //case WindowMessages.WM_WINDOWPOSCHANGING:
                 //    WmWindowPosChanging(ref m);
                 //    break;
-                case Interop.WindowMessages.WM_ENTERMENULOOP:
+                case WindowMessages.WM_ENTERMENULOOP:
                     WmEnterMenuLoop(ref m);
                     break;
-                case Interop.WindowMessages.WM_EXITMENULOOP:
+                case WindowMessages.WM_EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
-                case Interop.WindowMessages.WM_CAPTURECHANGED:
+                case WindowMessages.WM_CAPTURECHANGED:
                     base.WndProc(ref m);
                     // This is a work-around for the Win32 scroll bar; it
                     // doesn't release it's capture in response to a CAPTURECHANGED
@@ -7279,11 +7275,11 @@ namespace System.Windows.Forms
                         CaptureInternal = false;
                     }
                     break;
-                case Interop.WindowMessages.WM_GETDPISCALEDSIZE:
+                case WindowMessages.WM_GETDPISCALEDSIZE:
                     Debug.Assert(NativeMethods.Util.SignedLOWORD(m.WParam) == NativeMethods.Util.SignedHIWORD(m.WParam), "Non-square pixels!");
                     WmGetDpiScaledSize(ref m);
                     break;
-                case Interop.WindowMessages.WM_DPICHANGED:
+                case WindowMessages.WM_DPICHANGED:
                     WmDpiChanged(ref m);
                     break;
                 default:
@@ -7303,7 +7299,7 @@ namespace System.Windows.Forms
             /*C#r:protected*/
 
             /// <summary>
-            /// Initializes a new instance of the ControlCollection class.
+            ///  Initializes a new instance of the ControlCollection class.
             /// </summary>
             public ControlCollection(Form owner)
             : base(owner)

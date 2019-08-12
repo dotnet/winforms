@@ -87,7 +87,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Places nonpersistent data on the system <see cref='Clipboard'/>.
+        ///  Places nonpersistent data on the system <see cref='Clipboard'/>.
         /// </summary>
         public static void SetDataObject(object data)
         {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Overload that uses default values for retryTimes and retryDelay.
+        ///  Overload that uses default values for retryTimes and retryDelay.
         /// </summary>
         public static void SetDataObject(object data, bool copy)
         {
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Places data on the system <see cref='Clipboard'/> and uses copy to specify whether the data
+        ///  Places data on the system <see cref='Clipboard'/> and uses copy to specify whether the data
         ///  should remain on the <see cref='Clipboard'/>
         ///  after the application exits.
         /// </summary>

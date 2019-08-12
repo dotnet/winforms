@@ -10,17 +10,17 @@ namespace System.Windows.Forms
     public enum StatusBarPanelBorderStyle
     {
         /// <summary>
-        /// No border.
+        ///  No border.
         /// </summary>
         None = 1,
 
         /// <summary>
-        /// A raised border.
+        ///  A raised border.
         /// </summary>
         Raised = 2,
 
         /// <summary>
-        /// A sunken border.
+        ///  A sunken border.
         /// </summary>
         Sunken = 3,
     }

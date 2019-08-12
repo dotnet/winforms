@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This is the glyph used to drag container controls around the designer. This glyph (and associated behavior) is created by the ParentControlDesigner.
+    ///  This is the glyph used to drag container controls around the designer. This glyph (and associated behavior) is created by the ParentControlDesigner.
     /// </summary>
     internal sealed class ContainerSelectorGlyph : Glyph
     {
@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly ContainerSelectorBehavior _relatedBehavior;
 
         /// <summary>
-        /// ContainerSelectorGlyph constructor.
+        ///  ContainerSelectorGlyph constructor.
         /// </summary>
         internal ContainerSelectorGlyph(Rectangle containerBounds, int glyphSize, int glyphOffset, ContainerSelectorBehavior behavior) : base(behavior)
         {
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// The bounds of this Glyph.
+        ///  The bounds of this Glyph.
         /// </summary>
         public override Rectangle Bounds
         {
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
+        ///  Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
         /// </summary>
         public override Cursor GetHitTest(Point p)
         {
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Very simple paint logic.
+        ///  Very simple paint logic.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

@@ -2,14 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <remarks>
-    /// Sample Guids
-    /// ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"
-    /// Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"
-    /// Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"
-    /// Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"
+    ///  Sample Guids
+    ///  ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"
+    ///  Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"
+    ///  Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"
+    ///  Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"
     /// </remarks>
     public class FileDialogCustomPlace
     {
@@ -52,9 +54,9 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        /// This can throw in a multitude of ways if the path or Guid doesn't correspond
-        /// to an actual filesystem directory.
-        /// The caller is responsible for handling these situations.
+        ///  This can throw in a multitude of ways if the path or Guid doesn't correspond
+        ///  to an actual filesystem directory.
+        ///  The caller is responsible for handling these situations.
         /// </remarks>
         internal FileDialogNative.IShellItem GetNativePath()
         {
@@ -65,7 +67,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                int result = Interop.Shell32.SHGetKnownFolderPath(ref _knownFolderGuid, 0, IntPtr.Zero, out filePathString);
+                int result = Shell32.SHGetKnownFolderPath(ref _knownFolderGuid, 0, IntPtr.Zero, out filePathString);
                 if (result == 0)
                 {
                     return null;

@@ -9,7 +9,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Associates standard command with ToolStripMenuItem.
+    ///  Associates standard command with ToolStripMenuItem.
     /// </summary>
     internal class StandardCommandToolStripMenuItem : ToolStripMenuItem
     {
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Retrieves the menu editor service, which we cache for speed.
+        ///  Retrieves the menu editor service, which we cache for speed.
         /// </summary>
         public IMenuCommandService MenuService
         {

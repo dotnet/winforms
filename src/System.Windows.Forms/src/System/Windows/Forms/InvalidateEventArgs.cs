@@ -7,13 +7,13 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='Control.Invalidate'/> event.
+    ///  Provides data for the <see cref='Control.Invalidate'/> event.
     /// </summary>
     public class InvalidateEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='InvalidateEventArgs'/>
-        /// class.
+        ///  Initializes a new instance of the <see cref='InvalidateEventArgs'/>
+        ///  class.
         /// </summary>
         public InvalidateEventArgs(Rectangle invalidRect)
         {
@@ -21,8 +21,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value indicating the <see cref='Rectangle'/> that contains the
-        /// invalidated window area.
+        ///  Gets a value indicating the <see cref='Rectangle'/> that contains the
+        ///  invalidated window area.
         /// </summary>
         public Rectangle InvalidRect { get; }
     }

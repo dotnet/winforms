@@ -8,12 +8,12 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class contains the information a user needs to paint the ToolTip.
+    ///  This class contains the information a user needs to paint the ToolTip.
     /// </summary>
     public class PopupEventArgs : CancelEventArgs
     {
         /// <summary>
-        /// Creates a new PopupEventArgs with the given parameters.
+        ///  Creates a new PopupEventArgs with the given parameters.
         /// </summary>
         public PopupEventArgs(IWin32Window associatedWindow, Control associatedControl, bool isBalloon, Size size)
         {
@@ -24,22 +24,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The Associated Window for which the tooltip is being painted.
+        ///  The Associated Window for which the tooltip is being painted.
         /// </summary>
         public IWin32Window AssociatedWindow { get; }
 
         /// <summary>
-        /// The control for which the tooltip is being painted.
+        ///  The control for which the tooltip is being painted.
         /// </summary>
         public Control AssociatedControl { get; }
 
         /// <summary>
-        /// The rectangle outlining the area in which the painting should be done.
+        ///  The rectangle outlining the area in which the painting should be done.
         /// </summary>
         public Size ToolTipSize { get; set; }
 
         /// <summary>
-        /// Whether the tooltip is Ballooned.
+        ///  Whether the tooltip is Ballooned.
         /// </summary>
         public bool IsBalloon { get; }
     }

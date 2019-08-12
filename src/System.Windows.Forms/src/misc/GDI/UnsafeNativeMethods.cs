@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
@@ -64,14 +64,14 @@ namespace System.Windows.Forms.Internal
         public static extern int GetBkColor(HandleRef hDC);
 
         /// <remarks>
-        /// This method is currently used just for drawing the text background
-        /// (ComponentEditorForm.cs) and not for rendering text.
-        /// Prefer using DrawText over this method if possible, it handles issues on older
-        /// platforms properly. Ideally, we should remove this method but to avoid issues at this
-        /// point I'm leaving it here.
+        ///  This method is currently used just for drawing the text background
+        ///  (ComponentEditorForm.cs) and not for rendering text.
+        ///  Prefer using DrawText over this method if possible, it handles issues on older
+        ///  platforms properly. Ideally, we should remove this method but to avoid issues at this
+        ///  point I'm leaving it here.
         /// </remarks>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = false, CharSet = CharSet.Auto)]
-        internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref Interop.RECT rect, string str, int length, int[] spacing);
+        internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref RECT rect, string str, int length, int[] spacing);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "LineTo", CharSet = CharSet.Auto)]
         public static extern bool IntLineTo(HandleRef hdc, int x, int y);
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Internal
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool MoveToEx(HandleRef hdc, int x, int y, ref Point pt);
+        public static unsafe extern bool MoveToEx(HandleRef hdc, int x, int y, Point *lppt);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "Rectangle", CharSet = CharSet.Auto)]
         public static extern bool IntRectangle(HandleRef hdc, int left, int top, int right, int bottom);
@@ -97,9 +97,9 @@ namespace System.Windows.Forms.Internal
         }
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, EntryPoint = "FillRect", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern bool IntFillRect(HandleRef hdc, [In] ref Interop.RECT rect, HandleRef hbrush);
+        public static extern bool IntFillRect(HandleRef hdc, [In] ref RECT rect, HandleRef hbrush);
 
-        public static bool FillRect(HandleRef hDC, [In] ref Interop.RECT rect, HandleRef hbrush)
+        public static bool FillRect(HandleRef hDC, [In] ref RECT rect, HandleRef hbrush)
         {
             bool retVal = IntFillRect(hDC, ref rect, hbrush);
             DbgUtil.AssertWin32(retVal, "FillRect(hdc=[0x{0:X8}], rect=[{1}], hbrush=[{2}]", hDC.Handle, rect, hbrush.Handle);
@@ -130,13 +130,13 @@ namespace System.Windows.Forms.Internal
         public static extern bool GetViewportExtEx(HandleRef hdc, ref Size lpSize);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool GetViewportOrgEx(HandleRef hdc, ref Point lpPoint);
+        public static extern bool GetViewportOrgEx(HandleRef hdc, out Point lpPoint);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern bool SetViewportExtEx(HandleRef hDC, int x, int y, ref Size size);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, ref Point point);
+        public static unsafe extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, Point *point);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern int GetTextMetricsW(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm);

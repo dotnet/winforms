@@ -13,14 +13,14 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This serializer serializes collections.  This can either create statements or expressions.  It will create an expression and assign it to the statement in the current context stack if the object is an array.  If it is a collection with an add range or similar method, it will create a statement calling the method.
+    ///  This serializer serializes collections.  This can either create statements or expressions.  It will create an expression and assign it to the statement in the current context stack if the object is an array.  If it is a collection with an add range or similar method, it will create a statement calling the method.
     /// </summary>
     public class CollectionCodeDomSerializer : CodeDomSerializer
     {
         private static CollectionCodeDomSerializer s_defaultSerializer;
 
         /// <summary>
-        /// Retrieves a default static instance of this serializer.
+        ///  Retrieves a default static instance of this serializer.
         /// </summary>
         internal new static CollectionCodeDomSerializer Default
         {
@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Computes the delta between an existing collection and a modified one. This is for the case of inherited items that have collection properties so we only generate Add/AddRange calls for the items that have been added.  It works by Hashing up the items in the original collection and then walking the modified collection and only returning those items which do not exist in the base collection.
+        ///  Computes the delta between an existing collection and a modified one. This is for the case of inherited items that have collection properties so we only generate Add/AddRange calls for the items that have been added.  It works by Hashing up the items in the original collection and then walking the modified collection and only returning those items which do not exist in the base collection.
         /// </summary>
         private ICollection GetCollectionDelta(ICollection original, ICollection modified)
         {
@@ -115,7 +115,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Checks the attributes on this method to see if they support serialization.
+        ///  Checks the attributes on this method to see if they support serialization.
         /// </summary>
         protected bool MethodSupportsSerialization(MethodInfo method)
         {
@@ -139,7 +139,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
@@ -241,7 +241,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Given a set of methods and objects, determines the method with the correct of  parameter type for all objects.
+        ///  Given a set of methods and objects, determines the method with the correct of  parameter type for all objects.
         /// </summary>
         private static MethodInfo ChooseMethodByType(TypeDescriptionProvider provider, List<MethodInfo> methods, ICollection values)
         {
@@ -303,7 +303,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given collection.  targetExpression will refer to the expression used to rever to the  collection, but it can be null.
+        ///  Serializes the given collection.  targetExpression will refer to the expression used to rever to the  collection, but it can be null.
         /// </summary>
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
@@ -418,7 +418,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given array.
+        ///  Serializes the given array.
         /// </summary>
         private CodeArrayCreateExpression SerializeArray(IDesignerSerializationManager manager, Type targetType, ICollection array, ICollection valuesToSerialize)
         {
@@ -501,7 +501,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given collection by creating multiple calls to an Add method.
+        ///  Serializes the given collection by creating multiple calls to an Add method.
         /// </summary>
         private object SerializeViaAdd(
             IDesignerSerializationManager manager,
@@ -593,7 +593,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given collection by creating an array and passing it to the AddRange method.
+        ///  Serializes the given collection by creating an array and passing it to the AddRange method.
         /// </summary>
         private object SerializeViaAddRange(
             IDesignerSerializationManager manager,
@@ -701,7 +701,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Returns true if we should clear the collection contents.
+        ///  Returns true if we should clear the collection contents.
         /// </summary>
         private bool ShouldClearCollection(IDesignerSerializationManager manager, ICollection collection)
         {

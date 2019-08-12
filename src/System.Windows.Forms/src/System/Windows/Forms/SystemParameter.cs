@@ -10,57 +10,57 @@ namespace System.Windows.Forms
     public enum SystemParameter
     {
         /// <summary>
-        /// DropShadow.
+        ///  DropShadow.
         /// </summary>
         DropShadow = 0,
 
         /// <summary>
-        /// Flat Menu.
+        ///  Flat Menu.
         /// </summary>
         FlatMenu = 1,
 
         /// <summary>
-        /// FontSmoothingContrastMetric.
+        ///  FontSmoothingContrastMetric.
         /// </summary>
         FontSmoothingContrastMetric = 2,
 
         /// <summary>
-        /// FontSmoothingTypeMetric.
+        ///  FontSmoothingTypeMetric.
         /// </summary>
         FontSmoothingTypeMetric = 3,
 
         /// <summary>
-        /// MenuFadeEnabled.
+        ///  MenuFadeEnabled.
         /// </summary>
         MenuFadeEnabled = 4,
 
         /// <summary>
-        /// SelectionFade.
+        ///  SelectionFade.
         /// </summary>
         SelectionFade = 5,
 
         /// <summary>
-        /// ToolTipAnimationMetric.
+        ///  ToolTipAnimationMetric.
         /// </summary>
         ToolTipAnimationMetric = 6,
 
         /// <summary>
-        /// UIEffects.
+        ///  UIEffects.
         /// </summary>
         UIEffects = 7,
 
         /// <summary>
-        /// CaretWidthMetric.
+        ///  CaretWidthMetric.
         /// </summary>
         CaretWidthMetric = 8,
 
         /// <summary>
-        /// VerticalFocusThicknessMetric.
+        ///  VerticalFocusThicknessMetric.
         /// </summary>
         VerticalFocusThicknessMetric = 9,
 
         /// <summary>
-        /// HorizontalFocusThicknessMetric.
+        ///  HorizontalFocusThicknessMetric.
         /// </summary>
         HorizontalFocusThicknessMetric = 10,
     }

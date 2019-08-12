@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class contains the information a user needs to paint the ToolTip.
+    ///  This class contains the information a user needs to paint the ToolTip.
     /// </summary>
     public class DrawToolTipEventArgs : EventArgs
     {
@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         private readonly Color _foreColor;
 
         /// <summary>
-        /// Creates a new DrawToolTipEventArgs with the given parameters.
+        ///  Creates a new DrawToolTipEventArgs with the given parameters.
         /// </summary>
         public DrawToolTipEventArgs(Graphics graphics, IWin32Window associatedWindow, Control associatedControl, Rectangle bounds,
                                     string toolTipText, Color backColor, Color foreColor, Font font)
@@ -31,17 +31,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Graphics object with which painting should be done.
+        ///  Graphics object with which painting should be done.
         /// </summary>
         public Graphics Graphics { get; }
 
         /// <summary>
-        /// The window for which the tooltip is being painted.
+        ///  The window for which the tooltip is being painted.
         /// </summary>
         public IWin32Window AssociatedWindow { get; }
 
         /// <summary>
-        /// The control for which the tooltip is being painted.
+        ///  The control for which the tooltip is being painted.
         /// </summary>
         public Control AssociatedControl { get; }
 
@@ -51,17 +51,17 @@ namespace System.Windows.Forms
         public Rectangle Bounds { get; }
 
         /// <summary>
-        /// The text that should be drawn.
+        ///  The text that should be drawn.
         /// </summary>
         public string ToolTipText { get; }
 
         /// <summary>
-        /// The font used to draw tooltip text.
+        ///  The font used to draw tooltip text.
         /// </summary>
         public Font Font { get; }
 
         /// <summary>
-        /// Draws the background of the ToolTip.
+        ///  Draws the background of the ToolTip.
         /// </summary>
         public void DrawBackground()
         {
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the text (overloaded)
+        ///  Draws the text (overloaded)
         /// </summary>
         public void DrawText()
         {
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the text (overloaded) - takes a TextFormatFlags argument.
+        ///  Draws the text (overloaded) - takes a TextFormatFlags argument.
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws a border for the ToolTip similar to the default border.
+        ///  Draws a border for the ToolTip similar to the default border.
         /// </summary>
         public void DrawBorder()
         {

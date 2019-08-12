@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Basic Properties for Scrollbars.
+    ///  Basic Properties for Scrollbars.
     /// </summary>
     public abstract class ScrollProperties
     {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a bool value controlling whether the scrollbar is enabled.
+        ///  Gets or sets a bool value controlling whether the scrollbar is enabled.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
@@ -66,8 +66,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value to be added or subtracted to the <see cref='LargeChange'/>
-        /// property when the scroll box is moved a large distance.
+        ///  Gets or sets a value to be added or subtracted to the <see cref='LargeChange'/>
+        ///  property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(10)]
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the upper limit of values of the scrollable range.
+        ///  Gets or sets the upper limit of values of the scrollable range.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(100)]
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the lower limit of values of the scrollable range.
+        ///  Gets or sets the lower limit of values of the scrollable range.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(0)]
@@ -182,8 +182,8 @@ namespace System.Windows.Forms
         internal abstract int VerticalDisplayPosition { get; }
 
         /// <summary>
-        /// Gets or sets the value to be added or subtracted to the <see cref='ScrollBar.Value'/>
-        /// property when the scroll box is moved a small distance.
+        ///  Gets or sets the value to be added or subtracted to the <see cref='ScrollBar.Value'/>
+        ///  property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(1)]
@@ -214,8 +214,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a numeric value that represents the current position of the scroll box
-        /// on the scroll bar control.
+        ///  Gets or sets a numeric value that represents the current position of the scroll box
+        ///  on the scroll bar control.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(0)]
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a bool value controlling whether the scrollbar is showing.
+        ///  Gets or sets a bool value controlling whether the scrollbar is showing.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]

@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -994,7 +995,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Indicates the drawing mode for the tree view.
+            ///  Indicates the drawing mode for the tree view.
             /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -1763,14 +1764,14 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
+                    SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
                     if (delayed)
                     {
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
                     }
                     else
                     {
-                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
+                        SendMessage(WindowMessages.WM_SETREDRAW, 1, 0);
                     }
                 }
             }
@@ -1988,7 +1989,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Fires the DrawNode event.
+        ///  Fires the DrawNode event.
         /// </summary>
         protected virtual void OnDrawNode(DrawTreeNodeEventArgs e)
         {
@@ -2041,7 +2042,7 @@ namespace System.Windows.Forms
                 SendMessage(NativeMethods.TVM_SETTEXTCOLOR, 0, ColorTranslator.ToWin32(c));
             }
 
-            /// put the linecolor into the native control only if Set ...
+            ///  put the linecolor into the native control only if Set ...
             if (lineColor != Color.Empty)
             {
                 SendMessage(NativeMethods.TVM_SETLINECOLOR, 0, ColorTranslator.ToWin32(lineColor));
@@ -2186,9 +2187,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseHover(EventArgs e)
         {
-            /// Hover events need to be caught for each node
-            /// within the TreeView so the appropriate
-            /// NodeHovered event can be raised.
+            ///  Hover events need to be caught for each node
+            ///  within the TreeView so the appropriate
+            ///  NodeHovered event can be raised.
 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
@@ -2619,7 +2620,7 @@ namespace System.Windows.Forms
             // TreeView doesn't properly revert back to the unselected image
             // if the unselected image is blank.
             //
-            Interop.RECT rc = new Interop.RECT();
+            RECT rc = new RECT();
             *((IntPtr*)&rc.left) = nmtv->itemOld.hItem;
             if (nmtv->itemOld.hItem != IntPtr.Zero)
             {
@@ -2862,7 +2863,7 @@ namespace System.Windows.Forms
                     if (renderinfo != null && renderinfo.Font != null)
                     {
                         // Mess with the DC directly...
-                        Interop.Gdi32.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
+                        Gdi32.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.
                         m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
@@ -3122,7 +3123,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                SendMessage(Interop.WindowMessages.WM_CONTEXTMENU, Handle, SafeNativeMethods.GetMessagePos());
+                                SendMessage(WindowMessages.WM_CONTEXTMENU, Handle, SafeNativeMethods.GetMessagePos());
                             }
                             m.Result = (IntPtr)1;
 
@@ -3159,9 +3160,7 @@ namespace System.Windows.Forms
 
                 if (contextMenu != null)
                 {
-
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    UnsafeNativeMethods.GetCursorPos(pt);
+                    UnsafeNativeMethods.GetCursorPos(out Point pt);
 
                     // Summary: the current window must be made the foreground window
                     // before calling TrackPopupMenuEx, and a task switch must be
@@ -3173,13 +3172,13 @@ namespace System.Windows.Forms
 
                     SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
                                              NativeMethods.TPM_VERTICAL,
-                                             pt.x,
-                                             pt.y,
+                                             pt.X,
+                                             pt.Y,
                                              new HandleRef(this, Handle),
                                              null);
 
                     // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
                 }
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
                 else if (menu != null)
@@ -3220,10 +3219,10 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
-                case Interop.WindowMessages.WM_NCCALCSIZE:
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
-                case Interop.WindowMessages.WM_SIZE:
+                case WindowMessages.WM_WINDOWPOSCHANGING:
+                case WindowMessages.WM_NCCALCSIZE:
+                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case WindowMessages.WM_SIZE:
                     // While we are changing size of treeView to avoid the scrollbar; dont respond to the window-sizing messages.
                     if (treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs])
                     {
@@ -3235,7 +3234,7 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_HSCROLL:
                     base.WndProc(ref m);
                     if (DrawMode == TreeViewDrawMode.OwnerDrawAll)
                     {
@@ -3243,7 +3242,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
                 case NativeMethods.TVM_SETITEM:
@@ -3267,7 +3266,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (nmhdr.code)
                     {
@@ -3297,10 +3296,10 @@ namespace System.Windows.Forms
                             break;
                     }
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     WmNotify(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     //just maintain state and fire double click.. in final mouseUp...
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
@@ -3310,7 +3309,7 @@ namespace System.Windows.Forms
                     //
                     CaptureInternal = true;
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     try
                     {
                         treeViewState[TREEVIEWSTATE_ignoreSelects] = true;
@@ -3353,8 +3352,8 @@ namespace System.Windows.Forms
                     }
                     downButton = MouseButtons.Left;
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
                     NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO
                     {
                         pt_x = NativeMethods.Util.SignedLOWORD(m.LParam),
@@ -3404,24 +3403,24 @@ namespace System.Windows.Forms
                     //always clear our hit-tested node we cached on mouse down
                     hNodeMouseDown = IntPtr.Zero;
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONDBLCLK:
                     //fire Up in the Wndproc !!
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
                     break;
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case WindowMessages.WM_MOUSELEAVE:
                     // if the mouse leaves and then reenters the TreeView
                     // NodeHovered events should be raised.
                     prevHoveredNode = null;
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     //just maintain state and fire double click.. in final mouseUp...
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
@@ -3431,7 +3430,7 @@ namespace System.Windows.Forms
                     //
                     CaptureInternal = true;
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     //Cache the hit-tested node for verification when mouse up is fired
@@ -3445,11 +3444,11 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
+                case WindowMessages.WM_SYSCOLORCHANGE:
                     SendMessage(NativeMethods.TVM_SETINDENT, Indent, 0);
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     // If we get focus through the LBUttonDown .. we might have done the validation...
                     // so skip it..
                     if (treeViewState[TREEVIEWSTATE_lastControlValidated])
@@ -3464,7 +3463,7 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_CONTEXTMENU:
                     if (treeViewState[TREEVIEWSTATE_showTreeViewContextMenu])
                     {
                         treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = false;

@@ -1053,7 +1053,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        /// This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
+        ///  This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
         private bool IsDotNetAssembly(string assemblyPath)
         {

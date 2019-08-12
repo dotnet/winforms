@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
@@ -93,22 +94,22 @@ namespace System.Windows.Forms.Internal
         }
 
         /// <summary>
-        /// Get the number of pixels per logical inch along the device axes. In a system with multiple display
-        /// monitors, this value is the same for all monitors.
+        ///  Get the number of pixels per logical inch along the device axes. In a system with multiple display
+        ///  monitors, this value is the same for all monitors.
         /// </summary>
         public Size Dpi => new Size(DpiX, DpiY);
 
         /// <summary>
-        /// Get the number of pixels per logical inch along the device width. In a system with multiple display
-        /// monitors, this value is the same for all monitors.
+        ///  Get the number of pixels per logical inch along the device width. In a system with multiple display
+        ///  monitors, this value is the same for all monitors.
         /// </summary>
-        public int DpiX => Interop.Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+        public int DpiX => Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
 
         /// <summary>
-        /// Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
-        /// display monitors, this value is the same for all monitors.
+        ///  Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
+        ///  display monitors, this value is the same for all monitors.
         /// </summary>
-        public int DpiY => Interop.Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSY);
+        public int DpiY => Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
 
         /// <summary>
         ///  The font selected into the device context.
@@ -169,11 +170,11 @@ namespace System.Windows.Forms.Internal
 
             if (selectedFont != null && selectedFont.Hfont != IntPtr.Zero)
             {
-                IntPtr hCurrentFont = Interop.Gdi32.GetCurrentObject(new HandleRef(this, hDC), Interop.Gdi32.ObjectType.OBJ_FONT);
+                IntPtr hCurrentFont = Gdi32.GetCurrentObject(new HandleRef(this, hDC), Gdi32.ObjectType.OBJ_FONT);
                 if (hCurrentFont == selectedFont.Hfont)
                 {
                     // select initial font back in
-                    Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
+                    Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
                     hCurrentFont = hInitialFont;
                 }
 
@@ -240,7 +241,7 @@ namespace System.Windows.Forms.Internal
             // we need to clear it off.
             MeasurementDCInfo.ResetIfIsMeasurementDC(Hdc);
 #endif
-            Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
+            Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
             selectedFont = null;
             hCurrentFont = hInitialFont;
         }
@@ -300,7 +301,7 @@ namespace System.Windows.Forms.Internal
                     hCurrentBmp = hObj;
                     break;
             }
-            return Interop.Gdi32.SelectObject(new HandleRef(this, Hdc), hObj);
+            return Gdi32.SelectObject(new HandleRef(this, Hdc), hObj);
         }
 
         /// <summary>
@@ -376,8 +377,7 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                Point point = new Point();
-                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), ref point);
+                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), out Point point);
                 return point;
             }
             set
@@ -390,10 +390,10 @@ namespace System.Windows.Forms.Internal
         ///  Sets the DC Viewport origin to the specified value and returns its previous value;
         ///  origin values are in device units.
         /// </summary>
-        public Point SetViewportOrigin(Point newOrigin)
+        public unsafe Point SetViewportOrigin(Point newOrigin)
         {
-            Point oldOrigin = new Point();
-            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, ref oldOrigin);
+            var oldOrigin = new Point();
+            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, &oldOrigin);
             return oldOrigin;
         }
     }

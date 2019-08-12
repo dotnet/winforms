@@ -236,12 +236,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, SetLastError = true)]
         public static extern IntPtr DuplicateHandle(HandleRef processSource, HandleRef handleSource, HandleRef processTarget, ref IntPtr handleTarget, int desiredAccess, bool inheritHandle, int options);
 
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern IStorage StgOpenStorageOnILockBytes(ILockBytes iLockBytes, IStorage pStgPriority, int grfMode, int sndExcluded, int reserved);
-
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern IntPtr GetHGlobalFromILockBytes(ILockBytes pLkbyt);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SetWindowsHookEx(int hookid, NativeMethods.HookProc pfnhook, HandleRef hinst, int threadid);
 
@@ -261,7 +255,7 @@ namespace System.Windows.Forms
         public static extern IntPtr CallNextHookEx(HandleRef hhook, int code, IntPtr wparam, IntPtr lparam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ScreenToClient(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);
+        public static extern int ScreenToClient(HandleRef hWnd, ref Point pt);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
@@ -373,7 +367,7 @@ namespace System.Windows.Forms
         public static extern IntPtr GetFocus();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos([In, Out] NativeMethods.POINT pt);
+        public static extern bool GetCursorPos(out Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
@@ -454,7 +448,7 @@ namespace System.Windows.Forms
         public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Interop.RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, [In, Out] NativeMethods.POINT pt, int cPoints);
+        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Point pt, uint cPoints);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, bool wParam, int lParam);
@@ -539,7 +533,7 @@ namespace System.Windows.Forms
         public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, [Out, MarshalAs(UnmanagedType.IUnknown)]out object editOle);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.CHARRANGE lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Interop.Richedit.CHARRANGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.FINDTEXT lParam);
@@ -548,10 +542,10 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TEXTRANGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.POINT lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Point lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, int lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, int lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
@@ -588,7 +582,7 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVGROUP lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, [In, Out] NativeMethods.LVINSERTMARK lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, [In, Out] NativeMethods.LVINSERTMARK lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVINSERTMARK lParam);
@@ -754,7 +748,7 @@ namespace System.Windows.Forms
             uint dpi);
 
         /// <summary>
-        /// Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
+        ///  Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
         /// </summary>
         public unsafe static bool TrySystemParametersInfoForDpi(ref NativeMethods.NONCLIENTMETRICSW metrics, uint dpi)
         {
@@ -787,7 +781,7 @@ namespace System.Windows.Forms
         public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ClientToScreen(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);
+        public static extern int ClientToScreen(HandleRef hWnd, ref Point lpPoint);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetForegroundWindow();
@@ -926,12 +920,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLongPtr")]
         public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, NativeMethods.WndProc wndproc);
-
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern ILockBytes CreateILockBytesOnHGlobal(HandleRef hGlobal, bool fDeleteOnRelease);
-
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, int grfMode, int reserved);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr CreatePopupMenu();
@@ -1507,10 +1495,8 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
             int ShowContextMenu(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwID,
-                [In]
-                NativeMethods.POINT pt,
+                uint dwID,
+                ref Point pt,
                 [In, MarshalAs(UnmanagedType.Interface)]
                 object pcmdtReserved,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -2411,40 +2397,6 @@ namespace System.Windows.Forms
             object GetEmbeddedObject();
         };
 
-        [ComImport(), Guid("00020D03-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRichEditOleCallback
-        {
-            [PreserveSig]
-            int GetNewStorage(out IStorage ret);
-
-            [PreserveSig]
-            int GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo);
-
-            [PreserveSig]
-            int ShowContainerUI(int fShow);
-
-            [PreserveSig]
-            int QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp);
-
-            [PreserveSig]
-            int DeleteObject(IntPtr lpoleobj);
-
-            [PreserveSig]
-            int QueryAcceptData(IComDataObject lpdataobj, /* CLIPFORMAT* */ IntPtr lpcfFormat, int reco, int fReally, IntPtr hMetaPict);
-
-            [PreserveSig]
-            int ContextSensitiveHelp(int fEnterMode);
-
-            [PreserveSig]
-            int GetClipboardData(NativeMethods.CHARRANGE lpchrg, int reco, IntPtr lplpdataobj);
-
-            [PreserveSig]
-            int GetDragDropEffect(bool fDrag, int grfKeyState, ref int pdwEffect);
-
-            [PreserveSig]
-            int GetContextMenu(short seltype, IntPtr lpoleobj, NativeMethods.CHARRANGE lpchrg, out IntPtr hmenu);
-        }
-
         [ComImport(), Guid("00000115-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleInPlaceUIWindow
         {
@@ -2991,28 +2943,18 @@ namespace System.Windows.Forms
                            out Guid pClassID);
         }
 
-        [ComImport(), Guid("37D84F60-42CB-11CE-8135-00AA004BB851"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistPropertyBag
+        [ComImport]
+        [Guid("37D84F60-42CB-11CE-8135-00AA004BB851")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IPersistPropertyBag /* : IPersist */
         {
-            void GetClassID(
-                [Out]
-                out Guid pClassID);
+            void GetClassID(out Guid pClassID);
 
             void InitNew();
 
-            void Load(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IPropertyBag pPropBag,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IErrorLog pErrorLog);
+            void Load(IPropertyBag pPropBag, IErrorLog pErrorLog);
 
-            void Save(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IPropertyBag pPropBag,
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fClearDirty,
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fSaveAllProperties);
+            void Save(IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties);
         }
 
         [
@@ -3069,56 +3011,6 @@ namespace System.Windows.Forms
                               NativeMethods.tagEXCEPINFO pExcepInfo_p1);
         }
 
-        [ComImport(), Guid("00000109-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStream
-        {
-            void GetClassID([Out] out Guid pClassId);
-
-            [PreserveSig]
-            int IsDirty();
-
-            void Load(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm);
-
-            void Save(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm,
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                 bool fClearDirty);
-
-            long GetSizeMax();
-        }
-
-        [ComImport(),
-        Guid("7FD52380-4E07-101B-AE2D-08002B2EC713"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStreamInit
-        {
-            void GetClassID(
-                   [Out]
-                  out Guid pClassID);
-
-            [PreserveSig]
-            int IsDirty();
-
-            void Load(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm);
-
-            void Save(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                      IStream pstm,
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                     bool fClearDirty);
-
-            void GetSizeMax(
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 long pcbSize);
-
-            void InitNew();
-        }
-
         [ComImport(),
         Guid("B196B286-BAB4-101A-B69C-00AA00341D07"),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -3144,28 +3036,6 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int EnumConnections(out object pEnum);
-        }
-
-        [ComImport(), Guid("0000010A-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStorage
-        {
-            void GetClassID(
-                   [Out]
-                  out Guid pClassID);
-
-            [PreserveSig]
-            int IsDirty();
-
-            void InitNew(IStorage pstg);
-
-            [PreserveSig]
-            int Load(IStorage pstg);
-
-            void Save(IStorage pStgSave, bool fSameAsLoad);
-
-            void SaveCompleted(IStorage pStgNew);
-
-            void HandsOffStorage();
         }
 
         [ComImport(), Guid("00020404-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -3229,64 +3099,6 @@ namespace System.Windows.Forms
             int SetOptions([In] int dwFlag);
 
             void GetOptions([Out] IntPtr pdwFlag);
-        }
-
-        [ComImport(), Guid("0000000C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IStream
-        {
-            int Read(
-                    IntPtr buf,
-                    int len);
-
-            int Write(
-                    IntPtr buf,
-                    int len);
-
-            [return: MarshalAs(UnmanagedType.I8)]
-            long Seek(
-                    [In, MarshalAs(UnmanagedType.I8)]
-                 long dlibMove,
-                     int dwOrigin);
-
-            void SetSize(
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long libNewSize);
-
-            [return: MarshalAs(UnmanagedType.I8)]
-            long CopyTo(
-                    [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm,
-                    [In, MarshalAs(UnmanagedType.I8)]
-                 long cb,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                 long[] pcbRead);
-
-            void Commit(
-                    int grfCommitFlags);
-
-            void Revert();
-
-            void LockRegion(
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long libOffset,
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long cb,
-                    int dwLockType);
-
-            void UnlockRegion(
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long libOffset,
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long cb,
-                    int dwLockType);
-
-            void Stat(
-                    [Out]
-                 NativeMethods.STATSTG pStatstg,
-                    int grfStatFlag);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStream Clone();
         }
 
         public abstract class CharBuffer
@@ -3353,333 +3165,6 @@ namespace System.Windows.Forms
                     buffer[offset++] = (char)0;
                 }
             }
-        }
-
-        public class ComStreamFromDataStream : IStream
-        {
-            protected Stream dataStream;
-
-            // to support seeking ahead of the stream length...
-            private long virtualPosition = -1;
-
-            public ComStreamFromDataStream(Stream dataStream)
-            {
-                this.dataStream = dataStream ?? throw new ArgumentNullException(nameof(dataStream));
-            }
-
-            private void ActualizeVirtualPosition()
-            {
-                if (virtualPosition == -1)
-                {
-                    return;
-                }
-
-                if (virtualPosition > dataStream.Length)
-                {
-                    dataStream.SetLength(virtualPosition);
-                }
-
-                dataStream.Position = virtualPosition;
-
-                virtualPosition = -1;
-            }
-
-            public IStream Clone()
-            {
-                NotImplemented();
-                return null;
-            }
-
-            public void Commit(int grfCommitFlags)
-            {
-                dataStream.Flush();
-                // Extend the length of the file if needed.
-                ActualizeVirtualPosition();
-            }
-
-            public long CopyTo(IStream pstm, long cb, long[] pcbRead)
-            {
-                int bufsize = 4096; // one page
-                IntPtr buffer = Marshal.AllocHGlobal(bufsize);
-                if (buffer == IntPtr.Zero)
-                {
-                    throw new OutOfMemoryException();
-                }
-
-                long written = 0;
-                try
-                {
-                    while (written < cb)
-                    {
-                        int toRead = bufsize;
-                        if (written + toRead > cb)
-                        {
-                            toRead = (int)(cb - written);
-                        }
-
-                        int read = Read(buffer, toRead);
-                        if (read == 0)
-                        {
-                            break;
-                        }
-
-                        if (pstm.Write(buffer, read) != read)
-                        {
-                            throw EFail("Wrote an incorrect number of bytes");
-                        }
-                        written += read;
-                    }
-                }
-                finally
-                {
-                    Marshal.FreeHGlobal(buffer);
-                }
-                if (pcbRead != null && pcbRead.Length > 0)
-                {
-                    pcbRead[0] = written;
-                }
-
-                return written;
-            }
-
-            public Stream GetDataStream()
-            {
-                return dataStream;
-            }
-
-            public void LockRegion(long libOffset, long cb, int dwLockType)
-            {
-            }
-
-            protected static ExternalException EFail(string msg)
-            {
-                ExternalException e = new ExternalException(msg, NativeMethods.E_FAIL);
-                throw e;
-            }
-
-            protected static void NotImplemented()
-            {
-                ExternalException e = new ExternalException(SR.UnsafeNativeMethodsNotImplemented, NativeMethods.E_NOTIMPL);
-                throw e;
-            }
-
-            public int Read(IntPtr buf, /* cpr: int offset,*/  int length)
-            {
-                //        System.Text.Out.WriteLine("IStream::Read(" + length + ")");
-                byte[] buffer = new byte[length];
-                int count = Read(buffer, length);
-                Marshal.Copy(buffer, 0, buf, count);
-                return count;
-            }
-
-            public int Read(byte[] buffer, /* cpr: int offset,*/  int length)
-            {
-                ActualizeVirtualPosition();
-                return dataStream.Read(buffer, 0, length);
-            }
-
-            public void Revert()
-            {
-                NotImplemented();
-            }
-
-            public long Seek(long offset, int origin)
-            {
-                // Console.WriteLine("IStream::Seek("+ offset + ", " + origin + ")");
-                long pos = virtualPosition;
-                if (virtualPosition == -1)
-                {
-                    pos = dataStream.Position;
-                }
-                long len = dataStream.Length;
-                switch (origin)
-                {
-                    case NativeMethods.STREAM_SEEK_SET:
-                        if (offset <= len)
-                        {
-                            dataStream.Position = offset;
-                            virtualPosition = -1;
-                        }
-                        else
-                        {
-                            virtualPosition = offset;
-                        }
-                        break;
-                    case NativeMethods.STREAM_SEEK_END:
-                        if (offset <= 0)
-                        {
-                            dataStream.Position = len + offset;
-                            virtualPosition = -1;
-                        }
-                        else
-                        {
-                            virtualPosition = len + offset;
-                        }
-                        break;
-                    case NativeMethods.STREAM_SEEK_CUR:
-                        if (offset + pos <= len)
-                        {
-                            dataStream.Position = pos + offset;
-                            virtualPosition = -1;
-                        }
-                        else
-                        {
-                            virtualPosition = offset + pos;
-                        }
-                        break;
-                }
-                if (virtualPosition != -1)
-                {
-                    return virtualPosition;
-                }
-                else
-                {
-                    return dataStream.Position;
-                }
-            }
-
-            public void SetSize(long value)
-            {
-                dataStream.SetLength(value);
-            }
-
-            public void Stat(NativeMethods.STATSTG pstatstg, int grfStatFlag)
-            {
-                pstatstg.type = 2; // STGTY_STREAM
-                pstatstg.cbSize = dataStream.Length;
-                pstatstg.grfLocksSupported = 2; //LOCK_EXCLUSIVE
-            }
-
-            public void UnlockRegion(long libOffset, long cb, int dwLockType)
-            {
-            }
-
-            public int Write(IntPtr buf, /* cpr: int offset,*/ int length)
-            {
-                byte[] buffer = new byte[length];
-                Marshal.Copy(buf, buffer, 0, length);
-                return Write(buffer, length);
-            }
-
-            public int Write(byte[] buffer, /* cpr: int offset,*/ int length)
-            {
-                ActualizeVirtualPosition();
-                dataStream.Write(buffer, 0, length);
-                return length;
-            }
-        }
-
-        [ComImport(), Guid("0000000B-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IStorage
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStream CreateStream(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved1,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved2);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStream OpenStream(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                     IntPtr reserved1,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved2);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStorage CreateStorage(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved1,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved2);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStorage OpenStorage(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                     IntPtr pstgPriority,   // must be null
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                     IntPtr snbExclude,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved);
-
-            void CopyTo(
-                    int ciidExclude,
-                   [In, MarshalAs(UnmanagedType.LPArray)]
-                 Guid[] pIIDExclude,
-                    IntPtr snbExclude,
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                 IStorage stgDest);
-
-            void MoveElementTo(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                 IStorage stgDest,
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsNewName,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int grfFlags);
-
-            void Commit(
-                    int grfCommitFlags);
-
-            void Revert();
-
-            void EnumElements(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved1,
-                    // void *
-                    IntPtr reserved2,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved3,
-                   [Out, MarshalAs(UnmanagedType.Interface)]
-                 out object ppVal);                     // IEnumSTATSTG
-
-            void DestroyElement(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName);
-
-            void RenameElement(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsOldName,
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsNewName);
-
-            void SetElementTimes(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                   [In]
-                 NativeMethods.FILETIME pctime,
-                   [In]
-                 NativeMethods.FILETIME patime,
-                   [In]
-                 NativeMethods.FILETIME pmtime);
-
-            void SetClass(
-                   [In]
-                 ref Guid clsid);
-
-            void SetStateBits(
-                    int grfStateBits,
-                    int grfMask);
-
-            void Stat(
-                   [Out]
-                 NativeMethods.STATSTG pStatStg,
-                    int grfStatFlag);
         }
 
         [ComImport(), Guid("B196B28F-BAB4-101A-B69C-00AA00341D07"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -4155,47 +3640,6 @@ namespace System.Windows.Forms
             string DefaultAction { get; }
         }
 
-        [ComImport]
-        [Guid("0000000A-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ILockBytes
-        {
-            void ReadAt(
-                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
-                [Out] IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbRead
-            );
-
-            void WriteAt(
-                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
-                IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbWritten
-            );
-
-            void Flush();
-
-            void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
-
-            void LockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] long cb,
-                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
-            );
-
-            void UnlockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] long cb,
-                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
-            );
-
-            void Stat(
-                [Out] NativeMethods.STATSTG pstatstg,
-                [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag
-            );
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class OFNOTIFY
         {
@@ -4564,7 +4008,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This class provides static methods to create, activate and deactivate the theming scope.
+        ///  This class provides static methods to create, activate and deactivate the theming scope.
         /// </summary>
         internal class ThemingScope
         {
@@ -4573,8 +4017,8 @@ namespace System.Windows.Forms
             private static bool contextCreationSucceeded;
 
             /// <summary>
-            /// We now use explicitactivate everywhere and use this method to determine if we
-            /// really need to activate the activationcontext.  This should be pretty fast.
+            ///  We now use explicitactivate everywhere and use this method to determine if we
+            ///  really need to activate the activationcontext.  This should be pretty fast.
             /// </summary>
             private static bool IsContextActive()
             {
@@ -4713,7 +4157,7 @@ namespace System.Windows.Forms
         // obtained from UIAutomation source code
 
         /// <summary>
-        /// Logical structure change flags
+        ///  Logical structure change flags
         /// </summary>
         [ComVisible(true)]
         [Guid("e4cfef41-071d-472c-a65c-c14f59ea81eb")]
@@ -4760,25 +4204,25 @@ namespace System.Windows.Forms
             OverrideProvider = 0x0008,
 
             /// <summary>Indicates that this provider handles its own focus, and does not want
-            /// UIA to set focus to the nearest HWND on its behalf when AutomationElement.SetFocus
-            /// is used. This option is typically used by providers for HWNDs that appear to take
-            /// focus without actually receiving actual Win32 focus, such as menus and dropdowns</summary>
+            ///  UIA to set focus to the nearest HWND on its behalf when AutomationElement.SetFocus
+            ///  is used. This option is typically used by providers for HWNDs that appear to take
+            ///  focus without actually receiving actual Win32 focus, such as menus and dropdowns</summary>
             ProviderOwnsSetFocus = 0x0010,
 
             /// <summary>Indicates that this provider expects to be called according to COM threading rules:
-            /// if the provider is in a Single-Threaded Apartment, it will be called only on the apartment
-            /// thread. Only Server-side providers can use this option.</summary>
+            ///  if the provider is in a Single-Threaded Apartment, it will be called only on the apartment
+            ///  thread. Only Server-side providers can use this option.</summary>
             UseComThreading = 0x0020
         }
 
         public static readonly Guid guid_IAccessibleEx = new Guid("{F8B80ADA-2C44-48D0-89BE-5FF23C9CD875}");
 
         /// <summary>
-        /// The interface representing containers that manage selection.
+        ///  The interface representing containers that manage selection.
         /// </summary>
         /// <remarks>
-        /// Client code uses this public interface; server implementers implent the
-        /// ISelectionProvider public interface instead.
+        ///  Client code uses this public interface; server implementers implent the
+        ///  ISelectionProvider public interface instead.
         /// </remarks>
         [ComImport()]
         [ComVisible(true)]
@@ -4787,7 +4231,7 @@ namespace System.Windows.Forms
         public interface ISelectionProvider
         {
             /// <summary>
-            /// Get the currently selected elements
+            ///  Get the currently selected elements
             /// </summary>
             /// <returns>An AutomationElement array containing the currently selected elements</returns>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
@@ -4795,7 +4239,7 @@ namespace System.Windows.Forms
             object[] GetSelection();
 
             /// <summary>
-            /// Indicates whether the control allows more than one element to be selected
+            ///  Indicates whether the control allows more than one element to be selected
             /// </summary>
             /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
             /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
@@ -4806,7 +4250,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether the control requires at least one element to be selected
+            ///  Indicates whether the control requires at least one element to be selected
             /// </summary>
             /// <returns>Boolean indicating whether the control requires at least one element to be selected</returns>
             /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
@@ -4818,9 +4262,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Define a Selectable Item (only supported on logical elements that are a
-        /// child of an Element that supports SelectionPattern and is itself selectable).
-        /// This allows for manipulation of Selection from the element itself.
+        ///  Define a Selectable Item (only supported on logical elements that are a
+        ///  child of an Element that supports SelectionPattern and is itself selectable).
+        ///  This allows for manipulation of Selection from the element itself.
         /// </summary>
         [ComImport()]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -4829,37 +4273,37 @@ namespace System.Windows.Forms
         public interface ISelectionItemProvider
         {
             /// <summary>
-            /// Sets the current element as the selection
-            /// This clears the selection from other elements in the container.
+            ///  Sets the current element as the selection
+            ///  This clears the selection from other elements in the container.
             /// </summary>
             void Select();
 
             /// <summary>
-            /// Adds current element to selection.
+            ///  Adds current element to selection.
             /// </summary>
             void AddToSelection();
 
             /// <summary>
-            /// Removes current element from selection.
+            ///  Removes current element from selection.
             /// </summary>
             void RemoveFromSelection();
 
             /// <summary>
-            /// Check whether an element is selected.
+            ///  Check whether an element is selected.
             /// </summary>
             /// <returns>Returns true if the element is selected.</returns>
             bool IsSelected { [return: MarshalAs(UnmanagedType.Bool)] get; }
 
             /// <summary>
-            /// The logical element that supports the SelectionPattern for this Item.
+            ///  The logical element that supports the SelectionPattern for this Item.
             /// </summary>
             /// <returns>Returns a IRawElementProviderSimple.</returns>
             IRawElementProviderSimple SelectionContainer { [return: MarshalAs(UnmanagedType.Interface)] get; }
         }
 
         /// <summary>
-        /// Implemented by providers which want to provide information about or want to
-        /// reposition contained HWND-based elements.
+        ///  Implemented by providers which want to provide information about or want to
+        ///  reposition contained HWND-based elements.
         /// </summary>
         [ComVisible(true)]
         [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
@@ -4867,8 +4311,8 @@ namespace System.Windows.Forms
         public interface IRawElementProviderHwndOverride : IRawElementProviderSimple
         {
             /// <summary>
-            /// Request a provider for the specified component. The returned provider can supply additional
-            /// properties or override properties of the specified component.
+            ///  Request a provider for the specified component. The returned provider can supply additional
+            ///  properties or override properties of the specified component.
             /// </summary>
             /// <param name="hwnd">The window handle of the component.</param>
             /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
@@ -4945,12 +4389,12 @@ namespace System.Windows.Forms
         public interface IExpandCollapseProvider
         {
             /// <summary>
-            /// Blocking method that returns after the element has been expanded.
+            ///  Blocking method that returns after the element has been expanded.
             /// </summary>
             void Expand();
 
             /// <summary>
-            /// Blocking method that returns after the element has been collapsed.
+            ///  Blocking method that returns after the element has been collapsed.
             /// </summary>
             void Collapse();
 
@@ -4968,7 +4412,7 @@ namespace System.Windows.Forms
         public interface IValueProvider
         {
             /// <summary>
-            /// Request to set the value that this UI element is representing
+            ///  Request to set the value that this UI element is representing
             /// </summary>
             /// <param name="value">Value to set the UI to</param>
             void SetValue([MarshalAs(UnmanagedType.LPWStr)] string value);
@@ -5016,16 +4460,16 @@ namespace System.Windows.Forms
         public interface IRawElementProviderSimple
         {
             /// <summary>
-            /// Indicates the type of provider this is, for example, whether it is a client-side
-            /// or server-side provider.
+            ///  Indicates the type of provider this is, for example, whether it is a client-side
+            ///  or server-side provider.
             /// </summary>
             /// <remarks>
-            /// Providers must specify at least either one of ProviderOptions.ClientSideProvider
-            /// or ProviderOptions.ServerSideProvider.
+            ///  Providers must specify at least either one of ProviderOptions.ClientSideProvider
+            ///  or ProviderOptions.ServerSideProvider.
             ///
-            /// UIAutomation treats different types of providers
-            /// differently - for example, events from server-side provider are broadcast to all listening
-            /// clients, whereas events from client-side providers remain in that client.
+            ///  UIAutomation treats different types of providers
+            ///  differently - for example, events from server-side provider are broadcast to all listening
+            ///  clients, whereas events from client-side providers remain in that client.
             /// </remarks>
             ProviderOptions ProviderOptions
             {
@@ -5033,7 +4477,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Get a pattern interface from this object
+            ///  Get a pattern interface from this object
             /// </summary>
             /// <param name="patternId">Identifier indicating the interface to return</param>
             /// <returns>Returns the interface as an object, if supported; otherwise returns null/</returns>
@@ -5041,7 +4485,7 @@ namespace System.Windows.Forms
             object GetPatternProvider(int patternId);
 
             /// <summary>
-            /// Request value of specified property from an element.
+            ///  Request value of specified property from an element.
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
@@ -5053,10 +4497,10 @@ namespace System.Windows.Forms
             // also need to implement this so we can determine the HWND. Still only
             // lives on a root, however.
             /// <summary>
-            /// Returns a base provider for this element.
+            ///  Returns a base provider for this element.
             ///
-            /// Typically only used by elements that correspond directly to a Win32 Window Handle,
-            /// in which case the implementation returns AutomationInteropProvider.BaseElementFromHandle( hwnd ).
+            ///  Typically only used by elements that correspond directly to a Win32 Window Handle,
+            ///  in which case the implementation returns AutomationInteropProvider.BaseElementFromHandle( hwnd ).
             /// </summary>
             IRawElementProviderSimple HostRawElementProvider
             {
@@ -5065,7 +4509,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Directions for navigation the UIAutomation tree
+        ///  Directions for navigation the UIAutomation tree
         /// </summary>
         [ComVisible(true)]
         [Guid("670c3006-bf4c-428b-8534-e1848f645122")]
@@ -5084,13 +4528,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implemented by providers to expose elements that are part of
-        /// a structure more than one level deep. For simple one-level
-        /// structures which have no children, IRawElementProviderSimple
-        /// can be used instead.
+        ///  Implemented by providers to expose elements that are part of
+        ///  a structure more than one level deep. For simple one-level
+        ///  structures which have no children, IRawElementProviderSimple
+        ///  can be used instead.
         ///
-        /// The root node of the fragment must support the IRawElementProviderFragmentRoot
-        /// interface, which is derived from this, and has some additional methods.
+        ///  The root node of the fragment must support the IRawElementProviderFragmentRoot
+        ///  interface, which is derived from this, and has some additional methods.
         /// </summary>
         [ComVisible(true)]
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
@@ -5099,7 +4543,7 @@ namespace System.Windows.Forms
         public interface IRawElementProviderFragment : IRawElementProviderSimple
         {
             /// <summary>
-            /// Request to return the element in the specified direction
+            ///  Request to return the element in the specified direction
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate</param>
             /// <returns>Returns the element in the specified direction</returns>
@@ -5107,19 +4551,19 @@ namespace System.Windows.Forms
             object /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
             /// <summary>
-            /// Gets the runtime ID of an elemenent. This should be unique
-            /// among elements on a desktop.
+            ///  Gets the runtime ID of an elemenent. This should be unique
+            ///  among elements on a desktop.
             /// </summary>
             /// <remarks>
-            /// Proxy implementations should return null for the top-level proxy which
-            /// correpsonds to the HWND; and should return an array which starts
-            /// with AutomationInteropProvider.AppendRuntimeId, followed by values
-            /// which are then unique within that proxy's HWNDs.
+            ///  Proxy implementations should return null for the top-level proxy which
+            ///  correpsonds to the HWND; and should return an array which starts
+            ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
+            ///  which are then unique within that proxy's HWNDs.
             /// </remarks>
             int[] GetRuntimeId();
 
             /// <summary>
-            /// Return a bounding rectangle of this element
+            ///  Return a bounding rectangle of this element
             /// </summary>
             NativeMethods.UiaRect BoundingRectangle
             {
@@ -5127,25 +4571,25 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// If this UI is capable of hosting other UI that also supports UIAutomation, and
-            /// the subtree rooted at this element contains such hosted UI fragments, this should return
-            /// an array of those fragments.
+            ///  If this UI is capable of hosting other UI that also supports UIAutomation, and
+            ///  the subtree rooted at this element contains such hosted UI fragments, this should return
+            ///  an array of those fragments.
             ///
-            /// If this UI does not host other UI, it may return null.
+            ///  If this UI does not host other UI, it may return null.
             /// </summary>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
             object[] /*IRawElementProviderSimple[]*/ GetEmbeddedFragmentRoots();
 
             /// <summary>
-            /// Request that focus is set to this item.
-            /// The UIAutomation framework will ensure that the UI hosting this fragment is already
-            /// focused before calling this method, so this method should only update its internal
-            /// focus state; it should not attempt to give its own HWND the focus, for example.
+            ///  Request that focus is set to this item.
+            ///  The UIAutomation framework will ensure that the UI hosting this fragment is already
+            ///  focused before calling this method, so this method should only update its internal
+            ///  focus state; it should not attempt to give its own HWND the focus, for example.
             /// </summary>
             void SetFocus();
 
             /// <summary>
-            /// Return the element that is the root node of this fragment of UI.
+            ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
             IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -5155,9 +4599,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The root element in a fragment of UI must support this interface. Other
-        /// elements in the same fragment need to support the IRawElementProviderFragment
-        /// interface.
+        ///  The root element in a fragment of UI must support this interface. Other
+        ///  elements in the same fragment need to support the IRawElementProviderFragment
+        ///  interface.
         /// </summary>
         [ComVisible(true)]
         [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
@@ -5166,24 +4610,24 @@ namespace System.Windows.Forms
         public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment
         {
             /// <summary>
-            /// Return the child element at the specified point, if one exists,
-            /// otherwise return this element if the point is on this element,
-            /// otherwise return null.
+            ///  Return the child element at the specified point, if one exists,
+            ///  otherwise return this element if the point is on this element,
+            ///  otherwise return null.
             /// </summary>
             /// <param name="x">x coordinate of point to check</param>
             /// <param name="y">y coordinate of point to check</param>
             /// <returns>Return the child element at the specified point, if one exists,
-            /// otherwise return this element if the point is on this element,
-            /// otherwise return null.
+            ///  otherwise return this element if the point is on this element,
+            ///  otherwise return null.
             /// </returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object /*IRawElementProviderFragment*/ ElementProviderFromPoint(double x, double y);
 
             /// <summary>
-            /// Return the element in this fragment which has the keyboard focus,
+            ///  Return the element in this fragment which has the keyboard focus,
             /// </summary>
             /// <returns>Return the element in this fragment which has the keyboard focus,
-            /// if any; otherwise return null.</returns>
+            ///  if any; otherwise return null.</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object /*IRawElementProviderFragment*/ GetFocus();
         }
@@ -5314,14 +4758,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implemented by objects that have a single, unambiguous, action associated with them.
-        /// These objects are usually stateless, and invoking them does not change their own state,
-        /// but causes something to happen in the larger context of the app the control is in.
+        ///  Implemented by objects that have a single, unambiguous, action associated with them.
+        ///  These objects are usually stateless, and invoking them does not change their own state,
+        ///  but causes something to happen in the larger context of the app the control is in.
         ///
-        /// Examples of UI that implments this includes:
-        /// Push buttons
-        /// Hyperlinks
-        /// Menu items
+        ///  Examples of UI that implments this includes:
+        ///  Push buttons
+        ///  Hyperlinks
+        ///  Menu items
         /// </summary>
         [ComImport()]
         [ComVisible(true)]
@@ -5330,17 +4774,17 @@ namespace System.Windows.Forms
         public interface IInvokeProvider
         {
             /// <summary>
-            /// Request that the control initiate its action.
-            /// Should return immediately without blocking.
-            /// There is no way to determine what happened, when it happend, or whether
-            /// anything happened at all.
+            ///  Request that the control initiate its action.
+            ///  Should return immediately without blocking.
+            ///  There is no way to determine what happened, when it happend, or whether
+            ///  anything happened at all.
             /// </summary>
             void Invoke();
         }
 
         /// <summary>
-        /// Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
-        /// This allows them to be scrolled into view using known API's based on the control in question.
+        ///  Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
+        ///  This allows them to be scrolled into view using known API's based on the control in question.
         /// </summary>
         [ComImport()]
         [ComVisible(true)]
@@ -5349,9 +4793,9 @@ namespace System.Windows.Forms
         public interface IScrollItemProvider
         {
             /// <summary>
-            /// Scrolls the windows containing this automation element to make this element visible.
-            /// InvalidOperationException should be thrown if item becomes unable to be scrolled. Makes
-            /// no guarantees about where the item will be in the scrolled window.
+            ///  Scrolls the windows containing this automation element to make this element visible.
+            ///  InvalidOperationException should be thrown if item becomes unable to be scrolled. Makes
+            ///  no guarantees about where the item will be in the scrolled window.
             /// </summary>
             void ScrollIntoView();
         }

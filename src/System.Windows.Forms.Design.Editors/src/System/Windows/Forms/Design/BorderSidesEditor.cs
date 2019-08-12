@@ -11,7 +11,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides an editor for setting the ToolStripStatusLabel BorderSides property..
+    ///  Provides an editor for setting the ToolStripStatusLabel BorderSides property..
     /// </summary>
     [CLSCompliant(false)]
     public class BorderSidesEditor : UITypeEditor
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
         private BorderSidesEditorUI _borderSidesEditorUI;
 
         /// <summary>
-        /// Edits the given object value using the editor style provided by BorderSidesEditor.GetEditStyle.
+        ///  Edits the given object value using the editor style provided by BorderSidesEditor.GetEditStyle.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -50,8 +50,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the editing style of the Edit method.
-        /// If the method is not supported, this will return UITypeEditorEditStyle.None.
+        ///  Gets the editing style of the Edit method.
+        ///  If the method is not supported, this will return UITypeEditorEditStyle.None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Editor UI for the BorderSides editor.
+        ///  Editor UI for the BorderSides editor.
         /// </summary>
         private class BorderSidesEditorUI : UserControl
         {
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Allows someone else to close our dropdown.
+            ///  Allows someone else to close our dropdown.
             /// </summary>
             public IWindowsFormsEditorService EditorService
             {
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Returns the current value of BorderSides, if nothing is selected returns BorderSides.None.
+            ///  Returns the current value of BorderSides, if nothing is selected returns BorderSides.None.
             /// </summary>
             public object Value { get; private set; }
 
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// The first checkBox (allCheckBox) gets the focus by default.
+            ///  The first checkBox (allCheckBox) gets the focus by default.
             /// </summary>
             protected override void OnGotFocus(EventArgs e)
             {
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
+            ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
             /// </summary>
             private void rightCheckBox_CheckedChanged(object sender, EventArgs e)
             {
@@ -245,7 +245,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
+            ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
             /// </summary>
             private void leftCheckBox_CheckedChanged(object sender, EventArgs e)
             {
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
+            ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
             /// </summary>
             private void bottomCheckBox_CheckedChanged(object sender, EventArgs e)
             {
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
+            ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
             /// </summary>
             private void topCheckBox_CheckedChanged(object sender, EventArgs e)
             {
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
+            ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
             /// </summary>
             private void noneCheckBox_CheckedChanged(object sender, EventArgs e)
             {
@@ -326,7 +326,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
+            ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
             /// </summary>
             private void allCheckBox_CheckedChanged(object sender, EventArgs e)
             {
@@ -344,7 +344,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Click event.
+            ///  Click event.
             /// </summary>
             private void noneCheckBoxClicked(object sender, EventArgs e)
             {
@@ -355,7 +355,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Click event.
+            ///  Click event.
             /// </summary>
             private void allCheckBoxClicked(object sender, EventArgs e)
             {
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Allows to reset the state and start afresh.
+            ///  Allows to reset the state and start afresh.
             /// </summary>
             private void ResetCheckBoxState()
             {
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Allows to select proper values..
+            ///  Allows to select proper values..
             /// </summary>
             private void SetCheckBoxCheckState(ToolStripStatusLabelBorderSides sides)
             {
@@ -409,7 +409,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Triggered whenever the user drops down the editor.
+            ///  Triggered whenever the user drops down the editor.
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Update the current value based on the state of the UI controls.
+            ///  Update the current value based on the state of the UI controls.
             /// </summary>
             private void UpdateCurrentValue()
             {

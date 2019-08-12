@@ -526,8 +526,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates an instance of BindingList<T> where T is only known at run time,
-        /// not compile time
+        ///  Creates an instance of BindingList<T> where T is only known at run time,
+        ///  not compile time
         /// </summary>
         private static IList CreateBindingList(Type type)
         {
@@ -538,7 +538,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Create an object of the given type. Throw an exception if this fails.
+        ///  Create an object of the given type. Throw an exception if this fails.
         /// </summary>
         private static object CreateInstanceOfType(Type type)
         {
@@ -597,11 +597,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Unhook BindingSource from its data source, since the data source could be some
-        /// global object who's lifetime exceeds the lifetime of the parent form. Otherwise
-        /// the BindingSource (and any components bound through it) will end up in limbo,
-        /// still processing list change events, etc. And when unhooking from the data source,
-        /// take care not to trigger any events that could confuse compoents bound to us.
+        ///  Unhook BindingSource from its data source, since the data source could be some
+        ///  global object who's lifetime exceeds the lifetime of the parent form. Otherwise
+        ///  the BindingSource (and any components bound through it) will end up in limbo,
+        ///  still processing list change events, etc. And when unhooking from the data source,
+        ///  take care not to trigger any events that could confuse compoents bound to us.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -642,9 +642,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Ensures that the inner list has been set up. Handles the case of ResetList() being
-        /// called during initialization, which sets a flag to defer ResetList() work until
-        /// after initialization is complete.
+        ///  Ensures that the inner list has been set up. Handles the case of ResetList() being
+        ///  called during initialization, which sets a flag to defer ResetList() work until
+        ///  after initialization is complete.
         /// </summary>
         private void EnsureInnerList()
         {
@@ -656,8 +656,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Overload of IBindingList.Find that takes a string instead of a property
-        /// descriptor (for convenience).
+        ///  Overload of IBindingList.Find that takes a string instead of a property
+        ///  descriptor (for convenience).
         /// </summary>
         public int Find(string propertyName, object key)
         {
@@ -671,10 +671,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Given a type, create a list based on that type. If the type represents a list type,
-        /// we create an instance of that type (or throw if we cannot instance that type).
-        /// Otherwise we assume the type represents the item type, in which case we create
-        /// a typed BindingList of that item type.
+        ///  Given a type, create a list based on that type. If the type represents a list type,
+        ///  we create an instance of that type (or throw if we cannot instance that type).
+        ///  Otherwise we assume the type represents the item type, in which case we create
+        ///  a typed BindingList of that item type.
         /// </summary>
         private static IList GetListFromType(Type type)
         {
@@ -693,9 +693,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a list based on an enumerable object. We rip through the enumerable,
-        /// extract all its items, and stuff these items into a typed BindingList, using
-        /// the type of the first item to determine the type of the list.
+        ///  Creates a list based on an enumerable object. We rip through the enumerable,
+        ///  extract all its items, and stuff these items into a typed BindingList, using
+        ///  the type of the first item to determine the type of the list.
         /// </summary>
         private static IList GetListFromEnumerable(IEnumerable enumerable)
         {
@@ -715,9 +715,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Used when we change data sources or when the properties of the current data source change.
-        /// Decides whether this would be a good time to blow away the data member field, since it
-        /// might not refer to a valid data source property any more.
+        ///  Used when we change data sources or when the properties of the current data source change.
+        ///  Decides whether this would be a good time to blow away the data member field, since it
+        ///  might not refer to a valid data source property any more.
         /// </summary>
         private bool IsDataMemberValid()
         {
@@ -794,8 +794,8 @@ namespace System.Windows.Forms
         public void MovePrevious() => Position--;
 
         /// <remarks>
-        /// This method is used to fire ListChanged events when the inner list
-        /// is not an IBindingList (and therefore cannot fire them itself).
+        ///  This method is used to fire ListChanged events when the inner list
+        ///  is not an IBindingList (and therefore cannot fire them itself).
         /// </remarks>
         private void OnSimpleListChanged(ListChangedType listChangedType, int newIndex)
         {
@@ -873,11 +873,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When the data member is set, and the data source signals a change of current item,
-        /// we need to query its new current item for the list specified by the data member.
-        /// Or if there is no longer a current item on the data source, we use an empty list.
-        /// In either case, we only have to change lists, not metadata, since we can assume
-        /// that the new list has the same item properties as the old list.
+        ///  When the data member is set, and the data source signals a change of current item,
+        ///  we need to query its new current item for the list specified by the data member.
+        ///  Or if there is no longer a current item on the data source, we use an empty list.
+        ///  In either case, we only have to change lists, not metadata, since we can assume
+        ///  that the new list has the same item properties as the old list.
         /// </summary>
         private void ParentCurrencyManager_CurrentItemChanged(object sender, EventArgs e)
         {
@@ -968,10 +968,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When the data source signals a change of metadata, we need to re-query for the
-        /// list specified by the data member field. If the data member is no longer valid
-        /// under the data source's new metadata, we have no choice but to clear the data
-        /// member field and just bind directly to the data source itself.
+        ///  When the data source signals a change of metadata, we need to re-query for the
+        ///  list specified by the data member field. If the data member is no longer valid
+        ///  under the data source's new metadata, we have no choice but to clear the data
+        ///  member field and just bind directly to the data source itself.
         /// </summary>
         private void ParentCurrencyManager_MetaDataChanged(object sender, EventArgs e)
         {
@@ -1081,8 +1081,8 @@ namespace System.Windows.Forms
         public void SuspendBinding() => _currencyManager.SuspendBinding();
 
         /// <summary>
-        /// Binds the BindingSource to the list specified by its DataSource and DataMember
-        /// properties.
+        ///  Binds the BindingSource to the list specified by its DataSource and DataMember
+        ///  properties.
         /// </summary>
         private void ResetList()
         {
@@ -1163,8 +1163,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Binds the BindingSource to the specified list, rewiring internal event handlers,
-        /// firing any appropriate external events, and updating all relevant field members.
+        ///  Binds the BindingSource to the specified list, rewiring internal event handlers,
+        ///  firing any appropriate external events, and updating all relevant field members.
         /// </summary>
         private void SetList(IList list, bool metaDataChanged, bool applySortAndFilter)
         {
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeAllowNew() => _allowNewIsSet;
 
         /// <summary>
-        /// Hooks property changed events for the NEW current item, if nececssary
+        ///  Hooks property changed events for the NEW current item, if nececssary
         private void HookItemChangedEventsForNewCurrent()
         {
             Debug.Assert(_currentItemHookedForItemChange == null, "BindingSource trying to hook new current item before unhooking old current item!");
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Unhooks property changed events for the OLD current item, if necessary
+        ///  Unhooks property changed events for the OLD current item, if necessary
         /// </summary>
         private void UnhookItemChangedEventsForOldCurrent()
         {
@@ -1369,14 +1369,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Begin bulk member initialization - deferring calculation of inner list until
-        /// EndInit is reached
+        ///  Begin bulk member initialization - deferring calculation of inner list until
+        ///  EndInit is reached
         /// </summary>
         void ISupportInitialize.BeginInit() => _initializing = true;
 
         /// <summary>
-        /// End bulk member initialization - updating the inner list and notifying any
-        /// dependents of our completion
+        ///  End bulk member initialization - updating the inner list and notifying any
+        ///  dependents of our completion
         /// </summary>
         private void EndInitCore()
         {
@@ -1386,12 +1386,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Check to see if DataSource has completed its initialization, before ending our
-        /// initialization.
-        /// If DataSource is still initializing, hook its Initialized event and wait for it
-        /// to signal completion.
-        /// If DataSource is already initialized, just go ahead and complete our
-        /// initialization now.
+        ///  Check to see if DataSource has completed its initialization, before ending our
+        ///  initialization.
+        ///  If DataSource is still initializing, hook its Initialized event and wait for it
+        ///  to signal completion.
+        ///  If DataSource is already initialized, just go ahead and complete our
+        ///  initialization now.
         /// </summary>
         void ISupportInitialize.EndInit()
         {
@@ -1406,10 +1406,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Respond to late completion of the DataSource's initialization, by completing our
-        /// own initialization. This situation can arise if the call to the DataSource's
-        /// EndInit() method comes after the call to the BindingSource's EndInit() method
-        /// (since code-generated ordering of these calls is non-deterministic).
+        ///  Respond to late completion of the DataSource's initialization, by completing our
+        ///  own initialization. This situation can arise if the call to the DataSource's
+        ///  EndInit() method comes after the call to the BindingSource's EndInit() method
+        ///  (since code-generated ordering of these calls is non-deterministic).
         /// </summary>
         private void DataSource_Initialized(object sender, EventArgs e)
         {
@@ -1422,13 +1422,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Report to any dependents whether we are still in bulk member initialization
+        ///  Report to any dependents whether we are still in bulk member initialization
         /// </summary>
         bool ISupportInitializeNotification.IsInitialized => !_initializing;
 
         /// <summary>
-        /// Event used to signal to our dependents that we have completed bulk member
-        /// initialization and updated our inner list
+        ///  Event used to signal to our dependents that we have completed bulk member
+        ///  initialization and updated our inner list
         /// </summary>
         event EventHandler ISupportInitializeNotification.Initialized
         {

@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -135,7 +136,6 @@ namespace System.Windows.Forms
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //START WHIDBEY ADDS                                                                                           //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Displays a message box with specified text, caption, and style with Help Button.
         /// </summary>
@@ -230,7 +230,6 @@ namespace System.Windows.Forms
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //END ADD                                                                                                      //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Displays a message box with specified text, caption, and style.
         /// </summary>
@@ -405,12 +404,12 @@ namespace System.Windows.Forms
             if (Application.UseVisualStyles)
             {
                 // CLR4.0 or later, shell32.dll needs to be loaded explicitly.
-                if (Interop.Kernel32.GetModuleHandleW(Interop.Libraries.Shell32) == IntPtr.Zero)
+                if (Kernel32.GetModuleHandleW(Libraries.Shell32) == IntPtr.Zero)
                 {
-                    if (Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable(Interop.Libraries.Shell32) == IntPtr.Zero)
+                    if (Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Shell32) == IntPtr.Zero)
                     {
                         int lastWin32Error = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Interop.Libraries.Shell32));
+                        throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Libraries.Shell32));
                     }
                 }
 
@@ -435,7 +434,7 @@ namespace System.Windows.Forms
             // but since we have disabled this thread main window the message is lost. So we have to send it again after
             // we enable the main window.
             //
-            UnsafeNativeMethods.SendMessage(new HandleRef(owner, handle), Interop.WindowMessages.WM_SETFOCUS, 0, 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(owner, handle), WindowMessages.WM_SETFOCUS, 0, 0);
             return result;
         }
 

@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// A collection of listview groups.
+    ///  A collection of listview groups.
     /// </summary>
     [ListBindable(false)]
     public class ListViewGroupCollection : IList

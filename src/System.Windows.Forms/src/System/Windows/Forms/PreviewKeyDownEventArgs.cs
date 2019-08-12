@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the PreviewKeyDownEvent
+    ///  Provides data for the PreviewKeyDownEvent
     /// </summary>
     public class PreviewKeyDownEventArgs : EventArgs
     {
@@ -15,21 +15,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the key data for a <see cref='Forms.Control.KeyDown'/>
-        /// or <see cref='Forms.Control.KeyUp'/> event.
+        ///  Gets the key data for a <see cref='Forms.Control.KeyDown'/>
+        ///  or <see cref='Forms.Control.KeyUp'/> event.
         /// </summary>
         public Keys KeyData { get; }
 
         public bool Alt => (KeyData & Keys.Alt) == Keys.Alt;
 
         /// <summary>
-        /// Gets a value indicating whether the CTRL key was pressed.
+        ///  Gets a value indicating whether the CTRL key was pressed.
         /// </summary>
         public bool Control => (KeyData & Keys.Control) == Keys.Control;
 
         /// <summary>
-        /// Gets the keyboard code for a <see cref='Forms.Control.KeyDown'/>
-        /// or <see cref='Forms.Control.KeyUp'/> event.
+        ///  Gets the keyboard code for a <see cref='Forms.Control.KeyDown'/>
+        ///  or <see cref='Forms.Control.KeyUp'/> event.
         /// </summary>
         public Keys KeyCode
         {
@@ -46,20 +46,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the keyboard value for a <see cref='Forms.Control.KeyDown'/>
-        /// or <see cref='Forms.Control.KeyUp'/> event.
+        ///  Gets the keyboard value for a <see cref='Forms.Control.KeyDown'/>
+        ///  or <see cref='Forms.Control.KeyUp'/> event.
         /// </summary>
         public int KeyValue => (int)(KeyData & Keys.KeyCode);
 
         /// <summary>
-        /// Gets the modifier flags for a <see cref='Forms.Control.KeyDown'/>
-        /// or <see cref='Forms.Control.KeyUp'/> event.
-        /// This indicates which modifier keys (CTRL, SHIFT, and/or ALT) were pressed.
+        ///  Gets the modifier flags for a <see cref='Forms.Control.KeyDown'/>
+        ///  or <see cref='Forms.Control.KeyUp'/> event.
+        ///  This indicates which modifier keys (CTRL, SHIFT, and/or ALT) were pressed.
         /// </summary>
         public Keys Modifiers => KeyData & Keys.Modifiers;
 
         /// <summary>
-        /// Gets a value indicating whether the SHIFT key was pressed.
+        ///  Gets a value indicating whether the SHIFT key was pressed.
         /// </summary>
         public bool Shift => (KeyData & Keys.Shift) == Keys.Shift;
 

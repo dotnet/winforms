@@ -7,20 +7,20 @@ namespace System.Windows.Forms
     public enum MessageBoxDefaultButton
     {
         /// <summary>
-        /// Specifies that the first button on the message box should be the
-        /// default button.
+        ///  Specifies that the first button on the message box should be the
+        ///  default button.
         /// </summary>
         Button1 = 0x00000000,
 
         /// <summary>
-        /// Specifies that the second button on the message box should be the
-        /// default button.
+        ///  Specifies that the second button on the message box should be the
+        ///  default button.
         /// </summary>
         Button2 = 0x00000100,
 
         /// <summary>
-        /// Specifies that the third button on the message box should be the
-        /// default button.
+        ///  Specifies that the third button on the message box should be the
+        ///  default button.
         /// </summary>
         Button3 = 0x00000200,
     }

@@ -17,15 +17,16 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using Directory = System.IO.Directory;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides <see langword='static '/>
-    /// methods and properties
-    /// to manage an application, such as methods to run and quit an application,
-    /// to process Windows messages, and properties to get information about an application. This
-    /// class cannot be inherited.
+    ///  Provides <see langword='static '/>
+    ///  methods and properties
+    ///  to manage an application, such as methods to run and quit an application,
+    ///  to process Windows messages, and properties to get information about an application. This
+    ///  class cannot be inherited.
     /// </summary>
     public sealed class Application
     {
@@ -101,7 +102,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
+        ///  Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
         internal static bool ComCtlSupportsVisualStyles
         {
             get
@@ -130,20 +131,20 @@ namespace System.Windows.Forms
             // cached.
             // GetModuleHandle  returns a handle to a mapped module without incrementing its
             // reference count.
-            IntPtr hModule = Interop.Kernel32.GetModuleHandleW(Interop.Libraries.Comctl32);
+            IntPtr hModule = Kernel32.GetModuleHandleW(Libraries.Comctl32);
             if (hModule != IntPtr.Zero)
             {
-                return Interop.Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+                return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
             }
 
             // Load comctl since GetModuleHandle failed to find it
-            hModule = Interop.Kernel32.LoadLibraryFromSystemPathIfAvailable(Interop.Libraries.Comctl32);
+            hModule = Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Comctl32);
             if (hModule == IntPtr.Zero)
             {
                 return false;
             }
 
-            return Interop.Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+            return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
         }
 
         /// <summary>
@@ -210,7 +211,7 @@ namespace System.Windows.Forms
         ///  Gets the path for the application data that is shared among all users.
         /// </summary>
         /// <remarks>
-        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
         // the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string CommonAppDataPath
@@ -369,7 +370,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the current HighDpi mode for the process.
+        ///  Gets the current HighDpi mode for the process.
         /// </summary>
         public static HighDpiMode HighDpiMode
         {
@@ -380,7 +381,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the HighDpi mode for process.
+        ///  Sets the HighDpi mode for process.
         /// </summary>
         /// <param name="highDpiMode">The HighDpi mode to set.</param>
         /// <returns></returns>
@@ -398,8 +399,8 @@ namespace System.Windows.Forms
         ///  Gets the path for the application data specific to a local, non-roaming user.
         /// </summary>
         /// <remarks>
-        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-        /// the Windows logo required adornments to the directory (Company\Product\Version)
+        ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        ///  the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string LocalUserAppDataPath
         {
@@ -421,7 +422,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the forms collection associated with this application.
+        ///  Gets the forms collection associated with this application.
         /// </summary>
         public static FormCollection OpenForms => s_forms ?? (s_forms = new FormCollection());
 
@@ -647,8 +648,8 @@ namespace System.Windows.Forms
         ///  Gets the path for the application data specific to the roaming user.
         /// </summary>
         /// <remarks>
-        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-        /// the Windows logo required adornments to the directory (Company\Product\Version)
+        ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        ///  the Windows logo required adornments to the directory (Company\Product\Version)
         /// </remarks>
         public static string UserAppDataPath
         {
@@ -674,9 +675,9 @@ namespace System.Windows.Forms
         public static bool UseVisualStyles => s_useVisualStyles;
 
         /// <remarks>
-        /// Don't never ever change this name, since the window class and partner teams
-        /// dependent on this. Changing this will introduce breaking changes.
-        /// If there is some reason need to change this, notify any partner teams affected.
+        ///  Don't never ever change this name, since the window class and partner teams
+        ///  dependent on this. Changing this will introduce breaking changes.
+        ///  If there is some reason need to change this, notify any partner teams affected.
         /// </remarks>
         internal static string WindowsFormsVersion => "WindowsForms10";
 
@@ -725,7 +726,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
+        ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
         private static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
         {
@@ -746,8 +747,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This helper broadcasts out a WM_THEMECHANGED this window and all children.
-        /// it is assumed at this point that the handle belongs to the current process and has a visible top level window.
+        ///  This helper broadcasts out a WM_THEMECHANGED this window and all children.
+        ///  it is assumed at this point that the handle belongs to the current process and has a visible top level window.
         /// </summary>
         private static bool SendThemeChangedRecursive(IntPtr handle, IntPtr lparam)
         {
@@ -757,7 +758,7 @@ namespace System.Windows.Forms
                 NativeMethods.NullHandleRef);
 
             //then do myself.
-            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), WindowMessages.WM_THEMECHANGED, 0, 0);
 
             return true;
         }
@@ -965,8 +966,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
-        /// Uses the default theming manifest file shipped with the redist.
+        ///  Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
+        ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
         public static void EnableVisualStyles()
         {
@@ -1219,7 +1220,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Park control handle on a parkingwindow that has matching DpiAwareness.
+        ///  Park control handle on a parkingwindow that has matching DpiAwareness.
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiContext"> dpi awareness</param>
@@ -1241,7 +1242,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ThreadException'/> event.
+        ///  Raises the <see cref='ThreadException'/> event.
         /// </summary>
         public static void OnThreadException(Exception t)
         {
@@ -1921,7 +1922,7 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.GetMessageA(ref msg, NativeMethods.NullHandleRef, 0, 0);
                                 }
 
-                                if (msg.message == Interop.WindowMessages.WM_QUIT)
+                                if (msg.message == WindowMessages.WM_QUIT)
                                 {
                                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Normal message loop termination");
 
@@ -2455,7 +2456,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns parking window that matches dpi awareness context. return null if not found.
+            ///  Returns parking window that matches dpi awareness context. return null if not found.
             /// </summary>
             /// <returns>return matching parking window from list. returns null if not found</returns>
             internal ParkingWindow GetParkingWindowForContext(DpiAwarenessContext context)
@@ -3052,8 +3053,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// A method of determining whether we are handling messages that does not demand register
-            /// the componentmanager
+            ///  A method of determining whether we are handling messages that does not demand register
+            ///  the componentmanager
             /// </summary>
             /// <returns></returns>
             internal bool IsValidComponentId()
@@ -3191,7 +3192,7 @@ namespace System.Windows.Forms
                 // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
                 // to.
                 //
-                UnsafeNativeMethods.PostThreadMessage(id, Interop.WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.PostThreadMessage(id, WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
             }
 
@@ -3574,10 +3575,10 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (msg.message >= Interop.WindowMessages.WM_KEYFIRST
-                        && msg.message <= Interop.WindowMessages.WM_KEYLAST)
+                if (msg.message >= WindowMessages.WM_KEYFIRST
+                        && msg.message <= WindowMessages.WM_KEYLAST)
                 {
-                    if (msg.message == Interop.WindowMessages.WM_CHAR)
+                    if (msg.message == WindowMessages.WM_CHAR)
                     {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                         if (unchecked((int)(long)msg.wParam) == 3 && (unchecked((int)(long)msg.lParam) & breakLParamMask) == breakLParamMask)
@@ -3706,7 +3707,6 @@ namespace System.Windows.Forms
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
-
             /****************************************************************************************
              *
              *                                  IMsoComponent
@@ -4037,7 +4037,7 @@ namespace System.Windows.Forms
             //   in whidbey we now aggressively tear down the parking window
             //   when the last control has been removed off of it.
 
-            private const int WM_CHECKDESTROY = Interop.WindowMessages.WM_USER + 0x01;
+            private const int WM_CHECKDESTROY = WindowMessages.WM_USER + 0x01;
 
             private int childCount = 0;
 
@@ -4160,12 +4160,12 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg != Interop.WindowMessages.WM_SHOWWINDOW)
+                if (m.Msg != WindowMessages.WM_SHOWWINDOW)
                 {
                     base.WndProc(ref m);
-                    if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY)
+                    if (m.Msg == WindowMessages.WM_PARENTNOTIFY)
                     {
-                        if (NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == Interop.WindowMessages.WM_DESTROY)
+                        if (NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == WindowMessages.WM_DESTROY)
                         {
                             UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
                         }

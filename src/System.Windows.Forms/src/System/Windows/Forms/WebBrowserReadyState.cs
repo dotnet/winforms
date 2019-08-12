@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the ReadyState of the WebBrowser control.
-    /// Returned by the <see cref='WebBrowser.ReadyState'/> property.
+    ///  Specifies the ReadyState of the WebBrowser control.
+    ///  Returned by the <see cref='WebBrowser.ReadyState'/> property.
     /// </summary>
     public enum WebBrowserReadyState
     {

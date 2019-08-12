@@ -8,9 +8,9 @@ using System.Reflection;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// DesignerActionList is the abstract base class which control authors inherit from to create a task sheet.
-    /// Typical usage is to add properties and methods and then implement the abstract
-    /// GetSortedActionItems method to return an array of DesignerActionItems in the order they are to be displayed.
+    ///  DesignerActionList is the abstract base class which control authors inherit from to create a task sheet.
+    ///  Typical usage is to add properties and methods and then implement the abstract
+    ///  GetSortedActionItems method to return an array of DesignerActionItems in the order they are to be displayed.
     /// </summary>
     public class DesignerActionList
     {

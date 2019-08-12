@@ -12,7 +12,7 @@ using System.Diagnostics;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
+    ///  This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
     /// </summary>
     [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
     public class TypeCodeDomSerializer : CodeDomSerializerBase
@@ -39,10 +39,10 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method deserializes a previously serialized code type declaration. The default implementation performs the following tasks:
-        /// • Case Sensitivity Checks: It looks for a CodeDomProvider service to decide if it should treat members as case sensitive or case insensitive.
-        /// • Statement Sorting:  All member variables and local variables from init methods are stored in a table. Then each statement in an init method is added to a statement collection grouped according to its left hand side. So all statements assigning or operating on a particular variable are grouped under that variable.  Variables that have no statements are discarded.
-        /// • Deserialization: Finally, the statement collections for each variable are deserialized according to the variable. Deserialize returns an instance of the root object.
+        ///  This method deserializes a previously serialized code type declaration. The default implementation performs the following tasks:
+        ///  • Case Sensitivity Checks: It looks for a CodeDomProvider service to decide if it should treat members as case sensitive or case insensitive.
+        ///  • Statement Sorting:  All member variables and local variables from init methods are stored in a table. Then each statement in an init method is added to a statement collection grouped according to its left hand side. So all statements assigning or operating on a particular variable are grouped under that variable.  Variables that have no statements are discarded.
+        ///  • Deserialization: Finally, the statement collections for each variable are deserialized according to the variable. Deserialize returns an instance of the root object.
         /// </summary>
         public virtual object Deserialize(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
@@ -227,7 +227,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This takes the given name and deserializes it from our name table.  Before blindly deserializing it checks the contents of the name table to see if the object already exists within it. We do this because deserializing one object may call back into us through OnResolveName and deserialize another.
+        ///  This takes the given name and deserializes it from our name table.  Before blindly deserializing it checks the contents of the name table to see if the object already exists within it. We do this because deserializing one object may call back into us through OnResolveName and deserialize another.
         /// </summary>
         private object DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection statements)
         {
@@ -349,7 +349,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method returns the method to emit all of the initialization code to for the given member.   The default implementation returns an empty constructor.
+        ///  This method returns the method to emit all of the initialization code to for the given member.   The default implementation returns an empty constructor.
         /// </summary>
         protected virtual CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration declaration, object value)
         {
@@ -374,7 +374,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method returns an array of methods that need to be interpreted during deserialization.   The default implementation returns a single element array with the constructor in it.
+        ///  This method returns an array of methods that need to be interpreted during deserialization.   The default implementation returns a single element array with the constructor in it.
         /// </summary>
         protected virtual CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
@@ -397,7 +397,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Called by the serialization manager to resolve a name to an object.
+        ///  Called by the serialization manager to resolve a name to an object.
         /// </summary>
         private void OnResolveName(object sender, ResolveNameEventArgs e)
         {
@@ -419,12 +419,12 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method serializes the given root object and optional collection of members to create a new type definition. The members collection can be null or empty. If it contains values, these values will be serialized. Values themselves may decide to serialize as either member  variables or local variables. This determination is done by looking for an extender property on the object called GenerateMember. If true, a member is generated. Otherwise, a local variable is generated. For convenience, the members collection can contain the root object. In this case the root object will not also be added as a member or local variable. The return value is a CodeTypeDeclaration that defines the root object.  The name of the type will be taken from the root object’s name, if it was a named object.  If not, a name will be fabricated from the simple type name of the root class.
-        /// The default implementation of Serialize performs the following tasks:
-        /// •    Context Seeding.  The serialization context will be “seeded” with data including the RootContext, and CodeTypeDeclaration.
-        /// •    Member Serialization.  Next Serialize will walk all of the members and call SerializeToExpression.  Because serialization is done opportunistically in SerializeToExpression, this ensures that we do not serialize twice.
-        /// •    Root Seralization.  Finally, the root object is serialized and its statements are added to the statement collection.
-        /// •    Statement Integration.  After all objects have been serialized the Serialize method orders the statements and adds them to a method returned from GetInitializeMethod.  Finally, a constructor is fabricated that calls all of the methods returned from GetInitializeMethod (this step is skipped for cases when GetInitializeMethod returns a constructor.
+        ///  This method serializes the given root object and optional collection of members to create a new type definition. The members collection can be null or empty. If it contains values, these values will be serialized. Values themselves may decide to serialize as either member  variables or local variables. This determination is done by looking for an extender property on the object called GenerateMember. If true, a member is generated. Otherwise, a local variable is generated. For convenience, the members collection can contain the root object. In this case the root object will not also be added as a member or local variable. The return value is a CodeTypeDeclaration that defines the root object.  The name of the type will be taken from the root object’s name, if it was a named object.  If not, a name will be fabricated from the simple type name of the root class.
+        ///  The default implementation of Serialize performs the following tasks:
+        ///  •    Context Seeding.  The serialization context will be “seeded” with data including the RootContext, and CodeTypeDeclaration.
+        ///  •    Member Serialization.  Next Serialize will walk all of the members and call SerializeToExpression.  Because serialization is done opportunistically in SerializeToExpression, this ensures that we do not serialize twice.
+        ///  •    Root Seralization.  Finally, the root object is serialized and its statements are added to the statement collection.
+        ///  •    Statement Integration.  After all objects have been serialized the Serialize method orders the statements and adds them to a method returned from GetInitializeMethod.  Finally, a constructor is fabricated that calls all of the methods returned from GetInitializeMethod (this step is skipped for cases when GetInitializeMethod returns a constructor.
         /// </summary>
         public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection members)
         {
@@ -511,7 +511,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Takes the statement context and integrates all the statements into the correct methods.  Then, those methods are added to the code type declaration.
+        ///  Takes the statement context and integrates all the statements into the correct methods.  Then, those methods are added to the code type declaration.
         /// </summary>
         private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection members, StatementContext statementCxt, CodeTypeDeclaration typeDecl)
         {

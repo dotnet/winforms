@@ -8,13 +8,13 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='Form.InputLanguageChanging'/> event.
+    ///  Provides data for the <see cref='Form.InputLanguageChanging'/> event.
     /// </summary>
     public class InputLanguageChangingEventArgs : CancelEventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='InputLanguageChangingEventArgs'/> class with the
-        /// specified locale, character set, and acceptance.
+        ///  Initializes a new instance of the <see cref='InputLanguageChangingEventArgs'/> class with the
+        ///  specified locale, character set, and acceptance.
         /// </summary>
         public InputLanguageChangingEventArgs(CultureInfo culture, bool sysCharSet)
         {
@@ -24,8 +24,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='InputLanguageChangingEventArgs'/> class with the
-        /// specified input language, character set, and acceptance of a language change.
+        ///  Initializes a new instance of the <see cref='InputLanguageChangingEventArgs'/> class with the
+        ///  specified input language, character set, and acceptance of a language change.
         /// </summary>
         public InputLanguageChangingEventArgs(InputLanguage inputLanguage, bool sysCharSet)
         {
@@ -35,18 +35,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the requested input language.
+        ///  Gets the requested input language.
         /// </summary>
         public InputLanguage InputLanguage { get; }
 
         /// <summary>
-        /// Gets the locale of the requested input language.
+        ///  Gets the locale of the requested input language.
         /// </summary>
         public CultureInfo Culture { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the system default font supports the character set
-        /// required for the requested input language.
+        ///  Gets a value indicating whether the system default font supports the character set
+        ///  required for the requested input language.
         /// </summary>
         public bool SysCharSet { get; }
     }

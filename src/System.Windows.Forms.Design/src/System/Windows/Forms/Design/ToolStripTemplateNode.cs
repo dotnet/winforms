@@ -5,16 +5,15 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design.Behavior;
-using static System.Windows.Forms.UnsafeNativeMethods;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swaped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
+    ///  This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swaped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
     /// </summary>
     internal class ToolStripTemplateNode : IMenuStatusHandler
     {
@@ -143,7 +142,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This property enables / disables Menu Command Handler.
+        ///  This property enables / disables Menu Command Handler.
         /// </summary>
         public bool Active
         {
@@ -250,7 +249,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns the Bounds of this ToolStripTemplateNode.
+        ///  Returns the Bounds of this ToolStripTemplateNode.
         /// </summary>
         public Rectangle Bounds
         {
@@ -265,7 +264,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is the designer contextMenu that pops when rightclicked on the TemplateNode.
+        ///  This is the designer contextMenu that pops when rightclicked on the TemplateNode.
         /// </summary>
         private ContextMenuStrip DesignerContextMenu
         {
@@ -301,7 +300,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This property returns the actual editor ToolStrip.
+        ///  This property returns the actual editor ToolStrip.
         /// </summary>
         public ToolStrip EditorToolStrip
         {
@@ -309,7 +308,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This property returns the actual editor ToolStrip.
+        ///  This property returns the actual editor ToolStrip.
         /// </summary>
         internal TextBox EditBox
         {
@@ -317,7 +316,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// HotRegion within the templateNode. this is the region which responds to the mouse.
+        ///  HotRegion within the templateNode. this is the region which responds to the mouse.
         /// </summary>
         public Rectangle HotRegion
         {
@@ -326,7 +325,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// value to suggest if IME mode is set.
+        ///  value to suggest if IME mode is set.
         /// </summary>
         public bool IMEModeSet
         {
@@ -335,7 +334,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// KeyBoardHandling service.
+        ///  KeyBoardHandling service.
         /// </summary>
         private ToolStripKeyboardHandlingService KeyboardService
         {
@@ -350,7 +349,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// SelectionService.
+        ///  SelectionService.
         /// </summary>
         private ISelectionService SelectionService
         {
@@ -377,7 +376,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Type of the new Item to be added.
+        ///  Type of the new Item to be added.
         /// </summary>
         public Type ToolStripItemType
         {
@@ -386,7 +385,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Is system context menu for the insitu edit box displayed?.
+        ///  Is system context menu for the insitu edit box displayed?.
         /// </summary>
         internal bool IsSystemContextMenuDisplayed
         {
@@ -395,7 +394,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Helper function to add new Item when the DropDownItem (in the ToolStripTemplateNode) is clicked
+        ///  Helper function to add new Item when the DropDownItem (in the ToolStripTemplateNode) is clicked
         /// </summary>
         private void AddNewItemClick(object sender, EventArgs e)
         {
@@ -457,7 +456,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the user clicks the CenterLabel of the ToolStripTemplateNode.
+        ///  Called when the user clicks the CenterLabel of the ToolStripTemplateNode.
         /// </summary>
         private void CenterLabelClick(object sender, MouseEventArgs e)
         {
@@ -582,7 +581,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting of the templateNode on MouseEnter.
+        ///  Painting of the templateNode on MouseEnter.
         /// </summary>
         private void CenterLabelMouseEnter(object sender, EventArgs e)
         {
@@ -597,7 +596,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting of the templateNode on MouseMove
+        ///  Painting of the templateNode on MouseMove
         /// </summary>
         private void CenterLabelMouseMove(object sender, MouseEventArgs e)
         {
@@ -619,7 +618,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting of the templateNode on MouseLeave
+        ///  Painting of the templateNode on MouseLeave
         /// </summary>
         private void CenterLabelMouseLeave(object sender, EventArgs e)
         {
@@ -638,7 +637,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting of the templateNode on MouseEnter
+        ///  Painting of the templateNode on MouseEnter
         /// </summary>
         private void CenterTextBoxMouseEnter(object sender, EventArgs e)
         {
@@ -650,7 +649,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting of the templateNode on TextBox mouseLeave (in case of MenuStrip)
+        ///  Painting of the templateNode on TextBox mouseLeave (in case of MenuStrip)
         /// </summary>
         private void CenterTextBoxMouseLeave(object sender, EventArgs e)
         {
@@ -662,7 +661,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Fucntion disposes the ToolStrip and its components and also clears the event handlers associated.
+        ///  This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Fucntion disposes the ToolStrip and its components and also clears the event handlers associated.
         /// </summary>
         internal void CloseEditor()
         {
@@ -730,7 +729,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This internal Function is called by item designers to ROLLBACK the current Insitu editing mode.
+        ///  This internal Function is called by item designers to ROLLBACK the current Insitu editing mode.
         /// </summary>
         internal void Commit(bool enterKeyPressed, bool tabKeyPressed)
         {
@@ -750,7 +749,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Internal function that would commit the TemplateNode
+        ///  Internal function that would commit the TemplateNode
         /// </summary>
         internal void CommitAndSelect()
         {
@@ -793,7 +792,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This private function performs the job of commiting the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for commiting (or ROLLBACKING) the Insitu Edit mode.  The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
+        ///  This private function performs the job of commiting the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for commiting (or ROLLBACKING) the Insitu Edit mode.  The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
         /// </summary>
         private void CommitEditor(bool commit, bool enterKeyPressed, bool tabKeyPressed)
         {
@@ -828,7 +827,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The ToolStripTemplateNode enters into InSitu Edit Mode through this Function. This Function is called by FocusEditor( ) which starts the InSitu. The centerLabel is SWAPPED by centerTextBox and the ToolStripTemplateNode is Ready for  Text.  Settting "Active = true" pushes the IEventHandler which now intercepts the  Escape and Enter keys to ROLLBACK or COMMIT the InSitu Editing respectively.
+        ///  The ToolStripTemplateNode enters into InSitu Edit Mode through this Function. This Function is called by FocusEditor( ) which starts the InSitu. The centerLabel is SWAPPED by centerTextBox and the ToolStripTemplateNode is Ready for  Text.  Settting "Active = true" pushes the IEventHandler which now intercepts the  Escape and Enter keys to ROLLBACK or COMMIT the InSitu Editing respectively.
         /// </summary>
         private void EnterInSituEdit()
         {
@@ -890,9 +889,9 @@ namespace System.Windows.Forms.Design
                     if (_designerHost != null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 0, 0);
+                        NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 0, 0);
                         tb.Focus();
-                        NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 1, 0);
+                        NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 1, 0);
                     }
                 }
                 finally
@@ -906,7 +905,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The ToolStripTemplateNode exits from InSitu Edit Mode through this Function. This Function is called by CommitEditor( ) which stops the InSitu. The centerTextBox is SWAPPED by centerLabel and the ToolStripTemplateNode is exits the   InSitu Mode.  Settting "Active = false" pops the IEventHandler.
+        ///  The ToolStripTemplateNode exits from InSitu Edit Mode through this Function. This Function is called by CommitEditor( ) which stops the InSitu. The centerTextBox is SWAPPED by centerLabel and the ToolStripTemplateNode is exits the   InSitu Mode.  Settting "Active = false" pops the IEventHandler.
         /// </summary>
         private void ExitInSituEdit()
         {
@@ -953,7 +952,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This internal function is called from ToolStripItemDesigner to put the  current item into InSitu Edit Mode.
+        ///  This internal function is called from ToolStripItemDesigner to put the  current item into InSitu Edit Mode.
         /// </summary>
         internal void FocusEditor(ToolStripItem currentItem)
         {
@@ -965,7 +964,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the user enters into the InSitu edit mode.This keeps the fdesigner Form Active.....
+        ///  Called when the user enters into the InSitu edit mode.This keeps the fdesigner Form Active.....
         /// </summary>
         private void FocusForm()
         {
@@ -974,9 +973,9 @@ namespace System.Windows.Forms.Design
                 if (_designerHost != null)
                 {
                     Control baseComponent = (Control)_designerHost.RootComponent;
-                    NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 0, 0);
+                    NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 0, 0);
                     designerFrame.Focus();
-                    NativeMethods.SendMessage(baseComponent.Handle, Interop.WindowMessages.WM_SETREDRAW, 1, 0);
+                    NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 1, 0);
                 }
             }
         }
@@ -997,7 +996,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting of the templateNode on when the contextMenu is closed
+        ///  Painting of the templateNode on when the contextMenu is closed
         /// </summary>
         private void OnContextMenuClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
@@ -1017,7 +1016,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Set the KeyBoardService member, so the designer knows that the "ContextMenu" is opened.
+        ///  Set the KeyBoardService member, so the designer knows that the "ContextMenu" is opened.
         /// </summary>
         private void OnContextMenuOpened(object sender, EventArgs e)
         {
@@ -1034,7 +1033,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by the design surface when it is being flushed.  This will save any changes made to TemplateNode.
+        ///  Called by the design surface when it is being flushed.  This will save any changes made to TemplateNode.
         /// </summary>
         private void OnLoaderFlushed(object sender, EventArgs e)
         {
@@ -1042,7 +1041,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is small HACK. For some reason if the InSituEditor's textbox has focus the escape key is lost and the menu service doesnt get it.... but the textbox gets it. So need to check for the escape key here and call CommitEditor(false) which  will ROLLBACK the edit.
+        ///  This is small HACK. For some reason if the InSituEditor's textbox has focus the escape key is lost and the menu service doesnt get it.... but the textbox gets it. So need to check for the escape key here and call CommitEditor(false) which  will ROLLBACK the edit.
         /// </summary>
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
@@ -1078,7 +1077,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Select text on KeyDown.
+        ///  Select text on KeyDown.
         /// </summary>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -1096,7 +1095,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Check for the Enter key here and call CommitEditor(true) which  will COMMIT the edit.
+        ///  Check for the Enter key here and call CommitEditor(true) which  will COMMIT the edit.
         /// </summary>
         private void OnKeyDefaultAction(object sender, EventArgs e)
         {
@@ -1118,14 +1117,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the delete menu item is selected.
+        ///  Called when the delete menu item is selected.
         /// </summary>
         private void OnMenuCut(object sender, EventArgs e)
         {
         }
 
         /// <summary>
-        /// Show ContextMenu if the Right Mouse button was pressed and we have received the following MouseUp
+        ///  Show ContextMenu if the Right Mouse button was pressed and we have received the following MouseUp
         /// </summary>
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
@@ -1142,7 +1141,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Set the selection to the component.
+        ///  Set the selection to the component.
         /// </summary>
         private void OnMouseDown(object sender, MouseEventArgs e)
         {
@@ -1154,7 +1153,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting on the button for mouse Move.
+        ///  Painting on the button for mouse Move.
         /// </summary>
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
@@ -1177,7 +1176,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Painting on the button for mouse Leave.
+        ///  Painting on the button for mouse Leave.
         /// </summary>
         private void OnMouseLeave(object sender, EventArgs e)
         {
@@ -1209,7 +1208,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Intercept invokation of specific commands and keys
+        ///  Intercept invokation of specific commands and keys
         /// </summary>
         public bool OverrideInvoke(MenuCommand cmd)
         {
@@ -1228,7 +1227,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Intercept invokation of specific commands and keys
+        ///  Intercept invokation of specific commands and keys
         /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
@@ -1245,7 +1244,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This internal Function is called by item designers to ROLLBACK the current Insitu editing mode.
+        ///  This internal Function is called by item designers to ROLLBACK the current Insitu editing mode.
         /// </summary>
         internal void RollBack()
         {
@@ -1319,7 +1318,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This function sets up the MenuStrip specific TemplateNode.
+        ///  This function sets up the MenuStrip specific TemplateNode.
         /// </summary>
         private void SetUpMenuTemplateNode(ToolStripTemplateNode owner, string text, Image image, IComponent currentItem)
         {
@@ -1350,7 +1349,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This function sets up TemplateNode for ToolStrip, StatusStrip, ContextMenuStrip.
+        ///  This function sets up TemplateNode for ToolStrip, StatusStrip, ContextMenuStrip.
         /// </summary>
         private void SetUpToolTemplateNode(ToolStripTemplateNode owner, string text, Image image, IComponent component)
         {
@@ -1413,7 +1412,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method does actual edit node creation.
+        ///  This method does actual edit node creation.
         /// </summary>
         private void SetupNewEditNode(ToolStripTemplateNode owner, string text, Image image, IComponent currentItem)
         {
@@ -1459,7 +1458,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This method does sets the width of the Editor (_miniToolStrip) based on the  text passed in.
+        ///  This method does sets the width of the Editor (_miniToolStrip) based on the  text passed in.
         /// </summary>
         internal void SetWidth(string text)
         {
@@ -1475,7 +1474,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Private class that implements the textBox for the InSitu Editor.
+        ///  Private class that implements the textBox for the InSitu Editor.
         /// </summary>
         private class TemplateTextBox : TextBox
         {
@@ -1492,7 +1491,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Get Parent Handle.
+            ///  Get Parent Handle.
             /// </summary>
             private bool IsParentWindow(IntPtr hWnd)
             {
@@ -1515,7 +1514,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Process the IMEMode message..
+            ///  Process the IMEMode message..
             /// </summary>
             protected override bool ProcessDialogKey(Keys keyData)
             {
@@ -1532,13 +1531,13 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Process the WNDPROC for WM_KILLFOCUS to commit the Insitu Editor..
+            ///  Process the WNDPROC for WM_KILLFOCUS to commit the Insitu Editor..
             /// </summary>
             protected override void WndProc(ref Message m)
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_KILLFOCUS:
+                    case WindowMessages.WM_KILLFOCUS:
                         base.WndProc(ref m);
                         IntPtr focussedWindow = (IntPtr)m.WParam;
                         if (!IsParentWindow(focussedWindow))
@@ -1550,7 +1549,7 @@ namespace System.Windows.Forms.Design
                     // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
                     // 2.Select the text of the item and right click on it
                     // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph  behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no text to work with.  Thus need to block glyph behaviors while the context menu is displayed.
-                    case Interop.WindowMessages.WM_CONTEXTMENU:
+                    case WindowMessages.WM_CONTEXTMENU:
                         owner.IsSystemContextMenuDisplayed = true;
                         base.WndProc(ref m);
                         owner.IsSystemContextMenuDisplayed = false;
@@ -1563,7 +1562,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TranparentToolStrip so that it picks up the itemColor.
+        ///  Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TranparentToolStrip so that it picks up the itemColor.
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {
@@ -1582,7 +1581,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Owner TemplateNode..
+            ///  Owner TemplateNode..
             /// </summary>
             public ToolStripTemplateNode TemplateNode
             {
@@ -1590,7 +1589,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Commit the node and move to next selection.
+            ///  Commit the node and move to next selection.
             /// </summary>
             private void CommitAndSelectNext(bool forward)
             {
@@ -1602,7 +1601,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// get current selection.
+            ///  get current selection.
             /// </summary>
             private ToolStripItem GetSelectedItem()
             {
@@ -1631,7 +1630,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Process the Tab Key..
+            ///  Process the Tab Key..
             /// </summary>
             private bool ProcessTabKey(bool forward)
             {
@@ -1647,7 +1646,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Process the Dialog Keys for the Templatenode ToolStrip..
+            ///  Process the Dialog Keys for the Templatenode ToolStrip..
             /// </summary>
             protected override bool ProcessDialogKey(Keys keyData)
             {
@@ -1699,7 +1698,7 @@ namespace System.Windows.Forms.Design
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_GETOBJECT:
+                    case WindowMessages.WM_GETOBJECT:
                         if (owner._addItemButton == null)
                         {
                             // only adding patterns to _miniToolStrip associated with MenuStrip or ContextMenu
@@ -1766,7 +1765,7 @@ namespace System.Windows.Forms.Design
         */
 
         /// <summary>
-        /// Private class that implements the custom Renderer for the TemplateNode ToolStrip.
+        ///  Private class that implements the custom Renderer for the TemplateNode ToolStrip.
         /// </summary>
         public class MiniToolStripRenderer : ToolStripSystemRenderer
         {
@@ -1791,7 +1790,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Current state of the TemplateNode UI..
+            ///  Current state of the TemplateNode UI..
             /// </summary>
             public int State
             {
@@ -1800,7 +1799,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Custom method to draw DOWN arrow on the DropDown.
+            ///  Custom method to draw DOWN arrow on the DropDown.
             /// </summary>
             private void DrawArrow(Graphics g, Rectangle bounds)
             {
@@ -1809,7 +1808,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Drawing different DropDown states.
+            ///  Drawing different DropDown states.
             /// </summary>
             private void DrawDropDown(Graphics g, Rectangle bounds, int state)
             {
@@ -1852,7 +1851,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Render ToolStrip Border
+            ///  Render ToolStrip Border
             /// </summary>
             protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
             {
@@ -1865,7 +1864,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Render the Center Label on the TemplateNode ToolStrip.
+            ///  Render the Center Label on the TemplateNode ToolStrip.
             /// </summary>
             protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
             {
@@ -1947,7 +1946,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Render the splitButton on the TemplateNode ToolStrip..
+            ///  Render the splitButton on the TemplateNode ToolStrip..
             /// </summary>
             protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
             {

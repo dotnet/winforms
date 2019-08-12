@@ -4,6 +4,8 @@
 
 using System.Windows.Forms.Internal;
 using Xunit;
+using static Interop;
+
 
 namespace System.Windows.Forms.Tests.InteropTests
 {
@@ -65,7 +67,7 @@ namespace System.Windows.Forms.Tests.InteropTests
             NativeMethods.LOGFONTW logFont = default;
             IntPtr handle = IntUnsafeNativeMethods.CreateFontIndirectW(ref logFont);
             Assert.NotEqual(IntPtr.Zero, handle);
-            Assert.True(Interop.Gdi32.DeleteObject(handle) != Interop.BOOL.FALSE);
+            Assert.True(Gdi32.DeleteObject(handle) != BOOL.FALSE);
         }
     }
 }

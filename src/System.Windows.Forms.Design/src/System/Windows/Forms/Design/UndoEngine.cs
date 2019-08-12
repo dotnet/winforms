@@ -12,12 +12,12 @@ using System.Reflection;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The UndoEngine is a class that can be instantiated to support automatic undo.
-    /// Normally, to support undo, a developer must create individual undo units that consist of an undo action and a redo action.
-    /// This is fragile because each and every action the user performs must be wrapped in an undo unit.
-    /// Worse, if a user action is not wrapped in an undo unit its absence on the undo stack will break undo because each individual unit always assumes that the previous unit's state is maintained.
-    /// The UndoEngine, on the other hand, listens to change events and can create undo and redo actions automatically.
-    /// All that is necessary to implement undo is to add these actions to an undo/redo stack and instantiate this class.
+    ///  The UndoEngine is a class that can be instantiated to support automatic undo.
+    ///  Normally, to support undo, a developer must create individual undo units that consist of an undo action and a redo action.
+    ///  This is fragile because each and every action the user performs must be wrapped in an undo unit.
+    ///  Worse, if a user action is not wrapped in an undo unit its absence on the undo stack will break undo because each individual unit always assumes that the previous unit's state is maintained.
+    ///  The UndoEngine, on the other hand, listens to change events and can create undo and redo actions automatically.
+    ///  All that is necessary to implement undo is to add these actions to an undo/redo stack and instantiate this class.
     /// </summary>
     public abstract class UndoEngine : IDisposable
     {
@@ -35,10 +35,10 @@ namespace System.ComponentModel.Design
         private bool _enabled;
 
         /// <summary>
-        /// Creates a new UndoEngine.  UndoEngine requires a service provider for access to various services.  The following services must be available or else UndoEngine will  throw an exception:
-        /// IDesignerHost
-        /// IComponentChangeService
-        /// IDesignerSerializationService
+        ///  Creates a new UndoEngine.  UndoEngine requires a service provider for access to various services.  The following services must be available or else UndoEngine will  throw an exception:
+        ///  IDesignerHost
+        ///  IComponentChangeService
+        ///  IDesignerSerializationService
         /// </summary>
         protected UndoEngine(IServiceProvider provider)
         {
@@ -64,7 +64,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Retrieves the current unit from the stack.
+        ///  Retrieves the current unit from the stack.
         /// </summary>
         private UndoUnit CurrentUnit
         {
@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This property indicates if an undo is in progress.
+        ///  This property indicates if an undo is in progress.
         /// </summary>
         public bool UndoInProgress
         {
@@ -87,12 +87,12 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This property returns true if the Undo engine is currently enabled.  When enabled, the undo engine tracks changes made to the designer.  When disabled, changes are ignored.
-        /// If the UndoEngine is set to disabled while in the middle of processing change notifications from the designer, the undo engine will only ignore additional changes.
-        /// That is, it will finish recording the changes that are in process and only ignore additional changes.
-        /// Caution should be used when disabling undo.  If undo is disabled it is easy to make a change that would cause other undo actions to become invalid.
-        /// For example, if myButton.Text was changed, and then myButton was renamed while undo was disabled, attempting to undo the text change would fail because there is no longer a control called myButton.
-        /// Generally, you should never make changes to components with undo disabled unless you are certain to put the components back the way they were before undo was disabled.  An example of this would be to replace one instance of "Button" with another, say "SuperButton", fixing up all the property values as you go.  The result is a new component, but because it has the same component name and property values, undo state will still be consistent.
+        ///  This property returns true if the Undo engine is currently enabled.  When enabled, the undo engine tracks changes made to the designer.  When disabled, changes are ignored.
+        ///  If the UndoEngine is set to disabled while in the middle of processing change notifications from the designer, the undo engine will only ignore additional changes.
+        ///  That is, it will finish recording the changes that are in process and only ignore additional changes.
+        ///  Caution should be used when disabling undo.  If undo is disabled it is easy to make a change that would cause other undo actions to become invalid.
+        ///  For example, if myButton.Text was changed, and then myButton was renamed while undo was disabled, attempting to undo the text change would fail because there is no longer a control called myButton.
+        ///  Generally, you should never make changes to components with undo disabled unless you are certain to put the components back the way they were before undo was disabled.  An example of this would be to replace one instance of "Button" with another, say "SuperButton", fixing up all the property values as you go.  The result is a new component, but because it has the same component name and property values, undo state will still be consistent.
         /// </summary>
         public bool Enabled
         {
@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is raised immediately before an undo action is performed.
+        ///  This event is raised immediately before an undo action is performed.
         /// </summary>
         public event EventHandler Undoing
         {
@@ -110,7 +110,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is raised immediately after an undo action is performed. It will always be raised even if an exception is thrown.
+        ///  This event is raised immediately after an undo action is performed. It will always be raised even if an exception is thrown.
         /// </summary>
         public event EventHandler Undone
         {
@@ -119,25 +119,25 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds the given undo unit into the undo stack.  UndoEngine does not maintain its own undo stack, so you must implement this method yourself.
+        ///  Adds the given undo unit into the undo stack.  UndoEngine does not maintain its own undo stack, so you must implement this method yourself.
         /// </summary>
         protected abstract void AddUndoUnit(UndoUnit unit);
 
         /// <summary>
-        /// This method will check to see if the current undo unit needs to be popped from the stack.  If it does, it will pop it and add it to the undo stack.
-        /// There must be at least one unit on the stack to call this method.
+        ///  This method will check to see if the current undo unit needs to be popped from the stack.  If it does, it will pop it and add it to the undo stack.
+        ///  There must be at least one unit on the stack to call this method.
         ///
-        /// When calling CheckPopUnit you must supply a reason for the call.
-        /// There are three reasons:
+        ///  When calling CheckPopUnit you must supply a reason for the call.
+        ///  There are three reasons:
         ///
-        /// Normal
-        /// Call with Normal if you are not calling in response to a closing transaction.  For normal pop reasons, the unit will be popped if there is no current transaction.  If the unit is not empty it will be added to the undo engine.  If there is a transaction in progress, this method will do nothing.
+        ///  Normal
+        ///  Call with Normal if you are not calling in response to a closing transaction.  For normal pop reasons, the unit will be popped if there is no current transaction.  If the unit is not empty it will be added to the undo engine.  If there is a transaction in progress, this method will do nothing.
         ///
-        /// TransactionCommit
-        /// Call with TransactionCommit if you are calling in response to a transaction closing, and if that transaction is marked as being committed.  CheckPopUnit will pop the unit off of the stack and add it to the undo engine if it is not empty.
+        ///  TransactionCommit
+        ///  Call with TransactionCommit if you are calling in response to a transaction closing, and if that transaction is marked as being committed.  CheckPopUnit will pop the unit off of the stack and add it to the undo engine if it is not empty.
         ///
-        /// TransactionCancel
-        /// Call with TransactionCancel if you are calling in response to a transaction closing, and if that transaction is marked as being cancelled.  CheckPopUnit will pop the unit off of the stack.  If the unit is not empty Undo will be called on the unit to roll back the transaction work.  The unit will never be added to the undo engine.
+        ///  TransactionCancel
+        ///  Call with TransactionCancel if you are calling in response to a transaction closing, and if that transaction is marked as being cancelled.  CheckPopUnit will pop the unit off of the stack.  If the unit is not empty Undo will be called on the unit to roll back the transaction work.  The unit will never be added to the undo engine.
         /// </summary>
         private void CheckPopUnit(PopUnitReason reason)
         {
@@ -184,8 +184,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This virtual method creates a new instance of an  UndoUnit class.  The default implementation just returns a new instance of UndoUnit.  Those providing their own UndoEngine can derive from UndoUnit to customize the actions it performs.  This is also a handy way to connect UndoEngine into an existing undo stack.
-        /// If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods.  If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompasing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
+        ///  This virtual method creates a new instance of an  UndoUnit class.  The default implementation just returns a new instance of UndoUnit.  Those providing their own UndoEngine can derive from UndoUnit to customize the actions it performs.  This is also a handy way to connect UndoEngine into an existing undo stack.
+        ///  If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods.  If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompasing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
         /// </summary>
         protected virtual UndoUnit CreateUndoUnit(string name, bool primary)
         {
@@ -198,14 +198,14 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This method is called instead of AddUndoUnit for undo units that have been canceled.  For undo systems that just treat undo as a simple stack of undo units, typically you do not need to override this method.  This method does give you a chance to perform any clean-up for a unit
+        ///  This method is called instead of AddUndoUnit for undo units that have been canceled.  For undo systems that just treat undo as a simple stack of undo units, typically you do not need to override this method.  This method does give you a chance to perform any clean-up for a unit
         /// </summary>
         protected virtual void DiscardUndoUnit(UndoUnit unit)
         {
         }
 
         /// <summary>
-        /// Public dispose method.
+        ///  Public dispose method.
         /// </summary>
         public void Dispose()
         {
@@ -213,7 +213,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Protected dispose implementation.
+        ///  Protected dispose implementation.
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -242,7 +242,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Helper function to retrieve the name of an object.
+        ///  Helper function to retrieve the name of an object.
         /// </summary>
         internal string GetName(object obj, bool generateNew)
         {
@@ -281,7 +281,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Similar to GetService, but this will throw a NotSupportedException if the service is not present.
+        ///  Similar to GetService, but this will throw a NotSupportedException if the service is not present.
         /// </summary>
         protected object GetRequiredService(Type serviceType)
         {
@@ -298,7 +298,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This just calls through to the service provider passed into the constructor.
+        ///  This just calls through to the service provider passed into the constructor.
         /// </summary>
         protected object GetService(Type serviceType)
         {
@@ -522,7 +522,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is raised immediately before an undo action is performed.
+        ///  This event is raised immediately before an undo action is performed.
         /// </summary>
         protected virtual void OnUndoing(EventArgs e)
         {
@@ -530,7 +530,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is raised immediately after an undo action is performed. It will always be raised even if an exception is thrown.
+        ///  This event is raised immediately after an undo action is performed. It will always be raised even if an exception is thrown.
         /// </summary>
         protected virtual void OnUndone(EventArgs e)
         {
@@ -561,7 +561,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This class embodies a unit of undoable work.  The undo engine creates an undo unit when a change to the designer is about to be made.  The undo unit is responsible for tracking changes.  The undo engine will call Close on the unit when it no longer needs to track changes.
+        ///  This class embodies a unit of undoable work.  The undo engine creates an undo unit when a change to the designer is about to be made.  The undo unit is responsible for tracking changes.  The undo engine will call Close on the unit when it no longer needs to track changes.
         /// </summary>
         protected class UndoUnit
         {
@@ -603,14 +603,14 @@ namespace System.ComponentModel.Design
             public string Name { get; }
 
             /// <summary>
-            /// This returns true if the undo unit has nothing in it to undo.  The unit will be discarded.
+            ///  This returns true if the undo unit has nothing in it to undo.  The unit will be discarded.
             /// </summary>
             public virtual bool IsEmpty => _events == null || _events.Count == 0;
 
             protected UndoEngine UndoEngine { get; }
 
             /// <summary>
-            /// Adds the given event to our event list.
+            ///  Adds the given event to our event list.
             /// </summary>
             private void AddEvent(UndoEvent e)
             {
@@ -623,7 +623,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Called by the undo engine when it wants to close this unit.  The unit should do any final work it needs to do to close.
+            ///  Called by the undo engine when it wants to close this unit.  The unit should do any final work it needs to do to close.
             /// </summary>
             public virtual void Close()
             {
@@ -651,7 +651,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo engine will call this on the active undo unit in response to a component added event.
+            ///  The undo engine will call this on the active undo unit in response to a component added event.
             /// </summary>
             public virtual void ComponentAdded(ComponentEventArgs e)
             {
@@ -678,7 +678,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo engine will call this on the active undo unit in response to a component adding event.
+            ///  The undo engine will call this on the active undo unit in response to a component adding event.
             /// </summary>
             public virtual void ComponentAdding(ComponentEventArgs e)
             {
@@ -722,7 +722,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo engine will call this on the active undo unit in response to a component changed event.
+            ///  The undo engine will call this on the active undo unit in response to a component changed event.
             /// </summary>
             public virtual void ComponentChanged(ComponentChangedEventArgs e)
             {
@@ -749,7 +749,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo engine will call this on the active undo unit in response to a component changing event.
+            ///  The undo engine will call this on the active undo unit in response to a component changing event.
             /// </summary>
             public virtual void ComponentChanging(ComponentChangingEventArgs e)
             {
@@ -834,7 +834,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo engine will call this on the active undo unit in response to a component removed event.
+            ///  The undo engine will call this on the active undo unit in response to a component removed event.
             /// </summary>
             public virtual void ComponentRemoved(ComponentEventArgs e)
             {
@@ -884,7 +884,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo engine will call this on the active undo unit in response to a component removing event.
+            ///  The undo engine will call this on the active undo unit in response to a component removing event.
             /// </summary>
             public virtual void ComponentRemoving(ComponentEventArgs e)
             {
@@ -908,7 +908,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo engine will cal this on the active undo unit in response to a component rename event.
+            ///  The undo engine will cal this on the active undo unit in response to a component rename event.
             /// </summary>
             public virtual void ComponentRename(ComponentRenameEventArgs e)
             {
@@ -916,7 +916,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Returns an instance of the rquested service.
+            ///  Returns an instance of the rquested service.
             /// </summary>
             protected object GetService(Type serviceType)
             {
@@ -924,7 +924,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Override for object.ToString()
+            ///  Override for object.ToString()
             /// </summary>
             public override string ToString()
             {
@@ -932,7 +932,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Either performs undo, or redo, depending on the state of the unit.  UndoUnit initially assumes that the undoable work has already been "done", so the first call to undo will undo the work.  The next call will undo the "undo", performing a redo.
+            ///  Either performs undo, or redo, depending on the state of the unit.  UndoUnit initially assumes that the undoable work has already been "done", so the first call to undo will undo the work.  The next call will undo the "undo", performing a redo.
             /// </summary>
             public void Undo()
             {
@@ -972,7 +972,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// The undo method invokes this method to perform the actual undo / redo work.  You should never call this method directly; override it if you wish, but always call the public Undo method to perform undo work.  Undo notifies the undo engine to suspend undo data gathering until  this undo is completed, which prevents new undo units from being created in response to this unit doing work.
+            ///  The undo method invokes this method to perform the actual undo / redo work.  You should never call this method directly; override it if you wish, but always call the public Undo method to perform undo work.  Undo notifies the undo engine to suspend undo data gathering until  this undo is completed, which prevents new undo units from being created in response to this unit doing work.
             /// </summary>
             protected virtual void UndoCore()
             {
@@ -1074,7 +1074,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// This undo event handles addition and removal of components.
+            ///  This undo event handles addition and removal of components.
             /// </summary>
             private sealed class AddRemoveUndoEvent : UndoEvent
             {
@@ -1085,7 +1085,7 @@ namespace System.ComponentModel.Design
                 private readonly IComponent _openComponent;
 
                 /// <summary>
-                /// Creates a new object that contains the state of the event.  The last parameter, add, determines the initial mode of this event.  If true, it means this event is being created in response to a component add.  If false, it is being created in response to   a component remove.
+                ///  Creates a new object that contains the state of the event.  The last parameter, add, determines the initial mode of this event.  If true, it means this event is being created in response to a component add.  If false, it is being created in response to   a component remove.
                 /// </summary>
                 public AddRemoveUndoEvent(UndoEngine engine, IComponent component, bool add)
                 {
@@ -1103,7 +1103,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Returns true if the add remove event has been comitted.
+                ///  Returns true if the add remove event has been comitted.
                 /// </summary>
                 internal bool Committed
                 {
@@ -1111,7 +1111,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// If this add/remove event is still open, OpenCompnent will contain the component it is operating on.
+                ///  If this add/remove event is still open, OpenCompnent will contain the component it is operating on.
                 /// </summary>
                 internal IComponent OpenComponent
                 {
@@ -1119,7 +1119,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Returns true if undoing this event will add a component.
+                ///  Returns true if undoing this event will add a component.
                 /// </summary>
                 internal bool NextUndoAdds
                 {
@@ -1127,7 +1127,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Commits this event.
+                ///  Commits this event.
                 /// </summary>
                 internal void Commit(UndoEngine engine)
                 {
@@ -1139,7 +1139,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Actually performs the undo action.
+                ///  Actually performs the undo action.
                 /// </summary>
                 public override void Undo(UndoEngine engine)
                 {
@@ -1183,7 +1183,7 @@ namespace System.ComponentModel.Design
                 private bool _savedAfterState;
 
                 /// <summary>
-                /// Creates a new component change undo event.  This event consists of a before and after snapshot of a single component.  A snapshot will not be taken if a name for the component cannot be determined.
+                ///  Creates a new component change undo event.  This event consists of a before and after snapshot of a single component.  A snapshot will not be taken if a name for the component cannot be determined.
                 /// </summary>
                 public ChangeUndoEvent(UndoEngine engine, ComponentChangingEventArgs e, bool serializeBeforeState)
                 {
@@ -1205,14 +1205,14 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Indicates that undoing this event may cause side effects in other objects.
-                /// Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
-                /// Events without side effects have their BeforeUndo called and then their Undo called immediately after.
+                ///  Indicates that undoing this event may cause side effects in other objects.
+                ///  Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
+                ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
                 /// </summary>
                 public override bool CausesSideEffects { get { return true; } }
 
                 /// <summary>
-                /// Returns true if the change event has been comitted.
+                ///  Returns true if the change event has been comitted.
                 /// </summary>
                 public bool Committed
                 {
@@ -1223,7 +1223,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Returns the component this change event is currently tracking. This will return null once the change event is committed.
+                ///  Returns the component this change event is currently tracking. This will return null once the change event is committed.
                 /// </summary>
                 public object OpenComponent
                 {
@@ -1234,7 +1234,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Called before Undo is called. All undo events get their BeforeUndo called, and then they all get their Undo called. This allows the undo event to examine the state of the world before other undo events mess with it.
+                ///  Called before Undo is called. All undo events get their BeforeUndo called, and then they all get their Undo called. This allows the undo event to examine the state of the world before other undo events mess with it.
                 /// </summary>
                 public override void BeforeUndo(UndoEngine engine)
                 {
@@ -1246,7 +1246,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Determines if this
+                ///  Determines if this
                 /// </summary>
                 public bool ContainsChange(MemberDescriptor desc)
                 {
@@ -1265,7 +1265,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Commits the unit.  Comitting the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
+                ///  Commits the unit.  Comitting the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
                 /// </summary>
                 public void Commit(UndoEngine engine)
                 {
@@ -1319,7 +1319,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Performs the actual undo.  AFter it finishes it will reverse the role of _before and _after
+                ///  Performs the actual undo.  AFter it finishes it will reverse the role of _before and _after
                 /// </summary>
                 public override void Undo(UndoEngine engine)
                 {
@@ -1346,7 +1346,7 @@ namespace System.ComponentModel.Design
                 private string _after;
 
                 /// <summary>
-                /// Creates a new rename undo event.
+                ///  Creates a new rename undo event.
                 /// </summary>
                 public RenameUndoEvent(string before, string after)
                 {
@@ -1356,7 +1356,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// Simply undoes a rename by setting the name back to the saved value.
+                ///  Simply undoes a rename by setting the name back to the saved value.
                 /// </summary>
                 public override void Undo(UndoEngine engine)
                 {
@@ -1376,22 +1376,22 @@ namespace System.ComponentModel.Design
             private abstract class UndoEvent
             {
                 /// <summary>
-                /// Indicates that undoing this event may cause side effects in other objects.
-                /// Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.
-                /// Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
-                /// Events without side effects have their BeforeUndo called and then their Undo called immediately after.
+                ///  Indicates that undoing this event may cause side effects in other objects.
+                ///  Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.
+                ///  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
+                ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
                 /// </summary>
                 public virtual bool CausesSideEffects { get { return false; } }
 
                 /// <summary>
-                /// Called before Undo is called.  All undo events get their BeforeUndo called, and then they all get their Undo called. This allows the undo event to examine the state of the world before other undo events mess with it. BeforeUndo returns true if before undo was supported, and false if not.  If before undo is not supported, the undo unit should be undone immediately.
+                ///  Called before Undo is called.  All undo events get their BeforeUndo called, and then they all get their Undo called. This allows the undo event to examine the state of the world before other undo events mess with it. BeforeUndo returns true if before undo was supported, and false if not.  If before undo is not supported, the undo unit should be undone immediately.
                 /// </summary>
                 public virtual void BeforeUndo(UndoEngine engine)
                 {
                 }
 
                 /// <summary>
-                /// Called by the undo unit when it wants to undo this bit of work.
+                ///  Called by the undo unit when it wants to undo this bit of work.
                 /// </summary>
                 public abstract void Undo(UndoEngine engine);
             }

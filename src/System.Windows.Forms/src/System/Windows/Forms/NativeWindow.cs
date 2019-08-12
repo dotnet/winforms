@@ -10,6 +10,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -99,7 +100,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
+        ///  Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
         internal DpiAwarenessContext DpiAwarenessContext { get; } = DpiHelper.IsScalingRequirementMet
             ? CommonUnsafeNativeMethods.TryGetThreadDpiAwarenessContext()
@@ -114,9 +115,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This was factored into another function so the finalizer in control that releases the window
-        /// can perform the exact same code without further changes.  If you make changes to the finalizer,
-        /// change this method -- try not to change NativeWindow's finalizer.
+        ///  This was factored into another function so the finalizer in control that releases the window
+        ///  can perform the exact same code without further changes.  If you make changes to the finalizer,
+        ///  change this method -- try not to change NativeWindow's finalizer.
         /// </summary>
         internal void ForceExitMessageLoop()
         {
@@ -167,7 +168,7 @@ namespace System.Windows.Forms
             if (h != IntPtr.Zero && ownedHandle)
             {
                 // If we owned the handle, post a WM_CLOSE to get rid of it.
-                UnsafeNativeMethods.PostMessage(new HandleRef(this, h), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                UnsafeNativeMethods.PostMessage(new HandleRef(this, h), WindowMessages.WM_CLOSE, 0, 0);
             }
         }
 
@@ -198,7 +199,7 @@ namespace System.Windows.Forms
         internal NativeWindow PreviousWindow { get; private set; }
 
         /// <summary>
-        /// Address of the Windows default WNDPROC (DefWindowProcW).
+        ///  Address of the Windows default WNDPROC (DefWindowProcW).
         /// </summary>
         internal static IntPtr DefaultWindowProc
         {
@@ -207,8 +208,8 @@ namespace System.Windows.Forms
                 if (_defaultWindowProc == IntPtr.Zero)
                 {
                     // Cache the default windows procedure address
-                    _defaultWindowProc = Interop.Kernel32.GetProcAddress(
-                        Interop.Kernel32.GetModuleHandleW(Interop.Libraries.User32),
+                    _defaultWindowProc = Kernel32.GetProcAddress(
+                        Kernel32.GetModuleHandleW(Libraries.User32),
                         "DefWindowProcW");
                     if (_defaultWindowProc == IntPtr.Zero)
                     {
@@ -504,7 +505,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (msg == Interop.WindowMessages.WM_NCDESTROY)
+                if (msg == WindowMessages.WM_NCDESTROY)
                 {
                     ReleaseHandle(false);
                 }
@@ -557,7 +558,7 @@ namespace System.Windows.Forms
                     // parented to this parkign window. Otherwise, reparenting of control will fail.
                     using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
                     {
-                        IntPtr modHandle = Interop.Kernel32.GetModuleHandleW(null);
+                        IntPtr modHandle = Kernel32.GetModuleHandleW(null);
 
                         // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
                         // Catch this and then we re-throw an out of memory error.
@@ -631,7 +632,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (msg == Interop.WindowMessages.WM_NCDESTROY)
+                if (msg == WindowMessages.WM_NCDESTROY)
                 {
                     ReleaseHandle(false);
                 }
@@ -687,7 +688,7 @@ namespace System.Windows.Forms
                     {
                         UnSubclass();
                         //then post a close and let it do whatever it needs to do on its own.
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_CLOSE, 0, 0);
                     }
                     Handle = IntPtr.Zero;
                     ownHandle = false;
@@ -934,7 +935,7 @@ namespace System.Windows.Forms
                             HandleRef href = new HandleRef(b, b.handle);
                             UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(null, DefaultWindowProc));
                             UnsafeNativeMethods.SetClassLong(href, NativeMethods.GCL_WNDPROC, DefaultWindowProc);
-                            UnsafeNativeMethods.PostMessage(href, Interop.WindowMessages.WM_CLOSE, 0, 0);
+                            UnsafeNativeMethods.PostMessage(href, WindowMessages.WM_CLOSE, 0, 0);
 
                             // Fish out the Window object, if it is valid, and NULL the handle pointer.  This
                             // way the rest of WinForms won't think the handle is still valid here.
@@ -1405,7 +1406,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Once the classname and style bits have been set, this can be called to register the class.
+            ///  Once the classname and style bits have been set, this can be called to register the class.
             /// </summary>
             private unsafe void RegisterClass()
             {
@@ -1419,7 +1420,7 @@ namespace System.Windows.Forms
                     // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.
                     // Make this hollow to avoid all flicker.
 
-                    windowClass.hbrBackground = Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.HOLLOW_BRUSH);
+                    windowClass.hbrBackground = Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH);
                     windowClass.style = _classStyle;
 
                     _defaultWindowProc = DefaultWindowProc;
@@ -1443,7 +1444,7 @@ namespace System.Windows.Forms
                 _windowClassName = GetFullClassName(localClassName);
                 _windowProc = new NativeMethods.WndProc(Callback);
                 windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windowProc);
-                windowClass.hInstance = Interop.Kernel32.GetModuleHandleW(null);
+                windowClass.hInstance = Kernel32.GetModuleHandleW(null);
 
                 fixed (char* c = _windowClassName)
                 {

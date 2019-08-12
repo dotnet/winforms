@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a method that will handle Form closed event.
+    ///  Represents a method that will handle Form closed event.
     /// </summary>
     public delegate void FormClosedEventHandler(object sender, FormClosedEventArgs e);
 }

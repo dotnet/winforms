@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides access to get and set option values for a designer.
+    ///  Provides access to get and set option values for a designer.
     /// </summary>
     [ComVisible(true)]
     public class DesignerOptions
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
         private Size _gridSize = new Size(8, 8);
 
         /// <summary>
-        /// Public GridSize property.
+        ///  Public GridSize property.
         /// </summary>
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDisplayName(nameof(SR.DesignerOptions_GridSizeDisplayName))]
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Public ShowGrid property.
+        ///  Public ShowGrid property.
         /// </summary>
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDisplayName(nameof(SR.DesignerOptions_ShowGridDisplayName))]
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Design
         public virtual bool ShowGrid { get; set; } = true;
 
         /// <summary>
-        /// Public SnapToGrid property.
+        ///  Public SnapToGrid property.
         /// </summary>
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDisplayName(nameof(SR.DesignerOptions_SnapToGridDisplayName))]
@@ -68,21 +68,21 @@ namespace System.Windows.Forms.Design
         public virtual bool SnapToGrid { get; set; } = true;
 
         /// <summary>
-        /// This property enables or disables snaplines in the designer.
+        ///  This property enables or disables snaplines in the designer.
         /// </summary>
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDescription(nameof(SR.DesignerOptions_UseSnapLines))]
         public virtual bool UseSnapLines { get; set; }
 
         /// <summary>
-        /// This property enables or disables smart tags in the designer.
+        ///  This property enables or disables smart tags in the designer.
         /// </summary>
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDescription(nameof(SR.DesignerOptions_UseSmartTags))]
         public virtual bool UseSmartTags { get; set; }
 
         /// <summary>
-        /// This property enables or disables smart tags in the designer.
+        ///  This property enables or disables smart tags in the designer.
         /// </summary>
         [SRDisplayName(nameof(SR.DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName))]
         [SRCategory(nameof(SR.DesignerOptions_ObjectBoundSmartTagSettings))]
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Design
         public virtual bool ObjectBoundSmartTagAutoShow { get; set; } = true;
 
         /// <summary>
-        /// This property enables or disables the component cache
+        ///  This property enables or disables the component cache
         /// </summary>
         [SRDisplayName(nameof(SR.DesignerOptions_CodeGenDisplay))]
         [SRCategory(nameof(SR.DesignerOptions_CodeGenSettings))]
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Design
         public virtual bool UseOptimizedCodeGeneration { get; set; }
 
         /// <summary>
-        /// This property enables or disables the InSitu Editing for ToolStrips
+        ///  This property enables or disables the InSitu Editing for ToolStrips
         /// </summary>
         [SRDisplayName(nameof(SR.DesignerOptions_EnableInSituEditingDisplay))]
         [SRCategory(nameof(SR.DesignerOptions_EnableInSituEditingCat))]

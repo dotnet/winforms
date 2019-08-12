@@ -5,32 +5,32 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the position of the image on the control.
+    ///  Specifies the position of the image on the control.
     /// </summary>
     public enum ImageLayout
     {
         /// <summary>
-        /// The image is aligned TOP - LEFT across the controls client rectangle.
+        ///  The image is aligned TOP - LEFT across the controls client rectangle.
         /// </summary>
         None,
 
         /// <summary>
-        /// The image is tiled across the controls client rectangle.
+        ///  The image is tiled across the controls client rectangle.
         /// </summary>
         Tile,
 
         /// <summary>
-        /// The image is centred within the controls client rectangle.
+        ///  The image is centred within the controls client rectangle.
         /// </summary>
         Center,
 
         /// <summary>
-        /// The image is streched across the controls client rectangle.
+        ///  The image is streched across the controls client rectangle.
         /// </summary>
         Stretch,
 
         /// <summary>
-        /// The image is streched across the controls client rectangle.
+        ///  The image is streched across the controls client rectangle.
         /// </summary>
         Zoom,
     }
