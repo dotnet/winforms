@@ -1277,14 +1277,14 @@ namespace System.Windows.Forms
             return clipRect;
         }
 
-        private static int SetupLogPixels(bool force)
+        private static HRESULT SetupLogPixels(bool force)
         {
             if (logPixelsX == -1 || force)
             {
                 using ScreenDC dc = ScreenDC.Create();
                 if (dc == IntPtr.Zero)
                 {
-                    return NativeMethods.E_FAIL;
+                    return HRESULT.E_FAIL;
                 }
 
                 logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
@@ -1292,33 +1292,25 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, $"log pixels are: {logPixelsX} {logPixelsY}");
             }
 
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        private void HiMetric2Pixel(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
+        private unsafe void HiMetric2Pixel(ref Size sz)
         {
-            NativeMethods._POINTL phm = new NativeMethods._POINTL
-            {
-                x = sz.cx,
-                y = sz.cy
-            };
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
-            ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
-            szout.cx = (int)pcont.x;
-            szout.cy = (int)pcont.y;
+            var phm = new Point(sz.Width, sz.Height);
+            var pcont = new PointF();
+            ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
+            sz.Width = (int)pcont.X;
+            sz.Height = (int)pcont.Y;
         }
 
-        private void Pixel2hiMetric(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
+        private unsafe void Pixel2hiMetric(ref Size sz)
         {
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF
-            {
-                x = (float)sz.cx,
-                y = (float)sz.cy
-            };
-            NativeMethods._POINTL phm = new NativeMethods._POINTL();
-            ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
-            szout.cx = phm.x;
-            szout.cy = phm.y;
+            var phm = new Point();
+            var pcont = new PointF(sz.Width, sz.Height);
+            ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            sz.Width = phm.X;
+            sz.Height = phm.Y;
         }
 
         private static int Pixel2Twip(int v, bool xDirection)
@@ -1342,45 +1334,32 @@ namespace System.Windows.Forms
             return (int)(((((double)v) / 20.0) / 72.0) * logP);
         }
 
-        private Size SetExtent(int width, int height)
+        private unsafe Size SetExtent(int width, int height)
         {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "setting extent to " + width.ToString(CultureInfo.InvariantCulture) + " " + height.ToString(CultureInfo.InvariantCulture));
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL
-            {
-                cx = width,
-                cy = height
-            };
+            Size sz = new Size(width, height);
             bool resetExtents = !IsUserMode();
-            try
-            {
-                Pixel2hiMetric(sz, sz);
-                GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-            }
-            catch (COMException)
+            Pixel2hiMetric(ref sz);
+            Interop.HRESULT hr = GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            if (hr != Interop.HRESULT.S_OK)
             {
                 resetExtents = true;
             }
             if (resetExtents)
             {
-                GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-                try
-                {
-                    GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-                }
-                catch (COMException e)
-                {
-                    Debug.Fail(e.ToString());
-                }
+                GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+                GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
             }
+
             return GetExtent();
         }
 
-        private Size GetExtent()
+        private unsafe Size GetExtent()
         {
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL();
-            GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-            HiMetric2Pixel(sz, sz);
-            return new Size(sz.cx, sz.cy);
+            var sz = new Size();
+            GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            HiMetric2Pixel(ref sz);
+            return sz;
         }
 
         /// <summary>
@@ -4251,10 +4230,15 @@ namespace System.Windows.Forms
                 return NativeMethods.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleControlSite.TransformCoords(NativeMethods._POINTL pPtlHimetric, NativeMethods.tagPOINTF pPtfContainer, int dwFlags)
+            unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, uint dwFlags)
             {
-                int hr = SetupLogPixels(false);
-                if (NativeMethods.Failed(hr))
+                if (pPtlHimetric == null || pPtfContainer == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
+                HRESULT hr = SetupLogPixels(false);
+                if (hr < 0)
                 {
                     return hr;
                 }
@@ -4263,45 +4247,45 @@ namespace System.Windows.Forms
                 {
                     if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
                     {
-                        pPtfContainer.x = (float)host.HM2Pix(pPtlHimetric.x, logPixelsX);
-                        pPtfContainer.y = (float)host.HM2Pix(pPtlHimetric.y, logPixelsY);
+                        pPtfContainer->X = (float)host.HM2Pix(pPtlHimetric->X, logPixelsX);
+                        pPtfContainer->Y = (float)host.HM2Pix(pPtlHimetric->Y, logPixelsY);
                     }
                     else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
                     {
-                        pPtfContainer.x = (float)host.HM2Pix(pPtlHimetric.x, logPixelsX);
-                        pPtfContainer.y = (float)host.HM2Pix(pPtlHimetric.y, logPixelsY);
+                        pPtfContainer->X = (float)host.HM2Pix(pPtlHimetric->X, logPixelsX);
+                        pPtfContainer->Y = (float)host.HM2Pix(pPtlHimetric->Y, logPixelsY);
                     }
                     else
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t dwFlags not supported: " + dwFlags);
-                        return NativeMethods.E_INVALIDARG;
+                        return HRESULT.E_INVALIDARG;
                     }
                 }
                 else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC) != 0)
                 {
                     if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
                     {
-                        pPtlHimetric.x = host.Pix2HM((int)pPtfContainer.x, logPixelsX);
-                        pPtlHimetric.y = host.Pix2HM((int)pPtfContainer.y, logPixelsY);
+                        pPtlHimetric->X = host.Pix2HM((int)pPtfContainer->X, logPixelsX);
+                        pPtlHimetric->Y = host.Pix2HM((int)pPtfContainer->Y, logPixelsY);
                     }
                     else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
                     {
-                        pPtlHimetric.x = host.Pix2HM((int)pPtfContainer.x, logPixelsX);
-                        pPtlHimetric.y = host.Pix2HM((int)pPtfContainer.y, logPixelsY);
+                        pPtlHimetric->X = host.Pix2HM((int)pPtfContainer->X, logPixelsX);
+                        pPtlHimetric->Y = host.Pix2HM((int)pPtfContainer->Y, logPixelsY);
                     }
                     else
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t dwFlags not supported: " + dwFlags);
-                        return NativeMethods.E_INVALIDARG;
+                        return HRESULT.E_INVALIDARG;
                     }
                 }
                 else
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t dwFlags not supported: " + dwFlags);
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers)
@@ -4487,18 +4471,9 @@ namespace System.Windows.Forms
                 return NativeMethods.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.Scroll(NativeMethods.tagSIZE scrollExtant)
+            Interop.HRESULT UnsafeNativeMethods.IOleInPlaceSite.Scroll(Size scrollExtant)
             {
-                try
-                {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in Scroll");
-                }
-                catch (Exception t)
-                {
-                    Debug.Fail(t.ToString());
-                    throw t;
-                }
-                return (NativeMethods.S_FALSE);
+                return Interop.HRESULT.S_FALSE;
             }
 
             int UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate(int fUndoable)

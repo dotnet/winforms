@@ -12,6 +12,8 @@ internal static partial class Interop
         E_NOINTERFACE = unchecked((int)0x80004002),
         E_POINTER = unchecked((int)0x80004003),
         E_FAIL = unchecked((int)0x80004005),
+        DRAGDROP_E_NOTREGISTERED = unchecked((int)0x80040100),
+        DRAGDROP_E_ALREADYREGISTERED = unchecked((int)0x80040101),
         STG_E_INVALIDFUNCTION = unchecked((int)0x80030001L),
         STG_E_FILENOTFOUND = unchecked((int)0x80030002),
         STG_E_ACCESSDENIED = unchecked((int)0x80030005),

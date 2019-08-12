@@ -5804,7 +5804,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
             }
 
-            IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, Handle), pt.X, pt.Y, value);
+            IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(Handle, pt, value);
             Control ctl = FromChildHandle(hwnd);
 
             return (ctl == this) ? null : ctl;
@@ -10257,27 +10257,29 @@ namespace System.Windows.Forms
                     }
                     if (accept)
                     {
-
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + Handle.ToString());
+
                         // Register
-                        int n = UnsafeNativeMethods.RegisterDragDrop(new HandleRef(this, Handle), (UnsafeNativeMethods.IOleDropTarget)(new DropTarget(this)));
+                        HRESULT n = Ole32.RegisterDragDrop(new HandleRef(this, Handle), (Ole32.IDropTarget)new DropTarget(this));
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.CurrentCulture));
-                        if (n != 0 && n != NativeMethods.DRAGDROP_E_ALREADYREGISTERED)
+                        if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                         {
-                            throw new Win32Exception(n);
+                            throw Marshal.GetExceptionForHR((int)n);
                         }
                     }
                     else
                     {
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Revoking drop target: " + Handle.ToString());
+
                         // Revoke
-                        int n = UnsafeNativeMethods.RevokeDragDrop(new HandleRef(this, Handle));
+                        HRESULT n = Ole32.RevokeDragDrop(new HandleRef(this, Handle));
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
-                        if (n != 0 && n != NativeMethods.DRAGDROP_E_NOTREGISTERED)
+                        if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_NOTREGISTERED)
                         {
-                            throw new Win32Exception(n);
+                            throw Marshal.GetExceptionForHR((int)n);
                         }
                     }
+
                     SetState(STATE_DROPTARGET, accept);
                 }
                 catch (Exception e)
@@ -12703,7 +12705,7 @@ namespace System.Windows.Forms
 
                 if ((_controlStyle & ControlStyles.StandardClick) == ControlStyles.StandardClick)
                 {
-                    if (GetState(STATE_MOUSEPRESSED) && !IsDisposed && UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                    if (GetState(STATE_MOUSEPRESSED) && !IsDisposed && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                     {
                         fireClick = true;
                     }
@@ -14140,23 +14142,33 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.SetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.SetExtent(uint dwDrawAspect, Size* pSizel)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetExtent(" + pSizel.cx + ", " + pSizel.cy + ")");
+            if (pSizel == null)
+            {
+                return Interop.HRESULT.E_INVALIDARG;
+            }
+
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetExtent(" + pSizel->Width + ", " + pSizel->Height + ")");
             Debug.Indent();
             ActiveXInstance.SetExtent(dwDrawAspect, pSizel);
             Debug.Unindent();
-            return NativeMethods.S_OK;
+            return Interop.HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.GetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.GetExtent(uint dwDrawAspect, Size* pSizel)
         {
+            if (pSizel == null)
+            {
+                return Interop.HRESULT.E_INVALIDARG;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent.  Aspect: " + dwDrawAspect.ToString(CultureInfo.InvariantCulture));
             Debug.Indent();
             ActiveXInstance.GetExtent(dwDrawAspect, pSizel);
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "value: " + pSizel.cx + ", " + pSizel.cy);
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "value: " + pSizel->Width + ", " + pSizel->Height);
             Debug.Unindent();
-            return NativeMethods.S_OK;
+            return Interop.HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleObject.Advise(IAdviseSink pAdvSink, out int cookie)
@@ -14349,20 +14361,32 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IQuickActivate.SetContentExtent(NativeMethods.tagSIZEL pSizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IQuickActivate.SetContentExtent(Size* pSizel)
         {
+            if (pSizel == null)
+            {
+                return Interop.HRESULT.E_INVALIDARG;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetContentExtent");
             Debug.Indent();
             ActiveXInstance.SetExtent(NativeMethods.DVASPECT_CONTENT, pSizel);
             Debug.Unindent();
+            return Interop.HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IQuickActivate.GetContentExtent(NativeMethods.tagSIZEL pSizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IQuickActivate.GetContentExtent(Size* pSizel)
         {
+            if (pSizel == null)
+            {
+                return Interop.HRESULT.E_INVALIDARG;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetContentExtent");
             Debug.Indent();
             ActiveXInstance.GetExtent(NativeMethods.DVASPECT_CONTENT, pSizel);
             Debug.Unindent();
+            return Interop.HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IViewObject.Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
@@ -14468,12 +14492,11 @@ namespace System.Windows.Forms
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
         }
 
-        void UnsafeNativeMethods.IViewObject2.GetExtent(int dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, NativeMethods.tagSIZEL lpsizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IViewObject2.GetExtent(uint dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, Size *lpsizel)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent (IViewObject2)");
             // we already have an implementation of this [from IOleObject]
-            //
-            ((UnsafeNativeMethods.IOleObject)this).GetExtent(dwDrawAspect, lpsizel);
+            return ((UnsafeNativeMethods.IOleObject)this).GetExtent(dwDrawAspect, lpsizel);
         }
 
         #region IKeyboardToolTip implementation

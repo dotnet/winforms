@@ -262,8 +262,6 @@ namespace System.Windows.Forms
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DISP_E_EXCEPTION = unchecked((int)0x80020009),
         DIB_RGB_COLORS = 0,
-        DRAGDROP_E_NOTREGISTERED = unchecked((int)0x80040100),
-        DRAGDROP_E_ALREADYREGISTERED = unchecked((int)0x80040101),
         DUPLICATE_SAME_ACCESS = 0x00000002,
         DFC_CAPTION = 1,
         DFC_MENU = 2,
@@ -2052,20 +2050,6 @@ namespace System.Windows.Forms
             public int dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
         }
 
-        // use this in cases where the Native API takes a POINT not a POINT*
-        // classes marshal by ref.
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINTSTRUCT
-        {
-            public int x;
-            public int y;
-            public POINTSTRUCT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-        }
-
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2162,23 +2146,6 @@ namespace System.Windows.Forms
             public int rcExclude_top;
             public int rcExclude_right;
             public int rcExclude_bottom;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class SIZE
-        {
-            public int cx;
-            public int cy;
-
-            public SIZE()
-            {
-            }
-
-            public SIZE(int cx, int cy)
-            {
-                this.cx = cx;
-                this.cy = cy;
-            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2798,22 +2765,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public sealed class _POINTL
-        {
-            public int x;
-            public int y;
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagSIZE
-        {
-            public int cx = 0;
-            public int cy = 0;
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class COMRECT
         {
             public int left;
@@ -2881,17 +2832,6 @@ namespace System.Windows.Forms
             public int uOldState;
             public int uChanged;
             public IntPtr lParam;
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagPOINTF
-        {
-            [MarshalAs(UnmanagedType.R4)/*leftover(offset=0, x)*/]
-            public float x;
-
-            [MarshalAs(UnmanagedType.R4)/*leftover(offset=4, y)*/]
-            public float y;
-
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
@@ -2975,13 +2915,6 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.U4)]
                 int lcid,
                 out string categoryName);
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagSIZEL
-        {
-            public int cx;
-            public int cy;
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
@@ -3533,13 +3466,6 @@ namespace System.Windows.Forms
         {
             public NMHDR hdr;
             public TV_ITEM item;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class POINTL
-        {
-            public int x;
-            public int y;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -4114,7 +4040,7 @@ namespace System.Windows.Forms
             public uint cbSize = (uint)Marshal.SizeOf<LVTILEVIEWINFO>();
             public int dwMask;
             public int dwFlags;
-            public SIZE sizeTile;
+            public Size sizeTile;
             public int cLines;
             public Interop.RECT rcLabelMargin;
         }

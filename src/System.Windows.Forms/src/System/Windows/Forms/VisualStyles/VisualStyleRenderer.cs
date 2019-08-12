@@ -755,8 +755,6 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
             }
 
-            NativeMethods.SIZE size = new NativeMethods.SIZE();
-
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
@@ -764,16 +762,16 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, new HandleRef(null, hWnd)))
                     {
-                        lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, null, type, size);
+                        lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, null, type, out Size size);
+                        return size;
                     }
                 }
                 else
                 {
-                    lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, null, type, size);
+                    lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, null, type, out Size size);
+                    return size;
                 }
             }
-
-            return new Size(size.cx, size.cy);
         }
 
         /// <summary>
@@ -792,15 +790,12 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
             }
 
-            NativeMethods.SIZE size = new NativeMethods.SIZE();
-
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, new NativeMethods.COMRECT(bounds), type, size);
+                lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, new NativeMethods.COMRECT(bounds), type, out Size size);
+                return size;
             }
-
-            return new Size(size.cx, size.cy);
         }
 
         /// <summary>
@@ -944,13 +939,11 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            int htCode = 0;
-            NativeMethods.POINTSTRUCT point = new NativeMethods.POINTSTRUCT(pt.X, pt.Y);
-
+            ushort htCode = 0;
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), NativeMethods.NullHandleRef, point, ref htCode);
+                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), NativeMethods.NullHandleRef, pt, ref htCode);
             }
 
             return (HitTestCode)htCode;
@@ -981,13 +974,11 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            int htCode = 0;
-            NativeMethods.POINTSTRUCT point = new NativeMethods.POINTSTRUCT(pt.X, pt.Y);
-
+            ushort htCode = 0;
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), new HandleRef(this, hRgn), point, ref htCode);
+                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), new HandleRef(this, hRgn), pt, ref htCode);
             }
 
             return (HitTestCode)htCode;

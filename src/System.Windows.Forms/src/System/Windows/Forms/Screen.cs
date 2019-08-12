@@ -301,8 +301,7 @@ namespace System.Windows.Forms
         {
             if (multiMonitorSupport)
             {
-                NativeMethods.POINTSTRUCT pt = new NativeMethods.POINTSTRUCT(point.X, point.Y);
-                return new Screen(SafeNativeMethods.MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST));
+                return new Screen(SafeNativeMethods.MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST));
             }
             else
             {

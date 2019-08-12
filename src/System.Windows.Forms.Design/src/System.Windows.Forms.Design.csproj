@@ -51,15 +51,18 @@
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateRectRgn.cs" Link="Interop\Gdi32\Interop.CreateRectRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextExtentPoint32.cs" Link="Interop\Gdi32\Interop.GetTextExtentPoint32.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetModuleHandle.cs" Link="Interop\Kernel32\Interop.GetModuleHandle.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStream.cs" Link="Interop\Ole32\Interop.IStream.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATSTG.cs" Link="Interop\Ole32\Interop.STATSTG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGC.cs" Link="Interop\Ole32\Interop.STGC.cs" />

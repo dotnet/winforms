@@ -1190,70 +1190,49 @@ namespace System.Windows.Forms
             }
         }
 
-        private Size SetExtent(int width, int height)
+        private unsafe Size SetExtent(int width, int height)
         {
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL
-            {
-                cx = width,
-                cy = height
-            };
+            var sz = new Size(width, height);
             bool resetExtents = DesignMode;
-            try
-            {
-                Pixel2hiMetric(sz, sz);
-                axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-            }
-            catch (COMException)
+            Pixel2hiMetric(ref sz);
+            Interop.HRESULT hr = axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            if (hr != Interop.HRESULT.S_OK)
             {
                 resetExtents = true;
             }
             if (resetExtents)
             {
-                axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-                try
-                {
-                    axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-                }
-                catch (COMException e)
-                {
-                    Debug.Fail(e.ToString());
-                }
+                axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+                axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
             }
+
             return GetExtent();
         }
 
-        private Size GetExtent()
+        private unsafe Size GetExtent()
         {
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL();
-            axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-            HiMetric2Pixel(sz, sz);
-            return new Size(sz.cx, sz.cy);
+            var sz = new Size();
+            axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            HiMetric2Pixel(ref sz);
+            return sz;
         }
 
-        private void HiMetric2Pixel(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
+        private unsafe void HiMetric2Pixel(ref Size sz)
         {
-            NativeMethods._POINTL phm = new NativeMethods._POINTL
-            {
-                x = sz.cx,
-                y = sz.cy
-            };
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
-            szout.cx = (int)pcont.x;
-            szout.cy = (int)pcont.y;
+            var phm = new Point(sz.Width, sz.Height);
+            var pcont = new PointF();
+            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
+            sz.Width = (int)pcont.X;
+            sz.Height = (int)pcont.Y;
         }
 
-        private void Pixel2hiMetric(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
+        private unsafe void Pixel2hiMetric(ref Size sz)
         {
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF
-            {
-                x = (float)sz.cx,
-                y = (float)sz.cy
-            };
-            NativeMethods._POINTL phm = new NativeMethods._POINTL();
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
-            szout.cx = phm.x;
-            szout.cy = phm.y;
+            var phm = new Point();
+            var pcont = new PointF(sz.Width, sz.Height);
+            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            sz.Width = phm.X;
+            sz.Height = phm.Y;
         }
 
         private bool EditMode

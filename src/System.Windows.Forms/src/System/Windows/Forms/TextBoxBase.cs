@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms
 
             if (mevent.Button == MouseButtons.Left)
             {
-                if (!ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                if (!ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                 {
                     if (!doubleClickFired)
                     {

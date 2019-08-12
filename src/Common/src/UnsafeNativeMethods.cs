@@ -64,19 +64,6 @@ namespace System.Windows.Forms
             [In]
             ref Guid iid);
 
-        //This marshals differently than NativeMethods.POINTSTRUCT
-        internal struct POINTSTRUCT
-        {
-            public int x;
-            public int y;
-
-            public POINTSTRUCT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-        }
-
         [DllImport(ExternDll.Kernel32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetLocaleInfo(int Locale, int LCType, StringBuilder lpLCData, int cchData);
 
@@ -315,14 +302,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
-        [DllImport(ExternDll.User32, EntryPoint = "ChildWindowFromPointEx", ExactSpelling = true, CharSet = CharSet.Auto)]
-        private static extern IntPtr _ChildWindowFromPointEx(HandleRef hwndParent, POINTSTRUCT pt, int uFlags);
-
-        public static IntPtr ChildWindowFromPointEx(HandleRef hwndParent, int x, int y, int uFlags)
-        {
-            POINTSTRUCT ps = new POINTSTRUCT(x, y);
-            return _ChildWindowFromPointEx(hwndParent, ps, uFlags);
-        }
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
 
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, SetLastError = true)]
         public static extern bool CloseHandle(HandleRef handle);
@@ -559,7 +540,7 @@ namespace System.Windows.Forms
         // For Button
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] NativeMethods.SIZE lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Size lParam);
 
         // For ListView
 
@@ -792,15 +773,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDesktopWindow();
 
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int RegisterDragDrop(HandleRef hwnd, IOleDropTarget target);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int RevokeDragDrop(HandleRef hwnd);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int RevokeDragDrop(IntPtr hwnd);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool PeekMessage([In, Out] ref NativeMethods.MSG msg, HandleRef hwnd, int msgMin, int msgMax, int remove);
 
@@ -1008,14 +980,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetClientRect(HandleRef hWnd, IntPtr rect);
 
-        [DllImport(ExternDll.User32, EntryPoint = "WindowFromPoint", ExactSpelling = true, CharSet = CharSet.Auto)]
-        private static extern IntPtr _WindowFromPoint(POINTSTRUCT pt);
-
-        public static IntPtr WindowFromPoint(int x, int y)
-        {
-            POINTSTRUCT ps = new POINTSTRUCT(x, y);
-            return _WindowFromPoint(ps);
-        }
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern IntPtr WindowFromPoint(Point pt);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr CreateWindowEx(
@@ -1117,44 +1083,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport(), Guid("00000122-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleDropTarget
-        {
-            [PreserveSig]
-            int OleDragEnter(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pDataObj,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfKeyState,
-                [In]
-                POINTSTRUCT pt,
-                [In, Out]
-                ref int pdwEffect);
-
-            [PreserveSig]
-            int OleDragOver(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfKeyState,
-                [In]
-                POINTSTRUCT pt,
-                [In, Out]
-                ref int pdwEffect);
-
-            [PreserveSig]
-            int OleDragLeave();
-
-            [PreserveSig]
-            int OleDrop(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pDataObj,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfKeyState,
-                [In]
-                POINTSTRUCT pt,
-                [In, Out]
-                ref int pdwEffect);
-        }
-
         [ComImport(), Guid("00000121-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleDropSource
         {
@@ -1170,12 +1098,10 @@ namespace System.Windows.Forms
                 int dwEffect);
         }
 
-        [
-        ComImport(),
-        Guid("B196B289-BAB4-101A-B69C-00AA00341D07"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        public interface IOleControlSite
+        [ComImport()]
+        [Guid("B196B289-BAB4-101A-B69C-00AA00341D07")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleControlSite
         {
             [PreserveSig]
             int OnControlInfoChanged();
@@ -1189,13 +1115,10 @@ namespace System.Windows.Forms
                 out object ppDisp);
 
             [PreserveSig]
-            int TransformCoords(
-                [In, Out]
-                NativeMethods._POINTL pPtlHimetric,
-                [In, Out]
-                NativeMethods.tagPOINTF pPtfContainer,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwFlags);
+            Interop.HRESULT TransformCoords(
+                Point *pPtlHimetric,
+                PointF *pPtfContainer,
+                uint dwFlags);
 
             [PreserveSig]
             int TranslateAccelerator(
@@ -1271,8 +1194,8 @@ namespace System.Windows.Forms
                 NativeMethods.tagOIFI lpFrameInfo);
 
             [PreserveSig]
-            int Scroll(
-                NativeMethods.tagSIZE scrollExtant);
+            Interop.HRESULT Scroll(
+                Size scrollExtant);
 
             [PreserveSig]
             int OnUIDeactivate(
@@ -1575,13 +1498,10 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dw);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetDropTarget(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IOleDropTarget pDropTarget,
-                [Out, MarshalAs(UnmanagedType.Interface)]
-                out IOleDropTarget ppDropTarget);
+            Interop.HRESULT GetDropTarget(
+                Interop.Ole32.IDropTarget pDropTarget,
+                out Interop.Ole32.IDropTarget ppDropTarget);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
@@ -2496,10 +2416,10 @@ namespace System.Windows.Forms
             void ReactivateAndUndo();
         }
 
-        [ComImport(),
-        Guid("00000112-0000-0000-C000-000000000046"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleObject
+        [ComImport()]
+        [Guid("00000112-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleObject
         {
             [PreserveSig]
             int SetClientSite(
@@ -2583,18 +2503,10 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            int SetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [In]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
-            int GetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [Out]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -2621,8 +2533,10 @@ namespace System.Windows.Forms
                       NativeMethods.tagLOGPALETTE pLogpal);
         }
 
-        [ComImport(), Guid("1C2056CC-5EF4-101B-8BC8-00AA003E3B29"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceObjectWindowless
+        [ComImport]
+        [Guid("1C2056CC-5EF4-101B-8BC8-00AA003E3B29")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleInPlaceObjectWindowless
         {
             [PreserveSig]
             int SetClientSite(
@@ -2707,18 +2621,10 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            int SetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [In]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
-            int GetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [Out]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -2860,8 +2766,10 @@ namespace System.Windows.Forms
                 IAdviseSink[] pAdvSink);
         }
 
-        [ComImport(), Guid("00000127-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IViewObject2 /* : IViewObject */
+        [ComImport]
+        [Guid("00000127-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IViewObject2 /* : IViewObject */
         {
             void Draw(
                 [In, MarshalAs(UnmanagedType.U4)]
@@ -2925,14 +2833,12 @@ namespace System.Windows.Forms
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 IAdviseSink[] pAdvSink);
 
-            void GetExtent(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+            [PreserveSig]
+            Interop.HRESULT GetExtent(
+                uint dwDrawAspect,
                 int lindex,
-                [In]
                 NativeMethods.tagDVTARGETDEVICE ptd,
-                [Out]
-                NativeMethods.tagSIZEL lpsizel);
+                Size *lpsizel);
         }
 
         [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -2957,26 +2863,21 @@ namespace System.Windows.Forms
             void Save(IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties);
         }
 
-        [
-            ComImport(),
-        Guid("CF51ED10-62FE-11CF-BF86-00A0C9034836"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        public interface IQuickActivate
+        [ComImport()]
+        [Guid("CF51ED10-62FE-11CF-BF86-00A0C9034836")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IQuickActivate
         {
             void QuickActivate(
-                              [In]
                               tagQACONTAINER pQaContainer,
                               [Out]
                               tagQACONTROL pQaControl);
 
-            void SetContentExtent(
-                                 [In]
-                                 NativeMethods.tagSIZEL pSizel);
+            [PreserveSig]
+            Interop.HRESULT SetContentExtent(Size* pSizel);
 
-            void GetContentExtent(
-                                 [Out]
-                                 NativeMethods.tagSIZEL pSizel);
+            [PreserveSig]
+            Interop.HRESULT GetContentExtent(Size* pSizel);
         }
 
         [ComImport(), Guid("55272A00-42CB-11CE-8135-00AA004BB851"),

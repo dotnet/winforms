@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -267,29 +268,15 @@ namespace System.Windows.Forms
                     {
                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
-                    if (accept)
-                    {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + owner.Handle.ToString());
-                        // Register
-                        int n = UnsafeNativeMethods.RegisterDragDrop(new HandleRef(owner, owner.Handle), (UnsafeNativeMethods.IOleDropTarget)(new DropTarget(this)));
 
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
-                        if (n != 0 && n != NativeMethods.DRAGDROP_E_ALREADYREGISTERED)
-                        {
-                            throw new Win32Exception(n);
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Revoking drop target: " + owner.Handle.ToString());
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + owner.Handle.ToString());
 
-                        // Revoke
-                        int n = UnsafeNativeMethods.RevokeDragDrop(new HandleRef(owner, owner.Handle));
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
-                        if (n != 0 && n != NativeMethods.DRAGDROP_E_NOTREGISTERED)
-                        {
-                            throw new Win32Exception(n);
-                        }
+                    // Register
+                    HRESULT n = Ole32.RegisterDragDrop(new HandleRef(owner, owner.Handle), (Ole32.IDropTarget)new DropTarget(this));
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
+                    if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
+                    {
+                        throw Marshal.GetExceptionForHR((int)n);
                     }
                 }
                 catch (Exception e)

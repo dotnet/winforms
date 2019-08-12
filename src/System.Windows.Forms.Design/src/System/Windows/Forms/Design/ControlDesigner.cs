@@ -501,7 +501,7 @@ namespace System.Windows.Forms.Design
                     if (e.Control.IsHandleCreated)
                     {
                         Application.OleRequired();
-                        UnsafeNativeMethods.RevokeDragDrop(e.Control.Handle);
+                        Ole32.RevokeDragDrop(e.Control.Handle);
                         // We only hook the control's children if there was no designer. We leave it up to the designer to hook its own children.
                         HookChildControls(e.Control);
                     }
@@ -884,7 +884,7 @@ namespace System.Windows.Forms.Design
                         if (child.IsHandleCreated)
                         {
                             Application.OleRequired();
-                            UnsafeNativeMethods.RevokeDragDrop(child.Handle);
+                            Ole32.RevokeDragDrop(child.Handle);
                             HookChildHandles(child.Handle);
                         }
                         else
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms.Design
             OnHandleChange();
             if (_revokeDragDrop)
             {
-                UnsafeNativeMethods.RevokeDragDrop(Control.Handle);
+                Ole32.RevokeDragDrop(Control.Handle);
             }
         }
 
@@ -2644,7 +2644,7 @@ namespace System.Windows.Forms.Design
                         // have a Windows Forms control associated with them, we have to RevokeDragDrop()
                         // for them so that the ParentControlDesigner()'s drag-drop support can work
                         // correctly.
-                        UnsafeNativeMethods.RevokeDragDrop(hwndChild);
+                        Ole32.RevokeDragDrop(hwndChild);
                         new ChildSubClass(this, hwndChild);
                         SubclassedChildWindows[hwndChild] = true;
                     }
@@ -2892,7 +2892,7 @@ namespace System.Windows.Forms.Design
                     if (m.Msg == WindowMessages.WM_CREATE)
                     {
                         Debug.Assert(_handle != IntPtr.Zero, "Handle for control not created");
-                        UnsafeNativeMethods.RevokeDragDrop(_handle);
+                        Ole32.RevokeDragDrop(_handle);
                     }
                 }
             }
