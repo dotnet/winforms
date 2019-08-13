@@ -1287,44 +1287,6 @@ namespace System.Windows.Forms
         //TTI_INFO                =1,
         TTI_WARNING = 2,
         //TTI_ERROR               =3,
-        TTF_IDISHWND = 0x0001,
-        TTF_RTLREADING = 0x0004,
-        TTF_TRACK = 0x0020,
-        TTF_CENTERTIP = 0x0002,
-        TTF_SUBCLASS = 0x0010,
-        TTF_TRANSPARENT = 0x0100,
-        TTF_ABSOLUTE = 0x0080,
-        TTDT_AUTOMATIC = 0,
-        TTDT_RESHOW = 1,
-        TTDT_AUTOPOP = 2,
-        TTDT_INITIAL = 3,
-        TTM_TRACKACTIVATE = (0x0400 + 17),
-        TTM_TRACKPOSITION = (0x0400 + 18),
-        TTM_ACTIVATE = (0x0400 + 1),
-        TTM_POP = (0x0400 + 28),
-        TTM_ADJUSTRECT = (0x400 + 31),
-        TTM_SETDELAYTIME = (0x0400 + 3),
-        TTM_SETTITLE = (Interop.WindowMessages.WM_USER + 33), // wParam = TTI_*, lParam = wchar* szTitle
-        TTM_ADDTOOL = (0x0400 + 50),
-        TTM_DELTOOL = (0x0400 + 51),
-        TTM_NEWTOOLRECT = (0x0400 + 52),
-        TTM_RELAYEVENT = (0x0400 + 7),
-        TTM_GETTIPBKCOLOR = (0x0400 + 22),
-        TTM_SETTIPBKCOLOR = (0x0400 + 19),
-        TTM_SETTIPTEXTCOLOR = (0x0400 + 20),
-        TTM_GETTIPTEXTCOLOR = (0x0400 + 23),
-        TTM_GETTOOLINFO = (0x0400 + 53),
-        TTM_SETTOOLINFO = (0x0400 + 54),
-        TTM_HITTEST = (0x0400 + 55),
-        TTM_GETTEXT = (0x0400 + 56),
-        TTM_UPDATE = (0x0400 + 29),
-        TTM_UPDATETIPTEXT = (0x0400 + 57),
-        TTM_ENUMTOOLS = (0x0400 + 58),
-        TTM_GETCURRENTTOOL = (0x0400 + 59),
-        TTM_WINDOWFROMPOINT = (0x0400 + 16),
-        TTM_GETDELAYTIME = (0x0400 + 21),
-        TTM_SETMAXTIPWIDTH = (0x0400 + 24),
-        TTM_GETBUBBLESIZE = (0x0400 + 30),
         TTN_GETDISPINFO = ((0 - 520) - 10),
         TTN_SHOW = ((0 - 520) - 1),
         TTN_POP = ((0 - 520) - 2),
@@ -3442,32 +3404,6 @@ namespace System.Windows.Forms
             public const int msocWindowFrameOwner = 1;
             public const int msocWindowComponent = 2;
             public const int msocWindowDlgOwner = 3;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TOOLINFO_T
-        {
-            public int cbSize = Marshal.SizeOf<TOOLINFO_T>();
-            public int uFlags;
-            public IntPtr hwnd;
-            public IntPtr uId;
-            public Interop.RECT rect;
-            public IntPtr hinst = IntPtr.Zero;
-            public string lpszText;
-            public IntPtr lParam = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TOOLINFO_TOOLTIP
-        {
-            public int cbSize = Marshal.SizeOf<TOOLINFO_TOOLTIP>();
-            public int uFlags;
-            public IntPtr hwnd;
-            public IntPtr uId;
-            public Interop.RECT rect;
-            public IntPtr hinst = IntPtr.Zero;
-            public IntPtr lpszText;
-            public IntPtr lParam = IntPtr.Zero;
         }
 
         [StructLayout(LayoutKind.Sequential)]

@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ///  Provides a low-level encapsulation of a window handle
     ///  and a window procedure. The class automatically manages window class creation and registration.
     /// </summary>
-    public class NativeWindow : MarshalByRefObject, IWin32Window
+    public class NativeWindow : MarshalByRefObject, IWin32Window, IHandle
     {
 #if DEBUG
         private static readonly BooleanSwitch AlwaysUseNormalWndProc = new BooleanSwitch("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");

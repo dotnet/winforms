@@ -2052,10 +2052,9 @@ namespace System.Windows.Forms
             ttt.hinst = IntPtr.Zero;
 
             // RightToLeft reading order
-            //
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= NativeMethods.TTF_RTLREADING;
+                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
             }
 
             Marshal.StructureToPtr(ttt, m.LParam, false);
@@ -2204,11 +2203,8 @@ namespace System.Windows.Forms
                             }
                             break;
                         case NativeMethods.TTN_GETDISPINFO:
-                            // MSDN:
-                            // Setting the max width has the added benefit of enabling Multiline
-                            // tool tips!
-                            //
-                            UnsafeNativeMethods.SendMessage(new HandleRef(nmhdr, nmhdr.hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                            // Setting the max width has the added benefit of enabling Multiline tool tips!
+                            User32.SendMessageW(nmhdr.hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

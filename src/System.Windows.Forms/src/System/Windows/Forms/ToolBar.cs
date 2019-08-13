@@ -1635,7 +1635,7 @@ namespace System.Windows.Forms
         {
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             int commandID = (int)ttt.hdr.idFrom;
-            ToolBarButton tbb = (ToolBarButton)buttons[commandID];
+            ToolBarButton tbb = buttons[commandID];
 
             if (tbb != null && tbb.ToolTipText != null)
             {
@@ -1652,7 +1652,7 @@ namespace System.Windows.Forms
             //
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= NativeMethods.TTF_RTLREADING;
+                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
             }
 
             Marshal.StructureToPtr(ttt, m.LParam, false);

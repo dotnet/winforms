@@ -60,7 +60,8 @@ namespace System.Windows.Forms
         IWin32Window,
         IArrangedElement,
         IBindableComponent,
-        IKeyboardToolTip
+        IKeyboardToolTip,
+        IHandle
     {
 #if FINALIZATION_WATCH
         static readonly TraceSwitch ControlFinalization = new TraceSwitch("ControlFinalization", "Tracks the creation and destruction of finalization");

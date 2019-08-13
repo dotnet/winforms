@@ -29273,15 +29273,15 @@ namespace System.Windows.Forms
 
                 if (!string.IsNullOrEmpty(toolTip))
                 {
-                    // MSDN: Setting the max width has the added benefit of enabling multiline tool tips!
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    // Setting the max width has the added benefit of enabling multiline tool tips!
+                    User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
 
                     ttt.lpszText = toolTip;
 
                     if (RightToLeft == RightToLeft.Yes)
                     {
-                        ttt.uFlags |= NativeMethods.TTF_RTLREADING;
+                        ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
                     }
                     Marshal.StructureToPtr(ttt, m.LParam, false);
                     return true;

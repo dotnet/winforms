@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -182,7 +183,7 @@ namespace System.Windows.Forms
         {
             _currentTool = tool;
             ResetTimer();
-            StartTimer(toolTip.GetDelayTime(NativeMethods.TTDT_RESHOW),
+            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.RESHOW),
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.ReshowDelayTimerExpired, tool)));
             return SmState.ReadyForReshow;
         }
@@ -190,7 +191,7 @@ namespace System.Windows.Forms
         private SmState ShowToolTip(IKeyboardToolTip tool, ToolTip toolTip)
         {
             string toolTipText = tool.GetCaptionForTool(toolTip);
-            int autoPopDelay = toolTip.GetDelayTime(NativeMethods.TTDT_AUTOPOP);
+            int autoPopDelay = toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
             if (!_currentTool.IsHoveredWithMouse())
             {
                 toolTip.ShowKeyboardToolTip(toolTipText, _currentTool, autoPopDelay);
@@ -204,7 +205,7 @@ namespace System.Windows.Forms
         {
             _currentTool = tool;
             ResetTimer();
-            StartTimer(toolTip.GetDelayTime(NativeMethods.TTDT_INITIAL),
+            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.INITIAL),
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.InitialDelayTimerExpired, _currentTool)));
 
             return SmState.ReadyForInitShow;

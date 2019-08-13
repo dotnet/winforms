@@ -13,9 +13,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         readonly Control[] controls;
         string toolTipText;
-        readonly NativeMethods.TOOLINFO_T[] toolInfos;
         bool dontShow;
-        Point lastMouseMove = Point.Empty;
         private readonly int maximumToolTipLength = 1000;
 
         internal GridToolTip(Control[] controls)
@@ -23,7 +21,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             this.controls = controls;
             SetStyle(ControlStyles.UserPaint, false);
             Font = controls[0].Font;
-            toolInfos = new NativeMethods.TOOLINFO_T[controls.Length];
 
             for (int i = 0; i < controls.Length; i++)
             {
@@ -83,7 +80,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     for (int i = 0; i < controls.Length; i++)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i]));
+                        GetTOOLINFO(controls[i]).SendMessage(this, WindowMessages.TTM_UPDATETIPTEXTW);
                     }
 
                     if (visible && !dontShow)
@@ -119,41 +116,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private NativeMethods.TOOLINFO_T GetTOOLINFO(Control c)
-        {
-            int index = Array.IndexOf(controls, c);
-
-            Debug.Assert(index != -1, "Failed to find control in tooltip array");
-
-            if (toolInfos[index] == null)
-            {
-                toolInfos[index] = new NativeMethods.TOOLINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>()
-                };
-                toolInfos[index].uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
-            }
-            toolInfos[index].lpszText = toolTipText;
-            toolInfos[index].hwnd = c.Handle;
-            toolInfos[index].uId = c.Handle;
-            return toolInfos[index];
-        }
-
-        /*
-        private bool MouseMoved(Message msg){
-            bool moved = true;
-
-            Point newMove = new Point(NativeMethods.Util.LOWORD(msg.LParam), NativeMethods.Util.HIWORD(msg.LParam));
-
-            // check if the mouse has actually moved...
-            if (lastMouseMove == newMove){
-                  moved = false;
-            }
-
-            lastMouseMove = newMove;
-            return moved;
-        }
-        */
+        private ComCtl32.ToolInfoWrapper GetTOOLINFO(Control c)
+            => new ComCtl32.ToolInfoWrapper(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, toolTipText);
 
         private void OnControlCreateHandle(object sender, EventArgs e)
         {
@@ -164,7 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_DELTOOL, 0, GetTOOLINFO((Control)sender));
+                GetTOOLINFO((Control)sender).SendMessage(this, WindowMessages.TTM_DELTOOLW);
             }
         }
 
@@ -189,37 +153,33 @@ namespace System.Windows.Forms.PropertyGridInternal
                                   NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
                                   NativeMethods.SWP_NOACTIVATE);
 
-                if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(c)))
+                if (GetTOOLINFO(c).SendMessage(this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
                 {
                     Debug.Fail("TTM_ADDTOOL failed for " + c.GetType().Name);
                 }
 
-                // Setting the max width has the added benefit of enabling multiline
-                // tool tips!)
-                //
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                // Setting the max width has the added benefit of enabling multiline tool tips!)
+                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
         public void Reset()
         {
-            // okay, this resets the tooltip state,
-            // which can get broken when we leave the window
-            // then reenter.  So we set the tooltip to null,
-            // update the text, then it back to what it was, so the tooltip
-            // thinks it's back in the regular state again
-            //
+            // This resets the tooltip state, which can get broken when we leave the window
+            // then reenter. So we set the tooltip to null, update the text, then it back to
+            // what it was, so the tooltip thinks it's back in the regular state again
+
             string oldText = ToolTip;
             toolTipText = string.Empty;
             for (int i = 0; i < controls.Length; i++)
             {
-                if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i])))
+                if (GetTOOLINFO(controls[i]).SendMessage(this, WindowMessages.TTM_UPDATETIPTEXTW) == IntPtr.Zero)
                 {
                     //Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);
                 }
             }
             toolTipText = oldText;
-            SendMessage(NativeMethods.TTM_UPDATE, 0, 0);
+            User32.SendMessageW(this, WindowMessages.TTM_UPDATE);
         }
 
         protected override void WndProc(ref Message msg)
