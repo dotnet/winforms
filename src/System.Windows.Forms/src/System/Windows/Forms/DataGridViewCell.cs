@@ -5294,6 +5294,8 @@ namespace System.Windows.Forms
                     return owner.DataGridView.AccessibilityObject;
                 }
             }
+
+            internal override bool IsReadOnly => owner.ReadOnly;
         }
     }
 }
