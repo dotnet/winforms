@@ -4,22 +4,22 @@
     <body>
       <trans-unit id="$this.Text">
         <source>String Collection Editor</source>
-        <target state="new">String Collection Editor</target>
+        <target state="translated">문자열 컬렉션 편집기</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">취소</target>
         <note />
       </trans-unit>
       <trans-unit id="instruction.Text">
         <source>&amp;Enter the strings in the collection (one per line):</source>
-        <target state="new">&amp;Enter the strings in the collection (one per line):</target>
+        <target state="translated">한 줄에 하나씩 컬렉션에 문자열을 입력하십시오(&amp;E).</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">확인</target>
         <note />
       </trans-unit>
     </body>

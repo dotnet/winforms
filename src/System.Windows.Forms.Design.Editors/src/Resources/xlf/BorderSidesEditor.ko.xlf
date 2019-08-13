@@ -4,32 +4,32 @@
     <body>
       <trans-unit id="allCheckBox.Text">
         <source>&amp;All</source>
-        <target state="new">&amp;All</target>
+        <target state="translated">모두(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="bottomCheckBox.Text">
         <source>&amp;Bottom</source>
-        <target state="new">&amp;Bottom</target>
+        <target state="translated">아래쪽(&amp;B)</target>
         <note />
       </trans-unit>
       <trans-unit id="leftCheckBox.Text">
         <source>&amp;Left</source>
-        <target state="new">&amp;Left</target>
+        <target state="translated">왼쪽(&amp;L)</target>
         <note />
       </trans-unit>
       <trans-unit id="noneCheckBox.Text">
         <source>&amp;None</source>
-        <target state="new">&amp;None</target>
+        <target state="translated">없음(&amp;N)</target>
         <note />
       </trans-unit>
       <trans-unit id="rightCheckBox.Text">
         <source>&amp;Right</source>
-        <target state="new">&amp;Right</target>
+        <target state="translated">오른쪽(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="topCheckBox.Text">
         <source>&amp;Top</source>
-        <target state="new">&amp;Top</target>
+        <target state="translated">위쪽(&amp;T)</target>
         <note />
       </trans-unit>
     </body>
