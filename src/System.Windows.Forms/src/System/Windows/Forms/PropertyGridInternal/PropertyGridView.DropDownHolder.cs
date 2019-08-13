@@ -654,7 +654,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             int linkHeight = CreateNewLink.Height;
                             using (Graphics g = gridView.CreateGraphics())
                             {
-                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(gridView.ownerGrid, g, editor.Text, gridView.GetBaseFont());
+                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(gridView._ownerGrid, g, editor.Text, gridView.GetBaseFont());
                                 linkHeight = (int)sizef.Height;
                             }
 

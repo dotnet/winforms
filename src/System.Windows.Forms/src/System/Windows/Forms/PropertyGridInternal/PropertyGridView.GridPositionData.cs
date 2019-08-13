@@ -17,9 +17,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public GridPositionData(PropertyGridView gridView)
             {
-                selectedItemTree = gridView.GetGridEntryHierarchy(gridView.selectedGridEntry);
-                expandedState = gridView.SaveHierarchyState(gridView.topLevelGridEntries);
-                itemRow = gridView.selectedRow;
+                selectedItemTree = gridView.GetGridEntryHierarchy(gridView._selectedGridEntry);
+                expandedState = gridView.SaveHierarchyState(gridView._topLevelGridEntries);
+                itemRow = gridView._selectedRow;
                 itemCount = gridView.totalProps;
             }
 
@@ -32,10 +32,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     gridView.SelectGridEntry(entry, true);
 
-                    int delta = gridView.selectedRow - itemRow;
+                    int delta = gridView._selectedRow - itemRow;
                     if (delta != 0 && gridView.ScrollBar.Visible)
                     {
-                        if (itemRow < gridView.visibleRows)
+                        if (itemRow < gridView._visibleRows)
                         {
                             delta += gridView.GetScrollOffset();
 

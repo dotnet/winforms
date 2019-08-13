@@ -292,7 +292,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 object oldValue = psheet.SelectedGridEntry.PropertyValue;
                                 psheet.SelectedGridEntry.ResetPropertyValue();
                                 psheet.UnfocusSelection();
-                                psheet.ownerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
+                                psheet._ownerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
                             }
                         }
                         break;

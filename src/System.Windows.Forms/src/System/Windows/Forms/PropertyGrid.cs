@@ -2648,7 +2648,7 @@ namespace System.Windows.Forms
 
         public void ExpandAllGridItems()
         {
-            gridView.RecursivelyExpand(peMain, false, true, PropertyGridView.MaxRecurseExpand);
+            gridView.RecursivelyExpand(peMain, false, true, PropertyGridView.MAX_RECURSE_EXPAND);
         }
 
         private static Type[] GetCommonTabs(object[] objs, PropertyTabScope tabScope)
