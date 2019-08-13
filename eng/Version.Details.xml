@@ -10,9 +10,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview9-19413-07">
+    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview9-19413-09">
       <Uri>https://github.com/dotnet/core-setup</Uri>
-      <Sha>2b064ccfd1b067b9e5127474ff3b713c4ad3e4aa</Sha>
+      <Sha>e2e58f8e89f4cc3f43ca4dfa06d641af1d4686ac</Sha>
     </Dependency>
     <!-- CoreFX via Core Setup -->
     <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-preview9.19409.17" CoherentParentDependency="Microsoft.NETCore.App">
