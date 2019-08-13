@@ -1248,9 +1248,11 @@ namespace System.Windows.Forms
                 bool handlesCreated = control.IsHandleCreated
                                       && TopLevelControl != null
                                       && TopLevelControl.IsHandleCreated;
+
                 if (exists && !empty && handlesCreated && !DesignMode)
                 {
-                    GetTOOLINFO(control, info.Caption).SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
+                    ComCtl32.ToolInfoWrapper toolInfo = GetTOOLINFO(control, info.Caption);
+                    toolInfo.SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
                     CheckNativeToolTip(control);
                     CheckCompositeControls(control);
                 }
@@ -2077,29 +2079,32 @@ namespace System.Windows.Forms
             if (currentTooltipSize != r.Size)
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
-                int maxwidth = (IsBalloon) ?
-                Math.Min(currentTooltipSize.Width - 2 * BalloonOffsetX, screen.WorkingArea.Width) :
-                Math.Min(currentTooltipSize.Width, screen.WorkingArea.Width);
+                int maxwidth = (IsBalloon)
+                    ? Math.Min(currentTooltipSize.Width - 2 * BalloonOffsetX, screen.WorkingArea.Width)
+                    : Math.Min(currentTooltipSize.Width, screen.WorkingArea.Width);
                 User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)maxwidth);
             }
 
             if (e.Cancel)
             {
                 _cancelled = true;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
-                NativeMethods.HWND_TOPMOST,
-                0, 0, 0, 0,
-                NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
+                SafeNativeMethods.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    NativeMethods.HWND_TOPMOST,
+                    0, 0, 0, 0,
+                    NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
 
             }
             else
             {
                 _cancelled = false;
+
                 // Only width/height changes are respected, so set top,left to what we got earlier
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
-                NativeMethods.HWND_TOPMOST,
-                r.left, r.top, currentTooltipSize.Width, currentTooltipSize.Height,
-                NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
+                SafeNativeMethods.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    NativeMethods.HWND_TOPMOST,
+                    r.left, r.top, currentTooltipSize.Width, currentTooltipSize.Height,
+                    NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
             }
         }
 

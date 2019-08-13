@@ -1777,7 +1777,8 @@ namespace System.Windows.Forms
                 {
                     StatusBar p = (StatusBar)parent;
 
-                    if (GetTOOLINFO(tool).SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
+                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1788,7 +1789,8 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    GetMinTOOLINFO(tool).SendMessage(this, WindowMessages.TTM_DELTOOLW);
+                    ComCtl32.ToolInfoWrapper info = GetMinTOOLINFO(tool);
+                    info.SendMessage(this, WindowMessages.TTM_DELTOOLW);
                 }
             }
 
@@ -1796,7 +1798,8 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    GetTOOLINFO(tool).SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
+                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    info.SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1817,7 +1820,6 @@ namespace System.Windows.Forms
                                      NativeMethods.SWP_NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips!
-
                 User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 

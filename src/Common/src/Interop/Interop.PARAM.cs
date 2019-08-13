@@ -10,7 +10,7 @@ internal partial class Interop
     /// <summary>
     ///  Helpers for creating W/LPARAM arguments for messages.
     /// </summary>
-    public static class PARAM
+    internal static class PARAM
     {
         public static IntPtr FromLowHigh(int low, int high)
             => (IntPtr)((high << 16) | (low & 0xffff));

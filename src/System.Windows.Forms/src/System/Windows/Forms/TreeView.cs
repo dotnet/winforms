@@ -1784,7 +1784,7 @@ namespace System.Windows.Forms
         {
             if (toolTip != null)
             {
-                User32.SendMessageW(toolTip, WindowMessages.TTM_SETMAXTIPWIDTH, (IntPtr)0, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(toolTip, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
                 controlToolTipText = toolTipText;
             }

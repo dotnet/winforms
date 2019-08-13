@@ -1071,7 +1071,8 @@ namespace System.Windows.Forms
 
                 if (_tipWindow != null)
                 {
-                    new ComCtl32.ToolInfoWrapper(this, item.Id).SendMessage(_tipWindow, WindowMessages.TTM_DELTOOLW);
+                    var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
+                    info .SendMessage(_tipWindow, WindowMessages.TTM_DELTOOLW);
                 }
 
                 if (items.Count == 0)
