@@ -3779,31 +3779,6 @@ namespace System.Windows.Forms
                     IntPtr hdc);
         }
 
-        [ComImport(), Guid("7BF80981-BF32-101A-8BBB-00AA00300CAB"), InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIDispatch)]
-        public interface IPictureDisp
-        {
-            IntPtr Handle { get; }
-
-            IntPtr HPal { get; }
-
-            short PictureType { get; }
-
-            int Width { get; }
-
-            int Height { get; }
-
-            void Render(
-                    IntPtr hdc,
-                    int x,
-                    int y,
-                    int cx,
-                    int cy,
-                    int xSrc,
-                    int ySrc,
-                    int cxSrc,
-                    int cySrc);
-        }
-
         /// <summary>
         ///  This class provides static methods to create, activate and deactivate the theming scope.
         /// </summary>

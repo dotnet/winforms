@@ -12,7 +12,7 @@ internal static partial class Interop
     internal static partial class Ole32
     {
         [StructLayout(LayoutKind.Sequential)]
-        public struct PICTDESC
+        internal struct PICTDESC
         {
             public uint cbSizeofstruct;
             public PICTYPE picType;

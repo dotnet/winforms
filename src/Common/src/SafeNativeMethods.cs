@@ -252,15 +252,6 @@ namespace System.Windows.Forms
         public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out]NativeMethods.MONITORINFOEX info);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr MonitorFromPoint(Point pt, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr MonitorFromRect(ref Interop.RECT rect, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr MonitorFromWindow(HandleRef handle, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool EnumDisplayMonitors(HandleRef hdc, NativeMethods.COMRECT rcClip, NativeMethods.MonitorEnumProc lpfnEnum, IntPtr dwData);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]

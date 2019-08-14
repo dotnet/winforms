@@ -5059,7 +5059,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            IntPtr hPal = IntPtr.Zero;
+            uint hPal = default;
             Ole32.IPicture pict = (Ole32.IPicture)picture;
             Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
             if (type == Ole32.PICTYPE.BITMAP)
@@ -5080,16 +5080,16 @@ namespace System.Windows.Forms
         ///  Maps from an OLE IPictureDisp to a System.Drawing.Image
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected static Image GetPictureFromIPictureDisp(object picture)
+        protected unsafe static Image GetPictureFromIPictureDisp(object picture)
         {
             if (picture == null)
             {
                 return null;
             }
 
-            IntPtr hPal = IntPtr.Zero;
+            uint hPal = default;
             Ole32.IPictureDisp pict = (Ole32.IPictureDisp)picture;
-            Ole32.PICTYPE type = pict.Type;
+            Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
             if (type == Ole32.PICTYPE.BITMAP)
             {
                 try
@@ -5106,12 +5106,17 @@ namespace System.Windows.Forms
             return image;
         }
 
-        private static Image GetPictureFromParams(IntPtr handle, Ole32.PICTYPE type, IntPtr paletteHandle, int width, int height)
+        private static Image GetPictureFromParams(
+            uint handle,
+            Ole32.PICTYPE type,
+            uint paletteHandle,
+            int width,
+            int height)
         {
             switch (type)
             {
                 case Ole32.PICTYPE.ICON:
-                    return (Image)(Icon.FromHandle(handle)).Clone();
+                    return (Image)(Icon.FromHandle((IntPtr)handle)).Clone();
                 case Ole32.PICTYPE.METAFILE:
                     WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
                     {
@@ -5119,17 +5124,17 @@ namespace System.Windows.Forms
                         BboxBottom = (short)height
                     };
 
-                    using (var metafile = new Metafile(handle, header, deleteWmf: false))
+                    using (var metafile = new Metafile((IntPtr)handle, header, deleteWmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
                 case Ole32.PICTYPE.ENHMETAFILE:
-                    using (var metafile = new Metafile(handle, deleteEmf: false))
+                    using (var metafile = new Metafile((IntPtr)handle, deleteEmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
                 case Ole32.PICTYPE.BITMAP:
-                    return Image.FromHbitmap(handle, paletteHandle);
+                    return Image.FromHbitmap((IntPtr)handle, (IntPtr)paletteHandle);
                 case Ole32.PICTYPE.NONE:
                     // MSDN says this should not be a valid value, but comctl32 returns it...
                     return null;

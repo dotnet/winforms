@@ -430,7 +430,7 @@ namespace System.Windows.Forms
 
                 if (picture != null && picture.Type == (short)Ole32.PICTYPE.ICON)
                 {
-                    IntPtr cursorHandle = picture.Handle;
+                    IntPtr cursorHandle = (IntPtr)picture.Handle;
                     Size picSize = GetIconSize(cursorHandle);
                     if (DpiHelper.IsScalingRequired)
                     {

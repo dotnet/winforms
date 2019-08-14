@@ -133,7 +133,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 [GUID_COLOR] = typeof(Com2ColorConverter),
                 [typeof(SafeNativeMethods.IFontDisp).GUID] = typeof(Com2FontConverter),
                 [typeof(UnsafeNativeMethods.IFont).GUID] = typeof(Com2FontConverter),
-                [typeof(UnsafeNativeMethods.IPictureDisp).GUID] = typeof(Com2PictureConverter),
+                [typeof(Ole32.IPictureDisp).GUID] = typeof(Com2PictureConverter),
                 [typeof(Ole32.IPicture).GUID] = typeof(Com2PictureConverter)
             };
         }

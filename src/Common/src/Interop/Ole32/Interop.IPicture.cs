@@ -14,9 +14,9 @@ internal static partial class Interop
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IPicture
         {
-            IntPtr Handle { get; }
+            uint Handle { get; }
 
-            IntPtr hPal { get; }
+            uint hPal { get; }
 
             /// <remarks>
             ///  This is actually <see cref="PICTYPE"/>, but we can't describe it as such.
@@ -29,6 +29,9 @@ internal static partial class Interop
 
             int Height { get; }
 
+/*
+ *  We currently don't use the rest of the methods here. Keeping them undefined to make the RCW smaller.
+ * 
             void Render(
                 IntPtr hDC,
                 int x,
@@ -41,21 +44,22 @@ internal static partial class Interop
                 long cySrc,
                 ref RECT pRcWBounds);
 
-            void SetHPal(IntPtr hPal);
+            void SetHPal(uint hPal);
 
-            IntPtr CurDC { get; }
+            uint CurDC { get; }
 
-            IntPtr SelectPicture(IntPtr hDC, out IntPtr phDCOut);
+            uint SelectPicture(IntPtr hDC, out IntPtr phDCOut);
 
             BOOL KeepOriginalFormat { get; set; }
 
             void PictureChanged();
 
             int SaveAsFile(
-                /* opt IStream */ IntPtr pStream,
+                IntPtr pStream, // opt IStream
                 BOOL fSaveMemCopy);
 
             uint Attributes { get; }
+*/
         }
     }
 }

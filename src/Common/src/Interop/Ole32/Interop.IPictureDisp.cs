@@ -12,29 +12,24 @@ internal static partial class Interop
         [ComImport()]
         [Guid("7BF80981-BF32-101A-8BBB-00AA00300CAB")]
         [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
-        public interface IPictureDisp
+        internal unsafe interface IPictureDisp
         {
-            IntPtr Handle { get; }
+            uint Handle { get; }
 
-            IntPtr hPal { get; }
+            uint hPal { get; }
 
-            PICTYPE Type { [return: MarshalAs(UnmanagedType.I2)] get; }
+            /// <remarks>
+            ///  This is actually <see cref="PICTYPE"/>, but we can't describe it as such.
+            ///  We want <see cref="PICTYPE"/> to be <see langword="uint"/> so that
+            ///  <see cref="PICTDESC"/> is blittable.
+            /// </remarks>
+            short Type { get; }
 
             int Width { get; }
 
             int Height { get; }
 
-            void Render(
-                IntPtr hDC,
-                int x,
-                int y,
-                int cx,
-                int cy,
-                long xSrc,
-                long ySrc,
-                long cxSrc,
-                long cySrc,
-                ref RECT pRcWBounds);
+            // There are other methods, but we don't explicitly use them. See IPicture.
         }
     }
 }
