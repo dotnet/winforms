@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -431,13 +432,13 @@ namespace System.Windows.Forms
 
                     // Make sure this column has already been added to the ListView, else just return width
                     //
-                    IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), NativeMethods.LVM_GETHEADER, 0, 0);
+                    IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.GETHEADER, 0, 0);
                     if (hwndHdr != IntPtr.Zero)
                     {
                         int nativeColumnCount = (int)UnsafeNativeMethods.SendMessage(new HandleRef(listview, hwndHdr), NativeMethods.HDM_GETITEMCOUNT, 0, 0);
                         if (Index < nativeColumnCount)
                         {
-                            width = (int)UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), NativeMethods.LVM_GETCOLUMNWIDTH, Index, 0);
+                            width = (int)UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.GETCOLUMNWIDTH, Index, 0);
                         }
                     }
                 }
@@ -516,7 +517,7 @@ namespace System.Windows.Forms
         {
             if (listview.IsHandleCreated && !listview.Disposing)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), NativeMethods.LVM_SETCOLUMNORDERARRAY, cols.Length, cols);
+                UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.SETCOLUMNORDERARRAY, cols.Length, cols);
             }
         }
 

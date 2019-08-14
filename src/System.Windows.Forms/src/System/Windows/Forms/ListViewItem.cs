@@ -11,6 +11,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -848,7 +849,7 @@ namespace System.Windows.Forms
                     lv.Focus();
                 }
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), NativeMethods.LVM_EDITLABEL, Index, 0);
+                UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), (int)LVM.EDITLABEL, Index, 0);
             }
         }
 
@@ -1050,13 +1051,13 @@ namespace System.Windows.Forms
                 lvItem.mask |= NativeMethods.LVIF_GROUPID;
                 lvItem.iGroupId = listView.GetNativeGroupId(this);
 
-                Debug.Assert(!updateOwner || listView.SendMessage(NativeMethods.LVM_ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
-                Debug.Assert(!updateOwner || listView.SendMessage(NativeMethods.LVM_HASGROUP, lvItem.iGroupId, 0) != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
+                Debug.Assert(!updateOwner || listView.SendMessage((int)LVM.ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
+                Debug.Assert(!updateOwner || listView.SendMessage((int)LVM.HASGROUP, lvItem.iGroupId, 0) != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
             }
 
             if (updateOwner)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_SETITEM, 0, ref lvItem);
+                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.SETITEM, 0, ref lvItem);
             }
         }
 
@@ -1085,7 +1086,7 @@ namespace System.Windows.Forms
                 }
 
                 lvItem.iItem = displayIndex;
-                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_GETITEM, 0, ref lvItem);
+                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.GETITEM, 0, ref lvItem);
 
                 // Update this class' information
                 if (checkSelection)
