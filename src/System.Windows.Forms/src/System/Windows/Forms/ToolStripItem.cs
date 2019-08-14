@@ -4596,10 +4596,6 @@ namespace System.Windows.Forms
                     {
                         // Return the owner item as the accessible parent.
                         ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown();
-                        if (dropDown.OwnerItem != null)
-                        {
-                            return dropDown.OwnerItem.AccessibilityObject;
-                        }
                         return dropDown.AccessibilityObject;
                     }
                     return (Owner.Parent != null) ? Owner.Parent.AccessibilityObject : base.Parent;

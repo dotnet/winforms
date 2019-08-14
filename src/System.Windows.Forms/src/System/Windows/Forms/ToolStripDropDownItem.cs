@@ -943,22 +943,6 @@ namespace System.Windows.Forms
 
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                    int childCount = GetChildCount();
-                    if (childCount > 0)
-                    {
-                        return GetChildFragment(0);
-                    }
-
-                    return null;
-                case UnsafeNativeMethods.NavigateDirection.LastChild:
-                    childCount = GetChildCount();
-                    if (childCount > 0)
-                    {
-                        return GetChildFragment(childCount - 1);
-                    }
-
-                    return null;
                 case UnsafeNativeMethods.NavigateDirection.NextSibling:
                 case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
                     if (!(owner.Owner is ToolStripDropDown dropDown))

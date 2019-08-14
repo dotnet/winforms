@@ -2364,6 +2364,21 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
+            internal override object GetPropertyValue(int propertyID)
+            {
+                switch (propertyID)
+                {
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_MenuControlTypeId;
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
             public override string Name
             {
                 get
@@ -2377,12 +2392,9 @@ namespace System.Windows.Forms
                         return name;
                     }
 
-                    // NOT localized for testing purposes.  Localizers can use AccessibleName.
-                    name = "DropDown";
-
                     if (owner.OwnerItem != null && owner.OwnerItem.AccessibilityObject.Name != null)
                     {
-                        name = owner.OwnerItem.AccessibilityObject.Name + name;
+                        name = owner.OwnerItem.AccessibilityObject.Name;
                     }
 
                     return name;
