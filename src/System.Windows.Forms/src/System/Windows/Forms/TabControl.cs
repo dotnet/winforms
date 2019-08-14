@@ -2203,7 +2203,7 @@ namespace System.Windows.Forms
                             }
                             break;
                         case NativeMethods.TTN_GETDISPINFO:
-                            // Setting the max width has the added benefit of enabling Multiline tool tips!
+                            // Setting the max width has the added benefit of enabling Multiline tool tips
                             User32.SendMessageW(nmhdr.hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;

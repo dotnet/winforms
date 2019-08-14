@@ -6539,7 +6539,7 @@ namespace System.Windows.Forms
                             ListViewItem lvi = Items[infoTip.item];
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
-                                // Setting the max width has the added benefit of enabling multiline tool tips!
+                                // Setting the max width has the added benefit of enabling multiline tool tips
                                 User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.

@@ -1733,10 +1733,6 @@ namespace System.Windows.Forms
                     switch (note.code)
                     {
                         case NativeMethods.TTN_NEEDTEXT:
-                            // MSDN:
-                            // Setting the max width has the added benefit of enabling multiline
-                            // tool tips!
-
                             WmNotifyNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

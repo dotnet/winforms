@@ -1819,7 +1819,7 @@ namespace System.Windows.Forms
                                      NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
                                      NativeMethods.SWP_NOACTIVATE);
 
-                // Setting the max width has the added benefit of enabling multiline tool tips!
+                // Setting the max width has the added benefit of enabling multiline tool tips
                 User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
