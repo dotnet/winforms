@@ -1828,6 +1828,11 @@ namespace System.Windows.Forms
                     // once in the combobox and once here.
                     if (fireSetFocus)
                     {
+                        if (!DesignMode && childEdit != null && m.HWnd == childEdit.Handle)
+                        {
+                            WmImeSetFocus();
+                        }
+
                         InvokeGotFocus(this, EventArgs.Empty);
                     }
 
