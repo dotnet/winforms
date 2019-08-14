@@ -6539,13 +6539,8 @@ namespace System.Windows.Forms
                             ListViewItem lvi = Items[infoTip.item];
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
-
-                                // MSDN:
-                                // Setting the max width has the added benefit of enabling multiline
-                                // tool tips!
-                                //
-
-                                UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                                // Setting the max width has the added benefit of enabling multiline tool tips
+                                User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves

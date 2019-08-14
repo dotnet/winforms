@@ -1784,7 +1784,7 @@ namespace System.Windows.Forms
         {
             if (toolTip != null)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(toolTip, toolTip.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(toolTip, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
                 controlToolTipText = toolTipText;
             }
@@ -2992,7 +2992,7 @@ namespace System.Windows.Forms
                         Rectangle bounds = tn.Bounds;
                         bounds.Location = PointToScreen(bounds.Location);
 
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, tooltipHandle), NativeMethods.TTM_ADJUSTRECT, 1, ref bounds);
+                        User32.SendMessageW(tooltipHandle, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), bounds);
                         SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHandle),
                                 NativeMethods.HWND_TOPMOST, bounds.Left, bounds.Top, 0, 0, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER);
                         return true;
@@ -3033,10 +3033,9 @@ namespace System.Windows.Forms
             ttt.hinst = IntPtr.Zero;
 
             // RightToLeft reading order
-            //
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= NativeMethods.TTF_RTLREADING;
+                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
             }
             Marshal.StructureToPtr(ttt, m.LParam, false);
         }
@@ -3271,11 +3270,8 @@ namespace System.Windows.Forms
                     switch (nmhdr.code)
                     {
                         case NativeMethods.TTN_GETDISPINFO:
-                            // MSDN:
-                            // Setting the max width has the added benefit of enabling multiline
-                            // tool tips!
-                            //
-                            UnsafeNativeMethods.SendMessage(new HandleRef(nmhdr, nmhdr.hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                            // Setting the max width has the added benefit of enabling multiline tool tips
+                            User32.SendMessageW(nmhdr.hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

@@ -848,13 +848,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                NativeMethods.TOOLINFO_T toolInfo = new NativeMethods.TOOLINFO_T();
-                toolInfo.cbSize = Marshal.SizeOf(toolInfo);
-                toolInfo.hwnd = Handle;
-                toolInfo.uId = item.Id;
-                toolInfo.lpszText = item.Error;
-                toolInfo.uFlags = NativeMethods.TTF_SUBCLASS;
-                UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_ADDTOOL, 0, toolInfo);
+                var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
+                toolInfo.SendMessage(_tipWindow, WindowMessages.TTM_ADDTOOLW);
 
                 Update(timerCaused: false);
             }
@@ -904,9 +899,9 @@ namespace System.Windows.Forms
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     SafeNativeMethods.SetWindowPos(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_SETDELAYTIME, NativeMethods.TTDT_INITIAL, 0);
+                    User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
                 }
 
                 return true;
@@ -1076,11 +1071,8 @@ namespace System.Windows.Forms
 
                 if (_tipWindow != null)
                 {
-                    NativeMethods.TOOLINFO_T toolInfo = new NativeMethods.TOOLINFO_T();
-                    toolInfo.cbSize = Marshal.SizeOf(toolInfo);
-                    toolInfo.hwnd = Handle;
-                    toolInfo.uId = item.Id;
-                    UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_DELTOOL, 0, toolInfo);
+                    var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
+                    info .SendMessage(_tipWindow, WindowMessages.TTM_DELTOOLW);
                 }
 
                 if (items.Count == 0)
@@ -1179,18 +1171,14 @@ namespace System.Windows.Forms
 
                         if (_tipWindow != null)
                         {
-                            NativeMethods.TOOLINFO_T toolInfo = new NativeMethods.TOOLINFO_T();
-                            toolInfo.cbSize = Marshal.SizeOf(toolInfo);
-                            toolInfo.hwnd = Handle;
-                            toolInfo.uId = item.Id;
-                            toolInfo.lpszText = item.Error;
-                            toolInfo.rect = iconBounds;
-                            toolInfo.uFlags = NativeMethods.TTF_SUBCLASS;
+                            ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
                             if (_provider.RightToLeft)
                             {
-                                toolInfo.uFlags |= NativeMethods.TTF_RTLREADING;
+                                flags |= ComCtl32.TTF.RTLREADING;
                             }
-                            UnsafeNativeMethods.SendMessage(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.TTM_SETTOOLINFO, 0, toolInfo);
+
+                            var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, flags, item.Error, iconBounds);
+                            toolInfo.SendMessage(_tipWindow, WindowMessages.TTM_SETTOOLINFOW);
                         }
 
                         if (timerCaused && item.BlinkPhase > 0)

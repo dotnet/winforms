@@ -1628,7 +1628,7 @@ namespace System.Windows.Forms
         ///  this control binds to rectangular regions, instead of
         ///  full controls.
         /// </summary>
-        private class ControlToolTip
+        private class ControlToolTip : IHandle
         {
             public class Tool
             {
@@ -1775,35 +1775,31 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0)
                 {
-                    int ret;
                     StatusBar p = (StatusBar)parent;
 
-                    if (p.ToolTipSet)
-                    {
-                        ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(p.MainToolTip, p.MainToolTip.Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
-                    }
-                    else
-                    {
-                        ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
-                    }
-                    if (ret == 0)
+                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
                 }
             }
+
             private void RemoveTool(Tool tool)
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_DELTOOL, 0, GetMinTOOLINFO(tool));
+                    ComCtl32.ToolInfoWrapper info = GetMinTOOLINFO(tool);
+                    info.SendMessage(this, WindowMessages.TTM_DELTOOLW);
                 }
             }
+
             private void UpdateTool(Tool tool)
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTOOLINFO, 0, GetTOOLINFO(tool));
+                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    info.SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1823,10 +1819,8 @@ namespace System.Windows.Forms
                                      NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
                                      NativeMethods.SWP_NOACTIVATE);
 
-                // Setting the max width has the added benefit of enabling multiline
-                // tool tips!
-                //
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                // Setting the max width has the added benefit of enabling multiline tool tips
+                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>
@@ -1856,48 +1850,36 @@ namespace System.Windows.Forms
             ///  required data to uniquely identify a region. This is used primarily
             ///  for delete operations. NOTE: This cannot force the creation of a handle.
             /// </summary>
-            private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool)
+            private ComCtl32.ToolInfoWrapper GetMinTOOLINFO(Tool tool)
             {
-                NativeMethods.TOOLINFO_T ti = new NativeMethods.TOOLINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>(),
-                    hwnd = parent.Handle
-                };
                 if ((int)tool.id < 0)
                 {
                     AssignId(tool);
                 }
-                StatusBar p = (StatusBar)parent;
-                if (p != null && p.ToolTipSet)
-                {
-                    ti.uId = parent.Handle;
-                }
-                else
-                {
-                    ti.uId = tool.id;
-                }
-                return ti;
+
+                return new ComCtl32.ToolInfoWrapper(
+                    parent,
+                    id: parent is StatusBar sb ? sb.Handle : tool.id);
             }
 
             /// <summary>
             ///  Returns a detailed TOOLINFO_T structure that represents the specified
             ///  region. NOTE: This may force the creation of a handle.
             /// </summary>
-            private NativeMethods.TOOLINFO_T GetTOOLINFO(Tool tool)
+            private ComCtl32.ToolInfoWrapper GetTOOLINFO(Tool tool)
             {
-                NativeMethods.TOOLINFO_T ti = GetMinTOOLINFO(tool);
-                ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
-                ti.uFlags |= NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
+                ComCtl32.ToolInfoWrapper ti = GetMinTOOLINFO(tool);
+                ti.Info.uFlags |= ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
 
                 // RightToLeft reading order
                 Control richParent = parent;
                 if (richParent != null && richParent.RightToLeft == RightToLeft.Yes)
                 {
-                    ti.uFlags |= NativeMethods.TTF_RTLREADING;
+                    ti.Info.uFlags |= ComCtl32.TTF.RTLREADING;
                 }
 
-                ti.lpszText = tool.text;
-                ti.rect = tool.rect;
+                ti.Text = tool.text;
+                ti.Info.rect = tool.rect;
                 return ti;
             }
 
