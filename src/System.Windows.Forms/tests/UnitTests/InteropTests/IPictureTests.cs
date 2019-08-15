@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Forms.Internal;
+using System.Reflection;
+using System.Windows.Forms.ComponentModel.Com2Interop;
 using Xunit;
-using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests.InteropTests
@@ -21,8 +21,8 @@ namespace System.Windows.Forms.Tests.InteropTests
             Assert.NotNull(picture);
             Assert.Equal(PICTYPE.ICON, (PICTYPE)picture.Type);
 
-            Assert.Equal(arrow.Size.Height, HimetricToPixelY(picture.Height));
-            Assert.Equal(arrow.Size.Width, HimetricToPixelX(picture.Width));
+            Assert.Equal(arrow.Size.Height, GdiHelper.HimetricToPixelY(picture.Height));
+            Assert.Equal(arrow.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
         }
 
         [Fact]
@@ -34,8 +34,8 @@ namespace System.Windows.Forms.Tests.InteropTests
             Assert.NotNull(picture);
             Assert.Equal(PICTYPE.BITMAP, (PICTYPE)picture.Type);
 
-            Assert.Equal(bitmap.Size.Height, HimetricToPixelY(picture.Height));
-            Assert.Equal(bitmap.Size.Width, HimetricToPixelX(picture.Width));
+            Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY(picture.Height));
+            Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
         }
 
         [Fact]
@@ -47,8 +47,8 @@ namespace System.Windows.Forms.Tests.InteropTests
             Assert.NotNull(picture);
             Assert.Equal(PICTYPE.BITMAP, (PICTYPE)picture.Type);
 
-            Assert.Equal(bitmap.Size.Height, HimetricToPixelY(picture.Height));
-            Assert.Equal(bitmap.Size.Width, HimetricToPixelX(picture.Width));
+            Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY(picture.Height));
+            Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
         }
 
         [Fact]
@@ -73,24 +73,6 @@ namespace System.Windows.Forms.Tests.InteropTests
             Assert.NotNull(image);
             Assert.Equal(bitmap.Size, image.Size);
         }
-
-        static IPictureTests()
-        {
-            using ScreenDC dc = ScreenDC.Create();
-            s_logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
-            s_logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
-        }
-
-        private static long s_logPixelsX;
-        private static long s_logPixelsY;
-        // private const int TwipsPerInch = 1440;
-        private const int HiMetricPerInch = 2540;
-
-        private static int HimetricToPixelX(int himetric)
-            => (int)((s_logPixelsX * himetric) / HiMetricPerInch);
-        private static int HimetricToPixelY(int himetric)
-            => (int)((s_logPixelsY * himetric) / HiMetricPerInch);
-
 
         internal class AxHostAccess : AxHost
         {

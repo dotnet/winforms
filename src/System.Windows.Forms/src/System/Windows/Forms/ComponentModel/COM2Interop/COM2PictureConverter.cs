@@ -17,7 +17,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private object _lastManaged;
         private IntPtr _lastNativeHandle;
         private WeakReference _pictureRef;
-        private IntPtr _lastPalette = IntPtr.Zero;
 
         private Type _pictureType = typeof(Bitmap);
 
@@ -60,8 +59,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return _lastManaged;
             }
 
-            _lastNativeHandle = handle;
-
             if (handle != IntPtr.Zero)
             {
                 switch ((Ole32.PICTYPE)nativePicture.Type)
@@ -76,8 +73,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         break;
                     default:
                         Debug.Fail("Unknown picture type");
-                        break;
+                        return null;
                 }
+
+                _lastNativeHandle = handle;
                 _pictureRef = new WeakReference(nativePicture);
             }
             else
@@ -93,39 +92,42 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
-            // don't cancel the set
+            // Don't cancel the set
             cancelSet = false;
 
-            if (_lastManaged != null && _lastManaged.Equals(managedValue) && _pictureRef != null && _pictureRef.IsAlive)
+            if (_lastManaged?.Equals(managedValue) == true)
             {
-                return _pictureRef.Target;
+                object target = _pictureRef?.Target;
+                if (target != null)
+                {
+                    return target;
+                }
             }
 
             // We have to build an IPicture
-
-            _lastManaged = managedValue;
-
             if (managedValue != null)
             {
-                Ole32.PICTDESC pictdesc = default;
                 BOOL own = BOOL.FALSE;
 
-                if (_lastManaged is Icon icon)
+                Ole32.PICTDESC pictdesc;
+                if (managedValue is Icon icon)
                 {
                     pictdesc = Ole32.PICTDESC.FromIcon(icon, copy: false);
                 }
-                else if (_lastManaged is Bitmap bitmap)
+                else if (managedValue is Bitmap bitmap)
                 {
-                    pictdesc = Ole32.PICTDESC.FromBitmap(bitmap, _lastPalette);
+                    pictdesc = Ole32.PICTDESC.FromBitmap(bitmap);
                     own = BOOL.TRUE;
                 }
                 else
                 {
                     Debug.Fail($"Unknown Image type: {managedValue.GetType().Name}");
+                    return null;
                 }
 
                 Guid iid = typeof(Ole32.IPicture).GUID;
                 Ole32.IPicture pict = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(ref pictdesc, ref iid, own);
+                _lastManaged = managedValue;
                 _lastNativeHandle = (IntPtr)pict.Handle;
                 _pictureRef = new WeakReference(pict);
                 return pict;
@@ -133,7 +135,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             else
             {
                 _lastManaged = null;
-                _lastNativeHandle = _lastPalette = IntPtr.Zero;
+                _lastNativeHandle = IntPtr.Zero;
                 _pictureRef = null;
                 return null;
             }
