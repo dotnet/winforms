@@ -176,4 +176,5 @@ stages:
         -TsaIterationPath "DevDiv"
         -TsaRepositoryName "Winforms"
         -TsaCodebaseName "Winforms"
+        -TsaOnboard $True
         -TsaPublish $True'
