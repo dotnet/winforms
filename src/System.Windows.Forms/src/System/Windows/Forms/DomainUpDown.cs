@@ -281,10 +281,7 @@ namespace System.Windows.Forms
             if (matchIndex != -1)
             {
                 // Found a match, so select this value
-                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-                {
-                    domainIndex = matchIndex;
-                }
+                domainIndex = matchIndex;
                 SelectIndex(matchIndex);
             }
             else
@@ -541,12 +538,6 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // legacy behaviour. we do not want to void operation if domainIndex was -1 in latest runtime.
-            if (domainIndex == -1 && LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-            {
-                return;
-            }
-
             // If the user has entered text, attempt to match it to the domain list
             int matchIndex = -1;
             if (UserEdit)
@@ -556,12 +547,7 @@ namespace System.Windows.Forms
             if (matchIndex != -1)
             {
                 // Found a match, so set the domain index accordingly
-                //In legacy (.NET framework 4.7.1 and below), we were just updating selected index but no actualy change in the spinner.
-                //with new runtime, we update the selected index and perform spinner action.
-                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-                {
-                    domainIndex = matchIndex;
-                }
+                domainIndex = matchIndex;
                 SelectIndex(matchIndex);
             }
             else

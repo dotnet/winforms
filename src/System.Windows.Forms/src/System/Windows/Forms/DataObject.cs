@@ -2151,7 +2151,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class BitmapBinder : SerializationBinder
         {
-            // Bitmap type lives in defferent assemblies in the .Net Framework and in .Net Core.
+            // Bitmap type lives in defferent assemblies in the .NET Framework and in .NET Core.
             // However we allow desktop content to be deserializated in Core and Core content
             // deserialized on desktop. To support this roundtrip,
             // Bitmap type identity is unified to the desktop type during serialization

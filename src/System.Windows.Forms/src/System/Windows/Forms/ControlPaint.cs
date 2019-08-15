@@ -176,7 +176,7 @@ namespace System.Windows.Forms
         ///  Creates a 16-bit color bitmap.
         ///  Sadly, this must be public for the designer to get at it.
         ///  From MSDN:
-        ///  This member supports the .NET infrastructure and is not intended to be used directly from your code.
+        ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
         /// </summary>
         public static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
         {
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
         ///  de-allocating the HBITMAP with Windows.DeleteObject(handle).
         ///  If the image uses transparency, the background will be filled with the specified color.
         ///  From MSDN:
-        ///  This member supports the .NET infrastructure and is not intended to be used directly from your code.
+        ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
         /// </summary>
         public static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
         {
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
         ///  de-allocating the HBITMAP with Windows.DeleteObject(handle).
         ///  If the image uses transparency, the background will be filled with the specified color.
         ///  From MSDN:
-        ///  This member supports the .NET infrastructure and is not intended to be used directly from your code.
+        ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
         /// </summary>
         public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask)
         {

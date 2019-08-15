@@ -687,14 +687,13 @@ namespace System.Windows.Forms
         ///  Process a command key.
         ///  Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
         ///  Winforms TextBox supports this in .NET.
-            ///  m - the current windows message
-        ///  keyData - bitmask containing one or more keys
-            /// </summary>
+        /// </summary>
+        /// <param name="m">The current windows message.</param>
+        /// <param name="keyData">The bitmask containing one or more keys.</param>
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
-            if (!returnValue && Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox
-                && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
+            if (!returnValue && Multiline && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
             {
                 SelectAll();
                 return true;

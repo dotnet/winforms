@@ -333,21 +333,18 @@ namespace System.Windows.Forms
                 // Check for library
                 if (moduleHandle == IntPtr.Zero)
                 {
-                    string richEditControlDllVersion = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? Libraries.RichEdit : Libraries.RichEdit41;
+                    string richEditControlDllVersion = Libraries.RichEdit41;
                     moduleHandle = Kernel32.LoadLibraryFromSystemPathIfAvailable(richEditControlDllVersion);
 
                     int lastWin32Error = Marshal.GetLastWin32Error();
 
                     // This code has been here since the inception of the project,
                     // we can't determine why we have to compare w/ 32 here.
-                    // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10
+                    // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space)
                     if ((ulong)moduleHandle < (ulong)32)
                     {
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
                     }
-
-                    //Determine whether we're Rich Edit 2.0 or 3.0: see
-                    //http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/richedit/richeditcontrols/aboutricheditcontrols.asp
 
                     StringBuilder pathBuilder = UnsafeNativeMethods.GetModuleFileNameLongPath(new HandleRef(null, moduleHandle));
                     string path = pathBuilder.ToString();
@@ -365,7 +362,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = LocalAppContextSwitches.DoNotLoadLatestRichEditControl ? RichTextBoxConstants.WC_RICHEDITW : RichTextBoxConstants.WC_RICHEDITW_41;
+                cp.ClassName = RichTextBoxConstants.WC_RICHEDITW_41;
 
                 if (Multiline)
                 {

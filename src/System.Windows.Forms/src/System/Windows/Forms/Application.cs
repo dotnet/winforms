@@ -707,12 +707,6 @@ namespace System.Windows.Forms
             {
                 if (VisualStyleInformation.IsSupportedByOS)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)VisualStyleState.NoneEnabled, (int)VisualStyleState.ClientAndNonClientAreasEnabled)
-                        && LocalAppContextSwitches.EnableVisualStyleValidation)
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStyleState));
-                    }
-
                     SafeNativeMethods.SetThemeAppProperties((int)value);
 
                     //248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
@@ -3511,7 +3505,7 @@ namespace System.Windows.Forms
                 // If message filter is added or removed inside the user-provided PreFilterMessage function,
                 // and user code pumps messages, we might re-enter ProcessFilter on the same stack, we
                 // should not update the snapshot until the next message.
-                if (messageFilters != null && !GetState(STATE_FILTERSNAPSHOTVALID) && (LocalAppContextSwitches.DontSupportReentrantFilterMessage || inProcessFilters == 0))
+                if (messageFilters != null && !GetState(STATE_FILTERSNAPSHOTVALID) && inProcessFilters == 0)
                 {
                     messageFilterSnapshot.Clear();
                     if (messageFilters.Count > 0)
