@@ -749,6 +749,11 @@ namespace System.Windows.Forms
                 }
 
                 _window.CreateHandle(cp);
+
+                if (SystemInformation.HighContrast)
+                {
+                    SafeNativeMethods.SetWindowTheme(Handle, "", "");
+                }
             }
             finally
             {
