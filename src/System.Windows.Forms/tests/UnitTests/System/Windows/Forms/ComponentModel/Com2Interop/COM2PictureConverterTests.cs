@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
 
             // The converter asserts, but doesn't throw. Suppress asserts so
             // that we can validate it returns null as expected.
-            using (new NoAssertListener())
+            using (new NoAssertContext())
             {
                 Assert.Null(Instance.ConvertNativeToManaged(mock.Object, null));
             }
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
         {
             // The converter asserts, but doesn't throw. Suppress asserts so
             // that we can validate it returns null as expected.
-            using (new NoAssertListener())
+            using (new NoAssertContext())
             {
                 bool cancelSet = true;
                 Assert.Null(Instance.ConvertManagedToNative(new object(), null, ref cancelSet));

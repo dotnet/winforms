@@ -4,6 +4,13 @@
     <AssemblyName>InternalUtilitiesForTests</AssemblyName> 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Common\Interop\Gdi32\Interop.GetDeviceCaps.cs" />
+    <Compile Include="..\..\src\Interop\Interop.Libraries.cs" Link="Common\Interop\Interop.Libraries.cs" />
+    <Compile Include="..\..\src\Interop\User32\Interop.GetDC.cs" Link="Common\Interop\User32\Interop.GetDC.cs" />
+    <Compile Include="..\..\src\Interop\User32\Interop.ReleaseDC.cs" Link="Common\Interop\User32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\src\ScreenDC.cs" Link="Common\ScreenDC.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
@@ -13,7 +20,4 @@
     <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
-  </ItemGroup>
 </Project>
