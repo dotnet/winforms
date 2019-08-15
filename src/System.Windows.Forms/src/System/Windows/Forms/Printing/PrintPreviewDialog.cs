@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1248,7 +1248,14 @@ namespace System.Windows.Forms
             separatorToolStripSeparator1,
             closeToolStripButton});
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+
+            // in High Contrast mode the color scheme provided by ToolStripSystemRenderer 
+            // is not sufficiently contrast; so disable it in High Contrast mode.
+            if (!SystemInformation.HighContrast)
+            {
+                toolStrip1.RenderMode = ToolStripRenderMode.System;
+            }
+
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
             //
