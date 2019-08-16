@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Facade.csproj" />
+    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
+    <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
+  </ItemGroup>
+
+</Project>
