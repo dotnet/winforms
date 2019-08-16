@@ -26,6 +26,6 @@ stages:
   parameters:
     ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
       # these parameters should be set for running in the Internal / Non-Public
-      agentPoolName: NetCoreInternal-Int-Pool
+      agentPoolName: NetCoreInternal-Pool
       agentPool: BuildPool.Windows.10.Amd64.VS2019
       runAsPublic: false
