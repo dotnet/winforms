@@ -37,6 +37,8 @@ namespace WinformsControlsTest
                 // Sort the items in the list in ascending order.
                 Sorting = SortOrder.Ascending
             };
+            listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
+            listView1.Click += listView1_Click;
 
             // Create three items and three sets of subitems for each item.
             ListViewItem item1 = new ListViewItem("item1", 0)
@@ -66,6 +68,7 @@ namespace WinformsControlsTest
             listView1.Columns.Add("Column 2", -2, HorizontalAlignment.Left);
             listView1.Columns.Add("Column 3", -2, HorizontalAlignment.Left);
             listView1.Columns.Add("Column 4", -2, HorizontalAlignment.Center);
+            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             //Add the items to the ListView.
             listView1.Items.AddRange(new ListViewItem[] { item1, item2, item3 });
@@ -94,6 +97,16 @@ namespace WinformsControlsTest
             // Add the ListView to the control collection.
             Controls.Add(listView1);
             listView1.Dock = DockStyle.Bottom;
+        }
+
+        private void listView1_Click(object sender, System.EventArgs e)
+        {
+            MessageBox.Show(this, "listView1_Click", "event");
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            MessageBox.Show(this, "listView1_SelectedIndexChanged", "event");
         }
     }
 }

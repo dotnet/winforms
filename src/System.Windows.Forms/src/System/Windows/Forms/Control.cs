@@ -3271,11 +3271,9 @@ namespace System.Windows.Forms
                     value.AddReflectChild();
                 }
 
+                Control existing = _reflectParent as Control;
                 _reflectParent = value;
-                if (ReflectParent is Control c)
-                {
-                    c.RemoveReflectChild();
-                }
+                existing?.RemoveReflectChild();
             }
         }
 

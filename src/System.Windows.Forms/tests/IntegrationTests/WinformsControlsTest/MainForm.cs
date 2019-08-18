@@ -107,5 +107,10 @@ namespace WinformsControlsTest
         {
             new PropertyGrid(new UserControlWithCollectionEditors()).Show();
         }
+
+        private void RichTextBoxes_Click(object sender, EventArgs e)
+        {
+            new RichTextBoxes().Show();
+        }
     }
 }
