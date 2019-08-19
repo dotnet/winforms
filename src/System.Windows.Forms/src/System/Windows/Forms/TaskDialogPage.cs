@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         private TaskDialogCustomButtonStyle _customButtonStyle;
         private TaskDialogIcon? _icon;
         private string? _title;
-        private string? _instruction;
+        private string? _mainInstruction;
         private string? _text;
         private int _width;
         private bool _boundIconIsFromHandle;
@@ -286,9 +286,9 @@ namespace System.Windows.Forms
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
-        public string? Instruction
+        public string? MainInstruction
         {
-            get => _instruction;
+            get => _mainInstruction;
 
             set
             {
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
 
                 BoundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, value);
 
-                _instruction = value;
+                _mainInstruction = value;
             }
         }
 
