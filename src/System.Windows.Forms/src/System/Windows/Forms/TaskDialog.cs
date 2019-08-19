@@ -166,7 +166,7 @@ namespace System.Windows.Forms
         /// This will be set the first time the
         /// <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler returns
         /// <see cref="TaskDialogNativeMethods.S_OK"/> to cache the button instance,
-        /// so that <see cref="Show(IntPtr)"/> can then return it.
+        /// so that <see cref="ShowDialog(IntPtr)"/> can then return it.
         /// 
         /// Additionally, this is used to check if there was already a 
         /// <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler that
@@ -406,7 +406,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value that indicates whether <see cref="Show(IntPtr)"/> is
+        /// Gets a value that indicates whether <see cref="ShowDialog(IntPtr)"/> is
         /// currently being called.
         /// </summary>
         internal bool IsShown
@@ -459,14 +459,14 @@ namespace System.Windows.Forms
         /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
         /// icon to display in the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
-        public static TaskDialogResult Show(
+        public static TaskDialogResult ShowDialog(
             string? text,
             string? instruction = null,
             string? title = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
-            return Show(IntPtr.Zero, text, instruction, title, buttons, icon);
+            return ShowDialog(IntPtr.Zero, text, instruction, title, buttons, icon);
         }
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
         /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
         /// icon to display in the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
-        public static TaskDialogResult Show(
+        public static TaskDialogResult ShowDialog(
             IWin32Window owner,
             string? text,
             string? instruction = null,
@@ -490,7 +490,7 @@ namespace System.Windows.Forms
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
-            return Show(
+            return ShowDialog(
                 owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
                 text, instruction, title, buttons, icon);
         }
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
         /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
         /// icon to display in the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
-        public static TaskDialogResult Show(
+        public static TaskDialogResult ShowDialog(
             IntPtr hwndOwner,
             string? text,
             string? instruction = null,
@@ -528,7 +528,7 @@ namespace System.Windows.Forms
                 StandardButtons = buttons
             });
 
-            return ((TaskDialogStandardButton)dialog.Show(hwndOwner)).Result;
+            return ((TaskDialogStandardButton)dialog.ShowDialog(hwndOwner)).Result;
         }
 
         private static void FreeConfig(IntPtr ptrToFree)
@@ -569,9 +569,9 @@ namespace System.Windows.Forms
         /// </remarks>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
-        public TaskDialogButton Show()
+        public TaskDialogButton ShowDialog()
         {
-            return Show(IntPtr.Zero);
+            return ShowDialog(IntPtr.Zero);
         }
 
         /// <summary>
@@ -584,9 +584,9 @@ namespace System.Windows.Forms
         /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
-        public TaskDialogButton Show(IWin32Window owner)
+        public TaskDialogButton ShowDialog(IWin32Window owner)
         {
-            return Show(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)));
+            return ShowDialog(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)));
         }
 
         /// <summary>
@@ -602,7 +602,7 @@ namespace System.Windows.Forms
         /// </param>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
-        public TaskDialogButton Show(IntPtr hwndOwner)
+        public TaskDialogButton ShowDialog(IntPtr hwndOwner)
         {
             // Recursive Show() is not possible because a TaskDialog instance can only
             // represent a single native dialog.
