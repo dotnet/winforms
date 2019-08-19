@@ -384,6 +384,7 @@ namespace System.Windows.Forms
 
         // ToolTip
         private readonly DataGridViewToolTip toolTipControl;
+        private static readonly int PropToolTip = PropertyStore.CreateKey();
         // the tool tip string we get from cells
         private string toolTipCaption = string.Empty;
 
@@ -3475,6 +3476,26 @@ namespace System.Windows.Forms
             DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
             return (rowState & DataGridViewElementStates.Visible) != 0 &&
                    (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.Visible);
+        }
+
+        internal ToolTip KeyboardToolTip
+        {
+            get
+            {
+                ToolTip toolTip;
+                if (!Properties.ContainsObject(PropToolTip))
+                {
+                    toolTip = new ToolTip();
+                    toolTip.ReshowDelay = 500;
+                    toolTip.InitialDelay = 500;
+                    Properties.SetObject(PropToolTip, toolTip);
+                }
+                else
+                {
+                    toolTip = (ToolTip)Properties.GetObject(PropToolTip);
+                }
+                return toolTip;
+            }
         }
 
         internal LayoutData LayoutInfo

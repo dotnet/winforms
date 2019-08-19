@@ -1448,6 +1448,55 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => cell.GetInheritedStyle(new DataGridViewCellStyle(), -1, true));
         }
 
+        [StaFact]
+        public void DataGridViewCell_GetNeighboringToolsRectangles_ReturnsCorrectRectangles()
+        {
+            DataGridView dataGridView = new DataGridView();
+            dataGridView.Size = new Size(600, 200);
+            dataGridView.CreateControl();
+
+            DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn column2 = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn column3 = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn column4 = new DataGridViewTextBoxColumn();
+
+            dataGridView.Columns.Add(column1);
+            dataGridView.Columns.Add(column2);
+            dataGridView.Columns.Add(column3);
+            dataGridView.Columns.Add(column4);
+
+            dataGridView.Rows.Add();
+            dataGridView.Rows.Add();
+            dataGridView.Rows.Add();
+            dataGridView.Rows.Add();
+
+            dataGridView.Rows[0].Cells[1].Value = "Text";
+            dataGridView.Rows[1].Cells[2].Value = "Text";
+            dataGridView.Rows[1].Cells[3].Value = "Text";
+            dataGridView.Rows[2].Cells[0].Value = "Text";
+            dataGridView.Rows[2].Cells[1].Value = "Text";
+            dataGridView.Rows[2].Cells[3].Value = "Text";
+            dataGridView.Rows[3].Cells[1].Value = "Text";
+            dataGridView.Rows[3].Cells[2].Value = "Text";
+
+            IList<Rectangle> neighbors00 = ((IKeyboardToolTip)dataGridView.Rows[0].Cells[0]).GetNeighboringToolsRectangles();
+            Assert.True(neighbors00.Contains(dataGridView.Rows[0].Cells[1].AccessibilityObject.Bounds));
+            Assert.False(neighbors00.Contains(dataGridView.Rows[1].Cells[1].AccessibilityObject.Bounds));
+            Assert.False(neighbors00.Contains(dataGridView.Rows[1].Cells[0].AccessibilityObject.Bounds));
+
+            IList<Rectangle> neighbors21 = ((IKeyboardToolTip)dataGridView.Rows[2].Cells[1]).GetNeighboringToolsRectangles();
+            Assert.True(neighbors21.Contains(dataGridView.Rows[1].Cells[2].AccessibilityObject.Bounds));
+            Assert.True(neighbors21.Contains(dataGridView.Rows[2].Cells[0].AccessibilityObject.Bounds));
+            Assert.True(neighbors21.Contains(dataGridView.Rows[2].Cells[1].AccessibilityObject.Bounds));
+            Assert.True(neighbors21.Contains(dataGridView.Rows[3].Cells[1].AccessibilityObject.Bounds));
+            Assert.False(neighbors21.Contains(dataGridView.Rows[1].Cells[1].AccessibilityObject.Bounds));
+
+            IList<Rectangle> neighbors33 = ((IKeyboardToolTip)dataGridView.Rows[3].Cells[3]).GetNeighboringToolsRectangles();
+            Assert.True(neighbors33.Contains(dataGridView.Rows[2].Cells[3].AccessibilityObject.Bounds));
+            Assert.True(neighbors33.Contains(dataGridView.Rows[3].Cells[2].AccessibilityObject.Bounds));
+            Assert.False(neighbors33.Contains(dataGridView.Rows[2].Cells[2].AccessibilityObject.Bounds));
+        }
+
         [Fact]
         public void DataGridViewCell_GetPreferredSize_Invoke_ReturnsExpected()
         {

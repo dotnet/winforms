@@ -2842,6 +2842,21 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DefManifestNotFound" xml:space="preserve">
     <value>Default manifest file required to enable visual styles cannot be found.</value>
   </data>
+  <data name="DefaultDataGridViewButtonCellTollTipText" xml:space="preserve">
+    <value>Button</value>
+  </data>
+  <data name="DefaultDataGridViewComboBoxCellTollTipText" xml:space="preserve">
+    <value>ComboBox</value>
+  </data>
+  <data name="DefaultDataGridViewImageCellToolTipText" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="DefaultDataGridViewLinkCellTollTipText" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="DefaultDataGridViewTextBoxCellTollTipText" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="DescriptionBindingNavigator" xml:space="preserve">
     <value>Provides a user interface for navigation and manipulation of data bound to controls on a form.</value>
   </data>

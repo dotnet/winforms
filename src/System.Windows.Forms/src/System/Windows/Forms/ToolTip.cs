@@ -121,7 +121,11 @@ namespace System.Windows.Forms
 
         internal void HideToolTip(IKeyboardToolTip currentTool)
         {
-            Hide(currentTool.GetOwnerWindow());
+            IWin32Window ownerWindow = currentTool.GetOwnerWindow();
+            if (ownerWindow != null)
+            {
+                Hide(ownerWindow);
+            }
         }
 
         /// <summary>
@@ -264,6 +268,11 @@ namespace System.Windows.Forms
                 return _window.Handle;
             }
         }
+
+        /// <summary>
+        ///  Shows if the keyboard tooltip is currently active.
+        /// </summary>
+        internal bool IsActivatedByKeyboard { get; set; }
 
         /// <summary>
         ///  Gets or sets the IsBalloon for the <see cref="ToolTip"/> control.
@@ -814,12 +823,6 @@ namespace System.Windows.Forms
             _tools.Keys.CopyTo(ctls, 0);
             for (int i = 0; i < ctls.Length; i++)
             {
-                // DataGridView manages its own tool tip.
-                if (ctls[i] is DataGridView)
-                {
-                    return;
-                }
-
                 CreateRegion(ctls[i]);
             }
         }
@@ -1528,14 +1531,18 @@ namespace System.Windows.Forms
                 pointY = optimalPoint.Y;
 
                 // Update TipInfo for the tool with optimal position
-                TipInfo tipInfo = (TipInfo)(_tools[tool] ?? _tools[tool.GetOwnerWindow()]);
-                tipInfo.Position = new Point(pointX, pointY);
+                TipInfo tipInfo = (_tools[tool] ?? _tools[tool.GetOwnerWindow()]) as TipInfo;
+                if (tipInfo != null)
+                {
+                    tipInfo.Position = new Point(pointX, pointY);
+                }
 
                 // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip
                 Reposition(optimalPoint, bubbleSize);
             }
 
             SetTrackPosition(pointX, pointY);
+            IsActivatedByKeyboard = true;
             StartTimer(tool.GetOwnerWindow(), duration);
         }
 
@@ -1773,6 +1780,7 @@ namespace System.Windows.Forms
             // Clear off the toplevel control.
             ClearTopLevelControlEvents();
             _topLevelControl = null;
+            IsActivatedByKeyboard = false;
         }
 
         private void BaseFormDeactivate(object sender, EventArgs e)

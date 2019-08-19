@@ -4679,6 +4679,31 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Görsel stilleri etkinleştirmek için gerekli olan varsayılan bildirim dosyası bulunamıyor.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="needs-review-translation">Button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="needs-review-translation">Image</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="new">Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
         <source>Provides a user interface for navigation and manipulation of data bound to controls on a form.</source>
         <target state="translated">Bir formdaki denetimlere bağlı verilere gitmek veya değiştirmek için bir kullanıcı arabirimi sağlar.</target>

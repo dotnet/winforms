@@ -4679,6 +4679,31 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Не найден файл манифеста по умолчанию, необходимый для подключения визуальных стилей.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="needs-review-translation">Button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="needs-review-translation">Image</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="new">Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
         <source>Provides a user interface for navigation and manipulation of data bound to controls on a form.</source>
         <target state="translated">Указывает интерфейс пользователя для навигации и управления данными, привязанными к элементам управления формы.</target>

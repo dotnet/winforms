@@ -980,6 +980,16 @@ namespace System.Windows.Forms
             return cm;
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewComboBoxCellTollTipText;
+            }
+
+            return null;
+        }
+
         private int GetDropDownButtonHeight(Graphics graphics, DataGridViewCellStyle cellStyle)
         {
             int adjustment = 4;

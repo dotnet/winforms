@@ -4679,6 +4679,31 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">找不到啟用視覺化樣式所需的預設資訊清單檔。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="needs-review-translation">Button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="needs-review-translation">Image</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="new">Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
         <source>Provides a user interface for navigation and manipulation of data bound to controls on a form.</source>
         <target state="translated">提供使用者介面，以巡覽及操作繫結至表單上控制項的資料。</target>

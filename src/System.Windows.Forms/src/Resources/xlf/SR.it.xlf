@@ -4679,6 +4679,31 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
         <target state="translated">Il file manifesto predefinito necessario per abilitare gli stili di visualizzazione non è stato trovato.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="needs-review-translation">Button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="needs-review-translation">Image</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="new">Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
         <source>Provides a user interface for navigation and manipulation of data bound to controls on a form.</source>
         <target state="translated">Fornisce un'interfaccia utente per la navigazione e l'elaborazione dei dati associati ai controlli presenti in un form.</target>

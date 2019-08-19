@@ -4679,6 +4679,31 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <target state="translated">Le fichier manifeste par défaut requis pour activer les styles visuels est introuvable.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="needs-review-translation">Button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="needs-review-translation">Image</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="new">Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
         <source>Provides a user interface for navigation and manipulation of data bound to controls on a form.</source>
         <target state="translated">Fournit une interface utilisateur pour la navigation et la manipulation de contrôles liés aux données sur un formulaire.</target>

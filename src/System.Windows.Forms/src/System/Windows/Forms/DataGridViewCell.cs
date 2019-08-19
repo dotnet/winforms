@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,7 +17,7 @@ namespace System.Windows.Forms
     ///  Identifies a cell in the dataGridView.
     /// </summary>
     [TypeConverter(typeof(DataGridViewCellConverter))]
-    public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable
+    public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
         private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
         private const int DATAGRIDVIEWCELL_constrastThreshold = 1000;
@@ -50,9 +51,17 @@ namespace System.Windows.Forms
 
         private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
 
+        /// <summary>
+        /// Contains non-empty neighboring cells around the current cell. 
+        /// Used in <see cref='IKeyboardToolTip.GetNeighboringToolsRectangles'/> method.
+        /// </summary>
+        private readonly List<Rectangle> _nonEmptyNeighbors;
+
         private static readonly Type stringType = typeof(string);        // cache the string type for performance
 
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
+        
+        private bool _useDefaultToolTipText;  //  The tooltip text of this cell has not been set by a customer yet.
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='DataGridViewCell'/> class.
@@ -71,6 +80,8 @@ namespace System.Windows.Forms
 
             propertyStore = new PropertyStore();
             State = DataGridViewElementStates.None;
+            _nonEmptyNeighbors = new List<Rectangle>();
+            _useDefaultToolTipText = true;
         }
 
         ~DataGridViewCell()
@@ -400,6 +411,86 @@ namespace System.Windows.Forms
             get => Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
         }
 
+        #region IKeyboardToolTip implementation
+        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView != null;
+
+        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
+
+        /// <summary>
+        ///  The method looks for 8 cells around the current cell 
+        ///  to find the optimal tooltip position in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
+        ///  The optimal tooltip position is the position outside DataGridView or on top of an empty cell. 
+        ///  This is done so that tooltips do not overlap the text of other cells whenever possible.
+        /// </summary>
+        /// <returns>
+        ///  Non-empty neighboring cells around the current cell.
+        /// </returns>
+        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
+        {
+            _nonEmptyNeighbors.Clear();
+
+            if (DataGridView == null)
+            {
+                return _nonEmptyNeighbors;
+            }
+
+            for (int i = RowIndex - 1; i <= RowIndex + 1; i++)
+            {
+                if (i < 0 || i >= DataGridView.Rows.Count - 1)
+                {
+                    continue;
+                }
+
+                for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
+                {
+                    if (j < 0 || j > DataGridView.Columns.Count - 1
+                        || string.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
+                    {
+                        continue;
+                    }
+
+                    _nonEmptyNeighbors.Add(DataGridView.Rows[i].Cells[j].AccessibilityObject.Bounds);
+                }
+            }
+
+            return _nonEmptyNeighbors;
+        }
+
+        bool IKeyboardToolTip.IsHoveredWithMouse() => false;
+
+        bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView.RightToLeft == RightToLeft.Yes;
+
+        bool IKeyboardToolTip.AllowsToolTip() => true;
+
+        IWin32Window IKeyboardToolTip.GetOwnerWindow() => DataGridView;
+
+        void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
+
+        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip) { }
+
+        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
+
+        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip) { }
+
+        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
+        {
+            if (DataGridView.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
+            {
+                return ErrorText;
+            }
+
+            return ToolTipText;
+        }
+
+        bool IKeyboardToolTip.ShowsOwnToolTip() => true;
+
+        bool IKeyboardToolTip.IsBeingTabbedTo() => IsBeingTabbedTo();
+
+        internal virtual bool IsBeingTabbedTo() => DataGridView.AreCommonNavigationalKeysDown();
+
+        bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => true;
+        #endregion
+
         [Browsable(false)]
         public DataGridViewElementStates InheritedState
         {
@@ -541,7 +632,7 @@ namespace System.Windows.Forms
                 {
                     State = State & ~DataGridViewElementStates.ReadOnly;
                 }
-                
+
                 DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
             }
         }
@@ -750,6 +841,7 @@ namespace System.Windows.Forms
             set
             {
                 ToolTipTextInternal = value;
+                _useDefaultToolTipText = false;
             }
         }
 
@@ -1035,6 +1127,11 @@ namespace System.Windows.Forms
             }
             dataGridViewCell.State = State & ~DataGridViewElementStates.Selected;
             dataGridViewCell.Tag = Tag;
+
+            if (DataGridView != null)
+            {
+                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, DataGridView.KeyboardToolTip);
+            }
         }
 
         public virtual object Clone()
@@ -1631,6 +1728,11 @@ namespace System.Windows.Forms
         protected virtual Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             return Rectangle.Empty;
+        }
+
+        private protected virtual string GetDefaultToolTipText()
+        {
+            return string.Empty;
         }
 
         internal object GetEditedFormattedValue(object value, int rowIndex, ref DataGridViewCellStyle dataGridViewCellStyle, DataGridViewDataErrorContexts context)
@@ -2479,7 +2581,7 @@ namespace System.Windows.Forms
             return new Size(OwningColumn.Thickness, OwningRow.GetHeight(rowIndex));
         }
 
-        private string GetToolTipText(int rowIndex)
+        private protected string GetInternalToolTipText(int rowIndex)
         {
             string toolTipText = ToolTipTextInternal;
             if (DataGridView != null &&
@@ -2487,6 +2589,40 @@ namespace System.Windows.Forms
             {
                 toolTipText = DataGridView.OnCellToolTipTextNeeded(ColumnIndex, rowIndex, toolTipText);
             }
+
+            return toolTipText;
+        }
+
+        private string GetToolTipText(int rowIndex)
+        {
+            string toolTipText = GetInternalToolTipText(rowIndex);
+                                   
+            if (ColumnIndex < 0 || RowIndex < 0)
+            {
+                return toolTipText;  //  Cells in the Unit tests have ColumnIndex & RowIndex < 0 and 
+                                     //  we should return an expected result. It doesn't have an impact on UI cells.
+            }
+
+            if (string.IsNullOrEmpty(toolTipText))
+            {
+                if (!_useDefaultToolTipText)
+                {
+                    return string.Empty;
+                }
+
+                return GetDefaultToolTipText() ?? GetToolTipTextWithoutMnemonic(Value?.ToString());
+            }
+
+            return toolTipText;
+        }
+        
+        private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
+        {
+            if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
+            {
+                toolTipText = string.Join("", toolTipText.Split('&'));
+            }
+
             return toolTipText;
         }
 
@@ -2935,6 +3071,7 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(toolTipText))
             {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                 DataGridView.ActivateToolTip(true /*activate*/, toolTipText, ColumnIndex, rowIndex);
             }
 
@@ -2958,6 +3095,7 @@ namespace System.Windows.Forms
         {
             string errorText = GetErrorText(rowIndex);
             Debug.Assert(!string.IsNullOrEmpty(errorText), "if we entered the cell error area then an error was painted, so we should have an error");
+            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
             DataGridView.ActivateToolTip(true /*activate*/, errorText, ColumnIndex, rowIndex);
 
             // for debugging
@@ -4589,7 +4727,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
-                    
+
                     return owner.OwningRow?.AccessibilityObject;
                 }
             }
