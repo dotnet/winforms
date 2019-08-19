@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         private TaskDialogFlags _flags;
         private TaskDialogCustomButtonStyle _customButtonStyle;
         private TaskDialogIcon? _icon;
-        private string? _title;
+        private string? _caption;
         private string? _mainInstruction;
         private string? _text;
         private int _width;
@@ -259,14 +259,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the title of the task dialog window.
+        /// Gets or sets the text to display in the title bar of the task dialog.
         /// </summary>
         /// <remarks>
         /// This property can be set while the dialog is shown.
         /// </remarks>
-        public string? Title
+        public string? Caption
         {
-            get => _title;
+            get => _caption;
 
             set
             {
@@ -274,9 +274,9 @@ namespace System.Windows.Forms
 
                 // Note: We set the field values after calling the method to ensure
                 // it still has the previous value it the method throws.
-                BoundTaskDialog?.UpdateTitle(value);
+                BoundTaskDialog?.UpdateCaption(value);
 
-                _title = value;
+                _caption = value;
             }
         }
 

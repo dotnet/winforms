@@ -449,11 +449,11 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Displays a task dialog with the specified text, instruction,
-        /// title, buttons and icon.
+        /// caption, buttons and icon.
         /// </summary>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
-        /// <param name="title">The text to display in the title bar of the task dialog.</param>
+        /// <param name="caption">The text to display in the title bar of the task dialog.</param>
         /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
         /// in the task dialog.</param>
         /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
@@ -462,21 +462,21 @@ namespace System.Windows.Forms
         public static TaskDialogResult ShowDialog(
             string? text,
             string? mainInstruction = null,
-            string? title = null,
+            string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
-            return ShowDialog(IntPtr.Zero, text, mainInstruction, title, buttons, icon);
+            return ShowDialog(IntPtr.Zero, text, mainInstruction, caption, buttons, icon);
         }
 
         /// <summary>
         /// Displays a task dialog in front of the specified window and with the specified
-        /// text, main instruction, title, buttons and icon.
+        /// text, main instruction, caption, buttons and icon.
         /// </summary>
         /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
-        /// <param name="title">The text to display in the title bar of the task dialog.</param>
+        /// <param name="caption">The text to display in the title bar of the task dialog.</param>
         /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
         /// in the task dialog.</param>
         /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
@@ -486,18 +486,18 @@ namespace System.Windows.Forms
             IWin32Window owner,
             string? text,
             string? mainInstruction = null,
-            string? title = null,
+            string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
             return ShowDialog(
                 owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
-                text, mainInstruction, title, buttons, icon);
+                text, mainInstruction, caption, buttons, icon);
         }
 
         /// <summary>
         /// Displays a task dialog in front of the specified window and with the specified
-        /// text, instruction, title, buttons and icon.
+        /// text, instruction, caption, buttons and icon.
         /// </summary>
         /// <param name="hwndOwner">
         /// The handle of the owner window, or <see cref="IntPtr.Zero"/> to show a
@@ -505,7 +505,7 @@ namespace System.Windows.Forms
         /// </param>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
-        /// <param name="title">The text to display in the title bar of the task dialog.</param>
+        /// <param name="caption">The text to display in the title bar of the task dialog.</param>
         /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
         /// in the task dialog.</param>
         /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
             IntPtr hwndOwner,
             string? text,
             string? mainInstruction = null,
-            string? title = null,
+            string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
             TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
         {
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
             {
                 Text = text,
                 MainInstruction = mainInstruction,
-                Title = title,
+                Caption = caption,
                 Icon = icon,
                 StandardButtons = buttons
             });
@@ -1007,11 +1007,11 @@ namespace System.Windows.Forms
             UpdateWindowSize();
         }
 
-        internal void UpdateTitle(string? title)
+        internal void UpdateCaption(string? caption)
         {
-            // Note: We must not allow to change the title if we are currently
+            // Note: We must not allow to change the caption if we are currently
             // waiting for a TDN_NAVIGATED notification, because in that case
-            // the task dialog will already have set the title from the new page.
+            // the task dialog will already have set the caption from the new page.
             DenyIfDialogNotUpdatable();
 
             // TODO: Because we use SetWindowText() directly (as there is no task
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms
             // (or null) with this method causes the window title to be empty.
             // We could replicate the Task Dialog behavior by also using the
             // executable's name as title if the string is null or empty.
-            if (Interop.User32.SetWindowTextW(new HandleRef(this, Handle), title) == 0)
+            if (Interop.User32.SetWindowTextW(new HandleRef(this, Handle), caption) == 0)
             {
                 Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
             }
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms
 
                     // Strings in TasDialogConfig
                     Align(ref sizeToAllocate, sizeof(char));
-                    sizeToAllocate += SizeOfString(page.Title);
+                    sizeToAllocate += SizeOfString(page.Caption);
                     sizeToAllocate += SizeOfString(page.MainInstruction);
                     sizeToAllocate += SizeOfString(page.Text);
                     sizeToAllocate += SizeOfString(page.CheckBox?.Text);
@@ -1641,7 +1641,7 @@ namespace System.Windows.Forms
                             dwCommonButtons = (Interop.TaskDialog.TASKDIALOG_COMMON_BUTTON_FLAGS)standardButtonFlags,
                             mainIconUnion = iconValue,
                             footerIconUnion = footerIconValue,
-                            pszWindowTitle = MarshalString(page.Title),
+                            pszWindowTitle = MarshalString(page.Caption),
                             pszMainInstruction = MarshalString(page.MainInstruction),
                             pszContent = MarshalString(page.Text),
                             pszVerificationText = MarshalString(page.CheckBox?.Text),
