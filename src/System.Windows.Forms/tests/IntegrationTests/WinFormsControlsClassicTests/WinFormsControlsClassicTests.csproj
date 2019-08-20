@@ -209,6 +209,14 @@
       <Link>PropertyGrid.Designer.cs</Link>
       <DependentUpon>PropertyGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\WinformsControlsTest\RichTextBoxes.cs">
+      <Link>RichTextBoxes.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\RichTextBoxes.Designer.cs">
+      <Link>RichTextBoxes.Designer.cs</Link>
+      <DependentUpon>RichTextBoxes.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\WinformsControlsTest\ScalingBeforeChanges.cs">
       <Link>ScalingBeforeChanges.cs</Link>
       <SubType>Form</SubType>
@@ -272,6 +280,10 @@
       <Link>ListViewTest.resx</Link>
       <DependentUpon>ListViewTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\MainForm.resx">
+      <Link>MainForm.resx</Link>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\MdiChild.resx">
       <Link>MdiChild.resx</Link>
       <DependentUpon>MdiChild.cs</DependentUpon>
@@ -310,6 +322,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\WinformsControlsTest\Data\example.rtf">
+      <Link>Data\example.rtf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
