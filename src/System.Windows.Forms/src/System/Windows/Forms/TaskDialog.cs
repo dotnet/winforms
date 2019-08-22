@@ -464,7 +464,7 @@ namespace System.Windows.Forms
             string? mainInstruction = null,
             string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
-            TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
+            TaskDialogIcon? icon = null)
         {
             return ShowDialog(IntPtr.Zero, text, mainInstruction, caption, buttons, icon);
         }
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
             string? mainInstruction = null,
             string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
-            TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
+            TaskDialogIcon? icon = null)
         {
             return ShowDialog(
                 owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
@@ -517,7 +517,7 @@ namespace System.Windows.Forms
             string? mainInstruction = null,
             string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
-            TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
+            TaskDialogIcon? icon = null)
         {
             var dialog = new TaskDialog(new TaskDialogPage()
             {

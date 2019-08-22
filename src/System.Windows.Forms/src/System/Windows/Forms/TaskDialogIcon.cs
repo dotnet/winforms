@@ -15,63 +15,67 @@ namespace System.Windows.Forms
     /// footer of a task dialog (by setting the <see cref="TaskDialogFooter.Icon"/>
     /// property).
     /// </summary>
-    public abstract class TaskDialogIcon
+    public class TaskDialogIcon
     {
-        private static readonly IReadOnlyDictionary<TaskDialogStandardIcon, TaskDialogStandardIconContainer> s_standardIcons =
-            new Dictionary<TaskDialogStandardIcon, TaskDialogStandardIconContainer>() {
-                { TaskDialogStandardIcon.None, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.None) },
-                { TaskDialogStandardIcon.Information, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.Information) },
-                { TaskDialogStandardIcon.Warning, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.Warning) },
-                { TaskDialogStandardIcon.Error, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.Error) },
-                { TaskDialogStandardIcon.SecurityShield, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.SecurityShield) },
-                { TaskDialogStandardIcon.SecurityShieldBlueBar, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.SecurityShieldBlueBar) },
-                { TaskDialogStandardIcon.SecurityShieldGrayBar, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.SecurityShieldGrayBar) },
-                { TaskDialogStandardIcon.SecurityWarningYellowBar, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.SecurityWarningYellowBar) },
-                { TaskDialogStandardIcon.SecurityErrorRedBar, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.SecurityErrorRedBar) },
-                { TaskDialogStandardIcon.SecuritySuccessGreenBar, new TaskDialogStandardIconContainer(TaskDialogStandardIcon.SecuritySuccessGreenBar) },
-            };
+#pragma warning disable IDE1006 // Naming Styles
+        public static readonly TaskDialogIcon None = new TaskDialogIcon(TaskDialogStandardIcon.None);
+        public static readonly TaskDialogIcon Information = new TaskDialogIcon(TaskDialogStandardIcon.Information);
+        public static readonly TaskDialogIcon Warning = new TaskDialogIcon(TaskDialogStandardIcon.Warning);
+        public static readonly TaskDialogIcon Error = new TaskDialogIcon(TaskDialogStandardIcon.Error);
+        public static readonly TaskDialogIcon SecurityShield = new TaskDialogIcon(TaskDialogStandardIcon.SecurityShield);
+        public static readonly TaskDialogIcon SecurityShieldBlueBar = new TaskDialogIcon(TaskDialogStandardIcon.SecurityShieldBlueBar);
+        public static readonly TaskDialogIcon SecurityShieldGrayBar = new TaskDialogIcon(TaskDialogStandardIcon.SecurityShieldGrayBar);
+        public static readonly TaskDialogIcon SecurityWarningYellowBar = new TaskDialogIcon(TaskDialogStandardIcon.SecurityWarningYellowBar);
+        public static readonly TaskDialogIcon SecurityErrorRedBar = new TaskDialogIcon(TaskDialogStandardIcon.SecurityErrorRedBar);
+        public static readonly TaskDialogIcon SecuritySuccessGreenBar = new TaskDialogIcon(TaskDialogStandardIcon.SecuritySuccessGreenBar);
+#pragma warning restore IDE1006 // Naming Styles
 
-        private protected TaskDialogIcon()
+        private readonly TaskDialogStandardIcon? _standardIcon;
+
+        private readonly IntPtr? _iconHandle;
+        
+
+        public TaskDialogIcon(Icon? icon)
+            : this(icon?.Handle ?? default)
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="icon"></param>
-        public static implicit operator TaskDialogIcon(TaskDialogStandardIcon icon)
+        public TaskDialogIcon(IntPtr iconHandle)
         {
-            if (!s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer? result))
-            {
-                throw new InvalidCastException(); // TODO: Is this the correct exception type?
-            }
+            _iconHandle = iconHandle;
+        }
 
-            return result;
+        private TaskDialogIcon(TaskDialogStandardIcon standardIcon)
+        {
+            _standardIcon = standardIcon;
         }
 
         /// <summary>
-        /// 
+        /// The icon handle (<c>HICON</c>) that is represented by this
+        /// <see cref="TaskDialogIcon"/> instance.
         /// </summary>
-        /// <param name="icon"></param>
-        public static implicit operator TaskDialogIcon(Icon? icon)
+        /// <exception cref="InvalidOperationException">
+        /// This <see cref="TaskDialogIcon"/> instance was not created using a
+        /// constructor that takes an icon or icon handle.
+        /// </exception>
+        public IntPtr IconHandle
         {
-            return new TaskDialogIconHandle(icon);
+            get => _iconHandle ?? throw new InvalidOperationException();
         }
 
-        /// <summary>
-        /// Returns an <see cref="TaskDialogIcon"/> instance that reprents the specified
-        /// <see cref="TaskDialogStandardIcon"/>.
-        /// </summary>
-        /// <param name="icon"></param>
-        /// <returns></returns>
-        public static TaskDialogIcon Get(TaskDialogStandardIcon icon)
+        internal TaskDialogStandardIcon StandardIcon
         {
-            if (!s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer? result))
-            {
-                throw new ArgumentOutOfRangeException(nameof(icon));
-            }
+            get => _standardIcon ?? throw new InvalidOperationException();
+        }
 
-            return result;
+        internal bool IsStandardIcon
+        {
+            get => _standardIcon != null;
+        }
+
+        internal bool IsHandleIcon
+        {
+            get => _iconHandle != null;
         }
     }
 }

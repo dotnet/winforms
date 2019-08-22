@@ -544,15 +544,15 @@ namespace System.Windows.Forms
             // If no icon is specified (icon is null), we don't set the
             // "iconIsFromHandle" flag, which means that the icon can be updated
             // to show a Standard icon while the dialog is running.
-            if (icon is TaskDialogIconHandle iconHandle)
+            if (icon?.IsHandleIcon == true)
             {
                 iconIsFromHandle = true;
-                iconValue = iconHandle.IconHandle;
+                iconValue = icon.IconHandle;
             }
-            else if (icon is TaskDialogStandardIconContainer standardIconContainer)
+            else if (icon?.IsStandardIcon == true)
             {
                 iconIsFromHandle = false;
-                iconValue = (IntPtr)standardIconContainer.Icon;
+                iconValue = (IntPtr)icon.StandardIcon;
             }
 
             return (iconValue, iconIsFromHandle);

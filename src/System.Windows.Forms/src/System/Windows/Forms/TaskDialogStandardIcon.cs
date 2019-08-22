@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Contains constants for predefined icons of a task dialog.
     /// </summary>
-    public enum TaskDialogStandardIcon : int
+    internal enum TaskDialogStandardIcon : int
     {
         /// <summary>
         /// The task dialog does not display an icon.
