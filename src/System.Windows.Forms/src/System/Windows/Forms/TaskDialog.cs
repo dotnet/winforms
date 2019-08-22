@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms
                         int buttonID = (int)wParam;
                         TaskDialogButton? button = _boundPage.GetBoundButtonByID(buttonID);
 
-                        bool handlerResult = true;
+                        bool applyButtonResult = true;
                         if (button != null && !_suppressButtonClickedEvent)
                         {
                             // Note: When the event handler returned true but we received
@@ -1246,7 +1246,7 @@ namespace System.Windows.Forms
                             }
                             try
                             {
-                                handlerResult = button.HandleButtonClicked();
+                                applyButtonResult = button.HandleButtonClicked();
 
                                 // Check if the index was set to the current stack count,
                                 // which means we received a TDN_NAVIGATED notification
@@ -1257,7 +1257,7 @@ namespace System.Windows.Forms
                                 if (_buttonClickNavigationCounter.navigationIndex >=
                                     _buttonClickNavigationCounter.stackCount)
                                 {
-                                    handlerResult = false;
+                                    applyButtonResult = false;
                                 }
                             }
                             finally
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
 
                         // If the button would close the dialog, raise the Closing event
                         // so that the user can cancel the close.
-                        if (handlerResult && IsTaskDialogButtonCommitting(button))
+                        if (applyButtonResult && IsTaskDialogButtonCommitting(button))
                         {
                             // For consistency, we only raise the event (and allow the handler
                             // to return S_OK) if it was not already raised for a previous
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
                             // in the "Closing" event's args.
                             if (_resultButton != null)
                             {
-                                handlerResult = false;
+                                applyButtonResult = false;
                             }
                             else
                             {
@@ -1300,17 +1300,17 @@ namespace System.Windows.Forms
                                 var closingEventArgs = new TaskDialogClosingEventArgs(button);
                                 OnClosing(closingEventArgs);
 
-                                handlerResult = !closingEventArgs.Cancel;
+                                applyButtonResult = !closingEventArgs.Cancel;
 
                                 // Cache the result button if we return S_OK.
-                                if (handlerResult)
+                                if (applyButtonResult)
                                 {
                                     _resultButton = (button, buttonID);
                                 }
                             }
                         }
 
-                        return handlerResult ? Interop.HRESULT.S_OK : Interop.HRESULT.S_FALSE;
+                        return applyButtonResult ? Interop.HRESULT.S_OK : Interop.HRESULT.S_FALSE;
 
                     case TaskDialogNotification.TDN_RADIO_BUTTON_CLICKED:
                         int radioButtonID = (int)wParam;

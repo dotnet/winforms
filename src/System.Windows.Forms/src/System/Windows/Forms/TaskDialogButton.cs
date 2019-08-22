@@ -24,19 +24,38 @@ namespace System.Windows.Forms
         /// By default, the dialog will be closed after the event handler returns 
         /// (except for the <see cref="TaskDialogResult.Help"/> button which instead
         /// will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
-        /// To prevent the dialog from closing, set the
-        /// <see cref="TaskDialogButtonClickedEventArgs.CancelClose"/> property to <see langword="true"/>.
+        /// To prevent the dialog from closing when this button is clicked, set the
+        /// <see cref="ShouldCloseDialog"/> property to <see langword="false"/>.
         /// 
-        /// When the <see cref="TaskDialogButtonClickedEventArgs.CancelClose"/> is not set to
-        /// <see langword="true"/>, the <see cref="TaskDialog.Closing"/> event will occur afterwards which
-        /// also allows you to prevent the dialog from closing.
+        /// When the <see cref="ShouldCloseDialog"/> is set to
+        /// <see langword="true"/> (the default value), the <see cref="TaskDialog.Closing"/>
+        /// event will occur afterwards which also allows you to prevent the dialog from closing.
         /// </remarks>
-        public event EventHandler<TaskDialogButtonClickedEventArgs>? Click;
+        public event EventHandler<EventArgs>? Click;
 
         // Disallow inheritance by specifying a private protected constructor.
         private protected TaskDialogButton()
         {
         }
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether the task dialog should close
+        /// when this button is clicked (or, if this button represents the
+        /// <see cref="TaskDialogResult.Help"/> result, whether the
+        /// <see cref="TaskDialogPage.HelpRequest"/> should be raised).
+        /// </summary>
+        /// <value>
+        /// <see langword="true"/> to indicate that the task dialog should close when
+        /// this button is clicked; <see langword="false"/> otherwise.
+        /// </value>
+        /// <remarks>
+        /// If this property is set to <see langword="true"/> (the default value) after the
+        /// <see cref="Click"/> event handler returns, the <see cref="TaskDialog.Closing"/> event
+        /// will occur (except if this button represents the <see cref="TaskDialogResult.Help"/> result)
+        /// which allows you to cancel the close. If it is not cancelled, the dialog will close and
+        /// set the clicked button as result value.
+        /// </remarks>
+        public bool ShouldCloseDialog { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether the button can respond to user interaction.
@@ -128,10 +147,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal abstract int ButtonID
-        {
-            get;
-        }
+        internal abstract int ButtonID { get; }
 
         // Note: Instead of declaring an abstract Collection getter, we implement
         // the field and the property here so that the subclass doesn't have to
@@ -154,10 +170,9 @@ namespace System.Windows.Forms
 
         internal bool HandleButtonClicked()
         {
-            var e = new TaskDialogButtonClickedEventArgs();
-            OnClick(e);
+            OnClick(EventArgs.Empty);
 
-            return !e.CancelClose;
+            return ShouldCloseDialog;
         }
 
         private protected override void ApplyInitializationCore()
@@ -173,7 +188,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected void OnClick(TaskDialogButtonClickedEventArgs e)
+        private protected void OnClick(EventArgs e)
         {
             Click?.Invoke(this, e);
         }
