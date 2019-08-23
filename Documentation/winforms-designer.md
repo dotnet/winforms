@@ -54,8 +54,8 @@ There are few options available to help you to design UI for your .NET Core proj
 2. Open the `SimpleWinForms` project file by double clicking on it in Solution Explorer. Change the ``TargetFramework`` property from:
 
     ```diff
-    -    <TargetFramework>netcoreapp3.0</TargetFramework>
-    +    <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
+    -    <TargetFramework>netcoreapp5.0</TargetFramework>
+    +    <TargetFrameworks>net472;netcoreapp5.0</TargetFrameworks>
     ```
 
 3. Add for any and every form file you have in this ``ItemGroup``:
