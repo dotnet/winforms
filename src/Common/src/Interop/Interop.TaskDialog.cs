@@ -346,14 +346,14 @@ internal static partial class Interop
         }
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate int PFTASKDIALOGCALLBACK(
+        public delegate HRESULT PFTASKDIALOGCALLBACK(
                 IntPtr hwnd,
                 TASKDIALOG_NOTIFICATIONS msg,
                 IntPtr wParam,
                 IntPtr lParam,
                 IntPtr lpRefData);
 
-        [DllImport(Libraries.ComCtl32,
+        [DllImport(Libraries.Comctl32,
                 EntryPoint = "TaskDialogIndirect",
                 ExactSpelling = true)]
         public static extern int TaskDialogIndirect(

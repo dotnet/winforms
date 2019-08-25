@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
             Closed?.Invoke(this, e);
         }
 
-        private int HandleTaskDialogCallback(
+        private Interop.HRESULT HandleTaskDialogCallback(
             IntPtr hWnd,
             TaskDialogNotification notification,
             IntPtr wParam,
