@@ -7,12 +7,12 @@ using System.ComponentModel;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Designer for ToolStripDropDownItems. This is here so only the dropdown items get the "Edit Items..." verb.
+    ///  Designer for ToolStripDropDownItems. This is here so only the dropdown items get the "Edit Items..." verb.
     /// </summary>
     internal class ToolStripDropDownItemDesigner : ToolStripItemDesigner
     {
         /// <summary>
-        /// Initialize the item.
+        ///  Initialize the item.
         /// </summary>
         public override void Initialize(IComponent component)
         {
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
+        ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
         /// </summary>
         public override System.Collections.ICollection AssociatedComponents
         {

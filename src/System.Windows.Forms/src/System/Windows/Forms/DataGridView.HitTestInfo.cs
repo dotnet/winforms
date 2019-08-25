@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             internal int colStart;
 
             /// <summary>
-            /// Allows the <see cref='HitTestInfo'/> object to inform you the
+            ///  Allows the <see cref='HitTestInfo'/> object to inform you the
             ///  extent of the grid.
             /// </summary>
             public static readonly HitTestInfo Nowhere = new HitTestInfo();
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the part of the <see cref='DataGridView'/> control, other than the row or column, that was
+            ///  Gets the part of the <see cref='DataGridView'/> control, other than the row or column, that was
             ///  clicked.
             /// </summary>
             public DataGridViewHitTestType Type
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets the hash code for the <see cref='HitTestInfo'/> instance.
+            ///  Gets the hash code for the <see cref='HitTestInfo'/> instance.
             /// </summary>
             public override int GetHashCode() => HashCode.Combine(type, row, col);
 

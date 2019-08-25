@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
         <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
-        <target state="translated">Ovládací prvek ActiveX je ovládací prvek bez oken. Tento ovládací prvek není v této verzi platformy .NET podporován.</target>
+        <target state="translated">Ovládací prvek ActiveX je ovládací prvek bez oken. Tento ovládací prvek není v této verzi .NET podporován.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -4544,6 +4544,11 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Objekt Bitmap přímo nepodporuje formát DIB. Zadejte automatický převod nebo proveďte příkaz SetData s datovým formátem Bitmap.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="translated">Prázdný znak nebo řetězec není platnou hodnotou parametru format.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">Vlastnost DataMember {0} nebyla nalezena u vlastnosti DataSource.</target>
@@ -5196,9 +5201,9 @@ nikoli v tomto dialogovém okně.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET.
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Pokud chcete této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj Microsoft .NET.
 
-Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat.
+Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat.
 
 {1}.</target>
         <note />
@@ -5209,9 +5214,9 @@ Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a p
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET.
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Pokud chcete této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj Microsoft .NET.
 
-Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na tlačítko Konec, bude aplikace okamžitě ukončena.
+Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na Konec, aplikace se okamžitě zavře.
 
 {1}.</target>
         <note />
@@ -9506,12 +9511,12 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Funkce není v tomto operačním systému podporována.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Objekt TabPage nelze přidat k objektu {0}. Objekt TabPages lze přidat pouze k ovládacímu prvku TabControls.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">Objekt TabPage nelze přidat k jinému ovládacímu prvku TabPage. Objekt TabPages lze přidat pouze k ovládacímu prvku TabControls.</target>
         <note />

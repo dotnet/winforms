@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the event is handled.
+        ///  Gets or sets a value indicating whether the event is handled.
         /// </summary>
         public bool Handled { get; set; }
     }

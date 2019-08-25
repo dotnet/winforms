@@ -50,8 +50,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This routine returns the correct typename given a CodeTypeReference.  It expands the child typenames
-        /// and builds up the clr formatted generic name.  If its not a generic, it just returns BaseType.
+        ///  This routine returns the correct typename given a CodeTypeReference.  It expands the child typenames
+        ///  and builds up the clr formatted generic name.  If its not a generic, it just returns BaseType.
         /// </summary>
         internal static string GetTypeNameFromCodeTypeReference(IDesignerSerializationManager manager, CodeTypeReference typeref)
         {
@@ -720,7 +720,9 @@ namespace System.ComponentModel.Design.Serialization
 
                                 if (rhs is IConvertible ic)
                                 {
-                                    // f.FieldType is a type from the reflection (or project target) Universe, while rhs is a runtime type(exists in the visual studio framework) they need to be converted to the same universe for comparison to work. If TargetFrameworkProvider is not available, then we are working with runtime types.
+                                    // f.FieldType is a type from the reflection (or project target) universe, while rhs is a runtime type (exists in the Visual Studio framework)
+                                    // they need to be converted to the same universe for comparison to work. 
+                                    // If TargetFrameworkProvider is not available, then we are working with runtime types.
                                     Type fieldType = f.FieldType;
                                     TypeDescriptionProvider tdp = GetTargetFrameworkProviderForType(manager, fieldType);
                                     if (tdp != null)
@@ -906,7 +908,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (result == null)
                         {
                             TraceError("CodeThisReferenceExpression not handled because there is no root context or the root context did not contain an instance.");
-                            Error(manager, string.Format(SR.SerializerNoRootExpression), SR.SerializerNoRootExpression);
+                            Error(manager, SR.SerializerNoRootExpression, SR.SerializerNoRootExpression);
                         }
 
                         break;

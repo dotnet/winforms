@@ -18,12 +18,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The graphics object to draw with
+        ///  The graphics object to draw with
         /// </summary>
         public Graphics Graphics { get; }
 
         /// <summary>
-        /// Represents which toolStrip was affected by the click
+        ///  Represents which toolStrip was affected by the click
         /// </summary>
         public ToolStripPanel ToolStripPanel { get; }
 

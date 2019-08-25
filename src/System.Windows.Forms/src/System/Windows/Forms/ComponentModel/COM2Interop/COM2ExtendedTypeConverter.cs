@@ -9,8 +9,8 @@ using System.Collections;
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// Base class for value editors that extend basic functionality.
-    /// calls will be delegated to the "base value editor".
+    ///  Base class for value editors that extend basic functionality.
+    ///  calls will be delegated to the "base value editor".
     /// </summary>
     internal class Com2ExtendedTypeConverter : TypeConverter
     {

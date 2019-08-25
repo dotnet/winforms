@@ -11,7 +11,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Class for sharing code for launching the ToolStripItemsCollectionEditor from a verb. This class implments the IWindowsFormsEditorService and ITypeDescriptorContext to display the dialog.
+    ///  Class for sharing code for launching the ToolStripItemsCollectionEditor from a verb. This class implments the IWindowsFormsEditorService and ITypeDescriptorContext to display the dialog.
     /// </summary>
     internal class CollectionEditVerbManager : IWindowsFormsEditorService, ITypeDescriptorContext
     {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         private readonly DesignerVerb _editItemsVerb;
 
         /// <summary>
-        /// Create one of these things...
+        ///  Create one of these things...
         /// </summary>
         internal CollectionEditVerbManager(string text, ComponentDesigner designer, PropertyDescriptor prop, bool addToDesignerVerbs)
         {
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Our caching property for the IComponentChangeService
+        ///  Our caching property for the IComponentChangeService
         /// </summary>
         private IComponentChangeService ChangeService
         {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         IContainer ITypeDescriptorContext.Container
         {
@@ -85,12 +85,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         void ITypeDescriptorContext.OnComponentChanged() => ChangeService.OnComponentChanged(_designer.Component, _targetProperty, null, null);
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         bool ITypeDescriptorContext.OnComponentChanging()
         {
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         object ITypeDescriptorContext.Instance
         {
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor
         {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         object IServiceProvider.GetService(Type serviceType)
         {
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         void IWindowsFormsEditorService.CloseDropDown()
         {
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         void IWindowsFormsEditorService.DropDownControl(Control control)
         {
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Self-explanitory interface impl.
+        ///  Self-explanitory interface impl.
         /// </summary>
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When the verb is invoked, use all the stuff above to show the dialog, etc.
+        ///  When the verb is invoked, use all the stuff above to show the dialog, etc.
         /// </summary>
         private void OnEditItems(object sender, EventArgs e)
         {

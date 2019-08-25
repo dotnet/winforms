@@ -6,6 +6,6 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        internal const int MAX_PATH = 260;
+        public const int MAX_PATH = 260;
     }
 }

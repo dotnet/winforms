@@ -5,21 +5,23 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class implements the necessary interfaces required for an ActiveX site.
+    ///  This class implements the necessary interfaces required for an ActiveX site.
     ///
-    /// This class is public, but has an internal constructor so that external
-    /// users can only reference the Type (cannot instantiate it directly).
-    /// Other classes have to inherit this class and expose it to the outside world.
+    ///  This class is public, but has an internal constructor so that external
+    ///  users can only reference the Type (cannot instantiate it directly).
+    ///  Other classes have to inherit this class and expose it to the outside world.
     ///
-    /// This class does not have any public property/method/event by itself.
-    /// All implementations of the site interface methods are private, which
-    /// means that inheritors who want to override even a single method of one
-    /// of these interfaces will have to implement the whole interface.
+    ///  This class does not have any public property/method/event by itself.
+    ///  All implementations of the site interface methods are private, which
+    ///  means that inheritors who want to override even a single method of one
+    ///  of these interfaces will have to implement the whole interface.
     /// </summary>
     public class WebBrowserSiteBase
         : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable
@@ -38,7 +40,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Dispose(release the cookie)
+        ///  Dispose(release the cookie)
         /// </summary>
         public void Dispose()
         {
@@ -46,7 +48,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Release the cookie if we're disposing
+        ///  Release the cookie if we're disposing
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -57,7 +59,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the WebBrowserBase object set in the constructor.
+        ///  Retrieves the WebBrowserBase object set in the constructor.
         /// </summary>
         internal WebBrowserBase Host
         {
@@ -90,48 +92,53 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.TransformCoords(NativeMethods._POINTL pPtlHimetric, NativeMethods.tagPOINTF pPtfContainer, int dwFlags)
+        unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, uint dwFlags)
         {
+            if (pPtlHimetric == null || pPtfContainer == null)
+            {
+                return HRESULT.E_INVALIDARG;
+            }
+
             if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER) != 0)
             {
                 if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
                 {
-                    pPtfContainer.x = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.x, WebBrowserHelper.LogPixelsX);
-                    pPtfContainer.y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.y, WebBrowserHelper.LogPixelsY);
+                    pPtfContainer->X = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->X, WebBrowserHelper.LogPixelsX);
+                    pPtfContainer->Y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->Y, WebBrowserHelper.LogPixelsY);
                 }
                 else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
                 {
-                    pPtfContainer.x = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.x, WebBrowserHelper.LogPixelsX);
-                    pPtfContainer.y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric.y, WebBrowserHelper.LogPixelsY);
+                    pPtfContainer->X = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->X, WebBrowserHelper.LogPixelsX);
+                    pPtfContainer->Y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->Y, WebBrowserHelper.LogPixelsY);
                 }
                 else
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
             }
             else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC) != 0)
             {
                 if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
                 {
-                    pPtlHimetric.x = WebBrowserHelper.Pix2HM((int)pPtfContainer.x, WebBrowserHelper.LogPixelsX);
-                    pPtlHimetric.y = WebBrowserHelper.Pix2HM((int)pPtfContainer.y, WebBrowserHelper.LogPixelsY);
+                    pPtlHimetric->X = WebBrowserHelper.Pix2HM((int)pPtfContainer->X, WebBrowserHelper.LogPixelsX);
+                    pPtlHimetric->Y = WebBrowserHelper.Pix2HM((int)pPtfContainer->Y, WebBrowserHelper.LogPixelsY);
                 }
                 else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
                 {
-                    pPtlHimetric.x = WebBrowserHelper.Pix2HM((int)pPtfContainer.x, WebBrowserHelper.LogPixelsX);
-                    pPtlHimetric.y = WebBrowserHelper.Pix2HM((int)pPtfContainer.y, WebBrowserHelper.LogPixelsY);
+                    pPtlHimetric->X = WebBrowserHelper.Pix2HM((int)pPtfContainer->X, WebBrowserHelper.LogPixelsX);
+                    pPtlHimetric->Y = WebBrowserHelper.Pix2HM((int)pPtfContainer->Y, WebBrowserHelper.LogPixelsY);
                 }
                 else
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
             }
             else
             {
-                return NativeMethods.E_INVALIDARG;
+                return HRESULT.E_INVALIDARG;
             }
 
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers)
@@ -284,9 +291,9 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.Scroll(NativeMethods.tagSIZE scrollExtant)
+        Interop.HRESULT UnsafeNativeMethods.IOleInPlaceSite.Scroll(Size scrollExtant)
         {
-            return NativeMethods.S_FALSE;
+            return Interop.HRESULT.S_FALSE;
         }
 
         int UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate(int fUndoable)

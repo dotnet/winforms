@@ -9,8 +9,8 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of selected <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
-    /// control.
+    ///  Represents a collection of selected <see cref='DataGridViewCell'/> objects in the <see cref='DataGridView'/>
+    ///  control.
     /// </summary>
     [ListBindable(false)]
     public class DataGridViewSelectedCellCollection : BaseCollection, IList
@@ -19,12 +19,12 @@ namespace System.Windows.Forms
 
         int IList.Add(object value)
         {
-            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
         void IList.Clear()
         {
-            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
         bool IList.Contains(object value)
@@ -39,17 +39,17 @@ namespace System.Windows.Forms
 
         void IList.Insert(int index, object value)
         {
-            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
         void IList.Remove(object value)
         {
-            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
         void IList.RemoveAt(int index)
         {
-            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
         bool IList.IsFixedSize
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         object IList.this[int index]
         {
             get { return items[index]; }
-            set { throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection)); }
+            set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }
         }
 
         void ICollection.CopyTo(Array array, int index)
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a <see cref='DataGridViewCell'/> to this collection.
+        ///  Adds a <see cref='DataGridViewCell'/> to this collection.
         /// </summary>
         internal int Add(DataGridViewCell dataGridViewCell)
         {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
         */
 
         /// <summary>
-        /// Adds all the <see cref='DataGridViewCell'/> objects from the provided linked list to this collection.
+        ///  Adds all the <see cref='DataGridViewCell'/> objects from the provided linked list to this collection.
         /// </summary>
         internal void AddCellLinkedList(DataGridViewCellLinkedList dataGridViewCells)
         {
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
         ]
         public void Clear()
         {
-            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Insert(int index, DataGridViewCell dataGridViewCell)
         {
-            throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
     }
 }

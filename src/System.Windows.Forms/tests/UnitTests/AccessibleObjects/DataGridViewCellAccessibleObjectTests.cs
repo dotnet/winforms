@@ -38,5 +38,29 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             Assert.True(accCellWidthSum == accRowWidth - dataGridView.RowHeadersWidth);
         }
+
+        [StaFact]
+        public void DataGridViewCellsAccessibleObject_IsReadOnly_property()
+        {
+            DataGridView dataGridView = new DataGridView();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add(new DataGridViewRow()); 
+            dataGridView.Rows.Add(new DataGridViewRow()); 
+
+            dataGridView.Rows[0].Cells[0].ReadOnly = true;
+            dataGridView.Rows[1].ReadOnly = true;
+            dataGridView.Rows[2].ReadOnly = false;
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    bool value = cell.AccessibilityObject.IsReadOnly;
+
+                    Assert.Equal(cell.ReadOnly, value);
+                }
+            }
+        }
     }
 }

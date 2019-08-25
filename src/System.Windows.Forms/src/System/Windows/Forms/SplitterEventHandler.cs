@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a method that will handle splitter events.
+    ///  Represents a method that will handle splitter events.
     /// </summary>
     public delegate void SplitterEventHandler(object sender, SplitterEventArgs e);
 }

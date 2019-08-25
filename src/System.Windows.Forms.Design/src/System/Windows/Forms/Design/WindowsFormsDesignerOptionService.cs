@@ -7,7 +7,7 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Makes the DesignerOptions queryable through the IDesignerOption service.
+    ///  Makes the DesignerOptions queryable through the IDesignerOption service.
     /// </summary>
     public class WindowsFormsDesignerOptionService : DesignerOptionService
     {
@@ -16,8 +16,8 @@ namespace System.Windows.Forms.Design
         public virtual DesignerOptions CompatibilityOptions => _options ?? (_options = new DesignerOptions());
 
         /// <summary>
-        /// This method is called on demand the first time a user asks for child options or
-        /// properties of an options collection.
+        ///  This method is called on demand the first time a user asks for child options or
+        ///  properties of an options collection.
         /// </summary>
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {

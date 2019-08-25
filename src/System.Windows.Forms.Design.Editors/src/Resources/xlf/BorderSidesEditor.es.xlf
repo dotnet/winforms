@@ -4,32 +4,32 @@
     <body>
       <trans-unit id="allCheckBox.Text">
         <source>&amp;All</source>
-        <target state="new">&amp;All</target>
+        <target state="translated">&amp;Todos</target>
         <note />
       </trans-unit>
       <trans-unit id="bottomCheckBox.Text">
         <source>&amp;Bottom</source>
-        <target state="new">&amp;Bottom</target>
+        <target state="translated">&amp;Inferior</target>
         <note />
       </trans-unit>
       <trans-unit id="leftCheckBox.Text">
         <source>&amp;Left</source>
-        <target state="new">&amp;Left</target>
+        <target state="translated">I&amp;zquierda</target>
         <note />
       </trans-unit>
       <trans-unit id="noneCheckBox.Text">
         <source>&amp;None</source>
-        <target state="new">&amp;None</target>
+        <target state="translated">&amp;Ninguno</target>
         <note />
       </trans-unit>
       <trans-unit id="rightCheckBox.Text">
         <source>&amp;Right</source>
-        <target state="new">&amp;Right</target>
+        <target state="translated">&amp;Derecha</target>
         <note />
       </trans-unit>
       <trans-unit id="topCheckBox.Text">
         <source>&amp;Top</source>
-        <target state="new">&amp;Top</target>
+        <target state="translated">&amp;Superior</target>
         <note />
       </trans-unit>
     </body>

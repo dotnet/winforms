@@ -7,12 +7,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
 {
@@ -136,7 +135,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
+        ///  Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
         /// </summary>
         internal bool UseSnapLines
         {
@@ -198,7 +197,7 @@ namespace System.Windows.Forms.Design.Behavior
             set => _actionPointer = value;
         }
         /// <summary>
-        /// Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for testing purposes. See TestHook_GetRecentSnapLines method.
+        ///  Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for testing purposes. See TestHook_GetRecentSnapLines method.
         /// </summary>
         internal string[] RecentSnapLines
         {
@@ -324,9 +323,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point AdornerWindowPointToScreen(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT(p.X, p.Y);
-            NativeMethods.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, offset, 1);
-            return new Point(offset.x, offset.y);
+            NativeMethods.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, ref p, 1);
+            return p;
         }
 
         /// <summary>
@@ -348,17 +346,13 @@ namespace System.Windows.Forms.Design.Behavior
                 return Point.Empty;
             }
 
-            NativeMethods.POINT pt = new NativeMethods.POINT
-            {
-                x = c.Left,
-                y = c.Top
-            };
-            NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, pt, 1);
+            var pt = new Point(c.Left, c.Top);
+            NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, ref pt, 1);
             if (c.Parent.IsMirrored)
             {
-                pt.x -= c.Width;
+                pt.X -= c.Width;
             }
-            return new Point(pt.x, pt.y);
+            return pt;
         }
 
         /// <summary>
@@ -366,13 +360,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            NativeMethods.POINT nativePoint = new NativeMethods.POINT
-            {
-                x = pt.X,
-                y = pt.Y
-            };
-            NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, nativePoint, 1);
-            return new Point(nativePoint.x, nativePoint.y);
+            NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, ref pt, 1);
+            return pt;
         }
 
         /// <summary>
@@ -566,13 +555,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point ScreenToAdornerWindow(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT
-            {
-                x = p.X,
-                y = p.Y
-            };
-            NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, offset, 1);
-            return new Point(offset.x, offset.y);
+            NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, ref p, 1);
+            return p;
         }
 
         internal void OnLoseCapture()
@@ -592,7 +576,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
+        ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
         /// </summary>
         private class AdornerWindow : Control
         {
@@ -637,7 +621,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// We'll use CreateHandle as our notification for creating our mouse attacher.
+            ///  We'll use CreateHandle as our notification for creating our mouse attacher.
             /// </summary>
             protected override void OnHandleCreated(EventArgs e)
             {
@@ -650,7 +634,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Unhook and null out our mouseHook.
+            ///  Unhook and null out our mouseHook.
             /// </summary>
             protected override void OnHandleDestroyed(EventArgs e)
             {
@@ -665,7 +649,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Null out our mouseHook and unhook any events.
+            ///  Null out our mouseHook and unhook any events.
             /// </summary>
             protected override void Dispose(bool disposing)
             {
@@ -680,7 +664,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created & not being disposed.
             /// </summary>
             internal Control DesignerFrame
             {
@@ -688,7 +672,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Returns the display rectangle for the adorner window
+            ///  Returns the display rectangle for the adorner window
             /// </summary>
             internal Rectangle DesignerFrameDisplayRectangle
             {
@@ -706,7 +690,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created & not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
             {
@@ -723,7 +707,7 @@ namespace System.Windows.Forms.Design.Behavior
             public IEnumerable<Adorner> Adorners { get; private set; }
 
             /// <summary>
-            /// Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
+            ///  Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
             /// </summary>
             internal void EndDragNotification()
             {
@@ -731,7 +715,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow()
             {
@@ -743,7 +727,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Region region)
             {
@@ -759,7 +743,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Rectangle rectangle)
             {
@@ -775,7 +759,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragDrop(DragEventArgs e)
             {
@@ -822,7 +806,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragEnter(DragEventArgs e)
             {
@@ -832,18 +816,16 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    NativeMethods.GetCursorPos(pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt, 1);
-                    Point mousePos = new Point(pt.x, pt.y);
-                    _behaviorService.PropagateHitTest(mousePos);
+                    NativeMethods.GetCursorPos(out Point pt);
+                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    _behaviorService.PropagateHitTest(pt);
 
                 }
                 _behaviorService.OnDragEnter(null, e);
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragLeave(EventArgs e)
             {
@@ -860,7 +842,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragOver(DragEventArgs e)
             {
@@ -868,18 +850,16 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    NativeMethods.GetCursorPos(pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt, 1);
-                    Point mousePos = new Point(pt.x, pt.y);
-                    _behaviorService.PropagateHitTest(mousePos);
+                    NativeMethods.GetCursorPos(out Point pt);
+                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    _behaviorService.PropagateHitTest(pt);
                 }
 
                 _behaviorService.OnDragOver(e);
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
             {
@@ -887,7 +867,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e)
             {
@@ -895,7 +875,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse Messages so we can send drag notifcations.
+            ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse Messages so we can send drag notifcations.
             /// </summary>
             internal void StartDragNotification()
             {
@@ -903,7 +883,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
+            ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
             /// </summary>
             protected override void WndProc(ref Message m)
             {
@@ -919,12 +899,12 @@ namespace System.Windows.Forms.Design.Behavior
 
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_PAINT:
+                    case WindowMessages.WM_PAINT:
                         // Stash off the region we have to update
-                        IntPtr hrgn = NativeMethods.CreateRectRgn(0, 0, 0, 0);
-                        NativeMethods.GetUpdateRgn(m.HWnd, hrgn, true);
+                        IntPtr hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
+                        User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
                         // The region we have to update in terms of the smallest rectangle that completely encloses the update region of the window gives us the clip rectangle
-                        NativeMethods.RECT clip = new NativeMethods.RECT();
+                        RECT clip = new RECT();
                         NativeMethods.GetUpdateRect(m.HWnd, ref clip, true);
                         Rectangle paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
 
@@ -947,20 +927,16 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         finally
                         {
-                            NativeMethods.DeleteObject(hrgn);
+                            Gdi32.DeleteObject(hrgn);
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_NCHITTEST:
+                    case WindowMessages.WM_NCHITTEST:
                         Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)),
                                              (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
-                        NativeMethods.POINT pt1 = new NativeMethods.POINT
-                        {
-                            x = 0,
-                            y = 0
-                        };
-                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt1, 1);
-                        pt.Offset(pt1.x, pt1.y);
+                        var pt1 = new Point();
+                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        pt.Offset(pt1.X, pt1.Y);
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
                             m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
@@ -971,7 +947,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_CAPTURECHANGED:
+                    case WindowMessages.WM_CAPTURECHANGED:
                         base.WndProc(ref m);
                         _behaviorService.OnLoseCapture();
                         break;
@@ -992,56 +968,56 @@ namespace System.Windows.Forms.Design.Behavior
                 _behaviorService.PropagateHitTest(mouseLoc);
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_LBUTTONDOWN:
+                    case WindowMessages.WM_LBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_RBUTTONDOWN:
+                    case WindowMessages.WM_RBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Right, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case WindowMessages.WM_MOUSEMOVE:
                         if (_behaviorService.OnMouseMove(Control.MouseButtons, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_LBUTTONUP:
+                    case WindowMessages.WM_LBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Left))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_RBUTTONUP:
+                    case WindowMessages.WM_RBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Right))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_MOUSEHOVER:
+                    case WindowMessages.WM_MOUSEHOVER:
                         if (_behaviorService.OnMouseHover(mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                    case WindowMessages.WM_LBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                    case WindowMessages.WM_RBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Right, mouseLoc))
                         {
                             return false;
@@ -1128,7 +1104,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             try
                             {
-                                if (ProcessMouseMessage(mhs.hWnd, unchecked((int)(long)wparam), mhs.pt_x, mhs.pt_y))
+                                if (ProcessMouseMessage(mhs.hWnd, unchecked((int)(long)wparam), mhs.pt.X, mhs.pt.Y))
                                 {
                                     return (IntPtr)1;
                                 }
@@ -1202,19 +1178,15 @@ namespace System.Windows.Forms.Design.Behavior
                             try
                             {
                                 _processingMessage = true;
-                                NativeMethods.POINT pt = new NativeMethods.POINT
-                                {
-                                    x = x,
-                                    y = y
-                                };
-                                NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, pt, 1);
-                                Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.y, pt.x));
+                                var pt = new Point(x, y);
+                                NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, ref pt, 1);
+                                Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.Y, pt.X));
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
-                                if (m.Msg == Interop.WindowMessages.WM_LBUTTONDOWN)
+                                if (m.Msg == WindowMessages.WM_LBUTTONDOWN)
                                 {
                                     _lastLButtonDownTimeStamp = UnsafeNativeMethods.GetMessageTime();
                                 }
-                                else if (m.Msg == Interop.WindowMessages.WM_LBUTTONDBLCLK)
+                                else if (m.Msg == WindowMessages.WM_LBUTTONDBLCLK)
                                 {
                                     int lButtonDoubleClickTimeStamp = UnsafeNativeMethods.GetMessageTime();
                                     if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)
@@ -1223,7 +1195,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     }
                                 }
 
-                                if (!adornerWindow.WndProcProxy(ref m, pt.x, pt.y))
+                                if (!adornerWindow.WndProcProxy(ref m, pt.X, pt.Y))
                                 {
                                     // we did the work, stop the message propogation
                                     return true;

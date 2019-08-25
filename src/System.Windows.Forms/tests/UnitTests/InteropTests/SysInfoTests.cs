@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests.InteropTests
         {
 #pragma warning disable xUnit2000 // Constant on the right isn't typical
             Assert.Equal(Environment.Is64BitProcess ? 16 : 12, sizeof(NativeMethods.HIGHCONTRASTW));
-#pragma warning enable xUnit2000
+#pragma warning restore xUnit2000
         }
     }
 }

@@ -9,21 +9,21 @@ using System.Globalization;
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// This is the base class for handlers for Com2 extended browsing interface
-    /// such as IPerPropertyBrowsing, etc.
+    ///  This is the base class for handlers for Com2 extended browsing interface
+    ///  such as IPerPropertyBrowsing, etc.
     ///
-    /// These handlers should be stateless.  That is, they should keep no refs to object
-    /// and should only work on a give object and dispid.  That way all objects that
-    /// support a give interface can share a handler.
+    ///  These handlers should be stateless.  That is, they should keep no refs to object
+    ///  and should only work on a give object and dispid.  That way all objects that
+    ///  support a give interface can share a handler.
     ///
-    /// See Com2Properties for the array of handler classes to interface classes
-    /// where handlers should be registered.
+    ///  See Com2Properties for the array of handler classes to interface classes
+    ///  where handlers should be registered.
     /// </summary>
     internal class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
         /// <summary>
-        /// The interface that this handler managers
-        /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  The interface that this handler managers
+        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         public override Type Interface
         {
@@ -45,9 +45,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Called to setup the property handlers on a given properties
-        /// In this method, the handler will add listeners to the events that
-        /// the Com2PropertyDescriptor surfaces that it cares about.
+        ///  Called to setup the property handlers on a given properties
+        ///  In this method, the handler will add listeners to the events that
+        ///  the Com2PropertyDescriptor surfaces that it cares about.
         /// </summary>
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
@@ -88,8 +88,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
+        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private void OnGetDynamicAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo (part 2)
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo (part 2)
         /// </summary>
         private void OnGetDisplayName(Com2PropertyDescriptor sender, GetNameItemEvent nameItem)
         {
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Here is where we handle IVsPerPropertyBrowsing.IsPropertyReadOnly
+        ///  Here is where we handle IVsPerPropertyBrowsing.IsPropertyReadOnly
         /// </summary>
         private void OnGetIsReadOnly(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
         {
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Here is where we handle IVsPerPropertyBrowsing.DisplayChildProperties
+        ///  Here is where we handle IVsPerPropertyBrowsing.DisplayChildProperties
         /// </summary>
         private void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {

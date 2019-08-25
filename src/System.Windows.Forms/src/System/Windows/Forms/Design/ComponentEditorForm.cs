@@ -9,11 +9,12 @@ using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
+    ///  Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
     /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch)
@@ -648,7 +649,7 @@ namespace System.Windows.Forms.Design
             private const int STATE_SELECTED = 1;
             private const int STATE_HOT = 2;
 
-            private IntPtr hbrushDither;
+            private IntPtr _hbrushDither;
 
             public PageSelector()
             {
@@ -679,7 +680,7 @@ namespace System.Windows.Forms.Design
 
             private void CreateDitherBrush()
             {
-                Debug.Assert(hbrushDither == IntPtr.Zero, "Brush should not be recreated.");
+                Debug.Assert(_hbrushDither == IntPtr.Zero, "Brush should not be recreated.");
 
                 short[] patternBits = new short[] {
                     unchecked((short)0xAAAA), unchecked((short)0x5555), unchecked((short)0xAAAA), unchecked((short)0x5555),
@@ -692,21 +693,21 @@ namespace System.Windows.Forms.Design
 
                 if (hbitmapTemp != IntPtr.Zero)
                 {
-                    hbrushDither = SafeNativeMethods.CreatePatternBrush(new HandleRef(null, hbitmapTemp));
+                    _hbrushDither = SafeNativeMethods.CreatePatternBrush(new HandleRef(null, hbitmapTemp));
 
-                    Debug.Assert(hbrushDither != IntPtr.Zero,
+                    Debug.Assert(_hbrushDither != IntPtr.Zero,
                                  "Unable to created dithered brush. Page selector UI will not be correct");
 
-                    SafeNativeMethods.DeleteObject(new HandleRef(null, hbitmapTemp));
+                    Gdi32.DeleteObject(hbitmapTemp);
                 }
             }
 
-            private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, NativeMethods.RECT rcIn,
+            private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, RECT rcIn,
                                         int state, int backColor, int textColor)
             {
                 Size size = new Size();
-                IntNativeMethods.RECT rc2 = new IntNativeMethods.RECT();
-                IntNativeMethods.RECT rc = new IntNativeMethods.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
+                var rc2 = new RECT();
+                var rc = new RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
                 ImageList imagelist = ImageList;
                 IntPtr hfontOld = IntPtr.Zero;
 
@@ -714,11 +715,12 @@ namespace System.Windows.Forms.Design
                 // when the item is being tracked
                 if ((state & STATE_HOT) != 0)
                 {
-                    hfontOld = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(Parent, ((Control)Parent).FontHandle));
+                    hfontOld = Gdi32.SelectObject(dc, Parent.FontHandle);
+                    GC.KeepAlive(Parent);
                 }
 
                 // Fill the background
-                if (((state & STATE_SELECTED) != 0) && (hbrushDither != IntPtr.Zero))
+                if (((state & STATE_SELECTED) != 0) && (_hbrushDither != IntPtr.Zero))
                 {
                     FillRectDither(dc, rcIn);
                     SafeNativeMethods.SetBkMode(new HandleRef(null, dc), NativeMethods.TRANSPARENT);
@@ -730,7 +732,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Get the height of the font
-                IntUnsafeNativeMethods.GetTextExtentPoint32W(new HandleRef(null, dc), itemText, itemText.Length, ref size);
+                Gdi32.GetTextExtentPoint32W(dc, itemText, itemText.Length, ref size);
 
                 // Draw the caption
                 rc2.left = rc.left + SIZE_ICON_X + 2 * PADDING_HORZ;
@@ -738,8 +740,12 @@ namespace System.Windows.Forms.Design
                 rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), textColor);
-                IntUnsafeNativeMethods.DrawText(new HandleRef(null, dc), itemText, ref rc2,
-                                 IntNativeMethods.DT_LEFT | IntNativeMethods.DT_VCENTER | IntNativeMethods.DT_END_ELLIPSIS | IntNativeMethods.DT_NOPREFIX);
+                User32.DrawTextW(
+                    dc,
+                    itemText,
+                    itemText.Length,
+                    ref rc2,
+                    User32.TextFormatFlags.DT_LEFT | User32.TextFormatFlags.DT_VCENTER | User32.TextFormatFlags.DT_END_ELLIPSIS | User32.TextFormatFlags.DT_NOPREFIX);
 
                 SafeNativeMethods.ImageList_Draw(new HandleRef(imagelist, imagelist.Handle), imageIndex, new HandleRef(null, dc),
                                        PADDING_HORZ, rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
@@ -777,7 +783,7 @@ namespace System.Windows.Forms.Design
 
                 if (hfontOld != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, hfontOld));
+                    Gdi32.SelectObject(dc, hfontOld);
                 }
             }
 
@@ -791,7 +797,7 @@ namespace System.Windows.Forms.Design
                 itemHeight += 2 * PADDING_VERT;
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETITEMHEIGHT, itemHeight, 0);
 
-                if (hbrushDither == IntPtr.Zero)
+                if (_hbrushDither == IntPtr.Zero)
                 {
                     CreateDitherBrush();
                 }
@@ -846,16 +852,16 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleDestroyed(e);
 
-                if (!RecreatingHandle && (hbrushDither != IntPtr.Zero))
+                if (!RecreatingHandle && (_hbrushDither != IntPtr.Zero))
                 {
-                    SafeNativeMethods.DeleteObject(new HandleRef(this, hbrushDither));
-                    hbrushDither = IntPtr.Zero;
+                    Gdi32.DeleteObject(_hbrushDither);
+                    _hbrushDither = IntPtr.Zero;
                 }
             }
 
-            private void FillRectDither(IntPtr dc, NativeMethods.RECT rc)
+            private void FillRectDither(IntPtr dc, RECT rc)
             {
-                IntPtr hbrushOld = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(this, hbrushDither));
+                IntPtr hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
 
                 if (hbrushOld != IntPtr.Zero)
                 {
@@ -872,7 +878,7 @@ namespace System.Windows.Forms.Design
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY)
+                if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
                 {
                     NativeMethods.NMHDR nmh = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     if (nmh.code == NativeMethods.NM_CUSTOMDRAW)

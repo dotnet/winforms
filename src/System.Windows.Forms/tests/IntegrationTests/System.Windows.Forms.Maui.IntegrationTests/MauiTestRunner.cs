@@ -9,16 +9,16 @@ using System.Xml.Serialization;
 namespace System.Windows.Forms.Maui.IntegrationTests
 {
     /// <summary>
-    /// This class is used to run maui tests (exe) and gather the results.
-    /// Maui tests are executables that run one or more scenarios, and the results are
-    /// stored in a results.log. This class handles running the exe, deserializing the log
-    /// into a TestCase object, and returning that object to the caller.
+    ///  This class is used to run maui tests (exe) and gather the results.
+    ///  Maui tests are executables that run one or more scenarios, and the results are
+    ///  stored in a results.log. This class handles running the exe, deserializing the log
+    ///  into a TestCase object, and returning that object to the caller.
     ///
     /// </summary>
     public class MauiTestRunner
     {
         /// <summary>
-        /// Run a Maui test at the specified path and return the results
+        ///  Run a Maui test at the specified path and return the results
         /// </summary>
         /// <param name="path">The path to execute</param>
         /// <returns>The test results</returns>

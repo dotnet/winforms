@@ -3,21 +3,22 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
     public sealed class HtmlHistory : IDisposable
     {
-        private UnsafeNativeMethods.IOmHistory htmlHistory;
+        private IOmHistory htmlHistory;
         private bool disposed;
 
-        internal HtmlHistory(UnsafeNativeMethods.IOmHistory history)
+        internal HtmlHistory(IOmHistory history)
         {
             htmlHistory = history;
             Debug.Assert(NativeOmHistory != null, "The history object should implement IOmHistory");
         }
 
-        private UnsafeNativeMethods.IOmHistory NativeOmHistory
+        private IOmHistory NativeOmHistory
         {
             get
             {
@@ -81,10 +82,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Go to a specific url(string) in the history
         /// </summary>
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        /// break.
+        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+        ///  break.
         public void Go(string urlString)
         {
             object loc = (object)urlString;

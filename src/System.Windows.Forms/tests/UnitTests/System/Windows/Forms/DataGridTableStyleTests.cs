@@ -1282,11 +1282,11 @@ namespace System.Windows.Forms.Tests
             {
                 MappingName = value
             };
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
             
             // Set same.
             style.MappingName = value;
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
         }
 
         [Theory]
@@ -1303,12 +1303,11 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, dataGrid.Handle);
 
             style.MappingName = value;
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
             Assert.Equal(0, invalidatedCallCount);
             
-            // Set same.
             style.MappingName = value;
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
             Assert.Equal(0, invalidatedCallCount);
         }
 
@@ -1320,11 +1319,10 @@ namespace System.Windows.Forms.Tests
             {
                 MappingName = value
             };
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
             
-            // Set same.
             style.MappingName = value;
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
         }
 
         [Theory]

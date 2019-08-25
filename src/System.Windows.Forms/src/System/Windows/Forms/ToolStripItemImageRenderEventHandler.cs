@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Called when the background of a ToolStrip item is being rendered
+    ///  Called when the background of a ToolStrip item is being rendered
     /// </summary>
     public delegate void ToolStripItemImageRenderEventHandler(object sender, ToolStripItemImageRenderEventArgs e);
 }

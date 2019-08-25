@@ -33,7 +33,6 @@ namespace System.Windows.Forms
         // Member variables
         //
         //////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Allowable strings for the domain updown.
         /// </summary>
@@ -236,7 +235,6 @@ namespace System.Windows.Forms
         // Methods
         //
         //////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  Occurs when the <see cref='SelectedItem'/> property has
         ///  been changed.
@@ -283,10 +281,7 @@ namespace System.Windows.Forms
             if (matchIndex != -1)
             {
                 // Found a match, so select this value
-                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-                {
-                    domainIndex = matchIndex;
-                }
+                domainIndex = matchIndex;
                 SelectIndex(matchIndex);
             }
             else
@@ -394,9 +389,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Handles the <see cref='Control.KeyPress'/>
-        /// event, using the input character to find the next matching item in our
-        /// item collection.
+        ///  Handles the <see cref='Control.KeyPress'/>
+        ///  event, using the input character to find the next matching item in our
+        ///  item collection.
         /// </summary>
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
@@ -543,12 +538,6 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // legacy behaviour. we do not want to void operation if domainIndex was -1 in latest runtime.
-            if (domainIndex == -1 && LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-            {
-                return;
-            }
-
             // If the user has entered text, attempt to match it to the domain list
             int matchIndex = -1;
             if (UserEdit)
@@ -558,12 +547,7 @@ namespace System.Windows.Forms
             if (matchIndex != -1)
             {
                 // Found a match, so set the domain index accordingly
-                //In legacy (.NET framework 4.7.1 and below), we were just updating selected index but no actualy change in the spinner.
-                //with new runtime, we update the selected index and perform spinner action.
-                if (!LocalAppContextSwitches.UseLegacyDomainUpDownControlScrolling)
-                {
-                    domainIndex = matchIndex;
-                }
+                domainIndex = matchIndex;
                 SelectIndex(matchIndex);
             }
             else
@@ -608,8 +592,8 @@ namespace System.Windows.Forms
         // DomainUpDown collection class
 
         /// <summary>
-        /// Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
-        /// class.
+        ///  Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
+        ///  class.
         /// </summary>
         public class DomainUpDownItemCollection : ArrayList
         {
@@ -739,7 +723,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the accessible name.
+            ///  Gets or sets the accessible name.
             /// </summary>
             public override string Name
             {

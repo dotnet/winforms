@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -79,7 +80,7 @@ namespace System.Windows.Forms
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private bool fromHandleCreate = false;
         private StringSource stringSource = null;
-        private string placeholderText;
+        private string placeholderText = string.Empty;
 
         public TextBox()
         {
@@ -160,28 +161,24 @@ namespace System.Windows.Forms
             }
             set
             {
-                // FxCop: Avoid usage of Enum.IsDefined - this looks like an enum that could grow
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                             (int)value,
-                                             (int)AutoCompleteSource.None,
-                                             (int)AutoCompleteSource.AllSystemSources,
-                                             (int)AutoCompleteSource.AllUrl,
-                                             (int)AutoCompleteSource.CustomSource,
-                                             (int)AutoCompleteSource.FileSystem,
-                                             (int)AutoCompleteSource.FileSystemDirectories,
-                                             (int)AutoCompleteSource.HistoryList,
-                                             (int)AutoCompleteSource.ListItems,
-                                             (int)AutoCompleteSource.RecentlyUsedList))
+                switch (value)
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
+                    case AutoCompleteSource.None:
+                    case AutoCompleteSource.AllSystemSources:
+                    case AutoCompleteSource.AllUrl:
+                    case AutoCompleteSource.CustomSource:
+                    case AutoCompleteSource.FileSystem:
+                    case AutoCompleteSource.FileSystemDirectories:
+                    case AutoCompleteSource.HistoryList:
+                    case AutoCompleteSource.RecentlyUsedList:
+                        autoCompleteSource = value;
+                        SetAutoComplete(false);
+                        break;
+                    case AutoCompleteSource.ListItems:
+                        throw new NotSupportedException(SR.TextBoxAutoCompleteSourceNoItems);
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
                 }
-                if (value == AutoCompleteSource.ListItems)
-                {
-                    throw new NotSupportedException(SR.TextBoxAutoCompleteSourceNoItems);
-                }
-
-                autoCompleteSource = value;
-                SetAutoComplete(false);
             }
         }
 
@@ -372,7 +369,7 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
-                return (char)SendMessage(Interop.EditMessages.EM_GETPASSWORDCHAR, 0, 0);
+                return (char)SendMessage(EditMessages.EM_GETPASSWORDCHAR, 0, 0);
             }
             set
             {
@@ -384,7 +381,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessage(Interop.EditMessages.EM_SETPASSWORDCHAR, value, 0);
+                            SendMessage(EditMessages.EM_SETPASSWORDCHAR, value, 0);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -436,11 +433,11 @@ namespace System.Windows.Forms
 
             if (Multiline && !WordWrap && (ScrollBars & ScrollBars.Horizontal) != 0)
             {
-                scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(deviceDpi);
+                scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(_deviceDpi);
             }
             if (Multiline && (ScrollBars & ScrollBars.Vertical) != 0)
             {
-                scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(deviceDpi);
+                scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi);
             }
 
             // Subtract the scroll bar padding before measuring
@@ -648,7 +645,7 @@ namespace System.Windows.Forms
             {
                 if (!useSystemPasswordChar)
                 {
-                    SendMessage(Interop.EditMessages.EM_SETPASSWORDCHAR, passwordChar, 0);
+                    SendMessage(EditMessages.EM_SETPASSWORDCHAR, passwordChar, 0);
                 }
             }
 
@@ -687,17 +684,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Process a command key.
-        /// Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
-        /// Winforms TextBox supports this in .NET.
-            ///  m - the current windows message
-        /// keyData - bitmask containing one or more keys
-            /// </summary>
+        ///  Process a command key.
+        ///  Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
+        ///  Winforms TextBox supports this in .NET.
+        /// </summary>
+        /// <param name="m">The current windows message.</param>
+        /// <param name="keyData">The bitmask containing one or more keys.</param>
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
-            if (!returnValue && Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox
-                && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
+            if (!returnValue && Multiline && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
             {
                 SelectAll();
                 return true;
@@ -856,10 +852,10 @@ namespace System.Windows.Forms
         /// </summary>
         [
         Localizable(true),
-        DefaultValue(null),
+        DefaultValue(""),
         SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))
         ]
-        public string PlaceholderText
+        public virtual string PlaceholderText
         {
             get
             {
@@ -867,10 +863,18 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (value == null)
+                {
+                    value = string.Empty;
+                }
+
                 if (placeholderText != value)
                 {
                     placeholderText = value;
-                    Invalidate();
+                    if (IsHandleCreated)
+                    {
+                        Invalidate();
+                    }
                 }
             }
         }
@@ -878,7 +882,7 @@ namespace System.Windows.Forms
         //-------------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Draws the PlaceholderText in the client area of the TextBox using the default font and color.
+        ///  Draws the PlaceholderText in the client area of the TextBox using the default font and color.
         /// </summary>
         private void DrawPlaceholderText(Graphics graphics)
         {
@@ -938,7 +942,7 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 // Work around a very obscure Windows issue.
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
                     MouseButtons realState = MouseButtons;
                     bool wasValidationCancelled = ValidationCancelled;
                     Focus();
@@ -950,10 +954,10 @@ namespace System.Windows.Forms
                     break;
                 //for readability ... so that we know whats happening ...
                 // case WM_LBUTTONUP is included here eventhough it just calls the base.
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
                 default:
@@ -961,10 +965,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if ((m.Msg == Interop.WindowMessages.WM_PAINT || m.Msg == Interop.WindowMessages.WM_KILLFOCUS) &&
-                 !GetStyle(ControlStyles.UserPaint) &&
-                   string.IsNullOrEmpty(Text) &&
-                   !Focused)
+            if (ShouldRenderPlaceHolderText(m))
             {
                 using (Graphics g = CreateGraphics())
                 {
@@ -973,18 +974,25 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance()
+        private bool ShouldRenderPlaceHolderText(in Message m) =>
+                    !string.IsNullOrEmpty(PlaceholderText) &&
+                    (m.Msg == WindowMessages.WM_PAINT || m.Msg == WindowMessages.WM_KILLFOCUS) &&
+                    !GetStyle(ControlStyles.UserPaint) &&
+                    !Focused &&
+                    TextLength == 0;
+
+        internal TestAccessor GetTestAccessor() => new TestAccessor(this);
+
+        internal readonly struct TestAccessor
         {
-            if (string.IsNullOrEmpty(Text))
+            private readonly TextBox _textBox;
+
+            public TestAccessor(TextBox textBox)
             {
-                AccessibleObject accessibleObject = base.CreateAccessibilityInstance();
-                accessibleObject.Value = PlaceholderText;
-                return accessibleObject;
+                _textBox = textBox;
             }
-            else
-            {
-                return base.CreateAccessibilityInstance();
-            }
+
+            public bool ShouldRenderPlaceHolderText(in Message m) => _textBox.ShouldRenderPlaceHolderText(m);
         }
 
     }

@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='MainMenu'/> class with the specified container.
+        ///  Initializes a new instance of the <see cref='MainMenu'/> class with the specified container.
         /// </summary>
         public MainMenu(IContainer container) : this()
         {

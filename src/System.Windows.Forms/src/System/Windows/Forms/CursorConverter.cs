@@ -87,73 +87,62 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (value is Cursor cursor)
             {
-                throw new ArgumentNullException(nameof(destinationType));
-            }
-
-            if (destinationType == typeof(string) && value != null)
-            {
-                PropertyInfo[] props = GetProperties();
-                int bestMatch = -1;
-
-                for (int i = 0; i < props.Length; i++)
+                if (destinationType == typeof(string))
                 {
-                    PropertyInfo prop = props[i];
-                    object[] tempIndex = null;
-                    Cursor c = (Cursor)prop.GetValue(null, tempIndex);
-                    if (c == (Cursor)value)
+                    PropertyInfo[] props = GetProperties();
+                    int bestMatch = -1;
+
+                    for (int i = 0; i < props.Length; i++)
                     {
-                        if (Object.ReferenceEquals(c, value))
+                        PropertyInfo prop = props[i];
+                        object[] tempIndex = null;
+                        Cursor c = (Cursor)prop.GetValue(null, tempIndex);
+                        if (c == cursor)
                         {
-                            return prop.Name;
+                            if (ReferenceEquals(c, value))
+                            {
+                                return prop.Name;
+                            }
+                            else
+                            {
+                                bestMatch = i;
+                            }
                         }
-                        else
+                    }
+
+                    if (bestMatch != -1)
+                    {
+                        return props[bestMatch].Name;
+                    }
+
+                    // We throw here because we cannot meaningfully convert a custom
+                    // cursor into a string. In fact, the ResXResourceWriter will use
+                    // this exception to indicate to itself that this object should
+                    // be serialized through ISeriazable instead of a string.
+                    //
+                    throw new FormatException(SR.CursorCannotCovertToString);
+                }
+                else if (destinationType == typeof(InstanceDescriptor))
+                {
+                    PropertyInfo[] props = GetProperties();
+                    foreach (PropertyInfo prop in props)
+                    {
+                        if (prop.GetValue(null, null) == value)
                         {
-                            bestMatch = i;
+                            return new InstanceDescriptor(prop, null);
                         }
                     }
                 }
-
-                if (bestMatch != -1)
+                else if (destinationType == typeof(byte[]))
                 {
-                    return props[bestMatch].Name;
-                }
-
-                // We throw here because we cannot meaningfully convert a custom
-                // cursor into a string. In fact, the ResXResourceWriter will use
-                // this exception to indicate to itself that this object should
-                // be serialized through ISeriazable instead of a string.
-                //
-                throw new FormatException(SR.CursorCannotCovertToString);
-            }
-
-            if (destinationType == typeof(InstanceDescriptor) && value is Cursor)
-            {
-                PropertyInfo[] props = GetProperties();
-                foreach (PropertyInfo prop in props)
-                {
-                    if (prop.GetValue(null, null) == value)
-                    {
-                        return new InstanceDescriptor(prop, null);
-                    }
+                    return cursor.GetData();
                 }
             }
-
-            if (destinationType == typeof(byte[]))
+            else if (destinationType == typeof(byte[]) && value == null)
             {
-                if (value != null)
-                {
-                    MemoryStream ms = new MemoryStream();
-                    Cursor cursor = (Cursor)value;
-                    cursor.SavePicture(ms);
-                    ms.Close();
-                    return ms.ToArray();
-                }
-                else
-                {
-                    return Array.Empty<byte>();
-                }
+                return Array.Empty<byte>();
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

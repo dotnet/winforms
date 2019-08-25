@@ -5,8 +5,8 @@
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This class will provide a license context that the LicenseManager can use to get to
-    /// the design time services, like ITypeResolutionService.
+    ///  This class will provide a license context that the LicenseManager can use to get to
+    ///  the design time services, like ITypeResolutionService.
     /// </summary>
     internal class HostDesigntimeLicenseContext : DesigntimeLicenseContext
     {

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     {
         readonly List<NumericUpDownAcceleration> items;
 
-        /// ICollection<NumericUpDownAcceleration> implementation.
+        ///  ICollection<NumericUpDownAcceleration> implementation.
 
         /// <summary>
         ///  Adds an item (NumericUpDownAcceleration object) to the ICollection.
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             return items.Remove(acceleration);
         }
 
-        /// IEnumerable<NumericUpDownAcceleration> implementation.
+        ///  IEnumerable<NumericUpDownAcceleration> implementation.
 
         /// <summary>
         ///  Returns an enumerator that can iterate through the collection.
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
             return ((IEnumerable)items).GetEnumerator();
         }
 
-        /// NumericUpDownAccelerationCollection methods.
+        ///  NumericUpDownAccelerationCollection methods.
 
         /// <summary>
         ///  Class constructor.

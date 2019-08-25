@@ -2761,6 +2761,9 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DataGridVisibleRowCountDescr" xml:space="preserve">
     <value>Returns the count of visible rows in the grid.</value>
   </data>
+  <data name="DataObjectWhitespaceEmptyFormatNotAllowed" xml:space="preserve">
+    <value>Whitespace or empty string is not a valid value for parameter 'format'.</value>
+  </data>
   <data name="DataObjectDibNotSupported" xml:space="preserve">
     <value>Bitmap object does not directly support the device-independent bitmap format.  Either specify auto-conversion or perform a SetData with the Bitmap data format.</value>
   </data>
@@ -5750,10 +5753,10 @@ Stack trace where the illegal operation occurred was:
   <data name="TabControlSelectingEventDescr" xml:space="preserve">
     <value>Occurs when a tab page is being selected. </value>
   </data>
-  <data name="TABCONTROLTabPageNotOnTabControl" xml:space="preserve">
+  <data name="TabControlTabPageNotOnTabControl" xml:space="preserve">
     <value>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</value>
   </data>
-  <data name="TABCONTROLTabPageOnTabPage" xml:space="preserve">
+  <data name="TabControlTabPageOnTabPage" xml:space="preserve">
     <value>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</value>
   </data>
   <data name="TabControlTabsDescr" xml:space="preserve">

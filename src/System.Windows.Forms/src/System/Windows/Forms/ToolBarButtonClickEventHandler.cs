@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the method that will handle the <see cref='ToolBar.ButtonClick'/>
-    /// event of a <see cref='ToolBar'/>.
+    ///  Represents the method that will handle the <see cref='ToolBar.ButtonClick'/>
+    ///  event of a <see cref='ToolBar'/>.
     /// </summary>
     public delegate void ToolBarButtonClickEventHandler(object sender, ToolBarButtonClickEventArgs e);
 }

@@ -64,19 +64,6 @@ namespace System.Windows.Forms
             [In]
             ref Guid iid);
 
-        //This marshals differently than NativeMethods.POINTSTRUCT
-        internal struct POINTSTRUCT
-        {
-            public int x;
-            public int y;
-
-            public POINTSTRUCT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-        }
-
         [DllImport(ExternDll.Kernel32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetLocaleInfo(int Locale, int LCType, StringBuilder lpLCData, int cchData);
 
@@ -236,12 +223,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, SetLastError = true)]
         public static extern IntPtr DuplicateHandle(HandleRef processSource, HandleRef handleSource, HandleRef processTarget, ref IntPtr handleTarget, int desiredAccess, bool inheritHandle, int options);
 
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern IStorage StgOpenStorageOnILockBytes(ILockBytes iLockBytes, IStorage pStgPriority, int grfMode, int sndExcluded, int reserved);
-
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern IntPtr GetHGlobalFromILockBytes(ILockBytes pLkbyt);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SetWindowsHookEx(int hookid, NativeMethods.HookProc pfnhook, HandleRef hinst, int threadid);
 
@@ -261,7 +242,7 @@ namespace System.Windows.Forms
         public static extern IntPtr CallNextHookEx(HandleRef hhook, int code, IntPtr wparam, IntPtr lparam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ScreenToClient(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);
+        public static extern int ScreenToClient(HandleRef hWnd, ref Point pt);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
@@ -321,20 +302,11 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
-        [DllImport(ExternDll.User32, EntryPoint = "ChildWindowFromPointEx", ExactSpelling = true, CharSet = CharSet.Auto)]
-        private static extern IntPtr _ChildWindowFromPointEx(HandleRef hwndParent, POINTSTRUCT pt, int uFlags);
-
-        public static IntPtr ChildWindowFromPointEx(HandleRef hwndParent, int x, int y, int uFlags)
-        {
-            POINTSTRUCT ps = new POINTSTRUCT(x, y);
-            return _ChildWindowFromPointEx(hwndParent, ps, uFlags);
-        }
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
 
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, SetLastError = true)]
         public static extern bool CloseHandle(HandleRef handle);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr CreateCompatibleDC(HandleRef hDC);
 
         #region SendKeys SendInput functionality
 
@@ -357,9 +329,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int GetObject(HandleRef hObject, int nSize, ref int nEntries);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetObjectType(HandleRef hObject);
-
         [DllImport(ExternDll.User32)]
         public static extern IntPtr CreateAcceleratorTable(/*ACCEL*/ HandleRef pentries, int cCount);
 
@@ -379,7 +348,7 @@ namespace System.Windows.Forms
         public static extern IntPtr GetFocus();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos([In, Out] NativeMethods.POINT pt);
+        public static extern bool GetCursorPos(out Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
@@ -457,10 +426,10 @@ namespace System.Windows.Forms
         public static extern IntPtr FindWindow(string className, string windowName);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, [In, Out] ref NativeMethods.RECT rect, int cPoints);
+        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Interop.RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, [In, Out] NativeMethods.POINT pt, int cPoints);
+        public static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Point pt, uint cPoints);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, bool wParam, int lParam);
@@ -482,12 +451,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, StringBuilder lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TOOLINFO_T lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TOOLINFO_TOOLTIP lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.TBBUTTON lParam);
@@ -545,7 +508,7 @@ namespace System.Windows.Forms
         public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, [Out, MarshalAs(UnmanagedType.IUnknown)]out object editOle);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.CHARRANGE lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Interop.Richedit.CHARRANGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.FINDTEXT lParam);
@@ -554,10 +517,10 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TEXTRANGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.POINT lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Point lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, int lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, int lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
@@ -571,7 +534,7 @@ namespace System.Windows.Forms
         // For Button
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] NativeMethods.SIZE lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Size lParam);
 
         // For ListView
 
@@ -594,7 +557,7 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVGROUP lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, [In, Out] NativeMethods.LVINSERTMARK lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, [In, Out] NativeMethods.LVINSERTMARK lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVINSERTMARK lParam);
@@ -625,8 +588,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, [In, Out] ref NativeMethods.RECT lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
+        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, ref Interop.RECT lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, ref short wParam, ref short lParam);
@@ -637,8 +600,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, [In, Out] ref NativeMethods.RECT lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
+        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, ref Interop.RECT lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, [In, Out] ref Rectangle lParam);
@@ -654,8 +617,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(HandleRef hWnd, HandleRef hWndParent);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetWindowRect(HandleRef hWnd, [In, Out] ref NativeMethods.RECT rect);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern bool GetWindowRect(HandleRef hWnd, ref Interop.RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
@@ -665,9 +628,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
-
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetModuleHandle(string modName);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
@@ -679,45 +639,16 @@ namespace System.Windows.Forms
         public static extern IntPtr CallWindowProc(IntPtr wndProc, IntPtr hWnd, int msg,
                                                 IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Ansi)]
-        public static extern IntPtr GetProcAddress(HandleRef hModule, string lpProcName);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern bool GetClassInfoW(HandleRef hInstance, string lpClassName, ref NativeMethods.WNDCLASS lpWndClass);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetSystemMetrics(int nIndex);
-
-        // This API is available starting Windows10 RS1
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetSystemMetricsForDpi(int nIndex, uint dpi);
 
         [DllImport(ExternDll.Gdi32, CharSet = CharSet.Auto)]
         public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
 
-        /// <summary>
-        /// Tries to get system metrics for the dpi. dpi is ignored if "GetSystemMetricsForDpi" is not available on the OS that this application is running.
-        /// </summary>
-        /// <param name="nIndex">index</param>
-        /// <param name="dpi">dpi requested</param>
-        /// <returns>returns system metrics for dpi</returns>
-        public static int TryGetSystemMetricsForDpi(int nIndex, uint dpi)
-        {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.GetSystemMetricsForDpi)))
-            {
-                return GetSystemMetricsForDpi(nIndex, dpi);
-            }
-            else
-            {
-                Debug.Assert(false, "GetSystemMetricsForDpi() is not available on this OS");
-                return GetSystemMetrics(nIndex);
-            }
-        }
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
         private unsafe static extern bool SystemParametersInfoW(uint uiAction, uint uiParam, void* pvParam, uint fWinIni);
 
-        public unsafe static bool SystemParametersInfoW(uint uiAction, ref NativeMethods.RECT rect)
+        public unsafe static bool SystemParametersInfoW(uint uiAction, ref Interop.RECT rect)
         {
             fixed (void* p = &rect)
             {
@@ -792,11 +723,11 @@ namespace System.Windows.Forms
             uint dpi);
 
         /// <summary>
-        /// Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
+        ///  Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API is not available on the OS that this application is running.
         /// </summary>
         public unsafe static bool TrySystemParametersInfoForDpi(ref NativeMethods.NONCLIENTMETRICSW metrics, uint dpi)
         {
-            if (ApiHelper.IsApiAvailable(ExternDll.User32, nameof(UnsafeNativeMethods.SystemParametersInfoForDpi)))
+            if (OsVersion.IsWindows10_1607OrGreater)
             {
                 metrics.cbSize = (uint)sizeof(NativeMethods.NONCLIENTMETRICSW);
                 return SystemParametersInfoForDpi(
@@ -825,7 +756,7 @@ namespace System.Windows.Forms
         public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ClientToScreen(HandleRef hWnd, [In, Out] NativeMethods.POINT pt);
+        public static extern int ClientToScreen(HandleRef hWnd, ref Point lpPoint);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetForegroundWindow();
@@ -835,15 +766,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDesktopWindow();
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int RegisterDragDrop(HandleRef hwnd, IOleDropTarget target);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int RevokeDragDrop(HandleRef hwnd);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int RevokeDragDrop(IntPtr hwnd);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool PeekMessage([In, Out] ref NativeMethods.MSG msg, HandleRef hwnd, int msgMin, int msgMax, int remove);
@@ -892,16 +814,7 @@ namespace System.Windows.Forms
         public static extern bool EndPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr GetDC(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateDC(string lpszDriver, string lpszDeviceName, string lpszOutput, HandleRef devMode);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool SystemParametersInfo(int nAction, int nParam, [In, Out] IntPtr[] rc, int nUpdate);
@@ -912,9 +825,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Shell32, ExactSpelling = true, CharSet = CharSet.Ansi)]
         public static extern void DragAcceptFiles(HandleRef hWnd, bool fAccept);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetDeviceCaps(HandleRef hDC, int nIndex);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, NativeMethods.SCROLLINFO si);
 
@@ -923,12 +833,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetActiveWindow();
-
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr LoadLibrary(string libname);
-
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
-        private static extern IntPtr LoadLibraryEx(string lpModuleName, IntPtr hFile, uint dwFlags);
 
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
         //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should
@@ -983,12 +887,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLongPtr")]
         public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, NativeMethods.WndProc wndproc);
 
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern ILockBytes CreateILockBytesOnHGlobal(HandleRef hGlobal, bool fDeleteOnRelease);
-
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, int grfMode, int reserved);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr CreatePopupMenu();
 
@@ -1035,7 +933,7 @@ namespace System.Windows.Forms
         public static extern IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ClipCursor(ref NativeMethods.RECT rcClip);
+        public static extern bool ClipCursor(ref Interop.RECT rcClip);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool ClipCursor(NativeMethods.COMRECT rcClip);
@@ -1055,9 +953,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindow(HandleRef hWnd);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool DeleteDC(HandleRef hDC);
-
         public const int LAYOUT_RTL = 0x00000001;
         public const int LAYOUT_BITMAPORIENTATIONPRESERVED = 0x00000008;
 
@@ -1073,20 +968,14 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr PostMessage(HandleRef hwnd, int msg, int wparam, IntPtr lparam);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetClientRect(HandleRef hWnd, [In, Out] ref NativeMethods.RECT rect);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern bool GetClientRect(HandleRef hWnd, ref Interop.RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetClientRect(HandleRef hWnd, IntPtr rect);
 
-        [DllImport(ExternDll.User32, EntryPoint = "WindowFromPoint", ExactSpelling = true, CharSet = CharSet.Auto)]
-        private static extern IntPtr _WindowFromPoint(POINTSTRUCT pt);
-
-        public static IntPtr WindowFromPoint(int x, int y)
-        {
-            POINTSTRUCT ps = new POINTSTRUCT(x, y);
-            return _WindowFromPoint(ps);
-        }
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern IntPtr WindowFromPoint(Point pt);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr CreateWindowEx(
@@ -1105,9 +994,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DestroyWindow(HandleRef hWnd);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetStockObject(int nIndex);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
         public static extern ushort RegisterClassW(ref NativeMethods.WNDCLASS lpWndClass);
@@ -1137,9 +1023,9 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);
 
-        public unsafe static NativeMethods.RECT[] GetRectsFromRegion(IntPtr hRgn)
+        public unsafe static Interop.RECT[] GetRectsFromRegion(IntPtr hRgn)
         {
-            NativeMethods.RECT[] regionRects = null;
+            Interop.RECT[] regionRects = null;
             IntPtr pBytes = IntPtr.Zero;
             try
             {
@@ -1156,17 +1042,17 @@ namespace System.Windows.Forms
                         NativeMethods.RGNDATAHEADER* pRgnDataHeader = (NativeMethods.RGNDATAHEADER*)pBytes;
                         if (pRgnDataHeader->iType == 1)
                         {    // expecting RDH_RECTANGLES
-                            regionRects = new NativeMethods.RECT[pRgnDataHeader->nCount];
+                            regionRects = new Interop.RECT[pRgnDataHeader->nCount];
 
                             Debug.Assert(regionDataSize == pRgnDataHeader->cbSizeOfStruct + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                            Debug.Assert(Marshal.SizeOf<NativeMethods.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
+                            Debug.Assert(Marshal.SizeOf<Interop.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
 
                             // use the header size as the offset, and cast each rect in.
                             int rectStart = pRgnDataHeader->cbSizeOfStruct;
                             for (int i = 0; i < pRgnDataHeader->nCount; i++)
                             {
                                 // use some fancy pointer math to just copy the rect bits directly into the array.
-                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<NativeMethods.RECT>() * i)));
+                                regionRects[i] = *((Interop.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<Interop.RECT>() * i)));
                             }
                         }
                     }
@@ -1191,44 +1077,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport(), Guid("00000122-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleDropTarget
-        {
-            [PreserveSig]
-            int OleDragEnter(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pDataObj,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfKeyState,
-                [In]
-                POINTSTRUCT pt,
-                [In, Out]
-                ref int pdwEffect);
-
-            [PreserveSig]
-            int OleDragOver(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfKeyState,
-                [In]
-                POINTSTRUCT pt,
-                [In, Out]
-                ref int pdwEffect);
-
-            [PreserveSig]
-            int OleDragLeave();
-
-            [PreserveSig]
-            int OleDrop(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pDataObj,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfKeyState,
-                [In]
-                POINTSTRUCT pt,
-                [In, Out]
-                ref int pdwEffect);
-        }
-
         [ComImport(), Guid("00000121-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleDropSource
         {
@@ -1244,12 +1092,10 @@ namespace System.Windows.Forms
                 int dwEffect);
         }
 
-        [
-        ComImport(),
-        Guid("B196B289-BAB4-101A-B69C-00AA00341D07"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        public interface IOleControlSite
+        [ComImport()]
+        [Guid("B196B289-BAB4-101A-B69C-00AA00341D07")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleControlSite
         {
             [PreserveSig]
             int OnControlInfoChanged();
@@ -1263,13 +1109,10 @@ namespace System.Windows.Forms
                 out object ppDisp);
 
             [PreserveSig]
-            int TransformCoords(
-                [In, Out]
-                NativeMethods._POINTL pPtlHimetric,
-                [In, Out]
-                NativeMethods.tagPOINTF pPtfContainer,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwFlags);
+            Interop.HRESULT TransformCoords(
+                Point *pPtlHimetric,
+                PointF *pPtfContainer,
+                uint dwFlags);
 
             [PreserveSig]
             int TranslateAccelerator(
@@ -1345,8 +1188,8 @@ namespace System.Windows.Forms
                 NativeMethods.tagOIFI lpFrameInfo);
 
             [PreserveSig]
-            int Scroll(
-                NativeMethods.tagSIZE scrollExtant);
+            Interop.HRESULT Scroll(
+                Size scrollExtant);
 
             [PreserveSig]
             int OnUIDeactivate(
@@ -1569,10 +1412,8 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
             int ShowContextMenu(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwID,
-                [In]
-                NativeMethods.POINT pt,
+                uint dwID,
+                ref Point pt,
                 [In, MarshalAs(UnmanagedType.Interface)]
                 object pcmdtReserved,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -1651,13 +1492,10 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dw);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetDropTarget(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IOleDropTarget pDropTarget,
-                [Out, MarshalAs(UnmanagedType.Interface)]
-                out IOleDropTarget ppDropTarget);
+            Interop.HRESULT GetDropTarget(
+                Interop.Ole32.IDropTarget pDropTarget,
+                out Interop.Ole32.IDropTarget ppDropTarget);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
@@ -1804,2434 +1642,6 @@ namespace System.Windows.Forms
             void UpdatePageStatus([In, MarshalAs(UnmanagedType.IDispatch)] object pDisp,
                     [In] ref object nPage, [In] ref object fDone);
             [DispId(272)] void PrivacyImpactedStateChange([In] bool bImpacted);
-        }
-
-        [ComVisible(true), Guid("626FC520-A41E-11cf-A731-00A0C9082637"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLDocument
-        {
-            [return: MarshalAs(UnmanagedType.IDispatch)] object GetScript();
-        }
-
-        [ComVisible(true), Guid("332C4425-26CB-11D0-B483-00C04FD90119"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLDocument2
-        {
-            [return: MarshalAs(UnmanagedType.IDispatch)] object GetScript();
-            IHTMLElementCollection GetAll();
-            IHTMLElement GetBody();
-            IHTMLElement GetActiveElement();
-            IHTMLElementCollection GetImages();
-            IHTMLElementCollection GetApplets();
-            IHTMLElementCollection GetLinks();
-            IHTMLElementCollection GetForms();
-            IHTMLElementCollection GetAnchors();
-            void SetTitle(string p);
-            string GetTitle();
-            IHTMLElementCollection GetScripts();
-            void SetDesignMode(string p);
-            string GetDesignMode();
-            [return: MarshalAs(UnmanagedType.Interface)] object GetSelection();
-            string GetReadyState();
-            [return: MarshalAs(UnmanagedType.Interface)] object GetFrames();
-            IHTMLElementCollection GetEmbeds();
-            IHTMLElementCollection GetPlugins();
-            void SetAlinkColor(object c);
-            object GetAlinkColor();
-            void SetBgColor(object c);
-            object GetBgColor();
-            void SetFgColor(object c);
-            object GetFgColor();
-            void SetLinkColor(object c);
-            object GetLinkColor();
-            void SetVlinkColor(object c);
-            object GetVlinkColor();
-            string GetReferrer();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLLocation GetLocation();
-            string GetLastModified();
-            void SetUrl(string p);
-            string GetUrl();
-            void SetDomain(string p);
-            string GetDomain();
-            void SetCookie(string p);
-            string GetCookie();
-            void SetExpando(bool p);
-            bool GetExpando();
-            void SetCharset(string p);
-            string GetCharset();
-            void SetDefaultCharset(string p);
-            string GetDefaultCharset();
-            string GetMimeType();
-            string GetFileSize();
-            string GetFileCreatedDate();
-            string GetFileModifiedDate();
-            string GetFileUpdatedDate();
-            string GetSecurity();
-            string GetProtocol();
-            string GetNameProp();
-            int Write([In, MarshalAs(UnmanagedType.SafeArray)] object[] psarray);
-            int WriteLine([In, MarshalAs(UnmanagedType.SafeArray)] object[] psarray);
-            [return: MarshalAs(UnmanagedType.Interface)] object Open(string mimeExtension, object name, object features, object replace);
-            void Close();
-            void Clear();
-            bool QueryCommandSupported(string cmdID);
-            bool QueryCommandEnabled(string cmdID);
-            bool QueryCommandState(string cmdID);
-            bool QueryCommandIndeterm(string cmdID);
-            string QueryCommandText(
-                    string cmdID);
-            object QueryCommandValue(string cmdID);
-            bool ExecCommand(string cmdID,
-                    bool showUI, object value);
-            bool ExecCommandShowHelp(string cmdID);
-            IHTMLElement CreateElement(string eTag);
-            void SetOnhelp(object p);
-            object GetOnhelp();
-            void SetOnclick(object p);
-            object GetOnclick();
-            void SetOndblclick(object p);
-            object GetOndblclick();
-            void SetOnkeyup(object p);
-            object GetOnkeyup();
-            void SetOnkeydown(object p);
-            object GetOnkeydown();
-            void SetOnkeypress(object p);
-            object GetOnkeypress();
-            void SetOnmouseup(object p);
-            object GetOnmouseup();
-            void SetOnmousedown(object p);
-            object GetOnmousedown();
-            void SetOnmousemove(object p);
-            object GetOnmousemove();
-            void SetOnmouseout(object p);
-            object GetOnmouseout();
-            void SetOnmouseover(object p);
-            object GetOnmouseover();
-            void SetOnreadystatechange(object p);
-            object GetOnreadystatechange();
-            void SetOnafterupdate(object p);
-            object GetOnafterupdate();
-            void SetOnrowexit(object p);
-            object GetOnrowexit();
-            void SetOnrowenter(object p);
-            object GetOnrowenter();
-            void SetOndragstart(object p);
-            object GetOndragstart();
-            void SetOnselectstart(object p);
-            object GetOnselectstart();
-            IHTMLElement ElementFromPoint(int x, int y);
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLWindow2 GetParentWindow();
-            [return: MarshalAs(UnmanagedType.Interface)] object GetStyleSheets();
-            void SetOnbeforeupdate(object p);
-            object GetOnbeforeupdate();
-            void SetOnerrorupdate(object p);
-            object GetOnerrorupdate();
-            string toString();
-            [return: MarshalAs(UnmanagedType.Interface)] object CreateStyleSheet(string bstrHref, int lIndex);
-        }
-
-        [ComVisible(true), Guid("3050F485-98B5-11CF-BB82-00AA00BDCE0B"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLDocument3
-        {
-            void ReleaseCapture();
-            void Recalc([In] bool fForce);
-            object CreateTextNode([In] string text);
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElement GetDocumentElement();
-            string GetUniqueID();
-            bool AttachEvent([In] string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            void DetachEvent([In] string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            void SetOnrowsdelete([In] object p);
-            object GetOnrowsdelete();
-            void SetOnrowsinserted([In] object p);
-            object GetOnrowsinserted();
-            void SetOncellchange([In] object p);
-            object GetOncellchange();
-            void SetOndatasetchanged([In] object p);
-            object GetOndatasetchanged();
-            void SetOndataavailable([In] object p);
-            object GetOndataavailable();
-            void SetOndatasetcomplete([In] object p);
-            object GetOndatasetcomplete();
-            void SetOnpropertychange([In] object p);
-            object GetOnpropertychange();
-            void SetDir([In] string p);
-            string GetDir();
-            void SetOncontextmenu([In] object p);
-            object GetOncontextmenu();
-            void SetOnstop([In] object p);
-            object GetOnstop();
-            object CreateDocumentFragment();
-            object GetParentDocument();
-            void SetEnableDownload([In] bool p);
-            bool GetEnableDownload();
-            void SetBaseUrl([In] string p);
-            string GetBaseUrl();
-            [return: MarshalAs(UnmanagedType.IDispatch)] object GetChildNodes();
-            void SetInheritStyleSheets([In] bool p);
-            bool GetInheritStyleSheets();
-            void SetOnbeforeeditfocus([In] object p);
-            object GetOnbeforeeditfocus();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElementCollection GetElementsByName([In] string v);
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElement GetElementById([In] string v);
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElementCollection GetElementsByTagName([In] string v);
-        }
-
-        [ComVisible(true), Guid("3050F69A-98B5-11CF-BB82-00AA00BDCE0B"),
-        InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLDocument4
-        {
-            void Focus();
-            bool HasFocus();
-            void SetOnselectionchange(object p);
-            object GetOnselectionchange();
-            object GetNamespaces();
-            object createDocumentFromUrl(string bstrUrl, string bstrOptions);
-            void SetMedia(string bstrMedia);
-            string GetMedia();
-            object CreateEventObject([In, Optional] ref object eventObject);
-            bool FireEvent(string eventName);
-            object CreateRenderStyle(string bstr);
-            void SetOncontrolselect(object p);
-            object GetOncontrolselect();
-            string GetURLUnencoded();
-        }
-
-        [ComImport(), Guid("3050f613-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLDocumentEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(1026)] bool onstop(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(1027)] void onbeforeeditfocus(IHTMLEventObj evtObj);
-            [DispId(1037)] void onselectionchange(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-        }
-
-        [ComVisible(true), Guid("332C4426-26CB-11D0-B483-00C04FD90119"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLFramesCollection2
-        {
-            object Item(ref object idOrName);
-            int GetLength();
-        }
-
-        [ComVisible(true), Guid("332C4427-26CB-11D0-B483-00C04FD90119"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        public interface IHTMLWindow2
-        {
-            [return: MarshalAs(UnmanagedType.IDispatch)] object Item([In] ref object pvarIndex);
-            int GetLength();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLFramesCollection2 GetFrames();
-            void SetDefaultStatus([In] string p);
-            string GetDefaultStatus();
-            void SetStatus([In] string p);
-            string GetStatus();
-            int SetTimeout([In] string expression, [In] int msec, [In] ref object language);
-            void ClearTimeout([In] int timerID);
-            void Alert([In] string message);
-            bool Confirm([In] string message);
-            [return: MarshalAs(UnmanagedType.Struct)] object Prompt([In] string message, [In] string defstr);
-            object GetImage();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLLocation GetLocation();
-            [return: MarshalAs(UnmanagedType.Interface)] IOmHistory GetHistory();
-            void Close();
-            void SetOpener([In] object p);
-            [return: MarshalAs(UnmanagedType.IDispatch)] object GetOpener();
-            [return: MarshalAs(UnmanagedType.Interface)] IOmNavigator GetNavigator();
-            void SetName([In] string p);
-            string GetName();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLWindow2 GetParent();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLWindow2 Open([In] string URL, [In] string name, [In] string features, [In] bool replace);
-            object GetSelf();
-            object GetTop();
-            object GetWindow();
-            void Navigate([In] string URL);
-            void SetOnfocus([In] object p);
-            object GetOnfocus();
-            void SetOnblur([In] object p);
-            object GetOnblur();
-            void SetOnload([In] object p);
-            object GetOnload();
-            void SetOnbeforeunload(object p);
-            object GetOnbeforeunload();
-            void SetOnunload([In] object p);
-            object GetOnunload();
-            void SetOnhelp(object p);
-            object GetOnhelp();
-            void SetOnerror([In] object p);
-            object GetOnerror();
-            void SetOnresize([In] object p);
-            object GetOnresize();
-            void SetOnscroll([In] object p);
-            object GetOnscroll();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLDocument2 GetDocument();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLEventObj GetEvent();
-            object Get_newEnum();
-            object ShowModalDialog([In] string dialog, [In] ref object varArgIn, [In] ref object varOptions);
-            void ShowHelp([In] string helpURL, [In] object helpArg, [In] string features);
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLScreen GetScreen();
-            object GetOption();
-            void Focus();
-            bool GetClosed();
-            void Blur();
-            void Scroll([In] int x, [In] int y);
-            object GetClientInformation();
-            int SetInterval([In] string expression, [In] int msec, [In] ref object language);
-            void ClearInterval([In] int timerID);
-            void SetOffscreenBuffering([In] object p);
-            object GetOffscreenBuffering();
-            [return: MarshalAs(UnmanagedType.Struct)] object ExecScript([In] string code, [In] string language);
-            string toString();
-            void ScrollBy([In] int x, [In] int y);
-            void ScrollTo([In] int x, [In] int y);
-            void MoveTo([In] int x, [In] int y);
-            void MoveBy([In] int x, [In] int y);
-            void ResizeTo([In] int x, [In] int y);
-            void ResizeBy([In] int x, [In] int y);
-            object GetExternal();
-        }
-
-        [ComVisible(true), Guid("3050f4ae-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        public interface IHTMLWindow3
-        {
-            int GetScreenLeft();
-            int GetScreenTop();
-            bool AttachEvent(string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            void DetachEvent(string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            int SetTimeout([In]ref object expression, int msec, [In] ref object language);
-            int SetInterval([In]ref object expression, int msec, [In] ref object language);
-            void Print();
-            void SetBeforePrint(object o);
-            object GetBeforePrint();
-            void SetAfterPrint(object o);
-            object GetAfterPrint();
-            object GetClipboardData();
-            object ShowModelessDialog(string url, object varArgIn, object options);
-        }
-
-        [ComVisible(true), Guid("3050f6cf-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        public interface IHTMLWindow4
-        {
-            [return: MarshalAs(UnmanagedType.IDispatch)] object CreatePopup([In] ref object reserved);
-            [return: MarshalAs(UnmanagedType.Interface)] object frameElement();
-        }
-
-        [ComImport(), Guid("3050f625-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLWindowEvents2
-        {
-            [DispId(1003)] void onload(IHTMLEventObj evtObj);
-            [DispId(1008)] void onunload(IHTMLEventObj evtObj);
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1002)] bool onerror(string description, string url, int line);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(1017)] void onbeforeunload(IHTMLEventObj evtObj);
-            [DispId(1024)] void onbeforeprint(IHTMLEventObj evtObj);
-            [DispId(1025)] void onafterprint(IHTMLEventObj evtObj);
-        }
-
-        [ComVisible(true), Guid("3050f35c-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        public interface IHTMLScreen
-        {
-            int GetColorDepth();
-            void SetBufferDepth(int d);
-            int GetBufferDepth();
-            int GetWidth();
-            int GetHeight();
-            void SetUpdateInterval(int i);
-            int GetUpdateInterval();
-            int GetAvailHeight();
-            int GetAvailWidth();
-            bool GetFontSmoothingEnabled();
-        }
-
-        [ComVisible(true), Guid("163BB1E0-6E00-11CF-837A-48DC04C10000"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLLocation
-        {
-            void SetHref([In] string p);
-            string GetHref();
-            void SetProtocol([In] string p);
-            string GetProtocol();
-            void SetHost([In] string p);
-            string GetHost();
-            void SetHostname([In] string p);
-            string GetHostname();
-            void SetPort([In] string p);
-            string GetPort();
-            void SetPathname([In] string p);
-            string GetPathname();
-            void SetSearch([In] string p);
-            string GetSearch();
-            void SetHash([In] string p);
-            string GetHash();
-            void Reload([In] bool flag);
-            void Replace([In] string bstr);
-            void Assign([In] string bstr);
-        }
-
-        [ComVisible(true), Guid("FECEAAA2-8405-11CF-8BA1-00AA00476DA6"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IOmHistory
-        {
-            short GetLength();
-            void Back();
-            void Forward();
-            void Go([In] ref object pvargdistance);
-        }
-
-        [ComVisible(true), Guid("FECEAAA5-8405-11CF-8BA1-00AA00476DA6"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IOmNavigator
-        {
-            string GetAppCodeName();
-            string GetAppName();
-            string GetAppVersion();
-            string GetUserAgent();
-            bool JavaEnabled();
-            bool TaintEnabled();
-            object GetMimeTypes();
-            object GetPlugins();
-            bool GetCookieEnabled();
-            object GetOpsProfile();
-            string GetCpuClass();
-            string GetSystemLanguage();
-            string GetBrowserLanguage();
-            string GetUserLanguage();
-            string GetPlatform();
-            string GetAppMinorVersion();
-            int GetConnectionSpeed();
-            bool GetOnLine();
-            object GetUserProfile();
-        }
-
-        [ComVisible(true), Guid("3050F32D-98B5-11CF-BB82-00AA00BDCE0B"),
-        InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLEventObj
-        {
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElement GetSrcElement();
-            bool GetAltKey();
-            bool GetCtrlKey();
-            bool GetShiftKey();
-            void SetReturnValue(object p);
-            object GetReturnValue();
-            void SetCancelBubble(bool p);
-            bool GetCancelBubble();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElement GetFromElement();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElement GetToElement();
-            void SetKeyCode([In] int p);
-            int GetKeyCode();
-            int GetButton();
-            string GetEventType();
-            string GetQualifier();
-            int GetReason();
-            int GetX();
-            int GetY();
-            int GetClientX();
-            int GetClientY();
-            int GetOffsetX();
-            int GetOffsetY();
-            int GetScreenX();
-            int GetScreenY();
-            object GetSrcFilter();
-        }
-
-        [ComVisible(true), Guid("3050F21F-98B5-11CF-BB82-00AA00BDCE0B"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLElementCollection
-        {
-            string toString();
-            void SetLength(int p);
-            int GetLength();
-            [return: MarshalAs(UnmanagedType.Interface)] object Get_newEnum();
-            [return: MarshalAs(UnmanagedType.IDispatch)] object Item(object idOrName, object index);
-            [return: MarshalAs(UnmanagedType.Interface)] object Tags(object tagName);
-        }
-
-        [ComVisible(true), Guid("3050F1FF-98B5-11CF-BB82-00AA00BDCE0B"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLElement
-        {
-            void SetAttribute(string attributeName, object attributeValue, int lFlags);
-            object GetAttribute(string attributeName, int lFlags);
-            bool RemoveAttribute(string strAttributeName, int lFlags);
-            void SetClassName(string p);
-            string GetClassName();
-            void SetId(string p);
-            string GetId();
-            string GetTagName();
-            IHTMLElement GetParentElement();
-            IHTMLStyle GetStyle();
-            void SetOnhelp(object p);
-            object GetOnhelp();
-            void SetOnclick(object p);
-            object GetOnclick();
-            void SetOndblclick(object p);
-            object GetOndblclick();
-            void SetOnkeydown(object p);
-            object GetOnkeydown();
-            void SetOnkeyup(object p);
-            object GetOnkeyup();
-            void SetOnkeypress(object p);
-            object GetOnkeypress();
-            void SetOnmouseout(object p);
-            object GetOnmouseout();
-            void SetOnmouseover(object p);
-            object GetOnmouseover();
-            void SetOnmousemove(object p);
-            object GetOnmousemove();
-            void SetOnmousedown(object p);
-            object GetOnmousedown();
-            void SetOnmouseup(object p);
-            object GetOnmouseup();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLDocument2 GetDocument();
-            void SetTitle(string p);
-            string GetTitle();
-            void SetLanguage(string p);
-            string GetLanguage();
-            void SetOnselectstart(object p);
-            object GetOnselectstart();
-            void ScrollIntoView(object varargStart);
-            bool Contains(IHTMLElement pChild);
-            int GetSourceIndex();
-            object GetRecordNumber();
-            void SetLang(string p);
-            string GetLang();
-            int GetOffsetLeft();
-            int GetOffsetTop();
-            int GetOffsetWidth();
-            int GetOffsetHeight();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElement GetOffsetParent();
-            void SetInnerHTML(string p);
-            string GetInnerHTML();
-            void SetInnerText(string p);
-            string GetInnerText();
-            void SetOuterHTML(string p);
-            string GetOuterHTML();
-            void SetOuterText(string p);
-            string GetOuterText();
-            void InsertAdjacentHTML(string @where,
-                string html);
-            void InsertAdjacentText(string @where,
-                string text);
-            IHTMLElement GetParentTextEdit();
-            bool GetIsTextEdit();
-            void Click();
-            [return: MarshalAs(UnmanagedType.Interface)] object GetFilters();
-            void SetOndragstart(object p);
-            object GetOndragstart();
-            string toString();
-            void SetOnbeforeupdate(object p);
-            object GetOnbeforeupdate();
-            void SetOnafterupdate(object p);
-            object GetOnafterupdate();
-            void SetOnerrorupdate(object p);
-            object GetOnerrorupdate();
-            void SetOnrowexit(object p);
-            object GetOnrowexit();
-            void SetOnrowenter(object p);
-            object GetOnrowenter();
-            void SetOndatasetchanged(object p);
-            object GetOndatasetchanged();
-            void SetOndataavailable(object p);
-            object GetOndataavailable();
-            void SetOndatasetcomplete(object p);
-            object GetOndatasetcomplete();
-            void SetOnfilterchange(object p);
-            object GetOnfilterchange();
-            [return: MarshalAs(UnmanagedType.IDispatch)] object GetChildren();
-            [return: MarshalAs(UnmanagedType.IDispatch)] object GetAll();
-        }
-
-        [ComVisible(true), Guid("3050f434-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLElement2
-        {
-            string ScopeName();
-            void SetCapture(bool containerCapture);
-            void ReleaseCapture();
-            void SetOnLoseCapture(object v);
-            object GetOnLoseCapture();
-            string GetComponentFromPoint(int x, int y);
-            void DoScroll(object component);
-            void SetOnScroll(object v);
-            object GetOnScroll();
-            void SetOnDrag(object v);
-            object GetOnDrag();
-            void SetOnDragEnd(object v);
-            object GetOnDragEnd();
-            void SetOnDragEnter(object v);
-            object GetOnDragEnter();
-            void SetOnDragOver(object v);
-            object GetOnDragOver();
-            void SetOnDragleave(object v);
-            object GetOnDragLeave();
-            void SetOnDrop(object v);
-            object GetOnDrop();
-            void SetOnBeforeCut(object v);
-            object GetOnBeforeCut();
-            void SetOnCut(object v);
-            object GetOnCut();
-            void SetOnBeforeCopy(object v);
-            object GetOnBeforeCopy();
-            void SetOnCopy(object v);
-            object GetOnCopy(object p);
-            void SetOnBeforePaste(object v);
-            object GetOnBeforePaste(object p);
-            void SetOnPaste(object v);
-            object GetOnPaste(object p);
-            object GetCurrentStyle();
-            void SetOnPropertyChange(object v);
-            object GetOnPropertyChange(object p);
-            object GetClientRects();
-            object GetBoundingClientRect();
-            void SetExpression(string propName, string expression, string language);
-            object GetExpression(string propName);
-            bool RemoveExpression(string propName);
-            void SetTabIndex(int v);
-            short GetTabIndex();
-            void Focus();
-            void SetAccessKey(string v);
-            string GetAccessKey();
-            void SetOnBlur(object v);
-            object GetOnBlur();
-            void SetOnFocus(object v);
-            object GetOnFocus();
-            void SetOnResize(object v);
-            object GetOnResize();
-            void Blur();
-            void AddFilter(object pUnk);
-            void RemoveFilter(object pUnk);
-            int ClientHeight();
-            int ClientWidth();
-            int ClientTop();
-            int ClientLeft();
-            bool AttachEvent(string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            void DetachEvent(string ev, [In, MarshalAs(UnmanagedType.IDispatch)] object pdisp);
-            object ReadyState();
-            void SetOnReadyStateChange(object v);
-            object GetOnReadyStateChange();
-            void SetOnRowsDelete(object v);
-            object GetOnRowsDelete();
-            void SetOnRowsInserted(object v);
-            object GetOnRowsInserted();
-            void SetOnCellChange(object v);
-            object GetOnCellChange();
-            void SetDir(string v);
-            string GetDir();
-            object CreateControlRange();
-            int GetScrollHeight();
-            int GetScrollWidth();
-            void SetScrollTop(int v);
-            int GetScrollTop();
-            void SetScrollLeft(int v);
-            int GetScrollLeft();
-            void ClearAttributes();
-            void MergeAttributes(object mergeThis);
-            void SetOnContextMenu(object v);
-            object GetOnContextMenu();
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IHTMLElement
-                InsertAdjacentElement(string @where,
-                    [In, MarshalAs(UnmanagedType.Interface)] IHTMLElement insertedElement);
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IHTMLElement
-                applyElement([In, MarshalAs(UnmanagedType.Interface)] IHTMLElement apply,
-                    string @where);
-            string GetAdjacentText(string @where);
-            string ReplaceAdjacentText(string @where, string newText);
-            bool CanHaveChildren();
-            int AddBehavior(string url, ref object oFactory);
-            bool RemoveBehavior(int cookie);
-            object GetRuntimeStyle();
-            object GetBehaviorUrns();
-            void SetTagUrn(string v);
-            string GetTagUrn();
-            void SetOnBeforeEditFocus(object v);
-            object GetOnBeforeEditFocus();
-            int GetReadyStateValue();
-            [return: MarshalAs(UnmanagedType.Interface)] IHTMLElementCollection GetElementsByTagName(string v);
-        }
-
-        [ComVisible(true), Guid("3050f673-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLElement3
-        {
-            void MergeAttributes(object mergeThis, object pvarFlags);
-            bool IsMultiLine();
-            bool CanHaveHTML();
-            void SetOnLayoutComplete(object v);
-            object GetOnLayoutComplete();
-            void SetOnPage(object v);
-            object GetOnPage();
-            void SetInflateBlock(bool v);
-            bool GetInflateBlock();
-            void SetOnBeforeDeactivate(object v);
-            object GetOnBeforeDeactivate();
-            void SetActive();
-            void SetContentEditable(string v);
-            string GetContentEditable();
-            bool IsContentEditable();
-            void SetHideFocus(bool v);
-            bool GetHideFocus();
-            void SetDisabled(bool v);
-            bool GetDisabled();
-            bool IsDisabled();
-            void SetOnMove(object v);
-            object GetOnMove();
-            void SetOnControlSelect(object v);
-            object GetOnControlSelect();
-            bool FireEvent(string bstrEventName, IntPtr pvarEventObject);
-            void SetOnResizeStart(object v);
-            object GetOnResizeStart();
-            void SetOnResizeEnd(object v);
-            object GetOnResizeEnd();
-            void SetOnMoveStart(object v);
-            object GetOnMoveStart();
-            void SetOnMoveEnd(object v);
-            object GetOnMoveEnd();
-            void SetOnMouseEnter(object v);
-            object GetOnMouseEnter();
-            void SetOnMouseLeave(object v);
-            object GetOnMouseLeave();
-            void SetOnActivate(object v);
-            object GetOnActivate();
-            void SetOnDeactivate(object v);
-            object GetOnDeactivate();
-            bool DragDrop();
-            int GlyphMode();
-        }
-
-        [ComVisible(true), Guid("3050f5da-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        public interface IHTMLDOMNode
-        {
-            long GetNodeType();
-            IHTMLDOMNode GetParentNode();
-            bool HasChildNodes();
-            object GetChildNodes();
-            object GetAttributes();
-            IHTMLDOMNode InsertBefore(IHTMLDOMNode newChild, object refChild);
-            IHTMLDOMNode RemoveChild(IHTMLDOMNode oldChild);
-            IHTMLDOMNode ReplaceChild(IHTMLDOMNode newChild, IHTMLDOMNode oldChild);
-            IHTMLDOMNode CloneNode(bool fDeep);
-            IHTMLDOMNode RemoveNode(bool fDeep);
-            IHTMLDOMNode SwapNode(IHTMLDOMNode otherNode);
-            IHTMLDOMNode ReplaceNode(IHTMLDOMNode replacement);
-            IHTMLDOMNode AppendChild(IHTMLDOMNode newChild);
-            string NodeName();
-            void SetNodeValue(object v);
-            object GetNodeValue();
-            IHTMLDOMNode FirstChild();
-            IHTMLDOMNode LastChild();
-            IHTMLDOMNode PreviousSibling();
-            IHTMLDOMNode NextSibling();
-        };
-
-        [ComImport(), Guid("3050f60f-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f610-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLAnchorEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f611-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLAreaEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f617-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLButtonElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f612-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLControlElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f614-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLFormElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1007)] bool onsubmit(IHTMLEventObj evtObj);
-            [DispId(1015)] bool onreset(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f7ff-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLFrameSiteEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1003)] void onload(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f616-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLImgEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1003)] void onload(IHTMLEventObj evtObj);
-            [DispId(1002)] void onerror(IHTMLEventObj evtObj);
-            [DispId(1000)] void onabort(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f61a-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLInputFileElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(-2147412082)] bool onchange(IHTMLEventObj evtObj);
-            [DispId(-2147412102)] void onselect(IHTMLEventObj evtObj);
-            [DispId(1003)] void onload(IHTMLEventObj evtObj);
-            [DispId(1002)] void onerror(IHTMLEventObj evtObj);
-            [DispId(1000)] void onabort(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f61b-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLInputImageEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(-2147412080)] void onload(IHTMLEventObj evtObj);
-            [DispId(-2147412083)] void onerror(IHTMLEventObj evtObj);
-            [DispId(-2147412084)] void onabort(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f618-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLInputTextElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1001)] bool onchange(IHTMLEventObj evtObj);
-            [DispId(1006)] void onselect(IHTMLEventObj evtObj);
-            [DispId(1003)] void onload(IHTMLEventObj evtObj);
-            [DispId(1002)] void onerror(IHTMLEventObj evtObj);
-            [DispId(1001)] void onabort(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f61c-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLLabelEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f61d-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLLinkElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(-2147412080)] void onload(IHTMLEventObj evtObj);
-            [DispId(-2147412083)] void onerror(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f61e-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLMapEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f61f-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLMarqueeElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(-2147412092)] void onbounce(IHTMLEventObj evtObj);
-            [DispId(-2147412086)] void onfinish(IHTMLEventObj evtObj);
-            [DispId(-2147412085)] void onstart(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f619-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLOptionButtonElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(-2147412082)] bool onchange(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f622-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLSelectElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(-2147412082)] void onchange_void(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f615-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLStyleElementEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1003)] void onload(IHTMLEventObj evtObj);
-            [DispId(1002)] void onerror(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f623-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLTableEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f624-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLTextContainerEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1001)] void onchange_void(IHTMLEventObj evtObj);
-            [DispId(1006)] void onselect(IHTMLEventObj evtObj);
-        }
-
-        [ComImport(), Guid("3050f621-98b5-11cf-bb82-00aa00bdce0b"),
-        InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
-        TypeLibType(TypeLibTypeFlags.FHidden)]
-        public interface DHTMLScriptEvents2
-        {
-            [DispId(-2147418102)] bool onhelp(IHTMLEventObj evtObj);
-            [DispId(-600)] bool onclick(IHTMLEventObj evtObj);
-            [DispId(-601)] bool ondblclick(IHTMLEventObj evtObj);
-            [DispId(-603)] bool onkeypress(IHTMLEventObj evtObj);
-            [DispId(-602)] void onkeydown(IHTMLEventObj evtObj);
-            [DispId(-604)] void onkeyup(IHTMLEventObj evtObj);
-            [DispId(-2147418103)] void onmouseout(IHTMLEventObj evtObj);
-            [DispId(-2147418104)] void onmouseover(IHTMLEventObj evtObj);
-            [DispId(-606)] void onmousemove(IHTMLEventObj evtObj);
-            [DispId(-605)] void onmousedown(IHTMLEventObj evtObj);
-            [DispId(-607)] void onmouseup(IHTMLEventObj evtObj);
-            [DispId(-2147418100)] bool onselectstart(IHTMLEventObj evtObj);
-            [DispId(-2147418095)] void onfilterchange(IHTMLEventObj evtObj);
-            [DispId(-2147418101)] bool ondragstart(IHTMLEventObj evtObj);
-            [DispId(-2147418108)] bool onbeforeupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418107)] void onafterupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418099)] bool onerrorupdate(IHTMLEventObj evtObj);
-            [DispId(-2147418106)] bool onrowexit(IHTMLEventObj evtObj);
-            [DispId(-2147418105)] void onrowenter(IHTMLEventObj evtObj);
-            [DispId(-2147418098)] void ondatasetchanged(IHTMLEventObj evtObj);
-            [DispId(-2147418097)] void ondataavailable(IHTMLEventObj evtObj);
-            [DispId(-2147418096)] void ondatasetcomplete(IHTMLEventObj evtObj);
-            [DispId(-2147418094)] void onlosecapture(IHTMLEventObj evtObj);
-            [DispId(-2147418093)] void onpropertychange(IHTMLEventObj evtObj);
-            [DispId(1014)] void onscroll(IHTMLEventObj evtObj);
-            [DispId(-2147418111)] void onfocus(IHTMLEventObj evtObj);
-            [DispId(-2147418112)] void onblur(IHTMLEventObj evtObj);
-            [DispId(1016)] void onresize(IHTMLEventObj evtObj);
-            [DispId(-2147418092)] bool ondrag(IHTMLEventObj evtObj);
-            [DispId(-2147418091)] void ondragend(IHTMLEventObj evtObj);
-            [DispId(-2147418090)] bool ondragenter(IHTMLEventObj evtObj);
-            [DispId(-2147418089)] bool ondragover(IHTMLEventObj evtObj);
-            [DispId(-2147418088)] void ondragleave(IHTMLEventObj evtObj);
-            [DispId(-2147418087)] bool ondrop(IHTMLEventObj evtObj);
-            [DispId(-2147418083)] bool onbeforecut(IHTMLEventObj evtObj);
-            [DispId(-2147418086)] bool oncut(IHTMLEventObj evtObj);
-            [DispId(-2147418082)] bool onbeforecopy(IHTMLEventObj evtObj);
-            [DispId(-2147418085)] bool oncopy(IHTMLEventObj evtObj);
-            [DispId(-2147418081)] bool onbeforepaste(IHTMLEventObj evtObj);
-            [DispId(-2147418084)] bool onpaste(IHTMLEventObj evtObj);
-            [DispId(1023)] bool oncontextmenu(IHTMLEventObj evtObj);
-            [DispId(-2147418080)] void onrowsdelete(IHTMLEventObj evtObj);
-            [DispId(-2147418079)] void onrowsinserted(IHTMLEventObj evtObj);
-            [DispId(-2147418078)] void oncellchange(IHTMLEventObj evtObj);
-            [DispId(-609)] void onreadystatechange(IHTMLEventObj evtObj);
-            [DispId(1030)] void onlayoutcomplete(IHTMLEventObj evtObj);
-            [DispId(1031)] void onpage(IHTMLEventObj evtObj);
-            [DispId(1042)] void onmouseenter(IHTMLEventObj evtObj);
-            [DispId(1043)] void onmouseleave(IHTMLEventObj evtObj);
-            [DispId(1044)] void onactivate(IHTMLEventObj evtObj);
-            [DispId(1045)] void ondeactivate(IHTMLEventObj evtObj);
-            [DispId(1034)] bool onbeforedeactivate(IHTMLEventObj evtObj);
-            [DispId(1047)] bool onbeforeactivate(IHTMLEventObj evtObj);
-            [DispId(1048)] void onfocusin(IHTMLEventObj evtObj);
-            [DispId(1049)] void onfocusout(IHTMLEventObj evtObj);
-            [DispId(1035)] void onmove(IHTMLEventObj evtObj);
-            [DispId(1036)] bool oncontrolselect(IHTMLEventObj evtObj);
-            [DispId(1038)] bool onmovestart(IHTMLEventObj evtObj);
-            [DispId(1039)] void onmoveend(IHTMLEventObj evtObj);
-            [DispId(1040)] bool onresizestart(IHTMLEventObj evtObj);
-            [DispId(1041)] void onresizeend(IHTMLEventObj evtObj);
-            [DispId(1033)] bool onmousewheel(IHTMLEventObj evtObj);
-            [DispId(1002)] void onerror(IHTMLEventObj evtObj);
-        }
-
-        [ComVisible(true), Guid("3050F25E-98B5-11CF-BB82-00AA00BDCE0B"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLStyle
-        {
-            void SetFontFamily(string p);
-            string GetFontFamily();
-            void SetFontStyle(string p);
-            string GetFontStyle();
-            void SetFontObject(string p);
-            string GetFontObject();
-            void SetFontWeight(string p);
-            string GetFontWeight();
-            void SetFontSize(object p);
-            object GetFontSize();
-            void SetFont(string p);
-            string GetFont();
-            void SetColor(object p);
-            object GetColor();
-            void SetBackground(string p);
-            string GetBackground();
-            void SetBackgroundColor(object p);
-            object GetBackgroundColor();
-            void SetBackgroundImage(string p);
-            string GetBackgroundImage();
-            void SetBackgroundRepeat(string p);
-            string GetBackgroundRepeat();
-            void SetBackgroundAttachment(string p);
-            string GetBackgroundAttachment();
-            void SetBackgroundPosition(string p);
-            string GetBackgroundPosition();
-            void SetBackgroundPositionX(object p);
-            object GetBackgroundPositionX();
-            void SetBackgroundPositionY(object p);
-            object GetBackgroundPositionY();
-            void SetWordSpacing(object p);
-            object GetWordSpacing();
-            void SetLetterSpacing(object p);
-            object GetLetterSpacing();
-            void SetTextDecoration(string p);
-            string GetTextDecoration();
-            void SetTextDecorationNone(bool p);
-            bool GetTextDecorationNone();
-            void SetTextDecorationUnderline(bool p);
-            bool GetTextDecorationUnderline();
-            void SetTextDecorationOverline(bool p);
-            bool GetTextDecorationOverline();
-            void SetTextDecorationLineThrough(bool p);
-            bool GetTextDecorationLineThrough();
-            void SetTextDecorationBlink(bool p);
-            bool GetTextDecorationBlink();
-            void SetVerticalAlign(object p);
-            object GetVerticalAlign();
-            void SetTextTransform(string p);
-            string GetTextTransform();
-            void SetTextAlign(string p);
-            string GetTextAlign();
-            void SetTextIndent(object p);
-            object GetTextIndent();
-            void SetLineHeight(object p);
-            object GetLineHeight();
-            void SetMarginTop(object p);
-            object GetMarginTop();
-            void SetMarginRight(object p);
-            object GetMarginRight();
-            void SetMarginBottom(object p);
-            object GetMarginBottom();
-            void SetMarginLeft(object p);
-            object GetMarginLeft();
-            void SetMargin(string p);
-            string GetMargin();
-            void SetPaddingTop(object p);
-            object GetPaddingTop();
-            void SetPaddingRight(object p);
-            object GetPaddingRight();
-            void SetPaddingBottom(object p);
-            object GetPaddingBottom();
-            void SetPaddingLeft(object p);
-            object GetPaddingLeft();
-            void SetPadding(string p);
-            string GetPadding();
-            void SetBorder(string p);
-            string GetBorder();
-            void SetBorderTop(string p);
-            string GetBorderTop();
-            void SetBorderRight(string p);
-            string GetBorderRight();
-            void SetBorderBottom(string p);
-            string GetBorderBottom();
-            void SetBorderLeft(string p);
-            string GetBorderLeft();
-            void SetBorderColor(string p);
-            string GetBorderColor();
-            void SetBorderTopColor(object p);
-            object GetBorderTopColor();
-            void SetBorderRightColor(object p);
-            object GetBorderRightColor();
-            void SetBorderBottomColor(object p);
-            object GetBorderBottomColor();
-            void SetBorderLeftColor(object p);
-            object GetBorderLeftColor();
-            void SetBorderWidth(string p);
-            string GetBorderWidth();
-            void SetBorderTopWidth(object p);
-            object GetBorderTopWidth();
-            void SetBorderRightWidth(object p);
-            object GetBorderRightWidth();
-            void SetBorderBottomWidth(object p);
-            object GetBorderBottomWidth();
-            void SetBorderLeftWidth(object p);
-            object GetBorderLeftWidth();
-            void SetBorderStyle(string p);
-            string GetBorderStyle();
-            void SetBorderTopStyle(string p);
-            string GetBorderTopStyle();
-            void SetBorderRightStyle(string p);
-            string GetBorderRightStyle();
-            void SetBorderBottomStyle(string p);
-            string GetBorderBottomStyle();
-            void SetBorderLeftStyle(string p);
-            string GetBorderLeftStyle();
-            void SetWidth(object p);
-            object GetWidth();
-            void SetHeight(object p);
-            object GetHeight();
-            void SetStyleFloat(string p);
-            string GetStyleFloat();
-            void SetClear(string p);
-            string GetClear();
-            void SetDisplay(string p);
-            string GetDisplay();
-            void SetVisibility(string p);
-            string GetVisibility();
-            void SetListStyleType(string p);
-            string GetListStyleType();
-            void SetListStylePosition(string p);
-            string GetListStylePosition();
-            void SetListStyleImage(string p);
-            string GetListStyleImage();
-            void SetListStyle(string p);
-            string GetListStyle();
-            void SetWhiteSpace(string p);
-            string GetWhiteSpace();
-            void SetTop(object p);
-            object GetTop();
-            void SetLeft(object p);
-            object GetLeft();
-            string GetPosition();
-            void SetZIndex(object p);
-            object GetZIndex();
-            void SetOverflow(string p);
-            string GetOverflow();
-            void SetPageBreakBefore(string p);
-            string GetPageBreakBefore();
-            void SetPageBreakAfter(string p);
-            string GetPageBreakAfter();
-            void SetCssText(string p);
-            string GetCssText();
-            void SetPixelTop(int p);
-            int GetPixelTop();
-            void SetPixelLeft(int p);
-            int GetPixelLeft();
-            void SetPixelWidth(int p);
-            int GetPixelWidth();
-            void SetPixelHeight(int p);
-            int GetPixelHeight();
-            void SetPosTop(float p);
-            float GetPosTop();
-            void SetPosLeft(float p);
-            float GetPosLeft();
-            void SetPosWidth(float p);
-            float GetPosWidth();
-            void SetPosHeight(float p);
-            float GetPosHeight();
-            void SetCursor(string p);
-            string GetCursor();
-            void SetClip(string p);
-            string GetClip();
-            void SetFilter(string p);
-            string GetFilter();
-            void SetAttribute(string strAttributeName, object AttributeValue, int lFlags);
-            object GetAttribute(string strAttributeName, int lFlags);
-            bool RemoveAttribute(string strAttributeName, int lFlags);
         }
 
         [ComImport(),
@@ -4901,40 +2311,6 @@ namespace System.Windows.Forms
             object GetEmbeddedObject();
         };
 
-        [ComImport(), Guid("00020D03-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRichEditOleCallback
-        {
-            [PreserveSig]
-            int GetNewStorage(out IStorage ret);
-
-            [PreserveSig]
-            int GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo);
-
-            [PreserveSig]
-            int ShowContainerUI(int fShow);
-
-            [PreserveSig]
-            int QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp);
-
-            [PreserveSig]
-            int DeleteObject(IntPtr lpoleobj);
-
-            [PreserveSig]
-            int QueryAcceptData(IComDataObject lpdataobj, /* CLIPFORMAT* */ IntPtr lpcfFormat, int reco, int fReally, IntPtr hMetaPict);
-
-            [PreserveSig]
-            int ContextSensitiveHelp(int fEnterMode);
-
-            [PreserveSig]
-            int GetClipboardData(NativeMethods.CHARRANGE lpchrg, int reco, IntPtr lplpdataobj);
-
-            [PreserveSig]
-            int GetDragDropEffect(bool fDrag, int grfKeyState, ref int pdwEffect);
-
-            [PreserveSig]
-            int GetContextMenu(short seltype, IntPtr lpoleobj, NativeMethods.CHARRANGE lpchrg, out IntPtr hmenu);
-        }
-
         [ComImport(), Guid("00000115-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleInPlaceUIWindow
         {
@@ -5034,10 +2410,10 @@ namespace System.Windows.Forms
             void ReactivateAndUndo();
         }
 
-        [ComImport(),
-        Guid("00000112-0000-0000-C000-000000000046"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleObject
+        [ComImport()]
+        [Guid("00000112-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleObject
         {
             [PreserveSig]
             int SetClientSite(
@@ -5121,18 +2497,10 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            int SetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [In]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
-            int GetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [Out]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -5159,8 +2527,10 @@ namespace System.Windows.Forms
                       NativeMethods.tagLOGPALETTE pLogpal);
         }
 
-        [ComImport(), Guid("1C2056CC-5EF4-101B-8BC8-00AA003E3B29"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceObjectWindowless
+        [ComImport]
+        [Guid("1C2056CC-5EF4-101B-8BC8-00AA003E3B29")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleInPlaceObjectWindowless
         {
             [PreserveSig]
             int SetClientSite(
@@ -5245,18 +2615,10 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            int SetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [In]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
-            int GetExtent(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwDrawAspect,
-                   [Out]
-                     NativeMethods.tagSIZEL pSizel);
+            Interop.HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -5398,8 +2760,10 @@ namespace System.Windows.Forms
                 IAdviseSink[] pAdvSink);
         }
 
-        [ComImport(), Guid("00000127-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IViewObject2 /* : IViewObject */
+        [ComImport]
+        [Guid("00000127-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IViewObject2 /* : IViewObject */
         {
             void Draw(
                 [In, MarshalAs(UnmanagedType.U4)]
@@ -5463,14 +2827,12 @@ namespace System.Windows.Forms
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 IAdviseSink[] pAdvSink);
 
-            void GetExtent(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+            [PreserveSig]
+            Interop.HRESULT GetExtent(
+                uint dwDrawAspect,
                 int lindex,
-                [In]
                 NativeMethods.tagDVTARGETDEVICE ptd,
-                [Out]
-                NativeMethods.tagSIZEL lpsizel);
+                Size *lpsizel);
         }
 
         [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -5481,50 +2843,35 @@ namespace System.Windows.Forms
                            out Guid pClassID);
         }
 
-        [ComImport(), Guid("37D84F60-42CB-11CE-8135-00AA004BB851"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistPropertyBag
+        [ComImport]
+        [Guid("37D84F60-42CB-11CE-8135-00AA004BB851")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IPersistPropertyBag /* : IPersist */
         {
-            void GetClassID(
-                [Out]
-                out Guid pClassID);
+            void GetClassID(out Guid pClassID);
 
             void InitNew();
 
-            void Load(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IPropertyBag pPropBag,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IErrorLog pErrorLog);
+            void Load(IPropertyBag pPropBag, IErrorLog pErrorLog);
 
-            void Save(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IPropertyBag pPropBag,
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fClearDirty,
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fSaveAllProperties);
+            void Save(IPropertyBag pPropBag, Interop.BOOL fClearDirty, Interop.BOOL fSaveAllProperties);
         }
 
-        [
-            ComImport(),
-        Guid("CF51ED10-62FE-11CF-BF86-00A0C9034836"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        public interface IQuickActivate
+        [ComImport()]
+        [Guid("CF51ED10-62FE-11CF-BF86-00A0C9034836")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IQuickActivate
         {
             void QuickActivate(
-                              [In]
                               tagQACONTAINER pQaContainer,
                               [Out]
                               tagQACONTROL pQaControl);
 
-            void SetContentExtent(
-                                 [In]
-                                 NativeMethods.tagSIZEL pSizel);
+            [PreserveSig]
+            Interop.HRESULT SetContentExtent(Size* pSizel);
 
-            void GetContentExtent(
-                                 [Out]
-                                 NativeMethods.tagSIZEL pSizel);
+            [PreserveSig]
+            Interop.HRESULT GetContentExtent(Size* pSizel);
         }
 
         [ComImport(), Guid("55272A00-42CB-11CE-8135-00AA004BB851"),
@@ -5559,56 +2906,6 @@ namespace System.Windows.Forms
                               NativeMethods.tagEXCEPINFO pExcepInfo_p1);
         }
 
-        [ComImport(), Guid("00000109-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStream
-        {
-            void GetClassID([Out] out Guid pClassId);
-
-            [PreserveSig]
-            int IsDirty();
-
-            void Load(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm);
-
-            void Save(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm,
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                 bool fClearDirty);
-
-            long GetSizeMax();
-        }
-
-        [ComImport(),
-        Guid("7FD52380-4E07-101B-AE2D-08002B2EC713"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStreamInit
-        {
-            void GetClassID(
-                   [Out]
-                  out Guid pClassID);
-
-            [PreserveSig]
-            int IsDirty();
-
-            void Load(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm);
-
-            void Save(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                      IStream pstm,
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                     bool fClearDirty);
-
-            void GetSizeMax(
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 long pcbSize);
-
-            void InitNew();
-        }
-
         [ComImport(),
         Guid("B196B286-BAB4-101A-B69C-00AA00341D07"),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -5634,28 +2931,6 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int EnumConnections(out object pEnum);
-        }
-
-        [ComImport(), Guid("0000010A-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStorage
-        {
-            void GetClassID(
-                   [Out]
-                  out Guid pClassID);
-
-            [PreserveSig]
-            int IsDirty();
-
-            void InitNew(IStorage pstg);
-
-            [PreserveSig]
-            int Load(IStorage pstg);
-
-            void Save(IStorage pStgSave, bool fSameAsLoad);
-
-            void SaveCompleted(IStorage pStgNew);
-
-            void HandsOffStorage();
         }
 
         [ComImport(), Guid("00020404-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -5719,64 +2994,6 @@ namespace System.Windows.Forms
             int SetOptions([In] int dwFlag);
 
             void GetOptions([Out] IntPtr pdwFlag);
-        }
-
-        [ComImport(), Guid("0000000C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IStream
-        {
-            int Read(
-                    IntPtr buf,
-                    int len);
-
-            int Write(
-                    IntPtr buf,
-                    int len);
-
-            [return: MarshalAs(UnmanagedType.I8)]
-            long Seek(
-                    [In, MarshalAs(UnmanagedType.I8)]
-                 long dlibMove,
-                     int dwOrigin);
-
-            void SetSize(
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long libNewSize);
-
-            [return: MarshalAs(UnmanagedType.I8)]
-            long CopyTo(
-                    [In, MarshalAs(UnmanagedType.Interface)]
-                  IStream pstm,
-                    [In, MarshalAs(UnmanagedType.I8)]
-                 long cb,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                 long[] pcbRead);
-
-            void Commit(
-                    int grfCommitFlags);
-
-            void Revert();
-
-            void LockRegion(
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long libOffset,
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long cb,
-                    int dwLockType);
-
-            void UnlockRegion(
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long libOffset,
-                   [In, MarshalAs(UnmanagedType.I8)]
-                 long cb,
-                    int dwLockType);
-
-            void Stat(
-                    [Out]
-                 NativeMethods.STATSTG pStatstg,
-                    int grfStatFlag);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStream Clone();
         }
 
         public abstract class CharBuffer
@@ -5843,333 +3060,6 @@ namespace System.Windows.Forms
                     buffer[offset++] = (char)0;
                 }
             }
-        }
-
-        public class ComStreamFromDataStream : IStream
-        {
-            protected Stream dataStream;
-
-            // to support seeking ahead of the stream length...
-            private long virtualPosition = -1;
-
-            public ComStreamFromDataStream(Stream dataStream)
-            {
-                this.dataStream = dataStream ?? throw new ArgumentNullException(nameof(dataStream));
-            }
-
-            private void ActualizeVirtualPosition()
-            {
-                if (virtualPosition == -1)
-                {
-                    return;
-                }
-
-                if (virtualPosition > dataStream.Length)
-                {
-                    dataStream.SetLength(virtualPosition);
-                }
-
-                dataStream.Position = virtualPosition;
-
-                virtualPosition = -1;
-            }
-
-            public IStream Clone()
-            {
-                NotImplemented();
-                return null;
-            }
-
-            public void Commit(int grfCommitFlags)
-            {
-                dataStream.Flush();
-                // Extend the length of the file if needed.
-                ActualizeVirtualPosition();
-            }
-
-            public long CopyTo(IStream pstm, long cb, long[] pcbRead)
-            {
-                int bufsize = 4096; // one page
-                IntPtr buffer = Marshal.AllocHGlobal(bufsize);
-                if (buffer == IntPtr.Zero)
-                {
-                    throw new OutOfMemoryException();
-                }
-
-                long written = 0;
-                try
-                {
-                    while (written < cb)
-                    {
-                        int toRead = bufsize;
-                        if (written + toRead > cb)
-                        {
-                            toRead = (int)(cb - written);
-                        }
-
-                        int read = Read(buffer, toRead);
-                        if (read == 0)
-                        {
-                            break;
-                        }
-
-                        if (pstm.Write(buffer, read) != read)
-                        {
-                            throw EFail("Wrote an incorrect number of bytes");
-                        }
-                        written += read;
-                    }
-                }
-                finally
-                {
-                    Marshal.FreeHGlobal(buffer);
-                }
-                if (pcbRead != null && pcbRead.Length > 0)
-                {
-                    pcbRead[0] = written;
-                }
-
-                return written;
-            }
-
-            public Stream GetDataStream()
-            {
-                return dataStream;
-            }
-
-            public void LockRegion(long libOffset, long cb, int dwLockType)
-            {
-            }
-
-            protected static ExternalException EFail(string msg)
-            {
-                ExternalException e = new ExternalException(msg, NativeMethods.E_FAIL);
-                throw e;
-            }
-
-            protected static void NotImplemented()
-            {
-                ExternalException e = new ExternalException(SR.UnsafeNativeMethodsNotImplemented, NativeMethods.E_NOTIMPL);
-                throw e;
-            }
-
-            public int Read(IntPtr buf, /* cpr: int offset,*/  int length)
-            {
-                //        System.Text.Out.WriteLine("IStream::Read(" + length + ")");
-                byte[] buffer = new byte[length];
-                int count = Read(buffer, length);
-                Marshal.Copy(buffer, 0, buf, count);
-                return count;
-            }
-
-            public int Read(byte[] buffer, /* cpr: int offset,*/  int length)
-            {
-                ActualizeVirtualPosition();
-                return dataStream.Read(buffer, 0, length);
-            }
-
-            public void Revert()
-            {
-                NotImplemented();
-            }
-
-            public long Seek(long offset, int origin)
-            {
-                // Console.WriteLine("IStream::Seek("+ offset + ", " + origin + ")");
-                long pos = virtualPosition;
-                if (virtualPosition == -1)
-                {
-                    pos = dataStream.Position;
-                }
-                long len = dataStream.Length;
-                switch (origin)
-                {
-                    case NativeMethods.STREAM_SEEK_SET:
-                        if (offset <= len)
-                        {
-                            dataStream.Position = offset;
-                            virtualPosition = -1;
-                        }
-                        else
-                        {
-                            virtualPosition = offset;
-                        }
-                        break;
-                    case NativeMethods.STREAM_SEEK_END:
-                        if (offset <= 0)
-                        {
-                            dataStream.Position = len + offset;
-                            virtualPosition = -1;
-                        }
-                        else
-                        {
-                            virtualPosition = len + offset;
-                        }
-                        break;
-                    case NativeMethods.STREAM_SEEK_CUR:
-                        if (offset + pos <= len)
-                        {
-                            dataStream.Position = pos + offset;
-                            virtualPosition = -1;
-                        }
-                        else
-                        {
-                            virtualPosition = offset + pos;
-                        }
-                        break;
-                }
-                if (virtualPosition != -1)
-                {
-                    return virtualPosition;
-                }
-                else
-                {
-                    return dataStream.Position;
-                }
-            }
-
-            public void SetSize(long value)
-            {
-                dataStream.SetLength(value);
-            }
-
-            public void Stat(NativeMethods.STATSTG pstatstg, int grfStatFlag)
-            {
-                pstatstg.type = 2; // STGTY_STREAM
-                pstatstg.cbSize = dataStream.Length;
-                pstatstg.grfLocksSupported = 2; //LOCK_EXCLUSIVE
-            }
-
-            public void UnlockRegion(long libOffset, long cb, int dwLockType)
-            {
-            }
-
-            public int Write(IntPtr buf, /* cpr: int offset,*/ int length)
-            {
-                byte[] buffer = new byte[length];
-                Marshal.Copy(buf, buffer, 0, length);
-                return Write(buffer, length);
-            }
-
-            public int Write(byte[] buffer, /* cpr: int offset,*/ int length)
-            {
-                ActualizeVirtualPosition();
-                dataStream.Write(buffer, 0, length);
-                return length;
-            }
-        }
-
-        [ComImport(), Guid("0000000B-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IStorage
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStream CreateStream(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved1,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved2);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStream OpenStream(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                     IntPtr reserved1,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved2);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStorage CreateStorage(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved1,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved2);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStorage OpenStorage(
-                    [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                     IntPtr pstgPriority,   // must be null
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int grfMode,
-                     IntPtr snbExclude,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved);
-
-            void CopyTo(
-                    int ciidExclude,
-                   [In, MarshalAs(UnmanagedType.LPArray)]
-                 Guid[] pIIDExclude,
-                    IntPtr snbExclude,
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                 IStorage stgDest);
-
-            void MoveElementTo(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                 IStorage stgDest,
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsNewName,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int grfFlags);
-
-            void Commit(
-                    int grfCommitFlags);
-
-            void Revert();
-
-            void EnumElements(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved1,
-                    // void *
-                    IntPtr reserved2,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int reserved3,
-                   [Out, MarshalAs(UnmanagedType.Interface)]
-                 out object ppVal);                     // IEnumSTATSTG
-
-            void DestroyElement(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName);
-
-            void RenameElement(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsOldName,
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsNewName);
-
-            void SetElementTimes(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                 string pwcsName,
-                   [In]
-                 NativeMethods.FILETIME pctime,
-                   [In]
-                 NativeMethods.FILETIME patime,
-                   [In]
-                 NativeMethods.FILETIME pmtime);
-
-            void SetClass(
-                   [In]
-                 ref Guid clsid);
-
-            void SetStateBits(
-                    int grfStateBits,
-                    int grfMask);
-
-            void Stat(
-                   [Out]
-                 NativeMethods.STATSTG pStatStg,
-                    int grfStatFlag);
         }
 
         [ComImport(), Guid("B196B28F-BAB4-101A-B69C-00AA00341D07"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -6645,47 +3535,6 @@ namespace System.Windows.Forms
             string DefaultAction { get; }
         }
 
-        [ComImport]
-        [Guid("0000000A-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ILockBytes
-        {
-            void ReadAt(
-                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
-                [Out] IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbRead
-            );
-
-            void WriteAt(
-                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
-                IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbWritten
-            );
-
-            void Flush();
-
-            void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
-
-            void LockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] long cb,
-                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
-            );
-
-            void UnlockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] long cb,
-                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
-            );
-
-            void Stat(
-                [Out] NativeMethods.STATSTG pstatstg,
-                [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag
-            );
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class OFNOTIFY
         {
@@ -6722,21 +3571,21 @@ namespace System.Windows.Forms
 
             void SetRect(
                  [In]
-                    ref NativeMethods.RECT prcView);
+                    ref Interop.RECT prcView);
 
             void GetRect(
                  [In, Out]
-                    ref NativeMethods.RECT prcView);
+                    ref Interop.RECT prcView);
 
             void SetRectComplex(
                  [In]
-                    NativeMethods.RECT prcView,
+                    Interop.RECT prcView,
                  [In]
-                    NativeMethods.RECT prcHScroll,
+                    Interop.RECT prcHScroll,
                  [In]
-                    NativeMethods.RECT prcVScroll,
+                    Interop.RECT prcVScroll,
                  [In]
-                    NativeMethods.RECT prcSizeBox);
+                    Interop.RECT prcSizeBox);
 
             void Show(bool fShow);
 
@@ -7054,7 +3903,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This class provides static methods to create, activate and deactivate the theming scope.
+        ///  This class provides static methods to create, activate and deactivate the theming scope.
         /// </summary>
         internal class ThemingScope
         {
@@ -7063,8 +3912,8 @@ namespace System.Windows.Forms
             private static bool contextCreationSucceeded;
 
             /// <summary>
-            /// We now use explicitactivate everywhere and use this method to determine if we
-            /// really need to activate the activationcontext.  This should be pretty fast.
+            ///  We now use explicitactivate everywhere and use this method to determine if we
+            ///  really need to activate the activationcontext.  This should be pretty fast.
             /// </summary>
             private static bool IsContextActive()
             {
@@ -7203,7 +4052,7 @@ namespace System.Windows.Forms
         // obtained from UIAutomation source code
 
         /// <summary>
-        /// Logical structure change flags
+        ///  Logical structure change flags
         /// </summary>
         [ComVisible(true)]
         [Guid("e4cfef41-071d-472c-a65c-c14f59ea81eb")]
@@ -7250,25 +4099,25 @@ namespace System.Windows.Forms
             OverrideProvider = 0x0008,
 
             /// <summary>Indicates that this provider handles its own focus, and does not want
-            /// UIA to set focus to the nearest HWND on its behalf when AutomationElement.SetFocus
-            /// is used. This option is typically used by providers for HWNDs that appear to take
-            /// focus without actually receiving actual Win32 focus, such as menus and dropdowns</summary>
+            ///  UIA to set focus to the nearest HWND on its behalf when AutomationElement.SetFocus
+            ///  is used. This option is typically used by providers for HWNDs that appear to take
+            ///  focus without actually receiving actual Win32 focus, such as menus and dropdowns</summary>
             ProviderOwnsSetFocus = 0x0010,
 
             /// <summary>Indicates that this provider expects to be called according to COM threading rules:
-            /// if the provider is in a Single-Threaded Apartment, it will be called only on the apartment
-            /// thread. Only Server-side providers can use this option.</summary>
+            ///  if the provider is in a Single-Threaded Apartment, it will be called only on the apartment
+            ///  thread. Only Server-side providers can use this option.</summary>
             UseComThreading = 0x0020
         }
 
         public static readonly Guid guid_IAccessibleEx = new Guid("{F8B80ADA-2C44-48D0-89BE-5FF23C9CD875}");
 
         /// <summary>
-        /// The interface representing containers that manage selection.
+        ///  The interface representing containers that manage selection.
         /// </summary>
         /// <remarks>
-        /// Client code uses this public interface; server implementers implent the
-        /// ISelectionProvider public interface instead.
+        ///  Client code uses this public interface; server implementers implent the
+        ///  ISelectionProvider public interface instead.
         /// </remarks>
         [ComImport()]
         [ComVisible(true)]
@@ -7277,7 +4126,7 @@ namespace System.Windows.Forms
         public interface ISelectionProvider
         {
             /// <summary>
-            /// Get the currently selected elements
+            ///  Get the currently selected elements
             /// </summary>
             /// <returns>An AutomationElement array containing the currently selected elements</returns>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
@@ -7285,7 +4134,7 @@ namespace System.Windows.Forms
             object[] GetSelection();
 
             /// <summary>
-            /// Indicates whether the control allows more than one element to be selected
+            ///  Indicates whether the control allows more than one element to be selected
             /// </summary>
             /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
             /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
@@ -7296,7 +4145,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Indicates whether the control requires at least one element to be selected
+            ///  Indicates whether the control requires at least one element to be selected
             /// </summary>
             /// <returns>Boolean indicating whether the control requires at least one element to be selected</returns>
             /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
@@ -7308,9 +4157,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Define a Selectable Item (only supported on logical elements that are a
-        /// child of an Element that supports SelectionPattern and is itself selectable).
-        /// This allows for manipulation of Selection from the element itself.
+        ///  Define a Selectable Item (only supported on logical elements that are a
+        ///  child of an Element that supports SelectionPattern and is itself selectable).
+        ///  This allows for manipulation of Selection from the element itself.
         /// </summary>
         [ComImport()]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -7319,37 +4168,37 @@ namespace System.Windows.Forms
         public interface ISelectionItemProvider
         {
             /// <summary>
-            /// Sets the current element as the selection
-            /// This clears the selection from other elements in the container.
+            ///  Sets the current element as the selection
+            ///  This clears the selection from other elements in the container.
             /// </summary>
             void Select();
 
             /// <summary>
-            /// Adds current element to selection.
+            ///  Adds current element to selection.
             /// </summary>
             void AddToSelection();
 
             /// <summary>
-            /// Removes current element from selection.
+            ///  Removes current element from selection.
             /// </summary>
             void RemoveFromSelection();
 
             /// <summary>
-            /// Check whether an element is selected.
+            ///  Check whether an element is selected.
             /// </summary>
             /// <returns>Returns true if the element is selected.</returns>
             bool IsSelected { [return: MarshalAs(UnmanagedType.Bool)] get; }
 
             /// <summary>
-            /// The logical element that supports the SelectionPattern for this Item.
+            ///  The logical element that supports the SelectionPattern for this Item.
             /// </summary>
             /// <returns>Returns a IRawElementProviderSimple.</returns>
             IRawElementProviderSimple SelectionContainer { [return: MarshalAs(UnmanagedType.Interface)] get; }
         }
 
         /// <summary>
-        /// Implemented by providers which want to provide information about or want to
-        /// reposition contained HWND-based elements.
+        ///  Implemented by providers which want to provide information about or want to
+        ///  reposition contained HWND-based elements.
         /// </summary>
         [ComVisible(true)]
         [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
@@ -7357,8 +4206,8 @@ namespace System.Windows.Forms
         public interface IRawElementProviderHwndOverride : IRawElementProviderSimple
         {
             /// <summary>
-            /// Request a provider for the specified component. The returned provider can supply additional
-            /// properties or override properties of the specified component.
+            ///  Request a provider for the specified component. The returned provider can supply additional
+            ///  properties or override properties of the specified component.
             /// </summary>
             /// <param name="hwnd">The window handle of the component.</param>
             /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
@@ -7435,12 +4284,12 @@ namespace System.Windows.Forms
         public interface IExpandCollapseProvider
         {
             /// <summary>
-            /// Blocking method that returns after the element has been expanded.
+            ///  Blocking method that returns after the element has been expanded.
             /// </summary>
             void Expand();
 
             /// <summary>
-            /// Blocking method that returns after the element has been collapsed.
+            ///  Blocking method that returns after the element has been collapsed.
             /// </summary>
             void Collapse();
 
@@ -7458,7 +4307,7 @@ namespace System.Windows.Forms
         public interface IValueProvider
         {
             /// <summary>
-            /// Request to set the value that this UI element is representing
+            ///  Request to set the value that this UI element is representing
             /// </summary>
             /// <param name="value">Value to set the UI to</param>
             void SetValue([MarshalAs(UnmanagedType.LPWStr)] string value);
@@ -7506,16 +4355,16 @@ namespace System.Windows.Forms
         public interface IRawElementProviderSimple
         {
             /// <summary>
-            /// Indicates the type of provider this is, for example, whether it is a client-side
-            /// or server-side provider.
+            ///  Indicates the type of provider this is, for example, whether it is a client-side
+            ///  or server-side provider.
             /// </summary>
             /// <remarks>
-            /// Providers must specify at least either one of ProviderOptions.ClientSideProvider
-            /// or ProviderOptions.ServerSideProvider.
+            ///  Providers must specify at least either one of ProviderOptions.ClientSideProvider
+            ///  or ProviderOptions.ServerSideProvider.
             ///
-            /// UIAutomation treats different types of providers
-            /// differently - for example, events from server-side provider are broadcast to all listening
-            /// clients, whereas events from client-side providers remain in that client.
+            ///  UIAutomation treats different types of providers
+            ///  differently - for example, events from server-side provider are broadcast to all listening
+            ///  clients, whereas events from client-side providers remain in that client.
             /// </remarks>
             ProviderOptions ProviderOptions
             {
@@ -7523,7 +4372,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Get a pattern interface from this object
+            ///  Get a pattern interface from this object
             /// </summary>
             /// <param name="patternId">Identifier indicating the interface to return</param>
             /// <returns>Returns the interface as an object, if supported; otherwise returns null/</returns>
@@ -7531,7 +4380,7 @@ namespace System.Windows.Forms
             object GetPatternProvider(int patternId);
 
             /// <summary>
-            /// Request value of specified property from an element.
+            ///  Request value of specified property from an element.
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
@@ -7543,10 +4392,10 @@ namespace System.Windows.Forms
             // also need to implement this so we can determine the HWND. Still only
             // lives on a root, however.
             /// <summary>
-            /// Returns a base provider for this element.
+            ///  Returns a base provider for this element.
             ///
-            /// Typically only used by elements that correspond directly to a Win32 Window Handle,
-            /// in which case the implementation returns AutomationInteropProvider.BaseElementFromHandle( hwnd ).
+            ///  Typically only used by elements that correspond directly to a Win32 Window Handle,
+            ///  in which case the implementation returns AutomationInteropProvider.BaseElementFromHandle( hwnd ).
             /// </summary>
             IRawElementProviderSimple HostRawElementProvider
             {
@@ -7555,7 +4404,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Directions for navigation the UIAutomation tree
+        ///  Directions for navigation the UIAutomation tree
         /// </summary>
         [ComVisible(true)]
         [Guid("670c3006-bf4c-428b-8534-e1848f645122")]
@@ -7574,13 +4423,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implemented by providers to expose elements that are part of
-        /// a structure more than one level deep. For simple one-level
-        /// structures which have no children, IRawElementProviderSimple
-        /// can be used instead.
+        ///  Implemented by providers to expose elements that are part of
+        ///  a structure more than one level deep. For simple one-level
+        ///  structures which have no children, IRawElementProviderSimple
+        ///  can be used instead.
         ///
-        /// The root node of the fragment must support the IRawElementProviderFragmentRoot
-        /// interface, which is derived from this, and has some additional methods.
+        ///  The root node of the fragment must support the IRawElementProviderFragmentRoot
+        ///  interface, which is derived from this, and has some additional methods.
         /// </summary>
         [ComVisible(true)]
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
@@ -7589,7 +4438,7 @@ namespace System.Windows.Forms
         public interface IRawElementProviderFragment : IRawElementProviderSimple
         {
             /// <summary>
-            /// Request to return the element in the specified direction
+            ///  Request to return the element in the specified direction
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate</param>
             /// <returns>Returns the element in the specified direction</returns>
@@ -7597,19 +4446,19 @@ namespace System.Windows.Forms
             object /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
             /// <summary>
-            /// Gets the runtime ID of an elemenent. This should be unique
-            /// among elements on a desktop.
+            ///  Gets the runtime ID of an elemenent. This should be unique
+            ///  among elements on a desktop.
             /// </summary>
             /// <remarks>
-            /// Proxy implementations should return null for the top-level proxy which
-            /// correpsonds to the HWND; and should return an array which starts
-            /// with AutomationInteropProvider.AppendRuntimeId, followed by values
-            /// which are then unique within that proxy's HWNDs.
+            ///  Proxy implementations should return null for the top-level proxy which
+            ///  correpsonds to the HWND; and should return an array which starts
+            ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
+            ///  which are then unique within that proxy's HWNDs.
             /// </remarks>
             int[] GetRuntimeId();
 
             /// <summary>
-            /// Return a bounding rectangle of this element
+            ///  Return a bounding rectangle of this element
             /// </summary>
             NativeMethods.UiaRect BoundingRectangle
             {
@@ -7617,25 +4466,25 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// If this UI is capable of hosting other UI that also supports UIAutomation, and
-            /// the subtree rooted at this element contains such hosted UI fragments, this should return
-            /// an array of those fragments.
+            ///  If this UI is capable of hosting other UI that also supports UIAutomation, and
+            ///  the subtree rooted at this element contains such hosted UI fragments, this should return
+            ///  an array of those fragments.
             ///
-            /// If this UI does not host other UI, it may return null.
+            ///  If this UI does not host other UI, it may return null.
             /// </summary>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
             object[] /*IRawElementProviderSimple[]*/ GetEmbeddedFragmentRoots();
 
             /// <summary>
-            /// Request that focus is set to this item.
-            /// The UIAutomation framework will ensure that the UI hosting this fragment is already
-            /// focused before calling this method, so this method should only update its internal
-            /// focus state; it should not attempt to give its own HWND the focus, for example.
+            ///  Request that focus is set to this item.
+            ///  The UIAutomation framework will ensure that the UI hosting this fragment is already
+            ///  focused before calling this method, so this method should only update its internal
+            ///  focus state; it should not attempt to give its own HWND the focus, for example.
             /// </summary>
             void SetFocus();
 
             /// <summary>
-            /// Return the element that is the root node of this fragment of UI.
+            ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
             IRawElementProviderFragmentRoot FragmentRoot
             {
@@ -7645,9 +4494,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The root element in a fragment of UI must support this interface. Other
-        /// elements in the same fragment need to support the IRawElementProviderFragment
-        /// interface.
+        ///  The root element in a fragment of UI must support this interface. Other
+        ///  elements in the same fragment need to support the IRawElementProviderFragment
+        ///  interface.
         /// </summary>
         [ComVisible(true)]
         [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
@@ -7656,24 +4505,24 @@ namespace System.Windows.Forms
         public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment
         {
             /// <summary>
-            /// Return the child element at the specified point, if one exists,
-            /// otherwise return this element if the point is on this element,
-            /// otherwise return null.
+            ///  Return the child element at the specified point, if one exists,
+            ///  otherwise return this element if the point is on this element,
+            ///  otherwise return null.
             /// </summary>
             /// <param name="x">x coordinate of point to check</param>
             /// <param name="y">y coordinate of point to check</param>
             /// <returns>Return the child element at the specified point, if one exists,
-            /// otherwise return this element if the point is on this element,
-            /// otherwise return null.
+            ///  otherwise return this element if the point is on this element,
+            ///  otherwise return null.
             /// </returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object /*IRawElementProviderFragment*/ ElementProviderFromPoint(double x, double y);
 
             /// <summary>
-            /// Return the element in this fragment which has the keyboard focus,
+            ///  Return the element in this fragment which has the keyboard focus,
             /// </summary>
             /// <returns>Return the element in this fragment which has the keyboard focus,
-            /// if any; otherwise return null.</returns>
+            ///  if any; otherwise return null.</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object /*IRawElementProviderFragment*/ GetFocus();
         }
@@ -7686,7 +4535,7 @@ namespace System.Windows.Forms
             ToggleState_On = 1,
             ToggleState_Indeterminate = 2
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [ComImport()]
         [ComVisible(true)]
@@ -7711,7 +4560,7 @@ namespace System.Windows.Forms
             RowOrColumnMajor_ColumnMajor = 1,
             RowOrColumnMajor_Indeterminate = 2
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [ComImport()]
         [ComVisible(true)]
@@ -7804,14 +4653,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Implemented by objects that have a single, unambiguous, action associated with them.
-        /// These objects are usually stateless, and invoking them does not change their own state,
-        /// but causes something to happen in the larger context of the app the control is in.
+        ///  Implemented by objects that have a single, unambiguous, action associated with them.
+        ///  These objects are usually stateless, and invoking them does not change their own state,
+        ///  but causes something to happen in the larger context of the app the control is in.
         ///
-        /// Examples of UI that implments this includes:
-        /// Push buttons
-        /// Hyperlinks
-        /// Menu items
+        ///  Examples of UI that implments this includes:
+        ///  Push buttons
+        ///  Hyperlinks
+        ///  Menu items
         /// </summary>
         [ComImport()]
         [ComVisible(true)]
@@ -7820,17 +4669,17 @@ namespace System.Windows.Forms
         public interface IInvokeProvider
         {
             /// <summary>
-            /// Request that the control initiate its action.
-            /// Should return immediately without blocking.
-            /// There is no way to determine what happened, when it happend, or whether
-            /// anything happened at all.
+            ///  Request that the control initiate its action.
+            ///  Should return immediately without blocking.
+            ///  There is no way to determine what happened, when it happend, or whether
+            ///  anything happened at all.
             /// </summary>
             void Invoke();
         }
 
         /// <summary>
-        /// Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
-        /// This allows them to be scrolled into view using known API's based on the control in question.
+        ///  Implemented by objects in a known Scrollable context, such as ListItems, ListViewItems, TreeViewItems, and Tabs.
+        ///  This allows them to be scrolled into view using known API's based on the control in question.
         /// </summary>
         [ComImport()]
         [ComVisible(true)]
@@ -7839,35 +4688,11 @@ namespace System.Windows.Forms
         public interface IScrollItemProvider
         {
             /// <summary>
-            /// Scrolls the windows containing this automation element to make this element visible.
-            /// InvalidOperationException should be thrown if item becomes unable to be scrolled. Makes
-            /// no guarantees about where the item will be in the scrolled window.
+            ///  Scrolls the windows containing this automation element to make this element visible.
+            ///  InvalidOperationException should be thrown if item becomes unable to be scrolled. Makes
+            ///  no guarantees about where the item will be in the scrolled window.
             /// </summary>
             void ScrollIntoView();
-        }
-
-        public static IntPtr LoadLibraryFromSystemPathIfAvailable(string libraryName)
-        {
-            IntPtr module = IntPtr.Zero;
-
-            // introduced the LOAD_LIBRARY_SEARCH_SYSTEM32 flag. It also introduced
-            // the AddDllDirectory function. We test for presence of AddDllDirectory as an
-            // indirect evidence for the support of LOAD_LIBRARY_SEARCH_SYSTEM32 flag.
-            IntPtr kernel32 = GetModuleHandle(ExternDll.Kernel32);
-            if (kernel32 != IntPtr.Zero)
-            {
-                if (GetProcAddress(new HandleRef(null, kernel32), "AddDllDirectory") != IntPtr.Zero)
-                {
-                    module = LoadLibraryEx(libraryName, IntPtr.Zero, NativeMethods.LOAD_LIBRARY_SEARCH_SYSTEM32);
-                }
-                else
-                {
-                    // LOAD_LIBRARY_SEARCH_SYSTEM32 is not supported on this OS.
-                    // Fall back to using plain ol' LoadLibrary
-                    module = LoadLibrary(libraryName);
-                }
-            }
-            return module;
         }
     }
 }

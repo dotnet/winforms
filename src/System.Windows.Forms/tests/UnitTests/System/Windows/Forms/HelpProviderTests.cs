@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_GetHelpKeyword_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.GetHelpKeyword(null));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.GetHelpKeyword(null));
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_GetHelpNavigator_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.GetHelpNavigator(null));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.GetHelpNavigator(null));
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_GetHelpString_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.GetHelpString(null));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.GetHelpString(null));
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_GetShowHelp_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.GetShowHelp(null));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.GetShowHelp(null));
         }
 
         [Theory]
@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_ResetShowHelp_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.ResetShowHelp(null));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.ResetShowHelp(null));
         }
 
         [Theory]
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_SetHelpKeyword_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.SetHelpKeyword(null, "keyword"));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.SetHelpKeyword(null, "keyword"));
         }
 
         [Theory]
@@ -314,11 +314,13 @@ namespace System.Windows.Forms.Tests
             Assert.True(provider.GetShowHelp(control));
         }
 
-        [Fact]
-        public void HelpProvider_SetHelpNavigator_NullCtl_ThrowsArgumentNullException()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HelpNavigator))]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HelpNavigator))]
+        public void HelpProvider_SetHelpNavigator_NullCtl_ThrowsArgumentNullException(HelpNavigator navigator)
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.SetHelpNavigator(null, HelpNavigator.AssociateIndex));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.SetHelpNavigator(null, navigator));
         }
 
         [Theory]
@@ -326,7 +328,6 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_SetHelpNavigator_InvalidNavigator_ThrowsInvalidEnumArgumentException(HelpNavigator navigator)
         {
             var provider = new HelpProvider();
-            Assert.Throws<InvalidEnumArgumentException>("navigator", () => provider.SetHelpNavigator(null, navigator));
             Assert.Throws<InvalidEnumArgumentException>("navigator", () => provider.SetHelpNavigator(new Control(), navigator));
         }
 
@@ -393,7 +394,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_SetHelpString_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.SetHelpString(null, "keyword"));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.SetHelpString(null, "keyword"));
         }
 
         [Theory]
@@ -451,7 +452,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_SetShowHelp_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.SetShowHelp(null, true));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.SetShowHelp(null, true));
         }
 
         [Fact]
@@ -465,7 +466,7 @@ namespace System.Windows.Forms.Tests
         public void HelpProvider_ShouldSerializeShowHelp_NullCtl_ThrowsArgumentNullException()
         {
             var provider = new HelpProvider();
-            Assert.Throws<ArgumentNullException>("key", () => provider.ShouldSerializeShowHelp(null));
+            Assert.Throws<ArgumentNullException>("ctl", () => provider.ShouldSerializeShowHelp(null));
         }
 
         [Theory]

@@ -64,9 +64,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref='Checked'/>
-        /// value and the appearance of
-        /// the control automatically change when the control is clicked.
+        ///  Gets or sets a value indicating whether the <see cref='Checked'/>
+        ///  value and the appearance of
+        ///  the control automatically change when the control is clicked.
         /// </summary>
         [
         DefaultValue(true),
@@ -278,11 +278,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
-        /// For RadioButton controls, scale the width of the system-style padding and height of the radio button image.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
-        /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
+        ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
+        ///  For RadioButton controls, scale the width of the system-style padding and height of the radio button image.
+        ///  Must call the base class method to get the current DPI values. This method is invoked only when
+        ///  Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
+        ///  EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
         /// <param name="deviceDpiNew">New DPI value</param>
@@ -563,7 +563,7 @@ namespace System.Windows.Forms
                 if (base.MouseIsDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                     {
                         //Paint in raised state...
                         //

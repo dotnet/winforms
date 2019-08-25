@@ -17,7 +17,7 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         private static readonly byte[] serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IDataObject'/>.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IDataObject'/>.
         /// </summary>
         internal DataObject(IDataObject data)
         {
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see langword='IComDataObject'/>.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see langword='IComDataObject'/>.
         /// </summary>
         internal DataObject(IComDataObject data)
         {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data.
         /// </summary>
         public DataObject(object data)
         {
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data and its
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data and its
         ///  associated format.
         /// </summary>
         public DataObject(string format, object data) : this()
@@ -128,41 +128,31 @@ namespace System.Windows.Forms
 
         private IntPtr GetCompatibleBitmap(Bitmap bm)
         {
+            using ScreenDC hDC = ScreenDC.Create();
+
             // GDI+ returns a DIBSECTION based HBITMAP. The clipboard deals well
             // only with bitmaps created using CreateCompatibleBitmap(). So, we
             // convert the DIBSECTION into a compatible bitmap.
-            //
             IntPtr hBitmap = bm.GetHbitmap();
 
-            // Get the screen DC.
-            //
-            IntPtr hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-
             // Create a compatible DC to render the source bitmap.
-            //
-            IntPtr dcSrc = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hDC));
-            IntPtr srcOld = SafeNativeMethods.SelectObject(new HandleRef(null, dcSrc), new HandleRef(bm, hBitmap));
+            IntPtr dcSrc = Gdi32.CreateCompatibleDC(hDC);
+            IntPtr srcOld = Gdi32.SelectObject(dcSrc, hBitmap);
 
             // Create a compatible DC and a new compatible bitmap.
-            //
-            IntPtr dcDest = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hDC));
+            IntPtr dcDest = Gdi32.CreateCompatibleDC(hDC);
             IntPtr hBitmapNew = SafeNativeMethods.CreateCompatibleBitmap(new HandleRef(null, hDC), bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            //
-            IntPtr destOld = SafeNativeMethods.SelectObject(new HandleRef(null, dcDest), new HandleRef(null, hBitmapNew));
+            IntPtr destOld = Gdi32.SelectObject(dcDest, hBitmapNew);
             SafeNativeMethods.BitBlt(new HandleRef(null, dcDest), 0, 0, bm.Size.Width, bm.Size.Height, new HandleRef(null, dcSrc), 0, 0, 0x00CC0020);
 
             // Clear the source and destination compatible DCs.
-            //
-            SafeNativeMethods.SelectObject(new HandleRef(null, dcSrc), new HandleRef(null, srcOld));
-            SafeNativeMethods.SelectObject(new HandleRef(null, dcDest), new HandleRef(null, destOld));
+            Gdi32.SelectObject(dcSrc, srcOld);
+            Gdi32.SelectObject(dcDest, destOld);
 
-            UnsafeNativeMethods.DeleteDC(new HandleRef(null, dcSrc));
-            UnsafeNativeMethods.DeleteDC(new HandleRef(null, dcDest));
-            UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
-
-            SafeNativeMethods.DeleteObject(new HandleRef(bm, hBitmap));
+            Gdi32.DeleteDC(dcSrc);
+            Gdi32.DeleteDC(dcDest);
 
             return hBitmapNew;
         }
@@ -195,12 +185,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual object GetData(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format.FullName);
-            Debug.Assert(format != null, "Must specify a format type");
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format?.FullName ?? "(null)");
             if (format == null)
             {
                 return null;
             }
+
             return GetData(format.FullName);
         }
 
@@ -211,12 +201,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual bool GetDataPresent(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format.FullName);
-            Debug.Assert(format != null, "Must specify a format type");
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format?.FullName ?? "(null)");
             if (format == null)
             {
                 return false;
             }
+
             bool b = GetDataPresent(format.FullName);
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "  ret: " + b.ToString());
             return b;
@@ -535,30 +525,13 @@ namespace System.Windows.Forms
                     }
                     else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
                     {
-                        if (format.Equals(DataFormats.Bitmap) && data is Bitmap)
+                        if (format.Equals(DataFormats.Bitmap) && data is Bitmap bm
+                            && bm != null)
                         {
                             // save bitmap
-                            //
-                            Bitmap bm = (Bitmap)data;
-                            if (bm != null)
-                            {
-                                medium.unionmember = GetCompatibleBitmap(bm);
-                            }
+                            medium.unionmember = GetCompatibleBitmap(bm);
                         }
                     }
-                    /*
-                    else if ((formatetc.tymed & TYMED.TYMED_ENHMF) != 0) {
-                        if (format.Equals(DataFormats.EnhancedMetafile)
-                            && data is Metafile) {
-                            // save metafile
-
-                            Metafile mf = (Metafile)data;
-                            if (mf != null) {
-                                medium.unionmember = mf.Handle;
-                            }
-                        }
-                    }
-                    */
                     else
                     {
                         Marshal.ThrowExceptionForHR(DV_E_TYMED);
@@ -778,7 +751,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We are restricting serialization of formats that represent strings, bitmaps or OLE types.
+        ///  We are restricting serialization of formats that represent strings, bitmaps or OLE types.
         /// </summary>
         /// <param name="format">format name</param>
         /// <returns>true - serialize only safe types, strings or bitmaps.</returns>
@@ -1086,7 +1059,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(string format, bool autoConvert, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, autoConvert, data);
         }
@@ -1097,7 +1070,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(string format, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
@@ -1109,7 +1082,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(Type format, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format.FullName + ", " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
@@ -1120,7 +1093,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data.ToString());
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data?.ToString() ?? "(null)");
             Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
             innerData.SetData(data);
         }
@@ -1318,7 +1291,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Uses IStream and retrieves the specified format from the bound IComDataObject.
             /// </summary>
-            private object GetDataFromOleIStream(string format)
+            private unsafe object GetDataFromOleIStream(string format)
             {
 
                 FORMATETC formatetc = new FORMATETC();
@@ -1348,18 +1321,16 @@ namespace System.Windows.Forms
 
                 if (medium.unionmember != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.IStream pStream = (UnsafeNativeMethods.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
+                    Ole32.IStream pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
                     Marshal.Release(medium.unionmember);
-                    NativeMethods.STATSTG sstg = new NativeMethods.STATSTG();
-                    pStream.Stat(sstg, NativeMethods.STATFLAG_DEFAULT);
-                    int size = (int)sstg.cbSize;
+                    pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.STATFLAG_DEFAULT);
 
                     IntPtr hglobal = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE
                                                       | NativeMethods.GMEM_DDESHARE
                                                       | NativeMethods.GMEM_ZEROINIT,
-                                                      size);
+                                                      (int)sstg.cbSize);
                     IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(innerData, hglobal));
-                    pStream.Read(ptr, size);
+                    pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
                     UnsafeNativeMethods.GlobalUnlock(new HandleRef(innerData, hglobal));
 
                     return GetDataFromHGLOBAL(format, hglobal);
@@ -1510,24 +1481,20 @@ namespace System.Windows.Forms
 
                 if (medium.unionmember != IntPtr.Zero)
                 {
-
-                    if (format.Equals(DataFormats.Bitmap)
-                    //||format.Equals(DataFormats.Dib))
-                    )
+                    if (format.Equals(DataFormats.Bitmap))
                     {
                         // as/urt 140870 -- GDI+ doesn't own this HBITMAP, but we can't
                         // delete it while the object is still around.  So we have to do the really expensive
                         // thing of cloning the image so we can release the HBITMAP.
-                        //
 
-                        //This bitmap is created by the com object which originally copied the bitmap to tbe
-                        //clipboard. We call Add here, since DeleteObject calls Remove.
+                        // This bitmap is created by the com object which originally copied the bitmap to tbe
+                        // clipboard. We call Add here, since DeleteObject calls Remove.
                         Image clipboardImage = Image.FromHbitmap(medium.unionmember);
                         if (clipboardImage != null)
                         {
                             Image firstImage = clipboardImage;
                             clipboardImage = (Image)clipboardImage.Clone();
-                            SafeNativeMethods.DeleteObject(new HandleRef(null, medium.unionmember));
+                            Gdi32.DeleteObject(medium.unionmember);
                             firstImage.Dispose();
                         }
                         data = clipboardImage;
@@ -1659,7 +1626,7 @@ namespace System.Windows.Forms
             {
 
                 string[] files = null;
-                StringBuilder sb = new StringBuilder(Interop.Kernel32.MAX_PATH);
+                StringBuilder sb = new StringBuilder(Kernel32.MAX_PATH);
 
                 int count = UnsafeNativeMethods.DragQueryFile(new HandleRef(null, hdrop), unchecked((int)0xFFFFFFFF), null, 0);
                 if (count > 0)
@@ -1958,6 +1925,11 @@ namespace System.Windows.Forms
             public virtual object GetData(string format, bool autoConvert)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetData: " + format + ", " + autoConvert.ToString());
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    return null;
+                }
+
                 DataStoreEntry dse = (DataStoreEntry)data[format];
                 object baseVar = null;
                 if (dse != null)
@@ -2017,7 +1989,16 @@ namespace System.Windows.Forms
 
             public virtual void SetData(string format, bool autoConvert, object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    if (format == null)
+                    {
+                        throw new ArgumentNullException(nameof(format));
+                    }
+
+                    throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
+                }
 
                 // We do not have proper support for Dibs, so if the user explicitly asked
                 // for Dib and provided a Bitmap object we can't convert.  Instead, publish as an HBITMAP
@@ -2039,19 +2020,29 @@ namespace System.Windows.Forms
             }
             public virtual void SetData(string format, object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + data?.ToString() ?? "(null)");
                 SetData(format, true, data);
             }
 
             public virtual void SetData(Type format, object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format.FullName + ", " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
+                if (format == null)
+                {
+                    throw new ArgumentNullException(nameof(format));
+                }
+
                 SetData(format.FullName, data);
             }
 
             public virtual void SetData(object data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data.ToString());
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data?.ToString() ?? "(null)");
+                if (data == null)
+                {
+                    throw new ArgumentNullException(nameof(data));
+                }
+    
                 if (data is ISerializable
                     && !this.data.ContainsKey(DataFormats.Serializable))
                 {
@@ -2070,8 +2061,11 @@ namespace System.Windows.Forms
 
             public virtual bool GetDataPresent(string format, bool autoConvert)
             {
-                Debug.Assert(format != null, "Null format passed in");
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetDataPresent: " + format + ", " + autoConvert.ToString());
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    return false;
+                }
 
                 if (!autoConvert)
                 {
@@ -2151,13 +2145,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Binder that restricts DataObject content deserialization to Bitmap type and
-        /// serialization to strings and Bitmaps.
-        /// Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
+        ///  Binder that restricts DataObject content deserialization to Bitmap type and
+        ///  serialization to strings and Bitmaps.
+        ///  Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
         /// </summary>
         private class BitmapBinder : SerializationBinder
         {
-            // Bitmap type lives in defferent assemblies in the .Net Framework and in .Net Core.
+            // Bitmap type lives in defferent assemblies in the .NET Framework and in .NET Core.
             // However we allow desktop content to be deserializated in Core and Core content
             // deserialized on desktop. To support this roundtrip,
             // Bitmap type identity is unified to the desktop type during serialization
@@ -2217,7 +2211,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Bitmap and string types are safe type to serialize/deserialize.
+            ///  Bitmap and string types are safe type to serialize/deserialize.
             /// </summary>
             /// <param name="serializedType"></param>
             /// <param name="assemblyName"></param>
@@ -2235,8 +2229,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This exception is used to indicate that clipboard contains a serialized
-        /// managed object that contains unexpected types and that we should stop processing this data.
+        ///  This exception is used to indicate that clipboard contains a serialized
+        ///  managed object that contains unexpected types and that we should stop processing this data.
         /// </summary>
         private class RestrictedTypeDeserializationException : Exception
         {

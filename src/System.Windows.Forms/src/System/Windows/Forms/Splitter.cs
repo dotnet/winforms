@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -742,22 +743,12 @@ namespace System.Windows.Forms
             IntPtr parentHandle = ParentInternal.Handle;
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(ParentInternal, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = SafeNativeMethods.SelectObject(new HandleRef(ParentInternal, dc), new HandleRef(null, halftone));
+            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(ParentInternal, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
-            SafeNativeMethods.SelectObject(new HandleRef(ParentInternal, dc), new HandleRef(null, saveBrush));
-            SafeNativeMethods.DeleteObject(new HandleRef(null, halftone));
-            UnsafeNativeMethods.ReleaseDC(new HandleRef(ParentInternal, parentHandle), new HandleRef(null, dc));
+            Gdi32.SelectObject(dc, saveBrush);
+            Gdi32.DeleteObject(halftone);
+            User32.ReleaseDC(new HandleRef(ParentInternal, parentHandle), dc);
         }
-
-        /// <summary>
-        ///  Raises a splitter event
-        /// </summary>
-        /* No one seems to be calling this, so it is okay to comment it out
-        private void RaiseSplitterEvent(object key, SplitterEventArgs spevent) {
-            SplitterEventHandler handler = (SplitterEventHandler)Events[key];
-            if (handler != null) handler(this, spevent);
-        }
-        */
 
         /// <summary>
         ///  Finds the target of the splitter. The target of the splitter is the
@@ -1050,9 +1041,9 @@ namespace System.Windows.Forms
             /// </summary>
             public bool PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                 {
-                    if (m.Msg == Interop.WindowMessages.WM_KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape)
+                    if (m.Msg == WindowMessages.WM_KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape)
                     {
                         owner.SplitEnd(false);
                     }

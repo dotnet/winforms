@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// The month calendar control fires this event to request information about how
-    /// the days within the visible months should be displayed.
+    ///  The month calendar control fires this event to request information about how
+    ///  the days within the visible months should be displayed.
     /// </summary>
     public class DateBoldEventArgs : EventArgs
     {

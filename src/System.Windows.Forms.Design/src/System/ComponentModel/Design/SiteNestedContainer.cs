@@ -8,8 +8,8 @@ using System.Globalization;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This is a nested container.static Anything added to the nested container
-    /// will be hostable in a designer.
+    ///  This is a nested container.static Anything added to the nested container
+    ///  will be hostable in a designer.
     /// </summary>
     internal sealed class SiteNestedContainer : NestedContainer
     {
@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Override to support named containers.
+        ///  Override to support named containers.
         /// </summary>
         protected override string OwnerName
         {
@@ -43,7 +43,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called to add a component to its container.
+        ///  Called to add a component to its container.
         /// </summary>
         public override void Add(IComponent component, string name)
         {
@@ -70,7 +70,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Creates a site for the component within the container.
+        ///  Creates a site for the component within the container.
         /// </summary>
         protected override ISite CreateSite(IComponent component, string name)
         {
@@ -83,7 +83,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called to remove a component from its container.
+        ///  Called to remove a component from its container.
         /// </summary>
         public override void Remove(IComponent component)
         {

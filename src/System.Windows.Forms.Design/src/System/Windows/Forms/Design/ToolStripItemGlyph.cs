@@ -8,7 +8,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// The glyph we put over the items. Basically this sets the hit-testable area of the item itself.
+    ///  The glyph we put over the items. Basically this sets the hit-testable area of the item itself.
     /// </summary>
     internal class ToolStripItemGlyph : ControlBodyGlyph
     {
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Abstract method that forces Glyph implementations to provide hit test logic. Given any point - if the Glyph has decided to  be involved with that location, the Glyph will need to return  a valid Cursor. Otherwise, returning null will cause the  the BehaviorService to simply ignore it.
+        ///  Abstract method that forces Glyph implementations to provide hit test logic. Given any point - if the Glyph has decided to  be involved with that location, the Glyph will need to return  a valid Cursor. Otherwise, returning null will cause the  the BehaviorService to simply ignore it.
         /// </summary>
         public override Cursor GetHitTest(Point p)
         {
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Control host dont draw on Invalidation...
+        ///  Control host dont draw on Invalidation...
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

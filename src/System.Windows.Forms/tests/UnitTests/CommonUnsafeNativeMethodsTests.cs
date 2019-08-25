@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
     public class CommonUnsafeNativeMethodsTests
     {
         /*/// <summary>
-        /// Data for the TryFindDpiAwarenessContextsEqual test
+        ///  Data for the TryFindDpiAwarenessContextsEqual test
         /// </summary>
         public static TheoryData TryFindDpiAwarenessContextsEqualData =>
             CommonTestHelper.GetEnumTheoryData<DpiAwarenessContext>();
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
         }
 
         /// <summary>
-        /// Data for the TrySetThreadDpiAwarenessContextGetSet test
+        ///  Data for the TrySetThreadDpiAwarenessContextGetSet test
         /// </summary>
         public static TheoryData TrySetThreadDpiAwarenessContextGetSetData =>
             CommonTestHelper.GetEnumTheoryData<DpiAwarenessContext>();

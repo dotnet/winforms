@@ -58,7 +58,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Returns true if this GridEntry has a value field in the right hand column.
+        ///  Returns true if this GridEntry has a value field in the right hand column.
         /// </summary>
         internal override bool HasValue
         {
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Gets the accessibility object for the current category grid entry.
+        ///  Gets the accessibility object for the current category grid entry.
         /// </summary>
         /// <returns></returns>
         protected override GridEntryAccessibleObject GetAccessibilityObject()
@@ -194,8 +194,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Gets the owner of the current value.  This is usually the value of the
-        /// root entry, which is the object being browsed
+        ///  Gets the owner of the current value.  This is usually the value of the
+        ///  root entry, which is the object being browsed
         /// </summary>
         public override object GetChildValueOwner(GridEntry childEntry)
         {
@@ -269,7 +269,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        /// Defines the Category Grid Entry accessible object that is derived from Grid Entry accessible object.
+        ///  Defines the Category Grid Entry accessible object that is derived from Grid Entry accessible object.
         /// </summary>
         [Runtime.InteropServices.ComVisible(true)]
         internal class CategoryGridEntryAccessibleObject : GridEntryAccessibleObject
@@ -277,7 +277,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly CategoryGridEntry _owningCategoryGridEntry;
 
             /// <summary>
-            /// Initializes new instance of CategoryGridEntryAccessibleObject.
+            ///  Initializes new instance of CategoryGridEntryAccessibleObject.
             /// </summary>
             /// <param name="owningCategoryGridEntry">The owning Category Grid Entry object.</param>
             public CategoryGridEntryAccessibleObject(CategoryGridEntry owningCategoryGridEntry) : base(owningCategoryGridEntry)
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            /// Returns the element in the specified direction.
+            ///  Returns the element in the specified direction.
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>

@@ -17,6 +17,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -145,7 +146,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns the list of commands that should be filtered by the form that hosts this panel. This is done so that these specific commands will not get passed on to VS, and can instead be handled by the panel itself.
+        ///  Returns the list of commands that should be filtered by the form that hosts this panel. This is done so that these specific commands will not get passed on to VS, and can instead be handled by the panel itself.
         /// </summary>
         public CommandID[] FilteredCommandIDs
         {
@@ -194,7 +195,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the Line that currently has input focus.
+        ///  Gets the Line that currently has input focus.
         /// </summary>
         private Line FocusedLine
         {
@@ -261,7 +262,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Helper event so that Lines can be notified of this event.
+        ///  Helper event so that Lines can be notified of this event.
         /// </summary>
         private event EventHandler FormActivated
         {
@@ -270,7 +271,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Helper event so that Lines can be notified of this event.
+        ///  Helper event so that Lines can be notified of this event.
         /// </summary>
         private event EventHandler FormDeactivate
         {
@@ -303,7 +304,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Computes the best possible location (in desktop coordinates) to display the panel, given the size of the panel and the position of its anchor
+        ///  Computes the best possible location (in desktop coordinates) to display the panel, given the size of the panel and the position of its anchor
         /// </summary>
         public static Point ComputePreferredDesktopLocation(Rectangle rectangleAnchor, Size sizePanel, out DockStyle edgeToDock)
         {
@@ -811,15 +812,15 @@ namespace System.ComponentModel.Design
                 {
                     options = (MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
                 }
-                MessageBox.Show(this, errorMessage, string.Format(SR.UIServiceHelper_ErrorCaption), MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, options);
+                MessageBox.Show(this, errorMessage, SR.UIServiceHelper_ErrorCaption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, options);
             }
         }
 
         /// <summary>
-        /// Strips out ampersands used for mnemonics so that they don't show up in the rendering.
-        /// - Convert "&&" to "&"
-        /// - Convert "&x" to "x"
-        /// - An ampersand by itself at the end of a string is displayed as-is
+        ///  Strips out ampersands used for mnemonics so that they don't show up in the rendering.
+        ///  - Convert "&&" to "&"
+        ///  - Convert "&x" to "x"
+        ///  - An ampersand by itself at the end of a string is displayed as-is
         /// </summary>
         private static string StripAmpersands(string s)
         {
@@ -1858,7 +1859,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            /// Custom label that provides accurate accessibility information and focus abilities.
+            ///  Custom label that provides accurate accessibility information and focus abilities.
             /// </summary>
             private sealed class EditorLabel : Label
             {
@@ -1956,30 +1957,30 @@ namespace System.ComponentModel.Design
                     // All measurement code borrowed from WinForms PropertyGridView.cs
                     int maxWidth = 0;
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
-                    IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(listBox, listBox.Handle));
+                    IntPtr hdc = User32.GetDC(new HandleRef(listBox, listBox.Handle));
                     IntPtr hFont = listBox.Font.ToHfont();
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     try
                     {
-                        hFont = SafeNativeMethods.SelectObject(new HandleRef(listBox, hdc), new HandleRef(listBox.Font, hFont));
+                        hFont = Gdi32.SelectObject(hdc, hFont);
                         if (listBox.Items.Count > 0)
                         {
-                            NativeMethods.SIZE textSize = new NativeMethods.SIZE();
                             foreach (string s in listBox.Items)
                             {
-                                SafeNativeMethods.GetTextExtentPoint32(new HandleRef(listBox, hdc), s, s.Length, textSize);
-                                maxWidth = Math.Max((int)textSize.cx, maxWidth);
+                                var textSize = new Size();
+                                Gdi32.GetTextExtentPoint32W(new HandleRef(listBox, hdc), s, s.Length, ref textSize);
+                                maxWidth = Math.Max((int)textSize.Width, maxWidth);
                             }
                         }
                         SafeNativeMethods.GetTextMetrics(new HandleRef(listBox, hdc), ref tm);
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
-                        hFont = SafeNativeMethods.SelectObject(new HandleRef(listBox, hdc), new HandleRef(listBox.Font, hFont));
+                        hFont = Gdi32.SelectObject(hdc, hFont);
                     }
                     finally
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(listBox.Font, hFont));
-                        UnsafeNativeMethods.ReleaseDC(new HandleRef(listBox, listBox.Handle), new HandleRef(listBox, hdc));
+                        Gdi32.DeleteObject(hFont);
+                        User32.ReleaseDC(new HandleRef(listBox, listBox.Handle), hdc);
                     }
 
                     listBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(ListBoxMaximumHeight, listBox.PreferredHeight));
@@ -2410,7 +2411,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                /// General purpose method, based on Control.Contains()... Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
+                ///  General purpose method, based on Control.Contains()... Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
                 /// </summary>
                 private bool OwnsWindow(IntPtr hWnd)
                 {
@@ -2451,7 +2452,7 @@ namespace System.ComponentModel.Design
                         IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), Interop.WindowMessages.WM_CANCELMODE, 0, 0);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, 0, 0);
                             SafeNativeMethods.ReleaseCapture();
                         }
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
@@ -2472,7 +2473,7 @@ namespace System.ComponentModel.Design
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m.Msg == Interop.WindowMessages.WM_ACTIVATE)
+                    if (m.Msg == WindowMessages.WM_ACTIVATE)
                     {
                         if (Visible && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == NativeMethods.WA_INACTIVE)
                         {
@@ -2531,16 +2532,6 @@ namespace System.ComponentModel.Design
                     public static int LOWORD(int n) => n & 0xffff;
                 }
 
-                [StructLayout(LayoutKind.Sequential)]
-                public class SIZE
-                {
-                    public int cx = 0;
-                    public int cy = 0;
-                    public SIZE()
-                    {
-                    }
-                }
-
                 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
                 public struct TEXTMETRIC
                 {
@@ -2594,17 +2585,11 @@ namespace System.ComponentModel.Design
 
             private static class SafeNativeMethods
             {
-                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-                public static extern bool DeleteObject(HandleRef hObject);
-
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern bool ReleaseCapture();
 
                 [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
-
-                [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-                public static extern int GetTextExtentPoint32(HandleRef hDC, string str, int len, [In, Out] NativeMethods.SIZE size);
 
                 [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
                 public static extern int GetTextMetricsW(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRIC lptm);
@@ -2665,12 +2650,6 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr GetCapture();
-
-                [DllImport(ExternDll.User32, ExactSpelling = true)]
-                public static extern IntPtr GetDC(HandleRef hWnd);
-
-                [DllImport(ExternDll.User32, ExactSpelling = true)]
-                public static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
             }
             #endregion
 

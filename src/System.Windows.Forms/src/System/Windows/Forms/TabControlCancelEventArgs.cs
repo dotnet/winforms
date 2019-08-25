@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='TabControl.OnDeselecting'/>,
+    ///  Provides data for the <see cref='TabControl.OnDeselecting'/>,
     /// <see cref='TabControl.OnDeselected'/> event.
     /// </summary>
     public class TabControlCancelEventArgs : CancelEventArgs
@@ -20,17 +20,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Stores the referemce to the tabpage that is undergoing the TabControl event.
+        ///  Stores the referemce to the tabpage that is undergoing the TabControl event.
         /// </summary>
         public TabPage TabPage { get; }
 
         /// <summary>
-        /// Stores the index to the tabpage that is undergoing the TabControl event.
+        ///  Stores the index to the tabpage that is undergoing the TabControl event.
         /// </summary>
         public int TabPageIndex { get; }
 
         /// <summary>
-        /// Stores the TabControl action which instigated the TabControl event.
+        ///  Stores the TabControl action which instigated the TabControl event.
         /// </summary>
         public TabControlAction Action { get; }
     }

@@ -5,7 +5,7 @@
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Specifies identifiers to indicate the style of a <see cref='UITypeEditor'/>.
+    ///  Specifies identifiers to indicate the style of a <see cref='UITypeEditor'/>.
     /// </summary>
     public enum UITypeEditorEditStyle
     {

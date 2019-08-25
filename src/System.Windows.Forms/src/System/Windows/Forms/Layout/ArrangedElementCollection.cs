@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Repositions a element in this list.
+        ///  Repositions a element in this list.
         /// </summary>
         private protected void MoveElement(IArrangedElement element, int fromIndex, int toIndex)
         {

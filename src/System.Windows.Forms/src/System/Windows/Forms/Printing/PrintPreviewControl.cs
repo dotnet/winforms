@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -402,7 +403,6 @@ namespace System.Windows.Forms
         }
 
         // This function computes everything in terms of physical size (millimeters), not pixels
-        //
         private void ComputeLayout()
         {
             Debug.Assert(pageInfo != null, "Must call ComputePreview first");
@@ -415,8 +415,8 @@ namespace System.Windows.Forms
 
             Graphics tempGraphics = CreateGraphicsInternal();
             IntPtr dc = tempGraphics.GetHdc();
-            screendpi = new Point(UnsafeNativeMethods.GetDeviceCaps(new HandleRef(tempGraphics, dc), NativeMethods.LOGPIXELSX),
-                                  UnsafeNativeMethods.GetDeviceCaps(new HandleRef(tempGraphics, dc), NativeMethods.LOGPIXELSY));
+            screendpi = new Point(Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX),
+                                  Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY));
             tempGraphics.ReleaseHdcInternal(dc);
             tempGraphics.Dispose();
 
@@ -454,7 +454,7 @@ namespace System.Windows.Forms
                     UseAntiAlias = UseAntiAlias
                 };
                 document.PrintController = new PrintControllerWithStatusDialog(previewController,
-                                                                               string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
+                                                                               SR.PrintControllerWithStatusDialog_DialogTitlePreview);
 
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
@@ -775,8 +775,7 @@ namespace System.Windows.Forms
                 position.Y = 0;
             }
 
-            Rectangle rect = ClientRectangle;
-            NativeMethods.RECT scroll = NativeMethods.RECT.FromXYWH(rect.X, rect.Y, rect.Width, rect.Height);
+            RECT scroll = ClientRectangle;
             SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
                                  current.X - position.X,
                                  current.Y - position.Y,
@@ -964,15 +963,15 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case Interop.WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
                 //added case to handle keyboard events
                 //
-                case Interop.WindowMessages.WM_KEYDOWN:
+                case WindowMessages.WM_KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:
@@ -1000,14 +999,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets back color respectively to the High Contrast theme is applied or not
-        /// and taking into account saved custom back color.
+        ///  Gets back color respectively to the High Contrast theme is applied or not
+        ///  and taking into account saved custom back color.
         /// </summary>
         /// <param name="isHighContract">Indicates whether High Contrast theme is applied or not.</param>
         /// <returns>
-        /// Standard back color for PrintPreview control in standard theme (1),
-        /// contrasted color if there is High Contrast theme applied (2) and
-        /// custom color if this is set irrespectively to HC or not HC mode (3).
+        ///  Standard back color for PrintPreview control in standard theme (1),
+        ///  contrasted color if there is High Contrast theme applied (2) and
+        ///  custom color if this is set irrespectively to HC or not HC mode (3).
         /// </returns>
         private Color GetBackColor(bool isHighContract)
         {

@@ -33,8 +33,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
+        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {

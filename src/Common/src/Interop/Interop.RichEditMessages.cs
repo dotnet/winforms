@@ -5,8 +5,8 @@
 internal static partial class Interop
 {
     /// <summary>
-    /// RichTextBox Control Messages. Note that some messages have the same name but different value compared to normal Edit Control Messages.
-    /// Copied form richedit.h
+    ///  RichTextBox Control Messages. Note that some messages have the same name but different value compared to normal Edit Control Messages.
+    ///  Copied form richedit.h
     /// </summary>
     public static class RichEditMessages
     {

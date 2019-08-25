@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -86,8 +87,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Deriving classes can override this to configure a default size for their control.
-        /// This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected internal override Padding DefaultMargin
         {
@@ -117,49 +118,6 @@ namespace System.Windows.Forms
             get
             {
                 return Control as TextBox;
-            }
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ToolStripTextBoxAccessibleObject(this);
-        }
-
-        [ComVisible(true)]
-        internal class ToolStripTextBoxAccessibleObject : ToolStripItemAccessibleObject
-        {
-            private readonly ToolStripTextBox ownerItem = null;
-
-            public ToolStripTextBoxAccessibleObject(ToolStripTextBox ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.Text;
-                }
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
-            {
-                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
-                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
-                {
-                    return ownerItem.TextBox.AccessibilityObject;
-                }
-
-                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
-                return base.FragmentNavigate(direction);
             }
         }
 
@@ -588,7 +546,6 @@ namespace System.Windows.Forms
         private class ToolStripTextBoxControl : TextBox
         {
             private bool mouseIsOver = false;
-            private ToolStripTextBox ownerItem;
             private bool isFontSet = true;
             private bool alreadyHooked;
 
@@ -600,11 +557,11 @@ namespace System.Windows.Forms
             }
 
             // returns the distance from the client rect to the upper left hand corner of the control
-            private NativeMethods.RECT AbsoluteClientRECT
+            private RECT AbsoluteClientRECT
             {
                 get
                 {
-                    NativeMethods.RECT rect = new NativeMethods.RECT();
+                    RECT rect = new RECT();
                     CreateParams cp = CreateParams;
 
                     AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
@@ -628,7 +585,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    NativeMethods.RECT rect = AbsoluteClientRECT;
+                    RECT rect = AbsoluteClientRECT;
                     return Rectangle.FromLTRB(rect.top, rect.top, rect.right, rect.bottom);
                 }
             }
@@ -683,11 +640,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public ToolStripTextBox Owner
-            {
-                get { return ownerItem; }
-                set { ownerItem = value; }
-            }
+            public ToolStripTextBox Owner { get; set; }
 
             internal override bool SupportsUiaProviders => true;
 
@@ -697,58 +650,37 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
-                NativeMethods.RECT absoluteClientRectangle = AbsoluteClientRECT;
-                HandleRef hNonClientRegion = NativeMethods.NullHandleRef;
-                HandleRef hClientRegion = NativeMethods.NullHandleRef;
-                HandleRef hTotalRegion = NativeMethods.NullHandleRef;
 
-                try
+                RECT absoluteClientRectangle = AbsoluteClientRECT;
+
+                // Get the total client area, then exclude the client by using XOR
+                IntPtr hTotalRegion = Gdi32.CreateRectRgn(0, 0, Width, Height);
+                IntPtr hClientRegion = Gdi32.CreateRectRgn(absoluteClientRectangle.left, absoluteClientRectangle.top, absoluteClientRectangle.right, absoluteClientRectangle.bottom);
+                IntPtr hNonClientRegion = Gdi32.CreateRectRgn(0, 0, 0, 0);
+
+                Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.CombineMode.RGN_XOR);
+
+                // Call RedrawWindow with the region.
+                RECT ignored = default;
+                SafeNativeMethods.RedrawWindow(
+                    new HandleRef(this, Handle),
+                    ref ignored,
+                    hNonClientRegion,
+                    NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_ERASE | NativeMethods.RDW_UPDATENOW
+                        | NativeMethods.RDW_ERASENOW | NativeMethods.RDW_FRAME);
+
+                if (hNonClientRegion != IntPtr.Zero)
                 {
-                    // get the total client area, then exclude the client by using XOR
-                    hTotalRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(0, 0, Width, Height));
-                    hClientRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(absoluteClientRectangle.left, absoluteClientRectangle.top, absoluteClientRectangle.right, absoluteClientRectangle.bottom));
-                    hNonClientRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(0, 0, 0, 0));
-
-                    SafeNativeMethods.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, NativeMethods.RGN_XOR);
-
-                    // Call RedrawWindow with the region.
-                    NativeMethods.RECT ignored = new NativeMethods.RECT();
-                    SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle),
-                                                   ref ignored, hNonClientRegion,
-                                                   NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_ERASE |
-                                                   NativeMethods.RDW_UPDATENOW | NativeMethods.RDW_ERASENOW |
-                                                   NativeMethods.RDW_FRAME);
+                    Gdi32.DeleteObject(hNonClientRegion);
                 }
-                finally
+                if (hClientRegion != IntPtr.Zero)
                 {
-                    // clean up our regions.
-                    try
-                    {
-                        if (hNonClientRegion.Handle != IntPtr.Zero)
-                        {
-                            SafeNativeMethods.DeleteObject(hNonClientRegion);
-                        }
-                    }
-                    finally
-                    {
-                        try
-                        {
-                            if (hClientRegion.Handle != IntPtr.Zero)
-                            {
-                                SafeNativeMethods.DeleteObject(hClientRegion);
-                            }
-                        }
-                        finally
-                        {
-                            if (hTotalRegion.Handle != IntPtr.Zero)
-                            {
-                                SafeNativeMethods.DeleteObject(hTotalRegion);
-                            }
-                        }
-                    }
-
+                    Gdi32.DeleteObject(hClientRegion);
                 }
-
+                if (hTotalRegion != IntPtr.Zero)
+                {
+                    Gdi32.DeleteObject(hTotalRegion);
+                }
             }
 
             protected override void OnGotFocus(EventArgs e)
@@ -829,7 +761,7 @@ namespace System.Windows.Forms
 
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                return new ToolStripTextBoxControlAccessibleObject(this);
+                return new ToolStripTextBoxControlAccessibleObject(this, Owner);
             }
 
             protected override void Dispose(bool disposing)
@@ -855,8 +787,8 @@ namespace System.Windows.Forms
                 // Using GetWindowDC instead of GetDCEx as GetDCEx seems to return a null handle and a last error of
                 // the operation succeeded.  We're not going to use the clipping rect anyways - so it's not
                 // that bigga deal.
-                HandleRef hdc = new HandleRef(this, UnsafeNativeMethods.GetWindowDC(new HandleRef(this, m.HWnd)));
-                if (hdc.Handle == IntPtr.Zero)
+                IntPtr hdc = UnsafeNativeMethods.GetWindowDC(new HandleRef(this, m.HWnd));
+                if (hdc == IntPtr.Zero)
                 {
                     throw new Win32Exception();
                 }
@@ -872,7 +804,7 @@ namespace System.Windows.Forms
                         outerBorderColor = SystemColors.ControlDark;
                         innerBorderColor = SystemColors.Control;
                     }
-                    using (Graphics g = Graphics.FromHdcInternal(hdc.Handle))
+                    using (Graphics g = Graphics.FromHdcInternal(hdc))
                     {
 
                         Rectangle clientRect = AbsoluteClientRectangle;
@@ -896,7 +828,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ReleaseDC(new HandleRef(this, Handle), hdc);
+                    User32.ReleaseDC(new HandleRef(this, Handle), hdc);
                 }
                 // we've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
@@ -904,7 +836,7 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == Interop.WindowMessages.WM_NCPAINT)
+                if (m.Msg == WindowMessages.WM_NCPAINT)
                 {
                     WmNCPaint(ref m);
                     return;
@@ -916,50 +848,17 @@ namespace System.Windows.Forms
             }
         }
 
-        private class ToolStripTextBoxControlAccessibleObject : Control.ControlAccessibleObject
+        private class ToolStripTextBoxControlAccessibleObject : ToolStripHostedControlAccessibleObject
         {
-            public ToolStripTextBoxControlAccessibleObject(ToolStripTextBoxControl toolStripTextBoxControl) : base(toolStripTextBoxControl)
+            public ToolStripTextBoxControlAccessibleObject(Control toolStripHostedControl, ToolStripControlHost toolStripControlHost) : base(toolStripHostedControl, toolStripControlHost)
             {
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    if (Owner is ToolStripTextBoxControl toolStripTextBoxControl)
-                    {
-                        return toolStripTextBoxControl.Owner.Owner.AccessibilityObject;
-                    }
-
-                    return base.FragmentRoot;
-                }
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        if (Owner is ToolStripTextBoxControl toolStripTextBoxControl)
-                        {
-                            return toolStripTextBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
-                        }
-                        break;
-                }
-
-                return base.FragmentNavigate(direction);
             }
 
             internal override object GetPropertyValue(int propertyID)
             {
-                switch (propertyID)
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_EditControlTypeId;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                        return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
+                    return NativeMethods.UIA_EditControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -975,7 +874,6 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
         }
-
     }
 
 }

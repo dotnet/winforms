@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -488,9 +489,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Override this function if you want to do custom table layouts for the
-        /// StatusStrip.  The default layoutstyle is tablelayout, and we need to play
-        /// with the row/column styles
+        ///  Override this function if you want to do custom table layouts for the
+        ///  StatusStrip.  The default layoutstyle is tablelayout, and we need to play
+        ///  with the row/column styles
         /// </summary>
         protected virtual void OnSpringTableLayoutCore()
         {
@@ -612,7 +613,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == Interop.WindowMessages.WM_NCHITTEST) && SizingGrip)
+            if ((m.Msg == WindowMessages.WM_NCHITTEST) && SizingGrip)
             {
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
@@ -630,23 +631,23 @@ namespace System.Windows.Forms
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
-                        NativeMethods.RECT rootHwndClientArea = new NativeMethods.RECT();
+                        RECT rootHwndClientArea = new RECT();
                         UnsafeNativeMethods.GetClientRect(rootHwnd, ref rootHwndClientArea);
 
                         // map the size grip FROM statusStrip coords TO the toplevel window coords.
-                        NativeMethods.POINT gripLocation;
+                        Point gripLocation;
                         if (RightToLeft == RightToLeft.Yes)
                         {
-                            gripLocation = new NativeMethods.POINT(SizeGripBounds.Left, SizeGripBounds.Bottom);
+                            gripLocation = new Point(SizeGripBounds.Left, SizeGripBounds.Bottom);
                         }
                         else
                         {
-                            gripLocation = new NativeMethods.POINT(SizeGripBounds.Right, SizeGripBounds.Bottom);
+                            gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
-                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, gripLocation, 1);
+                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, ref gripLocation, 1);
 
-                        int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.y);
-                        int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.x);
+                        int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
+                        int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
 
                         if (RightToLeft != RightToLeft.Yes)
                         {
@@ -683,7 +684,7 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == Interop.WindowMessages.WM_NCHITTEST)
+                if (m.Msg == WindowMessages.WM_NCHITTEST)
                 {
                     int x = NativeMethods.Util.LOWORD(m.LParam);
                     int y = NativeMethods.Util.HIWORD(m.LParam);

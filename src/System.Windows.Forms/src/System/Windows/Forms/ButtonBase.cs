@@ -9,6 +9,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1326,9 +1327,9 @@ namespace System.Windows.Forms
                         // things, even though we are ownerdraw.
                         break;
 
-                    case Interop.WindowMessages.WM_KILLFOCUS:
-                    case Interop.WindowMessages.WM_CANCELMODE:
-                    case Interop.WindowMessages.WM_CAPTURECHANGED:
+                    case WindowMessages.WM_KILLFOCUS:
+                    case WindowMessages.WM_CANCELMODE:
+                    case WindowMessages.WM_CAPTURECHANGED:
                         if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                         {
                             SetFlag(FlagMousePressed, false);
@@ -1342,9 +1343,9 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                         break;
 
-                    case Interop.WindowMessages.WM_LBUTTONUP:
-                    case Interop.WindowMessages.WM_MBUTTONUP:
-                    case Interop.WindowMessages.WM_RBUTTONUP:
+                    case WindowMessages.WM_LBUTTONUP:
+                    case WindowMessages.WM_MBUTTONUP:
+                    case WindowMessages.WM_RBUTTONUP:
                         try
                         {
                             SetFlag(FlagInButtonUp, true);
@@ -1365,7 +1366,7 @@ namespace System.Windows.Forms
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                    case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
                         if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);

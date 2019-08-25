@@ -303,10 +303,10 @@ namespace System.Windows.Forms
             public ArrayList InnerList { get; }
 
             /// <summary>
-            /// Indicates the value where the collection should check its items to remove dead weakref left over.
-            /// Note: When GC collects weak refs from this collection the WeakRefObject identity changes since its
-            /// Target becomes null. This makes the item unrecognizable by the collection and cannot be
-            /// removed - Remove(item) and Contains(item) will not find it anymore.
+            ///  Indicates the value where the collection should check its items to remove dead weakref left over.
+            ///  Note: When GC collects weak refs from this collection the WeakRefObject identity changes since its
+            ///  Target becomes null. This makes the item unrecognizable by the collection and cannot be
+            ///  removed - Remove(item) and Contains(item) will not find it anymore.
             /// </summary>
             public int RefCheckThreshold { get; set; } = int.MaxValue; // this means this is disabled by default.
 
@@ -416,10 +416,10 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Removes the value using its hash code as its identity. This is needed because the
-            /// underlying item in the collection may have already been collected changing the
-            /// identity of the WeakRefObject making it impossible for the collection to identify
-            /// it. See WeakRefObject for more info.
+            ///  Removes the value using its hash code as its identity. This is needed because the
+            ///  underlying item in the collection may have already been collected changing the
+            ///  identity of the WeakRefObject making it impossible for the collection to identify
+            ///  it. See WeakRefObject for more info.
             /// </summary>
             public void RemoveByHashCode(object value)
             {
@@ -476,10 +476,10 @@ namespace System.Windows.Forms
             public IEnumerator GetEnumerator() => InnerList.GetEnumerator();
 
             /// <summary>
-            /// Wraps a weak ref object. WARNING: Use this class carefully!
-            /// When the weak ref is collected, this object looses its identity. This is bad when the object
-            /// has been added to a collection since Contains(WeakRef(item)) and Remove(WeakRef(item)) would
-            /// not be able to identify the item.
+            ///  Wraps a weak ref object. WARNING: Use this class carefully!
+            ///  When the weak ref is collected, this object looses its identity. This is bad when the object
+            ///  has been added to a collection since Contains(WeakRef(item)) and Remove(WeakRef(item)) would
+            ///  not be able to identify the item.
             /// </summary>
             internal class WeakRefObject
             {

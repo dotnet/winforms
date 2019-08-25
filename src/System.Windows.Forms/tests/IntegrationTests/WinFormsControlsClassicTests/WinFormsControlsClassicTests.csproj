@@ -69,8 +69,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Common\src\Interop\Interop.Libraries.cs">
+      <Link>Interop.Libraries.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs">
       <Link>Interop.WindowMessages.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs">
+      <Link>Gdi32\Interop.GetDeviceCaps.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Common\src\Interop\User32\Interop.GetDC.cs">
+      <Link>User32\Interop.GetDC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs">
+      <Link>User32\Interop.ReleaseDC.cs</Link>
     </Compile>
     <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\ExternalTestHelpers.cs">
       <Link>ExternalTestHelpers.cs</Link>
@@ -197,6 +209,14 @@
       <Link>PropertyGrid.Designer.cs</Link>
       <DependentUpon>PropertyGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\WinformsControlsTest\RichTextBoxes.cs">
+      <Link>RichTextBoxes.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\RichTextBoxes.Designer.cs">
+      <Link>RichTextBoxes.Designer.cs</Link>
+      <DependentUpon>RichTextBoxes.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\WinformsControlsTest\ScalingBeforeChanges.cs">
       <Link>ScalingBeforeChanges.cs</Link>
       <SubType>Form</SubType>
@@ -260,6 +280,10 @@
       <Link>ListViewTest.resx</Link>
       <DependentUpon>ListViewTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\MainForm.resx">
+      <Link>MainForm.resx</Link>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\MdiChild.resx">
       <Link>MdiChild.resx</Link>
       <DependentUpon>MdiChild.cs</DependentUpon>
@@ -298,6 +322,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\WinformsControlsTest\Data\example.rtf">
+      <Link>Data\example.rtf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
@@ -336,4 +364,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build" Condition="'$(OS)' != 'Windows_NT'">
+  </Target>
 </Project>

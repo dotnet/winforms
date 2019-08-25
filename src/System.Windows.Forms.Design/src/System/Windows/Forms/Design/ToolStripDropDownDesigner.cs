@@ -14,7 +14,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Designer for ToolStripDropDowns...just provides the Edit... verb.
+    ///  Designer for ToolStripDropDowns...just provides the Edit... verb.
     /// </summary>
     internal class ToolStripDropDownDesigner : ComponentDesigner
     {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         private UndoEngine undoEngine = null;
 
         /// <summary>
-        /// ShadowProperty.
+        ///  ShadowProperty.
         /// </summary>
         private bool AutoClose
         {
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Adds designer actions to the ActionLists collection.
+        ///  Adds designer actions to the ActionLists collection.
         /// </summary>
         public override DesignerActionListCollection ActionLists
         {
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The ToolStripItems are the associated components.   We want those to come with in any cut, copy opreations.
+        ///  The ToolStripItems are the associated components.   We want those to come with in any cut, copy opreations.
         /// </summary>
         public override System.Collections.ICollection AssociatedComponents
         {
@@ -88,8 +88,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Set by the ToolStripItemCollectionEditor when it's launched for this The Items property doesnt open another instance
-        /// of collectioneditor.  We count this so that we can deal with nestings.
+        ///  Set by the ToolStripItemCollectionEditor when it's launched for this The Items property doesnt open another instance
+        ///  of collectioneditor.  We count this so that we can deal with nestings.
         /// </summary>
         internal bool EditingCollection
         {
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Prefilter this property so that we can set the right To Left on the Design Menu...
+        ///  Prefilter this property so that we can set the right To Left on the Design Menu...
         /// </summary>
         private RightToLeft RightToLeft
         {
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
+        ///  shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
         /// </summary>
         private string SettingsKey
         {
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this designer.
+        ///  Disposes of this designer.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes of this dummy menuItem and its designer..
+        ///  Disposes of this dummy menuItem and its designer..
         /// </summary>
         private void DisposeMenu()
         {
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Initialize the item.
+        ///  Initialize the item.
         /// </summary>
         // EditorServiceContext is newed up to add Edit Items verb.
         public override void Initialize(IComponent component)
@@ -499,7 +499,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Listens SelectionChanging to Show the MenuDesigner.
+        ///  Listens SelectionChanging to Show the MenuDesigner.
         /// </summary>
         private void OnSelectionChanging(object sender, EventArgs e)
         {
@@ -513,7 +513,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Listens SelectionChanged to Show the MenuDesigner.
+        ///  Listens SelectionChanged to Show the MenuDesigner.
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -625,7 +625,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
+        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
         /// </summary>
         public void ShowMenu()
         {
@@ -641,7 +641,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
+        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
         /// </summary>
         public void ShowMenu(ToolStripItem selectedItem)
         {
@@ -746,7 +746,7 @@ namespace System.Windows.Forms.Design
         private bool ShouldSerializeRightToLeft() => RightToLeft != RightToLeft.No;
 
         /// <summary>
-        /// ResumeLayout after Undone.
+        ///  ResumeLayout after Undone.
         /// </summary>
         private void OnUndone(object source, EventArgs e)
         {
@@ -758,7 +758,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
+        ///  This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
         /// </summary>
         internal class ContextMenuStripBehavior : System.Windows.Forms.Design.Behavior.Behavior
         {

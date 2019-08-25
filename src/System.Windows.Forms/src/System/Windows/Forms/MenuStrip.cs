@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -187,7 +188,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
+        ///  Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
         /// </summary>
         internal bool OnMenuKey()
         {
@@ -230,7 +231,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
-                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), Interop.WindowMessages.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
+                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), WindowMessages.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
                         return true;
                     }
                 }
@@ -239,12 +240,12 @@ namespace System.Windows.Forms
 
         }
         /// <summary>
-        /// Summary of WndProc.
+        ///  Summary of WndProc.
         /// </summary>
         /// <param name=m></param>
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
+            if (m.Msg == WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
             {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);

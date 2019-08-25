@@ -5,28 +5,28 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the style of control to display.
+    ///  Specifies the style of control to display.
     /// </summary>
     public enum FlatStyle
     {
         /// <summary>
-        /// The control appears flat.
+        ///  The control appears flat.
         /// </summary>
         Flat,
 
         /// <summary>
-        /// A control appears flat until the mouse pointer moves over it, at
-        /// which point it appears three-dimensional.
+        ///  A control appears flat until the mouse pointer moves over it, at
+        ///  which point it appears three-dimensional.
         /// </summary>
         Popup,
 
         /// <summary>
-        /// The control appears three-dimensional.
+        ///  The control appears three-dimensional.
         /// </summary>
         Standard,
 
         /// <summary>
-        /// The control appears three-dimensional.
+        ///  The control appears three-dimensional.
         /// </summary>
         System,
     }

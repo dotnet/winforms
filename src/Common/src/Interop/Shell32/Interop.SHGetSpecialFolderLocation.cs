@@ -10,7 +10,7 @@ internal static partial class Interop
 {
     public static partial class Shell32
     {
-        [DllImport(Libraries.Shell32, EntryPoint = "SHGetSpecialFolderLocation", ExactSpelling = true)]
+        [DllImport(Libraries.Shell32, ExactSpelling = true)]
         public static extern int SHGetSpecialFolderLocation(IntPtr hwnd, int csidl, out CoTaskMemSafeHandle ppidl);
     }
 }

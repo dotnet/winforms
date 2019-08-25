@@ -200,11 +200,11 @@ namespace System.Windows.Forms.Tests
             {
                 HeaderText = value
             };
-            Assert.Same(expected, style.HeaderText);
+            Assert.Equal(expected, style.HeaderText);
 
             // Set same.
             style.HeaderText = value;
-            Assert.Same(expected, style.HeaderText);
+            Assert.Equal(expected, style.HeaderText);
         }
 
         [Theory]
@@ -216,11 +216,11 @@ namespace System.Windows.Forms.Tests
             {
                 HeaderText = value
             };
-            Assert.Same(expected, style.HeaderText);
+            Assert.Equal(expected, style.HeaderText);
 
             // Set same.
             style.HeaderText = value;
-            Assert.Same(expected, style.HeaderText);
+            Assert.Equal(expected, style.HeaderText);
         }
 
         [Fact]
@@ -281,11 +281,10 @@ namespace System.Windows.Forms.Tests
             {
                 MappingName = value
             };
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
 
-            // Set same.
             style.MappingName = value;
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
         }
 
         [Theory]
@@ -299,11 +298,10 @@ namespace System.Windows.Forms.Tests
             tableStyle.GridColumnStyles.Add(style);
 
             style.MappingName = value;
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
 
-            // Set same.
             style.MappingName = value;
-            Assert.Same(expected, style.MappingName);
+            Assert.Equal(expected, style.MappingName);
         }
 
         [Fact]

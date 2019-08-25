@@ -4,22 +4,22 @@
     <body>
       <trans-unit id="$this.Text">
         <source>String Collection Editor</source>
-        <target state="new">String Collection Editor</target>
+        <target state="translated">文字列コレクション エディター</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">キャンセル</target>
         <note />
       </trans-unit>
       <trans-unit id="instruction.Text">
         <source>&amp;Enter the strings in the collection (one per line):</source>
-        <target state="new">&amp;Enter the strings in the collection (one per line):</target>
+        <target state="translated">コレクションに文字列を入力してください (各行に 1 つ)(&amp;E):</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
     </body>

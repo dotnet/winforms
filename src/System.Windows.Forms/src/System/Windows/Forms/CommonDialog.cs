@@ -6,17 +6,18 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies the base class used for displaying dialog boxes on the screen.
+    ///  Specifies the base class used for displaying dialog boxes on the screen.
     /// </summary>
     [ToolboxItemFilter("System.Windows.Forms")]
     public abstract class CommonDialog : Component
     {
         private static readonly object s_helpRequestEvent = new object();
-        private const int CDM_SETDEFAULTFOCUS = Interop.WindowMessages.WM_USER + 0x51;
+        private const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
         private static int s_helpMsg;
 
         private IntPtr _defOwnerWndProc;
@@ -26,7 +27,7 @@ namespace System.Windows.Forms
         private IntPtr _defaultControlHwnd;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='CommonDialog'/> class.
+        ///  Initializes a new instance of the <see cref='CommonDialog'/> class.
         /// </summary>
         public CommonDialog()
         {
@@ -41,8 +42,8 @@ namespace System.Windows.Forms
         public object Tag { get; set; }
 
         /// <summary>
-        /// Occurs when the user clicks the Help button on a common
-        /// dialog box.
+        ///  Occurs when the user clicks the Help button on a common
+        ///  dialog box.
         /// </summary>
         [SRDescription(nameof(SR.CommonDialogHelpRequested))]
         public event EventHandler HelpRequest
@@ -52,12 +53,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Defines the common dialog box hook procedure that is overridden to add specific
-        /// functionality to a common dialog box.
+        ///  Defines the common dialog box hook procedure that is overridden to add specific
+        ///  functionality to a common dialog box.
         /// </summary>
         protected virtual IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == Interop.WindowMessages.WM_INITDIALOG)
+            if (msg == WindowMessages.WM_INITDIALOG)
             {
                 MoveToScreenCenter(hWnd);
 
@@ -66,7 +67,7 @@ namespace System.Windows.Forms
                 _defaultControlHwnd = wparam;
                 UnsafeNativeMethods.SetFocus(new HandleRef(null, wparam));
             }
-            else if (msg == Interop.WindowMessages.WM_SETFOCUS)
+            else if (msg == WindowMessages.WM_SETFOCUS)
             {
                 UnsafeNativeMethods.PostMessage(new HandleRef(null, hWnd), CDM_SETDEFAULTFOCUS, 0, 0);
             }
@@ -82,13 +83,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Centers the given window on the screen. This method is used by the default
-        /// common dialog hook procedure to center the dialog on the screen before it
-        /// is shown.
+        ///  Centers the given window on the screen. This method is used by the default
+        ///  common dialog hook procedure to center the dialog on the screen before it
+        ///  is shown.
         /// </summary>
         private protected static void MoveToScreenCenter(IntPtr hWnd)
         {
-            NativeMethods.RECT r = new NativeMethods.RECT();
+            RECT r = new RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(null, hWnd), ref r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
@@ -98,7 +99,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='HelpRequest'/> event.
+        ///  Raises the <see cref='HelpRequest'/> event.
         /// </summary>
         protected virtual void OnHelpRequest(EventArgs e)
         {
@@ -107,8 +108,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Defines the owner window procedure that is overridden to add specific
-        /// functionality to a common dialog box.
+        ///  Defines the owner window procedure that is overridden to add specific
+        ///  functionality to a common dialog box.
         /// </summary>
         protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
@@ -138,23 +139,23 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, resets the properties of a common dialog
-        /// to their default values.
+        ///  When overridden in a derived class, resets the properties of a common dialog
+        ///  to their default values.
         /// </summary>
         public abstract void Reset();
 
         /// <summary>
-        /// When overridden in a derived class, specifies a common dialog box.
+        ///  When overridden in a derived class, specifies a common dialog box.
         /// </summary>
         protected abstract bool RunDialog(IntPtr hwndOwner);
 
         /// <summary>
-        /// Runs a common dialog box.
+        ///  Runs a common dialog box.
         /// </summary>
         public DialogResult ShowDialog() => ShowDialog(owner: null);
 
         /// <summary>
-        /// Runs a common dialog box, parented to the given IWin32Window.
+        ///  Runs a common dialog box, parented to the given IWin32Window.
         /// </summary>
         public DialogResult ShowDialog(IWin32Window owner)
         {

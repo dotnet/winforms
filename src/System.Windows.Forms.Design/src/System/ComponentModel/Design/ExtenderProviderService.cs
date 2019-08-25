@@ -7,9 +7,9 @@ using System.Collections;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The extender provider service actually provides two services: IExtenderProviderService,
-    /// which allows other objects to add and remove extender providers, and IExtenderListService,
-    /// which is used by TypeDescriptor to discover the set of extender providers.
+    ///  The extender provider service actually provides two services: IExtenderProviderService,
+    ///  which allows other objects to add and remove extender providers, and IExtenderListService,
+    ///  which is used by TypeDescriptor to discover the set of extender providers.
     /// </summary>
     internal sealed class ExtenderProviderService : IExtenderProviderService, IExtenderListService
     {
@@ -20,7 +20,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the set of extender providers for the component.
+        ///  Gets the set of extender providers for the component.
         /// </summary>
         IExtenderProvider[] IExtenderListService.GetExtenderProviders()
         {
@@ -34,7 +34,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds an extender provider.
+        ///  Adds an extender provider.
         /// </summary>
         void IExtenderProviderService.AddExtenderProvider(IExtenderProvider provider)
         {
@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes an extender provider.
+        ///  Removes an extender provider.
         /// </summary>
         void IExtenderProviderService.RemoveExtenderProvider(IExtenderProvider provider)
         {

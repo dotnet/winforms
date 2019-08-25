@@ -15,9 +15,9 @@ namespace System.Windows.Forms.ButtonInternal
     /// <summary>
     ///        PLEASE READ
     ///        -----------
-    /// This class is used for more than just Button:
-    /// it's used for things that derive from ButtonBase,
-    /// parts of ToolStripItem, and parts of the DataGridView.
+    ///  This class is used for more than just Button:
+    ///  it's used for things that derive from ButtonBase,
+    ///  parts of ToolStripItem, and parts of the DataGridView.
     /// </summary>
     internal abstract class ButtonBaseAdapter
     {

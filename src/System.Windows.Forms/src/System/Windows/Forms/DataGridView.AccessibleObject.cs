@@ -523,7 +523,7 @@ namespace System.Windows.Forms
                 switch (propertyId)
                 {
                     case NativeMethods.UIA_NamePropertyId:
-                        return string.Format(SR.DataGridView_AccEditingPanelAccName);
+                        return SR.DataGridView_AccEditingPanelAccName;
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_PaneControlTypeId;
                     case NativeMethods.UIA_IsKeyboardFocusablePropertyId:

@@ -7,7 +7,6 @@ using System.Globalization;
 
 namespace System
 {
-    [Serializable]
     internal class InvariantComparer : IComparer
     {
         private readonly CompareInfo m_compareInfo;
@@ -31,4 +30,3 @@ namespace System
         }
     }
 }
-

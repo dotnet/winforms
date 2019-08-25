@@ -7,54 +7,54 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class contains the information a user needs to paint ListView items.
+    ///  This class contains the information a user needs to paint ListView items.
     /// </summary>
     public class DrawListViewItemEventArgs : EventArgs
     {
         /// <summary>
-        /// Creates a new DrawListViewItemEventArgs with the given parameters.
+        ///  Creates a new DrawListViewItemEventArgs with the given parameters.
         /// </summary>
         public DrawListViewItemEventArgs(Graphics graphics, ListViewItem item, Rectangle bounds, int itemIndex, ListViewItemStates state)
         {
-            Graphics = graphics;
-            Item = item;
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Item = item ?? throw new ArgumentNullException(nameof(item));
             Bounds = bounds;
             ItemIndex = itemIndex;
             State = state;
         }
 
         /// <summary>
-        /// Graphics object with which painting should be done.
+        ///  Graphics object with which painting should be done.
         /// </summary>
         public Graphics Graphics { get; }
 
         /// <summary>
-        /// The item to be painted.
+        ///  The item to be painted.
         /// </summary>
         public ListViewItem Item { get; }
 
         /// <summary>
-        /// The rectangle outlining the area in which the painting should be done.
+        ///  The rectangle outlining the area in which the painting should be done.
         /// </summary>
         public Rectangle Bounds { get; }
 
         /// <summary>
-        /// The index of the item that should be painted.
+        ///  The index of the item that should be painted.
         /// </summary>
         public int ItemIndex { get; }
 
         /// <summary>
-        /// Miscellaneous state information.
+        ///  Miscellaneous state information.
         /// </summary>
         public ListViewItemStates State { get; }
 
         /// <summary>
-        /// Causes the item do be drawn by the system instead of owner drawn.
+        ///  Causes the item do be drawn by the system instead of owner drawn.
         /// </summary>
         public bool DrawDefault { get; set; }
 
         /// <summary>
-        /// Draws the item's background.
+        ///  Draws the item's background.
         /// </summary>
         public void DrawBackground()
         {
@@ -65,8 +65,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws a focus rectangle in the given bounds, if the item is focused. In Details View, if FullRowSelect is
-        /// true, the rectangle is drawn around the whole item, else around the first sub-item's text area.
+        ///  Draws a focus rectangle in the given bounds, if the item is focused. In Details View, if FullRowSelect is
+        ///  true, the rectangle is drawn around the whole item, else around the first sub-item's text area.
         /// </summary>
         public void DrawFocusRectangle()
         {
@@ -77,15 +77,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Draws the item's text (overloaded) - useful only when View != View.Details
+        ///  Draws the item's text (overloaded) - useful only when View != View.Details
         /// </summary>
-        public void DrawText()
-        {
-            DrawText(TextFormatFlags.Left);
-        }
+        public void DrawText() => DrawText(TextFormatFlags.Left);
 
         /// <summary>
-        /// Draws the item's text (overloaded) - useful only when View != View.Details - takes a TextFormatFlags argument.
+        ///  Draws the item's text (overloaded) - useful only when View != View.Details - takes a TextFormatFlags argument.
         /// </summary>
         public void DrawText(TextFormatFlags flags)
         {
@@ -95,7 +92,7 @@ namespace System.Windows.Forms
         private Rectangle UpdateBounds(Rectangle originalBounds, bool drawText)
         {
             Rectangle resultBounds = originalBounds;
-            if (Item.ListView.View == View.Details)
+            if (Item.ListView != null && Item.ListView.View == View.Details)
             {
                 // Note: this logic will compute the bounds so they align w/ the system drawn bounds only
                 // for the default font.

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a standard Windows vertical scroll bar.
+    ///  Represents a standard Windows vertical scroll bar.
     /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             {
                 if (DpiHelper.IsScalingRequirementMet)
                 {
-                    return new Size(SystemInformation.GetVerticalScrollBarWidthForDpi(deviceDpi), LogicalToDeviceUnits(DefaultHeight));
+                    return new Size(SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi), LogicalToDeviceUnits(DefaultHeight));
                 }
                 else
                 {

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -12,32 +13,49 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData()
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-
-            yield return new object[] { null, null, Rectangle.Empty, -2, (ListViewItemStates)(ListViewItemStates.Checked - 1) };
-            yield return new object[] { graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked };
-            yield return new object[] { graphics, new ListViewItem(), new Rectangle(-1, 2, -3, -4), 0, ListViewItemStates.Focused };
-            yield return new object[] { graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), 1, ListViewItemStates.Checked };
+            yield return new object[] { Rectangle.Empty, -2, (ListViewItemStates)(ListViewItemStates.Checked - 1) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked };
+            yield return new object[] { new Rectangle(-1, 2, -3, -4), 0, ListViewItemStates.Focused };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), 1, ListViewItemStates.Checked };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData))]
-        public void Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates(Graphics graphics, ListViewItem item, Rectangle bounds, int itemIndex, ListViewItemStates state)
+        public void DrawListViewItemEventArgs_Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates(Rectangle bounds, int itemIndex, ListViewItemStates state)
         {
-            var e = new DrawListViewItemEventArgs(graphics, item, bounds, itemIndex, state);
-            Assert.Equal(graphics, e.Graphics);
-            Assert.Equal(item, e.Item);
-            Assert.Equal(bounds, e.Bounds);
-            Assert.Equal(itemIndex, e.ItemIndex);
-            Assert.Equal(state, e.State);
-            Assert.False(e.DrawDefault);
+            using (var image = new Bitmap(10, 10))
+            using (Graphics graphics = Graphics.FromImage(image))
+            {
+                var item = new ListViewItem();
+                var e = new DrawListViewItemEventArgs(graphics, item, bounds, itemIndex, state);
+                Assert.Same(graphics, e.Graphics);
+                Assert.Same(item, e.Item);
+                Assert.Equal(bounds, e.Bounds);
+                Assert.Equal(itemIndex, e.ItemIndex);
+                Assert.Equal(state, e.State);
+                Assert.False(e.DrawDefault);
+            }
+        }
+
+        [Fact]
+        public void DrawListViewItemEventArgs_Ctor_NullGraphics_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>("graphics", () => new DrawListViewItemEventArgs(null, new ListViewItem(), new Rectangle(1, 2, 3, 4), 0, ListViewItemStates.Default));
+        }
+
+        [Fact]
+        public void DrawListViewItemEventArgs_Ctor_NullItem_ThrowsArgumentNullException()
+        {
+            using (var image = new Bitmap(10, 10))
+            using (Graphics graphics = Graphics.FromImage(image))
+            {
+                Assert.Throws<ArgumentNullException>("item", () => new DrawListViewItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 0, ListViewItemStates.Default));
+            }
         }
 
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void DrawDefault_Set_GetReturnsExpected(bool value)
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DrawListViewItemEventArgs_DrawDefault_Set_GetReturnsExpected(bool value)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
@@ -47,187 +65,100 @@ namespace System.Windows.Forms.Tests
                     DrawDefault = value
                 };
                 Assert.Equal(value, e.DrawDefault);
+
+                // Set same.
+                e.DrawDefault = value;
+                Assert.Equal(value, e.DrawDefault);
+
+                // Set different.
+                e.DrawDefault = !value;
+                Assert.Equal(!value, e.DrawDefault);
             }
         }
 
-        [Fact]
-        public void DrawBackground_HasGraphics_Success()
+        public static IEnumerable<object[]> Draw_TestData()
         {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-                e.DrawBackground();
-            }
-        }
+            yield return new object[] { new ListViewItem(), new Rectangle(1, 2, 3, 4), ListViewItemStates.Default };
+            yield return new object[] { new ListViewItem(), new Rectangle(1, 2, 3, 4), ListViewItemStates.Focused };
+            yield return new object[] { new ListViewItem(), new Rectangle(1, 2, 3, 4), ListViewItemStates.Checked };
+            yield return new object[] { new ListViewItem(), Rectangle.Empty, ListViewItemStates.Default };
+            yield return new object[] { new ListViewItem(), Rectangle.Empty, ListViewItemStates.Focused };
+            yield return new object[] { new ListViewItem(), Rectangle.Empty, ListViewItemStates.Checked };
+            yield return new object[] { new ListViewItem(), new Rectangle(-1, -2, -3, -4), ListViewItemStates.Default };
+            yield return new object[] { new ListViewItem(), new Rectangle(-1, -2, -3, -4), ListViewItemStates.Focused };
+            yield return new object[] { new ListViewItem(), new Rectangle(-1, -2, -3, -4), ListViewItemStates.Checked };
 
-        [Fact]
-        public void DrawBackground_NullGraphics_ThrowsNullReferenceException()
-        {
-            var e = new DrawListViewItemEventArgs(null, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-            Assert.Throws<NullReferenceException>(() => e.DrawBackground());
-        }
-
-        [Fact]
-        public void DrawBackground_NullItem_ThrowsNullReferenceException()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Focused);
-                Assert.Throws<NullReferenceException>(() => e.DrawBackground());
-            }
-        }
-
-        public static IEnumerable<object[]> ListViewItem_TestData()
-        {
             foreach (View view in new View[] { View.Details, View.List })
             {
                 var listView = new ListView { View = view };
                 var listViewItem = new ListViewItem();
                 listView.Items.Add(listViewItem);
-                yield return new object[] { listViewItem };
+                yield return new object[] { listViewItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Default };
+                yield return new object[] { listViewItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Focused };
+                yield return new object[] { listViewItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Checked };
 
                 var subItemsItem = new ListViewItem();
                 subItemsItem.SubItems.Add(new ListViewItem.ListViewSubItem());
                 listView.Items.Add(subItemsItem);
-                yield return new object[] { subItemsItem };
+                yield return new object[] { subItemsItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Default };
+                yield return new object[] { subItemsItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Focused };
+                yield return new object[] { subItemsItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Checked };
 
                 var fullRowSelectListView = new ListView { View = view, FullRowSelect = true };
                 var fullRowSelectListViewItem = new ListViewItem();
                 fullRowSelectListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem());
                 fullRowSelectListView.Items.Add(fullRowSelectListViewItem);
-                yield return new object[] { fullRowSelectListViewItem };
+                yield return new object[] { fullRowSelectListViewItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Default };
+                yield return new object[] { fullRowSelectListViewItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Focused };
+                yield return new object[] { fullRowSelectListViewItem, new Rectangle(1, 2, 3, 4), ListViewItemStates.Checked };
             }
         }
 
         [Theory]
-        [MemberData(nameof(ListViewItem_TestData))]
-        public void DrawFocusRectangle_HasGraphicsFocused_Success(ListViewItem listViewItem)
+        [MemberData(nameof(Draw_TestData))]
+        public void DrawListViewItemEventArgs_DrawBackground_Invoke_Success(ListViewItem item, Rectangle bounds, ListViewItemStates state)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new DrawListViewItemEventArgs(graphics, listViewItem, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Focused);
-                e.DrawFocusRectangle();
-            }
-        }
-
-        [Fact]
-        public void DrawFocusRectangle_NullGraphicsNotFocused_Nop()
-        {
-            var e = new DrawListViewItemEventArgs(null, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-            e.DrawFocusRectangle();
-        }
-
-        [Fact]
-        public void DrawFocusRectangle_NullGraphicsFocused_ThrowsArgumentNullException()
-        {
-            var listView = new ListView();
-            var listViewItem = new ListViewItem();
-            listView.Items.Add(listViewItem);
-
-            var e = new DrawListViewItemEventArgs(null, listViewItem, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Focused);
-            Assert.Throws<ArgumentNullException>("graphics", () => e.DrawFocusRectangle());
-        }
-
-        [Fact]
-        public void DrawFocusRectangle_NullItemNotFocused_Nop()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-                e.DrawFocusRectangle();
-            }
-        }
-
-        [Fact]
-        public void DrawFocusRectangle_NullItemFocused_ThrowsNullReferenceException()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Focused);
-                Assert.Throws<NullReferenceException>(() => e.DrawFocusRectangle());
-            }
-        }
-
-        [Fact]
-        public void DrawFocusRectangle_ItemHasNoListViewNotFocused_Nop()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-                e.DrawFocusRectangle();
-            }
-        }
-
-        [Fact]
-        public void DrawFocusRectangle_ItemHasNoListViewFocused_ThrowsNullReferenceException()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Focused);
-                Assert.Throws<NullReferenceException>(() => e.DrawFocusRectangle());
+                var e = new DrawListViewItemEventArgs(graphics, item, bounds, -1, state);
+                e.DrawBackground();
             }
         }
 
         [Theory]
-        [MemberData(nameof(ListViewItem_TestData))]
-        public void DrawText_HasGraphicsWithoutFlags_Success(ListViewItem listViewItem)
+        [MemberData(nameof(Draw_TestData))]
+        public void DrawListViewItemEventArgs_DrawFocusRectangle_HasGraphicsFocused_Success(ListViewItem item, Rectangle bounds, ListViewItemStates state)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new DrawListViewItemEventArgs(graphics, listViewItem, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
+                var e = new DrawListViewItemEventArgs(graphics, item, bounds, -1, state);
+                e.DrawFocusRectangle();
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Draw_TestData))]
+        public void DrawListViewItemEventArgs_DrawText_Invoke_Success(ListViewItem item, Rectangle bounds, ListViewItemStates state)
+        {
+            using (var image = new Bitmap(10, 10))
+            using (Graphics graphics = Graphics.FromImage(image))
+            {
+                var e = new DrawListViewItemEventArgs(graphics, item, bounds, -1, state);
                 e.DrawText();
             }
         }
 
         [Theory]
-        [MemberData(nameof(ListViewItem_TestData))]
-        public void DrawText_HasGraphicsWithFlags_Success(ListViewItem listViewItem)
+        [MemberData(nameof(Draw_TestData))]
+        public void DrawListViewItemEventArgs_DrawText_InvokeTextFormatFlags(ListViewItem item, Rectangle bounds, ListViewItemStates state)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new DrawListViewItemEventArgs(graphics, listViewItem, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
+                var e = new DrawListViewItemEventArgs(graphics, item, bounds, -1, state);
                 e.DrawText(TextFormatFlags.Bottom);
-            }
-        }
-
-        [Fact]
-        public void DrawText_NullGraphics_ThrowsNullReferenceException()
-        {
-            var e = new DrawListViewItemEventArgs(null, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-            Assert.Throws<NullReferenceException>(() => e.DrawText());
-            Assert.Throws<NullReferenceException>(() => e.DrawText(TextFormatFlags.Left));
-        }
-
-        [Fact]
-        public void DrawText_NullItem_ThrowsNullReferenceException()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-                Assert.Throws<NullReferenceException>(() => e.DrawText());
-                Assert.Throws<NullReferenceException>(() => e.DrawText(TextFormatFlags.Left));
-            }
-        }
-
-        [Fact]
-        public void DrawText_ItemHasNoListView_ThrowsNullReferenceException()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewItemEventArgs(graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked);
-                Assert.Throws<NullReferenceException>(() => e.DrawText());
-                Assert.Throws<NullReferenceException>(() => e.DrawText(TextFormatFlags.Left));
             }
         }
     }

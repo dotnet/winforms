@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -13,9 +15,6 @@ namespace System.Windows.Forms.Design
         public static readonly int PS_SOLID = 0;
 
         public delegate bool EnumChildrenCallback(IntPtr hwnd, IntPtr lParam);
-
-        // Investigate removing this if the duplicate code in OleDragDropHandler.cs is removed
-        public const int HOLLOW_BRUSH = 5;
 
         public const int DLGC_WANTALLKEYS = 0x0004;
         public const int NM_CLICK = 0 - 0 - 2;
@@ -28,22 +27,12 @@ namespace System.Windows.Forms.Design
 
         public const int VK_PROCESSKEY = 0xE5;
 
-        public const int STGM_READ = 0x00000000;
-        public const int STGM_WRITE = 0x00000001;
-        public const int STGM_READWRITE = 0x00000002;
-        public const int STGM_SHARE_EXCLUSIVE = 0x00000010;
-        public const int STGM_CREATE = 0x00001000;
-        public const int STGM_TRANSACTED = 0x00010000;
-        public const int STGM_CONVERT = 0x00020000;
         public const int CC_FULLOPEN = 0x00000002;
         public const int CC_ENABLETEMPLATEHANDLE = 0x00000040;
         public const int STGM_DELETEONRELEASE = 0x04000000;
 
         public const int RECO_PASTE = 0x00000000; // paste from clipboard
         public const int RECO_DROP = 0x00000001; // drop
-
-        public const int LOGPIXELSX = 88,
-            LOGPIXELSY = 90;
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendDlgItemMessage(IntPtr hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
@@ -57,34 +46,11 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
-
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int DrawTextW(HandleRef hDC, string lpszString, int nCount, ref RECT lpRect, int nFormat);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class POINT
-        {
-            public int x;
-            public int y;
-
-            public POINT()
-            {
-            }
-
-            public POINT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
         public class TV_ITEM
@@ -119,7 +85,7 @@ namespace System.Windows.Forms.Design
             public readonly TV_ITEM itemNew = null;
             public readonly TV_ITEM itemOld = null;
             public readonly NMHDR nmhdr = null;
-            public readonly POINT ptDrag = null;
+            public readonly Point ptDrag;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -172,9 +138,7 @@ namespace System.Windows.Forms.Design
 
             public int time;
 
-            // pt was a by-value POINT structure
-            public int pt_x;
-            public int pt_y;
+            public Point pt;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -205,23 +169,6 @@ namespace System.Windows.Forms.Design
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-
-            public RECT(int left, int top, int right, int bottom)
-            {
-                this.left = left;
-                this.top = top;
-                this.right = right;
-                this.bottom = bottom;
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public sealed class tagOIFI
         {
             [MarshalAs(UnmanagedType.U4)] public readonly int cAccelEntries;
@@ -232,14 +179,6 @@ namespace System.Windows.Forms.Design
 
             public readonly IntPtr hAccel;
             public readonly IntPtr hwndFrame;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagSIZE
-        {
-            [MarshalAs(UnmanagedType.I4)] public readonly int cx = 0;
-
-            [MarshalAs(UnmanagedType.I4)] public readonly int cy = 0;
         }
 
         [ComVisible(true)]
@@ -390,11 +329,11 @@ namespace System.Windows.Forms.Design
 
             void SaveViewState(
                 [In] [MarshalAs(UnmanagedType.Interface)]
-                IStream pstm);
+                Ole32.IStream pstm);
 
             void ApplyViewState(
                 [In] [MarshalAs(UnmanagedType.Interface)]
-                IStream pstm);
+                Ole32.IStream pstm);
 
             void Clone(
                 [In] [MarshalAs(UnmanagedType.Interface)]
@@ -429,10 +368,8 @@ namespace System.Windows.Forms.Design
                 [Out] COMRECT lprcClipRect,
                 [In] [Out] tagOIFI lpFrameInfo);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int Scroll(
-                [In] [MarshalAs(UnmanagedType.U4)] tagSIZE scrollExtant);
+            Interop.HRESULT Scroll(Size scrollExtant);
 
             void OnUIDeactivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fUndoable);
@@ -449,65 +386,9 @@ namespace System.Windows.Forms.Design
                 [In] COMRECT lprcPosRect);
         }
 
-        [ComVisible(true)]
-        [ComImport]
-        [Guid("0000000C-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IStream
-        {
-            [return: MarshalAs(UnmanagedType.I4)]
-            int Read(
-                [In] IntPtr buf,
-                [In] [MarshalAs(UnmanagedType.I4)] int len);
-
-            [return: MarshalAs(UnmanagedType.I4)]
-            int Write(
-                [In] IntPtr buf,
-                [In] [MarshalAs(UnmanagedType.I4)] int len);
-
-            [return: MarshalAs(UnmanagedType.I8)]
-            long Seek(
-                [In] [MarshalAs(UnmanagedType.I8)] long dlibMove,
-                [In] [MarshalAs(UnmanagedType.I4)] int dwOrigin);
-
-            void SetSize(
-                [In] [MarshalAs(UnmanagedType.I8)] long libNewSize);
-
-            [return: MarshalAs(UnmanagedType.I8)]
-            long CopyTo(
-                [In] [MarshalAs(UnmanagedType.Interface)]
-                IStream pstm,
-                [In] [MarshalAs(UnmanagedType.I8)] long cb,
-                [Out] [MarshalAs(UnmanagedType.LPArray)]
-                long[] pcbRead);
-
-            void Commit(
-                [In] [MarshalAs(UnmanagedType.I4)] int grfCommitFlags);
-
-            void Revert();
-
-            void LockRegion(
-                [In] [MarshalAs(UnmanagedType.I8)] long libOffset,
-                [In] [MarshalAs(UnmanagedType.I8)] long cb,
-                [In] [MarshalAs(UnmanagedType.I4)] int dwLockType);
-
-            void UnlockRegion(
-                [In] [MarshalAs(UnmanagedType.I8)] long libOffset,
-                [In] [MarshalAs(UnmanagedType.I8)] long cb,
-                [In] [MarshalAs(UnmanagedType.I4)] int dwLockType);
-
-            void Stat(
-                [In] IntPtr pStatstg,
-                [In] [MarshalAs(UnmanagedType.I4)] int grfStatFlag);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IStream Clone();
-        }
-
         public static readonly int WM_MOUSEENTER = Util.RegisterWindowMessage("WinFormsMouseEnter");
         public static readonly int HDN_ENDTRACK = HDN_ENDTRACKW;
 
-        public const int DT_CALCRECT = 0x00000400;
         public const int WS_DISABLED = 0x08000000;
         public const int WS_CLIPSIBLINGS = 0x04000000;
         public const int WS_CLIPCHILDREN = 0x02000000;
@@ -516,7 +397,6 @@ namespace System.Windows.Forms.Design
         public const int WS_BORDER = 0x00800000;
         public const int CS_DROPSHADOW = 0x00020000;
         public const int CS_DBLCLKS = 0x0008;
-        public const int NOTSRCCOPY = 0x00330008;
         public const int SRCCOPY = 0x00CC0020;
         public const int LVM_SETCOLUMNWIDTH = 0x1000 + 30;
         public const int LVM_GETHEADER = 0x1000 + 31;
@@ -739,9 +619,6 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In] [Out] TV_HITTESTINFO lParam);
-
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
-        public static extern bool ExternalDeleteObject(HandleRef hObject);
 
         [StructLayout(LayoutKind.Sequential)]
         public class HDHITTESTINFO
@@ -997,66 +874,6 @@ namespace System.Windows.Forms.Design
             [MarshalAs(UnmanagedType.U4)] public readonly int advf = 0;
 
             [MarshalAs(UnmanagedType.U4)] public readonly int dwConnection = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class CHARRANGE
-        {
-            public readonly int cpMax = 0;
-            public readonly int cpMin = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class STATSTG
-        {
-            [MarshalAs(UnmanagedType.I8)] public readonly long atime = 0;
-
-            [MarshalAs(UnmanagedType.I8)] public readonly long cbSize = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b0 = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b1 = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b2 = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b3 = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b4 = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b5 = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b6 = 0;
-
-            [MarshalAs(UnmanagedType.U1)] public readonly byte clsid_b7 = 0;
-
-            public readonly int clsid_data1 = 0;
-
-            [MarshalAs(UnmanagedType.I2)] public readonly short clsid_data2 = 0;
-
-            [MarshalAs(UnmanagedType.I2)] public readonly short clsid_data3 = 0;
-
-            [MarshalAs(UnmanagedType.I8)] public readonly long ctime = 0;
-
-            [MarshalAs(UnmanagedType.I4)] public readonly int grfLocksSupported = 0;
-
-            [MarshalAs(UnmanagedType.I4)] public readonly int grfMode = 0;
-
-            [MarshalAs(UnmanagedType.I4)] public readonly int grfStateBits = 0;
-
-            [MarshalAs(UnmanagedType.I8)] public readonly long mtime = 0;
-
-            [MarshalAs(UnmanagedType.LPWStr)] public readonly string pwcsName = null;
-
-            [MarshalAs(UnmanagedType.I4)] public readonly int reserved = 0;
-
-            public readonly int type = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class FILETIME
-        {
-            public readonly uint dwHighDateTime = 0;
-            public readonly uint dwLowDateTime = 0;
         }
 
         [ComImport]

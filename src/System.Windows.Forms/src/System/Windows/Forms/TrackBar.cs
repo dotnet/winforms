@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -476,7 +477,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int cyhscroll = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
+                int cyhscroll = User32.GetSystemMetrics(User32.SystemMetric.SM_CYHSCROLL);
 
                 // this is our preferred size
                 //
@@ -924,7 +925,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.MouseWheel'/> event.
+        ///  Raises the <see cref='Control.MouseWheel'/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -1150,8 +1151,8 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL:
                     switch (NativeMethods.Util.LOWORD(m.WParam))
                     {
                         case NativeMethods.TB_LINEUP:

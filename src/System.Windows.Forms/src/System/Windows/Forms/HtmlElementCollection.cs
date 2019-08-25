@@ -4,12 +4,13 @@
 
 using System.Collections;
 using System.Diagnostics;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
     public sealed class HtmlElementCollection : ICollection
     {
-        private readonly UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
+        private readonly IHTMLElementCollection htmlElementCollection;
         private readonly HtmlElement[] elementsArray;
         private readonly HtmlShimManager shimManager;
 
@@ -21,7 +22,7 @@ namespace System.Windows.Forms
             this.shimManager = shimManager;
         }
 
-        internal HtmlElementCollection(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLElementCollection elements)
+        internal HtmlElementCollection(HtmlShimManager shimManager, IHTMLElementCollection elements)
         {
             htmlElementCollection = elements;
             elementsArray = null;
@@ -36,7 +37,7 @@ namespace System.Windows.Forms
             this.shimManager = shimManager;
         }
 
-        private UnsafeNativeMethods.IHTMLElementCollection NativeHtmlElementCollection
+        private IHTMLElementCollection NativeHtmlElementCollection
         {
             get
             {
@@ -56,7 +57,7 @@ namespace System.Windows.Forms
 
                 if (NativeHtmlElementCollection != null)
                 {
-                    return (NativeHtmlElementCollection.Item((object)index, (object)0) is UnsafeNativeMethods.IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
+                    return (NativeHtmlElementCollection.Item((object)index, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
                 else if (elementsArray != null)
                 {
@@ -75,7 +76,7 @@ namespace System.Windows.Forms
             {
                 if (NativeHtmlElementCollection != null)
                 {
-                    return (NativeHtmlElementCollection.Item((object)elementId, (object)0) is UnsafeNativeMethods.IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
+                    return (NativeHtmlElementCollection.Item((object)elementId, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
                 else if (elementsArray != null)
                 {

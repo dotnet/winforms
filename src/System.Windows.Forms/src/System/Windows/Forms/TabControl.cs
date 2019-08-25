@@ -10,6 +10,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -392,19 +393,15 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 // Null out cachedDisplayRect whenever we do anything to change it...
-                //
                 if (!cachedDisplayRect.IsEmpty)
                 {
                     return cachedDisplayRect;
                 }
 
-                Rectangle bounds = Bounds;
-                NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                RECT rect = Bounds;
 
                 // We force a handle creation here, because otherwise the DisplayRectangle will be wildly inaccurate
-                //
                 if (!IsDisposed)
                 {
                     // Since this is called thru the OnResize (and Layout) which is triggered by SetExtent if the TabControl is hosted as
@@ -422,7 +419,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Rectangle r = Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+                Rectangle r = rect;
 
                 Point p = Location;
                 r.X -= p.X;
@@ -1252,7 +1249,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = false;
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            RECT rect = new RECT();
 
             // normally, we would not want to create the handle for this, but since
             // it is dependent on the actual physical display, we simply must.
@@ -2055,10 +2052,9 @@ namespace System.Windows.Forms
             ttt.hinst = IntPtr.Zero;
 
             // RightToLeft reading order
-            //
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= NativeMethods.TTF_RTLREADING;
+                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
             }
 
             Marshal.StructureToPtr(ttt, m.LParam, false);
@@ -2156,16 +2152,16 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
                     // We use TCM_SETITEMSIZE instead
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFY:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (nmhdr.code)
                     {
@@ -2207,11 +2203,8 @@ namespace System.Windows.Forms
                             }
                             break;
                         case NativeMethods.TTN_GETDISPINFO:
-                            // MSDN:
-                            // Setting the max width has the added benefit of enabling Multiline
-                            // tool tips!
-                            //
-                            UnsafeNativeMethods.SendMessage(new HandleRef(nmhdr, nmhdr.hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                            // Setting the max width has the added benefit of enabling Multiline tool tips
+                            User32.SendMessageW(nmhdr.hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
@@ -2229,9 +2222,9 @@ namespace System.Windows.Forms
         public class TabPageCollection : IList
         {
             private readonly TabControl owner;
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             public TabPageCollection(TabControl owner)

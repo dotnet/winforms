@@ -11,8 +11,8 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of System.Windows.Forms.DataGridColumnStyle objects in the <see cref='DataGrid'/>
-    /// control.
+    ///  Represents a collection of System.Windows.Forms.DataGridColumnStyle objects in the <see cref='DataGrid'/>
+    ///  control.
     /// </summary>
     [
     Editor("System.Windows.Forms.Design.DataGridColumnCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -136,14 +136,14 @@ namespace System.Windows.Forms
         ///  property to determine how many System.Windows.Forms.DataGridColumnStyle objects are in a System.Windows.Forms.GridColumnsStyleCollection, and uses that number to iterate through the
         ///  collection.
         ///  <code lang='VB'>
-        /// Private Sub PrintGridColumns()
+        ///  Private Sub PrintGridColumns()
         ///  Dim colsCount As Integer
         ///  colsCount = DataGrid1.GridColumns.Count
         ///  Dim i As Integer
         ///  For i = 0 to colsCount - 1
         ///  Debug.Print DataGrid1.GridColumns(i).GetType.ToString
         ///  Next i
-        /// End Sub
+        ///  End Sub
         ///  </code>
         /// </example>
         /// <seealso cref='System.Windows.Forms.GridColumnsCollection.Add'/>
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
         */
 
         /// <summary>
-        /// Gets the System.Windows.Forms.DataGridColumnStyle at a specified index.
+        ///  Gets the System.Windows.Forms.DataGridColumnStyle at a specified index.
         /// </summary>
         public DataGridColumnStyle this[int index]
         {
@@ -167,8 +167,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the System.Windows.Forms.DataGridColumnStyle
-        /// with the specified name.
+        ///  Gets the System.Windows.Forms.DataGridColumnStyle
+        ///  with the specified name.
         /// </summary>
         public DataGridColumnStyle this[string columnName]
         {
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the System.Windows.Forms.DataGridColumnStyle associated with the
+        ///  Gets the System.Windows.Forms.DataGridColumnStyle associated with the
         ///  specified <see cref='Data.DataColumn'/>.
         /// </summary>
         public DataGridColumnStyle this[PropertyDescriptor propertyDesciptor]
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds a System.Windows.Forms.DataGridColumnStyle to the System.Windows.Forms.GridColumnStylesCollection
+        ///  Adds a System.Windows.Forms.DataGridColumnStyle to the System.Windows.Forms.GridColumnStylesCollection
         /// </summary>
         internal void CheckForMappingNameDuplicates(DataGridColumnStyle column)
         {
@@ -326,7 +326,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when a change is made to the System.Windows.Forms.GridColumnStylesCollection.
+        ///  Occurs when a change is made to the System.Windows.Forms.GridColumnStylesCollection.
         /// </summary>
         public event CollectionChangeEventHandler CollectionChanged
         {
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
         ///  <see cref='System.Windows.Forms.GridColumnsCollection.Caption'/> of each <see cref='System.Data.DataColumn'/>
         ///  associated with the object.
             /// <code lang='VB'>
-        /// Private Sub EnumerateThroughGridColumns()
+        ///  Private Sub EnumerateThroughGridColumns()
         ///  Dim ie As System.Collections.IEnumerator
         ///  Dim dgCol As DataGridColumn
         ///  Set ie = DataGrid1.GridColumns.GetEnumerator
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
         ///  Set dgCol = ie.GetObject
         ///  Debug.Print dgCol.DataColumn.Caption
         ///  Loop
-        /// End Sub
+        ///  End Sub
         /// </code>
         /// </example>
         /// <seealso cref='System.Data.DataColumn'/>
@@ -420,7 +420,7 @@ namespace System.Windows.Forms
         ///  .
         /// </summary>
         /// <param name='allowRemove'>
-        /// A value that indicates if the enumerator can remove elements. <see langword='true'/>, if removals are allowed; otherwise, <see langword='false'/>. The default is <see langword='false'/>.
+        ///  A value that indicates if the enumerator can remove elements. <see langword='true'/>, if removals are allowed; otherwise, <see langword='false'/>. The default is <see langword='false'/>.
         /// </param>
         /// <returns>
         ///  An <see cref='System.Collections.IEnumerator'/> that can be used to iterate through the
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
         /// <example>
         ///  The following example gets an <see cref='System.Collections.IEnumerator'/> for that iterates through the System.Windows.Forms.GridColumnsStyleCollection. If a column in the collection is of type <see cref='System.Windows.Forms.DataGridBoolColumn'/>, it is deleted.
         ///  <code lang='VB'>
-        /// Private Sub RemoveBoolColumns()
+        ///  Private Sub RemoveBoolColumns()
         ///  Dim ie As System.Collections.IEnumerator
         ///  Dim dgCol As DataGridColumn
         ///  Set ie = DataGrid1.GridColumns.GetEnumerator(true)
@@ -449,7 +449,7 @@ namespace System.Windows.Forms
         ///  DataGrid1.GridColumns.Remove dgCol
         ///  End If
         ///  Loop
-        /// End If
+        ///  End If
         ///  </code>
         /// </example>
         /// <seealso cref='System.Collections.IEnumerator'/>
@@ -465,7 +465,7 @@ namespace System.Windows.Forms
         */
 
         /// <summary>
-        /// Gets the index of a specified System.Windows.Forms.DataGridColumnStyle.
+        ///  Gets the index of a specified System.Windows.Forms.DataGridColumnStyle.
         /// </summary>
         public int IndexOf(DataGridColumnStyle element)
         {
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the System.Windows.Forms.GridColumnsCollection.CollectionChanged event.
+        ///  Raises the System.Windows.Forms.GridColumnsCollection.CollectionChanged event.
         /// </summary>
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
@@ -496,7 +496,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Removes the specified System.Windows.Forms.DataGridColumnStyle from the System.Windows.Forms.GridColumnsStyleCollection.
+        ///  Removes the specified System.Windows.Forms.DataGridColumnStyle from the System.Windows.Forms.GridColumnsStyleCollection.
         /// </summary>
         public void Remove(DataGridColumnStyle column)
         {
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Removes the System.Windows.Forms.DataGridColumnStyle with the specified index from the System.Windows.Forms.GridColumnsStyleCollection.
+        ///  Removes the System.Windows.Forms.DataGridColumnStyle with the specified index from the System.Windows.Forms.GridColumnsStyleCollection.
         /// </summary>
         public void RemoveAt(int index)
         {

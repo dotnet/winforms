@@ -10,7 +10,7 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Hosts a System.Windows.Forms.TextBox control in a cell of a System.Windows.Forms.DataGridColumnStyle for editing strings.
+    ///  Hosts a System.Windows.Forms.TextBox control in a cell of a System.Windows.Forms.DataGridColumnStyle for editing strings.
     /// </summary>
     public class DataGridTextBoxColumn : DataGridColumnStyle
     {
@@ -31,15 +31,15 @@ namespace System.Windows.Forms
         private int editRow = -1;
 
         /// <summary>
-        /// Initializes a new instance of the System.Windows.Forms.DataGridTextBoxColumn
-        /// class.
+        ///  Initializes a new instance of the System.Windows.Forms.DataGridTextBoxColumn
+        ///  class.
         /// </summary>
         public DataGridTextBoxColumn() : this(null, null)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn with
+        ///  Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn with
         ///  a specified System.Data.DataColumn.
         /// </summary>
         public DataGridTextBoxColumn(PropertyDescriptor prop)
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn. with
+        ///  Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn. with
         ///  the specified System.Data.DataColumn and System.Windows.Forms.ComponentModel.Format.
         /// </summary>
         public DataGridTextBoxColumn(PropertyDescriptor prop, string format) : this(prop, format, false) { }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         // =------------------------------------------------------------------
 
         /// <summary>
-        /// Gets the hosted System.Windows.Forms.TextBox control.
+        ///  Gets the hosted System.Windows.Forms.TextBox control.
         /// </summary>
         [Browsable(false)]
         public virtual TextBox TextBox
@@ -130,8 +130,8 @@ namespace System.Windows.Forms
         */
 
         /// <summary>
-        /// Gets or sets the System.Windows.Forms.ComponentModel.Format for the System.Windows.Forms.DataGridTextBoxColumn
-        /// .
+        ///  Gets or sets the System.Windows.Forms.ComponentModel.Format for the System.Windows.Forms.DataGridTextBoxColumn
+        ///  .
         /// </summary>
         [
         SRDescription(nameof(SR.FormatControlFormatDescr)),
@@ -287,8 +287,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Ends an edit operation on the System.Windows.Forms.DataGridColumnStyle
-        /// .
+        ///  Ends an edit operation on the System.Windows.Forms.DataGridColumnStyle
+        ///  .
         /// </summary>
         protected void EndEdit()
         {
@@ -551,8 +551,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Paints the a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
-        /// System.Drawing.Rectangle, DataView.Rectangle, and row number.
+        ///  Paints the a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
+        ///  System.Drawing.Rectangle, DataView.Rectangle, and row number.
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
         {
@@ -569,8 +569,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
-        /// System.Drawing.Rectangle, DataView.Rectangle, row number, background color,
+        ///  Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
+        ///  System.Drawing.Rectangle, DataView.Rectangle, row number, background color,
         ///  and foreground color..
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,

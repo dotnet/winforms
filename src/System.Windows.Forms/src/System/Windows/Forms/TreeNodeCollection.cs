@@ -16,9 +16,9 @@ namespace System.Windows.Forms
     {
         private readonly TreeNode owner;
 
-        /// A caching mechanism for key accessor
-        /// We use an index here rather than control so that we don't have lifetime
-        /// issues by holding on to extra references.
+        ///  A caching mechanism for key accessor
+        ///  We use an index here rather than control so that we don't have lifetime
+        ///  issues by holding on to extra references.
         private int lastAccessedIndex = -1;
 
         //this index is used to optimize performance of AddRange

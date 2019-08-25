@@ -7,12 +7,12 @@ namespace WinformsControlsTest
     partial class ComboBoxes
     {
         /// <summary>
-        /// Required designer variable.
+        ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// Clean up any resources being used.
+        ///  Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -27,8 +27,8 @@ namespace WinformsControlsTest
         #region Windows Form Designer generated code
 
         /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -45,6 +45,7 @@ namespace WinformsControlsTest
             this.comboBox11 = new System.Windows.Forms.ComboBox();
             this.comboBox12 = new System.Windows.Forms.ComboBox();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             //
             // comboBox1
@@ -58,7 +59,8 @@ namespace WinformsControlsTest
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 3;
-            //
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            // 
             // comboBox2
             //
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -219,12 +221,22 @@ namespace WinformsControlsTest
             this.currentDPILabel1.TabIndex = 15;
             this.currentDPILabel1.Text = "Current scaling is 100%";
             //
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(18, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "label1";
+            // 
             // ComboBoxes
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(831, 198);
             this.Controls.Add(this.currentDPILabel1);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox9);
             this.Controls.Add(this.comboBox10);
             this.Controls.Add(this.comboBox11);
@@ -259,5 +271,6 @@ namespace WinformsControlsTest
         private System.Windows.Forms.ComboBox comboBox11;
         private System.Windows.Forms.ComboBox comboBox12;
         private CurrentDPILabel currentDPILabel1;
+        private System.Windows.Forms.Label label1;
     }
 }

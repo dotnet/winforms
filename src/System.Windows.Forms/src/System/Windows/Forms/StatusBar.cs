@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -129,7 +130,6 @@ namespace System.Windows.Forms
                 // not supported, always return CONTROL
                 return SystemColors.Control;
             }
-
             set
             {
                 // no op, not supported.
@@ -386,16 +386,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /* No one is calling this, so it is ok to comment it out
-        private IntPtr ToolTipHandle {
-            get {
-                EnumChildren c = new EnumChildren( this );
-                UnsafeNativeMethods.EnumChildWindows(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), new NativeMethods.EnumChildrenProc(c.Callback), NativeMethods.NullHandleRef);
-                return c.hWndFound;
-            }
-        }
-        */
-
         /// <summary>
         ///  Gets or sets a value indicating whether panels should be shown.
         /// </summary>
@@ -552,7 +542,6 @@ namespace System.Windows.Forms
         {
             // This forces handle creation every time any time the StatusBar
             // has to be re-laidout.
-            //
             if (!IsHandleCreated)
             {
                 return;
@@ -588,7 +577,6 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.SB_SETPARTS, length, offsets2);
 
             // Tooltip setup...
-            //
             for (int i = 0; i < length; i++)
             {
                 panel = (StatusBarPanel)panels[i];
@@ -693,29 +681,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /* Not used
-        private sealed class EnumChildren {
-
-            public IntPtr hWndFound = IntPtr.Zero;
-
-            private StatusBar peer;
-
-            public EnumChildren( StatusBar peer ) {
-                if (peer == null)
-                    throw new ArgumentNullException(nameof(peer));
-                this.peer = peer;
-            }
-
-            public bool Callback(IntPtr hWnd, IntPtr lparam) {
-                if (UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd)) == peer.Handle) {
-                    hWndFound = hWnd;
-                    return false;
-                }
-
-                return true;
-            }
-        }*/
-
         /// <summary>
         ///  Raises the <see cref='OnMouseDown'/> event.
         /// </summary>
@@ -727,16 +692,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnPanelClick'/> event.
+        ///  Raises the <see cref='PanelClick'/> event.
         /// </summary>
         protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e)
         {
             ((StatusBarPanelClickEventHandler)Events[EVENT_PANELCLICK])?.Invoke(this, e);
         }
 
-        /// <summary>
-        ///  Raises the Layout event.
-        /// </summary>
         protected override void OnLayout(LayoutEventArgs levent)
         {
             if (showPanels)
@@ -945,8 +907,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnResize'/>
-        ///  event.
+        ///  Raises the <see cref='OnResize'/> event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {
@@ -971,7 +932,7 @@ namespace System.Windows.Forms
             return s;
         }
 
-        //call this when System.Windows.forms.toolTip is Associated with Statusbar....
+        // call this when System.Windows.forms.toolTip is Associated with Statusbar....
         internal void SetToolTip(ToolTip t)
         {
             mainToolTip = t;
@@ -1107,11 +1068,10 @@ namespace System.Windows.Forms
             bool callSuper = true;
 
             // The default implementation of the statusbar
-            //       : will let you size the form when it is docked on the bottom,
-            //       : but when it is anywhere else, the statusbar will be resized.
-            //       : to prevent that we provide a little bit a sanity to only
-            //       : allow resizing, when it would resize the form.
-            //
+            // will let you size the form when it is docked on the bottom,
+            // but when it is anywhere else, the statusbar will be resized.
+            // to prevent that we provide a little bit a sanity to only
+            // allow resizing, when it would resize the form.
             if (x > bounds.X + bounds.Width - SizeGripWidth)
             {
                 Control parent = ParentInternal;
@@ -1175,14 +1135,14 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_NOTIFY:
-                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
+                case WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code)
                     {
@@ -1208,20 +1168,19 @@ namespace System.Windows.Forms
         ///  The collection of StatusBarPanels that the StatusBar manages.
         ///  event.
         /// </summary>
-        [
-        ListBindable(false)
-        ]
+        [ListBindable(false)]
         public class StatusBarPanelCollection : IList
         {
             private readonly StatusBar owner;
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+
+            // A caching mechanism for key accessor
+            // We use an index here rather than control so that we don't have lifetime
+            // issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /// <summary>
-                ///  Constructor for the StatusBarPanelCollection class
-                /// </summary>
+            ///  Constructor for the StatusBarPanelCollection class
+            /// </summary>
             public StatusBarPanelCollection(StatusBar owner)
             {
                 this.owner = owner;
@@ -1294,6 +1253,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
@@ -1322,9 +1282,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Returns an integer representing the number of StatusBarPanels
+            ///  Returns an integer representing the number of StatusBarPanels
             ///  in this collection.
-                /// </summary>
+            /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             public int Count
             {
@@ -1367,8 +1327,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Adds a StatusBarPanel to the collection.
-                /// </summary>
+            ///  Adds a StatusBarPanel to the collection.
+            /// </summary>
             public virtual StatusBarPanel Add(string text)
             {
                 StatusBarPanel panel = new StatusBarPanel
@@ -1380,8 +1340,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Adds a StatusBarPanel to the collection.
-                /// </summary>
+            ///  Adds a StatusBarPanel to the collection.
+            /// </summary>
             public virtual int Add(StatusBarPanel value)
             {
                 int index = owner.panels.Count;
@@ -1498,8 +1458,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Inserts a StatusBarPanel in the collection.
-                /// </summary>
+            ///  Inserts a StatusBarPanel in the collection.
+            /// </summary>
             public virtual void Insert(int index, StatusBarPanel value)
             {
 
@@ -1562,8 +1522,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Removes all the StatusBarPanels in the collection.
-                /// </summary>
+            ///  Removes all the StatusBarPanels in the collection.
+            /// </summary>
             public virtual void Clear()
             {
                 owner.RemoveAllPanelsWithoutUpdate();
@@ -1572,8 +1532,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Removes an individual StatusBarPanel in the collection.
-                /// </summary>
+            ///  Removes an individual StatusBarPanel in the collection.
+            /// </summary>
             public virtual void Remove(StatusBarPanel value)
             {
 
@@ -1600,8 +1560,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Removes an individual StatusBarPanel in the collection at the given index.
-                /// </summary>
+            ///  Removes an individual StatusBarPanel in the collection at the given index.
+            /// </summary>
             public virtual void RemoveAt(int index)
             {
                 int length = Count;
@@ -1619,13 +1579,13 @@ namespace System.Windows.Forms
 
                 // this will cause the panels tooltip to be removed since it's no longer a child
                 // of this StatusBar.
-                //
                 owner.UpdateTooltip(panel);
 
                 // We must reindex the panels after a removal...
                 owner.UpdatePanelIndex();
                 owner.ForcePanelUpdate();
             }
+
             /// <summary>
             ///  Removes the child control with the specified key.
             /// </summary>
@@ -1644,8 +1604,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Returns the Enumerator for this collection.
-                /// </summary>
+            ///  Returns the Enumerator for this collection.
+            /// </summary>
             public IEnumerator GetEnumerator()
             {
                 if (owner.panels != null)
@@ -1658,6 +1618,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         ///  This is a tooltip control that provides tips for a single
         ///  control. Each "tool" region is defined by a rectangle and
@@ -1667,7 +1628,7 @@ namespace System.Windows.Forms
         ///  this control binds to rectangular regions, instead of
         ///  full controls.
         /// </summary>
-        private class ControlToolTip
+        private class ControlToolTip : IHandle
         {
             public class Tool
             {
@@ -1714,8 +1675,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <summary>
-            /// </summary>
             public IntPtr Handle
             {
                 get
@@ -1816,35 +1775,31 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0)
                 {
-                    int ret;
                     StatusBar p = (StatusBar)parent;
 
-                    if (p.ToolTipSet)
-                    {
-                        ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(p.MainToolTip, p.MainToolTip.Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
-                    }
-                    else
-                    {
-                        ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
-                    }
-                    if (ret == 0)
+                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
                 }
             }
+
             private void RemoveTool(Tool tool)
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_DELTOOL, 0, GetMinTOOLINFO(tool));
+                    ComCtl32.ToolInfoWrapper info = GetMinTOOLINFO(tool);
+                    info.SendMessage(this, WindowMessages.TTM_DELTOOLW);
                 }
             }
+
             private void UpdateTool(Tool tool)
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTOOLINFO, 0, GetTOOLINFO(tool));
+                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    info.SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1864,10 +1819,8 @@ namespace System.Windows.Forms
                                      NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
                                      NativeMethods.SWP_NOACTIVATE);
 
-                // Setting the max width has the added benefit of enabling multiline
-                // tool tips!
-                //
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                // Setting the max width has the added benefit of enabling multiline tool tips
+                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>
@@ -1897,69 +1850,49 @@ namespace System.Windows.Forms
             ///  required data to uniquely identify a region. This is used primarily
             ///  for delete operations. NOTE: This cannot force the creation of a handle.
             /// </summary>
-            private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool)
+            private ComCtl32.ToolInfoWrapper GetMinTOOLINFO(Tool tool)
             {
-                NativeMethods.TOOLINFO_T ti = new NativeMethods.TOOLINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>(),
-                    hwnd = parent.Handle
-                };
                 if ((int)tool.id < 0)
                 {
                     AssignId(tool);
                 }
-                StatusBar p = (StatusBar)parent;
-                if (p != null && p.ToolTipSet)
-                {
-                    ti.uId = parent.Handle;
-                }
-                else
-                {
-                    ti.uId = tool.id;
-                }
-                return ti;
+
+                return new ComCtl32.ToolInfoWrapper(
+                    parent,
+                    id: parent is StatusBar sb ? sb.Handle : tool.id);
             }
 
             /// <summary>
             ///  Returns a detailed TOOLINFO_T structure that represents the specified
             ///  region. NOTE: This may force the creation of a handle.
             /// </summary>
-            private NativeMethods.TOOLINFO_T GetTOOLINFO(Tool tool)
+            private ComCtl32.ToolInfoWrapper GetTOOLINFO(Tool tool)
             {
-                NativeMethods.TOOLINFO_T ti = GetMinTOOLINFO(tool);
-                ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
-                ti.uFlags |= NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
+                ComCtl32.ToolInfoWrapper ti = GetMinTOOLINFO(tool);
+                ti.Info.uFlags |= ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
 
                 // RightToLeft reading order
-                //
                 Control richParent = parent;
                 if (richParent != null && richParent.RightToLeft == RightToLeft.Yes)
                 {
-                    ti.uFlags |= NativeMethods.TTF_RTLREADING;
+                    ti.Info.uFlags |= ComCtl32.TTF.RTLREADING;
                 }
 
-                ti.lpszText = tool.text;
-                ti.rect = NativeMethods.RECT.FromXYWH(tool.rect.X, tool.rect.Y, tool.rect.Width, tool.rect.Height);
+                ti.Text = tool.text;
+                ti.Info.rect = tool.rect;
                 return ti;
             }
 
-            /// <summary>
-            /// </summary>
             ~ControlToolTip()
             {
                 DestroyHandle();
             }
 
-            /// <summary>
-            ///  WNDPROC
-            /// </summary>
             protected void WndProc(ref Message msg)
             {
                 switch (msg.Msg)
                 {
-                    case Interop.WindowMessages.WM_SETFOCUS:
-                        //
-
+                    case WindowMessages.WM_SETFOCUS:
                         return;
                     default:
                         window.DefWndProc(ref msg);
@@ -1967,8 +1900,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <summary>
-            /// </summary>
             private class ToolTipNativeWindow : NativeWindow
             {
                 readonly ControlToolTip control;
@@ -1987,7 +1918,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 }
 

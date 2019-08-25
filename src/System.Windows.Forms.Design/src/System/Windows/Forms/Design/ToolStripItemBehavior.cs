@@ -14,7 +14,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// The behavior for the glpyh that covers the items themselves.  This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
+    ///  The behavior for the glpyh that covers the items themselves.  This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
     /// </summary>
     internal class ToolStripItemBehavior : Behavior.Behavior
     {
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Clears the insertion mark when items are being reordered
+        ///  Clears the insertion mark when items are being reordered
         /// </summary>
         private void ClearInsertionMark(ToolStripItem item)
         {
@@ -446,7 +446,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overriden to paint the border on mouse enter.....
+        ///  Overriden to paint the border on mouse enter.....
         /// </summary>
         public override bool OnMouseEnter(Glyph g)
         {
@@ -471,7 +471,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// overriden to "clear" the boundary-paint when the mouse leave the item
+        ///  overriden to "clear" the boundary-paint when the mouse leave the item
         /// </summary>
         public override bool OnMouseLeave(Glyph g)
         {
@@ -495,7 +495,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When any MouseMove message enters the BehaviorService's AdornerWindow (mousemove, ncmousemove) it is first passed here, to the top-most Behavior in the BehaviorStack.  Returning 'true' from this function signifies that  the Message was 'handled' by the Behavior and should not continue to be processed.
+        ///  When any MouseMove message enters the BehaviorService's AdornerWindow (mousemove, ncmousemove) it is first passed here, to the top-most Behavior in the BehaviorStack.  Returning 'true' from this function signifies that  the Message was 'handled' by the Behavior and should not continue to be processed.
         /// </summary>
         public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
         {
@@ -603,7 +603,7 @@ namespace System.Windows.Forms.Design
 
         //  OLE DragDrop virtual methods
         /// <summary>
-        /// OnDragDrop can be overridden so that a Behavior can specify its own Drag/Drop rules.
+        ///  OnDragDrop can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
         public override void OnDragDrop(Glyph g, DragEventArgs e)
         {
@@ -795,7 +795,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// OnDragEnter can be overridden so that a Behavior can specify its own Drag/Drop rules.
+        ///  OnDragEnter can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
         public override void OnDragEnter(Glyph g, DragEventArgs e)
         {
@@ -822,7 +822,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// OnDragLeave can be overridden so that a Behavior can specify its own Drag/Drop rules.
+        ///  OnDragLeave can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
         public override void OnDragLeave(Glyph g, EventArgs e)
         {
@@ -831,7 +831,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// OnDragOver can be overridden so that a Behavior can specify its own Drag/Drop rules.
+        ///  OnDragOver can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
         public override void OnDragOver(Glyph g, DragEventArgs e)
         {
@@ -850,7 +850,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Paints the insertion mark when items are being reordered
+        ///  Paints the insertion mark when items are being reordered
         /// </summary>
         private void PaintInsertionMark(ToolStripItem item)
         {
@@ -896,7 +896,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// QueryContinueDrag can be overridden so that a Behavior can specify its own Drag/Drop rules.
+        ///  QueryContinueDrag can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
         private void QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {

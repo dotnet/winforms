@@ -9,7 +9,7 @@ using System.Runtime.Versioning;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Winforms application configuration options
+    ///  Winforms application configuration options
     /// </summary>
     internal static class ConfigurationOptions
     {
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Extract current targeted framework version
+        ///  Extract current targeted framework version
         /// </summary>
         public static Version NetFrameworkVersion
         {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Extract value of the key specified from collection read from app.config file's winforms section
+        ///  Extract value of the key specified from collection read from app.config file's winforms section
         /// </summary>
         /// <param name="settingName"> setting key name</param>
         /// <returns>value of key</returns>

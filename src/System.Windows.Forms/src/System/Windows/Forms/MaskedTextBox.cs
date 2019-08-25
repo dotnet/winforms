@@ -10,6 +10,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -56,7 +57,7 @@ namespace System.Windows.Forms
         private const byte imeConvertionUpdate = 1;  // the char being composed has been updated but not coverted yet.
         private const byte imeConvertionCompleted = 2;  // the char being composed has been fully converted.
 
-        ///////// Instance fields
+        /////////  Instance fields
 
         // Used for keeping selection when prompt is hidden on leave (text changes).
         private int lastSelLength;
@@ -98,7 +99,7 @@ namespace System.Windows.Forms
         private static readonly int CUTCOPYINCLUDEPROMPT = BitVector32.CreateMask(INSERT_TOGGLED);
         private static readonly int CUTCOPYINCLUDELITERALS = BitVector32.CreateMask(CUTCOPYINCLUDEPROMPT);
 
-        ///////// Properties backend fields. See corresponding property comments for more info.
+        /////////  Properties backend fields. See corresponding property comments for more info.
 
         private char passwordChar; // control's pwd char, it could be different from the one displayed if using system password.
         private Type validatingType;
@@ -184,9 +185,8 @@ namespace System.Windows.Forms
             caretTestPos = 0;
         }
 
-        /////////////////// Properties
+        ///////////////////  Properties
         ///
-
         /// <summary>
         ///  Unsupported method/property.
         /// </summary>
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
                         if (!MaskedTextProvider.IsValidMaskChar(c))
                         {
                             // Same message as in SR.MaskedTextProviderMaskInvalidChar in System.txt
-                            throw new ArgumentException(string.Format(SR.MaskedTextBoxMaskInvalidChar));
+                            throw new ArgumentException(SR.MaskedTextBoxMaskInvalidChar);
                         }
                     }
 
@@ -1197,13 +1197,13 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // This message does not return a value.
-                SendMessage(Interop.EditMessages.EM_SETPASSWORDCHAR, pwdChar, 0);
+                SendMessage(EditMessages.EM_SETPASSWORDCHAR, pwdChar, 0);
                 Invalidate();
             }
         }
 
         /// <summary>
-        /// The value of the Edit control default password char.
+        ///  The value of the Edit control default password char.
         /// </summary>
         private char SystemPasswordChar
         {
@@ -1585,7 +1585,7 @@ namespace System.Windows.Forms
             set { }
         }
 
-        ////////////// Methods
+        //////////////  Methods
 
         /// <summary>
         ///  Clears information about the most recent operation from the undo buffer of the control.
@@ -1599,8 +1599,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a handle for this control. This method is called by the .NET.
-        ///  Inheriting classes should always call base.createHandle when overriding this method.
+        ///  Creates a handle for this control. This method is called by the framework, this should
+        ///  not be called directly. Inheriting classes should always call <c>base.CreateHandle</c> when overriding this method.
         ///  Overridden to be able to set the control text with the masked (passworded) value when recreating
         ///  handle, since the underlying native edit control is not aware of it.
         /// </summary>
@@ -2135,7 +2135,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyUp'/> event.
+        ///  Raises the <see cref='Control.KeyUp'/> event.
         /// </summary>
         protected override void OnKeyUp(KeyEventArgs e)
         {
@@ -2594,7 +2594,7 @@ namespace System.Windows.Forms
             // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed
             // the corresponding WM_IME_CHAR message.
 
-            if (m.Msg == Interop.WindowMessages.WM_CHAR && base.ImeWmCharsToIgnore > 0)
+            if (m.Msg == WindowMessages.WM_CHAR && base.ImeWmCharsToIgnore > 0)
             {
                 return true;    // meaning, we handled the message so it is not passed to the default WndProc.
             }
@@ -3063,19 +3063,19 @@ namespace System.Windows.Forms
             // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     return;
-                case Interop.WindowMessages.WM_CONTEXTMENU:
-                case Interop.EditMessages.EM_CANUNDO:
+                case WindowMessages.WM_CONTEXTMENU:
+                case EditMessages.EM_CANUNDO:
                     base.ClearUndo(); // resets undo buffer.
                     base.WndProc(ref m);
                     return;
 
-                case Interop.EditMessages.EM_SCROLLCARET:  // No scroll for single-line control.
-                case Interop.EditMessages.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
-                case Interop.EditMessages.EM_UNDO:
-                case Interop.WindowMessages.WM_UNDO:
+                case EditMessages.EM_SCROLLCARET:  // No scroll for single-line control.
+                case EditMessages.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
+                case EditMessages.EM_UNDO:
+                case WindowMessages.WM_UNDO:
                     return;
 
                 default:
@@ -3090,49 +3090,49 @@ namespace System.Windows.Forms
 
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
+                case WindowMessages.WM_IME_STARTCOMPOSITION:
                     if (WmImeStartComposition())
                     {
                         break;
                     }
                     goto default;
 
-                case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
+                case WindowMessages.WM_IME_ENDCOMPOSITION:
                     flagState[IME_ENDING_COMPOSITION] = true;
                     goto default;
 
-                case Interop.WindowMessages.WM_IME_COMPOSITION:
+                case WindowMessages.WM_IME_COMPOSITION:
                     if (WmImeComposition(ref m))
                     {
                         break;
                     }
                     goto default;
 
-                case Interop.WindowMessages.WM_CUT:
+                case WindowMessages.WM_CUT:
                     if (!ReadOnly && WmCopy())
                     {
                         WmClear();
                     }
                     break;
 
-                case Interop.WindowMessages.WM_COPY:
+                case WindowMessages.WM_COPY:
                     WmCopy();
                     break;
 
-                case Interop.WindowMessages.WM_PASTE:
+                case WindowMessages.WM_PASTE:
                     WmPaste();
                     break;
 
-                case Interop.WindowMessages.WM_CLEAR:
+                case WindowMessages.WM_CLEAR:
                     WmClear();
                     break;
 
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     base.WndProc(ref m);
                     WmKillFocus();
                     break;
 
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     WmSetFocus();
                     base.WndProc(ref m);
                     break;

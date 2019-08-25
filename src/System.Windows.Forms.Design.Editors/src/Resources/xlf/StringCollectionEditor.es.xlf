@@ -4,22 +4,22 @@
     <body>
       <trans-unit id="$this.Text">
         <source>String Collection Editor</source>
-        <target state="new">String Collection Editor</target>
+        <target state="translated">Editor de colección de cadenas</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Cancelar</target>
         <note />
       </trans-unit>
       <trans-unit id="instruction.Text">
         <source>&amp;Enter the strings in the collection (one per line):</source>
-        <target state="new">&amp;Enter the strings in the collection (one per line):</target>
+        <target state="translated">&amp;Agregue las cadenas de la colección (una por línea):</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">Aceptar</target>
         <note />
       </trans-unit>
     </body>

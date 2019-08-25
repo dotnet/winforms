@@ -7,12 +7,12 @@ using System.ComponentModel;
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Object passed as an argument to <see cref='UITypeEditor.PaintValue'/> containing information needed by the editor to paint the given value.
+    ///  Object passed as an argument to <see cref='UITypeEditor.PaintValue'/> containing information needed by the editor to paint the given value.
     /// </summary>
     public class PaintValueEventArgs : EventArgs
     {
         /// <summary>
-        /// Constructor that accepts the information needed by the editor to paint the given value.
+        ///  Constructor that accepts the information needed by the editor to paint the given value.
         /// </summary>
         /// <param name="context">The <see cref="ITypeDescriptorContext"/> in which this value appears in.</param>
         /// <param name="value">The value to paint.</param>
@@ -42,7 +42,7 @@ namespace System.Drawing.Design
         public Graphics Graphics { get; }
 
         /// <summary>
-        /// Value to paint.
+        ///  Value to paint.
         /// </summary>
         public object Value { get; }
     }

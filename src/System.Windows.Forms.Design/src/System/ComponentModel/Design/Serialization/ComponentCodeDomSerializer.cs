@@ -386,7 +386,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             // We implement statement caching only for the main code generation phase.  We don't implement it for other
                             // serialization managers.  How do we tell the difference?  The main serialization manager exists as a service.
-                            IDesignerSerializationManager mainManager = (IDesignerSerializationManager)manager.GetService(typeof(IDesignerSerializationManager));
+                            IDesignerSerializationManager mainManager = manager.GetService(typeof(IDesignerSerializationManager)) as IDesignerSerializationManager;
 
                             if (supportInitialize)
                             {
@@ -399,13 +399,11 @@ namespace System.ComponentModel.Design.Serialization
                             // Writing out properties is expensive.  But, we're very smart and we cache the results
                             // in ComponentCache.  See if we have cached results.  If so, use 'em.  If not, generate
                             // code and then see if we can cache the results for later.
-                            ComponentCache cache = (ComponentCache)manager.GetService(typeof(ComponentCache));
+                            ComponentCache cache = manager.GetService(typeof(ComponentCache)) as ComponentCache;
                             ComponentCache.Entry entry = null;
                             if (cache == null)
                             {
-                                IServiceContainer sc = (IServiceContainer)manager.GetService(typeof(IServiceContainer));
-
-                                if (sc != null)
+                                if (manager.GetService(typeof(IServiceContainer)) is ServiceContainer sc)
                                 {
                                     cache = new ComponentCache(manager);
                                     sc.AddService(typeof(ComponentCache), cache);
@@ -413,7 +411,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                if (manager == mainManager && cache != null && cache.Enabled)
+                                if (manager == mainManager && cache.Enabled)
                                 {
                                     entry = cache[value];
                                 }
@@ -432,8 +430,7 @@ namespace System.ComponentModel.Design.Serialization
                                     // new entry object even if there is still an existing one that is just invalid, and it
                                     // might have dependencies that will be lost.
                                     // we need to make sure we copy over any dependencies that are also tracked.
-                                    ComponentCache.Entry oldEntry = null;
-                                    oldEntry = cache.GetEntryAll(value);
+                                    ComponentCache.Entry oldEntry = cache?.GetEntryAll(value);
                                     if (oldEntry != null && oldEntry.Dependencies != null && oldEntry.Dependencies.Count > 0)
                                     {
                                         foreach (object dependency in oldEntry.Dependencies)

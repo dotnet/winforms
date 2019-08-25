@@ -8,7 +8,7 @@ using System.Drawing;
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    /// This class maps an IPicture to a System.Drawing.Image.
+    ///  This class maps an IPicture to a System.Drawing.Image.
     /// </summary>
     internal class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
     {

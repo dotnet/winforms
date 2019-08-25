@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -35,7 +36,6 @@ namespace System.Windows.Forms
         // Member variables
         //
         ////////////////////////////////////////////////////////////////////////
-
         // Child controls
         internal UpDownEdit upDownEdit; // See nested class at end of this file
         internal UpDownButtons upDownButtons; // See nested class at end of this file
@@ -105,7 +105,6 @@ namespace System.Windows.Forms
         // Properties
         //
         ////////////////////////////////////////////////////////////////////////
-
         // AutoScroll is not relevant to an UpDownBase
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -663,7 +662,6 @@ namespace System.Windows.Forms
         // Methods
         //
         ////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         ///  When overridden in a derived class, handles the pressing of the down button
         ///  on the up-down control.
@@ -678,7 +676,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets an accessible name.
+        ///  Gets an accessible name.
         /// </summary>
         /// <param name="baseName">The base name.</param>
         /// <returns>The accessible name.</returns>
@@ -707,8 +705,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, raises the Changed event.
-        /// event.
+        ///  When overridden in a derived class, raises the Changed event.
+        ///  event.
         /// </summary>
         protected virtual void OnChanged(object source, EventArgs e)
         {
@@ -804,8 +802,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyDown'/>
-        /// event.
+        ///  Raises the <see cref='Control.KeyDown'/>
+        ///  event.
         /// </summary>
         protected virtual void OnTextBoxKeyDown(object source, KeyEventArgs e)
         {
@@ -837,8 +835,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.KeyPress'/>
-        /// event.
+        ///  Raises the <see cref='Control.KeyPress'/>
+        ///  event.
         /// </summary>
         protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
@@ -847,7 +845,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.LostFocus'/> event.
+        ///  Raises the <see cref='Control.LostFocus'/> event.
         /// </summary>
         protected virtual void OnTextBoxLostFocus(object source, EventArgs e)
         {
@@ -858,7 +856,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref='Control.Resize'/> event.
         /// </summary>
         protected virtual void OnTextBoxResize(object source, EventArgs e)
         {
@@ -867,8 +865,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the TextBoxTextChanged event.
-        /// event.
+        ///  Raises the TextBoxTextChanged event.
+        ///  event.
         /// </summary>
         protected virtual void OnTextBoxTextChanged(object source, EventArgs e)
         {
@@ -918,7 +916,7 @@ namespace System.Windows.Forms
             if (mevent.Button == MouseButtons.Left)
             {
                 Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                if (UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle && !ValidationCancelled)
+                if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle && !ValidationCancelled)
                 {
                     if (!doubleClickFired)
                     {
@@ -938,7 +936,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.OnMouseWheel'/> event.
+        ///  Raises the <see cref='Control.OnMouseWheel'/> event.
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -1129,9 +1127,9 @@ namespace System.Windows.Forms
             {
                 // same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
-                NativeMethods.POINT point = new NativeMethods.POINT(e.X, e.Y);
-                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), point, 1);
-                return new MouseEventArgs(e.Button, e.Clicks, point.x, point.y, e.Delta);
+                var point = new Point(e.X, e.Y);
+                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref point, 1);
+                return new MouseEventArgs(e.Button, e.Clicks, point.X, point.Y, e.Delta);
             }
             return e;
         }
@@ -1168,7 +1166,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     if (!HostedInWin32DialogManager)
                     {
                         if (ActiveControl == null)
@@ -1189,7 +1187,7 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     DefWndProc(ref m);
                     break;
                 default:
@@ -1213,7 +1211,6 @@ namespace System.Windows.Forms
             // Member variables
             //
             /////////////////////////////////////////////////////////////////////
-
             // Parent control
             private readonly UpDownBase parent;
             private bool doubleClickFired = false;
@@ -1221,7 +1218,6 @@ namespace System.Windows.Forms
             // Constructors
             //
             /////////////////////////////////////////////////////////////////////
-
             internal UpDownEdit(UpDownBase parent)
             : base()
             {
@@ -1279,7 +1275,7 @@ namespace System.Windows.Forms
                 MouseEventArgs me = parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired)
                         {
@@ -1313,8 +1309,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Raises the <see cref='Control.KeyUp'/>
-            /// event.
+            ///  Raises the <see cref='Control.KeyUp'/>
+            ///  event.
             /// </summary>
             protected override void OnKeyUp(KeyEventArgs e)
             {
@@ -1390,7 +1386,6 @@ namespace System.Windows.Forms
             // Member variables
             //
             /////////////////////////////////////////////////////////////////////
-
             // Parent control
             private readonly UpDownBase parent;
 
@@ -1412,7 +1407,6 @@ namespace System.Windows.Forms
             // Constructors
             //
             /////////////////////////////////////////////////////////////////////
-
             internal UpDownButtons(UpDownBase parent)
 
             : base()
@@ -1430,7 +1424,6 @@ namespace System.Windows.Forms
             // Methods
             //
             /////////////////////////////////////////////////////////////////////
-
             /// <summary>
             ///
             ///  Adds a handler for the updown button event.
@@ -1652,7 +1645,7 @@ namespace System.Windows.Forms
                 MouseEventArgs me = parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt.X, pt.Y) == Handle)
+                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired)
                         {

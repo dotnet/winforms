@@ -5,14 +5,14 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the <see cref='ToolBar.ButtonClick'/>
-    /// event.
+    ///  Provides data for the <see cref='ToolBar.ButtonClick'/>
+    ///  event.
     /// </summary>
     public class ToolBarButtonClickEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='ToolBarButtonClickEventArgs'/>
-        /// class.
+        ///  Initializes a new instance of the <see cref='ToolBarButtonClickEventArgs'/>
+        ///  class.
         /// </summary>
         public ToolBarButtonClickEventArgs(ToolBarButton button)
         {
@@ -20,8 +20,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies the <see cref='ToolBarButton'/>
-        /// that was clicked.
+        ///  Specifies the <see cref='ToolBarButton'/>
+        ///  that was clicked.
         /// </summary>
         public ToolBarButton Button { get; set; }
     }

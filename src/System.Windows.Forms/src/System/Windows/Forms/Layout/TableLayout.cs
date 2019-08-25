@@ -200,11 +200,11 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// LayoutCore: EntryPoint from LayoutEngine.
-        /// Container: IArrangedElement to layout (could be table layout panel but doesnt have to be - eg. ToolStrip)
-        /// LayoutEventArgs: args created from PerformLayout.
+        ///  LayoutCore: EntryPoint from LayoutEngine.
+        ///  Container: IArrangedElement to layout (could be table layout panel but doesnt have to be - eg. ToolStrip)
+        ///  LayoutEventArgs: args created from PerformLayout.
         ///
-        /// Summary of algorithm:
+        ///  Summary of algorithm:
         ///  (1).  Determine the row and column assignments of all the children of the container. (This can be cached)
         ///  (2).  Apply column styles, then row styles for all the rows:
         ///  (a).  Create a list of column or row sizes (Strip[]) - initialize absolute columns/rows sizes.
@@ -248,12 +248,12 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// GetPreferredSize:  Called on the container to determine the size that best fits its contents.
-        /// Container: IArrangedElement to determine preferredSize (could be table layout panel but doesnt have to be - eg. ToolStrip)
-        /// ProposedContstraints: the suggested size that the table layout should fit into.  If either argument is 0,
+        ///  GetPreferredSize:  Called on the container to determine the size that best fits its contents.
+        ///  Container: IArrangedElement to determine preferredSize (could be table layout panel but doesnt have to be - eg. ToolStrip)
+        ///  ProposedContstraints: the suggested size that the table layout should fit into.  If either argument is 0,
         ///             TableLayout pretends it's unconstrained for perfomance reasons.
         ///
-        /// Summary of Algorithm:
+        ///  Summary of Algorithm:
         ///  Similar to LayoutCore.  Row/Column assignments are NOT cached.  TableLayout uses AGRESSIVE
         ///  caching for performance reasons.
         /// </summary>
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// EnsureRowAndColumnAssignments: Sets up Row/Column assignments for all the children of the container
+        ///  EnsureRowAndColumnAssignments: Sets up Row/Column assignments for all the children of the container
         ///  - Does nothing if Cache is valid
         ///  - sets RowStart,RowSpan,ColumnStart,ColumnSpan into the LayoutInfo[] collection (containerInfo.ChildrenInfo)
         /// </summary>
@@ -342,7 +342,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// ExpandLastElement: expands the row/column to fill the rest of the space in the container.
+        ///  ExpandLastElement: expands the row/column to fill the rest of the space in the container.
         /// </summary>
         private void ExpandLastElement(ContainerInfo containerInfo, Size usedSpace, Size totalSpace)
         {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// AssignRowsAndColumns: part of EnsureRowAndColumnAssignments.
+        ///  AssignRowsAndColumns: part of EnsureRowAndColumnAssignments.
         ///  determines the number of rows and columns we need to create
         /// </summary>
         private void AssignRowsAndColumns(ContainerInfo containerInfo)
@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// xAssignRowsAndColumns: part of AssignRowsAndColumns.
+        ///  xAssignRowsAndColumns: part of AssignRowsAndColumns.
         ///  def: fixed element: has a specific row/column assignment (assigned by SetRow,SetColumn, or Add(c,row,column)
         ///  def: flow element: does NOT have a specific row/column assignment.
         ///
@@ -605,7 +605,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// GetNextLayoutInfo: part of xAssignRowsAndColumns.
+        ///  GetNextLayoutInfo: part of xAssignRowsAndColumns.
         ///  helper function that walks through the collection picking out the next flow element or fixed element.
         /// </summary>
         private static LayoutInfo GetNextLayoutInfo(LayoutInfo[] layoutInfo, ref int index, bool absolutelyPositioned)
@@ -623,7 +623,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// IsCursorPastInsertionPoint: part of xAssignRowsAndColumns.
+        ///  IsCursorPastInsertionPoint: part of xAssignRowsAndColumns.
         ///  check to see if the user specified location for fixedLayoutInfo has passed the insertion point specified by the cursor
         /// </summary>
         private bool IsCursorPastInsertionPoint(LayoutInfo fixedLayoutInfo, int insertionRow, int insertionCol)
@@ -644,7 +644,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// IsOverlappingWithReservationGrid: part of xAssignRowsAndColumns.
+        ///  IsOverlappingWithReservationGrid: part of xAssignRowsAndColumns.
         ///  check to see if the absolutely positioned layoutInfo fits in the reservation grid
         /// </summary>
         private bool IsOverlappingWithReservationGrid(LayoutInfo fixedLayoutInfo, ReservationGrid reservationGrid, int currentRow)
@@ -668,7 +668,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// AdvanceUntilFits: part of xAssignRowsAndColumns.
+        ///  AdvanceUntilFits: part of xAssignRowsAndColumns.
         ///  Advances the position of layoutInfo until we have enough space and do not
         ///  collide with a rowSpanned element.  ColStop will be the column on which the
         ///  element ends (exclusive).
@@ -683,7 +683,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// GetColStartAndStop: part of xAssignRowsAndColumns.
+        ///  GetColStartAndStop: part of xAssignRowsAndColumns.
         /// </summary>
         private void GetColStartAndStop(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, out int colStop)
         {
@@ -993,7 +993,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Sets the minimum size for each element
+        ///  Sets the minimum size for each element
         /// </summary>
         private void DistributeSize(IList styles, Strip[] strips, int start, int stop, int min, int max, int cellBorderWidth)
         {
@@ -1109,8 +1109,8 @@ namespace System.Windows.Forms.Layout
         }
 
         ///<summary>
-        /// Now that we've allocated minimum and maximum sizes to everyone (the strips), distribute the extra space
-        /// as according to the Row/Column styles.
+        ///  Now that we've allocated minimum and maximum sizes to everyone (the strips), distribute the extra space
+        ///  as according to the Row/Column styles.
         ///</summary>
         private int DistributeStyles(int cellBorderWidth, IList styles, Strip[] strips, int maxSize, bool dontHonorConstraint)
         {
@@ -1474,9 +1474,9 @@ namespace System.Windows.Forms.Layout
         }
 
         ///<summary>
-        /// This class contains layout related information pertaining to a child control of the
-        /// container being laid out. It contains Row,column assignments as well as RowSpan/ColumnSpan.
-        /// This class is used from ContainerInfo as a way of caching information about child controls.
+        ///  This class contains layout related information pertaining to a child control of the
+        ///  container being laid out. It contains Row,column assignments as well as RowSpan/ColumnSpan.
+        ///  This class is used from ContainerInfo as a way of caching information about child controls.
         /// </summary>
         internal sealed class LayoutInfo
         {
@@ -1490,16 +1490,16 @@ namespace System.Windows.Forms.Layout
             public IArrangedElement Element { get; }
 
             /// <summary>
-            /// Corresponds to TableLayoutSettings.SetRow. Can be -1 indicating that it is a
-            /// "flow" element and will fit in as necessary. This occurs when a control is
-            /// just added without specific position.
+            ///  Corresponds to TableLayoutSettings.SetRow. Can be -1 indicating that it is a
+            ///  "flow" element and will fit in as necessary. This occurs when a control is
+            ///  just added without specific position.
             /// </summary>
             public int RowPosition { get; set; } = -1;
 
             /// <summary>
-            /// Corresponds to TableLayoutSettings.SetColumn. Can be -1 indicating that it is a
-            /// "flow" element and will fit in as necessary. This occurs when a control is
-            /// just added without specific position.
+            ///  Corresponds to TableLayoutSettings.SetColumn. Can be -1 indicating that it is a
+            ///  "flow" element and will fit in as necessary. This occurs when a control is
+            ///  just added without specific position.
             /// </summary>
             public int ColumnPosition { get; set; } = -1;
 
@@ -1577,11 +1577,11 @@ namespace System.Windows.Forms.Layout
         }
 
         ///<summary>
-        /// this class contains layout related information pertaining to the container
-        /// being laid out by this instance of the TableLayout.  It contains references
-        /// to all the information that should be used from the table layout engine,
-        /// as this class is responsible for caching information about the control and
-        /// it's children being layed out.
+        ///  this class contains layout related information pertaining to the container
+        ///  being laid out by this instance of the TableLayout.  It contains references
+        ///  to all the information that should be used from the table layout engine,
+        ///  as this class is responsible for caching information about the control and
+        ///  it's children being layed out.
         /// </summary>
         internal sealed class ContainerInfo
         {
@@ -1627,7 +1627,7 @@ namespace System.Windows.Forms.Layout
             }
 
             /// <summary>
-            /// the container being laid out
+            ///  the container being laid out
             /// </summary>
             public IArrangedElement Container
             {
@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms.Layout
             }
 
             /// <summary>
-            /// list of ints that represent the sizes of individual columns
+            ///  list of ints that represent the sizes of individual columns
             /// </summary>
             public Strip[] Columns
             {
@@ -1661,7 +1661,7 @@ namespace System.Windows.Forms.Layout
             }
 
             ///
-            /// list of ints that represent the sizes of individual rows
+            ///  list of ints that represent the sizes of individual rows
             ///
             public Strip[] Rows
             {
@@ -1677,7 +1677,7 @@ namespace System.Windows.Forms.Layout
             }
 
             /// <summary>
-            /// Same as TableLayoutSettings.RowCount
+            ///  Same as TableLayoutSettings.RowCount
             /// </summary>
             public int MaxRows
             {
@@ -1697,7 +1697,7 @@ namespace System.Windows.Forms.Layout
             }
 
             /// <summary>
-            /// Same as TableLayoutSettings.ColumnCount
+            ///  Same as TableLayoutSettings.ColumnCount
             /// </summary>
             public int MaxColumns
             {
@@ -1716,7 +1716,7 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
-            /// Cached information
+            ///  Cached information
             public int MinRowsAndColumns
             {
                 get
@@ -1726,7 +1726,7 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
-            /// Cached information
+            ///  Cached information
             public int MinColumns
             {
                 get
@@ -1737,7 +1737,7 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
-            /// Cached information
+            ///  Cached information
             public int MinRows
             {
                 get
@@ -1812,7 +1812,7 @@ namespace System.Windows.Forms.Layout
             }
 
             /// <summary>
-            /// gets cached information about the children of the control being layed out.
+            ///  gets cached information about the children of the control being layed out.
             /// </summary>
             public LayoutInfo[] ChildrenInfo
             {

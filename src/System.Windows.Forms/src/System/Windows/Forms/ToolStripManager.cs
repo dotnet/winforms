@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -170,7 +171,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
+        ///  Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </summary>
         public static ToolStrip FindToolStrip(string toolStripName)
         {
@@ -188,7 +189,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
+        ///  Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </summary>
         internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
         {
@@ -482,21 +483,21 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// ============================================================================
+        ///  ============================================================================
         ///  BEGIN task specific functions.  Since ToolStripManager is used
         ///  for Painting, Merging and Rafting, and who knows what else in the future
         ///  the following properties/methods/events are organized in regions
         ///  alphabetically by task
-        /// ----------------------------------------------------------------------------
+        ///  ----------------------------------------------------------------------------
 
         ///
         ///  ToolStripManager Default Renderer
         ///
         #region DefaultRenderer
 
-        /// These are thread static because we want separate instances
-        /// for each thread.  We dont want to guarantee thread safety
-        /// and dont want to have to take locks in painting code.
+        ///  These are thread static because we want separate instances
+        ///  for each thread.  We dont want to guarantee thread safety
+        ///  and dont want to have to take locks in painting code.
         [ThreadStatic]
         private static ToolStripRenderer defaultRenderer;
 
@@ -530,7 +531,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
-        /// is the property used.
+        ///  is the property used.
         /// </summary>
         public static ToolStripRenderer Renderer
         {
@@ -545,7 +546,6 @@ namespace System.Windows.Forms
             set
             {
                 ///
-
                 if (defaultRenderer != value)
                 {
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
@@ -596,7 +596,6 @@ namespace System.Windows.Forms
             {
 
                 ///
-
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripManagerRenderMode));
@@ -615,8 +614,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary> an additional layering of control.  this lets you pick whether your toolbars
-        /// should use visual style information (theming) to render itself.
-        /// potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
+        ///  should use visual style information (theming) to render itself.
+        ///  potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
         /// </summary>
         public static bool VisualStylesEnabled
         {
@@ -785,10 +784,9 @@ namespace System.Windows.Forms
         ///
         ///  ToolStripManager ALT key PreProcessing
         ///
-
         #region MenuKeyAndShortcutProcessing
 
-        /// ModalMenuFilter
+        ///  ModalMenuFilter
         ///  - this installs a message filter when a dropdown becomes active.
         ///  - the message filter
         ///  a. eats WM_MOUSEMOVEs so that the window that's underneath
@@ -801,8 +799,8 @@ namespace System.Windows.Forms
         ///
         ///  - There should be 1 Message Filter per thread and it should be uninstalled once
         ///  the last dropdown has gone away
-        /// This is not part of ToolStripManager because it's DropDown specific and
-        /// we dont want to publicly expose this message filter.
+        ///  This is not part of ToolStripManager because it's DropDown specific and
+        ///  we dont want to publicly expose this message filter.
         internal class ModalMenuFilter : IMessageModifyAndFilter
         {
             private HandleRef _activeHwnd = NativeMethods.NullHandleRef; // the window that was active when we showed the dropdown
@@ -843,7 +841,7 @@ namespace System.Windows.Forms
             {
             }
 
-            /// this is the HWnd that was active when we popped the first dropdown.
+            ///  this is the HWnd that was active when we popped the first dropdown.
             internal static HandleRef ActiveHwnd
             {
                 get { return Instance.ActiveHwndInternal; }
@@ -923,9 +921,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// This is used in scenarios where windows forms
-            /// does not own the message pump, but needs access
-            /// to the message queue.
+            ///  This is used in scenarios where windows forms
+            ///  does not own the message pump, but needs access
+            ///  to the message queue.
             private HostedWindowsFormsMessageHook MessageHook
             {
                 get
@@ -1169,13 +1167,9 @@ namespace System.Windows.Forms
 
                     if (activeToolStrip != null)
                     {
-                        NativeMethods.POINT pt = new NativeMethods.POINT
-                        {
-                            x = x,
-                            y = y
-                        };
-                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), pt, 1);
-                        if (!activeToolStrip.ClientRectangle.Contains(pt.x, pt.y))
+                        var pt = new Point(x, y);
+                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), ref pt, 1);
+                        if (!activeToolStrip.ClientRectangle.Contains(pt.X, pt.Y))
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {
@@ -1372,15 +1366,15 @@ namespace System.Windows.Forms
             {
                 bool filterMessage = false;
 
-                if (m.Msg >= Interop.WindowMessages.WM_MOUSEFIRST && m.Msg <= Interop.WindowMessages.WM_MOUSELAST)
+                if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= Interop.WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= Interop.WindowMessages.WM_NCMBUTTONDBLCLK)
+                else if (m.Msg >= WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                else if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                 {
                     filterMessage = true;
                 }
@@ -1445,8 +1439,8 @@ namespace System.Windows.Forms
                 {
                     switch (m.Msg)
                     {
-                        case Interop.WindowMessages.WM_MOUSEMOVE:
-                        case Interop.WindowMessages.WM_NCMOUSEMOVE:
+                        case WindowMessages.WM_MOUSEMOVE:
+                        case WindowMessages.WM_NCMOUSEMOVE:
                             // Mouse move messages should be eaten if they arent for a dropdown.
                             // this prevents things like ToolTips and mouse over highlights from
                             // being processed.
@@ -1486,9 +1480,9 @@ namespace System.Windows.Forms
                                 }
                             }
                             break;
-                        case Interop.WindowMessages.WM_LBUTTONDOWN:
-                        case Interop.WindowMessages.WM_RBUTTONDOWN:
-                        case Interop.WindowMessages.WM_MBUTTONDOWN:
+                        case WindowMessages.WM_LBUTTONDOWN:
+                        case WindowMessages.WM_RBUTTONDOWN:
+                        case WindowMessages.WM_MBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1498,9 +1492,9 @@ namespace System.Windows.Forms
                                 /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
 
                             break;
-                        case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                        case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                        case Interop.WindowMessages.WM_NCMBUTTONDOWN:
+                        case WindowMessages.WM_NCLBUTTONDOWN:
+                        case WindowMessages.WM_NCRBUTTONDOWN:
+                        case WindowMessages.WM_NCMBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1510,14 +1504,14 @@ namespace System.Windows.Forms
                                 /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
                             break;
 
-                        case Interop.WindowMessages.WM_KEYDOWN:
-                        case Interop.WindowMessages.WM_KEYUP:
-                        case Interop.WindowMessages.WM_CHAR:
-                        case Interop.WindowMessages.WM_DEADCHAR:
-                        case Interop.WindowMessages.WM_SYSKEYDOWN:
-                        case Interop.WindowMessages.WM_SYSKEYUP:
-                        case Interop.WindowMessages.WM_SYSCHAR:
-                        case Interop.WindowMessages.WM_SYSDEADCHAR:
+                        case WindowMessages.WM_KEYDOWN:
+                        case WindowMessages.WM_KEYUP:
+                        case WindowMessages.WM_CHAR:
+                        case WindowMessages.WM_DEADCHAR:
+                        case WindowMessages.WM_SYSKEYDOWN:
+                        case WindowMessages.WM_SYSKEYUP:
+                        case WindowMessages.WM_SYSCHAR:
+                        case WindowMessages.WM_SYSDEADCHAR:
 
                             if (!activeToolStrip.ContainsFocus)
                             {
@@ -1624,7 +1618,7 @@ namespace System.Windows.Forms
                                 // the message filters and preprocess message.
                                 if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                                 {
-                                    msg->message = Interop.WindowMessages.WM_NULL;
+                                    msg->message = WindowMessages.WM_NULL;
                                 }
                             }
                         }
@@ -1731,20 +1725,20 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool ProcessCmdKey(ref Message m, Keys keyData)
         {
-            Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - processing: [" + keyData.ToString() + "]");
+            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - processing: [" + keyData.ToString() + "]");
             if (ToolStripManager.IsValidShortcut(keyData))
             {
                 // if we're at the toplevel, check the toolstrips for matching shortcuts.
                 // Win32 menus are handled in Form.ProcessCmdKey, but we cant guarantee that
                 // toolstrips will be hosted in a form.  ToolStrips have a hash of shortcuts
                 // per container, so this should hopefully be a quick search.
-                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");
+                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");
 
                 return ToolStripManager.ProcessShortcut(ref m, keyData);
             }
-            if (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
+            if (m.Msg == WindowMessages.WM_SYSKEYDOWN)
             {
-                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
+                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
                 ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);
             }
 
@@ -1767,7 +1761,7 @@ namespace System.Windows.Forms
 
             if (activeControlInChain != null && IsValidShortcut(shortcut))
             {
-                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - processing: [" + shortcut.ToString() + "]");
+                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - processing: [" + shortcut.ToString() + "]");
 
                 // start from the focused control and work your way up the parent chain
                 do
@@ -1780,7 +1774,7 @@ namespace System.Windows.Forms
                             ToolStripMenuItem item = activeControlInChain.ContextMenuStrip.Shortcuts[shortcut] as ToolStripMenuItem;
                             if (item.ProcessCmdKey(ref m, shortcut))
                             {
-                                Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on context menu: [" + item.ToString() + "]");
+                                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on context menu: [" + item.ToString() + "]");
                                 return true;
                             }
                         }
@@ -1882,7 +1876,7 @@ namespace System.Windows.Forms
                             {
                                 if (item.ProcessCmdKey(ref m, shortcut))
                                 {
-                                    Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on toolstrip: [" + item.ToString() + "]");
+                                    Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on toolstrip: [" + item.ToString() + "]");
                                     retVal = true;
                                     break;
                                 }
@@ -1908,7 +1902,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool ProcessMenuKey(ref Message m)
         {
-            Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessMenuKey: [" + m.ToString() + "]");
+            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessMenuKey: [" + m.ToString() + "]");
             if (!IsThreadUsingToolStrips())
             {
                 return false;
@@ -2067,9 +2061,8 @@ namespace System.Windows.Forms
         #endregion MenuKeyAndShortcutProcessing
 
         ///
-        /// ToolStripManager MenuMerging functions
+        ///  ToolStripManager MenuMerging functions
         ///
-
         #region MenuMerging
 
         private static ToolStripItem FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
@@ -2127,7 +2120,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// merge two toolstrips
+        ///  merge two toolstrips
         /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, ToolStrip targetToolStrip)
         {
@@ -2318,7 +2311,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// merge two toolstrips
+        ///  merge two toolstrips
         /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, string targetName)
         {
@@ -2343,7 +2336,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// doesn't do a null check on source... if it's null we unmerge everything
+        ///  doesn't do a null check on source... if it's null we unmerge everything
         /// </summary>
         internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls)
         {
@@ -2453,7 +2446,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// unmerge two toolstrips
+        ///  unmerge two toolstrips
         /// </summary>
         public static bool RevertMerge(ToolStrip targetToolStrip)
         {
@@ -2461,7 +2454,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// unmerge two toolstrips
+        ///  unmerge two toolstrips
         /// </summary>
         public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip)
         {
@@ -2473,7 +2466,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// unmerge two toolstrips
+        ///  unmerge two toolstrips
         /// </summary>
         public static bool RevertMerge(string targetName)
         {

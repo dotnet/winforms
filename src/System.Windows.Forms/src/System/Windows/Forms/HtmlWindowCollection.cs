@@ -5,15 +5,16 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
     public class HtmlWindowCollection : ICollection
     {
-        private readonly UnsafeNativeMethods.IHTMLFramesCollection2 htmlFramesCollection2;
+        private readonly IHTMLFramesCollection2 htmlFramesCollection2;
         private readonly HtmlShimManager shimManager;
 
-        internal HtmlWindowCollection(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLFramesCollection2 collection)
+        internal HtmlWindowCollection(HtmlShimManager shimManager, IHTMLFramesCollection2 collection)
         {
             htmlFramesCollection2 = collection;
             this.shimManager = shimManager;
@@ -21,7 +22,7 @@ namespace System.Windows.Forms
             Debug.Assert(NativeHTMLFramesCollection2 != null, "The window collection object should implement IHTMLFramesCollection2");
         }
 
-        private UnsafeNativeMethods.IHTMLFramesCollection2 NativeHTMLFramesCollection2
+        private IHTMLFramesCollection2 NativeHTMLFramesCollection2
         {
             get
             {
@@ -39,7 +40,7 @@ namespace System.Windows.Forms
                 }
 
                 object oIndex = (object)index;
-                return (NativeHTMLFramesCollection2.Item(ref oIndex) is UnsafeNativeMethods.IHTMLWindow2 htmlWindow2) ? new HtmlWindow(shimManager, htmlWindow2) : null;
+                return (NativeHTMLFramesCollection2.Item(ref oIndex) is IHTMLWindow2 htmlWindow2) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }
         }
 
@@ -48,11 +49,11 @@ namespace System.Windows.Forms
             get
             {
                 object oWindowId = (object)windowId;
-                UnsafeNativeMethods.IHTMLWindow2 htmlWindow2 = null;
+                IHTMLWindow2 htmlWindow2 = null;
                 try
                 {
                     htmlWindow2 = htmlFramesCollection2.Item(ref oWindowId)
-                            as UnsafeNativeMethods.IHTMLWindow2;
+                            as IHTMLWindow2;
                 }
                 catch (COMException)
                 {

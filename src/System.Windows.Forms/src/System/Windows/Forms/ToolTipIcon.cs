@@ -7,22 +7,22 @@ namespace System.Windows.Forms
     public enum ToolTipIcon
     {
         /// <summary>
-        /// No Icon.
+        ///  No Icon.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// A Information Icon.
+        ///  A Information Icon.
         /// </summary>
         Info = 1,
 
         /// <summary>
-        /// A Warning Icon.
+        ///  A Warning Icon.
         /// </summary>
         Warning = 2,
 
         /// <summary>
-        /// A Error Icon.
+        ///  A Error Icon.
         /// </summary>
         Error = 3
     }

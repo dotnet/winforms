@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
             _toolStrip = (ToolStrip)designer.Component;
             _designer = designer;
 
-            _changeParentVerb = new ChangeToolStripParentVerb(string.Format(SR.ToolStripDesignerEmbedVerb), designer);
+            _changeParentVerb = new ChangeToolStripParentVerb(SR.ToolStripDesignerEmbedVerb, designer);
             if (!(_toolStrip is StatusStrip))
             {
                 _standardItemsVerb = new StandardMenuStripVerb(designer);
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// False if were inherited and can't be modified.
+        ///  False if were inherited and can't be modified.
         /// </summary>
         private bool CanAddItems
         {
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Controls whether the Chrome is Automatically shown on selection
+        ///  Controls whether the Chrome is Automatically shown on selection
         /// </summary>
         public override bool AutoShow
         {
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The Main method to group the ActionItems and pass it to the Panel.
+        ///  The Main method to group the ActionItems and pass it to the Panel.
         /// </summary>
         public override DesignerActionItemCollection GetSortedActionItems()
         {

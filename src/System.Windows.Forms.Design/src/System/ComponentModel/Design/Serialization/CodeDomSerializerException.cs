@@ -8,9 +8,8 @@ using System.Runtime.Serialization;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// The exception that is thrown when the code dom serializer experiences an error.
+    ///  The exception that is thrown when the code dom serializer experiences an error.
     /// </summary>
-    [Serializable]
     public class CodeDomSerializerException : SystemException
     {
         public CodeDomSerializerException(string message, CodeLinePragma linePragma) : base(message)
@@ -39,25 +38,14 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        protected CodeDomSerializerException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            LinePragma = (CodeLinePragma)info.GetValue("linePragma", typeof(CodeLinePragma));
-        }
-
         /// <summary>
-        /// Gets the line pragma object that is related to this error.
+        ///  Gets the line pragma object that is related to this error.
         /// </summary>
         public CodeLinePragma LinePragma { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
-            {
-                throw new ArgumentNullException(nameof(info));
-            }
-
-            info.AddValue("linePragma", LinePragma);
-            base.GetObjectData(info, context);
+            throw new PlatformNotSupportedException();
         }
     }
 }

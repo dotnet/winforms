@@ -45,8 +45,8 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.Controls, control.Controls);
             Assert.False(control.Created);
             Assert.Equal(SizeF.Empty, control.CurrentAutoScaleDimensions);
-            Assert.Same(Cursors.Default, control.Cursor);
-            Assert.Same(Cursors.Default, control.DefaultCursor);
+            Assert.Equal(Cursors.Default, control.Cursor);
+            Assert.Equal(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
             Assert.Equal(new Padding(3), control.DefaultMargin);
             Assert.Equal(Size.Empty, control.DefaultMaximumSize);

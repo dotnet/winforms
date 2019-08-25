@@ -7,12 +7,12 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Representaion of one row item in the PropertyGrid. These items represent the
-    /// hierarchy of the grid's "tree-like" view and can be used to get information about
-    /// the grid's state and contents.
-    /// These objects should not be cached because they represent a snapshot of the
-    /// PropertyGrid's state and may be disposed by grid activity. The PropertyGrid often
-    /// recretates these objects internally even if it doesn't appear to change to the user.
+    ///  Representaion of one row item in the PropertyGrid. These items represent the
+    ///  hierarchy of the grid's "tree-like" view and can be used to get information about
+    ///  the grid's state and contents.
+    ///  These objects should not be cached because they represent a snapshot of the
+    ///  PropertyGrid's state and may be disposed by grid activity. The PropertyGrid often
+    ///  recretates these objects internally even if it doesn't appear to change to the user.
     /// </summary>
     public abstract class GridItem
     {
@@ -25,50 +25,50 @@ namespace System.Windows.Forms
         public object Tag { get; set; }
 
         /// <summary>
-        /// Retrieves the child GridItems, if any, of this GridItem
+        ///  Retrieves the child GridItems, if any, of this GridItem
         /// </summary>
         public abstract GridItemCollection GridItems { get; }
 
         /// <summary>
-        /// Retrieves type of this GridItem, as a value from System.Windows.Forms.GridItemType
+        ///  Retrieves type of this GridItem, as a value from System.Windows.Forms.GridItemType
         /// </summary>
         public abstract GridItemType GridItemType { get; }
 
         /// <summary>
-        /// Retrieves the text label of this GridItem. This may be different from the actual
-        /// PropertyName. For GridItemType.Property GridItems, retrieve the PropertyDescriptor
-        /// and check its Name property.
+        ///  Retrieves the text label of this GridItem. This may be different from the actual
+        ///  PropertyName. For GridItemType.Property GridItems, retrieve the PropertyDescriptor
+        ///  and check its Name property.
         /// </summary>
         public abstract string Label { get; }
 
         /// <summary>
-        /// Retrieves parent GridItem of this GridItem, if any.
+        ///  Retrieves parent GridItem of this GridItem, if any.
         /// </summary>
         public abstract GridItem Parent { get; }
 
         /// <summary>
-        /// If this item is a GridItemType.Property GridItem, this retreives the
-        /// System.ComponentModel.PropertyDescriptor that is associated with this GridItem.
-        /// This can be used to retrieve infomration such as property Type, Name, or
-        /// TypeConverter.
+        ///  If this item is a GridItemType.Property GridItem, this retreives the
+        ///  System.ComponentModel.PropertyDescriptor that is associated with this GridItem.
+        ///  This can be used to retrieve infomration such as property Type, Name, or
+        ///  TypeConverter.
         /// </summary>
         public abstract PropertyDescriptor PropertyDescriptor { get; }
 
         /// <summary>
-        /// Retrieves the current Value of this grid Item. This may be null.
+        ///  Retrieves the current Value of this grid Item. This may be null.
         /// </summary>
         /// <remarks>
-        /// We don't do set because of the value class semantics, etc.
+        ///  We don't do set because of the value class semantics, etc.
         /// </remarks>
         public abstract object Value { get; }
 
         /// <summary>
-        /// Retreives whether the given property is expandable.
+        ///  Retreives whether the given property is expandable.
         /// </summary>
         public virtual bool Expandable => false;
 
         /// <summary>
-        /// Retreives or sets whether the GridItem is in an expanded state.
+        ///  Retreives or sets whether the GridItem is in an expanded state.
         /// </summary>
         public virtual bool Expanded
         {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Attempts to select this GridItem in the PropertyGrid.
+        ///  Attempts to select this GridItem in the PropertyGrid.
         /// </summary>
         public abstract bool Select();
     }

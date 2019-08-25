@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
         <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
-        <target state="translated">Данный элемент управления ActiveX является неоконным и не поддерживается в этой версии .NET.</target>
+        <target state="translated">Элемент управления ActiveX является неоконным и не поддерживается в этой версии .NET.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -4544,6 +4544,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Растровый объект непосредственно не поддерживает не зависящий от устройства растровый формат.  Используйте автоматическое приведение либо выполните SetData с растровым форматом данных.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="translated">Пробел и пустая строка не являются допустимыми значениями для параметра "format".</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">Свойство '{0}' для DataMember не найдено в DataSource.</target>
@@ -5197,7 +5202,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET.
+        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с используемой политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET.
 
 При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу.
 
@@ -5210,7 +5215,7 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для получения соответствующего разрешения для данного приложения обратитесь к системному администратору или используйте конфигуратор Microsoft .NET.
+        <target state="translated">Приложение попыталось выполнить операцию, недопустимую в соответствии с использующейся политикой безопасности. Для выдачи соответствующего разрешения данному приложению обратитесь к системному администратору или используйте конфигуратор Microsoft .NET.
 
 При нажатии кнопки "Продолжить" приложение проигнорирует ошибку и попытается продолжить работу. При нажатии кнопки "Выход" приложение немедленно завершит работу.
 
@@ -9507,12 +9512,12 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Функция не поддерживается в данной ОС.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">TabPage нельзя добавить к '{0}'. TabPages можно добавлять только к TabControls.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">TabPage нельзя добавить к другой TabPage. TabPages можно добавлять только к TabControls.</target>
         <note />

@@ -12,7 +12,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// ToolStripItem that can host Controls.
+    ///  ToolStripItem that can host Controls.
     /// </summary>
     public class ToolStripControlHost : ToolStripItem
     {
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         internal static readonly object EventValidating = new object();
 
         /// <summary>
-        /// Constructs a ToolStripControlHost
+        ///  Constructs a ToolStripControlHost
         /// </summary>
         public ToolStripControlHost(Control c)
         {
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the image that is displayed on a <see cref='Label'/>.
+        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
         /// </summary>
         [
         Localizable(true),
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             }
         }
         /// <summary>
-        /// Overriden to return value from Control.CanSelect.
+        ///  Overriden to return value from Control.CanSelect.
         /// </summary>
         public override bool CanSelect
         {
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The control that this item is hosting.
+        ///  The control that this item is hosting.
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Control
@@ -169,8 +169,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Deriving classes can override this to configure a default size for their control.
-        /// This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected override Size DefaultSize
         {
@@ -208,8 +208,8 @@ namespace System.Windows.Forms
 
         /// <summary>
         //  For control hosts, this property has no effect
-        /// as they get their own clicks.  Use ControlStyles.StandardClick
-        /// instead.
+        ///  as they get their own clicks.  Use ControlStyles.StandardClick
+        ///  instead.
         /// </summary>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool DoubleClickEnabled
@@ -364,7 +364,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the control loses focus.
+        ///  Occurs when the control loses focus.
         /// </summary>
         [
         SRCategory(nameof(SR.CatFocus)),
@@ -379,7 +379,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when a key is pressed down while the control has focus.
+        ///  Occurs when a key is pressed down while the control has focus.
         /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown
@@ -409,9 +409,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is used for international applications where the language
-        /// is written from RightToLeft. When this property is true,
-        /// control placement and text will be from right to left.
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
+        ///  control placement and text will be from right to left.
         /// </summary>
         public override RightToLeft RightToLeft
         {
@@ -494,7 +494,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container.
+        ///  Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site
@@ -518,7 +518,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Overriden to modify hosted control's text.
+        ///  Overriden to modify hosted control's text.
         /// </summary>
         [DefaultValue("")]
         public override string Text
@@ -586,15 +586,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventValidated, value);
         }
 
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return Control.AccessibilityObject;
-        }
-
         /// <summary>
-        /// Cleans up and destroys the hosted control.
+        ///  Cleans up and destroys the hosted control.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -633,7 +626,6 @@ namespace System.Windows.Forms
         ///  Handle* wrappers:
         ///  We sync the event from the hosted control and call resurface it on ToolStripItem.
         ///
-
         private void HandleClick(object sender, EventArgs e)
         {
             OnClick(e);
@@ -813,7 +805,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// called when the control has lost focus
+        ///  called when the control has lost focus
         /// </summary>
         protected virtual void OnGotFocus(EventArgs e)
         {
@@ -826,7 +818,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// called when the control has lost focus
+        ///  called when the control has lost focus
         /// </summary>
         protected virtual void OnLostFocus(EventArgs e)
         {
@@ -845,7 +837,7 @@ namespace System.Windows.Forms
             RaiseKeyEvent(EventKeyUp, e);
         }
         /// <summary>
-        /// Called when the items bounds are changed.  Here, we update the Control's bounds.
+        ///  Called when the items bounds are changed.  Here, we update the Control's bounds.
         /// </summary>
         protected override void OnBoundsChanged()
         {
@@ -876,7 +868,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when the control fires its Paint event.
+        ///  Called when the control fires its Paint event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -889,7 +881,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when the item's parent has been changed.
+        ///  Called when the item's parent has been changed.
         /// </summary>
         protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent)
         {
@@ -913,9 +905,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The events from the hosted control are subscribed here.
-        /// Override to add/prevent syncing of control events.
-        /// NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
+        ///  The events from the hosted control are subscribed here.
+        ///  Override to add/prevent syncing of control events.
+        ///  NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
         /// </summary>
         protected virtual void OnSubscribeControlEvents(Control control)
         {
@@ -962,8 +954,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The events from the hosted control are unsubscribed here.
-        /// Override to unhook events subscribed in OnSubscribeControlEvents.
+        ///  The events from the hosted control are unsubscribed here.
+        ///  Override to unhook events subscribed in OnSubscribeControlEvents.
         /// </summary>
         protected virtual void OnUnsubscribeControlEvents(Control control)
         {
@@ -1150,6 +1142,99 @@ namespace System.Windows.Forms
             KeyboardToolTipStateMachine.Instance.Unhook(Control, toolTip);
         }
 
+        /// <summary>
+        ///     Constructs the new instance of the accessibility object for this ToolStripControlHost ToolStrip item.
+        /// </summary>
+        /// <returns>
+        ///     The new instance of the accessibility object for this ToolStripControlHost ToolStrip item
+        /// </returns>
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new ToolStripControlHostAccessibleObject(this);
+        }
+
+        /// <summary>
+        ///  Defines the ToolStripControlHost AccessibleObject.
+        /// </summary>
+        [Runtime.InteropServices.ComVisible(true)]
+        internal class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
+        {
+            private readonly ToolStripControlHost _ownerItem = null;
+
+            /// <summary>
+            ///  Initializes the new instance of ToolStripControlHostAccessibleObject.
+            /// </summary>
+            /// <param name="ownerItem">The owning ToolStripControlHost.</param>
+            public ToolStripControlHostAccessibleObject(ToolStripControlHost ownerItem) : base(ownerItem)
+            {
+                _ownerItem = ownerItem;
+            }
+
+            /// <summary>
+            ///  Gets a description of the default action for an object.
+            /// </summary>
+            public override string DefaultAction
+            {
+                get
+                {
+                    // Note: empty value is provided due to this Accessible object
+                    // represents the control container but not the contained control
+                    // itself.
+                    return string.Empty;
+                }
+            }
+
+            /// <summary>
+            ///  Performs the default action associated with this accessible object.
+            /// </summary>
+            public override void DoDefaultAction()
+            {
+                // Do nothing.
+            }
+
+            /// <summary>
+            ///  Gets the role of this accessible object.
+            /// </summary>
+            public override AccessibleRole Role
+            {
+                get
+                {
+                    AccessibleObject controlAccessibleObject  = _ownerItem.ControlAccessibilityObject;
+                    if (controlAccessibleObject != null)
+                    {
+                        return controlAccessibleObject.Role;
+                    }
+
+                    return AccessibleRole.Default;
+                }
+            }
+
+            /// <summary>
+            ///  Request to return the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
+                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
+                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                {
+                    return _ownerItem.Control.AccessibilityObject;
+                }
+
+                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
+                return base.FragmentNavigate(direction);
+            }
+
+            /// <summary>
+            ///  Return the element that is the root node of this fragment of UI.
+            /// </summary>
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            {
+                get => _ownerItem.RootToolStrip.AccessibilityObject;
+            }
+        }
+
         // Our implementation of ISite:
         // Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing
         // whether the control is in runtime or designtime.
@@ -1181,7 +1266,7 @@ namespace System.Windows.Forms
 
             // The container in which the component is sited.
             /// <summary>
-            /// When implemented by a class, gets the container associated with the <see cref='ISite'/>.
+            ///  When implemented by a class, gets the container associated with the <see cref='ISite'/>.
             /// </summary>
             IContainer ISite.Container
             {
@@ -1296,6 +1381,81 @@ namespace System.Windows.Forms
                 {
                     _dictionary[key] = value;
                 }
+            }
+        }
+
+        /// <summary>
+        ///  Represents the ToolStrip hosted control accessible object which is responsible
+        ///  for accessible navigation within the ToolStrip standard items and hosted controls
+        ///  like TextBox, ComboBox, ProgressBar, etc.
+        /// </summary>
+        public class ToolStripHostedControlAccessibleObject : Control.ControlAccessibleObject
+        {
+            private ToolStripControlHost _toolStripControlHost;
+            private Control _toolStripHostedControl;
+
+            /// <summary>
+            ///  Creates the new instance of ToolStripHostedControlAccessibleObject.
+            /// </summary>
+            /// <param name="toolStripHostedControl">The ToolStrip control hosted in the ToolStripControlHost container.</param>
+            /// <param name="toolStripControlHost">The ToolStripControlHost container which hosts the control.</param>
+            public ToolStripHostedControlAccessibleObject(Control toolStripHostedControl, ToolStripControlHost toolStripControlHost) : base(toolStripHostedControl)
+            {
+                _toolStripControlHost = toolStripControlHost;
+                _toolStripHostedControl = toolStripHostedControl;
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            {
+                get
+                {
+                    if (_toolStripHostedControl != null // Hosted control should not be null.
+                        && _toolStripControlHost != null // ToolStripControlHost is a container for ToolStripControl.
+                        && _toolStripControlHost.Owner != null) // Owner is the ToolStrip.
+                    {
+                        return _toolStripControlHost.Owner.AccessibilityObject; 
+                    }
+
+                    return base.FragmentRoot;
+                }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
+                if (_toolStripHostedControl != null &&
+                    _toolStripControlHost != null)
+                {
+                    switch (direction)
+                    {
+                        case UnsafeNativeMethods.NavigateDirection.Parent:
+                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                            return _toolStripControlHost.AccessibilityObject.FragmentNavigate(direction);
+                    }
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object GetPropertyValue(int propertyID)
+            {
+                switch (propertyID)
+                {
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_ValuePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
             }
         }
     }

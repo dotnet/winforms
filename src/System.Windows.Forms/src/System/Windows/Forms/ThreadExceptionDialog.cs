@@ -226,7 +226,7 @@ namespace System.Windows.Forms
 
             Size textSize = new Size(scaledMaxWidth - scaledPaddingWidth, int.MaxValue);
 
-            if (DpiHelper.IsScalingRequirementMet && Label.UseCompatibleTextRenderingDefault == false)
+            if (DpiHelper.IsScalingRequirementMet && !Control.UseCompatibleTextRenderingDefault)
             {
                 // we need to measure string using API that matches the rendering engine - TextRenderer.MeasureText for GDI
                 textSize = Size.Ceiling(TextRenderer.MeasureText(messageText, Font, textSize, TextFormatFlags.WordBreak));
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the property
+        ///  Hide the property
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

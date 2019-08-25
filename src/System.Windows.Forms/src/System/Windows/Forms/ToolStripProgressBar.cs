@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Create a strongly typed accessor for the class
+        ///  Create a strongly typed accessor for the class
         /// </summary>
         /// <value></value>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specify what size you want the item to start out at
+        ///  Specify what size you want the item to start out at
         /// </summary>
         /// <value></value>
         protected override Size DefaultSize
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specify how far from the edges you want to be
+        ///  Specify how far from the edges you want to be
         /// </summary>
         /// <value></value>
         protected internal override Padding DefaultMargin
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Wrap some commonly used properties
+        ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
         [
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Wrap some commonly used properties
+        ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
         [
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the property.
+        ///  Hide the property.
         /// </summary>
         [
         Browsable(false),
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Wrap some commonly used properties
+        ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
         [
@@ -269,18 +269,6 @@ namespace System.Windows.Forms
             {
                 ProgressBar.Value = value;
             }
-        }
-
-        /// <summary>
-        ///  Constructs the new instance of the accessibility object for this ToolStripProgressBar ToolStrip item.
-        /// </summary>
-        /// <returns>
-        ///  The new instance of the accessibility object for this ToolStripProgressBar ToolStrip item
-        /// </returns>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ToolStripProgressBarAccessibleObject(this);
         }
 
         private static Control CreateControlInstance()
@@ -327,7 +315,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -340,7 +328,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -353,7 +341,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -365,7 +353,7 @@ namespace System.Windows.Forms
             remove => base.KeyUp -= value;
         }
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -378,7 +366,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -398,7 +386,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -411,7 +399,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -424,7 +412,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hide the event.
+        ///  Hide the event.
         /// </summary>
         [
         Browsable(false),
@@ -443,43 +431,6 @@ namespace System.Windows.Forms
         public void PerformStep()
         {
             ProgressBar.PerformStep();
-        }
-
-        [Runtime.InteropServices.ComVisible(true)]
-        internal class ToolStripProgressBarAccessibleObject : ToolStripItemAccessibleObject
-        {
-            private readonly ToolStripProgressBar ownerItem = null;
-
-            public ToolStripProgressBarAccessibleObject(ToolStripProgressBar ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.ProgressBar;
-                }
-            }
-
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
-            {
-                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
-                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
-                {
-                    return ownerItem.ProgressBar.AccessibilityObject;
-                }
-
-                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
-                return base.FragmentNavigate(direction);
-            }
         }
 
         internal class ToolStripProgressBarControl : ProgressBar

@@ -22,6 +22,8 @@ namespace System.Windows.Forms.IntegrationTests.Common
         MdiParent,
         PropertyGrid,
         ListView,
-        FontNameEditor
+        FontNameEditor,
+        CollectionEditors,
+        RichTextBoxes
     }
 }

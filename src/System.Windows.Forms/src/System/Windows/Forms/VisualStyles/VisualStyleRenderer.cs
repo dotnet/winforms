@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.VisualStyles
 {
@@ -38,7 +39,7 @@ namespace System.Windows.Forms.VisualStyles
         }
 
         /// <summary>
-        /// Check if visual styles is supported for client area.
+        ///  Check if visual styles is supported for client area.
         /// </summary>
         private static bool AreClientAreaVisualStylesSupported
         {
@@ -600,7 +601,7 @@ namespace System.Windows.Forms.VisualStyles
             // From the GDI+ sources it doesn't appear as if they take ownership of the hRegion, so this is safe to do.
             // We need to DeleteObject in order to not leak.
             Region region = Region.FromHrgn(hRegion);
-            SafeNativeMethods.ExternalDeleteObject(new HandleRef(null, hRegion));
+            Gdi32.DeleteObject(hRegion);
             return region;
 
         }
@@ -754,8 +755,6 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
             }
 
-            NativeMethods.SIZE size = new NativeMethods.SIZE();
-
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
@@ -763,16 +762,16 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, new HandleRef(null, hWnd)))
                     {
-                        lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, null, type, size);
+                        lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, null, type, out Size size);
+                        return size;
                     }
                 }
                 else
                 {
-                    lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, null, type, size);
+                    lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, null, type, out Size size);
+                    return size;
                 }
             }
-
-            return new Size(size.cx, size.cy);
         }
 
         /// <summary>
@@ -791,15 +790,12 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
             }
 
-            NativeMethods.SIZE size = new NativeMethods.SIZE();
-
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, new NativeMethods.COMRECT(bounds), type, size);
+                lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, Handle), hdc, part, state, new NativeMethods.COMRECT(bounds), type, out Size size);
+                return size;
             }
-
-            return new Size(size.cx, size.cy);
         }
 
         /// <summary>
@@ -813,9 +809,8 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(PointProperty));
             }
 
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            lastHResult = SafeNativeMethods.GetThemePosition(new HandleRef(this, Handle), part, state, (int)prop, point);
-            return new Point(point.x, point.y);
+            lastHResult = SafeNativeMethods.GetThemePosition(new HandleRef(this, Handle), part, state, (int)prop, out Point point);
+            return point;
         }
 
         /// <summary>
@@ -944,13 +939,11 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            int htCode = 0;
-            NativeMethods.POINTSTRUCT point = new NativeMethods.POINTSTRUCT(pt.X, pt.Y);
-
+            ushort htCode = 0;
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), NativeMethods.NullHandleRef, point, ref htCode);
+                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), NativeMethods.NullHandleRef, pt, ref htCode);
             }
 
             return (HitTestCode)htCode;
@@ -981,13 +974,11 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            int htCode = 0;
-            NativeMethods.POINTSTRUCT point = new NativeMethods.POINTSTRUCT(pt.X, pt.Y);
-
+            ushort htCode = 0;
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), new HandleRef(this, hRgn), point, ref htCode);
+                lastHResult = SafeNativeMethods.HitTestThemeBackground(new HandleRef(this, Handle), hdc, part, state, (int)options, new NativeMethods.COMRECT(backgroundRectangle), new HandleRef(this, hRgn), pt, ref htCode);
             }
 
             return (HitTestCode)htCode;

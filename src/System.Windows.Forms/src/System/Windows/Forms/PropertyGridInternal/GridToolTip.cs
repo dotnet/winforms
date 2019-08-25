@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -12,9 +13,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         readonly Control[] controls;
         string toolTipText;
-        readonly NativeMethods.TOOLINFO_T[] toolInfos;
         bool dontShow;
-        Point lastMouseMove = Point.Empty;
         private readonly int maximumToolTipLength = 1000;
 
         internal GridToolTip(Control[] controls)
@@ -22,7 +21,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             this.controls = controls;
             SetStyle(ControlStyles.UserPaint, false);
             Font = controls[0].Font;
-            toolInfos = new NativeMethods.TOOLINFO_T[controls.Length];
 
             for (int i = 0; i < controls.Length; i++)
             {
@@ -54,11 +52,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //Let the user know the text was truncated by throwing on an ellipsis
                     value = value.Substring(0, maximumToolTipLength) + "...";
                 }
+
                 toolTipText = value;
 
                 if (IsHandleCreated)
                 {
-
                     bool visible = Visible;
 
                     if (visible)
@@ -66,30 +64,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                         Visible = false;
                     }
 
-                    // here's a workaround.  if we give
-                    // the tooltip an empty string, it won't come back
-                    // so we just force it hidden instead
-                    //
-                    if (value == null || value.Length == 0)
-                    {
-                        dontShow = true;
-                        value = string.Empty;
-                    }
-                    else
-                    {
-                        dontShow = false;
-                    }
+                    // Here's a workaround.  If we give the tooltip an empty string, it won't come back
+                    // so we just force it hidden instead.
+                    dontShow = string.IsNullOrEmpty(value);
 
                     for (int i = 0; i < controls.Length; i++)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i]));
+                        ComCtl32.ToolInfoWrapper info = GetTOOLINFO(controls[i]);
+                        info.SendMessage(this, WindowMessages.TTM_UPDATETIPTEXTW);
                     }
 
                     if (visible && !dontShow)
                     {
                         Visible = true;
                     }
-
                 }
             }
         }
@@ -118,41 +106,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private NativeMethods.TOOLINFO_T GetTOOLINFO(Control c)
-        {
-            int index = Array.IndexOf(controls, c);
-
-            Debug.Assert(index != -1, "Failed to find control in tooltip array");
-
-            if (toolInfos[index] == null)
-            {
-                toolInfos[index] = new NativeMethods.TOOLINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>()
-                };
-                toolInfos[index].uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
-            }
-            toolInfos[index].lpszText = toolTipText;
-            toolInfos[index].hwnd = c.Handle;
-            toolInfos[index].uId = c.Handle;
-            return toolInfos[index];
-        }
-
-        /*
-        private bool MouseMoved(Message msg){
-            bool moved = true;
-
-            Point newMove = new Point(NativeMethods.Util.LOWORD(msg.LParam), NativeMethods.Util.HIWORD(msg.LParam));
-
-            // check if the mouse has actually moved...
-            if (lastMouseMove == newMove){
-                  moved = false;
-            }
-
-            lastMouseMove = newMove;
-            return moved;
-        }
-        */
+        private ComCtl32.ToolInfoWrapper GetTOOLINFO(Control c)
+            => new ComCtl32.ToolInfoWrapper(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, toolTipText);
 
         private void OnControlCreateHandle(object sender, EventArgs e)
         {
@@ -163,7 +118,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_DELTOOL, 0, GetTOOLINFO((Control)sender));
+                GetTOOLINFO((Control)sender).SendMessage(this, WindowMessages.TTM_DELTOOLW);
             }
         }
 
@@ -179,7 +134,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void SetupToolTip(Control c)
+        private void SetupToolTip(Control control)
         {
             if (IsHandleCreated)
             {
@@ -188,56 +143,55 @@ namespace System.Windows.Forms.PropertyGridInternal
                                   NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
                                   NativeMethods.SWP_NOACTIVATE);
 
-                if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(c)))
+                ComCtl32.ToolInfoWrapper info = GetTOOLINFO(control);
+                if (info.SendMessage(this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
                 {
-                    Debug.Fail("TTM_ADDTOOL failed for " + c.GetType().Name);
+                    Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
                 }
 
-                // Setting the max width has the added benefit of enabling multiline
-                // tool tips!)
-                //
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                // Setting the max width has the added benefit of enabling multiline tool tips
+                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
         public void Reset()
         {
-            // okay, this resets the tooltip state,
-            // which can get broken when we leave the window
-            // then reenter.  So we set the tooltip to null,
-            // update the text, then it back to what it was, so the tooltip
-            // thinks it's back in the regular state again
-            //
+            // This resets the tooltip state, which can get broken when we leave the window
+            // then reenter. So we set the tooltip to null, update the text, then it back to
+            // what it was, so the tooltip thinks it's back in the regular state again
+
             string oldText = ToolTip;
             toolTipText = string.Empty;
+
             for (int i = 0; i < controls.Length; i++)
             {
-                if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i])))
+                ComCtl32.ToolInfoWrapper info = GetTOOLINFO(controls[i]);
+                if (info.SendMessage(this, WindowMessages.TTM_UPDATETIPTEXTW) == IntPtr.Zero)
                 {
-                    //Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);
+                    // Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);
                 }
             }
+
             toolTipText = oldText;
-            SendMessage(NativeMethods.TTM_UPDATE, 0, 0);
+            User32.SendMessageW(this, WindowMessages.TTM_UPDATE);
         }
 
         protected override void WndProc(ref Message msg)
         {
             switch (msg.Msg)
             {
-                case Interop.WindowMessages.WM_SHOWWINDOW:
+                case WindowMessages.WM_SHOWWINDOW:
                     if (unchecked((int)(long)msg.WParam) != 0 && dontShow)
                     {
                         msg.WParam = IntPtr.Zero;
                     }
                     break;
-                case Interop.WindowMessages.WM_NCHITTEST:
-                    // When using v6 common controls, the native
-                    // tooltip does not end up returning HTTRANSPARENT all the time, so its TTF_TRANSPARENT
-                    // behavior does not work, ie. mouse events do not fall thru to controls underneath. This
-                    // is due to a combination of old app-specific code in comctl32, functional changes between
-                    // v5 and v6, and the specfic way the property grid drives its tooltip. Workaround is to just
-                    // force HTTRANSPARENT all the time.
+                case WindowMessages.WM_NCHITTEST:
+                    // When using v6 common controls, the native tooltip does not end up returning HTTRANSPARENT
+                    // all the time, so its TTF_TRANSPARENT behavior does not work, ie. mouse events do not fall
+                    // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
+                    // functional changes between v5 and v6, and the specfic way the property grid drives its tooltip.
+                    // Workaround is to just force HTTRANSPARENT all the time.
                     msg.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
                     return;
             }

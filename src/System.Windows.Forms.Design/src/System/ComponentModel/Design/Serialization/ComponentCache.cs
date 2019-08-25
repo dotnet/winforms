@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This class is used to cache serialized properties and events of components to speed-up Design to Code view switches
+    ///  This class is used to cache serialized properties and events of components to speed-up Design to Code view switches
     /// </summary>
     internal class ComponentCache : IDisposable
     {
@@ -19,8 +19,7 @@ namespace System.ComponentModel.Design.Serialization
         internal ComponentCache(IDesignerSerializationManager manager)
         {
             _serManager = manager;
-            IComponentChangeService cs = (IComponentChangeService)manager.GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (manager.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
                 cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
                 cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
@@ -51,7 +50,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Access serialized Properties and events for the given component
+        ///  Access serialized Properties and events for the given component
         /// </summary>
         internal Entry this[object component]
         {
@@ -220,7 +219,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Helper to remove an entry from the cache.
+        ///  Helper to remove an entry from the cache.
         /// </summary>
         internal void RemoveEntry(object component)
         {

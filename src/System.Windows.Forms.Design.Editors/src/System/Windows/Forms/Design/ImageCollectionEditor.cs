@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design
     internal class ImageCollectionEditor : CollectionEditor
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='ImageCollectionEditor'/> class.
+        ///  Initializes a new instance of the <see cref='ImageCollectionEditor'/> class.
         /// </summary>
         public ImageCollectionEditor(Type type)
             : base(type)

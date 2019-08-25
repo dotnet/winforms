@@ -9,6 +9,23 @@ Fixes #
 - 
 - 
 
+<!-- We are in TELL-MODE the following section must be completed -->
+
+## Customer Impact
+
+- 
+- 
+
+## Regression? 
+
+- Yes / No
+
+## Risk
+
+-
+
+<!-- end TELL-MODE -->
+
 
 ## Screenshots <!-- Remove this section if PR does not change UI -->
 

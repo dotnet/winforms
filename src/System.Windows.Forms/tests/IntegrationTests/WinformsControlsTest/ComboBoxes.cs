@@ -17,6 +17,12 @@ namespace WinformsControlsTest
         public ComboBoxes()
         {
             InitializeComponent();
+            comboBox1.SelectedIndex = 0;
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            label1.Text = comboBox1.Text;
         }
     }
 }

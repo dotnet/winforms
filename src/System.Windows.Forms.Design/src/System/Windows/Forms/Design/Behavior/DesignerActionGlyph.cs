@@ -9,7 +9,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This Glyph represents the UI appended to a control when DesignerActions are available. Each image that represents these states are demand created.  This is done because it is entirely possible that a DesignerActionGlyph will only ever be in one of these states during its lifetime... kind of sad really.
+    ///  This Glyph represents the UI appended to a control when DesignerActions are available. Each image that represents these states are demand created.  This is done because it is entirely possible that a DesignerActionGlyph will only ever be in one of these states during its lifetime... kind of sad really.
     /// </summary>
     internal sealed class DesignerActionGlyph : Glyph
     {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Bitmap _glyphImageOpened;
 
         /// <summary>
-        /// Constructor that passes empty alternative bounds and parents. Typically this is done for control on the designer's surface since component tray glyphs will have these alternative values.
+        ///  Constructor that passes empty alternative bounds and parents. Typically this is done for control on the designer's surface since component tray glyphs will have these alternative values.
         /// </summary>
         public DesignerActionGlyph(DesignerActionBehavior behavior, Adorner adorner) : this(behavior, adorner, Rectangle.Empty, null)
         { }
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design.Behavior
         { }
 
         /// <summary>
-        /// Constructor that sets the dropdownbox size, creates a our hottrack brush and invalidates the glyph (to configure location).
+        ///  Constructor that sets the dropdownbox size, creates a our hottrack brush and invalidates the glyph (to configure location).
         /// </summary>
         private DesignerActionGlyph(DesignerActionBehavior behavior, Adorner adorner, Rectangle alternativeBounds, Control alternativeParent) : base(behavior)
         {
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the bounds of our glyph.  This is used by the related Behavior to determine where to show the contextmenu (list of actions).
+        ///  Returns the bounds of our glyph.  This is used by the related Behavior to determine where to show the contextmenu (list of actions).
         /// </summary>
         public override Rectangle Bounds
         {
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Standard hit test logic that returns true if the point is contained within our bounds. This is also used to manage out mouse over state.
+        ///  Standard hit test logic that returns true if the point is contained within our bounds. This is also used to manage out mouse over state.
         /// </summary>
         public override Cursor GetHitTest(Point p)
         {
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns an image representing the
+        ///  Returns an image representing the
         /// </summary>
         private Image GlyphImageClosed
         {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called when the state for this DesignerActionGlyph changes.  Or when the related component's size or location change.  Here, we re-calculate the Glyph's bounds and change our image.
+        ///  Called when the state for this DesignerActionGlyph changes.  Or when the related component's size or location change.  Here, we re-calculate the Glyph's bounds and change our image.
         /// </summary>
         internal void Invalidate()
         {
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Used to manage the mouse-pointer-is-over-glyph state.  If this is true,  then we will shade our BoxImage in the Paint logic.
+        ///  Used to manage the mouse-pointer-is-over-glyph state.  If this is true,  then we will shade our BoxImage in the Paint logic.
         /// </summary>
         private bool MouseOver
         {
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Responds to a paint event.  This Glyph will paint its current image and, if  MouseHover is true, we'll paint over the image with the 'hoverBrush'.
+        ///  Responds to a paint event.  This Glyph will paint its current image and, if  MouseHover is true, we'll paint over the image with the 'hoverBrush'.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called by the ComponentTray when a tray control changes location.
+        ///  Called by the ComponentTray when a tray control changes location.
         /// </summary>
         internal void UpdateAlternativeBounds(Rectangle newBounds)
         {

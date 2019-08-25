@@ -3,14 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using static Interop;
+
 
 namespace WinformsControlsTest
 {
@@ -20,14 +18,6 @@ namespace WinformsControlsTest
         {
             InitializeComponent();
         }
-        [DllImport("gdi32", ExactSpelling = true)]
-        internal static extern int GetDeviceCaps(HandleRef hDC, int index);
-
-        [DllImport("user32", ExactSpelling = true)]
-        internal static extern IntPtr GetDC(HandleRef hWnd);
-
-        [DllImport("user32", ExactSpelling = true)]
-        internal static extern int ReleaseDC(HandleRef hWnd, HandleRef hDC);
 
         [DllImport("User32", ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
@@ -47,13 +37,13 @@ namespace WinformsControlsTest
         {
             x = LogicalDpi;
             y = LogicalDpi;
-            IntPtr hDC = GetDC(handleRef);
+            IntPtr hDC = User32.GetDC(handleRef);
             if (hDC != IntPtr.Zero)
             {
-                x = GetDeviceCaps(new HandleRef(null, hDC), LOGPIXELSX);
-                y = GetDeviceCaps(new HandleRef(null, hDC), LOGPIXELSY);
+                x = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSX);
+                y = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSY);
 
-                ReleaseDC(handleRef, new HandleRef(null, hDC));
+                User32.ReleaseDC(handleRef, new HandleRef(null, hDC));
             }
         }
 
@@ -91,7 +81,7 @@ namespace WinformsControlsTest
             base.WndProc(ref m);
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_DPICHANGED:
+                case WindowMessages.WM_DPICHANGED:
                     int x = LOWORD(m.WParam);
                     int y = HIWORD(m.WParam);
                     if (x != deviceDpiX || y != deviceDpiY)
@@ -130,13 +120,13 @@ namespace WinformsControlsTest
             uint dpi;
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_DPICHANGED_BEFOREPARENT:
+                case WindowMessages.WM_DPICHANGED_BEFOREPARENT:
                     dpi = GetDpiForWindow(new HandleRef(this, Handle));
                     Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                     m.Result = (IntPtr)1;
                     break;
-                case Interop.WindowMessages.WM_DPICHANGED_AFTERPARENT:
+                case WindowMessages.WM_DPICHANGED_AFTERPARENT:
                     dpi = GetDpiForWindow(new HandleRef(this, Handle));
                     Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                     m.Result = (IntPtr)1;

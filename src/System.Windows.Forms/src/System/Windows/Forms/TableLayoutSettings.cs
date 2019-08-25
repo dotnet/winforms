@@ -13,10 +13,8 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>this is a wrapper class to expose interesting properties of TableLayout</summary>
-    [
-     TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
-     Serializable
-    ]
+    [TypeConverter(typeof(TableLayoutSettingsTypeConverter))]
+    [Serializable]  // This class participates in resx serialization.
     public sealed class TableLayoutSettings : LayoutSettings, ISerializable
     {
         private static readonly int[] borderStyleToOffset = {
@@ -91,9 +89,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This sets the maximum number of columns allowed on this table instead of allocating
-        /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
-        /// causing out of memory exception
+        ///  This sets the maximum number of columns allowed on this table instead of allocating
+        ///  actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
+        ///  causing out of memory exception
         /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -121,9 +119,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This sets the maximum number of rows allowed on this table instead of allocating
-        /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
-        /// causing out of memory exception
+        ///  This sets the maximum number of rows allowed on this table instead of allocating
+        ///  actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
+        ///  causing out of memory exception
         /// </summary>
         [SRDescription(nameof(SR.GridPanelRowsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -346,7 +344,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Get the row position of the element
+        ///  Get the row position of the element
         /// </summary>
         [SRDescription(nameof(SR.GridPanelRowDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -371,9 +369,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Set the row position of the element
-        /// If we set the row position to -1, it will automatically switch the control from
-        /// absolutely positioned to non-absolutely positioned
+        ///  Set the row position of the element
+        ///  If we set the row position to -1, it will automatically switch the control from
+        ///  absolutely positioned to non-absolutely positioned
         /// </summary>
         public void SetRow(object control, int row)
         {
@@ -390,7 +388,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Get the column position of the element
+        ///  Get the column position of the element
         /// </summary>
         [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -406,7 +404,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Set the column position of the element
+        ///  Set the column position of the element
         /// </summary>
         [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -422,7 +420,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Get the column position of the element
+        ///  Get the column position of the element
         /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -447,9 +445,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Set the column position of the element
-        /// If we set the column position to -1, it will automatically switch the control from
-        /// absolutely positioned to non-absolutely positioned
+        ///  Set the column position of the element
+        ///  If we set the column position to -1, it will automatically switch the control from
+        ///  absolutely positioned to non-absolutely positioned
         /// </summary>
         public void SetColumn(object control, int column)
         {
@@ -508,7 +506,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        /// Get the element which covers the specified row and column. return null if we can't find one
+        ///  Get the element which covers the specified row and column. return null if we can't find one
         ///</summary>
         internal IArrangedElement GetControlFromPosition(int column, int row)
         {

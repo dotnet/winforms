@@ -1,5 +1,5 @@
-<Project InitialTargets="BuildPackage">
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props"/>
+﻿<Project InitialTargets="BuildPackage">
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
   <PropertyGroup>
     <TargetFrameworkName>netcoreapp</TargetFrameworkName>
     <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
@@ -57,11 +57,15 @@
     </ItemGroup>
   </Target>
 
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets"/>
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
   
   <ItemGroup>
     <IntermediateAssembly Remove="@(IntermediateAssembly)" />
     <IntermediateRefAssembly Remove="@(IntermediateRefAssembly)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="readme.md" />
   </ItemGroup>
 
   <PropertyGroup>

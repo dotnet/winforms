@@ -14,7 +14,7 @@ namespace WinformsControlsTest
         public MainForm()
         {
             this.BringToForeground();
-            InitializeComponent();
+            InitializeComponent();          
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -27,7 +27,7 @@ namespace WinformsControlsTest
             new DesignTimeAligned().Show();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void treeViewButton_Click(object sender, EventArgs e)
         {
             new TreeViewTest().Show();
         }
@@ -106,6 +106,11 @@ namespace WinformsControlsTest
         private void CollectionEditors_Click(object sender, EventArgs e)
         {
             new PropertyGrid(new UserControlWithCollectionEditors()).Show();
+        }
+
+        private void RichTextBoxes_Click(object sender, EventArgs e)
+        {
+            new RichTextBoxes().Show();
         }
     }
 }

@@ -8,13 +8,14 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
-    /// do not have HWNDS, this guy's got to figure out who the event was really supposed
-    /// to go to and pass it on to it.
+    ///  RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
+    ///  do not have HWNDS, this guy's got to figure out who the event was really supposed
+    ///  to go to and pass it on to it.
     /// </summary>
     internal class ToolStripDropTargetManager : IDropTarget
     {
@@ -32,7 +33,7 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        /// Summary of ToolStripDropTargetManager.
+        ///  Summary of ToolStripDropTargetManager.
         /// </summary>
         /// <param name=owner></param>	
         public ToolStripDropTargetManager(ToolStrip owner)
@@ -45,7 +46,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of EnsureRegistered.
+        ///  Summary of EnsureRegistered.
         /// </summary>
         /// <param name=dropTarget></param>	
         public void EnsureRegistered(IDropTarget dropTarget)
@@ -55,7 +56,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of EnsureUnRegistered.
+        ///  Summary of EnsureUnRegistered.
         /// </summary>
         /// <param name=dropTarget></param>	
         public void EnsureUnRegistered(IDropTarget dropTarget)
@@ -80,7 +81,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Takes a screen point and converts it into an item. May return null.
+        ///  Takes a screen point and converts it into an item. May return null.
         /// </summary>
         /// <param name=x></param>
         /// <param name=y></param>	
@@ -89,7 +90,7 @@ namespace System.Windows.Forms
             return owner.GetItemAt(owner.PointToClient(new Point(x, y)));
         }
         /// <summary>
-        /// Summary of OnDragEnter.
+        ///  Summary of OnDragEnter.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragEnter(DragEventArgs e)
@@ -149,7 +150,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnDragOver.
+        ///  Summary of OnDragOver.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragOver(DragEventArgs e)
@@ -206,7 +207,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnDragLeave.
+        ///  Summary of OnDragLeave.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragLeave(EventArgs e)
@@ -232,7 +233,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Summary of OnDragDrop.
+        ///  Summary of OnDragDrop.
         /// </summary>
         /// <param name=e></param>	
         public void OnDragDrop(DragEventArgs e)
@@ -267,29 +268,15 @@ namespace System.Windows.Forms
                     {
                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
-                    if (accept)
-                    {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + owner.Handle.ToString());
-                        // Register
-                        int n = UnsafeNativeMethods.RegisterDragDrop(new HandleRef(owner, owner.Handle), (UnsafeNativeMethods.IOleDropTarget)(new DropTarget(this)));
 
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
-                        if (n != 0 && n != NativeMethods.DRAGDROP_E_ALREADYREGISTERED)
-                        {
-                            throw new Win32Exception(n);
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Revoking drop target: " + owner.Handle.ToString());
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + owner.Handle.ToString());
 
-                        // Revoke
-                        int n = UnsafeNativeMethods.RevokeDragDrop(new HandleRef(owner, owner.Handle));
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
-                        if (n != 0 && n != NativeMethods.DRAGDROP_E_NOTREGISTERED)
-                        {
-                            throw new Win32Exception(n);
-                        }
+                    // Register
+                    HRESULT n = Ole32.RegisterDragDrop(new HandleRef(owner, owner.Handle), (Ole32.IDropTarget)new DropTarget(this));
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
+                    if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
+                    {
+                        throw Marshal.GetExceptionForHR((int)n);
                     }
                 }
                 catch (Exception e)
@@ -300,10 +287,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// if we have a new active item, fire drag leave and
-        /// enter.  This corresponds to the case where you
-        /// are dragging between items and havent actually
-        /// left the ToolStrip's client area.
+        ///  if we have a new active item, fire drag leave and
+        ///  enter.  This corresponds to the case where you
+        ///  are dragging between items and havent actually
+        ///  left the ToolStrip's client area.
         /// </summary>
         /// <param name=newTarget></param>
         /// <param name=e></param>	

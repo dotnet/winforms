@@ -11,21 +11,22 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Wraps ActiveX controls and exposes them as fully featured windows forms controls
-    /// (by inheriting from Control). Some of Control's properties that don't make sense
-    /// for ActiveX controls are blocked here (by setting Browsable attributes on some and
-    /// throwing exceptions from others), to make life easy for the inheritors.
+    ///  Wraps ActiveX controls and exposes them as fully featured windows forms controls
+    ///  (by inheriting from Control). Some of Control's properties that don't make sense
+    ///  for ActiveX controls are blocked here (by setting Browsable attributes on some and
+    ///  throwing exceptions from others), to make life easy for the inheritors.
     ///
-    /// Inheritors of this class simply need to concentrate on defining & implementing the
-    /// properties/methods/events of the specific ActiveX control they are wrapping, the
-    /// default properties etc and the code to implement the activation etc. are
-    /// encapsulated in the class below.
+    ///  Inheritors of this class simply need to concentrate on defining & implementing the
+    ///  properties/methods/events of the specific ActiveX control they are wrapping, the
+    ///  default properties etc and the code to implement the activation etc. are
+    ///  encapsulated in the class below.
     ///
-    /// The classid of the ActiveX control is specified in the constructor.
+    ///  The classid of the ActiveX control is specified in the constructor.
     /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -69,8 +70,8 @@ namespace System.Windows.Forms
         internal object activeXInstance;
 
         /// <summary>
-            /// Creates a new instance of a WinForms control which wraps an ActiveX control
-        /// given by the clsid parameter.
+            ///  Creates a new instance of a WinForms control which wraps an ActiveX control
+        ///  given by the clsid parameter.
             /// </summary>
         internal WebBrowserBase(string clsidString) : base()
         {
@@ -91,7 +92,7 @@ namespace System.Windows.Forms
         //
 
         /// <summary>
-            /// Returns the native webbrowser object that this control wraps.
+            ///  Returns the native webbrowser object that this control wraps.
             /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object ActiveXInstance
@@ -121,8 +122,8 @@ namespace System.Windows.Forms
         // below method and return their own WebBrowserSiteBaseBase derived object.
         //
         /// <summary>
-        /// Returns an object that will be set as the site for the native ActiveX control.
-        /// Implementors of the site can derive from <see cref='WebBrowserSiteBase'/> class.
+        ///  Returns an object that will be set as the site for the native ActiveX control.
+        ///  Implementors of the site can derive from <see cref='WebBrowserSiteBase'/> class.
         /// </summary>
         protected virtual WebBrowserSiteBase CreateWebBrowserSiteBase()
         {
@@ -130,34 +131,34 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// This will be called when the native ActiveX control has just been created.
-        /// Inheritors of this class can override this method to cast the nativeActiveXObject
-        /// parameter to the appropriate interface. They can then cache this interface
-        /// value in a member variable. However, they must release this value when
-        /// DetachInterfaces is called (by setting the cached interface variable to null).
+            ///  This will be called when the native ActiveX control has just been created.
+        ///  Inheritors of this class can override this method to cast the nativeActiveXObject
+        ///  parameter to the appropriate interface. They can then cache this interface
+        ///  value in a member variable. However, they must release this value when
+        ///  DetachInterfaces is called (by setting the cached interface variable to null).
             /// </summary>
         protected virtual void AttachInterfaces(object nativeActiveXObject)
         {
         }
 
         /// <summary>
-            /// See AttachInterfaces for a description of when to override DetachInterfaces.
+            ///  See AttachInterfaces for a description of when to override DetachInterfaces.
             /// </summary>
         protected virtual void DetachInterfaces()
         {
         }
 
         /// <summary>
-            /// This will be called when we are ready to start listening to events.
-        /// Inheritors can override this method to hook their own connection points.
+            ///  This will be called when we are ready to start listening to events.
+        ///  Inheritors can override this method to hook their own connection points.
             /// </summary>
         protected virtual void CreateSink()
         {
         }
 
         /// <summary>
-            /// This will be called when it is time to stop listening to events.
-        /// This is where inheritors have to disconnect their connection points.
+            ///  This will be called when it is time to stop listening to events.
+        ///  This is where inheritors have to disconnect their connection points.
             /// </summary>
         protected virtual void DetachSink()
         {
@@ -269,7 +270,7 @@ namespace System.Windows.Forms
 
                         if (hr == NativeMethods.S_OK)
                         {
-                            Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
+                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
                             return true;
                         }
                         else
@@ -300,12 +301,12 @@ namespace System.Windows.Forms
                             }
                             else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
                             {
-                                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
+                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
                                 return base.PreProcessMessage(ref msg);
                             }
                             else
                             {
-                                Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
+                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
                                 return false;
                             }
                         }
@@ -346,15 +347,14 @@ namespace System.Windows.Forms
                         NativeMethods.MSG msg = new NativeMethods.MSG
                         {
                             hwnd = IntPtr.Zero,
-                            message = Interop.WindowMessages.WM_SYSKEYDOWN,
+                            message = WindowMessages.WM_SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
                             time = SafeNativeMethods.GetTickCount()
                         };
-                        NativeMethods.POINT p = new NativeMethods.POINT();
-                        UnsafeNativeMethods.GetCursorPos(p);
-                        msg.pt_x = p.x;
-                        msg.pt_y = p.y;
+
+                        UnsafeNativeMethods.GetCursorPos(out Point p);
+                        msg.pt = p;
                         if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                         {
                             axOleControl.OnMnemonic(ref msg);
@@ -386,25 +386,25 @@ namespace System.Windows.Forms
                 //
                 // Things we explicitly ignore and pass to the ActiveX's windproc
                 //
-                case Interop.WindowMessages.WM_ERASEBKGND:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
-                case Interop.WindowMessages.WM_SETCURSOR:
-                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_MBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
-                case Interop.WindowMessages.WM_RBUTTONUP:
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case WindowMessages.WM_ERASEBKGND:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFYFORMAT:
+                case WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SYSCOLORCHANGE:
+                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONUP:
+                case WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_CONTEXTMENU:
                 //
                 // Some of the MSComCtl controls respond to this message to do some
                 // custom painting. So, we should just pass this message through.
-                case Interop.WindowMessages.WM_DRAWITEM:
+                case WindowMessages.WM_DRAWITEM:
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_COMMAND:
+                case WindowMessages.WM_COMMAND:
                     if (!ReflectMessage(m.LParam, ref m))
                     {
                         DefWndProc(ref m);
@@ -412,16 +412,16 @@ namespace System.Windows.Forms
 
                     break;
 
-                case Interop.WindowMessages.WM_HELP:
+                case WindowMessages.WM_HELP:
                     // We want to both fire the event, and let the ActiveX have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
-                case Interop.WindowMessages.WM_MOUSEACTIVATE:
+                case WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_MOUSEACTIVATE:
                     if (!DesignMode)
                     {
                         if (containingControl != null && containingControl.ActiveControl != this)
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     hwndFocus = (IntPtr)m.WParam;
                     try
                     {
@@ -444,7 +444,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case Interop.WindowMessages.WM_DESTROY:
+                case WindowMessages.WM_DESTROY:
                     //
                     // If we are currently in a state of InPlaceActive or above,
                     // we should first reparent the ActiveX control to our parking
@@ -605,15 +605,6 @@ namespace System.Windows.Forms
         //
         // Internal helper methods:
         //
-
-#if false
-        // FxCop: Currently not used
-        internal Guid ClassId {
-            get {
-                return clsid;
-            }
-        }
-#endif
 
         internal WebBrowserHelper.AXState ActiveXState
         {
@@ -1199,70 +1190,49 @@ namespace System.Windows.Forms
             }
         }
 
-        private Size SetExtent(int width, int height)
+        private unsafe Size SetExtent(int width, int height)
         {
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL
-            {
-                cx = width,
-                cy = height
-            };
+            var sz = new Size(width, height);
             bool resetExtents = DesignMode;
-            try
-            {
-                Pixel2hiMetric(sz, sz);
-                axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-            }
-            catch (COMException)
+            Pixel2hiMetric(ref sz);
+            Interop.HRESULT hr = axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            if (hr != Interop.HRESULT.S_OK)
             {
                 resetExtents = true;
             }
             if (resetExtents)
             {
-                axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-                try
-                {
-                    axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-                }
-                catch (COMException e)
-                {
-                    Debug.Fail(e.ToString());
-                }
+                axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+                axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
             }
+
             return GetExtent();
         }
 
-        private Size GetExtent()
+        private unsafe Size GetExtent()
         {
-            NativeMethods.tagSIZEL sz = new NativeMethods.tagSIZEL();
-            axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, sz);
-            HiMetric2Pixel(sz, sz);
-            return new Size(sz.cx, sz.cy);
+            var sz = new Size();
+            axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            HiMetric2Pixel(ref sz);
+            return sz;
         }
 
-        private void HiMetric2Pixel(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
+        private unsafe void HiMetric2Pixel(ref Size sz)
         {
-            NativeMethods._POINTL phm = new NativeMethods._POINTL
-            {
-                x = sz.cx,
-                y = sz.cy
-            };
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF();
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
-            szout.cx = (int)pcont.x;
-            szout.cy = (int)pcont.y;
+            var phm = new Point(sz.Width, sz.Height);
+            var pcont = new PointF();
+            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
+            sz.Width = (int)pcont.X;
+            sz.Height = (int)pcont.Y;
         }
 
-        private void Pixel2hiMetric(NativeMethods.tagSIZEL sz, NativeMethods.tagSIZEL szout)
+        private unsafe void Pixel2hiMetric(ref Size sz)
         {
-            NativeMethods.tagPOINTF pcont = new NativeMethods.tagPOINTF
-            {
-                x = (float)sz.cx,
-                y = (float)sz.cy
-            };
-            NativeMethods._POINTL phm = new NativeMethods._POINTL();
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(phm, pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
-            szout.cx = phm.x;
-            szout.cy = phm.y;
+            var phm = new Point();
+            var pcont = new PointF(sz.Width, sz.Height);
+            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            sz.Width = phm.X;
+            sz.Height = phm.Y;
         }
 
         private bool EditMode
@@ -1333,65 +1303,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-#if false
-        // FxCop: Currently not used
-        private Object GetAmbientProperty(int dispid) {
-
-            Control richParent = ParentInternal;
-
-            switch (dispid) {
-                case NativeMethods.ActiveX.DISPID_AMBIENT_USERMODE:
-                    return !DesignMode;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_AUTOCLIP:
-                    return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_MESSAGEREFLECT:
-                    return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FONT:
-                    if (richParent != null) {
-                        return WebBrowserHelper.GetIFontFromFont(richParent.Font);
-                    }
-                    return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWGRABHANDLES:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWHATCHING:
-                    return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR:
-                    if (richParent != null) {
-                        return WebBrowserHelper.GetOleColorFromColor(richParent.BackColor);
-                    }
-                    return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR:
-                    if (richParent != null) {
-                        return WebBrowserHelper.GetOleColorFromColor(richParent.ForeColor);
-                    }
-                    return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
-                    string rval = this.GetParentContainer().GetNameForControl(this);
-                    if (rval == null) rval = string.Empty;
-                    return rval;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
-                    return Thread.CurrentThread.CurrentCulture.LCID;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_RIGHTTOLEFT:
-                    Control ctl = this;
-                    while (ctl != null) {
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.No)
-                            return false;
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Yes)
-                            return true;
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Inherit)
-                            ctl = ctl.Parent;
-                    }
-                    return null;
-                default:
-                    return null;
-            }
-        }
-#endif
 
         internal UnsafeNativeMethods.IOleInPlaceObject AXInPlaceObject
         {
@@ -1946,7 +1857,7 @@ namespace System.Windows.Forms
             {
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                    case WindowMessages.WM_WINDOWPOSCHANGING:
                         WmWindowPosChanging(ref m);
                         break;
                     default:

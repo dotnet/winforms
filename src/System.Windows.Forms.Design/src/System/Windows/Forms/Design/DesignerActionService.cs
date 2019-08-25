@@ -9,7 +9,7 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The DesignerActionService manages DesignerActions. All DesignerActions are associated with an object. DesignerActions can be added or removed at any  given time. The DesignerActionService controls the expiration of DesignerActions by monitoring three basic events: selection change, component change, and timer expiration. Designer implementing this service will need to monitor the DesignerActionsChanged event on this class. This event will fire every time a change is made to any object's DesignerActions.
+    ///  The DesignerActionService manages DesignerActions. All DesignerActions are associated with an object. DesignerActions can be added or removed at any  given time. The DesignerActionService controls the expiration of DesignerActions by monitoring three basic events: selection change, component change, and timer expiration. Designer implementing this service will need to monitor the DesignerActionsChanged event on this class. This event will fire every time a change is made to any object's DesignerActions.
     /// </summary>
     public class DesignerActionService : IDisposable
     {
@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         private bool _reEntrantCode = false;
 
         /// <summary>
-        /// Standard constructor. A Service Provider is necessary for monitoring selection and component changes.
+        ///  Standard constructor. A Service Provider is necessary for monitoring selection and component changes.
         /// </summary>
         public DesignerActionService(IServiceProvider serviceProvider)
         {
@@ -45,7 +45,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This event is thrown whenever a DesignerActionList is removed or added for any object.
+        ///  This event is thrown whenever a DesignerActionList is removed or added for any object.
         /// </summary>
         public event DesignerActionListsChangedEventHandler DesignerActionListsChanged
         {
@@ -54,7 +54,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds a new collection of DesignerActions to be monitored with the related comp object.
+        ///  Adds a new collection of DesignerActions to be monitored with the related comp object.
         /// </summary>
         public void Add(IComponent comp, DesignerActionListCollection designerActionListCollection)
         {
@@ -82,7 +82,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds a new DesignerActionList to be monitored with the related comp object
+        ///  Adds a new DesignerActionList to be monitored with the related comp object
         /// </summary>
         public void Add(IComponent comp, DesignerActionList actionList)
         {
@@ -90,7 +90,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Clears all objects and DesignerActions from the DesignerActionService.
+        ///  Clears all objects and DesignerActions from the DesignerActionService.
         /// </summary>
         public void Clear()
         {
@@ -117,7 +117,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns true if the DesignerActionService is currently managing the comp object.
+        ///  Returns true if the DesignerActionService is currently managing the comp object.
         /// </summary>
         public bool Contains(IComponent comp)
         {
@@ -129,7 +129,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Disposes all resources and unhooks all events.
+        ///  Disposes all resources and unhooks all events.
         /// </summary>
         public void Dispose()
         {
@@ -317,7 +317,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We hook the OnComponentRemoved event so we can clean up  all associated actions.
+        ///  We hook the OnComponentRemoved event so we can clean up  all associated actions.
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
@@ -325,7 +325,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This fires our DesignerActionsChanged event.
+        ///  This fires our DesignerActionsChanged event.
         /// </summary>
         private void OnDesignerActionListsChanged(DesignerActionListsChangedEventArgs e)
         {
@@ -333,7 +333,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
         /// </summary>
         public void Remove(IComponent comp)
         {
@@ -352,7 +352,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
         /// </summary>
         public void Remove(DesignerActionList actionList)
         {
@@ -373,7 +373,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This will remove the all instances of the DesignerAction from  the 'comp' object. If an alarm was set, it will be unhooked. This will also fire the DesignerActionChanged event.
+        ///  This will remove the all instances of the DesignerAction from  the 'comp' object. If an alarm was set, it will be unhooked. This will also fire the DesignerActionChanged event.
         /// </summary>
         public void Remove(IComponent comp, DesignerActionList actionList)
         {

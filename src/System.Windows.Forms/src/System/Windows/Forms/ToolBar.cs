@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -98,7 +99,7 @@ namespace System.Windows.Forms
         private ToolBarButtonClickEventHandler onButtonDropDown = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='ToolBar'/> class.
+        ///  Initializes a new instance of the <see cref='ToolBar'/> class.
         /// </summary>
         public ToolBar()
         : base()
@@ -704,7 +705,7 @@ namespace System.Windows.Forms
                 {
                     // get the first visible button and get it's height
                     //
-                    NativeMethods.RECT rect = new NativeMethods.RECT();
+                    RECT rect = new RECT();
                     int firstVisible;
 
                     for (firstVisible = 0; firstVisible < buttons.Length; firstVisible++)
@@ -785,7 +786,7 @@ namespace System.Windows.Forms
                     else
                     {
 
-                        NativeMethods.RECT rect = new NativeMethods.RECT();
+                        RECT rect = new RECT();
 
                         for (int x = 0; x < buttonCount; x++)
                         {
@@ -830,7 +831,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We need to track the current scale factor so that we can tell the
+        ///  We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -843,7 +844,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// We need to track the current scale factor so that we can tell the
+        ///  We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -982,7 +983,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when a <see cref='ToolBarButton'/> on the <see cref='ToolBar'/> is clicked.
+        ///  Occurs when a <see cref='ToolBarButton'/> on the <see cref='ToolBar'/> is clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
         public event ToolBarButtonClickEventHandler ButtonClick
@@ -992,7 +993,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when a drop-down style <see cref='ToolBarButton'/> or its down arrow is clicked.
+        ///  Occurs when a drop-down style <see cref='ToolBarButton'/> or its down arrow is clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
         public event ToolBarButtonClickEventHandler ButtonDropDown
@@ -1283,8 +1284,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ButtonClick'/>
-        /// event.
+        ///  Raises the <see cref='ButtonClick'/>
+        ///  event.
         /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
         {
@@ -1292,8 +1293,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='ButtonDropDown'/>
-        /// event.
+        ///  Raises the <see cref='ButtonDropDown'/>
+        ///  event.
         /// </summary>
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
         {
@@ -1472,7 +1473,7 @@ namespace System.Windows.Forms
             RecreateHandle();
         }
 
-        /// Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
+        ///  Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
         private void SendToolbarButtonSizeMessage()
         {
             SendMessage(NativeMethods.TB_SETBUTTONSIZE, 0, NativeMethods.Util.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
@@ -1532,7 +1533,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines if the <see cref='ButtonSize'/> property needs to be persisted.
+        ///  Determines if the <see cref='ButtonSize'/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeButtonSize()
         {
@@ -1595,7 +1596,7 @@ namespace System.Windows.Forms
             Menu menu = tbb.DropDownMenu;
             if (menu != null)
             {
-                NativeMethods.RECT rc = new NativeMethods.RECT();
+                RECT rc = new RECT();
                 NativeMethods.TPMPARAMS tpm = new NativeMethods.TPMPARAMS();
 
                 SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);
@@ -1634,7 +1635,7 @@ namespace System.Windows.Forms
         {
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             int commandID = (int)ttt.hdr.idFrom;
-            ToolBarButton tbb = (ToolBarButton)buttons[commandID];
+            ToolBarButton tbb = buttons[commandID];
 
             if (tbb != null && tbb.ToolTipText != null)
             {
@@ -1651,7 +1652,7 @@ namespace System.Windows.Forms
             //
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= NativeMethods.TTF_RTLREADING;
+                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
             }
 
             Marshal.StructureToPtr(ttt, m.LParam, false);
@@ -1722,20 +1723,16 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
+                case WindowMessages.WM_COMMAND + WindowMessages.WM_REFLECT:
                     WmReflectCommand(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFY:
-                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
+                case WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code)
                     {
                         case NativeMethods.TTN_NEEDTEXT:
-                            // MSDN:
-                            // Setting the max width has the added benefit of enabling multiline
-                            // tool tips!
-
                             WmNotifyNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
@@ -1770,31 +1767,31 @@ namespace System.Windows.Forms
                                 // We'll need screen coordinates of this position for setting the tooltip's position
                                 int x = Location.X + buttonRight + 1;
                                 int y = Location.Y + (ButtonSize.Height / 2);
-                                NativeMethods.POINT leftTop = new NativeMethods.POINT(x, y);
-                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), leftTop);
+                                var leftTop = new Point(x, y);
+                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
 
                                 // Will the tooltip bleed off the top?
-                                if (leftTop.y < SystemInformation.WorkingArea.Y)
+                                if (leftTop.Y < SystemInformation.WorkingArea.Y)
                                 {
                                     // Reposition the tooltip to be displayed below the button
-                                    leftTop.y += (ButtonSize.Height / 2) + 1;
+                                    leftTop.Y += (ButtonSize.Height / 2) + 1;
                                 }
 
                                 // Will the tooltip bleed off the bottom?
-                                if (leftTop.y + tooltipHeight > SystemInformation.WorkingArea.Height)
+                                if (leftTop.Y + tooltipHeight > SystemInformation.WorkingArea.Height)
                                 {
                                     // Reposition the tooltip to be displayed above the button
-                                    leftTop.y -= ((ButtonSize.Height / 2) + tooltipHeight + 1);
+                                    leftTop.Y -= ((ButtonSize.Height / 2) + tooltipHeight + 1);
                                 }
 
                                 // Will the tooltip bleed off the right edge?
-                                if (leftTop.x + tooltipWidth > SystemInformation.WorkingArea.Right)
+                                if (leftTop.X + tooltipWidth > SystemInformation.WorkingArea.Right)
                                 {
                                     // Move the tooltip far enough left that it will display in the working area
-                                    leftTop.x -= (ButtonSize.Width + tooltipWidth + 2);
+                                    leftTop.X -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
-                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.x, leftTop.y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.X, leftTop.Y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
                                 m.Result = (IntPtr)1;
                                 return;
                             }
@@ -1819,20 +1816,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Encapsulates a collection of <see cref='ToolBarButton'/> controls for use by the
+        ///  Encapsulates a collection of <see cref='ToolBarButton'/> controls for use by the
         /// <see cref='ToolBar'/> class.
         /// </summary>
         public class ToolBarButtonCollection : IList
         {
             private readonly ToolBar owner;
             private bool suspendUpdate;
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref='ToolBarButtonCollection'/> class and assigns it to the specified toolbar.
+            ///  Initializes a new instance of the <see cref='ToolBarButtonCollection'/> class and assigns it to the specified toolbar.
             /// </summary>
             public ToolBarButtonCollection(ToolBar owner)
             {

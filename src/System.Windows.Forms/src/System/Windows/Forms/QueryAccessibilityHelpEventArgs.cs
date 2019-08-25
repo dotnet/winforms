@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// The QueryAccessibilityHelpEventArgs is fired when AccessibleObject is providing help
-    /// to accessibility applications.
+    ///  The QueryAccessibilityHelpEventArgs is fired when AccessibleObject is providing help
+    ///  to accessibility applications.
     /// </summary>
     [ComVisible(true)]
     public class QueryAccessibilityHelpEventArgs : EventArgs

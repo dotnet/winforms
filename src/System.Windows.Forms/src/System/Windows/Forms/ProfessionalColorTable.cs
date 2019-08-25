@@ -554,9 +554,9 @@ namespace System.Windows.Forms
 
         private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
-            /// we need to calculate our own alpha blended color based on the Higlight and Window
-            /// colors on the system.  Since terminalserver + alphablending doesnt work we cant just do a
-            /// FromARGB here.  So we have a simple function which calculates the blending for us.
+            ///  we need to calculate our own alpha blended color based on the Higlight and Window
+            ///  colors on the system.  Since terminalserver + alphablending doesnt work we cant just do a
+            ///  FromARGB here.  So we have a simple function which calculates the blending for us.
 
             if (!DisplayInformation.LowResolution)
             {

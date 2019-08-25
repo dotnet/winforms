@@ -7,18 +7,18 @@ using System.Runtime.InteropServices;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// An enum that defines what time of action happend to the related object's DesignerActionLists collection.
+    ///  An enum that defines what time of action happend to the related object's DesignerActionLists collection.
     /// </summary>
     [ComVisible(true)]
     public enum DesignerActionListsChangedType
     {
         /// <summary>
-        /// Signifies that one or more DesignerActionList was added.
+        ///  Signifies that one or more DesignerActionList was added.
         /// </summary>
         ActionListsAdded,
 
         /// <summary>
-        /// Signifies that one or more DesignerActionList was removed.
+        ///  Signifies that one or more DesignerActionList was removed.
         /// </summary>
         ActionListsRemoved
     }

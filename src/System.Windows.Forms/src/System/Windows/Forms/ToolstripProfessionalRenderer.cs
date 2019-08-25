@@ -9,7 +9,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Summary description for ProfessionalToolStripRenderer.
+    ///  Summary description for ProfessionalToolStripRenderer.
     /// </summary>
     public class ToolStripProfessionalRenderer : ToolStripRenderer
     {
@@ -584,7 +584,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            using (Brush b = new SolidBrush(ColorTable.MenuItemSelected))
+                            using (Brush b = new LinearGradientBrush(bounds, ColorTable.MenuItemSelectedGradientBegin, ColorTable.MenuItemSelectedGradientEnd, LinearGradientMode.Vertical))
                             {
                                 g.FillRectangle(b, bounds);
                             }

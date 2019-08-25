@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
@@ -19,9 +20,9 @@ namespace System.Windows.Forms
         internal static readonly object EventUnload = new object();
 
         private readonly HtmlShimManager shimManager;
-        private readonly UnsafeNativeMethods.IHTMLWindow2 htmlWindow2;
+        private readonly IHTMLWindow2 htmlWindow2;
 
-        internal HtmlWindow(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLWindow2 win)
+        internal HtmlWindow(HtmlShimManager shimManager, IHTMLWindow2 win)
         {
             htmlWindow2 = win;
             Debug.Assert(NativeHtmlWindow != null, "The window object should implement IHTMLWindow2");
@@ -29,7 +30,7 @@ namespace System.Windows.Forms
             this.shimManager = shimManager;
         }
 
-        internal UnsafeNativeMethods.IHTMLWindow2 NativeHtmlWindow
+        internal IHTMLWindow2 NativeHtmlWindow
         {
             get
             {
@@ -64,7 +65,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return NativeHtmlWindow.GetDocument() is UnsafeNativeMethods.IHTMLDocument iHTMLDocument ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
+                return NativeHtmlWindow.GetDocument() is IHTMLDocument iHTMLDocument ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
             }
         }
 
@@ -80,7 +81,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLFramesCollection2 iHTMLFramesCollection2 = NativeHtmlWindow.GetFrames();
+                IHTMLFramesCollection2 iHTMLFramesCollection2 = NativeHtmlWindow.GetFrames();
                 return (iHTMLFramesCollection2 != null) ? new HtmlWindowCollection(ShimManager, iHTMLFramesCollection2) : null;
             }
         }
@@ -89,7 +90,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IOmHistory iOmHistory = NativeHtmlWindow.GetHistory();
+                IOmHistory iOmHistory = NativeHtmlWindow.GetHistory();
                 return iOmHistory != null ? new HtmlHistory(iOmHistory) : null;
             }
         }
@@ -121,7 +122,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (NativeHtmlWindow.GetOpener() is UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+                return (NativeHtmlWindow.GetOpener() is IHTMLWindow2 iHTMLWindow2) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
             }
         }
 
@@ -129,7 +130,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.GetParent();
+                IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.GetParent();
                 return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
             }
         }
@@ -138,8 +139,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                return new Point(((UnsafeNativeMethods.IHTMLWindow3)NativeHtmlWindow).GetScreenLeft(),
-                        ((UnsafeNativeMethods.IHTMLWindow3)NativeHtmlWindow).GetScreenTop());
+                return new Point(((IHTMLWindow3)NativeHtmlWindow).GetScreenLeft(),
+                        ((IHTMLWindow3)NativeHtmlWindow).GetScreenTop());
             }
         }
 
@@ -150,7 +151,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement bodyElement = NativeHtmlWindow.GetDocument().GetBody();
+                IHTMLElement bodyElement = NativeHtmlWindow.GetDocument().GetBody();
                 return new Size(bodyElement.GetOffsetWidth(), bodyElement.GetOffsetHeight());
             }
             set
@@ -175,7 +176,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLLocation iHtmlLocation = NativeHtmlWindow.GetLocation();
+                IHTMLLocation iHtmlLocation = NativeHtmlWindow.GetLocation();
                 string stringLocation = (iHtmlLocation == null) ? "" : iHtmlLocation.GetHref();
                 return string.IsNullOrEmpty(stringLocation) ? null : new Uri(stringLocation);
             }
@@ -185,7 +186,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (((UnsafeNativeMethods.IHTMLWindow4)NativeHtmlWindow).frameElement() is UnsafeNativeMethods.IHTMLElement htmlElement) ? new HtmlElement(ShimManager, htmlElement) : null;
+                return (((IHTMLWindow4)NativeHtmlWindow).frameElement() is IHTMLElement htmlElement) ? new HtmlElement(ShimManager, htmlElement) : null;
             }
         }
 
@@ -240,22 +241,22 @@ namespace System.Windows.Forms
             NativeHtmlWindow.Navigate(url.ToString());
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        /// break.
+        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+        ///  break.
         public void Navigate(string urlString)
         {
             NativeHtmlWindow.Navigate(urlString);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        /// break.
+        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+        ///  break.
         public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
         {
-            UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, target, windowOptions, replaceEntry);
+            IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, target, windowOptions, replaceEntry);
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
@@ -264,13 +265,13 @@ namespace System.Windows.Forms
             return Open(url.ToString(), target, windowOptions, replaceEntry);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        /// break.
+        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+        ///  break.
         public HtmlWindow OpenNew(string urlString, string windowOptions)
         {
-            UnsafeNativeMethods.IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, "_blank", windowOptions, true);
+            IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, "_blank", windowOptions, true);
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
@@ -372,7 +373,7 @@ namespace System.Windows.Forms
         //
         [ClassInterface(ClassInterfaceType.None)]
         private class HTMLWindowEvents2 : StandardOleMarshalObject, /*Enforce calling back on the same thread*/
-            UnsafeNativeMethods.DHTMLWindowEvents2
+            DHTMLWindowEvents2
         {
             private readonly HtmlWindow parent;
 
@@ -389,13 +390,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void onfocus(UnsafeNativeMethods.IHTMLEventObj evtObj)
+            public void onfocus(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventGotFocus, e);
             }
 
-            public void onblur(UnsafeNativeMethods.IHTMLEventObj evtObj)
+            public void onblur(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventLostFocus, e);
@@ -408,13 +409,13 @@ namespace System.Windows.Forms
                 return e.Handled;
             }
 
-            public void onload(UnsafeNativeMethods.IHTMLEventObj evtObj)
+            public void onload(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventLoad, e);
             }
 
-            public void onunload(UnsafeNativeMethods.IHTMLEventObj evtObj)
+            public void onunload(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventUnload, e);
@@ -424,33 +425,33 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void onscroll(UnsafeNativeMethods.IHTMLEventObj evtObj)
+            public void onscroll(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventScroll, e);
             }
 
-            public void onresize(UnsafeNativeMethods.IHTMLEventObj evtObj)
+            public void onresize(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventResize, e);
             }
 
-            public bool onhelp(UnsafeNativeMethods.IHTMLEventObj evtObj)
+            public bool onhelp(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
 
-            public void onbeforeunload(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
+            public void onbeforeunload(IHTMLEventObj evtObj) { }
 
-            public void onbeforeprint(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
+            public void onbeforeprint(IHTMLEventObj evtObj) { }
 
-            public void onafterprint(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
+            public void onafterprint(IHTMLEventObj evtObj) { }
         }
 
         ///<summary>
-        /// HtmlWindowShim - this is the glue between the DOM eventing mechanisms
+        ///  HtmlWindowShim - this is the glue between the DOM eventing mechanisms
         ///        and our CLR callbacks.
         ///
         ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
@@ -472,17 +473,17 @@ namespace System.Windows.Forms
                 htmlWindow = window;
             }
 
-            public UnsafeNativeMethods.IHTMLWindow2 NativeHtmlWindow
+            public IHTMLWindow2 NativeHtmlWindow
             {
                 get { return htmlWindow.NativeHtmlWindow; }
             }
 
-            public override UnsafeNativeMethods.IHTMLWindow2 AssociatedWindow
+            public override IHTMLWindow2 AssociatedWindow
             {
                 get { return htmlWindow.NativeHtmlWindow; }
             }
 
-            /// Support IHtmlDocument3.AttachHandler
+            ///  Support IHtmlDocument3.AttachHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
 
@@ -491,18 +492,18 @@ namespace System.Windows.Forms
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-                bool success = ((UnsafeNativeMethods.IHTMLWindow3)NativeHtmlWindow).AttachEvent(eventName, proxy);
+                bool success = ((IHTMLWindow3)NativeHtmlWindow).AttachEvent(eventName, proxy);
                 Debug.Assert(success, "failed to add event");
             }
 
-            /// Support HTMLWindowEvents2
+            ///  Support HTMLWindowEvents2
             public override void ConnectToEvents()
             {
                 if (cookie == null || !cookie.Connected)
                 {
                     cookie = new AxHost.ConnectionPointCookie(NativeHtmlWindow,
                                                                               new HTMLWindowEvents2(htmlWindow),
-                                                                              typeof(UnsafeNativeMethods.DHTMLWindowEvents2),
+                                                                              typeof(DHTMLWindowEvents2),
                                                                               /*throwException*/ false);
                     if (!cookie.Connected)
                     {
@@ -511,13 +512,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// Support IHTMLWindow3.DetachHandler
+            ///  Support IHTMLWindow3.DetachHandler
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
                 if (proxy != null)
                 {
-                    ((UnsafeNativeMethods.IHTMLWindow3)NativeHtmlWindow).DetachEvent(eventName, proxy);
+                    ((IHTMLWindow3)NativeHtmlWindow).DetachEvent(eventName, proxy);
                 }
             }
 

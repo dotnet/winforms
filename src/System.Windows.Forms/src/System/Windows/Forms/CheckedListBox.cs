@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Hashtable = System.Collections.Hashtable;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -495,7 +496,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
+                RECT rect = new RECT();
                 SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect);
                 SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rect, false);
             }
@@ -926,7 +927,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Reparses the objects, getting new text strings for them.
+        ///  Reparses the objects, getting new text strings for them.
         /// </summary>
         protected override void RefreshItems()
         {
@@ -1046,10 +1047,10 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CHARTOITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_CHARTOITEM:
                     m.Result = NativeMethods.InvalidIntPtr;
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VKEYTOITEM:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:

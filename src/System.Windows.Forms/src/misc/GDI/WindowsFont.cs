@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
@@ -116,10 +117,9 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static WindowsFont FromHdc(IntPtr hdc)
         {
-            IntPtr hFont = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(null, hdc), IntNativeMethods.OBJ_FONT);
+            IntPtr hFont = Gdi32.GetCurrentObject(hdc, Gdi32.ObjectType.OBJ_FONT);
 
             // don't call DeleteObject on handle from GetCurrentObject, it is the one selected in the hdc.
-
             return FromHfont(hFont);
         }
 
@@ -186,7 +186,7 @@ namespace System.Windows.Forms.Internal
                         Debug.Assert(Hfont != IntPtr.Zero, "Unexpected null hFont.");
                         DbgUtil.AssertFinalization(this, disposing);
 
-                        NativeMethods.DeleteObject(Hfont);
+                        Gdi32.DeleteObject(Hfont);
                         Hfont = IntPtr.Zero;
                         _ownHandle = false;
                         deletedHandle = true;

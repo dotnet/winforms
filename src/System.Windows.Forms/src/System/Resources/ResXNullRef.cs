@@ -9,9 +9,7 @@ namespace System.Resources
     ///  It is a placeholder that is written into the file.  On read, it is replaced
     ///  with null.
     /// </summary>
-    [Serializable]
     internal sealed class ResXNullRef
     {
     }
 }
-

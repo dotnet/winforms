@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -84,7 +85,7 @@ namespace System.Windows.Forms
             {
                 using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
                 {
-                    wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, GetIntTextFormatFlags(flags));
+                    wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, GetTextFormatFlags(flags));
                 }
             }
         }
@@ -102,7 +103,7 @@ namespace System.Windows.Forms
             {
                 using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
                 {
-                    wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, backColor, GetIntTextFormatFlags(flags));
+                    wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, backColor, GetTextFormatFlags(flags));
                 }
             }
         }
@@ -174,7 +175,7 @@ namespace System.Windows.Forms
             {
                 using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
                 {
-                    wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, GetIntTextFormatFlags(flags));
+                    wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, GetTextFormatFlags(flags));
                 }
             }
         }
@@ -192,25 +193,25 @@ namespace System.Windows.Forms
             {
                 using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
                 {
-                    wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, backColor, GetIntTextFormatFlags(flags));
+                    wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, backColor, GetTextFormatFlags(flags));
                 }
             }
         }
 
-        private static IntTextFormatFlags GetIntTextFormatFlags(TextFormatFlags flags)
+        private static User32.TextFormatFlags GetTextFormatFlags(TextFormatFlags flags)
         {
             if (((uint)flags & WindowsGraphics.GdiUnsupportedFlagMask) == 0)
             {
-                return (IntTextFormatFlags)flags;
+                return (User32.TextFormatFlags)flags;
             }
 
             // Clear TextRenderer custom flags.
-            IntTextFormatFlags windowsGraphicsSupportedFlags = (IntTextFormatFlags)(((uint)flags) & ~WindowsGraphics.GdiUnsupportedFlagMask);
+            User32.TextFormatFlags windowsGraphicsSupportedFlags = (User32.TextFormatFlags)(((uint)flags) & ~WindowsGraphics.GdiUnsupportedFlagMask);
 
             return windowsGraphicsSupportedFlags;
         }
 
-        /// MeasureText wrappers.
+        ///  MeasureText wrappers.
 
         public static Size MeasureText(string text, Font font)
         {
@@ -246,7 +247,7 @@ namespace System.Windows.Forms
             }
             using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font))
             {
-                return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize, GetIntTextFormatFlags(flags));
+                return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
             }
         }
 
@@ -327,7 +328,7 @@ namespace System.Windows.Forms
             {
                 using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
                 {
-                    return wgr.WindowsGraphics.MeasureText(text, wf, proposedSize, GetIntTextFormatFlags(flags));
+                    return wgr.WindowsGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
                 }
             }
         }

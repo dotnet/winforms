@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1300,8 +1301,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the current LISTVIEWSTATE_handleDestroyed value so that this
-        /// value can be accessed from child classes.
+        ///  Returns the current LISTVIEWSTATE_handleDestroyed value so that this
+        ///  value can be accessed from child classes.
         /// </summary>
         internal bool ListViewHandleDestroyed
         {
@@ -1788,7 +1789,7 @@ namespace System.Windows.Forms
                             dwMask = NativeMethods.LVTVIM_TILESIZE
                         };
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETTILEVIEWINFO, 0, tileViewInfo);
-                        return new Size(tileViewInfo.sizeTile.cx, tileViewInfo.sizeTile.cy);
+                        return tileViewInfo.sizeTile;
                     }
                     else
                     {
@@ -1816,7 +1817,7 @@ namespace System.Windows.Forms
                         {
                             dwMask = NativeMethods.LVTVIM_TILESIZE,
                             dwFlags = NativeMethods.LVTVIF_FIXEDSIZE,
-                            sizeTile = new NativeMethods.SIZE(tileSize.Width, tileSize.Height)
+                            sizeTile = tileSize
                         };
                         bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETTILEVIEWINFO, 0, tileViewInfo);
                         Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");
@@ -2623,7 +2624,7 @@ namespace System.Windows.Forms
                             odCacheFont = new Font(odCacheFont, FontStyle.Bold);
                             odCacheFontHandleWrapper = new FontHandleWrapper(odCacheFont);
                             odCacheFontHandle = odCacheFontHandleWrapper.Handle;
-                            SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                             m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
                         }
                         return;
@@ -2944,7 +2945,7 @@ namespace System.Windows.Forms
                             // safety net code just in case
                             if (odCacheFont != null)
                             {
-                                SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(null, odCacheFontHandle));
+                                Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), odCacheFontHandle);
                             }
                         }
                         else
@@ -2954,7 +2955,7 @@ namespace System.Windows.Forms
                                 odCacheFontHandleWrapper.Dispose();
                             }
                             odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
-                            SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                         }
 
                         if (!dontmess)
@@ -3302,8 +3303,7 @@ namespace System.Windows.Forms
                 else
                 {
                     lvFindInfo.flags = NativeMethods.LVFI_NEARESTXY;
-                    lvFindInfo.ptX = pt.X;
-                    lvFindInfo.ptY = pt.Y;
+                    lvFindInfo.pt = pt;
                     // we can do this because SearchDirectionHint is set to the VK_*
                     lvFindInfo.vkDirection = (int)dir;
                 }
@@ -3548,10 +3548,9 @@ namespace System.Windows.Forms
 
         internal Point GetItemPosition(int index)
         {
-            NativeMethods.POINT pt = new NativeMethods.POINT();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETITEMPOSITION, index, pt);
-
-            return new Point(pt.x, pt.y);
+            var pt = new Point();
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETITEMPOSITION, index, ref pt);
+            return pt;
         }
 
         internal int GetItemState(int index)
@@ -3600,7 +3599,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            RECT itemrect = new RECT
             {
                 left = (int)portion
             };
@@ -3628,7 +3627,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            RECT itemrect = new RECT
             {
                 left = 0
             };
@@ -3710,7 +3709,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            NativeMethods.RECT itemrect = new NativeMethods.RECT
+            RECT itemrect = new RECT
             {
                 left = (int)portion,
                 top = subItemIndex
@@ -4380,9 +4379,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseHover(EventArgs e)
         {
-            /// Hover events need to be caught for each node
-            /// within the TreeView so the appropriate
-            /// NodeHovered event can be raised.
+            ///  Hover events need to be caught for each node
+            ///  within the TreeView so the appropriate
+            ///  NodeHovered event can be raised.
 
             ListViewItem item = null;
 
@@ -4835,7 +4834,7 @@ namespace System.Windows.Forms
                 IntPtr prc = IntPtr.Zero;
                 IntPtr pwpos = IntPtr.Zero;
 
-                prc = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.RECT>());
+                prc = Marshal.AllocHGlobal(Marshal.SizeOf<RECT>());
                 if (prc == IntPtr.Zero)
                 {
                     return;
@@ -5391,12 +5390,8 @@ namespace System.Windows.Forms
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
-            NativeMethods.POINT pt = new NativeMethods.POINT
-            {
-                x = x,
-                y = y
-            };
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEMPOSITION32, index, pt);
+            var pt = new Point(x, y);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETITEMPOSITION32, index, ref pt);
         }
 
         internal void SetItemState(int index, int state, int mask)
@@ -5426,7 +5421,7 @@ namespace System.Windows.Forms
         }
 
         ///<summary>
-        /// For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
+        ///  For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
         ///</summary>
         private void SetItemText(int itemIndex, int subItemIndex, string text, ref NativeMethods.LVITEM lvItem)
         {
@@ -5706,7 +5701,7 @@ namespace System.Windows.Forms
             // the tile view info size
             tileViewInfo.dwMask |= NativeMethods.LVTVIM_TILESIZE;
             tileViewInfo.dwFlags = NativeMethods.LVTVIF_FIXEDSIZE;
-            tileViewInfo.sizeTile = new NativeMethods.SIZE(TileSize.Width, TileSize.Height);
+            tileViewInfo.sizeTile = TileSize;
 
             bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETTILEVIEWINFO, 0, tileViewInfo);
             Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");
@@ -6183,7 +6178,7 @@ namespace System.Windows.Forms
         private Font GetListHeaderFont()
         {
             IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
-            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), Interop.WindowMessages.WM_GETFONT, 0, 0);
+            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), WindowMessages.WM_GETFONT, 0, 0);
             return Font.FromHfont(hFont);
         }
 
@@ -6544,13 +6539,8 @@ namespace System.Windows.Forms
                             ListViewItem lvi = Items[infoTip.item];
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
-
-                                // MSDN:
-                                // Setting the max width has the added benefit of enabling multiline
-                                // tool tips!
-                                //
-
-                                UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                                // Setting the max width has the added benefit of enabling multiline tool tips
+                                User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves
@@ -6587,7 +6577,7 @@ namespace System.Windows.Forms
                             Point startingPoint = Point.Empty;
                             if ((nmlvif.lvfi.flags & NativeMethods.LVFI_NEARESTXY) != 0)
                             {
-                                startingPoint = new Point(nmlvif.lvfi.ptX, nmlvif.lvfi.ptY);
+                                startingPoint = nmlvif.lvfi.pt;
                             }
 
                             SearchDirectionHint dir = SearchDirectionHint.Down;
@@ -6647,10 +6637,10 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     WmReflectNotify(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case WindowMessages.WM_LBUTTONDBLCLK:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.
@@ -6659,7 +6649,7 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case WindowMessages.WM_LBUTTONDOWN:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.
@@ -6668,9 +6658,9 @@ namespace System.Windows.Forms
                     downButton = MouseButtons.Left;
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONUP:
-                case Interop.WindowMessages.WM_MBUTTONUP:
+                case WindowMessages.WM_LBUTTONUP:
+                case WindowMessages.WM_RBUTTONUP:
+                case WindowMessages.WM_MBUTTONUP:
 
                     // see the mouse is on item
                     //
@@ -6694,21 +6684,21 @@ namespace System.Windows.Forms
                     listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     CaptureInternal = false;
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case WindowMessages.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case WindowMessages.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                case Interop.WindowMessages.WM_MOUSEMOVE:
+                case WindowMessages.WM_MOUSEMOVE:
                     if (listViewState[LISTVIEWSTATE_expectingMouseUp] && !listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                     {
                         OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
@@ -6717,7 +6707,7 @@ namespace System.Windows.Forms
                     CaptureInternal = false;
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_MOUSEHOVER:
+                case WindowMessages.WM_MOUSEHOVER:
                     if (HoverSelection)
                     {
                         base.WndProc(ref m);
@@ -6728,7 +6718,7 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case Interop.WindowMessages.WM_NOTIFY:
+                case WindowMessages.WM_NOTIFY:
                     if (WmNotify(ref m))
                     {
                         break; // we are done - skip default handling
@@ -6737,7 +6727,7 @@ namespace System.Windows.Forms
                     {
                         goto default;  //default handling needed
                     }
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     base.WndProc(ref m);
 
                     if (!RecreatingHandle && !ListViewHandleDestroyed)
@@ -6754,23 +6744,23 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case WindowMessages.WM_MOUSELEAVE:
                     // if the mouse leaves and then re-enters the ListView
                     // ItemHovered events should be raised.
                     prevHoveredItem = null;
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_PAINT:
+                case WindowMessages.WM_PAINT:
                     base.WndProc(ref m);
 
                     // win32 ListView
                     BeginInvoke(new MethodInvoker(CleanPreviousBackgroundImageFiles));
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case Interop.WindowMessages.WM_TIMER:
+                case WindowMessages.WM_TIMER:
                     if (unchecked((int)(long)m.WParam) != LVTOOLTIPTRACKING || !ComctlSupportsVisualStyles)
                     {
                         base.WndProc(ref m);
@@ -7054,9 +7044,9 @@ namespace System.Windows.Forms
         {
             private readonly ListView owner;
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /* C#r: protected */
@@ -7709,9 +7699,9 @@ namespace System.Windows.Forms
         {
             private readonly ListView owner;
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             /* C#r: protected */
@@ -8239,10 +8229,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
-            /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
+            ///  Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
             private int lastAccessedIndex = -1;
 
             /// <summary>
@@ -8721,9 +8711,9 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class ListViewItemCollection : IList
         {
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
             internal interface IInnerList
@@ -9736,11 +9726,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates the new instance of AccessibleObject for this ListView control.
-        /// Returning ListViewAccessibleObject.
+        ///  Creates the new instance of AccessibleObject for this ListView control.
+        ///  Returning ListViewAccessibleObject.
         /// </summary>
         /// <returns>
-        /// The AccessibleObject for this ListView instance.
+        ///  The AccessibleObject for this ListView instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {

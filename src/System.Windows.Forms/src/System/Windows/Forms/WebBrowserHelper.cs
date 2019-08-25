@@ -7,14 +7,15 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
+using static Interop;
+
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// This class contains static properties/methods that are internal.
-    /// It also has types that make sense only for ActiveX hosting classes.
-    /// In other words, this is a helper class for the ActiveX hosting classes.
+    ///  This class contains static properties/methods that are internal.
+    ///  It also has types that make sense only for ActiveX hosting classes.
+    ///  In other words, this is a helper class for the ActiveX hosting classes.
     /// </summary>
     internal static class WebBrowserHelper
     {
@@ -27,7 +28,7 @@ namespace System.Windows.Forms
             InPlaceActive = 4,  // Server in-place active [visible]
             UIActive = 8        // Used only by WebBrowserSiteBase
         }
-        //
+
         // Enumeration of the different Edit modes
         internal enum AXEditMode
         {
@@ -35,7 +36,7 @@ namespace System.Windows.Forms
             Object = 1,     // object provided an edit verb and we invoked it
             Host = 2        // we invoked our own edit verb
         };
-        //
+
         // Enumeration of Selection Styles
         internal enum SelectionStyle
         {
@@ -48,7 +49,6 @@ namespace System.Windows.Forms
         // Static members:
         //
 
-        //
         // BitVector32 masks for various internal state flags.
         internal static readonly int sinkAttached = BitVector32.CreateMask();
         internal static readonly int manualUpdate = BitVector32.CreateMask(sinkAttached);
@@ -59,18 +59,18 @@ namespace System.Windows.Forms
         internal static readonly int processingKeyUp = BitVector32.CreateMask(inTransition);
         internal static readonly int isMaskEdit = BitVector32.CreateMask(processingKeyUp);
         internal static readonly int recomputeContainingControl = BitVector32.CreateMask(isMaskEdit);
-        //
+
         // Gets the LOGPIXELSX of the screen DC.
         private static int logPixelsX = -1;
         private static int logPixelsY = -1;
         private const int HMperInch = 2540;
-        //
+
         // Special guids
         private static Guid ifont_Guid = typeof(UnsafeNativeMethods.IFont).GUID;
         internal static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         internal static Guid comctlImageCombo_Clsid = new Guid("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
         internal static Guid maskEdit_Clsid = new Guid("{c932ba85-4374-101b-a56c-00aa003668dc}");
-        //
+
         // Window message to check if we have already sub-classed
         internal static readonly int REGMSG_MSG = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_subclassCheck");
         internal const int REGMSG_RETVAL = 123;
@@ -89,7 +89,6 @@ namespace System.Windows.Forms
             return (logP * hm + HMperInch / 2) / HMperInch;
         }
 
-        //
         // We cache LOGPIXELSX for optimization
         internal static int LogPixelsX
         {
@@ -97,22 +96,13 @@ namespace System.Windows.Forms
             {
                 if (logPixelsX == -1)
                 {
-                    IntPtr hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-                    if (hDC != IntPtr.Zero)
-                    {
-                        logPixelsX = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSX);
-                        UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
-                    }
+                    using ScreenDC dc = ScreenDC.Create();
+                    logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
                 }
                 return logPixelsX;
             }
         }
-        internal static void ResetLogPixelsX()
-        {
-            logPixelsX = -1;
-        }
 
-        //
         // We cache LOGPIXELSY for optimization
         internal static int LogPixelsY
         {
@@ -120,22 +110,13 @@ namespace System.Windows.Forms
             {
                 if (logPixelsY == -1)
                 {
-                    IntPtr hDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
-                    if (hDC != IntPtr.Zero)
-                    {
-                        logPixelsY = UnsafeNativeMethods.GetDeviceCaps(new HandleRef(null, hDC), NativeMethods.LOGPIXELSY);
-                        UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, hDC));
-                    }
+                    using ScreenDC dc = ScreenDC.Create();
+                    logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                 }
                 return logPixelsY;
             }
         }
-        internal static void ResetLogPixelsY()
-        {
-            logPixelsY = -1;
-        }
 
-        //
         // Gets the selection service from the control's site
         internal static ISelectionService GetSelectionService(Control ctl)
         {
@@ -152,7 +133,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        //
         // Returns a big COMRECT
         internal static NativeMethods.COMRECT GetClipRect()
         {

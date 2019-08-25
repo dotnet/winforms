@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// The DataGrid exposes hooks to request editing commands via this interface.
+    ///  The DataGrid exposes hooks to request editing commands via this interface.
     /// </summary>
     public interface IDataGridEditingService
     {

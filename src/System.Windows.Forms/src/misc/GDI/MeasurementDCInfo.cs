@@ -8,21 +8,23 @@
 #define GDI_FONT_CACHE_TRACK
 #endif
 
+using static Interop;
+
 namespace System.Windows.Forms.Internal
 {
     internal static class MeasurementDCInfo
     {
-        /// MeasurementDCInfo
-        /// This class optimizes the MeasurmentGraphics as it caches in the last used font and TextMargins used.
-        /// This prevents unnecessary p/invoke calls to GetCurrentObject, etc
-        /// It has been found to give close to 2x performance when drawing lots of text in rapid succession
-        /// DataGridView with lots of text, etc.
-        /// To turn it on for your DLL, use the OPTIMIZED_MEASUREMENTDC compiler switch and add this class to the sources.
+        ///  MeasurementDCInfo
+        ///  This class optimizes the MeasurmentGraphics as it caches in the last used font and TextMargins used.
+        ///  This prevents unnecessary p/invoke calls to GetCurrentObject, etc
+        ///  It has been found to give close to 2x performance when drawing lots of text in rapid succession
+        ///  DataGridView with lots of text, etc.
+        ///  To turn it on for your DLL, use the OPTIMIZED_MEASUREMENTDC compiler switch and add this class to the sources.
 
         [ThreadStatic]
         private static CachedInfo cachedMeasurementDCInfo;
 
-        /// IsMeasurementDC
+        ///  IsMeasurementDC
         ///  Returns whether the IDeviceContext passed in is our static MeasurementDC.
         ///  If it is, we know a bit more information about it.
         internal static bool IsMeasurementDC(DeviceContext dc)
@@ -31,7 +33,7 @@ namespace System.Windows.Forms.Internal
             return sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == dc.Hdc;
         }
 
-        /// LastUsedFont -
+        ///  LastUsedFont -
         ///  Returns the font we think was last selected into the MeasurementGraphics.
         ///
         internal static WindowsFont LastUsedFont
@@ -50,10 +52,10 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        /// GetTextMargins - checks to see if we have cached information about the current font,
-        /// returns info about it.
-        /// An MRU of Font margins was considered, but seems like overhead.
-        internal static IntNativeMethods.DRAWTEXTPARAMS GetTextMargins(WindowsGraphics wg, WindowsFont font)
+        ///  GetTextMargins - checks to see if we have cached information about the current font,
+        ///  returns info about it.
+        ///  An MRU of Font margins was considered, but seems like overhead.
+        internal static User32.DRAWTEXTPARAMS GetTextMargins(WindowsGraphics wg, WindowsFont font)
         {
             // PERF: operate on a local reference rather than party directly on the thread static one.
             CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
@@ -61,20 +63,27 @@ namespace System.Windows.Forms.Internal
             if (currentCachedInfo != null && currentCachedInfo.LeftTextMargin > 0 && currentCachedInfo.RightTextMargin > 0 && font == currentCachedInfo.LastUsedFont)
             {
                 // we have to return clones as DrawTextEx will modify this struct
-                return new IntNativeMethods.DRAWTEXTPARAMS(currentCachedInfo.LeftTextMargin, currentCachedInfo.RightTextMargin);
+                return new User32.DRAWTEXTPARAMS
+                {
+                    iLeftMargin = currentCachedInfo.LeftTextMargin,
+                    iRightMargin = currentCachedInfo.RightTextMargin
+                };
             }
             else if (currentCachedInfo == null)
             {
                 currentCachedInfo = new CachedInfo();
                 cachedMeasurementDCInfo = currentCachedInfo;
             }
-            IntNativeMethods.DRAWTEXTPARAMS drawTextParams = wg.GetTextMargins(font);
+            User32.DRAWTEXTPARAMS drawTextParams = wg.GetTextMargins(font);
             currentCachedInfo.LeftTextMargin = drawTextParams.iLeftMargin;
             currentCachedInfo.RightTextMargin = drawTextParams.iRightMargin;
 
             // returning a copy here to be consistent with the return value from the cache.
-            return new IntNativeMethods.DRAWTEXTPARAMS(currentCachedInfo.LeftTextMargin, currentCachedInfo.RightTextMargin);
-
+            return new User32.DRAWTEXTPARAMS
+            {
+                iLeftMargin = currentCachedInfo.LeftTextMargin,
+                iRightMargin = currentCachedInfo.RightTextMargin
+            };
         }
 
         internal static void ResetIfIsMeasurementDC(IntPtr hdc)
@@ -89,7 +98,7 @@ namespace System.Windows.Forms.Internal
                 }
             }
         }
-        /// Reset
+        ///  Reset
         ///  clear the current cached information about the measurement dc.
         internal static void Reset()
         {
@@ -99,7 +108,7 @@ namespace System.Windows.Forms.Internal
                 currentCachedInfo.UpdateFont(null);
             }
         }
-        /// CachedInfo
+        ///  CachedInfo
         ///  store all the thread statics together so we dont have to fetch individual fields out of TLS
         private sealed class CachedInfo
         {

@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-/// this is the UBER container for ToolStripPanels.
+///  this is the UBER container for ToolStripPanels.
 namespace System.Windows.Forms
 {
     [ComVisible(true)]

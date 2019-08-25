@@ -495,7 +495,6 @@ namespace System.Windows.Forms.Tests
             var treeView = new TreeView();
             var treeNode = new TreeNode();
             treeView.Nodes.Add(treeNode);
-            Console.WriteLine("0");
             IntPtr handle = treeNode.Handle;
             Assert.NotEqual(IntPtr.Zero, handle);
             Assert.Equal(handle, treeNode.Handle);

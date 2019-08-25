@@ -20,7 +20,6 @@ using System.Xml;
 
 namespace System.Resources
 {
-    [Serializable]
     public sealed class ResXDataNode : ISerializable
     {
         private static readonly char[] SpecialChars = new char[] { ' ', '\r', '\n' };
@@ -742,25 +741,7 @@ namespace System.Resources
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
-            DataNodeInfo nodeInfo = GetDataNodeInfo();
-            si.AddValue("Name", nodeInfo.Name, typeof(string));
-            si.AddValue("Comment", nodeInfo.Comment, typeof(string));
-            si.AddValue("TypeName", nodeInfo.TypeName, typeof(string));
-            si.AddValue("MimeType", nodeInfo.MimeType, typeof(string));
-            si.AddValue("ValueData", nodeInfo.ValueData, typeof(string));
-        }
-
-        private ResXDataNode(SerializationInfo info, StreamingContext context)
-        {
-            nodeInfo = new DataNodeInfo
-            {
-                Name = (string)info.GetValue("Name", typeof(string)),
-                Comment = (string)info.GetValue("Comment", typeof(string)),
-                TypeName = (string)info.GetValue("TypeName", typeof(string)),
-                MimeType = (string)info.GetValue("MimeType", typeof(string)),
-                ValueData = (string)info.GetValue("ValueData", typeof(string))
-            };
-            InitializeDataNode(null);
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -1060,7 +1041,7 @@ namespace System.Resources
 
             if (result != null)
             {
-                // Only cache types from .Net framework  because they don't need to update.
+                // Only cache types from the shared framework  because they don't need to update.
                 // For simplicity, don't cache custom types
                 if (IsDotNetAssembly(result.Assembly.Location))
                 {
@@ -1072,7 +1053,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        /// This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
+        ///  This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
         private bool IsDotNetAssembly(string assemblyPath)
         {

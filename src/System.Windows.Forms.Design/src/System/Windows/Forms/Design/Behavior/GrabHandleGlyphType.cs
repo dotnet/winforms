@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// Describes the type of GrabHandle the GrabHandleGlyph represents.
+    ///  Describes the type of GrabHandle the GrabHandleGlyph represents.
     /// </summary>
     internal enum GrabHandleGlyphType
     {

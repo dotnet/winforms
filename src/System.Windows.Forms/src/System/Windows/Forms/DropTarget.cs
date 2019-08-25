@@ -4,11 +4,13 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class DropTarget : UnsafeNativeMethods.IOleDropTarget
+    internal class DropTarget : Ole32.IDropTarget
     {
         private IDataObject lastDataObject = null;
         private DragDropEffects lastEffect = DragDropEffects.None;
@@ -27,7 +29,7 @@ namespace System.Windows.Forms
         }
 #endif
 
-        private DragEventArgs CreateDragEventArgs(object pDataObj, int grfKeyState, NativeMethods.POINTL pt, int pdwEffect)
+        private DragEventArgs CreateDragEventArgs(object pDataObj, uint grfKeyState, Point pt, uint pdwEffect)
         {
             IDataObject data = null;
 
@@ -51,82 +53,69 @@ namespace System.Windows.Forms
                 }
             }
 
-            DragEventArgs drgevent = new DragEventArgs(data, grfKeyState, pt.x, pt.y, (DragDropEffects)pdwEffect, lastEffect);
+            DragEventArgs drgevent = new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, lastEffect);
             lastDataObject = data;
             return drgevent;
         }
 
-        int UnsafeNativeMethods.IOleDropTarget.OleDragEnter(object pDataObj, int grfKeyState,
-                                                      UnsafeNativeMethods.POINTSTRUCT pt,
-                                                      ref int pdwEffect)
+        HRESULT Ole32.IDropTarget.DragEnter(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter recieved");
-            NativeMethods.POINTL ptl = new NativeMethods.POINTL
-            {
-                x = pt.x,
-                y = pt.y
-            };
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
             Debug.Assert(pDataObj != null, "OleDragEnter didn't give us a valid data object.");
-            DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, ptl, pdwEffect);
+            DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 
             if (drgevent != null)
             {
                 owner.OnDragEnter(drgevent);
-                pdwEffect = (int)drgevent.Effect;
+                pdwEffect = (uint)drgevent.Effect;
                 lastEffect = drgevent.Effect;
             }
             else
             {
-                pdwEffect = (int)DragDropEffects.None;
+                pdwEffect = (uint)DragDropEffects.None;
             }
-            return NativeMethods.S_OK;
+
+            return HRESULT.S_OK;
         }
-        int UnsafeNativeMethods.IOleDropTarget.OleDragOver(int grfKeyState, UnsafeNativeMethods.POINTSTRUCT pt, ref int pdwEffect)
+
+        HRESULT Ole32.IDropTarget.DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver recieved");
-            NativeMethods.POINTL ptl = new NativeMethods.POINTL
-            {
-                x = pt.x,
-                y = pt.y
-            };
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
-            DragEventArgs drgevent = CreateDragEventArgs(null, grfKeyState, ptl, pdwEffect);
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
+            DragEventArgs drgevent = CreateDragEventArgs(null, grfKeyState, pt, pdwEffect);
             owner.OnDragOver(drgevent);
-            pdwEffect = (int)drgevent.Effect;
+            pdwEffect = (uint)drgevent.Effect;
             lastEffect = drgevent.Effect;
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
-        int UnsafeNativeMethods.IOleDropTarget.OleDragLeave()
+
+        HRESULT Ole32.IDropTarget.DragLeave()
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave recieved");
             owner.OnDragLeave(EventArgs.Empty);
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
-        int UnsafeNativeMethods.IOleDropTarget.OleDrop(object pDataObj, int grfKeyState, UnsafeNativeMethods.POINTSTRUCT pt, ref int pdwEffect)
+
+        HRESULT Ole32.IDropTarget.Drop(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop recieved");
-            NativeMethods.POINTL ptl = new NativeMethods.POINTL
-            {
-                x = pt.x,
-                y = pt.y
-            };
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
-            DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, ptl, pdwEffect);
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
+            DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 
             if (drgevent != null)
             {
                 owner.OnDragDrop(drgevent);
-                pdwEffect = (int)drgevent.Effect;
+                pdwEffect = (uint)drgevent.Effect;
             }
             else
             {
-                pdwEffect = (int)DragDropEffects.None;
+                pdwEffect = (uint)DragDropEffects.None;
             }
 
             lastEffect = DragDropEffects.None;
             lastDataObject = null;
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
     }
 }

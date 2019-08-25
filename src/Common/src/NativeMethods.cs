@@ -15,15 +15,6 @@ namespace System.Windows.Forms
         public static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
         public const int BITMAPINFO_MAX_COLORSIZE = 256;
-        public const int BI_BITFIELDS = 3;
-
-        public enum RegionFlags
-        {
-            ERROR = 0,
-            NULLREGION = 1,
-            SIMPLEREGION = 2,
-            COMPLEXREGION = 3,
-        }
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
@@ -31,65 +22,7 @@ namespace System.Windows.Forms
             DESKTOP_SWITCHDESKTOP = 0x0100,
             ERROR_ACCESS_DENIED = 0x0005;
 
-        public const int
-        /* FONT WEIGHT (BOLD) VALUES */
-        FW_DONTCARE = 0,
-        FW_NORMAL = 400,
-        FW_BOLD = 700,
-        // some others...
-
-        /* FONT CHARACTER SET */
-        ANSI_CHARSET = 0,
-        DEFAULT_CHARSET = 1,
-        // plus others ....
-
-        /* Font OutPrecision */
-        OUT_DEFAULT_PRECIS = 0,
-        OUT_TT_PRECIS = 4,
-        OUT_TT_ONLY_PRECIS = 7,
-
-        /* polygon fill mode */
-        ALTERNATE = 1,
-        WINDING = 2,
-
-        // text align
-        TA_DEFAULT = 0,
-
-        // brush
-        BS_SOLID = 0,
-        HOLLOW_BRUSH = 5,
-
-        // Binary raster operations.
-        R2_BLACK = 1,  /*  0       */
-        R2_NOTMERGEPEN = 2,  /* DPon     */
-        R2_MASKNOTPEN = 3,  /* DPna     */
-        R2_NOTCOPYPEN = 4,  /* PN       */
-        R2_MASKPENNOT = 5,  /* PDna     */
-        R2_NOT = 6,  /* Dn       */
-        R2_XORPEN = 7,  /* DPx      */
-        R2_NOTMASKPEN = 8,  /* DPan     */
-        R2_MASKPEN = 9,  /* DPa      */
-        R2_NOTXORPEN = 10, /* DPxn     */
-        R2_NOP = 11, /* D        */
-        R2_MERGENOTPEN = 12, /* DPno     */
-        R2_COPYPEN = 13, /* P        */
-        R2_MERGEPENNOT = 14, /* PDno     */
-        R2_MERGEPEN = 15, /* DPo      */
-        R2_WHITE = 16 /*  1       */;
-
-        public const int
-        /* SetGraphicsMode(hdc, iMode ) */
-        GM_COMPATIBLE = 1,
-        GM_ADVANCED = 2,
-        MWT_IDENTITY = 1;
-
-        public const int
-        PAGE_READONLY = 0x02,
-        PAGE_READWRITE = 0x04,
-        PAGE_WRITECOPY = 0x08,
-        FILE_MAP_COPY = 0x0001,
-        FILE_MAP_WRITE = 0x0002,
-        FILE_MAP_READ = 0x0004;
+        public const int BS_SOLID = 0;
 
         public const int SHGFI_ICON = 0x000000100,   // get icon
         SHGFI_DISPLAYNAME = 0x000000200,     // get display name
@@ -138,7 +71,6 @@ namespace System.Windows.Forms
         public const int BCM_GETIDEALSIZE = 0x1601,
         BI_RGB = 0,
         BS_PATTERN = 3,
-        BITSPIXEL = 12,
         BDR_RAISEDOUTER = 0x0001,
         BDR_SUNKENOUTER = 0x0002,
         BDR_RAISEDINNER = 0x0004,
@@ -329,10 +261,7 @@ namespace System.Windows.Forms
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DISP_E_EXCEPTION = unchecked((int)0x80020009),
-        DEFAULT_GUI_FONT = 17,
         DIB_RGB_COLORS = 0,
-        DRAGDROP_E_NOTREGISTERED = unchecked((int)0x80040100),
-        DRAGDROP_E_ALREADYREGISTERED = unchecked((int)0x80040101),
         DUPLICATE_SAME_ACCESS = 0x00000002,
         DFC_CAPTION = 1,
         DFC_MENU = 2,
@@ -565,19 +494,6 @@ namespace System.Windows.Forms
         INPLACE_E_NOTOOLSPACE = unchecked((int)0x800401A1),
         ICON_SMALL = 0,
         ICON_BIG = 1,
-        IDC_ARROW = 32512,
-        IDC_IBEAM = 32513,
-        IDC_WAIT = 32514,
-        IDC_CROSS = 32515,
-        IDC_SIZEALL = 32646,
-        IDC_SIZENWSE = 32642,
-        IDC_SIZENESW = 32643,
-        IDC_SIZEWE = 32644,
-        IDC_SIZENS = 32645,
-        IDC_UPARROW = 32516,
-        IDC_NO = 32648,
-        IDC_APPSTARTING = 32650,
-        IDC_HELP = 32651,
         IMAGE_ICON = 1,
         IMAGE_CURSOR = 2,
         ICC_LISTVIEW_CLASSES = 0x00000001,
@@ -618,31 +534,13 @@ namespace System.Windows.Forms
         public const int CSC_NAVIGATEFORWARD = 0x00000001,
         CSC_NAVIGATEBACK = 0x00000002;
 
-        public const int STG_E_INVALIDFUNCTION = unchecked((int)0x80030001);
-        public const int STG_E_FILENOTFOUND = unchecked((int)0x80030002);
-        public const int STG_E_PATHNOTFOUND = unchecked((int)0x80030003);
-        public const int STG_E_TOOMANYOPENFILES = unchecked((int)0x80030004);
-        public const int STG_E_ACCESSDENIED = unchecked((int)0x80030005);
-        public const int STG_E_INVALIDHANDLE = unchecked((int)0x80030006);
-        public const int STG_E_INSUFFICIENTMEMORY = unchecked((int)0x80030008);
-        public const int STG_E_INVALIDPOINTER = unchecked((int)0x80030009);
-        public const int STG_E_NOMOREFILES = unchecked((int)0x80030012);
-        public const int STG_E_DISKISWRITEPROTECTED = unchecked((int)0x80030013);
-        public const int STG_E_SEEKERROR = unchecked((int)0x80030019);
-        public const int STG_E_WRITEFAULT = unchecked((int)0x8003001D);
-        public const int STG_E_READFAULT = unchecked((int)0x8003001E);
-        public const int STG_E_SHAREVIOLATION = unchecked((int)0x80030020);
-        public const int STG_E_LOCKVIOLATION = unchecked((int)0x80030021);
-
         public const int INPUT_KEYBOARD = 1;
 
         public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
         public const int KEYEVENTF_KEYUP = 0x0002;
         public const int KEYEVENTF_UNICODE = 0x0004;
 
-        public const int LOGPIXELSX = 88,
-        LOGPIXELSY = 90,
-        LB_ERR = (-1),
+        public const int LB_ERR = (-1),
         LB_ERRSPACE = (-2),
         LBN_SELCHANGE = 1,
         LBN_DBLCLK = 2,
@@ -1019,8 +917,7 @@ namespace System.Windows.Forms
         NM_RCLICK = ((0 - 0) - 5),
         NM_RDBLCLK = ((0 - 0) - 6),
         NM_CUSTOMDRAW = ((0 - 0) - 12),
-        NM_RELEASEDCAPTURE = ((0 - 0) - 16),
-        NONANTIALIASED_QUALITY = 3;
+        NM_RELEASEDCAPTURE = ((0 - 0) - 16);
 
         public const int OFN_READONLY = 0x00000001,
         OFN_OVERWRITEPROMPT = 0x00000002,
@@ -1052,18 +949,6 @@ namespace System.Windows.Forms
         OLEMISC_ACTIVATEWHENVISIBLE = 0x0000100,
         OLEMISC_ACTSLIKEBUTTON = 0x00001000,
         OLEMISC_SETCLIENTSITEFIRST = 0x00020000,
-        OBJ_PEN = 1,
-        OBJ_BRUSH = 2,
-        OBJ_DC = 3,
-        OBJ_METADC = 4,
-        OBJ_PAL = 5,
-        OBJ_FONT = 6,
-        OBJ_BITMAP = 7,
-        OBJ_REGION = 8,
-        OBJ_METAFILE = 9,
-        OBJ_MEMDC = 10,
-        OBJ_EXTPEN = 11,
-        OBJ_ENHMETADC = 12,
         ODS_CHECKED = 0x0008,
         ODS_COMBOBOXEDIT = 0x1000,
         ODS_DEFAULT = 0x0020,
@@ -1130,7 +1015,6 @@ namespace System.Windows.Forms
         PSD_NONETWORKBUTTON = 0x00200000,
         PS_SOLID = 0,
         PS_DOT = 2,
-        PLANES = 14,
         PRF_CHECKVISIBLE = 0x00000001,
         PRF_NONCLIENT = 0x00000002,
         PRF_CLIENT = 0x00000004,
@@ -1180,9 +1064,6 @@ namespace System.Windows.Forms
 
         public const int RPC_E_CHANGED_MODE = unchecked((int)0x80010106),
             RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D),
-            RGN_AND = 1,
-            RGN_XOR = 3,
-            RGN_DIFF = 4,
             RDW_INVALIDATE = 0x0001,
             RDW_ERASE = 0x0004,
             RDW_ALLCHILDREN = 0x0080,
@@ -1193,15 +1074,6 @@ namespace System.Windows.Forms
             RB_INSERTBANDW = (0x0400 + 10);
 
         public const int stc4 = 0x0443,
-        SHGFP_TYPE_CURRENT = 0,
-        STGM_READ = 0x00000000,
-        STGM_WRITE = 0x00000001,
-        STGM_READWRITE = 0x00000002,
-        STGM_SHARE_EXCLUSIVE = 0x00000010,
-        STGM_CREATE = 0x00001000,
-        STGM_TRANSACTED = 0x00010000,
-        STGM_CONVERT = 0x00020000,
-        STGM_DELETEONRELEASE = 0x04000000,
         STARTF_USESHOWWINDOW = 0x00000001,
         SB_HORZ = 0,
         SB_VERT = 1,
@@ -1246,80 +1118,7 @@ namespace System.Windows.Forms
         SWP_SHOWWINDOW = 0x0040,
         SWP_HIDEWINDOW = 0x0080,
         SWP_DRAWFRAME = 0x0020,
-        SWP_NOOWNERZORDER = 0x0200,
-        SM_CXSCREEN = 0,
-        SM_CYSCREEN = 1,
-        SM_CXVSCROLL = 2,
-        SM_CYHSCROLL = 3,
-        SM_CYCAPTION = 4,
-        SM_CXBORDER = 5,
-        SM_CYBORDER = 6,
-        SM_CYVTHUMB = 9,
-        SM_CXHTHUMB = 10,
-        SM_CXICON = 11,
-        SM_CYICON = 12,
-        SM_CXCURSOR = 13,
-        SM_CYCURSOR = 14,
-        SM_CYMENU = 15,
-        SM_CYKANJIWINDOW = 18,
-        SM_MOUSEPRESENT = 19,
-        SM_CYVSCROLL = 20,
-        SM_CXHSCROLL = 21,
-        SM_DEBUG = 22,
-        SM_SWAPBUTTON = 23,
-        SM_CXMIN = 28,
-        SM_CYMIN = 29,
-        SM_CXSIZE = 30,
-        SM_CYSIZE = 31,
-        SM_CXFRAME = 32,
-        SM_CYFRAME = 33,
-        SM_CXMINTRACK = 34,
-        SM_CYMINTRACK = 35,
-        SM_CXDOUBLECLK = 36,
-        SM_CYDOUBLECLK = 37,
-        SM_CXICONSPACING = 38,
-        SM_CYICONSPACING = 39,
-        SM_MENUDROPALIGNMENT = 40,
-        SM_PENWINDOWS = 41,
-        SM_DBCSENABLED = 42,
-        SM_CMOUSEBUTTONS = 43,
-        SM_CXFIXEDFRAME = 7,
-        SM_CYFIXEDFRAME = 8,
-        SM_SECURE = 44,
-        SM_CXEDGE = 45,
-        SM_CYEDGE = 46,
-        SM_CXMINSPACING = 47,
-        SM_CYMINSPACING = 48,
-        SM_CXSMICON = 49,
-        SM_CYSMICON = 50,
-        SM_CYSMCAPTION = 51,
-        SM_CXSMSIZE = 52,
-        SM_CYSMSIZE = 53,
-        SM_CXMENUSIZE = 54,
-        SM_CYMENUSIZE = 55,
-        SM_ARRANGE = 56,
-        SM_CXMINIMIZED = 57,
-        SM_CYMINIMIZED = 58,
-        SM_CXMAXTRACK = 59,
-        SM_CYMAXTRACK = 60,
-        SM_CXMAXIMIZED = 61,
-        SM_CYMAXIMIZED = 62,
-        SM_NETWORK = 63,
-        SM_CLEANBOOT = 67,
-        SM_CXDRAG = 68,
-        SM_CYDRAG = 69,
-        SM_SHOWSOUNDS = 70,
-        SM_CXMENUCHECK = 71,
-        SM_CYMENUCHECK = 72,
-        SM_MIDEASTENABLED = 74,
-        SM_MOUSEWHEELPRESENT = 75,
-        SM_XVIRTUALSCREEN = 76,
-        SM_YVIRTUALSCREEN = 77,
-        SM_CXVIRTUALSCREEN = 78,
-        SM_CYVIRTUALSCREEN = 79,
-        SM_CMONITORS = 80,
-        SM_SAMEDISPLAYFORMAT = 81,
-        SM_REMOTESESSION = 0x1000;
+        SWP_NOOWNERZORDER = 0x0200;
 
         public const int HLP_FILE = 1,
         HLP_KEYWORD = 2,
@@ -1360,7 +1159,6 @@ namespace System.Windows.Forms
         SPI_ICONVERTICALSPACING = 0x0018,
         // SPI_GETICONMETRICS =        0x002D,
         SPI_GETICONTITLEWRAP = 0x0019,
-        SPI_GETICONTITLELOGFONT = 0x001F,
         SPI_GETKEYBOARDCUES = 0x100A,
         SPI_GETKEYBOARDDELAY = 0x0016,
         SPI_GETKEYBOARDPREF = 0x0044,
@@ -1385,10 +1183,6 @@ namespace System.Windows.Forms
         SPI_GETANIMATION = 0x0048,
         SPI_GETBORDER = 0x0005,
         SPI_GETCARETWIDTH = 0x2006,
-        SM_CYFOCUSBORDER = 84,
-        SM_CXFOCUSBORDER = 83,
-        SM_CYSIZEFRAME = SM_CYFRAME,
-        SM_CXSIZEFRAME = SM_CXFRAME,
         SPI_GETDRAGFULLWINDOWS = 38,
         SPI_GETNONCLIENTMETRICS = 41,
         SPI_GETWORKAREA = 48,
@@ -1410,20 +1204,7 @@ namespace System.Windows.Forms
         SBT_NOBORDERS = 0x0100,
         SBT_POPOUT = 0x0200,
         SBT_RTLREADING = 0x0400,
-        SRCCOPY = 0x00CC0020,
-        SRCAND = 0x008800C6, /* dest = source AND dest          */
-        SRCPAINT = 0x00EE0086, /* dest = source OR dest           */
-        NOTSRCCOPY = 0x00330008, /* dest = (NOT source)             */
-        STATFLAG_DEFAULT = 0x0,
-        STATFLAG_NONAME = 0x1,
-        STATFLAG_NOOPEN = 0x2,
-        STGC_DEFAULT = 0x0,
-        STGC_OVERWRITE = 0x1,
-        STGC_ONLYIFCURRENT = 0x2,
-        STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE = 0x4,
-        STREAM_SEEK_SET = 0x0,
-        STREAM_SEEK_CUR = 0x1,
-        STREAM_SEEK_END = 0x2;
+        SRCCOPY = 0x00CC0020;
 
         public const int S_OK = 0x00000000;
         public const int S_FALSE = 0x00000001;
@@ -1504,44 +1285,6 @@ namespace System.Windows.Forms
         //TTI_INFO                =1,
         TTI_WARNING = 2,
         //TTI_ERROR               =3,
-        TTF_IDISHWND = 0x0001,
-        TTF_RTLREADING = 0x0004,
-        TTF_TRACK = 0x0020,
-        TTF_CENTERTIP = 0x0002,
-        TTF_SUBCLASS = 0x0010,
-        TTF_TRANSPARENT = 0x0100,
-        TTF_ABSOLUTE = 0x0080,
-        TTDT_AUTOMATIC = 0,
-        TTDT_RESHOW = 1,
-        TTDT_AUTOPOP = 2,
-        TTDT_INITIAL = 3,
-        TTM_TRACKACTIVATE = (0x0400 + 17),
-        TTM_TRACKPOSITION = (0x0400 + 18),
-        TTM_ACTIVATE = (0x0400 + 1),
-        TTM_POP = (0x0400 + 28),
-        TTM_ADJUSTRECT = (0x400 + 31),
-        TTM_SETDELAYTIME = (0x0400 + 3),
-        TTM_SETTITLE = (Interop.WindowMessages.WM_USER + 33), // wParam = TTI_*, lParam = wchar* szTitle
-        TTM_ADDTOOL = (0x0400 + 50),
-        TTM_DELTOOL = (0x0400 + 51),
-        TTM_NEWTOOLRECT = (0x0400 + 52),
-        TTM_RELAYEVENT = (0x0400 + 7),
-        TTM_GETTIPBKCOLOR = (0x0400 + 22),
-        TTM_SETTIPBKCOLOR = (0x0400 + 19),
-        TTM_SETTIPTEXTCOLOR = (0x0400 + 20),
-        TTM_GETTIPTEXTCOLOR = (0x0400 + 23),
-        TTM_GETTOOLINFO = (0x0400 + 53),
-        TTM_SETTOOLINFO = (0x0400 + 54),
-        TTM_HITTEST = (0x0400 + 55),
-        TTM_GETTEXT = (0x0400 + 56),
-        TTM_UPDATE = (0x0400 + 29),
-        TTM_UPDATETIPTEXT = (0x0400 + 57),
-        TTM_ENUMTOOLS = (0x0400 + 58),
-        TTM_GETCURRENTTOOL = (0x0400 + 59),
-        TTM_WINDOWFROMPOINT = (0x0400 + 16),
-        TTM_GETDELAYTIME = (0x0400 + 21),
-        TTM_SETMAXTIPWIDTH = (0x0400 + 24),
-        TTM_GETBUBBLESIZE = (0x0400 + 30),
         TTN_GETDISPINFO = ((0 - 520) - 10),
         TTN_SHOW = ((0 - 520) - 1),
         TTN_POP = ((0 - 520) - 2),
@@ -2004,10 +1747,10 @@ namespace System.Windows.Forms
             internal IntPtr hinst = IntPtr.Zero;
             internal int idString = 0;
             internal IntPtr pszText;
-            internal POINT pt;
+            internal Point pt;
             internal int clrForeground = -1;
             internal int clrBackground = -1;
-            internal RECT rcMargins = RECT.FromXYWH(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
+            internal Interop.RECT rcMargins = new Interop.RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
             internal string pszFont = null;
         }
 
@@ -2032,8 +1775,8 @@ namespace System.Windows.Forms
         public class MONITORINFOEX
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFOEX>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
+            internal Interop.RECT rcMonitor = new Interop.RECT();
+            internal Interop.RECT rcWork = new Interop.RECT();
             internal int dwFlags = 0;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
             internal char[] szDevice = new char[32];
@@ -2043,8 +1786,8 @@ namespace System.Windows.Forms
         public class MONITORINFO
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFO>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
+            internal Interop.RECT rcMonitor = new Interop.RECT();
+            internal Interop.RECT rcWork = new Interop.RECT();
             internal int dwFlags = 0;
         }
 
@@ -2111,24 +1854,24 @@ namespace System.Windows.Forms
         public interface IVsPerPropertyBrowsing
         {
             /// <summary>
-            /// Hides the property at the given dispid from the properties window
-            /// implmentors should can return E_NOTIMPL to show all properties that
-            /// are otherwise browsable.
+            ///  Hides the property at the given dispid from the properties window
+            ///  implmentors should can return E_NOTIMPL to show all properties that
+            ///  are otherwise browsable.
             /// </summary>
             [PreserveSig]
             int HideProperty(int dispid, ref bool pfHide);
 
             /// <summary>
-            /// Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
-            /// Returning a non-S_OK return code or false for pfDisplay will suppress this feature
+            ///  Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
+            ///  Returning a non-S_OK return code or false for pfDisplay will suppress this feature
             /// </summary>
             [PreserveSig]
             int DisplayChildProperties(int dispid,
                                        ref bool pfDisplay);
 
             /// <summary>
-            /// Retrieves the localized name and description for a property.
-            /// returning a non-S_OK return code will display the default values
+            ///  Retrieves the localized name and description for a property.
+            ///  returning a non-S_OK return code will display the default values
             /// </summary>
             [PreserveSig]
             int GetLocalizedPropertyInfo(int dispid, int localeID,
@@ -2138,38 +1881,38 @@ namespace System.Windows.Forms
                                          string[] pbstrLocalizeDescription);
 
             /// <summary>
-            /// Determines if the given (usually current) value for a property is the default.  If it is not default,
-            /// the property will be shown as bold in the browser to indcate that it has been modified from the default.
+            ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
+            ///  the property will be shown as bold in the browser to indcate that it has been modified from the default.
             /// </summary>
             [PreserveSig]
             int HasDefaultValue(int dispid,
                                ref bool fDefault);
 
             /// <summary>
-            /// Determines if a property should be made read only.  This only applies to properties that are writeable,
+            ///  Determines if a property should be made read only.  This only applies to properties that are writeable,
             /// </summary>
             [PreserveSig]
             int IsPropertyReadOnly(int dispid,
                                    ref bool fReadOnly);
 
             /// <summary>
-            /// Returns the classname for this object. The class name is the non-bolded text
-            /// that appears in the properties window selection combo.  If this method returns
-            /// a non-S_OK return code, the default will be used. The default is the name
-            /// string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
+            ///  Returns the classname for this object. The class name is the non-bolded text
+            ///  that appears in the properties window selection combo.  If this method returns
+            ///  a non-S_OK return code, the default will be used. The default is the name
+            ///  string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
             [PreserveSig]
             int GetClassName([In, Out]ref string pbstrClassName);
 
             /// <summary>
-            /// Checks whether the given property can be reset to some default value.
-            /// If return value is non-S_OK or *pfCanReset is
+            ///  Checks whether the given property can be reset to some default value.
+            ///  If return value is non-S_OK or *pfCanReset is
             /// </summary>
             [PreserveSig]
             int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
 
             /// <summary>
-            /// If the return value is S_OK, the property's value will then be refreshed to the
-            /// new default values.
+            ///  If the return value is S_OK, the property's value will then be refreshed to the
+            ///  new default values.
             /// </summary>
             [PreserveSig]
             int ResetPropertyValue(int dispid);
@@ -2269,79 +2012,7 @@ namespace System.Windows.Forms
             public int dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class POINT
-        {
-            public int x;
-            public int y;
-
-            public POINT()
-            {
-            }
-
-            public POINT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-
-#if DEBUG
-            public override string ToString()
-            {
-                return "{x=" + x + ", y=" + y + "}";
-            }
-#endif
-        }
-
-        // use this in cases where the Native API takes a POINT not a POINT*
-        // classes marshal by ref.
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINTSTRUCT
-        {
-            public int x;
-            public int y;
-            public POINTSTRUCT(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-        }
-
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-
-            public RECT(int left, int top, int right, int bottom)
-            {
-                this.left = left;
-                this.top = top;
-                this.right = right;
-                this.bottom = bottom;
-            }
-
-            public RECT(Rectangle r)
-            {
-                left = r.Left;
-                top = r.Top;
-                right = r.Right;
-                bottom = r.Bottom;
-            }
-
-            public static implicit operator Rectangle(RECT r)
-                => Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
-
-            public static RECT FromXYWH(int x, int y, int width, int height)
-                => new RECT(x, y, x + width, y + height);
-
-            public Size Size
-                => new Size(right - left, bottom - top);
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct MARGINS
@@ -2380,7 +2051,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        [Serializable]
         public struct MSG
         {
             public IntPtr hwnd;
@@ -2388,9 +2058,7 @@ namespace System.Windows.Forms
             public IntPtr wParam;
             public IntPtr lParam;
             public int time;
-            // pt was a by-value POINT structure
-            public int pt_x;
-            public int pt_y;
+            public Point pt;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2443,34 +2111,13 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class SIZE
-        {
-            public int cx;
-            public int cy;
-
-            public SIZE()
-            {
-            }
-
-            public SIZE(int cx, int cy)
-            {
-                this.cx = cx;
-                this.cy = cy;
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public struct WINDOWPLACEMENT
         {
             public int length;
             public int flags;
             public int showCmd;
-            // ptMinPosition was a by-value POINT structure
-            public int ptMinPosition_x;
-            public int ptMinPosition_y;
-            // ptMaxPosition was a by-value POINT structure
-            public int ptMaxPosition_x;
-            public int ptMaxPosition_y;
+            public Point ptMinPosition;
+            public Point ptMaxPosition;
             // rcNormalPosition was a by-value RECT structure
             public int rcNormalPosition_left;
             public int rcNormalPosition_top;
@@ -2509,10 +2156,7 @@ namespace System.Windows.Forms
             public IntPtr hDevMode;
             public IntPtr hDevNames;
             public int Flags;
-
-            //POINT           ptPaperSize;
-            public int paperSizeX = 0;
-            public int paperSizeY = 0;
+            public Point paperSize;
 
             // RECT            rtMinMargin;
             public int minMarginLeft;
@@ -2822,13 +2466,13 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class ICONINFO
+        public struct ICONINFO
         {
-            public int fIcon = 0;
-            public int xHotspot = 0;
-            public int yHotspot = 0;
-            public IntPtr hbmMask = IntPtr.Zero;
-            public IntPtr hbmColor = IntPtr.Zero;
+            public int fIcon;
+            public int xHotspot;
+            public int yHotspot;
+            public IntPtr hbmMask;
+            public IntPtr hbmColor;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3017,7 +2661,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class CHOOSEFONT
         {
-            public int lStructSize = Marshal.SizeOf<CHOOSEFONT>();   // ndirect.DllLib.sizeOf(this);
+            public int lStructSize = Marshal.SizeOf<CHOOSEFONT>();
             public IntPtr hwndOwner;
             public IntPtr hDC;
             public IntPtr lpLogFont;
@@ -3033,34 +2677,6 @@ namespace System.Windows.Forms
             public short ___MISSING_ALIGNMENT__ = 0;
             public int nSizeMin;
             public int nSizeMax;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class BITMAPINFO
-        {
-            // bmiHeader was a by-value BITMAPINFOHEADER structure
-            public int bmiHeader_biSize = 40;  // ndirect.DllLib.sizeOf( BITMAPINFOHEADER.class );
-            public int bmiHeader_biWidth = 0;
-            public int bmiHeader_biHeight = 0;
-            public short bmiHeader_biPlanes = 0;
-            public short bmiHeader_biBitCount = 0;
-            public int bmiHeader_biCompression = 0;
-            public int bmiHeader_biSizeImage = 0;
-            public int bmiHeader_biXPelsPerMeter = 0;
-            public int bmiHeader_biYPelsPerMeter = 0;
-            public int bmiHeader_biClrUsed = 0;
-            public int bmiHeader_biClrImportant = 0;
-
-            // bmiColors was an embedded array of RGBQUAD structures
-            public byte bmiColors_rgbBlue = 0;
-            public byte bmiColors_rgbGreen = 0;
-            public byte bmiColors_rgbRed = 0;
-            public byte bmiColors_rgbReserved = 0;
-
-            private BITMAPINFO()
-            {
-                //Added to make FxCop happy: doesn't really matter since it's internal...
-            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3087,62 +2703,6 @@ namespace System.Windows.Forms
             public const int PICTYPE_METAFILE = 2;
             public const int PICTYPE_ICON = 3;
             public const int PICTYPE_ENHMETAFILE = 4;
-            public const int STATFLAG_DEFAULT = 0;
-            public const int STATFLAG_NONAME = 1;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class STATSTG
-        {
-            [MarshalAs(UnmanagedType.LPWStr)]
-            public string pwcsName = null;
-
-            public int type;
-            [MarshalAs(UnmanagedType.I8)]
-            public long cbSize;
-            [MarshalAs(UnmanagedType.I8)]
-            public long mtime = 0;
-            [MarshalAs(UnmanagedType.I8)]
-            public long ctime = 0;
-            [MarshalAs(UnmanagedType.I8)]
-            public long atime = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int grfMode = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int grfLocksSupported;
-
-            public int clsid_data1 = 0;
-            [MarshalAs(UnmanagedType.I2)]
-            public short clsid_data2 = 0;
-            [MarshalAs(UnmanagedType.I2)]
-            public short clsid_data3 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b0 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b1 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b2 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b3 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b4 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b5 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b6 = 0;
-            [MarshalAs(UnmanagedType.U1)]
-            public byte clsid_b7 = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int grfStateBits = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int reserved = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class FILETIME
-        {
-            public uint dwLowDateTime = 0;
-            public uint dwHighDateTime = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3164,22 +2724,6 @@ namespace System.Windows.Forms
                 + " " + wHour.ToString(CultureInfo.InvariantCulture) + ":" + wMinute.ToString(CultureInfo.InvariantCulture) + ":" + wSecond.ToString(CultureInfo.InvariantCulture)
                 + "]";
             }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class _POINTL
-        {
-            public int x;
-            public int y;
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagSIZE
-        {
-            public int cx = 0;
-            public int cy = 0;
-
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3229,7 +2773,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        [Serializable]
         public class MSOCRINFOSTRUCT
         {
             public int cbSize = Marshal.SizeOf<MSOCRINFOSTRUCT>();              // size of MSOCRINFO structure in bytes.
@@ -3251,17 +2794,6 @@ namespace System.Windows.Forms
             public int uOldState;
             public int uChanged;
             public IntPtr lParam;
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagPOINTF
-        {
-            [MarshalAs(UnmanagedType.R4)/*leftover(offset=0, x)*/]
-            public float x;
-
-            [MarshalAs(UnmanagedType.R4)/*leftover(offset=4, y)*/]
-            public float y;
-
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
@@ -3293,15 +2825,6 @@ namespace System.Windows.Forms
             public IntPtr hwndFrom;
             public IntPtr idFrom; //This is declared as UINT_PTR in winuser.h
             public int code;
-        }
-
-        [ComVisible(true)]
-        [Guid("626FC520-A41E-11CF-A731-00A0C9082637")]
-        [InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLDocument
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object GetScript();
         }
 
         [ComImport]
@@ -3354,13 +2877,6 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.U4)]
                 int lcid,
                 out string categoryName);
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagSIZEL
-        {
-            public int cx;
-            public int cy;
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
@@ -3823,32 +3339,6 @@ namespace System.Windows.Forms
             public const int msocWindowDlgOwner = 3;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TOOLINFO_T
-        {
-            public int cbSize = Marshal.SizeOf<TOOLINFO_T>();
-            public int uFlags;
-            public IntPtr hwnd;
-            public IntPtr uId;
-            public RECT rect;
-            public IntPtr hinst = IntPtr.Zero;
-            public string lpszText;
-            public IntPtr lParam = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TOOLINFO_TOOLTIP
-        {
-            public int cbSize = Marshal.SizeOf<TOOLINFO_TOOLTIP>();
-            public int uFlags;
-            public IntPtr hwnd;
-            public IntPtr uId;
-            public RECT rect;
-            public IntPtr hinst = IntPtr.Zero;
-            public IntPtr lpszText;
-            public IntPtr lParam = IntPtr.Zero;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public sealed class tagDVTARGETDEVICE
         {
@@ -3904,11 +3394,7 @@ namespace System.Windows.Forms
             public int action;
             public TV_ITEM itemOld;
             public TV_ITEM itemNew;
-            public int ptDrag_X; // This should be declared as POINT
-            public int ptDrag_Y; // we use unsafe blocks to manipulate
-                                 // NMTREEVIEW quickly, and POINT is declared
-                                 // as a class.  Too much churn to change POINT
-                                 // now.
+            public Point ptDrag;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -3916,13 +3402,6 @@ namespace System.Windows.Forms
         {
             public NMHDR hdr;
             public TV_ITEM item;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class POINTL
-        {
-            public int x;
-            public int y;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -4082,7 +3561,7 @@ namespace System.Windows.Forms
             public int itemState = 0;
             public IntPtr hwndItem = IntPtr.Zero;
             public IntPtr hDC = IntPtr.Zero;
-            public RECT rcItem;
+            public Interop.RECT rcItem;
             public IntPtr itemData = IntPtr.Zero;
         }
 
@@ -4105,7 +3584,7 @@ namespace System.Windows.Forms
             public int iCtrlId = 0;
             public IntPtr hItemHandle = IntPtr.Zero;
             public IntPtr dwContextId = IntPtr.Zero;
-            public POINT MousePos = null;
+            public Point MousePos;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4119,11 +3598,11 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class MINMAXINFO
         {
-            public POINT ptReserved = null;
-            public POINT ptMaxSize = null;
-            public POINT ptMaxPosition = null;
-            public POINT ptMinTrackSize = null;
-            public POINT ptMaxTrackSize = null;
+            public Point ptReserved;
+            public Point ptMaxSize;
+            public Point ptMaxPosition;
+            public Point ptMinTrackSize;
+            public Point ptMaxTrackSize;
         }
 
         [ComImport]
@@ -4258,7 +3737,7 @@ namespace System.Windows.Forms
             public NMHDR nmcd;
             public int dwDrawStage;
             public IntPtr hdc;
-            public RECT rc;
+            public Interop.RECT rc;
             public IntPtr dwItemSpec;
             public int uItemState;
             public IntPtr lItemlParam;
@@ -4321,7 +3800,7 @@ namespace System.Windows.Forms
             public int iPartId;
             public int iStateId;
             // Group Custom Draw
-            public RECT rcText;
+            public Interop.RECT rcText;
             public uint uAlign;
         }
 
@@ -4385,8 +3864,7 @@ namespace System.Windows.Forms
             public int flags;
             public string psz;
             public IntPtr lParam;
-            public int ptX; // was POINT pt
-            public int ptY;
+            public Point pt;
             public int vkDirection;
         }
 
@@ -4498,9 +3976,9 @@ namespace System.Windows.Forms
             public uint cbSize = (uint)Marshal.SizeOf<LVTILEVIEWINFO>();
             public int dwMask;
             public int dwFlags;
-            public SIZE sizeTile;
+            public Size sizeTile;
             public int cLines;
-            public RECT rcLabelMargin;
+            public Interop.RECT rcLabelMargin;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -4573,11 +4051,10 @@ namespace System.Windows.Forms
             public IntPtr pItem = IntPtr.Zero;    // HDITEM*
         }
 
+        [StructLayout(LayoutKind.Sequential)]
         public class MOUSEHOOKSTRUCT
         {
-            // pt was a by-value POINT structure
-            public int pt_x = 0;
-            public int pt_y = 0;
+            public Point pt;
             public IntPtr hWnd = IntPtr.Zero;
             public int wHitTestCode = 0;
             public int dwExtraInfo = 0;
@@ -4635,13 +4112,6 @@ namespace System.Windows.Forms
         }
 
         #endregion
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class CHARRANGE
-        {
-            public int cpMin;
-            public int cpMax;
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct CHARFORMATW
@@ -4713,7 +4183,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class TEXTRANGE
         {
-            public CHARRANGE chrg;
+            public Interop.Richedit.CHARRANGE chrg;
             public IntPtr lpstrText; /* allocated by caller, zero terminated by RichEdit */
         }
 
@@ -4728,7 +4198,7 @@ namespace System.Windows.Forms
         public class SELCHANGE
         {
             public NMHDR nmhdr;
-            public CHARRANGE chrg = null;
+            public Interop.Richedit.CHARRANGE chrg;
             public int seltyp = 0;
         }
 
@@ -4752,7 +4222,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class FINDTEXT
         {
-            public CHARRANGE chrg;
+            public Interop.Richedit.CHARRANGE chrg;
             public string lpstrText;
         }
 
@@ -4763,7 +4233,7 @@ namespace System.Windows.Forms
             public int msg = 0;
             public IntPtr wParam = IntPtr.Zero;
             public IntPtr lParam = IntPtr.Zero;
-            public CHARRANGE charrange = null;
+            public Interop.Richedit.CHARRANGE charrange;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4781,7 +4251,7 @@ namespace System.Windows.Forms
             public int iType;
             public int nCount;
             public int nRgnSize;
-            // public NativeMethods.RECT rcBound; // Note that we don't define this field as part of the marshaling
+            // public Interop.RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -4867,7 +4337,7 @@ namespace System.Windows.Forms
             OLECMDF_INVISIBLE = 0x00000010,
             OLECMDF_DEFHIDEONCTXTMENU = 0x00000020
         }
-#pragma warning enable CA1712
+#pragma warning restore CA1712
 
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES
@@ -4882,7 +4352,7 @@ namespace System.Windows.Forms
         public class REQRESIZE
         {
             public NMHDR nmhdr;
-            public RECT rc;
+            public Interop.RECT rc;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -4892,7 +4362,7 @@ namespace System.Windows.Forms
             public int msg;
             public IntPtr wParam;
             public IntPtr lParam;
-            public CHARRANGE chrg;
+            public Interop.Richedit.CHARRANGE chrg;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -5712,16 +5182,11 @@ namespace System.Windows.Forms
         internal const int UIA_SemanticZoomControlTypeId = 50039;
         internal const int UIA_AppBarControlTypeId = 50040;
 
-        // If this value is used, %windows%\system32 is searched for the DLL
-        // and its dependencies. Directories in the standard search path are not searched.
-        // Windows 7: this value requires KB2533623 to be installed.
-        internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Interop.RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] ref RECT rect, int cPoints);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] POINT pt, int cPoints);
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point pt, uint cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr WindowFromPoint(int x, int y);
@@ -5741,23 +5206,14 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
-        public static extern bool DeleteObject(IntPtr hObject);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
-
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
-        public static extern IntPtr CreateRectRgn(int x1, int y1, int x2, int y2);
+        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        public static extern bool GetUpdateRect(IntPtr hwnd, ref Interop.RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCursor();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos([In, Out] POINT pt);
+        public static extern bool GetCursorPos(out Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);

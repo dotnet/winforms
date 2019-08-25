@@ -14,7 +14,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
     public static class TestHelpers
     {
         /// <summary>
-        /// Gets the current config
+        ///  Gets the current config
         /// </summary>
         private static string Config
         {
@@ -29,8 +29,8 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Get the output exe path for a specified project.
-        /// Throws an exception if the path does not exist
+        ///  Get the output exe path for a specified project.
+        ///  Throws an exception if the path does not exist
         /// </summary>
         /// <param name="projectName">The name of the project</param>
         /// <returns>The exe path</returns>
@@ -49,10 +49,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Start a process with the specified path.
-        /// Also searches for a local .dotnet folder and adds it to the path.
-        /// If a local folder is not found, searches for a machine-wide install that matches
-        /// the version specified in the global.json.
+        ///  Start a process with the specified path.
+        ///  Also searches for a local .dotnet folder and adds it to the path.
+        ///  If a local folder is not found, searches for a machine-wide install that matches
+        ///  the version specified in the global.json.
         /// </summary>
         /// <param name="path">The path to the file to execute</param>
         /// <param name="setCwd">Set the current working directory to the process path</param>
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Get the path where dotnet is installed
+        ///  Get the path where dotnet is installed
         /// </summary>
         /// <returns>The full path of the folder containing the dotnet.exe</returns>
         private static string GetDotNetPath()
@@ -113,16 +113,16 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Get the path of the globally installed dotnet that matches the version specified in the global.json
+        ///  Get the path of the globally installed dotnet that matches the version specified in the global.json
         ///
-        /// The file looks something like this:
+        ///  The file looks something like this:
         ///
-        /// {
+        ///  {
         ///  "tools": {
         ///  "dotnet": "3.0.100-preview5-011568"
         ///  },
         ///
-        /// All we care about is the dotnet entry under tools
+        ///  All we care about is the dotnet entry under tools
         /// </summary>
         /// <returns>The path to the globally installed dotnet that matches the version specified in the global.json.</returns>
         private static string GetGlobalDotNetPath()
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Get the full path to the root of the repository
+        ///  Get the full path to the root of the repository
         /// </summary>
         /// <returns>The repo root</returns>
         private static string GetRepoRoot()
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Looks backwards form the current executing directory until it finds a sibling directory seek, then returns the full path of that sibling
+        ///  Looks backwards form the current executing directory until it finds a sibling directory seek, then returns the full path of that sibling
         /// </summary>
         /// <param name="seek">The sibling directory to look for</param>
         /// <returns>The full path of the first sibling directory by the current executing directory, away from the root</returns>
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses Enter on the given process if it can be made the foreground process
+        ///  Presses Enter on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Enter key to</param>
         /// <returns>Whether or not the Enter key was pressed on the process</returns>
@@ -213,7 +213,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses Tab on the given process if it can be made the foreground process
+        ///  Presses Tab on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Tab key to</param>
         /// <returns>Whether or not the Tab key was pressed on the process</returns>
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses Right on the given process if it can be made the foreground process
+        ///  Presses Right on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Right key to</param>
         /// <returns>Whether or not the Right key was pressed on the process</returns>
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses Down on the given process if it can be made the foreground process
+        ///  Presses Down on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Down key to</param>
         /// <returns>Whether or not the Down key was pressed on the process</returns>
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses Left on the given process if it can be made the foreground process
+        ///  Presses Left on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Left key to</param>
         /// <returns>Whether or not the Left key was pressed on the process</returns>
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses Up on the given process if it can be made the foreground process
+        ///  Presses Up on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Up key to</param>
         /// <returns>Whether or not the Up key was pressed on the process</returns>
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses Tab any number of times on the given process if it can be made the foreground process
+        ///  Presses Tab any number of times on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Tab key(s) to</param>
         /// <param name="times">The number of times to press tab in a row</param>
@@ -297,7 +297,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Bring the specified form to the foreground
+        ///  Bring the specified form to the foreground
         /// </summary>
         /// <param name="form">The form</param>
         public static void BringToForeground(this Form form)
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Set the culture for the current thread
+        ///  Set the culture for the current thread
         /// </summary>
         /// <param name="culture">The culture</param>
         public static void SetCulture(this Thread thread, string culture)
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        /// Presses the given keys on the given process, then waits 200ms
+        ///  Presses the given keys on the given process, then waits 200ms
         /// </summary>
         /// <param name="process">The process to send the key(s) to</param>
         /// <param name="keys">The key(s) to send to the process</param>

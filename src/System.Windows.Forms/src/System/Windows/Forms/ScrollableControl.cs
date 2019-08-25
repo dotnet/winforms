@@ -7,11 +7,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Defines a base class for controls that support auto-scrolling behavior.
+    ///  Defines a base class for controls that support auto-scrolling behavior.
     /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -37,22 +38,22 @@ namespace System.Windows.Forms
         private Size _userAutoScrollMinSize = Size.Empty;
 
         /// <summary>
-        /// Current size of the displayRect.
+        ///  Current size of the displayRect.
         /// </summary>
         private Rectangle _displayRect = Rectangle.Empty;
 
         /// <summary>
-        /// Current margins for autoscrolling.
+        ///  Current margins for autoscrolling.
         /// </summary>
         private Size _scrollMargin = Size.Empty;
 
         /// <summary>
-        /// User requested margins for autoscrolling.
+        ///  User requested margins for autoscrolling.
         /// </summary>
         private Size _requestedScrollMargin = Size.Empty;
 
         /// <summary>
-        /// User requested autoscroll position - used for form creation only.
+        ///  User requested autoscroll position - used for form creation only.
         /// </summary>
         private Point _scrollPosition = Point.Empty;
 
@@ -67,13 +68,13 @@ namespace System.Windows.Forms
         private static readonly object s_scrollEvent = new object();
 
         /// <summary>
-        /// Used to figure out what the horizontal scroll value should be set to when the horizontal
-        /// scrollbar is first shown.
+        ///  Used to figure out what the horizontal scroll value should be set to when the horizontal
+        ///  scrollbar is first shown.
         /// </summary>
         private bool resetRTLHScrollValue = false;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='ScrollableControl'/> class.
+        ///  Initializes a new instance of the <see cref='ScrollableControl'/> class.
         /// </summary>
         public ScrollableControl() : base()
         {
@@ -83,8 +84,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the container will allow the user to
-        /// scroll to any controls placed outside of its visible boundaries.
+        ///  Gets or sets a value indicating whether the container will allow the user to
+        ///  scroll to any controls placed outside of its visible boundaries.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
@@ -106,7 +107,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the size of the auto-scroll margin.
+        ///  Gets or sets the size of the auto-scroll margin.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
@@ -126,7 +127,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the location of the auto-scroll position.
+        ///  Gets or sets the location of the auto-scroll position.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Browsable(false)]
@@ -169,8 +170,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the CreateParams used to create the window.
-        /// If a subclass overrides this function, it must call the base implementation.
+        ///  Retrieves the CreateParams used to create the window.
+        ///  If a subclass overrides this function, it must call the base implementation.
         /// </summary>
         protected override CreateParams CreateParams
         {
@@ -200,9 +201,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retreives the current display rectangle. The display rectangle is the virtual
-        /// display area that is used to layout components. The position and dimensions of
-        /// the Form's display rectangle change during autoScroll.
+        ///  Retreives the current display rectangle. The display rectangle is the virtual
+        ///  display area that is used to layout components. The position and dimensions of
+        ///  the Form's display rectangle change during autoScroll.
         /// </summary>
         public override Rectangle DisplayRectangle
         {
@@ -244,7 +245,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the horizontal scroll bar is visible.
+        ///  Gets or sets a value indicating whether the horizontal scroll bar is visible.
         /// </summary>
         protected bool HScroll
         {
@@ -262,7 +263,7 @@ namespace System.Windows.Forms
         public HScrollProperties HorizontalScroll => _horizontalScroll ??= new HScrollProperties(this);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the vertical scroll bar is visible.
+        ///  Gets or sets a value indicating whether the vertical scroll bar is visible.
         /// </summary>
         protected bool VScroll
         {
@@ -271,7 +272,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the Veritcal Scroll bar for this ScrollableControl.
+        ///  Gets the Veritcal Scroll bar for this ScrollableControl.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ScrollableControlVerticalScrollDescr))]
@@ -280,7 +281,7 @@ namespace System.Windows.Forms
         public VScrollProperties VerticalScroll => _verticalScroll ??= new VScrollProperties(this);
 
         /// <summary>
-        /// Gets the dock padding settings for all edges of the control.
+        ///  Gets the dock padding settings for all edges of the control.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
@@ -288,8 +289,8 @@ namespace System.Windows.Forms
         public DockPaddingEdges DockPadding => dockPadding ??= new DockPaddingEdges(this);
 
         /// <summary>
-        /// Adjusts the auto-scroll bars on the container based on the current control
-        /// positions and the control currently selected.
+        ///  Adjusts the auto-scroll bars on the container based on the current control
+        ///  positions and the control currently selected.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void AdjustFormScrollbars(bool displayScrollbars)
@@ -580,13 +581,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Tests a given scroll state bit to determine if it is set.
+        ///  Tests a given scroll state bit to determine if it is set.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected bool GetScrollState(int bit) => (bit & _scrollState) == bit;
 
         /// <summary>
-        /// Forces the layout of any docked or anchored child controls.
+        ///  Forces the layout of any docked or anchored child controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLayout(LayoutEventArgs levent)
@@ -613,7 +614,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Handles mouse wheel processing for our scrollbars.
+        ///  Handles mouse wheel processing for our scrollbars.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -690,7 +691,7 @@ namespace System.Windows.Forms
         {
             // Don't call base in this instance - for App compat we should not fire Invalidate
             // when  the padding has changed.
-            ((EventHandler)Events[Control.EventPaddingChanged])?.Invoke(this, e);
+            ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -718,7 +719,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Scale this form. Form overrides this to enforce a maximum / minimum size.
+        ///  Scale this form. Form overrides this to enforce a maximum / minimum size.
         /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
@@ -727,7 +728,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Allows to set the <see cref="DisplayRectangle" /> to enable the visual scroll effect.
+        ///  Allows to set the <see cref="DisplayRectangle" /> to enable the visual scroll effect.
         /// </summary>
         internal void SetDisplayFromScrollProps(int x, int y)
         {
@@ -737,8 +738,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts the displayRect to be at the offset x, y. The contents of the
-        /// Form is scrolled using Windows.ScrollWindowEx.
+        ///  Adjusts the displayRect to be at the offset x, y. The contents of the
+        ///  Form is scrolled using Windows.ScrollWindowEx.
         /// </summary>
         protected void SetDisplayRectLocation(int x, int y)
         {
@@ -784,9 +785,8 @@ namespace System.Windows.Forms
 
             if (xDelta != 0 || yDelta != 0 && IsHandleCreated)
             {
-                Rectangle cr = ClientRectangle;
-                NativeMethods.RECT rcClip = NativeMethods.RECT.FromXYWH(cr.X, cr.Y, cr.Width, cr.Height);
-                NativeMethods.RECT rcUpdate = NativeMethods.RECT.FromXYWH(cr.X, cr.Y, cr.Width, cr.Height);
+                RECT rcClip = ClientRectangle;
+                RECT rcUpdate = ClientRectangle;
                 SafeNativeMethods.ScrollWindowEx(new HandleRef(this, Handle), xDelta, yDelta,
                                                  null,
                                                  ref rcClip,
@@ -809,8 +809,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Scrolls the currently active control into view if we are an AutoScroll
-        /// Form that has the Horiz or Vert scrollbar displayed...
+        ///  Scrolls the currently active control into view if we are an AutoScroll
+        ///  Form that has the Horiz or Vert scrollbar displayed...
         /// </summary>
         public void ScrollControlIntoView(Control activeControl)
         {
@@ -841,11 +841,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary> Allow containers to tweak autoscrolling. when you tab between controls contained in the scrollable control
-        /// this allows you to set the scroll location. This would allow you to scroll to the middle of a control, where as the default is
-        /// the top of the control.
-        /// Additionally there is a new AutoScrollOffset property on the child controls themselves. This lets them control where they want to
-        /// be scrolled to. E.g. In SelectedIndexChanged for a ListBox, you could do:
-        /// listBox1.AutoScrollOffset = parent.AutoScrollPosition;
+        ///  this allows you to set the scroll location. This would allow you to scroll to the middle of a control, where as the default is
+        ///  the top of the control.
+        ///  Additionally there is a new AutoScrollOffset property on the child controls themselves. This lets them control where they want to
+        ///  be scrolled to. E.g. In SelectedIndexChanged for a ListBox, you could do:
+        ///  listBox1.AutoScrollOffset = parent.AutoScrollPosition;
         /// </summary>
         protected virtual Point ScrollToControl(Control activeControl)
         {
@@ -908,7 +908,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Occurs when the scroll box has been moved by either a mouse or keyboard action.
+        ///  Occurs when the scroll box has been moved by either a mouse or keyboard action.
         /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
         public event ScrollEventHandler Scroll
@@ -918,7 +918,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='System.Windows.Forms.ScrollBar.OnScroll'/> event.
+        ///  Raises the <see cref='System.Windows.Forms.ScrollBar.OnScroll'/> event.
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
         {
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the size of the auto-scroll margins.
+        ///  Sets the size of the auto-scroll margins.
         /// </summary>
         public void SetAutoScrollMargin(int x, int y)
         {
@@ -963,8 +963,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Actually displays or hides the horiz and vert autoscrollbars. This will
-        /// also adjust the values of formState to reflect the new state
+        ///  Actually displays or hides the horiz and vert autoscrollbars. This will
+        ///  also adjust the values of formState to reflect the new state
         /// </summary>
         private bool SetVisibleScrollbars(bool horiz, bool vert)
         {
@@ -1029,9 +1029,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets the width and height of the virtual client area used in autoscrolling.
-        /// This will also adjust the x and y location of the virtual client area if the
-        /// new size forces it.
+        ///  Sets the width and height of the virtual client area used in autoscrolling.
+        ///  This will also adjust the x and y location of the virtual client area if the
+        ///  new size forces it.
         /// </summary>
         private bool SetDisplayRectangleSize(int width, int height)
         {
@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Sets a given scroll state bit.
+        ///  Sets a given scroll state bit.
         /// </summary>
         protected void SetScrollState(int bit, bool value)
         {
@@ -1096,8 +1096,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='ScrollableControl.AutoScrollPosition'/> property should
-        /// be persisted.
+        ///  Indicates whether the <see cref='ScrollableControl.AutoScrollPosition'/> property should
+        ///  be persisted.
         /// </summary>
         private bool ShouldSerializeAutoScrollPosition()
         {
@@ -1114,19 +1114,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the <see cref='ScrollableControl.AutoScrollMargin'/> property should be persisted.
+        ///  Indicates whether the <see cref='ScrollableControl.AutoScrollMargin'/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeAutoScrollMargin() => !AutoScrollMargin.Equals(Size.Empty);
 
         /// <summary>
-        /// Indicates whether the <see cref='ScrollableControl.AutoScrollMinSize'/>
-        /// property should be persisted.
+        ///  Indicates whether the <see cref='ScrollableControl.AutoScrollMinSize'/>
+        ///  property should be persisted.
         /// </summary>
         private bool ShouldSerializeAutoScrollMinSize() => !AutoScrollMinSize.Equals(Size.Empty);
 
         /// <summary>
-        /// Updates the value of the autoscroll scrollbars based on the current form
-        /// state. This is a one-way sync, updating the scrollbars only.
+        ///  Updates the value of the autoscroll scrollbars based on the current form
+        ///  state. This is a one-way sync, updating the scrollbars only.
         /// </summary>
         private void SyncScrollbars(bool autoScroll)
         {
@@ -1210,14 +1210,14 @@ namespace System.Windows.Forms
         {
             if (!IsMirrored)
             {
-                SendMessage(Interop.WindowMessages.WM_HSCROLL,
+                SendMessage(WindowMessages.WM_HSCROLL,
                             NativeMethods.Util.MAKELPARAM((RightToLeft == RightToLeft.Yes) ? NativeMethods.SB_RIGHT : NativeMethods.SB_LEFT, 0), 0);
             }
         }
 
         /// <summary>
-        /// Queries the system to determine the users preference for full drag
-        /// of windows.
+        ///  Queries the system to determine the users preference for full drag
+        ///  of windows.
         /// </summary>
         private void UpdateFullDrag()
         {
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// WM_VSCROLL handler
+        ///  WM_VSCROLL handler
         /// </summary>
         private void WmVScroll(ref Message m)
         {
@@ -1315,7 +1315,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// WM_HSCROLL handler
+        ///  WM_HSCROLL handler
         /// </summary>
         private void WmHScroll(ref Message m)
         {
@@ -1402,8 +1402,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This function gets called which populates the eventArgs and fires the OnScroll( ) event passing
-        /// the appropriate scroll event and scroll bar.
+        ///  This function gets called which populates the eventArgs and fires the OnScroll( ) event passing
+        ///  the appropriate scroll event and scroll bar.
         /// </summary>
         private void WmOnScroll(ref Message m, int oldValue, int value, ScrollOrientation scrollOrientation)
         {
@@ -1422,22 +1422,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The button's window procedure. Inheriting classes can override this
-        /// to add extra functionality, but should not forget to call
-        /// base.wndProc(m); to ensure the button continues to function properly.
+        ///  The button's window procedure. Inheriting classes can override this
+        ///  to add extra functionality, but should not forget to call
+        ///  base.wndProc(m); to ensure the button continues to function properly.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_VSCROLL:
+                case WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case Interop.WindowMessages.WM_HSCROLL:
+                case WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
-                case Interop.WindowMessages.WM_SETTINGCHANGE:
+                case WindowMessages.WM_SETTINGCHANGE:
                     WmSettingChange(ref m);
                     break;
                 default:
@@ -1447,7 +1447,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determines the border padding for docked controls.
+        ///  Determines the border padding for docked controls.
         /// </summary>
         [TypeConverter(typeof(DockPaddingEdgesConverter))]
         public class DockPaddingEdges : ICloneable
@@ -1459,8 +1459,8 @@ namespace System.Windows.Forms
             private int _bottom;
 
             /// <summary>
-            /// Creates a new DockPaddingEdges. The specified owner will be notified when
-            /// the values are changed.
+            ///  Creates a new DockPaddingEdges. The specified owner will be notified when
+            ///  the values are changed.
             /// </summary>
             internal DockPaddingEdges(ScrollableControl owner)
             {
@@ -1476,7 +1476,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or ssets the padding width for all edges of a docked control.
+            ///  Gets or ssets the padding width for all edges of a docked control.
             /// </summary>
             [RefreshProperties(RefreshProperties.All)]
             [SRDescription(nameof(SR.PaddingAllDescr))]
@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the padding width for the bottom edge of a docked control.
+            ///  Gets or sets the padding width for the bottom edge of a docked control.
             /// </summary>
             [RefreshProperties(RefreshProperties.All)]
             [SRDescription(nameof(SR.PaddingBottomDescr))]
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the padding width for the left edge of a docked control.
+            ///  Gets or sets the padding width for the left edge of a docked control.
             /// </summary>
             [RefreshProperties(RefreshProperties.All)]
             [SRDescription(nameof(SR.PaddingLeftDescr))]
@@ -1575,7 +1575,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the padding width for the right edge of a docked control.
+            ///  Gets or sets the padding width for the right edge of a docked control.
             /// </summary>
             [RefreshProperties(RefreshProperties.All)]
             [SRDescription(nameof(SR.PaddingRightDescr))]
@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets or sets the padding width for the top edge of a docked control.
+            ///  Gets or sets the padding width for the top edge of a docked control.
             /// </summary>
             [RefreshProperties(RefreshProperties.All)]
             [SRDescription(nameof(SR.PaddingTopDescr))]
@@ -1651,9 +1651,9 @@ namespace System.Windows.Forms
         public class DockPaddingEdgesConverter : TypeConverter
         {
             /// <summary>
-            /// Retrieves the set of properties for this type. By default, a type has does
-            /// not return any properties. An easy implementation of this method can just
-            /// call TypeDescriptor.GetProperties for the correct data type.
+            ///  Retrieves the set of properties for this type. By default, a type has does
+            ///  not return any properties. An easy implementation of this method can just
+            ///  call TypeDescriptor.GetProperties for the correct data type.
             /// </summary>
             public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
             {
@@ -1662,7 +1662,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Determines if this object supports properties. By default, this is false.
+            ///  Determines if this object supports properties. By default, this is false.
             /// </summary>
             public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
         }

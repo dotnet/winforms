@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Custom ContextMenu section for ToolStripMenuItems.
+    ///  Custom ContextMenu section for ToolStripMenuItems.
     /// </summary>
     internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     {
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Parent ToolStrip.
+        ///  Parent ToolStrip.
         /// </summary>
         private ToolStrip ParentTool
         {
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// creates a item representing an item, respecting Browsable.
+        ///  creates a item representing an item, respecting Browsable.
         /// </summary>
         private ToolStripMenuItem CreatePropertyBasedItem(string text, string propertyName, string imageName)
         {
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// creates an item that when clicked changes the enum value.
+        ///  creates an item that when clicked changes the enum value.
         /// </summary>
         private ToolStripMenuItem CreateEnumValueItem(string propertyName, string name, object value)
         {
@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (_designerHost.GetDesigner(currentItem) is ToolStripItemDesigner itemDesigner)
                     {
-                        verbManager = new CollectionEditVerbManager(string.Format(SR.ToolStripDropDownItemCollectionEditorVerb), itemDesigner, TypeDescriptor.GetProperties(currentItem)["DropDownItems"], false);
+                        verbManager = new CollectionEditVerbManager(SR.ToolStripDropDownItemCollectionEditorVerb, itemDesigner, TypeDescriptor.GetProperties(currentItem)["DropDownItems"], false);
                         editItemsToolStripMenuItem = new ToolStripMenuItem
                         {
                             Text = SR.ToolStripDropDownItemCollectionEditorVerb
@@ -318,7 +318,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Insert MenuItem into ToolStrip.
+        ///  Insert MenuItem into ToolStrip.
         /// </summary>
         private void InsertStripItem(Type t)
         {
@@ -333,7 +333,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Insert MenuItem into ToolStrip.
+        ///  Insert MenuItem into ToolStrip.
         /// </summary>
         private void InsertMenuItem(Type t)
         {
@@ -363,7 +363,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Insert Item into DropDownMenu.
+        ///  Insert Item into DropDownMenu.
         /// </summary>
         private void InsertIntoDropDown(ToolStripDropDown parent, Type t)
         {
@@ -431,7 +431,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Insert Item into Main MenuStrip.
+        ///  Insert Item into Main MenuStrip.
         /// </summary>
         private void InsertIntoMainMenu(MenuStrip parent, Type t)
         {
@@ -476,7 +476,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Insert Item into StatusStrip.
+        ///  Insert Item into StatusStrip.
         /// </summary>
         private void InsertIntoStatusStrip(StatusStrip parent, Type t)
         {
@@ -521,7 +521,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Insert Item into ToolStrip.
+        ///  Insert Item into ToolStrip.
         /// </summary>
         private void InsertToolStripItem(Type t)
         {

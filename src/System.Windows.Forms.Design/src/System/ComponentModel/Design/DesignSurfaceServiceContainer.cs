@@ -7,14 +7,14 @@ using System.Collections;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// A service container that supports "fixed" services.  Fixed  services cannot be removed.
+    ///  A service container that supports "fixed" services.  Fixed  services cannot be removed.
     /// </summary>
     internal sealed class DesignSurfaceServiceContainer : ServiceContainer
     {
         private readonly Hashtable _fixedServices = new Hashtable();
 
         /// <summary>
-        /// We always add ourselves as a service.
+        ///  We always add ourselves as a service.
         /// </summary>
         internal DesignSurfaceServiceContainer(IServiceProvider parentProvider) : base(parentProvider)
         {
@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes the given service type from the service container.
+        ///  Removes the given service type from the service container.
         /// </summary>
         internal void AddFixedService(Type serviceType, object serviceInstance)
         {
@@ -31,7 +31,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes a previously added fixed service.
+        ///  Removes a previously added fixed service.
         /// </summary>
         internal void RemoveFixedService(Type serviceType)
         {
@@ -40,7 +40,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes the given service type from the service container.  Throws an exception if the service is fixed.
+        ///  Removes the given service type from the service container.  Throws an exception if the service is fixed.
         /// </summary>
         public override void RemoveService(Type serviceType, bool promote)
         {

@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -97,7 +98,7 @@ namespace System.Windows.Forms.ButtonInternal
 
                     if (DisplayInformation.BitsPerPixel > 8)
                     {
-                        NativeMethods.RECT r = new NativeMethods.RECT(bounds.X, bounds.Y, bounds.Right, bounds.Bottom);
+                        RECT r = new RECT(bounds.X, bounds.Y, bounds.Right, bounds.Bottom);
                         // SysColorBrush does not have to be deleted.
                         SafeNativeMethods.FillRect(new HandleRef(e, e.HDC), ref r, new HandleRef(this,
                             isHighContrastHighlighted ? SafeNativeMethods.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF) : Control.BackColorBrush));

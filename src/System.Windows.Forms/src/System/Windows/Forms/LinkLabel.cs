@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -419,15 +420,12 @@ namespace System.Windows.Forms
                     {
                         // We want to instantly change the cursor if the mouse is within our bounds.
                         // This includes the case where the mouse is over one of our children
-                        NativeMethods.POINT p = new NativeMethods.POINT();
-                        NativeMethods.RECT r = new NativeMethods.RECT();
-                        UnsafeNativeMethods.GetCursorPos(p);
+                        var r = new RECT();
+                        UnsafeNativeMethods.GetCursorPos(out Point p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
-
-                        //
-                        if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                         {
-                            SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                            SendMessage(WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
                         }
                     }
                 }
@@ -583,10 +581,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Creates a handle for this control. This method is called by the .NET,
-        ///  this should not be called. Inheriting classes should always call
-        ///  base.createHandle when overriding this method.
-            /// </summary>
+        ///  Creates a handle for this control. This method is called by the framework,
+        ///  this should not be called directly. Inheriting classes should always call
+        ///  <c>base.CreateHandle</c> when overriding this method.
+        /// </summary>
         protected override void CreateHandle()
         {
             base.CreateHandle();
@@ -742,8 +740,7 @@ namespace System.Windows.Forms
 
                             using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
                             {
-                                IntNativeMethods.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
-
+                                User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
                                 iLeftMargin = dtParams.iLeftMargin;
                                 iRightMargin = dtParams.iRightMargin;
                             }
@@ -930,9 +927,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            /// Gets or sets a value that is returned to the
-        /// parent form when the link label.
-        /// is clicked.
+            ///  Gets or sets a value that is returned to the
+        ///  parent form when the link label.
+        ///  is clicked.
             /// </summary>
         DialogResult IButtonControl.DialogResult
         {
@@ -958,7 +955,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Control.GotFocus'/> event.
+        ///  Raises the <see cref='Control.GotFocus'/> event.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -2078,11 +2075,11 @@ namespace System.Windows.Forms
             {
                 if (OverrideCursor != null)
                 {
-                    Cursor.CurrentInternal = OverrideCursor;
+                    Cursor.Current = OverrideCursor;
                 }
                 else
                 {
-                    Cursor.CurrentInternal = Cursor;
+                    Cursor.Current = Cursor;
                 }
             }
             else
@@ -2096,7 +2093,7 @@ namespace System.Windows.Forms
         {
             switch (msg.Msg)
             {
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
                 default:
@@ -2110,10 +2107,10 @@ namespace System.Windows.Forms
             private readonly LinkLabel owner;
             private bool linksAdded = false;   //whether we should serialize the linkCollection
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
-            /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
+            ///  A caching mechanism for key accessor
+            ///  We use an index here rather than control so that we don't have lifetime
+            ///  issues by holding on to extra references.
+            ///  Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
             private int lastAccessedIndex = -1;
 
             public LinkCollection(LinkLabel owner)
@@ -2558,7 +2555,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Description for accessibility
+            ///  Description for accessibility
             /// </summary>
             public string Description { get; set; }
 
@@ -2623,14 +2620,14 @@ namespace System.Windows.Forms
             public object LinkData { get; set; }
 
             /// <summary>
-            /// The LinkLabel object that owns this link.
+            ///  The LinkLabel object that owns this link.
             /// </summary>
             internal LinkLabel Owner { get; set; }
 
             internal LinkState State { get; set; } = LinkState.Normal;
 
             /// <summary>
-            /// The name for the link - useful for indexing by key.
+            ///  The name for the link - useful for indexing by key.
             /// </summary>
             [DefaultValue("")]
             [SRCategory(nameof(SR.CatAppearance))]

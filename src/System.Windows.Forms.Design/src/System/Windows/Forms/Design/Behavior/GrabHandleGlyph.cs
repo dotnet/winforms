@@ -8,14 +8,14 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The GrabHandleGlyph represents the 8 handles of our new seleciton model.  Note that the pen and brush are created once per instance of this class and re-used in our painting logic for perf. reasonse.
+    ///  The GrabHandleGlyph represents the 8 handles of our new seleciton model.  Note that the pen and brush are created once per instance of this class and re-used in our painting logic for perf. reasonse.
     /// </summary>
     internal class GrabHandleGlyph : SelectionGlyphBase
     {
         private readonly bool _isPrimary = false;
 
         /// <summary>
-        /// GrabHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
+        ///  GrabHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
         /// </summary>
         internal GrabHandleGlyph(Rectangle controlBounds, GrabHandleGlyphType type, Behavior behavior, bool primarySelection) : base(behavior)
         {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Very simple paint logic.
+        ///  Very simple paint logic.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

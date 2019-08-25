@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Tests
         public void DataFormats_GetFormat_InvokeId_ReturnsExpected(int id, string expectedName)
         {
             DataFormats.Format result = DataFormats.GetFormat(id);
-            Assert.Same(result, DataFormats.GetFormat(id));
+            Assert.Equal(result, DataFormats.GetFormat(id));
             Assert.Equal(expectedName, result.Name);
             Assert.Equal(id & 0xFFFF, result.Id);
         }
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Tests
         public void DataFormats_Format_Ctor_String_Int(string name, int id)
         {
             var format = new DataFormats.Format(name, id);
-            Assert.Same(name, format.Name);
+            Assert.Equal(name, format.Name);
         }
     }
 }

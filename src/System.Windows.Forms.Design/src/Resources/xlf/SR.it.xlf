@@ -513,6 +513,16 @@
         <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere compreso tra {2} e {3}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="translated">(Nessuno)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="translated">(nessuno)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
         <target state="translated">Questo metodo/oggetto non è implementato per impostazione predefinita.</target>

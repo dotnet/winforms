@@ -80,7 +80,7 @@ namespace System.Windows.Forms
                 }
                 if (OwningColumn == null || DataGridView == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_CellDoesNotYetBelongToDataGridView));
+                    throw new InvalidOperationException(SR.DataGridView_CellDoesNotYetBelongToDataGridView);
                 }
                 if (value != sortGlyphDirection)
                 {
@@ -1261,12 +1261,12 @@ namespace System.Windows.Forms
                     {
                         if (Owner.OwningColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                         {
-                            return string.Format(SR.DataGridView_AccColumnHeaderCellDefaultAction);
+                            return SR.DataGridView_AccColumnHeaderCellDefaultAction;
                         }
                         else if (Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                                  Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                         {
-                            return string.Format(SR.DataGridView_AccColumnHeaderCellSelectDefaultAction);
+                            return SR.DataGridView_AccColumnHeaderCellSelectDefaultAction;
                         }
                         else
                         {
@@ -1484,7 +1484,7 @@ namespace System.Windows.Forms
             {
                 if (Owner == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
                 DataGridViewColumnHeaderCell dataGridViewCell = (DataGridViewColumnHeaderCell)Owner;

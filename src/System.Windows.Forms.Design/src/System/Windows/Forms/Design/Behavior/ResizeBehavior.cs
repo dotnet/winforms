@@ -8,11 +8,12 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the relatd control based on the new mouse location and the resize Rules.
+    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the relatd control based on the new mouse location and the resize Rules.
     /// </summary>
     internal class ResizeBehavior : Behavior
     {
@@ -38,7 +39,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Point _lastMouseLoc; //helps us avoid re-entering code if the mouse hasn't moved
         private Point _parentLocation; //used to snap resize ops to the grid
         private Size _parentGridSize; //used to snap resize ops to the grid
-        private NativeMethods.POINT _lastMouseAbs; // last absolute mouse position
+        private Point _lastMouseAbs; // last absolute mouse position
         private Point _lastSnapOffset; //the last snapoffset we used.
         private bool _didSnap; //did we actually snap.
         private Control _primaryControl; //the primary control the status bar will queue off of
@@ -50,7 +51,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool _captureLost;
 
         /// <summary>
-        /// Constructor that caches all values for perf. reasons.
+        ///  Constructor that caches all values for perf. reasons.
         /// </summary>
         internal ResizeBehavior(IServiceProvider serviceProvider)
         {
@@ -63,7 +64,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Demand creates the BehaviorService.
+        ///  Demand creates the BehaviorService.
         /// </summary>
         private BehaviorService BehaviorService
         {
@@ -86,7 +87,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Called during the resize operation, we'll try to determine an offset so that the controls snap to the grid settings of the parent.
+        ///  Called during the resize operation, we'll try to determine an offset so that the controls snap to the grid settings of the parent.
         /// </summary>
         private Rectangle AdjustToGrid(Rectangle controlBounds, SelectionRules rules)
         {
@@ -154,7 +155,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Builds up an array of snaplines used during resize to adjust/snap the controls bounds.
+        ///  Builds up an array of snaplines used during resize to adjust/snap the controls bounds.
         /// </summary>
         private SnapLine[] GenerateSnapLines(SelectionRules rules, Point loc)
         {
@@ -201,7 +202,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This is called in response to the mouse moving far enough away from its initial point.  Basically, we calculate the bounds for each control we're resizing and disable any adorners.
+        ///  This is called in response to the mouse moving far enough away from its initial point.  Basically, we calculate the bounds for each control we're resizing and disable any adorners.
         /// </summary>
         private void InitiateResize()
         {
@@ -282,7 +283,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// In response to a MouseDown, the SelectionBehavior will push (initiate) a dragBehavior by alerting the SelectionMananger that a new control has been selected and the mouse is down. Note that this is only if we find the related control's Dock property == none.
+        ///  In response to a MouseDown, the SelectionBehavior will push (initiate) a dragBehavior by alerting the SelectionMananger that a new control has been selected and the mouse is down. Note that this is only if we find the related control's Dock property == none.
         /// </summary>
         public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
         {
@@ -353,7 +354,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This method is called when we lose capture, which can occur when another window requests capture or the user presses ESC during a drag.  We check to see if we are currently dragging, and if we are we abort the transaction.  We pop our behavior off the stack at this time.
+        ///  This method is called when we lose capture, which can occur when another window requests capture or the user presses ESC during a drag.  We check to see if we are currently dragging, and if we are we abort the transaction.  We pop our behavior off the stack at this time.
         /// </summary>
         public override void OnLoseCapture(Glyph g, EventArgs e)
         {
@@ -441,7 +442,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This method will either initiate a new resize operation or continue with an existing one.  If we're currently dragging (i.e. resizing) then we look at the resize rules and set the bounds of each control to the new location of the mouse pointer.
+        ///  This method will either initiate a new resize operation or continue with an existing one.  If we're currently dragging (i.e. resizing) then we look at the resize rules and set the bounds of each control to the new location of the mouse pointer.
         /// </summary>
         public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
         {
@@ -465,9 +466,9 @@ namespace System.Windows.Forms.Design.Behavior
             // When DesignerWindowPane has scrollbars and we resize, shrinking the the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
             if (_lastMouseAbs != null)
             {
-                NativeMethods.POINT mouseLocAbs = new NativeMethods.POINT(mouseLoc.X, mouseLoc.Y);
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), mouseLocAbs);
-                if (mouseLocAbs.x == _lastMouseAbs.x && mouseLocAbs.y == _lastMouseAbs.y)
+                var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
+                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
+                if (mouseLocAbs.X == _lastMouseAbs.X && mouseLocAbs.Y == _lastMouseAbs.Y)
                 {
                     return true;
                 }
@@ -528,8 +529,8 @@ namespace System.Windows.Forms.Design.Behavior
 
             Control targetControl = _resizeComponents[0].resizeControl as Control;
             _lastMouseLoc = mouseLoc;
-            _lastMouseAbs = new NativeMethods.POINT(mouseLoc.X, mouseLoc.Y);
-            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), _lastMouseAbs);
+            _lastMouseAbs = new Point(mouseLoc.X, mouseLoc.Y);
+            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref _lastMouseAbs);
             int minHeight = Math.Max(targetControl.MinimumSize.Height, MINSIZE);
             int minWidth = Math.Max(targetControl.MinimumSize.Width, MINSIZE);
             if (_dragManager != null)
@@ -605,7 +606,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
                 bool needToUpdate = true;
                 // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine. E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small and resized back to 100px.  This is what should happen, but it looks bad in the designer.  To avoid the flicker we temporarily turn off painting while we do the resize.
-                UnsafeNativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_SETREDRAW, false, /* unused = */ 0);
+                UnsafeNativeMethods.SendMessage(control.Handle, WindowMessages.WM_SETREDRAW, false, /* unused = */ 0);
                 try
                 {
                     bool fRTL = false;
@@ -756,7 +757,7 @@ namespace System.Windows.Forms.Design.Behavior
                 finally
                 {
                     // While we were resizing we discarded painting messages to reduce flicker.  We now turn painting back on and manually refresh the controls.
-                    UnsafeNativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_SETREDRAW, true, /* unused = */ 0);
+                    UnsafeNativeMethods.SendMessage(control.Handle, WindowMessages.WM_SETREDRAW, true, /* unused = */ 0);
                     //update the control
                     if (needToUpdate)
                     {
@@ -826,7 +827,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// This ends the Behavior by popping itself from the BehaviorStack.  Also, all Adorners are re-enabled at the end of a successful drag.
+        ///  This ends the Behavior by popping itself from the BehaviorStack.  Also, all Adorners are re-enabled at the end of a successful drag.
         /// </summary>
         public override bool OnMouseUp(Glyph g, MouseButtons button)
         {

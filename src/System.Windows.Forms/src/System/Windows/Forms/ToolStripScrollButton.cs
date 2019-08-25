@@ -3,11 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// A non selectable ToolStrip item
+    ///  A non selectable ToolStrip item
     /// </summary>
     internal class ToolStripScrollButton : ToolStripControlHost
     {
@@ -40,8 +41,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Deriving classes can override this to configure a default size for their control.
-        /// This is more efficient than setting the size in the control's constructor.
+        ///  Deriving classes can override this to configure a default size for their control.
+        ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
         protected internal override Padding DefaultMargin
         {
@@ -198,7 +199,7 @@ namespace System.Windows.Forms
             protected override void WndProc(ref Message m)
             {
 
-                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                 {
                     //
 

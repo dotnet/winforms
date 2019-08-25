@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Represents the method that will handle a ContainerSelectorActive event.
+    ///  Represents the method that will handle a ContainerSelectorActive event.
     /// </summary>
     internal delegate void ContainerSelectorActiveEventHandler(object sender, ContainerSelectorActiveEventArgs e);
 }

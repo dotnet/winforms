@@ -11,12 +11,12 @@ using Microsoft.Win32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides methods and fields to manage the input language.
+    ///  Provides methods and fields to manage the input language.
     /// </summary>
     public sealed class InputLanguage
     {
         /// <summary>
-        /// The HKL handle.
+        ///  The HKL handle.
         /// </summary>
         private readonly IntPtr handle;
 
@@ -26,12 +26,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the culture of the current input language.
+        ///  Returns the culture of the current input language.
         /// </summary>
         public CultureInfo Culture => new CultureInfo((int)handle & 0xFFFF);
 
         /// <summary>
-        /// Gets or sets the input language for the current thread.
+        ///  Gets or sets the input language for the current thread.
         /// </summary>
         public static InputLanguage CurrentInputLanguage
         {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the default input language for the system.
+        ///  Returns the default input language for the system.
         /// </summary>
         public static InputLanguage DefaultInputLanguage
         {
@@ -71,12 +71,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the handle for the input language.
+        ///  Returns the handle for the input language.
         /// </summary>
         public IntPtr Handle => handle;
 
         /// <summary>
-        /// Returns a list of all installed input languages.
+        ///  Returns a list of all installed input languages.
         /// </summary>
         public static InputLanguageCollection InstalledInputLanguages
         {
@@ -98,8 +98,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the name of the current keyboard layout as it appears in the Windows
-        /// Regional Settings on the computer.
+        ///  Returns the name of the current keyboard layout as it appears in the Windows
+        ///  Regional Settings on the computer.
         /// </summary>
         public string LayoutName
         {
@@ -269,10 +269,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Attempts to extract the localized keyboard layout name using the
-        /// SHLoadIndirectString API (only on OSVersions >= 5).  Returning
-        /// null from this method will force us to use the legacy codepath
-        /// (pulling the text directly from the registry).
+        ///  Attempts to extract the localized keyboard layout name using the
+        ///  SHLoadIndirectString API (only on OSVersions >= 5).  Returning
+        ///  null from this method will force us to use the legacy codepath
+        ///  (pulling the text directly from the registry).
         /// </summary>
         private static string GetLocalizedKeyboardLayoutName(string layoutDisplayName)
         {
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates an InputLanguageChangedEventArgs given a windows message.
+        ///  Creates an InputLanguageChangedEventArgs given a windows message.
         /// </summary>
         internal static InputLanguageChangedEventArgs CreateInputLanguageChangedEventArgs(Message m)
         {
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates an InputLanguageChangingEventArgs given a windows message.
+        ///  Creates an InputLanguageChangingEventArgs given a windows message.
         /// </summary>
         internal static InputLanguageChangingEventArgs CreateInputLanguageChangingEventArgs(Message m)
         {
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Specifies whether two input languages are equal.
+        ///  Specifies whether two input languages are equal.
         /// </summary>
         public override bool Equals(object value)
         {
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns the input language associated with the specified culture.
+        ///  Returns the input language associated with the specified culture.
         /// </summary>
         public static InputLanguage FromCulture(CultureInfo culture)
         {
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Hash code for this input language.
+        ///  Hash code for this input language.
         /// </summary>
         public override int GetHashCode() => unchecked((int)(long)handle);
 

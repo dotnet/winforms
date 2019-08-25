@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Internal;
+using static Interop;
+
 
 namespace System.Windows.Forms
 {
@@ -23,8 +25,8 @@ namespace System.Windows.Forms
         public static readonly ContentAlignment AnyCenterAlign = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
 
         /// <summary>
-        /// The GetMessagePos function retrieves the cursor position for the last message
-        /// retrieved by the GetMessage function.
+        ///  The GetMessagePos function retrieves the cursor position for the last message
+        ///  retrieved by the GetMessage function.
         /// </summary>
         public static Point LastCursorPoint
         {
@@ -36,7 +38,7 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        /// this graphics requires disposal.
+        ///  this graphics requires disposal.
         /// </remarks>
         public static Graphics CreateMeasurementGraphics()
         {
@@ -44,9 +46,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// If you want to know if a piece of text contains one and only one &
-        /// this is your function. If you have a character "t" and want match it to &Text
-        /// Control.IsMnemonic is a better bet.
+        ///  If you want to know if a piece of text contains one and only one &
+        ///  this is your function. If you have a character "t" and want match it to &Text
+        ///  Control.IsMnemonic is a better bet.
         /// </summary>
         public static bool ContainsMnemonic(string text)
         {
@@ -78,7 +80,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Given a rectangle, constrain it to fit onto the current screen.
+        ///  Given a rectangle, constrain it to fit onto the current screen.
         /// </summary>
         internal static Rectangle ConstrainToScreenBounds(Rectangle bounds)
         {
@@ -126,8 +128,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adds an extra & to to the text so that "Fish & Chips" can be displayed on a menu item
-        /// without underlining anything.
+        ///  Adds an extra & to to the text so that "Fish & Chips" can be displayed on a menu item
+        ///  without underlining anything.
         ///  Fish & Chips --> Fish && Chips
         /// </summary>
         internal static string EscapeTextWithAmpersands(string text)
@@ -159,9 +161,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// helper function for generating information about a particular control
-        /// use AssertControlInformation if sticking in an assert - then the work
-        /// to figure out the control info will only be done when the assertion is false.
+        ///  helper function for generating information about a particular control
+        ///  use AssertControlInformation if sticking in an assert - then the work
+        ///  to figure out the control info will only be done when the assertion is false.
         /// </summary>
         internal static string GetControlInformation(IntPtr hwnd)
         {
@@ -171,7 +173,7 @@ namespace System.Windows.Forms
             }
 
 #if DEBUG
-            string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
+            string windowText = User32.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
             string nameOfControl = "Name: ";
             Control c = Control.FromHandle(hwnd);
@@ -212,8 +214,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieves the mnemonic from a given string, or zero if no mnemonic.
-        /// As used by the Control.Mnemonic to get mnemonic from Control.Text.
+        ///  Retrieves the mnemonic from a given string, or zero if no mnemonic.
+        ///  As used by the Control.Mnemonic to get mnemonic from Control.Text.
         /// <summary>
         public static char GetMnemonic(string text, bool convertToUpperCase)
         {
@@ -248,7 +250,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the top level handle for a given handle.
+        ///  Finds the top level handle for a given handle.
         /// </summary>
         public static HandleRef GetRootHWnd(HandleRef hwnd)
         {
@@ -257,7 +259,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Finds the top level handle for a given handle.
+        ///  Finds the top level handle for a given handle.
         /// </summary>
         public static HandleRef GetRootHWnd(Control control)
         {
@@ -265,12 +267,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Strips all keyboard mnemonic prefixes from a given string, eg. turning "He&lp" into "Help".
+        ///  Strips all keyboard mnemonic prefixes from a given string, eg. turning "He&lp" into "Help".
         /// </summary>
         /// <remarks>
-        /// Note: Be careful not to call this multiple times on the same string, otherwise you'll turn
-        /// something like "Fi&sh && Chips" into "Fish & Chips" on the first call, and then "Fish Chips"
-        /// on the second call.
+        ///  Note: Be careful not to call this multiple times on the same string, otherwise you'll turn
+        ///  something like "Fi&sh && Chips" into "Fish & Chips" on the first call, and then "Fish Chips"
+        ///  on the second call.
         /// </remarks>
         public static string TextWithoutMnemonics(string text)
         {
@@ -304,23 +306,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Translates a point from one control's coordinate system to the other
-        /// same as:
+        ///  Translates a point from one control's coordinate system to the other
+        ///  same as:
         ///  controlTo.PointToClient(controlFrom.PointToScreen(point))
-        /// but slightly more performant.
+        ///  but slightly more performant.
         /// </summary>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
-            NativeMethods.POINT pt = new NativeMethods.POINT(point.X, point.Y);
-            UnsafeNativeMethods.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), pt, 1);
-            return new Point(pt.x, pt.y);
+            UnsafeNativeMethods.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), ref point, 1);
+            return point;
         }
 
         /// <summary>
-        /// Compares the strings using invariant culture for Turkish-I support. Returns true if they match.
+        ///  Compares the strings using invariant culture for Turkish-I support. Returns true if they match.
         ///
-        /// If your strings are symbolic (returned from APIs, not from user) the following calls
-        /// are faster than this method:
+        ///  If your strings are symbolic (returned from APIs, not from user) the following calls
+        ///  are faster than this method:
         ///
         ///  String.Equals(s1, s2, StringComparison.Ordinal)
         ///  String.Equals(s1, s2, StringComparison.OrdinalIgnoreCase)
@@ -360,8 +361,8 @@ namespace System.Windows.Forms
         public static class EnumValidator
         {
             /// <summary>
-            /// Valid values are 0x001,0x002,0x004, 0x010,0x020,0x040, 0x100, 0x200,0x400
-            /// Method for verifying
+            ///  Valid values are 0x001,0x002,0x004, 0x010,0x020,0x040, 0x100, 0x200,0x400
+            ///  Method for verifying
             ///  Verify that the number passed in has only one bit on
             ///  Verify that the bit that is on is a valid bit by bitwise anding it to a mask.
             /// </summary>
@@ -379,11 +380,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// shifts off the number of bits specified by numBitsToShift
+            ///  shifts off the number of bits specified by numBitsToShift
             ///  -  makes sure the bits we've shifted off are just zeros
             ///  -  then compares if the resulting value is between minValAfterShift and maxValAfterShift
             ///
-            /// EXAMPLE:
+            ///  EXAMPLE:
             ///  MessageBoxIcon. Valid values are 0x0, 0x10, 0x20, 0x30, 0x40
             ///  Method for verifying: chop off the last 0 by shifting right 4 bits, verify resulting number is between 0 & 4.
             ///
@@ -437,9 +438,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This is a ControlCollection which can be made readonly. In readonly mode, this
-        /// ControlCollection throws NotSupportedExceptions for any operation that attempts
-        /// to modify the collection.
+        ///  This is a ControlCollection which can be made readonly. In readonly mode, this
+        ///  ControlCollection throws NotSupportedExceptions for any operation that attempts
+        ///  to modify the collection.
         /// </summary>
         internal class ReadOnlyControlCollection : Control.ControlCollection
         {
@@ -488,8 +489,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This control collection only allows a specific type of control
-        /// into the controls collection. It optionally supports readonlyness.
+        ///  This control collection only allows a specific type of control
+        ///  into the controls collection. It optionally supports readonlyness.
         /// </summary>
         internal class TypedControlCollection : ReadOnlyControlCollection
         {
@@ -531,14 +532,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// DCMapping is used to change the mapping and clip region of the
-        /// the specified device context to the given bounds. When the
-        /// DCMapping is disposed, the original mapping and clip rectangle
-        /// are restored.
+        ///  DCMapping is used to change the mapping and clip region of the
+        ///  the specified device context to the given bounds. When the
+        ///  DCMapping is disposed, the original mapping and clip rectangle
+        ///  are restored.
         ///
-        /// Example:
+        ///  Example:
         ///
-        /// using(WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, new Rectangle(10,10, 50, 50) {
+        ///  using(WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, new Rectangle(10,10, 50, 50) {
         ///  // inside here the hDC's mapping of (0,0) is inset by (10,10) and
         ///  // all painting is clipped at (0,0) - (50,50)
         ///  }
@@ -570,7 +571,7 @@ namespace System.Windows.Forms
             private Graphics _graphics;
             private Rectangle _translatedBounds;
 
-            public DCMapping(HandleRef hDC, Rectangle bounds)
+            public unsafe DCMapping(HandleRef hDC, Rectangle bounds)
             {
                 if (hDC.Handle == IntPtr.Zero)
                 {
@@ -578,9 +579,7 @@ namespace System.Windows.Forms
                 }
 
                 bool success;
-                NativeMethods.POINT viewportOrg = new NativeMethods.POINT();
-                HandleRef hOriginalClippingRegion = NativeMethods.NullHandleRef;
-                NativeMethods.RegionFlags originalRegionType = NativeMethods.RegionFlags.NULLREGION;
+                IntPtr hOriginalClippingRegion = IntPtr.Zero;
 
                 _translatedBounds = bounds;
                 _graphics = null;
@@ -588,44 +587,45 @@ namespace System.Windows.Forms
                 _dc.SaveHdc();
 
                 // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-                success = SafeNativeMethods.GetViewportOrgEx(hDC, viewportOrg);
+                success = SafeNativeMethods.GetViewportOrgEx(hDC, out Point viewportOrg);
                 Debug.Assert(success, "GetViewportOrgEx() failed.");
 
                 // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
-                HandleRef hClippingRegion = new HandleRef(null, SafeNativeMethods.CreateRectRgn(viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, viewportOrg.x + bounds.Right, viewportOrg.y + bounds.Bottom));
-                Debug.Assert(hClippingRegion.Handle != IntPtr.Zero, "CreateRectRgn() failed.");
+                IntPtr hClippingRegion = Gdi32.CreateRectRgn(viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, viewportOrg.X + bounds.Right, viewportOrg.Y + bounds.Bottom);
+                Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
                 try
                 {
                     // Create an empty region oriented at 0,0 so we can populate it with the original clipping region of the hDC passed in.
-                    hOriginalClippingRegion = new HandleRef(this, SafeNativeMethods.CreateRectRgn(0, 0, 0, 0));
-                    Debug.Assert(hOriginalClippingRegion.Handle != IntPtr.Zero, "CreateRectRgn() failed.");
+                    hOriginalClippingRegion = Gdi32.CreateRectRgn(0, 0, 0, 0);
+                    Debug.Assert(hOriginalClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
 
                     // Get the clipping region from the hDC: result = {-1 = error, 0 = no region, 1 = success} per MSDN
-                    int result = SafeNativeMethods.GetClipRgn(hDC, hOriginalClippingRegion);
+                    int result = Gdi32.GetClipRgn(hDC, hOriginalClippingRegion);
                     Debug.Assert(result != -1, "GetClipRgn() failed.");
 
                     // Shift the viewpoint origint by coordinates specified in "bounds".
-                    NativeMethods.POINT lastViewPort = new NativeMethods.POINT();
-                    success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, lastViewPort);
+                    var lastViewPort = new Point();
+                    success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, &lastViewPort);
                     Debug.Assert(success, "SetViewportOrgEx() failed.");
 
+                    RegionType originalRegionType;
                     if (result != 0)
                     {
                         // Get the origninal clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
-                        NativeMethods.RECT originalClipRect = new NativeMethods.RECT();
-                        originalRegionType = (NativeMethods.RegionFlags)SafeNativeMethods.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
-                        Debug.Assert(originalRegionType != NativeMethods.RegionFlags.ERROR, "ERROR returned from SelectClipRgn while selecting the original clipping region..");
+                        RECT originalClipRect = new RECT();
+                        originalRegionType = Gdi32.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
+                        Debug.Assert(originalRegionType != RegionType.ERROR, "ERROR returned from SelectClipRgn while selecting the original clipping region..");
 
-                        if (originalRegionType == NativeMethods.RegionFlags.SIMPLEREGION)
+                        if (originalRegionType == RegionType.SIMPLEREGION)
                         {
                             // Find the intersection of our clipping region and the current clipping region (our parent's)
                             //      Returns a NULLREGION, the two didn't intersect.
                             //      Returns a SIMPLEREGION, the two intersected
                             //      Resulting region (stuff that was in hOriginalClippingRegion AND hClippingRegion is placed in hClippingRegion
-                            NativeMethods.RegionFlags combineResult = (NativeMethods.RegionFlags)SafeNativeMethods.CombineRgn(hClippingRegion, hClippingRegion, hOriginalClippingRegion, NativeMethods.RGN_AND);
-                            Debug.Assert((combineResult == NativeMethods.RegionFlags.SIMPLEREGION) ||
-                                            (combineResult == NativeMethods.RegionFlags.NULLREGION),
+                            RegionType combineResult = Gdi32.CombineRgn(hClippingRegion, hClippingRegion, hOriginalClippingRegion, Gdi32.CombineMode.RGN_AND);
+                            Debug.Assert((combineResult == RegionType.SIMPLEREGION) ||
+                                            (combineResult == RegionType.NULLREGION),
                                             "SIMPLEREGION or NULLREGION expected.");
                         }
                     }
@@ -633,15 +633,15 @@ namespace System.Windows.Forms
                     {
                         // If there was no clipping region, then the result is a simple region.
                         // We don't need to keep track of the original now, since it is empty.
-                        SafeNativeMethods.DeleteObject(hOriginalClippingRegion);
-                        hOriginalClippingRegion = new HandleRef(null, IntPtr.Zero);
-                        originalRegionType = NativeMethods.RegionFlags.SIMPLEREGION;
+                        Gdi32.DeleteObject(hOriginalClippingRegion);
+                        hOriginalClippingRegion = IntPtr.Zero;
+                        originalRegionType = RegionType.SIMPLEREGION;
                     }
 
                     // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                    NativeMethods.RegionFlags selectResult = (NativeMethods.RegionFlags)SafeNativeMethods.SelectClipRgn(hDC, hClippingRegion);
-                    Debug.Assert((selectResult == NativeMethods.RegionFlags.SIMPLEREGION ||
-                                  selectResult == NativeMethods.RegionFlags.NULLREGION),
+                    RegionType selectResult = Gdi32.SelectClipRgn(hDC, hClippingRegion);
+                    Debug.Assert((selectResult == RegionType.SIMPLEREGION ||
+                                  selectResult == RegionType.NULLREGION),
                                   "SIMPLEREGION or NULLLREGION expected.");
 
                 }
@@ -655,12 +655,12 @@ namespace System.Windows.Forms
                     // Delete the new clipping region, as the clipping region for the HDC is now set
                     // to this rectangle. Hold on to hOriginalClippingRegion, as we'll need to restore
                     // it when this object is disposed.
-                    success = SafeNativeMethods.DeleteObject(hClippingRegion);
+                    success = Gdi32.DeleteObject(hClippingRegion) != BOOL.FALSE;
                     Debug.Assert(success, "DeleteObject(hClippingRegion) failed.");
 
-                    if (hOriginalClippingRegion.Handle != IntPtr.Zero)
+                    if (hOriginalClippingRegion != IntPtr.Zero)
                     {
-                        success = SafeNativeMethods.DeleteObject(hOriginalClippingRegion);
+                        success = Gdi32.DeleteObject(hOriginalClippingRegion) != BOOL.FALSE;
                         Debug.Assert(success, "DeleteObject(hOriginalClippingRegion) failed.");
                     }
                 }
@@ -688,8 +688,8 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Allows you to get the graphics object based off of the translated HDC.
-            /// Note this will be disposed when the DCMapping object is disposed.
+            ///  Allows you to get the graphics object based off of the translated HDC.
+            ///  Note this will be disposed when the DCMapping object is disposed.
             /// </summary>
             public Graphics Graphics
             {

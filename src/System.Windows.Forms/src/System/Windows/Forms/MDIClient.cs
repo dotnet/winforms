@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -151,16 +152,16 @@ namespace System.Windows.Forms
             switch (value)
             {
                 case MdiLayout.Cascade:
-                    SendMessage(Interop.WindowMessages.WM_MDICASCADE, 0, 0);
+                    SendMessage(WindowMessages.WM_MDICASCADE, 0, 0);
                     break;
                 case MdiLayout.TileVertical:
-                    SendMessage(Interop.WindowMessages.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
+                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
                     break;
                 case MdiLayout.TileHorizontal:
-                    SendMessage(Interop.WindowMessages.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
+                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    SendMessage(Interop.WindowMessages.WM_MDIICONARRANGE, 0, 0);
+                    SendMessage(WindowMessages.WM_MDIICONARRANGE, 0, 0);
                     break;
             }
         }
@@ -242,16 +243,16 @@ namespace System.Windows.Forms
                             if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
                             {
                                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
-                                wp.ptMinPosition_y -= yDelta;
-                                if (wp.ptMinPosition_y == -1)
+                                wp.ptMinPosition.Y -= yDelta;
+                                if (wp.ptMinPosition.Y == -1)
                                 {
                                     if (yDelta < 0)
                                     {
-                                        wp.ptMinPosition_y = 0;
+                                        wp.ptMinPosition.Y = 0;
                                     }
                                     else
                                     {
-                                        wp.ptMinPosition_y = -2;
+                                        wp.ptMinPosition.Y = -2;
                                     }
                                 }
                                 wp.flags = NativeMethods.WPF_SETMINPOSITION;
@@ -269,25 +270,29 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This code is required to set the correct window region during the resize of the Form at design time.
-        /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to
-        /// resize and hence draw the correct backcolor.
+        ///  This code is required to set the correct window region during the resize of the Form at design time.
+        ///  There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to
+        ///  resize and hence draw the correct backcolor.
         /// </summary>
         private void SetWindowRgn()
         {
             IntPtr rgn1 = IntPtr.Zero;
             IntPtr rgn2 = IntPtr.Zero;
-            NativeMethods.RECT rect = new NativeMethods.RECT();
+            RECT rect = new RECT();
             CreateParams cp = CreateParams;
 
             AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
 
             Rectangle bounds = Bounds;
-            rgn1 = SafeNativeMethods.CreateRectRgn(0, 0, bounds.Width, bounds.Height);
+            rgn1 = Gdi32.CreateRectRgn(0, 0, bounds.Width, bounds.Height);
             try
             {
-                rgn2 = SafeNativeMethods.CreateRectRgn(-rect.left, -rect.top,
-                                             bounds.Width - rect.right, bounds.Height - rect.bottom);
+                rgn2 = Gdi32.CreateRectRgn(
+                    -rect.left,
+                    -rect.top,
+                    bounds.Width - rect.right,
+                    bounds.Height - rect.bottom);
+
                 try
                 {
                     if (rgn1 == IntPtr.Zero || rgn2 == IntPtr.Zero)
@@ -295,7 +300,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
 
-                    if (SafeNativeMethods.CombineRgn(new HandleRef(null, rgn1), new HandleRef(null, rgn1), new HandleRef(null, rgn2), NativeMethods.RGN_DIFF) == 0)
+                    if (Gdi32.CombineRgn(rgn1, rgn1, rgn2, Gdi32.CombineMode.RGN_DIFF) == 0)
                     {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
@@ -314,7 +319,7 @@ namespace System.Windows.Forms
                 {
                     if (rgn2 != IntPtr.Zero)
                     {
-                        SafeNativeMethods.DeleteObject(new HandleRef(null, rgn2));
+                        Gdi32.DeleteObject(rgn2);
                     }
                 }
             }
@@ -322,7 +327,7 @@ namespace System.Windows.Forms
             {
                 if (rgn1 != IntPtr.Zero)
                 {
-                    SafeNativeMethods.DeleteObject(new HandleRef(null, rgn1));
+                    Gdi32.DeleteObject(rgn1);
                 }
             }
         }
@@ -347,14 +352,14 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
 
-                case Interop.WindowMessages.WM_CREATE:
+                case WindowMessages.WM_CREATE:
                     if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {
                         SetWindowRgn();
                     }
                     break;
 
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case WindowMessages.WM_SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
                     Form childForm = null;
                     if (ParentInternal is Form)
@@ -376,7 +381,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     InvokeGotFocus(this, EventArgs.Empty);
                     return;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case WindowMessages.WM_KILLFOCUS:
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }

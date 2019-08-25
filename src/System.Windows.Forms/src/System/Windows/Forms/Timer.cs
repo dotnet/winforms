@@ -5,12 +5,13 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Implements a Windows-based timer that raises an event at user-defined intervals.
-    /// This timer is optimized for use in Win Forms applications and must be used in a window.
+    ///  Implements a Windows-based timer that raises an event at user-defined intervals.
+    ///  This timer is optimized for use in Win Forms applications and must be used in a window.
     /// </summary>
     [DefaultProperty(nameof(Interval))]
     [DefaultEvent(nameof(Tick))]
@@ -32,14 +33,14 @@ namespace System.Windows.Forms
         private readonly object _syncObj = new object();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Timer'/> class.
+        ///  Initializes a new instance of the <see cref='Timer'/> class.
         /// </summary>
         public Timer() : base()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='Timer'/> class with the specified container.
+        ///  Initializes a new instance of the <see cref='Timer'/> class with the specified container.
         /// </summary>
         public Timer(IContainer container) : this()
         {
@@ -60,7 +61,7 @@ namespace System.Windows.Forms
         public object Tag { get; set; }
 
         /// <summary>
-        /// Occurs when the specified timer interval has elapsed and the timer is enabled.
+        ///  Occurs when the specified timer interval has elapsed and the timer is enabled.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.TimerTimerDescr))]
@@ -71,7 +72,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Disposes of the resources (other than memory) used by the timer.
+        ///  Disposes of the resources (other than memory) used by the timer.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -86,7 +87,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates whether the timer is running.
+        ///  Indicates whether the timer is running.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
@@ -132,7 +133,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates the time, in milliseconds, between timer ticks.
+        ///  Indicates the time, in milliseconds, between timer ticks.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(100)]
@@ -166,17 +167,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref='Tick'/> event.
+        ///  Raises the <see cref='Tick'/> event.
         /// </summary>
         protected virtual void OnTick(EventArgs e) => _onTimer?.Invoke(this, e);
 
         /// <summary>
-        /// Starts the timer.
+        ///  Starts the timer.
         /// </summary>
         public void Start() => Enabled = true;
 
         /// <summary>
-        /// Stops the timer.
+        ///  Stops the timer.
         /// </summary>
         public void Stop() => Enabled = false;
 
@@ -235,7 +236,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns true if we need to marshal across threads to access this timer's HWND.
+            ///  Returns true if we need to marshal across threads to access this timer's HWND.
             /// </summary>
             private bool GetInvokeRequired(IntPtr hWnd)
             {
@@ -249,7 +250,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Changes the interval of the timer without destroying the HWND.
+            ///  Changes the interval of the timer without destroying the HWND.
             /// <summary>
             public void RestartTimer(int newInterval)
             {
@@ -271,7 +272,7 @@ namespace System.Windows.Forms
             public void StopTimer() => StopTimer(IntPtr.Zero, destroyHwnd: true);
 
             /// <summary>
-            /// Stop the timer and optionally destroy the HWND.
+            ///  Stop the timer and optionally destroy the HWND.
             /// </summary>
             public void StopTimer(IntPtr hWnd, bool destroyHwnd)
             {
@@ -283,7 +284,7 @@ namespace System.Windows.Forms
                 // Fire a message across threads to destroy the timer and HWND on the thread that created it.
                 if (GetInvokeRequired(hWnd))
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, hWnd), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, hWnd), WindowMessages.WM_CLOSE, 0, 0);
                     return;
                 }
 
@@ -317,7 +318,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Destroy the handle, stopping the timer first.
+            ///  Destroy the handle, stopping the timer first.
             /// </summary>
             public override void DestroyHandle()
             {
@@ -345,7 +346,7 @@ namespace System.Windows.Forms
                 Debug.Assert(m.HWnd == Handle && Handle != IntPtr.Zero, "Timer getting messages for other windows?");
 
                 // For timer messages call the timer event.
-                if (m.Msg == Interop.WindowMessages.WM_TIMER)
+                if (m.Msg == WindowMessages.WM_TIMER)
                 {
                     if (unchecked((int)(long)m.WParam) == _timerID)
                     {
@@ -353,7 +354,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
-                else if (m.Msg == Interop.WindowMessages.WM_CLOSE)
+                else if (m.Msg == WindowMessages.WM_CLOSE)
                 {
                     // This is a posted method from another thread that tells us we need
                     // to kill the timer. The handle may already be gone, so we specify it here.

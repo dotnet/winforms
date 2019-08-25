@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Delegate to the WebBrowser Navigated event.
+    ///  Delegate to the WebBrowser Navigated event.
     /// </summary>
     public delegate void WebBrowserNavigatedEventHandler(object sender, WebBrowserNavigatedEventArgs e);
 }

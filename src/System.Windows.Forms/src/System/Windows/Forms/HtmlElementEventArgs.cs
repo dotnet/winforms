@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
@@ -12,7 +13,7 @@ namespace System.Windows.Forms
     {
         private readonly HtmlShimManager _shimManager;
 
-        internal HtmlElementEventArgs(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLEventObj eventObj)
+        internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
         {
             NativeHTMLEventObj = eventObj;
             Debug.Assert(NativeHTMLEventObj != null, "The event object should implement IHTMLEventObj");
@@ -20,7 +21,7 @@ namespace System.Windows.Forms
             _shimManager = shimManager;
         }
 
-        private UnsafeNativeMethods.IHTMLEventObj NativeHTMLEventObj { get; }
+        private IHTMLEventObj NativeHTMLEventObj { get; }
 
         public MouseButtons MouseButtonsPressed
         {
@@ -68,20 +69,20 @@ namespace System.Windows.Forms
         public int KeyPressedCode => NativeHTMLEventObj.GetKeyCode();
 
         /// <summary>
-        /// Indicates whether the Alt key was pressed, if this information is
-        /// provided to the IHtmlEventObj
+        ///  Indicates whether the Alt key was pressed, if this information is
+        ///  provided to the IHtmlEventObj
         /// </summary>
         public bool AltKeyPressed => NativeHTMLEventObj.GetAltKey();
 
         /// <summary>
-        /// Indicates whether the Ctrl key was pressed, if this information is
-        /// provided to the IHtmlEventObj
+        ///  Indicates whether the Ctrl key was pressed, if this information is
+        ///  provided to the IHtmlEventObj
         /// </summary>
         public bool CtrlKeyPressed => NativeHTMLEventObj.GetCtrlKey();
 
         /// <summary>
-        /// Indicates whether the Shift key was pressed, if this information is
-        /// provided to the IHtmlEventObj
+        ///  Indicates whether the Shift key was pressed, if this information is
+        ///  provided to the IHtmlEventObj
         /// </summary>
         public bool ShiftKeyPressed => NativeHTMLEventObj.GetShiftKey();
 
@@ -103,7 +104,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
+                IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
                 return htmlElement == null ? null : new HtmlElement(_shimManager, htmlElement);
             }
         }
@@ -114,7 +115,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                UnsafeNativeMethods.IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
+                IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
                 return htmlElement == null ? null : new HtmlElement(_shimManager, htmlElement);
             }
         }
