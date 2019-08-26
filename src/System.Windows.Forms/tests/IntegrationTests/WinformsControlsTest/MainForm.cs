@@ -112,5 +112,10 @@ namespace WinformsControlsTest
         {
             new RichTextBoxes().Show();
         }
+
+        private void PictureBoxes_Click(object sender, EventArgs e)
+        {
+            new PictureBoxes().Show();
+        }
     }
 }
