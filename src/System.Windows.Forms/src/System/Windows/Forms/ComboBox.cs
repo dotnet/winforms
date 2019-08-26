@@ -5410,7 +5410,7 @@ namespace System.Windows.Forms
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_EditControlTypeId;
                     case NativeMethods.UIA_NamePropertyId:
-                        return Name;
+                        return Name ?? SR.ComboBoxEditDefaultAccessibleName;
                     case NativeMethods.UIA_AccessKeyPropertyId:
                         return string.Empty;
                     case NativeMethods.UIA_HasKeyboardFocusPropertyId:
