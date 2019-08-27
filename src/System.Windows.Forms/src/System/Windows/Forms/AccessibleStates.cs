@@ -168,11 +168,11 @@ namespace System.Windows.Forms
         ///  selected, the objects are removed from the selection. If the anchor
         ///  object is selected, the selection is extended to include this object
         ///  and all the objects in between. You can set the selection state by
-        ///  combining this flag with <see cref='AccessibleSelection.AddSelection '/>
+        ///  combining this flag with <see cref='AccessibleSelection.AddSelection'/>
         ///  or <see cref='AccessibleSelection.RemoveSelection'/>. This flag does
         ///  not change the focus or the selection anchor unless it is combined with
         /// <see cref='AccessibleSelection.TakeFocus'/>. The behavior of
-        /// <see cref='AccessibleStates.ExtendSelection'/>|<see cref='AccessibleSelection.TakeFocus '/>
+        /// <see cref='AccessibleStates.ExtendSelection'/>|<see cref='AccessibleSelection.TakeFocus'/>
         ///  is equivalent to adding an item to a selection manually by holding down
         ///  the SHIFT key and clicking an unselected object.
         ///  This flag may not be combined with <see cref='AccessibleSelection.TakeSelection'/>.

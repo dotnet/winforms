@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design
+using System.Runtime.InteropServices;
+
+namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  This event is thown by the DesignerActionListservice when a shortcut is either added or removed to/from the related object.
+    ///  This event is raised by the <see cref="DesignerActionListservice"/> when a shortcut is either added or removed to/from the related object.
     /// </summary>
-    [System.Runtime.InteropServices.ComVisible(true)]
+    [ComVisible(true)]
     public delegate void DesignerActionListsChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
 }

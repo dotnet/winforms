@@ -13,8 +13,19 @@ namespace System.Windows.Forms
     /// </summary>
     public class ImageIndexConverter : Int32Converter
     {
-        private string parentImageListProperty = "Parent";
 
+        /// <summary>
+        ///  Gets a value that indicates whether a <see langword="null" /> value is valid in
+        ///  the <see cref="TypeConverter.StandardValuesCollection" /> collection.
+        /// </summary>
+        /// <value>
+        ///  Always returns <see langword="true" /> to indicate that a <see langword="null" /> value
+        ///  isn't valid in the standard values collection.
+        /// </value>
+        /// <remarks>
+        ///  <c>none</c> is the display name that is used when standard values are presented
+        ///  in the control UI and corresponds to a <c>null</c> value.
+        /// </remarks>
         protected virtual bool IncludeNoneAsStandardValue
         {
             get
@@ -29,17 +40,7 @@ namespace System.Windows.Forms
         ///  on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
         ///  the ToolStripItem.Owner property.
         /// </summary>
-        internal string ParentImageListProperty
-        {
-            get
-            {
-                return parentImageListProperty;
-            }
-            set
-            {
-                parentImageListProperty = value;
-            }
-        }
+        internal string ParentImageListProperty { get; set; } = "Parent";
 
         /// <summary>
         ///  Converts the given value object to a 32-bit signed integer object.
@@ -77,11 +78,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a collection containing a set of standard values
-        ///  for the data type this validator is designed for.  This
-        ///  will return null if the data type does not support a
-        ///  standard set of values.
+        ///  Retrieves a collection containing a set of standard values for the data type this validator is designed for.
         /// </summary>
+        /// <param name="context">
+        ///  An <see cref="ITypeDescriptorContext" /> that provides a format context, which can be used to extract
+        ///  additional information about the environment this type converter is being invoked from. 
+        ///  This parameter or properties of this parameter can be <see langword="null" />.
+        /// </param>
+        /// <returns>
+        ///  A collection that holds a standard set of valid index values. 
+        ///  If no image list is found, this collection will contain a single object with a value of -1. 
+        ///  This returns <see langword="null" /> if the data type doesn't support a standard set of values.
+        /// </returns>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
             if (context != null && context.Instance != null)

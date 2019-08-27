@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the ListControlConvert event of a ListView.
+    ///  Represents a method that will handle the <see cref="ListControl.Format"/> event of a <see cref="ListControl"/>.
     /// </summary>
     public delegate void ListControlConvertEventHandler(object sender, ListControlConvertEventArgs e);
 }

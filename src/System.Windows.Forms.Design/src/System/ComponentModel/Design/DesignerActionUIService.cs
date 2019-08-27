@@ -41,7 +41,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This event is thrown whenever a request is made to show/hide the ui
+        ///  This event is thrown whenever a request is made to show/hide the UI.
         /// </summary>
         public event DesignerActionUIStateChangeEventHandler DesignerActionUIStateChange
         {
@@ -60,7 +60,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This is a new Helper Method that the service provides to refresh the DesignerActionGlyph as well as DesignerActionPanels.
+        ///  Refreshes the <see cref="DesignerActionGlyph">designer action glyph</see> as well as <see cref="DesignerActionPanel">designer action panels</see>.
         /// </summary>
         public void Refresh(IComponent component)
         {

@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the <see cref='TreeView.OnNodeClick'/>,
+    ///  Represents a method that will handle the <see cref='TreeView.OnNodeClick'/>,
     /// <see cref='TreeView.OnNodeClick'/>, <see cref='TreeView.OnNodeClick'/>,
     ///  or <see cref='TreeView.BeforeSelect'/> event of a <see cref='TreeView'/>
     /// </summary>

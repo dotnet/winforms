@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the <see cref='Control.QueryContinueDrag'/>
+    ///  Represents a method that will handle the <see cref='Control.QueryContinueDrag'/>
     ///  event of a <see cref='Control'/>.
     /// </summary>
     public delegate void QueryContinueDragEventHandler(object sender, QueryContinueDragEventArgs e);
