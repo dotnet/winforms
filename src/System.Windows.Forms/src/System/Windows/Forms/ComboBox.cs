@@ -3947,14 +3947,14 @@ namespace System.Windows.Forms
 
                                 Rectangle updateRegionBoundingRect = wr.ToRectangle();
                                 FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
-                                // Call the base class to do its painting (with a clipped DC).
 
-                                NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
+                                // Call the base class to do its painting (with a clipped DC).
+                                var ps = new User32.PAINTSTRUCT();
                                 IntPtr dc;
                                 bool disposeDc = false;
                                 if (m.WParam == IntPtr.Zero)
                                 {
-                                    dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                                    dc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
                                     disposeDc = true;
                                 }
                                 else
@@ -3985,7 +3985,7 @@ namespace System.Windows.Forms
 
                                 if (disposeDc)
                                 {
-                                    UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+                                    User32.EndPaint(new HandleRef(this, Handle), ref ps);
                                 }
 
                             }

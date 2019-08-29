@@ -991,8 +991,8 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnPaint(ref Message m)
             {
-                NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                IntPtr hdc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                var ps = new User32.PAINTSTRUCT();
+                IntPtr hdc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
                 try
                 {
                     CreateMirrorDC(hdc, _windowBounds.Width - 1);
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+                    User32.EndPaint(new HandleRef(this, Handle), ref ps);
                 }
             }
 

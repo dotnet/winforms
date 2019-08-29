@@ -12863,7 +12863,7 @@ namespace System.Windows.Forms
             IntPtr hWnd = IntPtr.Zero;
             IntPtr dc;
             Rectangle clip;
-            NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
+            var ps = new User32.PAINTSTRUCT();
             bool needDisposeDC = false;
 
             try
@@ -12873,15 +12873,13 @@ namespace System.Windows.Forms
                     // Cache Handle not only for perf but to avoid object disposed exception in case the window
                     // is destroyed in an event handler.
                     hWnd = Handle;
-                    dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, hWnd), ref ps);
+                    dc = User32.BeginPaint(new HandleRef(this, hWnd), ref ps);
                     if (dc == IntPtr.Zero)
                     {
                         return;
                     }
                     needDisposeDC = true;
-                    clip = new Rectangle(ps.rcPaint_left, ps.rcPaint_top,
-                                         ps.rcPaint_right - ps.rcPaint_left,
-                                         ps.rcPaint_bottom - ps.rcPaint_top);
+                    clip = ps.rcPaint;
                 }
                 else
                 {
@@ -13008,7 +13006,7 @@ namespace System.Windows.Forms
             {
                 if (needDisposeDC)
                 {
-                    UnsafeNativeMethods.EndPaint(new HandleRef(this, hWnd), ref ps);
+                    User32.EndPaint(new HandleRef(this, hWnd), ref ps);
                 }
             }
         }
