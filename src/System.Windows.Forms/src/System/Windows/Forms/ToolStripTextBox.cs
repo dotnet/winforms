@@ -644,7 +644,7 @@ namespace System.Windows.Forms
 
             internal override bool SupportsUiaProviders => true;
 
-            private void InvalidateNonClient()
+            private unsafe void InvalidateNonClient()
             {
                 if (!IsPopupTextBox)
                 {
@@ -661,13 +661,12 @@ namespace System.Windows.Forms
                 Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.CombineMode.RGN_XOR);
 
                 // Call RedrawWindow with the region.
-                RECT ignored = default;
-                SafeNativeMethods.RedrawWindow(
+                User32.RedrawWindow(
                     new HandleRef(this, Handle),
-                    ref ignored,
+                    null,
                     hNonClientRegion,
-                    NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_ERASE | NativeMethods.RDW_UPDATENOW
-                        | NativeMethods.RDW_ERASENOW | NativeMethods.RDW_FRAME);
+                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_UPDATENOW
+                        | User32.RedrawWindowOptions.RDW_ERASENOW | User32.RedrawWindowOptions.RDW_FRAME);
 
                 if (hNonClientRegion != IntPtr.Zero)
                 {

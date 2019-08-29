@@ -560,27 +560,27 @@ namespace System.Windows.Forms.Design
         }
 
         // Called when our document becomes active.  We paint our form's border the appropriate color here.
-        private void OnDesignerActivate(object source, EventArgs evevent)
+        private unsafe void OnDesignerActivate(object source, EventArgs evevent)
         {
             // Paint the form's title bar UI-active
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
                 NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 1, 0);
-                SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RedrawWindowOptions.RDW_FRAME);
             }
         }
 
         /// <summary>
         ///  Called by the host when we become inactive.  Here we update the title bar of our form so it's the inactive color.
         /// </summary>
-        private void OnDesignerDeactivate(object sender, EventArgs e)
+        private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
                 NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 0, 0);
-                SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RedrawWindowOptions.RDW_FRAME);
             }
         }
 

@@ -2619,14 +2619,13 @@ namespace System.Windows.Forms
 
             // TreeView doesn't properly revert back to the unselected image
             // if the unselected image is blank.
-            //
-            RECT rc = new RECT();
+            var rc = new RECT();
             *((IntPtr*)&rc.left) = nmtv->itemOld.hItem;
             if (nmtv->itemOld.hItem != IntPtr.Zero)
             {
                 if (unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_GETITEMRECT, 1, ref rc)) != 0)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rc, true);
+                    User32.InvalidateRect(new HandleRef(this, Handle), &rc, BOOL.TRUE);
                 }
             }
         }

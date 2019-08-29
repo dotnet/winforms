@@ -3786,16 +3786,14 @@ namespace System.Windows.Forms
             }
         }
 
-        private void InvalidateColumnHeaders()
+        private unsafe void InvalidateColumnHeaders()
         {
             if (viewStyle == View.Details && IsHandleCreated)
             {
-                //
-
                 IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
                 if (hwndHdr != IntPtr.Zero)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(this, hwndHdr), null, true);
+                    User32.InvalidateRect(new HandleRef(this, hwndHdr), null, BOOL.TRUE);
                 }
             }
         }

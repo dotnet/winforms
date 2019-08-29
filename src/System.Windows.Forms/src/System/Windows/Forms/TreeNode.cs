@@ -1895,7 +1895,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void Realize(bool insertFirst)
+        internal unsafe void Realize(bool insertFirst)
         {
             // Debug.assert(handle == 0, "Node already realized");
             TreeView tv = TreeView;
@@ -1987,7 +1987,7 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.PostMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, IntPtr.Zero, handle);
                 }
 
-                SafeNativeMethods.InvalidateRect(new HandleRef(tv, tv.Handle), null, false);
+                User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);
 
                 if (parent.nodesCleared && (insertFirst || prev == null) && !tv.Scrollable)
                 {

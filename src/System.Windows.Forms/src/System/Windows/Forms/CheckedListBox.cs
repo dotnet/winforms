@@ -492,13 +492,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Invalidates the given item in the listbox
         /// </summary>
-        private void InvalidateItem(int index)
+        private unsafe void InvalidateItem(int index)
         {
             if (IsHandleCreated)
             {
-                RECT rect = new RECT();
+                var rect = new RECT();
                 SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect);
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rect, false);
+                User32.InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
 
@@ -846,13 +846,13 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void OnBackColorChanged(EventArgs e)
+        protected unsafe override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
 
             if (IsHandleCreated)
             {
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), null, true);
+                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.TRUE);
             }
         }
 

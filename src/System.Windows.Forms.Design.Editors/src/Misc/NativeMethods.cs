@@ -472,7 +472,6 @@ namespace System.Windows.Forms.Design
         public const int HWND_TOPMOST = -1;
         public const int HWND_NOTOPMOST = -2;
         public const int CWP_SKIPINVISIBLE = 0x0001;
-        public const int RDW_FRAME = 0x0400;
         public const int TVM_GETITEMRECT = 0x1100 + 4;
         public const int TVM_GETCOUNT = 0x1100 + 5;
         public const int TVM_GETINDENT = 0x1100 + 6;

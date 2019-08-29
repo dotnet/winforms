@@ -2131,7 +2131,7 @@ namespace System.Windows.Forms
         ///  beginUpdate(), any redrawing caused by operations performed on the
         ///  combo box is deferred until the call to endUpdate().
         /// </summary>
-        public void EndUpdate()
+        public unsafe void EndUpdate()
         {
             updateCount--;
             if (updateCount == 0 && AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -2142,11 +2142,11 @@ namespace System.Windows.Forms
             {
                 if (childEdit != null && childEdit.Handle != IntPtr.Zero)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(this, childEdit.Handle), null, false);
+                    User32.InvalidateRect(new HandleRef(this, childEdit.Handle), null, BOOL.FALSE);
                 }
                 if (childListBox != null && childListBox.Handle != IntPtr.Zero)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(this, childListBox.Handle), null, false);
+                    User32.InvalidateRect(new HandleRef(this, childListBox.Handle), null, BOOL.FALSE);
                 }
             }
         }
@@ -2378,14 +2378,14 @@ namespace System.Windows.Forms
         }
 
         // Invalidate the entire control, including child HWNDs and non-client areas
-        private void InvalidateEverything()
+        private unsafe void InvalidateEverything()
         {
-            SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle),
-                                           null, NativeMethods.NullHandleRef,
-                                           NativeMethods.RDW_INVALIDATE |
-                                           NativeMethods.RDW_FRAME |  // Control.Invalidate(true) doesn't invalidate the non-client region
-                                           NativeMethods.RDW_ERASE |
-                                           NativeMethods.RDW_ALLCHILDREN);
+            // Control.Invalidate(true) doesn't invalidate the non-client region
+            User32.RedrawWindow(
+                new HandleRef(this, Handle),
+                null,
+                IntPtr.Zero,
+                User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_FRAME | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
         }
 
         /// <summary>
@@ -4923,11 +4923,10 @@ namespace System.Windows.Forms
                 base.SetFocus();
             }
 
-            internal override void SelectItem()
+            internal unsafe override void SelectItem()
             {
                 _owningComboBox.SelectedIndex = GetCurrentIndex();
-
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, false);
+                User32.InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, BOOL.FALSE);
             }
 
             internal override void AddToSelection()

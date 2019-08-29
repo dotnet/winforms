@@ -1113,7 +1113,7 @@ namespace System.Windows.Forms
             ///  rectangles and descriptions. This basically brings the error window up to date with
             ///  the internal data structures.
             /// </summary>
-            public void Update(bool timerCaused)
+            public unsafe void Update(bool timerCaused)
             {
                 IconRegion iconRegion = _provider.Region;
                 Size size = iconRegion.Size;
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms
 
                 SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, _windowBounds.X, _windowBounds.Y,
                                      _windowBounds.Width, _windowBounds.Height, NativeMethods.SWP_NOACTIVATE);
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), null, false);
+                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
             }
 
             /// <summary>

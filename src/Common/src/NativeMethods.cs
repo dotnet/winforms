@@ -1063,15 +1063,7 @@ namespace System.Windows.Forms
                                                     //public const int RECO_DRAG  = 0x00000004;    // drag
 
         public const int RPC_E_CHANGED_MODE = unchecked((int)0x80010106),
-            RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D),
-            RDW_INVALIDATE = 0x0001,
-            RDW_ERASE = 0x0004,
-            RDW_ALLCHILDREN = 0x0080,
-            RDW_ERASENOW = 0x0200,
-            RDW_UPDATENOW = 0x0100,
-            RDW_FRAME = 0x0400,
-            RB_INSERTBANDA = (0x0400 + 1),
-            RB_INSERTBANDW = (0x0400 + 10);
+            RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D);
 
         public const int stc4 = 0x0443,
         STARTF_USESHOWWINDOW = 0x00000001,

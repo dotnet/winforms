@@ -6484,7 +6484,7 @@ namespace System.Windows.Forms
         ///  occur, calling update after invalidate will force a
         ///  synchronous paint.
         /// </summary>
-        public void Invalidate(Region region, bool invalidateChildren)
+        public unsafe void Invalidate(Region region, bool invalidateChildren)
         {
             if (region == null)
             {
@@ -6493,17 +6493,16 @@ namespace System.Windows.Forms
             else if (IsHandleCreated)
             {
                 IntPtr regionHandle = GetHRgn(region);
-
                 try
                 {
                     Debug.Assert(regionHandle != IntPtr.Zero, "Region wasn't null but HRGN is?");
                     if (invalidateChildren)
                     {
-                        SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle),
-                                                       null, new HandleRef(region, regionHandle),
-                                                       NativeMethods.RDW_INVALIDATE |
-                                                       NativeMethods.RDW_ERASE |
-                                                       NativeMethods.RDW_ALLCHILDREN);
+                        User32.RedrawWindow(
+                            new HandleRef(this, Handle),
+                            null,
+                            new HandleRef(region, regionHandle),
+                            User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
                     }
                     else
                     {
@@ -6548,26 +6547,27 @@ namespace System.Windows.Forms
         ///  This will not force a synchronous paint to occur, calling update after
         ///  invalidate will force a synchronous paint.
         /// </summary>
-        public void Invalidate(bool invalidateChildren)
+        public unsafe void Invalidate(bool invalidateChildren)
         {
             if (IsHandleCreated)
             {
                 if (invalidateChildren)
                 {
-                    SafeNativeMethods.RedrawWindow(new HandleRef(_window, Handle),
-                                                   null, NativeMethods.NullHandleRef,
-                                                   NativeMethods.RDW_INVALIDATE |
-                                                   NativeMethods.RDW_ERASE |
-                                                   NativeMethods.RDW_ALLCHILDREN);
+                    User32.RedrawWindow(
+                        new HandleRef(_window, Handle),
+                        null,
+                        IntPtr.Zero,
+                        User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
                 }
                 else
                 {
                     // It's safe to invoke InvalidateRect from a separate thread.
                     using (new MultithreadSafeCallScope())
                     {
-                        SafeNativeMethods.InvalidateRect(new HandleRef(_window, Handle),
-                                                         null,
-                                                         (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque);
+                        User32.InvalidateRect(
+                            new HandleRef(_window, Handle),
+                            null,
+                            (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? BOOL.TRUE : BOOL.FALSE);
                     }
                 }
 
@@ -6592,7 +6592,7 @@ namespace System.Windows.Forms
         ///  occur, calling update after invalidate will force a
         ///  synchronous paint.
         /// </summary>
-        public void Invalidate(Rectangle rc, bool invalidateChildren)
+        public unsafe void Invalidate(Rectangle rc, bool invalidateChildren)
         {
             if (rc.IsEmpty)
             {
@@ -6600,26 +6600,24 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated)
             {
+                RECT rcArea = rc;
                 if (invalidateChildren)
                 {
-                    RECT rcArea = rc;
-                    SafeNativeMethods.RedrawWindow(
+                    User32.RedrawWindow(
                         new HandleRef(_window, Handle),
-                        ref rcArea,
+                        &rcArea,
                         IntPtr.Zero,
-                        NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_ERASE | NativeMethods.RDW_ALLCHILDREN);
+                        User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
                 }
                 else
                 {
-                    RECT rcArea = new RECT(rc);
-
                     // It's safe to invoke InvalidateRect from a separate thread.
                     using (new MultithreadSafeCallScope())
                     {
-                        SafeNativeMethods.InvalidateRect(
+                        User32.InvalidateRect(
                             new HandleRef(_window, Handle),
-                            ref rcArea,
-                            (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque);
+                            &rcArea,
+                            (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? BOOL.TRUE : BOOL.FALSE);
                     }
                 }
                 NotifyInvalidate(rc);

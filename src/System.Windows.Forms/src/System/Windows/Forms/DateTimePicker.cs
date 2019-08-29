@@ -1592,10 +1592,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Forces a repaint of the updown control if it is displayed.
         /// </summary>
-        private void UpdateUpDown()
+        private unsafe void UpdateUpDown()
         {
             // The upDown control doesn't repaint correctly.
-            //
             if (ShowUpDown)
             {
                 EnumChildren c = new EnumChildren();
@@ -1603,7 +1602,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.EnumChildWindows(new HandleRef(this, Handle), cb, NativeMethods.NullHandleRef);
                 if (c.hwndFound != IntPtr.Zero)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(c, c.hwndFound), null, true);
+                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
                     SafeNativeMethods.UpdateWindow(new HandleRef(c, c.hwndFound));
                 }
             }
