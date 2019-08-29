@@ -6,7 +6,7 @@
     <VersionPrefix>4.8.1</VersionPrefix>
     <PreReleaseVersionLabel>preview1</PreReleaseVersionLabel>
     <!-- Set to true to produce shipping version strings in non-official builds, instead of fixed values like 42.42.42.42 for AssemblyVersion -->
-    <DotNetUseShippingVersions>true</DotNetUseShippingVersions>
+    <DotNetUseShippingVersions>true<DotNetUseShippingVersions>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp3.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
   </PropertyGroup>
