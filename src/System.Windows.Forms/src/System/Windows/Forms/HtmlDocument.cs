@@ -415,7 +415,7 @@ namespace System.Windows.Forms
             return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
-        public object InvokeScript(string scriptName, object[] args)
+        public unsafe object InvokeScript(string scriptName, object[] args)
         {
             object retVal = null;
             NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS
@@ -428,10 +428,9 @@ namespace System.Windows.Forms
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { scriptName };
-                    int[] dispids = new int[] { NativeMethods.ActiveX.DISPID_UNKNOWN };
-                    int hr = scriptObject.GetIDsOfNames(ref g, names, 1,
-                                                   SafeNativeMethods.GetThreadLCID(), dispids);
-                    if (NativeMethods.Succeeded(hr) && (dispids[0] != NativeMethods.ActiveX.DISPID_UNKNOWN))
+                    int dispid = Ole32.DISPID_UNKNOWN;
+                    HRESULT hr = scriptObject.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), &dispid);
+                    if (Succeeded(hr) && dispid != Ole32.DISPID_UNKNOWN)
                     {
                         if (args != null)
                         {
@@ -445,22 +444,23 @@ namespace System.Windows.Forms
 
                         object[] retVals = new object[1];
 
-                        hr = scriptObject.Invoke(dispids[0], ref g, SafeNativeMethods.GetThreadLCID(),
-                                NativeMethods.DISPATCH_METHOD, dp,
-                                retVals, new NativeMethods.tagEXCEPINFO(), null);
-                        if (hr == NativeMethods.S_OK)
+                        hr = scriptObject.Invoke(
+                            dispid,
+                            ref g,
+                            SafeNativeMethods.GetThreadLCID(),
+                            NativeMethods.DISPATCH_METHOD, dp,
+                            retVals,
+                            new NativeMethods.tagEXCEPINFO(),
+                            null);
+                        if (hr == HRESULT.S_OK)
                         {
                             retVal = retVals[0];
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
             }
             finally
             {
@@ -469,6 +469,7 @@ namespace System.Windows.Forms
                     HtmlDocument.FreeVARIANTVector(dp.rgvarg, args.Length);
                 }
             }
+
             return retVal;
         }
 

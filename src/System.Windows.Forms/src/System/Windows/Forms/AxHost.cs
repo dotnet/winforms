@@ -934,19 +934,19 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
+            AmbientChanged(Ole32.DISPID_AMBIENT_FONT);
         }
 
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
+            AmbientChanged(Ole32.DISPID_AMBIENT_FORECOLOR);
         }
 
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
+            AmbientChanged(Ole32.DISPID_AMBIENT_BACKCOLOR);
         }
 
         private void AmbientChanged(int dispid)
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms
                 //
                 if (GetOcx() is UnsafeNativeMethods.IOleControl oleCtl)
                 {
-                    oleCtl.OnAmbientPropertyChange(NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME);
+                    oleCtl.OnAmbientPropertyChange(Ole32.DISPID_AMBIENT_DISPLAYNAME);
                 }
             }
         }
@@ -2343,47 +2343,47 @@ namespace System.Windows.Forms
 
             switch (dispid)
             {
-                case NativeMethods.ActiveX.DISPID_AMBIENT_USERMODE:
+                case Ole32.DISPID_AMBIENT_USERMODE:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for usermode");
                     return IsUserMode();
-                case NativeMethods.ActiveX.DISPID_AMBIENT_AUTOCLIP:
+                case Ole32.DISPID_AMBIENT_AUTOCLIP:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for autoclip");
                     return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_MESSAGEREFLECT:
+                case Ole32.DISPID_AMBIENT_MESSAGEREFLECT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for message reflect");
                     return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD:
+                case Ole32.DISPID_AMBIENT_UIDEAD:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for uidead");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT:
+                case Ole32.DISPID_AMBIENT_DISPLAYASDEFAULT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for displayasdefault");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FONT:
+                case Ole32.DISPID_AMBIENT_FONT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for font");
                     if (richParent != null)
                     {
                         return GetIFontFromFont(richParent.Font);
                     }
                     return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWGRABHANDLES:
+                case Ole32.DISPID_AMBIENT_SHOWGRABHANDLES:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for showGrabHandles");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWHATCHING:
+                case Ole32.DISPID_AMBIENT_SHOWHATCHING:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for showHatching");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR:
+                case Ole32.DISPID_AMBIENT_BACKCOLOR:
                     if (richParent != null)
                     {
                         return GetOleColorFromColor(richParent.BackColor);
                     }
                     return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR:
+                case Ole32.DISPID_AMBIENT_FORECOLOR:
                     if (richParent != null)
                     {
                         return GetOleColorFromColor(richParent.ForeColor);
                     }
                     return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
+                case Ole32.DISPID_AMBIENT_DISPLAYNAME:
                     string rval = GetParentContainer().GetNameForControl(this);
                     if (rval == null)
                     {
@@ -2391,10 +2391,10 @@ namespace System.Windows.Forms
                     }
 
                     return rval;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
+                case Ole32.DISPID_AMBIENT_LOCALEID:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for localeid");
                     return Thread.CurrentThread.CurrentCulture.LCID;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_RIGHTTOLEFT:
+                case Ole32.DISPID_AMBIENT_RIGHTTOLEFT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for right to left");
                     Control ctl = this;
                     while (ctl != null)
@@ -3031,7 +3031,7 @@ namespace System.Windows.Forms
 
         private AxPropertyDescriptor GetPropertyDescriptorFromDispid(int dispid)
         {
-            Debug.Assert(dispid != NativeMethods.ActiveX.DISPID_UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");
+            Debug.Assert(dispid != Ole32.DISPID_UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");
 
             PropertyDescriptorCollection props = FillProperties(null);
             foreach (PropertyDescriptor prop in props)
@@ -3438,7 +3438,7 @@ namespace System.Windows.Forms
                 {
                     if (oleSite != null)
                     {
-                        ((UnsafeNativeMethods.IPropertyNotifySink)oleSite).OnChanged(NativeMethods.MEMBERID_NIL);
+                        ((Ole32.IPropertyNotifySink)oleSite).OnChanged(Ole32.DISPID_UNKNOWN);
                     }
 
                     if (trans != null)
@@ -3998,7 +3998,7 @@ namespace System.Windows.Forms
             Ole32.ISimpleFrameSite,
             UnsafeNativeMethods.IVBGetControl,
             Ole32.IGetVBAObject,
-            UnsafeNativeMethods.IPropertyNotifySink,
+            Ole32.IPropertyNotifySink,
             IReflect,
             IDisposable
         {
@@ -4056,7 +4056,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(UnsafeNativeMethods.IPropertyNotifySink));
+                    connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(Ole32.IPropertyNotifySink));
                 }
                 catch
                 {
@@ -4182,8 +4182,7 @@ namespace System.Windows.Forms
                 return Array.Empty<MemberInfo>();
             }
 
-            object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder,
-                                                    object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
+            object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
             {
                 if (name.StartsWith("[DISPID="))
                 {
@@ -4544,14 +4543,13 @@ namespace System.Windows.Forms
 
             // IPropertyNotifySink methods
 
-            void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid)
+            HRESULT Ole32.IPropertyNotifySink.OnChanged(int dispid)
             {
                 // Some controls fire OnChanged() notifications when getting values of some properties.
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
-                //
                 if (host.NoComponentChangeEvents != 0)
                 {
-                    return;
+                    return HRESULT.S_OK;
                 }
 
                 host.NoComponentChangeEvents++;
@@ -4561,7 +4559,7 @@ namespace System.Windows.Forms
 
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnChanged");
 
-                    if (dispid != NativeMethods.ActiveX.DISPID_UNKNOWN)
+                    if (dispid != Ole32.DISPID_UNKNOWN)
                     {
                         prop = host.GetPropertyDescriptorFromDispid(dispid);
                         if (prop != null)
@@ -4576,7 +4574,6 @@ namespace System.Windows.Forms
                     else
                     {
                         // update them all for DISPID_UNKNOWN.
-                        //
                         PropertyDescriptorCollection props = ((ICustomTypeDescriptor)host).GetProperties();
                         foreach (PropertyDescriptor p in props)
                         {
@@ -4603,7 +4600,7 @@ namespace System.Windows.Forms
                             {
                                 if (coEx == CheckoutException.Canceled)
                                 {
-                                    return;
+                                    return HRESULT.S_OK;
                                 }
                                 throw coEx;
                             }
@@ -4623,12 +4620,14 @@ namespace System.Windows.Forms
                 {
                     host.NoComponentChangeEvents--;
                 }
+
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispid)
+            HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(int dispid)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnRequestEdit for " + host.ToString());
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
         }
 
@@ -7492,7 +7491,7 @@ namespace System.Windows.Forms
                         return dispid.Value;
                     }
 
-                    return NativeMethods.ActiveX.DISPID_UNKNOWN;
+                    return Ole32.DISPID_UNKNOWN;
                 }
             }
 

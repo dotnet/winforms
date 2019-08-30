@@ -1942,22 +1942,14 @@ namespace System.Windows.Forms
         ///  Indicates whether the user can give the focus to this control using the TAB
         ///  key. This property is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(nameof(SR.ControlTabStopDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [DispId(Ole32.DISPID_TABSTOP)]
+        [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         /// <summary> this is the ToolTip used for the individual items

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IOleClientSite,
         UnsafeNativeMethods.IOleInPlaceSite,
         Ole32.ISimpleFrameSite,
-        UnsafeNativeMethods.IPropertyNotifySink,
+        Ole32.IPropertyNotifySink,
         IDisposable
     {
         private readonly WebBrowserBase host;
@@ -352,14 +352,13 @@ namespace System.Windows.Forms
         //
         // IPropertyNotifySink methods:
         //
-        void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid)
+        HRESULT Ole32.IPropertyNotifySink.OnChanged(int dispid)
         {
             // Some controls fire OnChanged() notifications when getting values of some properties.
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
-            //
             if (Host.NoComponentChangeEvents != 0)
             {
-                return;
+                return HRESULT.S_OK;
             }
 
             Host.NoComponentChangeEvents++;
@@ -376,16 +375,16 @@ namespace System.Windows.Forms
             {
                 Host.NoComponentChangeEvents--;
             }
+
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispid)
+        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(int dispid)
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        //
         // Virtual overrides:
-        //
         internal virtual void OnPropertyChanged(int dispid)
         {
             try
@@ -443,7 +442,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(UnsafeNativeMethods.IPropertyNotifySink));
+                    connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(Ole32.IPropertyNotifySink));
                 }
                 catch (Exception ex)
                 {

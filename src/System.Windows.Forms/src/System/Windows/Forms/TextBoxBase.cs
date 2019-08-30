@@ -278,14 +278,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets
-        ///  the background color of the control.
+        ///  Gets or sets the background color of the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
-        SRDescription(nameof(SR.ControlBackColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DispId(Ole32.DISPID_BACKCOLOR)]
+        [SRDescription(nameof(SR.ControlBackColorDescr))]
         public override Color BackColor
         {
             get
@@ -360,26 +357,17 @@ namespace System.Windows.Forms
         ///  Gets or sets the border type
         ///  of the text box control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.Fixed3D),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.TextBoxBorderDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.Fixed3D)]
+        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [SRDescription(nameof(SR.TextBoxBorderDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
                 if (borderStyle != value)
                 {
-                    //verify that 'value' is a valid enum type...
-
-                    //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
@@ -560,11 +548,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the foreground color of the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
-        SRDescription(nameof(SR.ControlForeColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DispId(Ole32.DISPID_FORECOLOR)]
+        [SRDescription(nameof(SR.ControlForeColorDescr))]
         public override Color ForeColor
         {
             get

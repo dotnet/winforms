@@ -96,15 +96,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 fixed (IntPtr* pAddrs = objAddrs)
                 {
-                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(null, parentHandle),
-                                                             0, 0,
-                                                             title,
-                                                             nObjs,
-                                                             new HandleRef(null, (IntPtr)(long)pAddrs),
-                                                             1,
-                                                             new HandleRef(null, guidsAddr),
-                                                             SafeNativeMethods.GetThreadLCID(),
-                                                             0, IntPtr.Zero);
+                    SafeNativeMethods.OleCreatePropertyFrame(
+                        new HandleRef(null, parentHandle),
+                        0,
+                        0,
+                        title,
+                        nObjs,
+                        new HandleRef(null, (IntPtr)(long)pAddrs),
+                        1,
+                        new HandleRef(null, guidsAddr),
+                        (int)SafeNativeMethods.GetThreadLCID(),
+                        0, IntPtr.Zero);
                 }
             }
             finally

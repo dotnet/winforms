@@ -290,16 +290,14 @@ namespace System.Windows.Forms
             set { TextBox.AutoCompleteSource = value; }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.Fixed3D),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.TextBoxBorderDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.Fixed3D)]
+        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [SRDescription(nameof(SR.TextBoxBorderDescr))]
         public BorderStyle BorderStyle
         {
-            get { return TextBox.BorderStyle; }
-            set { TextBox.BorderStyle = value; }
+            get => TextBox.BorderStyle;
+            set => TextBox.BorderStyle = value;
         }
 
         [

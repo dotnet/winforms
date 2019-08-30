@@ -764,7 +764,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(FormBorderStyle.Sizable)]
-        [DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE)]
+        [DispId(Ole32.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.FormBorderStyleDescr))]
         public FormBorderStyle FormBorderStyle
         {
@@ -2350,24 +2350,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property has no effect on Form, we need to hide it from browsers.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(nameof(SR.ControlTabStopDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DispId(Ole32.DISPID_TABSTOP)]
+        [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]

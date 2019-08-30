@@ -119,30 +119,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref='BorderStyle'/>
-        ///
-        ///  property.
+        ///  Gets or sets the <see cref='BorderStyle'/> property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(System.Windows.Forms.StatusBarPanelBorderStyle.Sunken),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(System.Windows.Forms.StatusBarPanelBorderStyle.Sunken)]
+        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))]
         public StatusBarPanelBorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
-                //valid values are 0x1 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelBorderStyle.None, (int)StatusBarPanelBorderStyle.Sunken))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelBorderStyle));
                 }
+
                 if (borderStyle != value)
                 {
                     borderStyle = value;

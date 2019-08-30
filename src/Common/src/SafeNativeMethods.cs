@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         public static extern bool PatBlt(HandleRef hdc, int left, int top, int width, int height, int rop);
 
         [DllImport(ExternDll.Kernel32, EntryPoint = "GetThreadLocale", CharSet = CharSet.Auto)]
-        public static extern int GetThreadLCID();
+        public static extern uint GetThreadLCID();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetMessagePos();

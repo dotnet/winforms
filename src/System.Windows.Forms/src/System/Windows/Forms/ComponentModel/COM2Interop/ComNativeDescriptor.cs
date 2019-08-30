@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -135,7 +136,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             int dispid = Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)component);
-            if (dispid != NativeMethods.MEMBERID_NIL)
+            if (dispid != Ole32.DISPID_UNKNOWN)
             {
                 bool success = false;
                 object value = GetPropertyValue(component, dispid, ref success);
@@ -148,7 +149,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return "";
         }
 
-        internal object GetPropertyValue(object component, string propertyName, ref bool succeeded)
+        internal unsafe object GetPropertyValue(object component, string propertyName, ref bool succeeded)
         {
             if (!(component is UnsafeNativeMethods.IDispatch))
             {
@@ -157,14 +158,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)component;
             string[] names = new string[] { propertyName };
-            int[] dispid = new int[1];
-            dispid[0] = NativeMethods.DISPID_UNKNOWN;
+            int dispid = Ole32.DISPID_UNKNOWN;
             Guid g = Guid.Empty;
             try
             {
-                int hr = iDispatch.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), dispid);
-
-                if (dispid[0] == NativeMethods.DISPID_UNKNOWN || NativeMethods.Failed(hr))
+                HRESULT hr = iDispatch.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), &dispid);
+                if (dispid == Ole32.DISPID_UNKNOWN || !Succeeded(hr))
                 {
                     return null;
                 }
@@ -173,7 +172,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return null;
             }
-            return GetPropertyValue(component, dispid[0], ref succeeded);
+
+            return GetPropertyValue(component, dispid, ref succeeded);
         }
 
         internal object GetPropertyValue(object component, int dispid, ref bool succeeded)
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
             object[] pVarResult = new object[1];
-            if (GetPropertyValue(component, dispid, pVarResult) == NativeMethods.S_OK)
+            if (GetPropertyValue(component, dispid, pVarResult) == HRESULT.S_OK)
             {
                 succeeded = true;
                 return pVarResult[0];
@@ -195,51 +195,46 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal int GetPropertyValue(object component, int dispid, object[] retval)
+        internal HRESULT GetPropertyValue(object component, int dispid, object[] retval)
         {
             if (!(component is UnsafeNativeMethods.IDispatch))
             {
-                return NativeMethods.E_NOINTERFACE;
+                return HRESULT.E_NOINTERFACE;
             }
+
             UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)component;
             try
             {
                 Guid g = Guid.Empty;
                 NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
-                int hr;
-
                 try
                 {
-
-                    hr = iDispatch.Invoke(dispid,
-                                              ref g,
-                                              SafeNativeMethods.GetThreadLCID(),
-                                              NativeMethods.DISPATCH_PROPERTYGET,
-                                              new NativeMethods.tagDISPPARAMS(),
-                                              retval,
-                                              pExcepInfo, null);
-
-                    /*if (hr != NativeMethods.S_OK){
-                      Com2PropertyDescriptor.PrintExceptionInfo(pExcepInfo);
-
-                    } */
-                    if (hr == NativeMethods.DISP_E_EXCEPTION)
+                    HRESULT hr = iDispatch.Invoke(
+                        dispid,
+                        ref g,
+                        SafeNativeMethods.GetThreadLCID(),
+                        NativeMethods.DISPATCH_PROPERTYGET,
+                        new NativeMethods.tagDISPPARAMS(),
+                        retval,
+                        pExcepInfo,
+                        null);
+                    if (hr == HRESULT.DISP_E_EXCEPTION)
                     {
-                        hr = pExcepInfo.scode;
+                        return (HRESULT)pExcepInfo.scode;
                     }
 
+                    return hr;
                 }
                 catch (ExternalException ex)
                 {
-                    hr = ex.ErrorCode;
+                    return (HRESULT)ex.ErrorCode;
                 }
-                return hr;
             }
             catch
             {
-                //Debug.Fail(e.ToString() + " " + component.GetType().GUID.ToString() + " " + component.ToString());
             }
-            return NativeMethods.E_FAIL;
+
+            return HRESULT.E_FAIL;
         }
 
         /// <summary>

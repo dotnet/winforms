@@ -8,10 +8,13 @@ internal static partial class Interop
     {
         S_OK = 0,
         S_FALSE = 1,
+        DISP_E_EXCEPTION = unchecked((int)0x80020009),
         E_NOTIMPL = unchecked((int)0x80004001),
         E_NOINTERFACE = unchecked((int)0x80004002),
         E_POINTER = unchecked((int)0x80004003),
+        E_ABORT = unchecked((int)0x80004004),
         E_FAIL = unchecked((int)0x80004005),
+        OLE_E_PROMPTSAVECANCELLED = unchecked((int)0x8004000C),
         DRAGDROP_E_NOTREGISTERED = unchecked((int)0x80040100),
         DRAGDROP_E_ALREADYREGISTERED = unchecked((int)0x80040101),
         STG_E_INVALIDFUNCTION = unchecked((int)0x80030001L),
@@ -22,4 +25,6 @@ internal static partial class Interop
         E_ACCESSDENIED = unchecked((int)0x80070005L),
         E_INVALIDARG = unchecked((int)0x80070057),
     }
+
+    public static bool Succeeded(HRESULT hr) => hr >= 0;
 }

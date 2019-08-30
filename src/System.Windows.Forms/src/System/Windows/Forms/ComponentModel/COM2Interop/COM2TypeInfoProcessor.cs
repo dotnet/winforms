@@ -11,6 +11,7 @@ using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Hashtable = System.Collections.Hashtable;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -59,27 +60,21 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             UnsafeNativeMethods.ITypeInfo pTypeInfo = null;
 
-            // this is kind of odd.  What's going on here is that
-            // if we want the CoClass (e.g. for the interface name),
-            // we need to look for IProvideClassInfo first, then
-            // look for the typeinfo from the IDispatch.
-            // In the case of many OleAut32 operations, the CoClass
-            // doesn't have the interface members on it, although
-            // in the shell it usually does, so
-            // we need to re-order the lookup if we _actually_ want
-            // the CoClass if it's available.
-            //
+            // This is kind of odd.  What's going on here is that if we want the CoClass (e.g. for
+            // the interface name), we need to look for IProvideClassInfo first, then look for the
+            // typeinfo from the IDispatch. In the case of many OleAut32 operations, the CoClass
+            // doesn't have the interface members on it, although in the shell it usually does, so
+            // we need to re-order the lookup if we *actually* want the CoClass if it's available.
 
             for (int i = 0; pTypeInfo == null && i < 2; i++)
             {
-
                 if (wantCoClass == (i == 0))
                 {
                     if (obj is NativeMethods.IProvideClassInfo pProvideClassInfo)
                     {
                         try
                         {
-                            pTypeInfo = pProvideClassInfo.GetClassInfo();
+                            pProvideClassInfo.GetClassInfo(out pTypeInfo);
                         }
                         catch
                         {
@@ -92,15 +87,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         try
                         {
-                            pTypeInfo = iDispatch.GetTypeInfo(0, SafeNativeMethods.GetThreadLCID());
+                            iDispatch.GetTypeInfo(0, SafeNativeMethods.GetThreadLCID(), out pTypeInfo);
                         }
                         catch
                         {
                         }
                     }
                 }
-
             }
+
             return pTypeInfo;
         }
 
@@ -153,9 +148,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Retrieve the dispid of the property that we are to use as the name
         ///  member.  In this case, the grid will put parens around the name.
         /// </summary>
-        public static int GetNameDispId(UnsafeNativeMethods.IDispatch obj)
+        public unsafe static int GetNameDispId(UnsafeNativeMethods.IDispatch obj)
         {
-            int dispid = NativeMethods.DISPID_UNKNOWN;
+            int dispid = Ole32.DISPID_UNKNOWN;
             string[] names = null;
 
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
@@ -170,10 +165,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                cnd.GetPropertyValue(obj, NativeMethods.ActiveX.DISPID_Name, ref succeeded);
+                cnd.GetPropertyValue(obj, Ole32.DISPID_Name, ref succeeded);
                 if (succeeded)
                 {
-                    dispid = NativeMethods.ActiveX.DISPID_Name;
+                    dispid = Ole32.DISPID_Name;
                 }
                 else
                 {
@@ -188,13 +183,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // now get the dispid of the one that worked...
             if (names != null)
             {
-                int[] pDispid = new int[] { NativeMethods.DISPID_UNKNOWN };
+                int pDispid = Ole32.DISPID_UNKNOWN;
                 Guid g = Guid.Empty;
-                int hr = obj.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), pDispid);
-                if (NativeMethods.Succeeded(hr))
+                HRESULT hr = obj.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), &pDispid);
+                if (Succeeded(hr))
                 {
-
-                    dispid = pDispid[0];
+                    dispid = pDispid;
                 }
             }
 
@@ -483,7 +477,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             PropertyDescriptor[] props = new PropertyDescriptor[cProps];
             int defaultProp = -1;
 
-            int hr = NativeMethods.S_OK;
+            HRESULT hr = HRESULT.S_OK;
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
@@ -502,10 +496,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     catch (ExternalException ex)
                     {
-                        hr = ex.ErrorCode;
+                        hr = (HRESULT)ex.ErrorCode;
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "IDispatch::Invoke(PROPGET, " + pi.Name + ") threw an exception :" + ex.ToString());
                     }
-                    if (!NativeMethods.Succeeded(hr))
+                    if (!Succeeded(hr))
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Adding Browsable(false) to property '" + pi.Name + "' because Invoke(dispid=0x{0:X} ,DISPATCH_PROPERTYGET) returned hr=0x{1:X}.  Properties that do not return S_OK are hidden by default.", pi.DispId, hr));
                         pi.Attributes.Add(new BrowsableAttribute(false));
@@ -514,13 +508,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    hr = NativeMethods.S_OK;
+                    hr = HRESULT.S_OK;
                 }
 
                 Attribute[] temp = new Attribute[pi.Attributes.Count];
                 pi.Attributes.CopyTo(temp, 0);
                 //Debug.Assert(pi.nonbrowsable || pi.valueType != null, "Browsable property '" + pi.name + "' has a null type");
-                props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !NativeMethods.Succeeded(hr));
+                props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !Succeeded(hr));
                 if (pi.IsDefault)
                 {
                     defaultProp = pi.Index;
@@ -616,7 +610,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FHIDDEN) != 0 ||
                 (flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FNONBROWSABLE) != 0 ||
                 pi.Name[0] == '_' ||
-                dispid == NativeMethods.ActiveX.DISPID_HWND)
+                dispid == Ole32.DISPID_HWND)
             {
                 pi.Attributes.Add(new BrowsableAttribute(false));
                 pi.NonBrowsable = true;
@@ -680,7 +674,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             (dispidToGet != NativeMethods.MEMBERID_NIL && funcDesc.memid != dispidToGet))
                         {
 
-                            if (funcDesc.memid == NativeMethods.ActiveX.DISPID_ABOUTBOX)
+                            if (funcDesc.memid == Ole32.DISPID_ABOUTBOX)
                             {
                                 addAboutBox = true;
                             }

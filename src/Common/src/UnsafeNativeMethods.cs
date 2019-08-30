@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -65,7 +66,7 @@ namespace System.Windows.Forms
             ref Guid iid);
 
         [DllImport(ExternDll.Kernel32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int GetLocaleInfo(int Locale, int LCType, StringBuilder lpLCData, int cchData);
+        public static extern int GetLocaleInfo(uint Locale, int LCType, StringBuilder lpLCData, int cchData);
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool PageSetupDlg([In, Out] NativeMethods.PAGESETUPDLG lppsd);
@@ -1180,15 +1181,6 @@ namespace System.Windows.Forms
                 int dwWhich,
                 [Out]
                 out IEnumUnknown ppenum);
-        }
-
-        [ComImport(), Guid("9BFBBC02-EFF1-101A-84ED-00AA00341D07"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPropertyNotifySink
-        {
-            void OnChanged(int dispID);
-
-            [PreserveSig]
-            int OnRequestEdit(int dispID);
         }
 
         [ComImport(), Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -2561,9 +2553,9 @@ namespace System.Windows.Forms
                [Out, MarshalAs(UnmanagedType.Interface)] object ppDropTarget);
         };
 
-        [ComImport(),
-        Guid("B196B288-BAB4-101A-B69C-00AA00341D07"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        [Guid("B196B288-BAB4-101A-B69C-00AA00341D07")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleControl
         {
             [PreserveSig]
@@ -2577,8 +2569,8 @@ namespace System.Windows.Forms
                       ref NativeMethods.MSG pMsg);
 
             [PreserveSig]
-            int OnAmbientPropertyChange(
-                    int dispID);
+            HRESULT OnAmbientPropertyChange(
+                int dispID);
 
             [PreserveSig]
             int FreezeEvents(
@@ -3029,48 +3021,37 @@ namespace System.Windows.Forms
             IEnumConnectionPoints Clone();
         }
 
-        [ComImport(), Guid("00020400-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IDispatch
+        [ComImport]
+        [Guid("00020400-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IDispatch
         {
             int GetTypeInfoCount();
 
-            [return: MarshalAs(UnmanagedType.Interface)]
-            ITypeInfo GetTypeInfo(
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int iTInfo,
-                    [In, MarshalAs(UnmanagedType.U4)]
-                 int lcid);
+            [PreserveSig]
+            HRESULT GetTypeInfo(
+                uint iTInfo,
+                uint lcid,
+                out ITypeInfo ppTInfo);
 
             [PreserveSig]
-            int GetIDsOfNames(
-                   [In]
-                 ref Guid riid,
-                   [In, MarshalAs(UnmanagedType.LPArray)]
-                 string[] rgszNames,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int cNames,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lcid,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 int[] rgDispId);
+            HRESULT GetIDsOfNames(
+                [In] ref Guid riid,
+                [In, MarshalAs(UnmanagedType.LPArray)] string[] rgszNames,
+                uint cNames,
+                uint lcid,
+                int* rgDispId);
 
             [PreserveSig]
-            int Invoke(
-                    int dispIdMember,
-                   [In]
-                 ref Guid riid,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lcid,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int dwFlags,
-                   [Out, In]
-                  NativeMethods.tagDISPPARAMS pDispParams,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  object[] pVarResult,
-                   [Out, In]
-                  NativeMethods.tagEXCEPINFO pExcepInfo,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  IntPtr [] pArgErr);
+            HRESULT Invoke(
+                int dispIdMember,
+                [In] ref Guid riid,
+                uint lcid,
+                uint dwFlags,
+                [Out, In] NativeMethods.tagDISPPARAMS pDispParams,
+                [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
+                [Out, In] NativeMethods.tagEXCEPINFO pExcepInfo,
+                [Out, MarshalAs(UnmanagedType.LPArray)] IntPtr [] pArgErr);
         }
 
         [ComImport(), Guid("00020401-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -3340,7 +3321,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.Interface)]
             public object pAdviseSink = null;
 
-            public IPropertyNotifySink pPropertyNotifySink;
+            public Ole32.IPropertyNotifySink pPropertyNotifySink;
 
             [MarshalAs(UnmanagedType.Interface)]
             public object pUnkEventSink = null;

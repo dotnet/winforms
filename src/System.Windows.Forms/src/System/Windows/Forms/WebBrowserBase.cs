@@ -559,7 +559,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
+            AmbientChanged(Ole32.DISPID_AMBIENT_FONT);
         }
 
         //
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
+            AmbientChanged(Ole32.DISPID_AMBIENT_FORECOLOR);
         }
 
         //
@@ -579,7 +579,7 @@ namespace System.Windows.Forms
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
+            AmbientChanged(Ole32.DISPID_AMBIENT_BACKCOLOR);
         }
 
         internal override void RecreateHandleCore()

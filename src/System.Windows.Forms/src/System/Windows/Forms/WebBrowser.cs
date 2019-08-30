@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms
             //
             internal override void OnPropertyChanged(int dispid)
             {
-                if (dispid != NativeMethods.ActiveX.DISPID_READYSTATE)
+                if (dispid != Ole32.DISPID_READYSTATE)
                 {
                     base.OnPropertyChanged(dispid);
                 }

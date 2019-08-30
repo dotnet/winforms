@@ -207,22 +207,15 @@ namespace System.Windows.Forms
         ///  Indicates what type of border the Splitter control has.  This value
         ///  comes from the System.Windows.Forms.BorderStyle enumeration.
         /// </summary>
-        [
-        DefaultValue(BorderStyle.None),
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.SplitterBorderStyleDescr))
-        ]
+        [DefaultValue(BorderStyle.None)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [SRDescription(nameof(SR.SplitterBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
-                //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
