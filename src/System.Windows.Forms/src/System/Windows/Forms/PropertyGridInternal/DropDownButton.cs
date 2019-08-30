@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -264,15 +265,15 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (direction == UnsafeNativeMethods.NavigateDirection.Parent &&
+            if (direction == UiaCore.NavigateDirection.Parent &&
                 _owningPropertyGrid.SelectedGridEntry != null &&
                 _owningDropDownButton.Visible)
             {
                 return _owningPropertyGrid.SelectedGridEntry?.AccessibilityObject;
             }
-            else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling)
+            else if (direction == UiaCore.NavigateDirection.PreviousSibling)
             {
                 return _owningPropertyGrid.EditAccessibleObject;
             }
@@ -283,7 +284,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Returns the element that is the root node of this fragment of UI.
         /// </summary>
-        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
         {
             get
             {

@@ -351,11 +351,11 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.Parent:
+                case UiaCore.NavigateDirection.Parent:
                     if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
                     {
                         return _parentAccessibleObject;
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
             return base.FragmentNavigate(direction);
         }
 
-        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
         {
             get
             {

@@ -26814,7 +26814,7 @@ namespace System.Windows.Forms
             editingControlAccessibleObject.SetParent(CurrentCell.AccessibilityObject);
 
             CurrentCell.AccessibilityObject.SetDetachableChild(editingControlAccessibleObject);
-            CurrentCell.AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, editingControlAccessibleObject.RuntimeId);
+            CurrentCell.AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildAdded, editingControlAccessibleObject.RuntimeId);
         }
 
         private bool SetAndSelectCurrentCellAddress(int columnIndex,

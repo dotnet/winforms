@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Accessibility;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Accessibility;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -36,7 +37,7 @@ namespace System.Windows.Forms
 
             internal override Rectangle BoundingRectangle => _owningListBox.GetToolNativeScreenRectangle();
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot => this;
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
             internal override bool IsSelectionRequired => true;
 
@@ -84,7 +85,7 @@ namespace System.Windows.Forms
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 AccessibleObject element = HitTest((int)x, (int)y);
 
@@ -101,7 +102,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 int childCount = _owningListBox.Items.Count;
 
@@ -112,16 +113,16 @@ namespace System.Windows.Forms
 
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         return GetChild(0);
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         return GetChild(childCount - 1);
                     default:
                         return base.FragmentNavigate(direction);
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment GetFocus()
             {
                 return GetFocused();
             }
@@ -161,18 +162,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetSelection()
+            internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
                 AccessibleObject itemAccessibleObject = GetSelected();
                 if (itemAccessibleObject != null)
                 {
-                    return new UnsafeNativeMethods.IRawElementProviderSimple[]
+                    return new UiaCore.IRawElementProviderSimple[]
                     {
                         itemAccessibleObject
                     };
                 }
 
-                return new UnsafeNativeMethods.IRawElementProviderSimple[0];
+                return new UiaCore.IRawElementProviderSimple[0];
             }
 
             internal override bool IsIAccessibleExSupported()

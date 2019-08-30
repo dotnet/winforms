@@ -730,7 +730,7 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (!(Owner is StatusStrip statusStrip) || statusStrip.Items.Count == 0)
                 {
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
 
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         AccessibleObject firstChild = null;
                         for (int i = 0; i < GetChildCount(); i++)
                         {
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
                         }
                         return null;
 
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         AccessibleObject lastChild = null;
                         for (int i = GetChildCount() - 1; i >= 0; i--)
                         {
@@ -767,12 +767,12 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 return HitTest((int)x, (int)y);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment GetFocus()
             {
                 return GetFocused();
             }

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -934,7 +935,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             if (owner == null || owner.DropDown == null)
             {
@@ -943,8 +944,8 @@ namespace System.Windows.Forms
 
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                case UiaCore.NavigateDirection.NextSibling:
+                case UiaCore.NavigateDirection.PreviousSibling:
                     if (!(owner.Owner is ToolStripDropDown dropDown))
                     {
                         break;
@@ -957,7 +958,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    index += direction == UnsafeNativeMethods.NavigateDirection.NextSibling ? 1 : -1;
+                    index += direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
 
                     if (index >= 0 && index < dropDown.Items.Count)
                     {

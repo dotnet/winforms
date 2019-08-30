@@ -25,9 +25,9 @@ namespace System.Windows.Forms
         IAccessible,
         UnsafeNativeMethods.IAccessibleEx,
         UnsafeNativeMethods.IServiceProvider,
-        UnsafeNativeMethods.IRawElementProviderSimple,
-        UnsafeNativeMethods.IRawElementProviderFragment,
-        UnsafeNativeMethods.IRawElementProviderFragmentRoot,
+        UiaCore.IRawElementProviderSimple,
+        UiaCore.IRawElementProviderFragment,
+        UiaCore.IRawElementProviderFragmentRoot,
         UnsafeNativeMethods.IInvokeProvider,
         UnsafeNativeMethods.IValueProvider,
         UnsafeNativeMethods.IRangeValueProvider,
@@ -36,13 +36,13 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.ITableProvider,
         UnsafeNativeMethods.ITableItemProvider,
         UnsafeNativeMethods.IGridProvider,
-        UnsafeNativeMethods.IGridItemProvider,
+        UiaCore.IGridItemProvider,
         OleAut32.IEnumVariant,
         UnsafeNativeMethods.IOleWindow,
         UnsafeNativeMethods.ILegacyIAccessibleProvider,
         UnsafeNativeMethods.ISelectionProvider,
-        UnsafeNativeMethods.ISelectionItemProvider,
-        UnsafeNativeMethods.IRawElementProviderHwndOverride,
+        UiaCore.ISelectionItemProvider,
+        UiaCore.IRawElementProviderHwndOverride,
         UnsafeNativeMethods.IScrollItemProvider
     {
         /// <summary>
@@ -543,10 +543,10 @@ namespace System.Windows.Forms
 
         internal virtual int ProviderOptions
         {
-            get => (int)(UnsafeNativeMethods.ProviderOptions.ServerSideProvider | UnsafeNativeMethods.ProviderOptions.UseComThreading);
+            get => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider
+        internal virtual UiaCore.IRawElementProviderSimple HostRawElementProvider
         {
             get => null;
         }
@@ -615,12 +615,12 @@ namespace System.Windows.Forms
 
         internal virtual int GetChildId() => NativeMethods.CHILDID_SELF;
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal virtual UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             return null;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetEmbeddedFragmentRoots()
+        internal virtual UiaCore.IRawElementProviderSimple[] GetEmbeddedFragmentRoots()
         {
             return null;
         }
@@ -631,17 +631,17 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle BoundingRectangle => Bounds;
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+        internal virtual UiaCore.IRawElementProviderFragmentRoot FragmentRoot
         {
             get => null;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+        internal virtual UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
         {
             return this;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+        internal virtual UiaCore.IRawElementProviderFragment GetFocus()
         {
             return null;
         }
@@ -668,12 +668,12 @@ namespace System.Windows.Forms
             get => UnsafeNativeMethods.ToggleState.ToggleState_Indeterminate;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetRowHeaders()
+        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaders()
         {
             return null;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetColumnHeaders()
+        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaders()
         {
             return null;
         }
@@ -683,17 +683,17 @@ namespace System.Windows.Forms
             get => UnsafeNativeMethods.RowOrColumnMajor.RowOrColumnMajor_RowMajor;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetRowHeaderItems()
+        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaderItems()
         {
             return null;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetColumnHeaderItems()
+        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
         {
             return null;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple GetItem(int row, int column)
+        internal virtual UiaCore.IRawElementProviderSimple GetItem(int row, int column)
         {
             return null;
         }
@@ -710,7 +710,7 @@ namespace System.Windows.Forms
 
         internal virtual int ColumnSpan => 1;
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple ContainingGrid
+        internal virtual UiaCore.IRawElementProviderSimple ContainingGrid
         {
             get => null;
         }
@@ -728,7 +728,7 @@ namespace System.Windows.Forms
             Value = newValue;
         }
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
+        internal virtual UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
         {
             return null;
         }
@@ -747,7 +747,7 @@ namespace System.Windows.Forms
 
         internal virtual double RangeValue => double.NaN;
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetSelection()
+        internal virtual UiaCore.IRawElementProviderSimple[] GetSelection()
         {
             return null;
         }
@@ -770,7 +770,7 @@ namespace System.Windows.Forms
 
         internal virtual bool IsItemSelected => false;
 
-        internal virtual UnsafeNativeMethods.IRawElementProviderSimple ItemSelectionContainer
+        internal virtual UiaCore.IRawElementProviderSimple ItemSelectionContainer
         {
             get => null;
         }
@@ -835,17 +835,17 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        UnsafeNativeMethods.ProviderOptions UnsafeNativeMethods.IRawElementProviderSimple.ProviderOptions
+        UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions
         {
-            get => (UnsafeNativeMethods.ProviderOptions)ProviderOptions;
+            get => (UiaCore.ProviderOptions)ProviderOptions;
         }
 
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderSimple.HostRawElementProvider
+        UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderSimple.HostRawElementProvider
         {
             get => HostRawElementProvider;
         }
 
-        object UnsafeNativeMethods.IRawElementProviderSimple.GetPatternProvider(int patternId)
+        object UiaCore.IRawElementProviderSimple.GetPatternProvider(int patternId)
         {
             if (IsPatternSupported(patternId))
             {
@@ -857,47 +857,47 @@ namespace System.Windows.Forms
             }
         }
 
-        object UnsafeNativeMethods.IRawElementProviderSimple.GetPropertyValue(int propertyID)
+        object UiaCore.IRawElementProviderSimple.GetPropertyValue(int propertyID)
         {
             return GetPropertyValue(propertyID);
         }
 
-        object UnsafeNativeMethods.IRawElementProviderFragment.Navigate(UnsafeNativeMethods.NavigateDirection direction)
+        object UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction)
         {
             return FragmentNavigate(direction);
         }
 
-        int[] UnsafeNativeMethods.IRawElementProviderFragment.GetRuntimeId()
+        int[] UiaCore.IRawElementProviderFragment.GetRuntimeId()
         {
             return RuntimeId;
         }
 
-        object[] UnsafeNativeMethods.IRawElementProviderFragment.GetEmbeddedFragmentRoots()
+        object[] UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots()
         {
             return GetEmbeddedFragmentRoots();
         }
 
-        void UnsafeNativeMethods.IRawElementProviderFragment.SetFocus()
+        void UiaCore.IRawElementProviderFragment.SetFocus()
         {
             SetFocus();
         }
 
-        NativeMethods.UiaRect UnsafeNativeMethods.IRawElementProviderFragment.BoundingRectangle
+        UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle
         {
-            get => new NativeMethods.UiaRect(BoundingRectangle);
+            get => new UiaCore.UiaRect(BoundingRectangle);
         }
 
-        UnsafeNativeMethods.IRawElementProviderFragmentRoot UnsafeNativeMethods.IRawElementProviderFragment.FragmentRoot
+        UiaCore.IRawElementProviderFragmentRoot UiaCore.IRawElementProviderFragment.FragmentRoot
         {
             get => FragmentRoot;
         }
 
-        object UnsafeNativeMethods.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
+        object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
         {
             return ElementProviderFromPoint(x, y);
         }
 
-        object UnsafeNativeMethods.IRawElementProviderFragmentRoot.GetFocus()
+        object UiaCore.IRawElementProviderFragmentRoot.GetFocus()
         {
             return GetFocus();
         }
@@ -932,9 +932,9 @@ namespace System.Windows.Forms
 
         object[] UnsafeNativeMethods.ILegacyIAccessibleProvider.GetSelection()
         {
-            return new UnsafeNativeMethods.IRawElementProviderSimple[]
+            return new UiaCore.IRawElementProviderSimple[]
             {
-                GetSelected() as UnsafeNativeMethods.IRawElementProviderSimple
+                GetSelected() as UiaCore.IRawElementProviderSimple
             };
         }
 
@@ -1015,15 +1015,15 @@ namespace System.Windows.Forms
 
         int UnsafeNativeMethods.IGridProvider.ColumnCount => ColumnCount;
 
-        int UnsafeNativeMethods.IGridItemProvider.Row => Row;
+        int UiaCore.IGridItemProvider.Row => Row;
 
-        int UnsafeNativeMethods.IGridItemProvider.Column => Column;
+        int UiaCore.IGridItemProvider.Column => Column;
 
-        int UnsafeNativeMethods.IGridItemProvider.RowSpan => RowSpan;
+        int UiaCore.IGridItemProvider.RowSpan => RowSpan;
 
-        int UnsafeNativeMethods.IGridItemProvider.ColumnSpan => ColumnSpan;
+        int UiaCore.IGridItemProvider.ColumnSpan => ColumnSpan;
 
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IGridItemProvider.ContainingGrid
+        UiaCore.IRawElementProviderSimple UiaCore.IGridItemProvider.ContainingGrid
         {
             get => ContainingGrid;
         }
@@ -2330,7 +2330,7 @@ namespace System.Windows.Forms
         /// </summary>
         Type IReflect.UnderlyingSystemType => typeof(IAccessible);
 
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
+        UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
         {
             return GetOverrideProviderForHwnd(hwnd);
         }
@@ -2361,21 +2361,21 @@ namespace System.Windows.Forms
 
         bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired => IsSelectionRequired;
 
-        void UnsafeNativeMethods.ISelectionItemProvider.Select() => SelectItem();
+        void UiaCore.ISelectionItemProvider.Select() => SelectItem();
 
-        void UnsafeNativeMethods.ISelectionItemProvider.AddToSelection()
+        void UiaCore.ISelectionItemProvider.AddToSelection()
         {
             AddToSelection();
         }
 
-        void UnsafeNativeMethods.ISelectionItemProvider.RemoveFromSelection()
+        void UiaCore.ISelectionItemProvider.RemoveFromSelection()
         {
             RemoveFromSelection();
         }
 
-        bool UnsafeNativeMethods.ISelectionItemProvider.IsSelected => IsItemSelected;
+        bool UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected;
 
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.ISelectionItemProvider.SelectionContainer
+        UiaCore.IRawElementProviderSimple UiaCore.ISelectionItemProvider.SelectionContainer
         {
             get => ItemSelectionContainer;
         }
@@ -2399,24 +2399,23 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            int result = NativeMethods.S_FALSE;
             try
             {
                 // The activityId can be any string. It cannot be null. It is not used currently.
-                result = UnsafeNativeMethods.UiaRaiseNotificationEvent(
+                HRESULT result = UiaCore.UiaRaiseNotificationEvent(
                     this,
                     notificationKind,
                     notificationProcessing,
                     notificationText,
                     string.Empty);
+                return result == HRESULT.S_OK;
             }
             catch (EntryPointNotFoundException)
             {
                 // The UIA Notification event is not available, so don't attempt to raise it again.
                 notificationEventAvailable = false;
+                return false;
             }
-
-            return result == NativeMethods.S_OK;
         }
 
         /// <summary>
@@ -2431,10 +2430,10 @@ namespace System.Windows.Forms
 
         internal bool RaiseAutomationEvent(int eventId)
         {
-            if (UnsafeNativeMethods.UiaClientsAreListening())
+            if (UiaCore.UiaClientsAreListening() != BOOL.FALSE)
             {
-                int result = UnsafeNativeMethods.UiaRaiseAutomationEvent(this, eventId);
-                return result == NativeMethods.S_OK;
+                HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
+                return result == HRESULT.S_OK;
             }
 
             return false;
@@ -2442,21 +2441,21 @@ namespace System.Windows.Forms
 
         internal bool RaiseAutomationPropertyChangedEvent(int propertyId, object oldValue, object newValue)
         {
-            if (UnsafeNativeMethods.UiaClientsAreListening())
+            if (UiaCore.UiaClientsAreListening() != BOOL.FALSE)
             {
-                int result = UnsafeNativeMethods.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
-                return result == NativeMethods.S_OK;
+                HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
+                return result == HRESULT.S_OK;
             }
 
             return false;
         }
 
-        internal bool RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType structureChangeType, int[] runtimeId)
+        internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
         {
-            if (UnsafeNativeMethods.UiaClientsAreListening())
+            if (UiaCore.UiaClientsAreListening() != BOOL.FALSE)
             {
-                int result = UnsafeNativeMethods.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId == null ? 0 : runtimeId.Length);
-                return result == NativeMethods.S_OK;
+                HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId == null ? 0 : runtimeId.Length);
+                return result == HRESULT.S_OK;
             }
 
             return false;
@@ -2695,9 +2694,9 @@ namespace System.Windows.Forms
         IReflect,
         UnsafeNativeMethods.IServiceProvider,
         UnsafeNativeMethods.IAccessibleEx,
-        UnsafeNativeMethods.IRawElementProviderSimple,
-        UnsafeNativeMethods.IRawElementProviderFragment,
-        UnsafeNativeMethods.IRawElementProviderFragmentRoot,
+        UiaCore.IRawElementProviderSimple,
+        UiaCore.IRawElementProviderFragment,
+        UiaCore.IRawElementProviderFragmentRoot,
         UnsafeNativeMethods.IInvokeProvider,
         UnsafeNativeMethods.IValueProvider,
         UnsafeNativeMethods.IRangeValueProvider,
@@ -2706,14 +2705,14 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.ITableProvider,
         UnsafeNativeMethods.ITableItemProvider,
         UnsafeNativeMethods.IGridProvider,
-        UnsafeNativeMethods.IGridItemProvider,
+        UiaCore.IGridItemProvider,
         OleAut32.IEnumVariant,
         UnsafeNativeMethods.IOleWindow,
         UnsafeNativeMethods.ILegacyIAccessibleProvider,
         UnsafeNativeMethods.ISelectionProvider,
-        UnsafeNativeMethods.ISelectionItemProvider,
+        UiaCore.ISelectionItemProvider,
         UnsafeNativeMethods.IScrollItemProvider,
-        UnsafeNativeMethods.IRawElementProviderHwndOverride
+        UiaCore.IRawElementProviderHwndOverride
     {
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
         private readonly OleAut32.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
@@ -2724,9 +2723,9 @@ namespace System.Windows.Forms
         private readonly UnsafeNativeMethods.IAccessibleEx publicIAccessibleEx;                   // AccessibleObject as IAccessibleEx
 
         // UIAutomation
-        private readonly UnsafeNativeMethods.IRawElementProviderSimple publicIRawElementProviderSimple;    // AccessibleObject as IRawElementProviderSimple
-        private readonly UnsafeNativeMethods.IRawElementProviderFragment publicIRawElementProviderFragment;// AccessibleObject as IRawElementProviderFragment
-        private readonly UnsafeNativeMethods.IRawElementProviderFragmentRoot publicIRawElementProviderFragmentRoot;// AccessibleObject as IRawElementProviderFragmentRoot
+        private readonly UiaCore.IRawElementProviderSimple publicIRawElementProviderSimple;    // AccessibleObject as IRawElementProviderSimple
+        private readonly UiaCore.IRawElementProviderFragment publicIRawElementProviderFragment;// AccessibleObject as IRawElementProviderFragment
+        private readonly UiaCore.IRawElementProviderFragmentRoot publicIRawElementProviderFragmentRoot;// AccessibleObject as IRawElementProviderFragmentRoot
         private readonly UnsafeNativeMethods.IInvokeProvider publicIInvokeProvider;                        // AccessibleObject as IInvokeProvider
         private readonly UnsafeNativeMethods.IValueProvider publicIValueProvider;                          // AccessibleObject as IValueProvider
         private readonly UnsafeNativeMethods.IRangeValueProvider publicIRangeValueProvider;                // AccessibleObject as IRangeValueProvider
@@ -2735,12 +2734,12 @@ namespace System.Windows.Forms
         private readonly UnsafeNativeMethods.ITableProvider publicITableProvider;                          // AccessibleObject as ITableProvider
         private readonly UnsafeNativeMethods.ITableItemProvider publicITableItemProvider;                  // AccessibleObject as ITableItemProvider
         private readonly UnsafeNativeMethods.IGridProvider publicIGridProvider;                            // AccessibleObject as IGridProvider
-        private readonly UnsafeNativeMethods.IGridItemProvider publicIGridItemProvider;                    // AccessibleObject as IGridItemProvider
+        private readonly UiaCore.IGridItemProvider publicIGridItemProvider;                    // AccessibleObject as IGridItemProvider
         private readonly UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;   // AccessibleObject as ILegayAccessibleProvider
         private readonly UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
-        private readonly UnsafeNativeMethods.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
+        private readonly UiaCore.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
         private readonly UnsafeNativeMethods.IScrollItemProvider publicIScrollItemProvider;          // AccessibleObject as IScrollItemProvider
-        private readonly UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
+        private readonly UiaCore.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
         ///  Create a new wrapper.
@@ -2754,9 +2753,9 @@ namespace System.Windows.Forms
             publicIReflect = (IReflect)accessibleImplemention;
             publicIServiceProvider = (UnsafeNativeMethods.IServiceProvider)accessibleImplemention;
             publicIAccessibleEx = (UnsafeNativeMethods.IAccessibleEx)accessibleImplemention;
-            publicIRawElementProviderSimple = (UnsafeNativeMethods.IRawElementProviderSimple)accessibleImplemention;
-            publicIRawElementProviderFragment = (UnsafeNativeMethods.IRawElementProviderFragment)accessibleImplemention;
-            publicIRawElementProviderFragmentRoot = (UnsafeNativeMethods.IRawElementProviderFragmentRoot)accessibleImplemention;
+            publicIRawElementProviderSimple = (UiaCore.IRawElementProviderSimple)accessibleImplemention;
+            publicIRawElementProviderFragment = (UiaCore.IRawElementProviderFragment)accessibleImplemention;
+            publicIRawElementProviderFragmentRoot = (UiaCore.IRawElementProviderFragmentRoot)accessibleImplemention;
             publicIInvokeProvider = (UnsafeNativeMethods.IInvokeProvider)accessibleImplemention;
             publicIValueProvider = (UnsafeNativeMethods.IValueProvider)accessibleImplemention;
             publicIRangeValueProvider = (UnsafeNativeMethods.IRangeValueProvider)accessibleImplemention;
@@ -2765,12 +2764,12 @@ namespace System.Windows.Forms
             publicITableProvider = (UnsafeNativeMethods.ITableProvider)accessibleImplemention;
             publicITableItemProvider = (UnsafeNativeMethods.ITableItemProvider)accessibleImplemention;
             publicIGridProvider = (UnsafeNativeMethods.IGridProvider)accessibleImplemention;
-            publicIGridItemProvider = (UnsafeNativeMethods.IGridItemProvider)accessibleImplemention;
+            publicIGridItemProvider = (UiaCore.IGridItemProvider)accessibleImplemention;
             publicILegacyIAccessibleProvider = (UnsafeNativeMethods.ILegacyIAccessibleProvider)accessibleImplemention;
             publicISelectionProvider = (UnsafeNativeMethods.ISelectionProvider)accessibleImplemention;
-            publicISelectionItemProvider = (UnsafeNativeMethods.ISelectionItemProvider)accessibleImplemention;
+            publicISelectionItemProvider = (UiaCore.ISelectionItemProvider)accessibleImplemention;
             publicIScrollItemProvider = (UnsafeNativeMethods.IScrollItemProvider)accessibleImplemention;
-            publicIRawElementProviderHwndOverride = (UnsafeNativeMethods.IRawElementProviderHwndOverride)accessibleImplemention;
+            publicIRawElementProviderHwndOverride = (UiaCore.IRawElementProviderHwndOverride)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
 
@@ -3027,17 +3026,17 @@ namespace System.Windows.Forms
             return publicIAccessibleEx.ConvertReturnedElement(pIn, out ppRetValOut);
         }
 
-        UnsafeNativeMethods.ProviderOptions UnsafeNativeMethods.IRawElementProviderSimple.ProviderOptions
+        UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions
         {
             get => publicIRawElementProviderSimple.ProviderOptions;
         }
 
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderSimple.HostRawElementProvider
+        UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderSimple.HostRawElementProvider
         {
             get => publicIRawElementProviderSimple.HostRawElementProvider;
         }
 
-        object UnsafeNativeMethods.IRawElementProviderSimple.GetPatternProvider(int patternId)
+        object UiaCore.IRawElementProviderSimple.GetPatternProvider(int patternId)
         {
             object obj = publicIRawElementProviderSimple.GetPatternProvider(patternId);
             if (obj != null)
@@ -3073,7 +3072,7 @@ namespace System.Windows.Forms
                 }
                 else if (patternId == NativeMethods.UIA_GridItemPatternId)
                 {
-                    return (UnsafeNativeMethods.IGridItemProvider)this;
+                    return (UiaCore.IGridItemProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_InvokePatternId)
                 {
@@ -3089,7 +3088,7 @@ namespace System.Windows.Forms
                 }
                 else if (patternId == NativeMethods.UIA_SelectionItemPatternId)
                 {
-                    return (UnsafeNativeMethods.ISelectionItemProvider)this;
+                    return (UiaCore.ISelectionItemProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_ScrollItemPatternId)
                 {
@@ -3106,47 +3105,47 @@ namespace System.Windows.Forms
             }
         }
 
-        object UnsafeNativeMethods.IRawElementProviderSimple.GetPropertyValue(int propertyID)
+        object UiaCore.IRawElementProviderSimple.GetPropertyValue(int propertyID)
         {
             return publicIRawElementProviderSimple.GetPropertyValue(propertyID);
         }
 
-        object UnsafeNativeMethods.IRawElementProviderFragment.Navigate(UnsafeNativeMethods.NavigateDirection direction)
+        object UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction)
         {
             return AsNativeAccessible(publicIRawElementProviderFragment.Navigate(direction));
         }
 
-        int[] UnsafeNativeMethods.IRawElementProviderFragment.GetRuntimeId()
+        int[] UiaCore.IRawElementProviderFragment.GetRuntimeId()
         {
             return publicIRawElementProviderFragment.GetRuntimeId();
         }
 
-        object[] UnsafeNativeMethods.IRawElementProviderFragment.GetEmbeddedFragmentRoots()
+        object[] UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots()
         {
             return AsArrayOfNativeAccessibles(publicIRawElementProviderFragment.GetEmbeddedFragmentRoots());
         }
 
-        void UnsafeNativeMethods.IRawElementProviderFragment.SetFocus()
+        void UiaCore.IRawElementProviderFragment.SetFocus()
         {
             publicIRawElementProviderFragment.SetFocus();
         }
 
-        NativeMethods.UiaRect UnsafeNativeMethods.IRawElementProviderFragment.BoundingRectangle
+        UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle
         {
             get => publicIRawElementProviderFragment.BoundingRectangle;
         }
 
-        UnsafeNativeMethods.IRawElementProviderFragmentRoot UnsafeNativeMethods.IRawElementProviderFragment.FragmentRoot
+        UiaCore.IRawElementProviderFragmentRoot UiaCore.IRawElementProviderFragment.FragmentRoot
         {
             get => publicIRawElementProviderFragment.FragmentRoot;
         }
 
-        object UnsafeNativeMethods.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
+        object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
         {
             return AsNativeAccessible(publicIRawElementProviderFragmentRoot.ElementProviderFromPoint(x, y));
         }
 
-        object UnsafeNativeMethods.IRawElementProviderFragmentRoot.GetFocus()
+        object UiaCore.IRawElementProviderFragmentRoot.GetFocus()
         {
             return AsNativeAccessible(publicIRawElementProviderFragmentRoot.GetFocus());
         }
@@ -3311,15 +3310,15 @@ namespace System.Windows.Forms
 
         int UnsafeNativeMethods.IGridProvider.ColumnCount => publicIGridProvider.ColumnCount;
 
-        int UnsafeNativeMethods.IGridItemProvider.Row => publicIGridItemProvider.Row;
+        int UiaCore.IGridItemProvider.Row => publicIGridItemProvider.Row;
 
-        int UnsafeNativeMethods.IGridItemProvider.Column => publicIGridItemProvider.Column;
+        int UiaCore.IGridItemProvider.Column => publicIGridItemProvider.Column;
 
-        int UnsafeNativeMethods.IGridItemProvider.RowSpan => publicIGridItemProvider.RowSpan;
+        int UiaCore.IGridItemProvider.RowSpan => publicIGridItemProvider.RowSpan;
 
-        int UnsafeNativeMethods.IGridItemProvider.ColumnSpan => publicIGridItemProvider.ColumnSpan;
+        int UiaCore.IGridItemProvider.ColumnSpan => publicIGridItemProvider.ColumnSpan;
 
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IGridItemProvider.ContainingGrid
+        UiaCore.IRawElementProviderSimple UiaCore.IGridItemProvider.ContainingGrid
         {
             get => publicIGridItemProvider.ContainingGrid;
         }
@@ -3357,7 +3356,7 @@ namespace System.Windows.Forms
         ///  Sets the current element as the selection
         ///  This clears the selection from other elements in the container.
         /// </summary>
-        void UnsafeNativeMethods.ISelectionItemProvider.Select()
+        void UiaCore.ISelectionItemProvider.Select()
         {
             publicISelectionItemProvider.Select();
         }
@@ -3365,7 +3364,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Adds current element to selection.
         /// </summary>
-        void UnsafeNativeMethods.ISelectionItemProvider.AddToSelection()
+        void UiaCore.ISelectionItemProvider.AddToSelection()
         {
             publicISelectionItemProvider.AddToSelection();
         }
@@ -3373,7 +3372,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Removes current element from selection.
         /// </summary>
-        void UnsafeNativeMethods.ISelectionItemProvider.RemoveFromSelection()
+        void UiaCore.ISelectionItemProvider.RemoveFromSelection()
         {
             publicISelectionItemProvider.RemoveFromSelection();
         }
@@ -3382,7 +3381,7 @@ namespace System.Windows.Forms
         ///  Check whether an element is selected.
         /// </summary>
         /// <returns>Returns true if the element is selected.</returns>
-        bool UnsafeNativeMethods.ISelectionItemProvider.IsSelected
+        bool UiaCore.ISelectionItemProvider.IsSelected
         {
             get => publicISelectionItemProvider.IsSelected;
         }
@@ -3396,7 +3395,7 @@ namespace System.Windows.Forms
         ///  The logical element that supports the SelectionPattern for this Item.
         /// </summary>
         /// <returns>Returns a IRawElementProviderSimple.</returns>
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.ISelectionItemProvider.SelectionContainer
+        UiaCore.IRawElementProviderSimple UiaCore.ISelectionItemProvider.SelectionContainer
         {
             get => publicISelectionItemProvider.SelectionContainer;
         }
@@ -3407,7 +3406,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="hwnd">The window handle of the component.</param>
         /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
-        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
+        UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
         {
             return publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
         }

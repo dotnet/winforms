@@ -10046,7 +10046,7 @@ namespace System.Windows.Forms
             // you should notify UI Automation by calling the UiaReturnRawElementProvider
             // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
             // UI Automation that it can safely remove all map entries that refer to the specified window.
-            UnsafeNativeMethods.UiaReturnRawElementProvider(new HandleRef(this, handle), new IntPtr(0), new IntPtr(0), null);
+            UiaCore.UiaReturnRawElementProvider(new HandleRef(this, handle), IntPtr.Zero, IntPtr.Zero, null);
         }
 
         /// <summary>
@@ -12132,7 +12132,7 @@ namespace System.Windows.Forms
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                 intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
-                m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
+                m.Result = UiaCore.UiaReturnRawElementProvider(
                     new HandleRef(this, Handle),
                     m.WParam,
                     m.LParam,

@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -4606,7 +4607,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -4619,14 +4620,14 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return Parent;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         int index = GetChildFragmentIndex();
                         if (index == -1)
                         {
@@ -4634,7 +4635,7 @@ namespace System.Windows.Forms
                             return null;
                         }
 
-                        int increment = direction == UnsafeNativeMethods.NavigateDirection.NextSibling ? 1 : -1;
+                        int increment = direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
                         AccessibleObject sibling = null;
 
                         index += increment;
