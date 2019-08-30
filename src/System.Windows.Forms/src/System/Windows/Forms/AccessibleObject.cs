@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -18,30 +19,31 @@ namespace System.Windows.Forms
     ///  accessibility application.
     /// </summary>
     [ComVisible(true)]
-    public class AccessibleObject : StandardOleMarshalObject,
-                                    IReflect,
-                                    IAccessible,
-                                    UnsafeNativeMethods.IAccessibleEx,
-                                    UnsafeNativeMethods.IServiceProvider,
-                                    UnsafeNativeMethods.IRawElementProviderSimple,
-                                    UnsafeNativeMethods.IRawElementProviderFragment,
-                                    UnsafeNativeMethods.IRawElementProviderFragmentRoot,
-                                    UnsafeNativeMethods.IInvokeProvider,
-                                    UnsafeNativeMethods.IValueProvider,
-                                    UnsafeNativeMethods.IRangeValueProvider,
-                                    UnsafeNativeMethods.IExpandCollapseProvider,
-                                    UnsafeNativeMethods.IToggleProvider,
-                                    UnsafeNativeMethods.ITableProvider,
-                                    UnsafeNativeMethods.ITableItemProvider,
-                                    UnsafeNativeMethods.IGridProvider,
-                                    UnsafeNativeMethods.IGridItemProvider,
-                                    UnsafeNativeMethods.IEnumVariant,
-                                    UnsafeNativeMethods.IOleWindow,
-                                    UnsafeNativeMethods.ILegacyIAccessibleProvider,
-                                    UnsafeNativeMethods.ISelectionProvider,
-                                    UnsafeNativeMethods.ISelectionItemProvider,
-                                    UnsafeNativeMethods.IRawElementProviderHwndOverride,
-                                    UnsafeNativeMethods.IScrollItemProvider
+    public class AccessibleObject :
+        StandardOleMarshalObject,
+        IReflect,
+        IAccessible,
+        UnsafeNativeMethods.IAccessibleEx,
+        UnsafeNativeMethods.IServiceProvider,
+        UnsafeNativeMethods.IRawElementProviderSimple,
+        UnsafeNativeMethods.IRawElementProviderFragment,
+        UnsafeNativeMethods.IRawElementProviderFragmentRoot,
+        UnsafeNativeMethods.IInvokeProvider,
+        UnsafeNativeMethods.IValueProvider,
+        UnsafeNativeMethods.IRangeValueProvider,
+        UnsafeNativeMethods.IExpandCollapseProvider,
+        UnsafeNativeMethods.IToggleProvider,
+        UnsafeNativeMethods.ITableProvider,
+        UnsafeNativeMethods.ITableItemProvider,
+        UnsafeNativeMethods.IGridProvider,
+        UnsafeNativeMethods.IGridItemProvider,
+        Ole32.IEnumVariant,
+        UnsafeNativeMethods.IOleWindow,
+        UnsafeNativeMethods.ILegacyIAccessibleProvider,
+        UnsafeNativeMethods.ISelectionProvider,
+        UnsafeNativeMethods.ISelectionItemProvider,
+        UnsafeNativeMethods.IRawElementProviderHwndOverride,
+        UnsafeNativeMethods.IScrollItemProvider
     {
         /// <summary>
         ///  Specifies the <see langword='IAccessible '/>interface used by this
@@ -50,11 +52,11 @@ namespace System.Windows.Forms
         private IAccessible systemIAccessible = null;
 
         /// <summary>
-        ///  Specifies the <see cref='NativeMethods.IEnumVariant'/> used by this
+        ///  Specifies the <see cref='Ole32.IEnumVariant'/> used by this
         /// <see cref='AccessibleObject'/> .
         /// </summary>
-        private UnsafeNativeMethods.IEnumVariant systemIEnumVariant = null;
-        private UnsafeNativeMethods.IEnumVariant enumVariant = null;
+        private Ole32.IEnumVariant systemIEnumVariant = null;
+        private Ole32.IEnumVariant enumVariant = null;
 
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
         private UnsafeNativeMethods.IOleWindow systemIOleWindow = null;
@@ -151,7 +153,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private UnsafeNativeMethods.IEnumVariant EnumVariant
+        private Ole32.IEnumVariant EnumVariant
         {
             get => enumVariant ?? (enumVariant = new EnumVariantObject(this));
         }
@@ -1932,28 +1934,28 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Clone this accessible object.
         /// </summary>
-        void UnsafeNativeMethods.IEnumVariant.Clone(UnsafeNativeMethods.IEnumVariant[] v)
+        HRESULT Ole32.IEnumVariant.Clone(Ole32.IEnumVariant[] ppEnum)
         {
-            EnumVariant.Clone(v);
+            return EnumVariant.Clone(ppEnum);
         }
 
         /// <summary>
         ///  Obtain the next n children of this accessible object.
         /// </summary>
-        int UnsafeNativeMethods.IEnumVariant.Next(int n, IntPtr rgvar, int[] ns)
+        unsafe HRESULT Ole32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
         {
-            return EnumVariant.Next(n, rgvar, ns);
+            return EnumVariant.Next(celt, rgVar, pCeltFetched);
         }
 
         /// <summary>
         ///  Resets the child accessible object enumerator.
         /// </summary>
-        void UnsafeNativeMethods.IEnumVariant.Reset() => EnumVariant.Reset();
+        HRESULT Ole32.IEnumVariant.Reset() => EnumVariant.Reset();
 
         /// <summary>
         ///  Skip the next n child accessible objects
         /// </summary>
-        void UnsafeNativeMethods.IEnumVariant.Skip(int n) => EnumVariant.Skip(n);
+        HRESULT Ole32.IEnumVariant.Skip(uint celt) => EnumVariant.Skip(celt);
 
         /// <summary>
         ///  When overridden in a derived class, navigates to another object.
@@ -2098,7 +2100,7 @@ namespace System.Windows.Forms
                             ref acc);
 
             // Get the IEnumVariant interface
-            Guid IID_IEnumVariant = new Guid(NativeMethods.uuid_IEnumVariant);
+            Guid IID_IEnumVariant = typeof(Ole32.IEnumVariant).GUID;
             object en = null;
             result = UnsafeNativeMethods.CreateStdAccessibleObject(
                         new HandleRef(this, handle),
@@ -2109,7 +2111,7 @@ namespace System.Windows.Forms
             if (acc != null || en != null)
             {
                 systemIAccessible = (IAccessible)acc;
-                systemIEnumVariant = (UnsafeNativeMethods.IEnumVariant)en;
+                systemIEnumVariant = (Ole32.IEnumVariant)en;
                 systemIOleWindow = acc as UnsafeNativeMethods.IOleWindow;
             }
         }
@@ -2470,9 +2472,9 @@ namespace System.Windows.Forms
             Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
         }
 
-        private class EnumVariantObject : UnsafeNativeMethods.IEnumVariant
+        private class EnumVariantObject : Ole32.IEnumVariant
         {
-            private int currentChild = 0;
+            private uint currentChild = 0;
             private readonly AccessibleObject owner;
 
             public EnumVariantObject(AccessibleObject owner)
@@ -2481,45 +2483,53 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            public EnumVariantObject(AccessibleObject owner, int currentChild)
+            public EnumVariantObject(AccessibleObject owner, uint currentChild)
             {
                 Debug.Assert(owner != null, "Cannot create EnumVariantObject with a null owner");
                 this.owner = owner;
                 this.currentChild = currentChild;
             }
 
-            void UnsafeNativeMethods.IEnumVariant.Clone(UnsafeNativeMethods.IEnumVariant[] v)
+            HRESULT Ole32.IEnumVariant.Clone(Ole32.IEnumVariant[] ppEnum)
             {
-                v[0] = new EnumVariantObject(owner, currentChild);
+                if (ppEnum == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
+                ppEnum[0] = new EnumVariantObject(owner, currentChild);
+                return HRESULT.S_OK;
             }
 
             /// <summary>
             ///  Resets the child accessible object enumerator.
             /// </summary>
-            void UnsafeNativeMethods.IEnumVariant.Reset()
+            HRESULT Ole32.IEnumVariant.Reset()
             {
                 currentChild = 0;
                 owner.systemIEnumVariant?.Reset();
+                return HRESULT.S_OK;
             }
 
             /// <summary>
             ///  Skips the next n child accessible objects.
             /// </summary>
-            void UnsafeNativeMethods.IEnumVariant.Skip(int n)
+            HRESULT Ole32.IEnumVariant.Skip(uint celt)
             {
-                currentChild += n;
-                owner.systemIEnumVariant?.Skip(n);
+                currentChild += celt;
+                owner.systemIEnumVariant?.Skip(celt);
+                return HRESULT.S_OK;
             }
 
             /// <summary>
             ///  Gets the next n child accessible objects.
             /// </summary>
-            int UnsafeNativeMethods.IEnumVariant.Next(int n, IntPtr rgvar, int[] ns)
+            unsafe HRESULT Ole32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
                 // NOTE: rgvar is a pointer to an array of variants
                 if (owner.IsClientObject)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "EnumVariantObject: owner = " + owner.ToString() + ", n = " + n);
+                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "EnumVariantObject: owner = " + owner.ToString() + ", celt = " + celt);
 
                     Debug.Indent();
 
@@ -2528,31 +2538,36 @@ namespace System.Windows.Forms
 
                     if ((childCount = owner.GetChildCount()) >= 0)
                     {
-                        NextFromChildCollection(n, rgvar, ns, childCount);
+                        NextFromChildCollection(celt, rgVar, pCeltFetched, childCount);
                     }
                     else if (owner.systemIEnumVariant == null)
                     {
-                        NextEmpty(n, rgvar, ns);
+                        NextEmpty(celt, rgVar, pCeltFetched);
                     }
                     else if ((newOrder = owner.GetSysChildOrder()) != null)
                     {
-                        NextFromSystemReordered(n, rgvar, ns, newOrder);
+                        NextFromSystemReordered(celt, rgVar, pCeltFetched, newOrder);
                     }
                     else
                     {
-                        NextFromSystem(n, rgvar, ns);
+                        NextFromSystem(celt, rgVar, pCeltFetched);
                     }
 
                     Debug.Unindent();
                 }
                 else
                 {
-                    NextFromSystem(n, rgvar, ns);
+                    NextFromSystem(celt, rgVar, pCeltFetched);
+                }
+
+                if (pCeltFetched == null)
+                {
+                    return HRESULT.S_OK;
                 }
 
                 // Tell caller whether requested number of items was returned. Once list of items has
                 // been exhausted, we return S_FALSE so that caller knows to stop calling this method.
-                return (ns[0] == n) ? NativeMethods.S_OK : NativeMethods.S_FALSE;
+                return *pCeltFetched == celt ? HRESULT.S_OK : HRESULT.S_FALSE;
             }
 
             /// <summary>
@@ -2561,11 +2576,14 @@ namespace System.Windows.Forms
             ///  proxy will enumerate the child windows, create a suitable kind of child accessible
             ///  proxy for each one, and return a set of IDispatch interfaces to these proxy objects.
             /// </summary>
-            private void NextFromSystem(int n, IntPtr rgvar, int[] ns)
+            private unsafe void NextFromSystem(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
-                owner.systemIEnumVariant.Next(n, rgvar, ns);
+                owner.systemIEnumVariant.Next(celt, rgVar, pCeltFetched);
+                if (pCeltFetched != null)
+                {
+                    currentChild += *pCeltFetched;
+                }
 
-                currentChild += ns[0];
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: Delegating to systemIEnumVariant");
             }
 
@@ -2586,22 +2604,24 @@ namespace System.Windows.Forms
             ///  (which also happens to be the order that children appear in the
             ///  Control.Controls[] collection).
             /// </summary>
-            private void NextFromSystemReordered(int n, IntPtr rgvar, int[] ns, int[] newOrder)
+            private unsafe void NextFromSystemReordered(uint celt, IntPtr rgVar, uint* pCeltFetched, int[] newOrder)
             {
-                int i;
-
-                for (i = 0; i < n && currentChild < newOrder.Length; ++i)
+                uint i;
+                for (i = 0; i < celt && currentChild < newOrder.Length; ++i)
                 {
-                    if (!GotoItem(owner.systemIEnumVariant, newOrder[currentChild], GetAddressOfVariantAtIndex(rgvar, i)))
+                    if (!GotoItem(owner.systemIEnumVariant, newOrder[currentChild], GetAddressOfVariantAtIndex(rgVar, i)))
                     {
                         break;
                     }
 
-                    ++currentChild;
+                    currentChild++;
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding sys child " + currentChild + " of " + newOrder.Length);
                 }
 
-                ns[0] = i;
+                if (pCeltFetched != null)
+                {
+                    *pCeltFetched = i;
+                }
             }
 
             /// <summary>
@@ -2609,18 +2629,20 @@ namespace System.Windows.Forms
             ///  of 1-based integer child ids, that the caller will eventually pass
             ///  back to us via IAccessible.get_accChild().
             /// </summary>
-            private void NextFromChildCollection(int n, IntPtr rgvar, int[] ns, int childCount)
+            private unsafe void NextFromChildCollection(uint celt, IntPtr rgVar, uint* pCeltFetched, int childCount)
             {
-                int i;
-
-                for (i = 0; i < n && currentChild < childCount; ++i)
+                uint i;
+                for (i = 0; i < celt && currentChild < childCount; ++i)
                 {
                     ++currentChild;
-                    Marshal.GetNativeVariantForObject(((object)currentChild), GetAddressOfVariantAtIndex(rgvar, i));
+                    Marshal.GetNativeVariantForObject(((object)currentChild), GetAddressOfVariantAtIndex(rgVar, i));
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding own child " + currentChild + " of " + childCount);
                 }
 
-                ns[0] = i;
+                if (pCeltFetched != null)
+                {
+                    *pCeltFetched = i;
+                }
             }
 
             /// <summary>
@@ -2628,9 +2650,13 @@ namespace System.Windows.Forms
             ///  system-provided proxy to fall back on. In this case, we return
             ///  an empty child collection.
             /// </summary>
-            private void NextEmpty(int n, IntPtr rgvar, int[] ns)
+            private unsafe void NextEmpty(uint celt, IntPtr rgvar, uint* pCeltFetched)
             {
-                ns[0] = 0;
+                if (pCeltFetched != null)
+                {
+                    *pCeltFetched = 0;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: no children to add");
             }
 
@@ -2638,60 +2664,59 @@ namespace System.Windows.Forms
             ///  Given an IEnumVariant interface, this method jumps to a specific
             ///  item in the collection and extracts the result for that one item.
             /// </summary>
-            private static bool GotoItem(UnsafeNativeMethods.IEnumVariant iev, int index, IntPtr variantPtr)
+            private unsafe static bool GotoItem(Ole32.IEnumVariant iev, int index, IntPtr variantPtr)
             {
-                int[] ns = new int[1];
+                uint celtFetched = 0;
 
                 iev.Reset();
-                iev.Skip(index);
-                iev.Next(1, variantPtr, ns);
+                iev.Skip((uint)index);
+                iev.Next(1, variantPtr, &celtFetched);
 
-                return ns[0] == 1;
+                return celtFetched == 1;
             }
 
             /// <summary>
             ///  Given an array of pointers to variants, calculate address of a given array element.
             /// </summary>
-            private static IntPtr GetAddressOfVariantAtIndex(IntPtr variantArrayPtr, int index)
+            private static IntPtr GetAddressOfVariantAtIndex(IntPtr variantArrayPtr, uint index)
             {
                 int variantSize = 8 + (IntPtr.Size * 2);
                 return (IntPtr)((ulong)variantArrayPtr + ((ulong)index) * ((ulong)variantSize));
             }
-
         }
-
     }
 
     /// <Summary>
     ///  Internal object passed out to OLEACC clients via WM_GETOBJECT.
     /// </Summary>
-    internal sealed class InternalAccessibleObject : StandardOleMarshalObject,
-                                    UnsafeNativeMethods.IAccessibleInternal,
-                                    IReflect,
-                                    UnsafeNativeMethods.IServiceProvider,
-                                    UnsafeNativeMethods.IAccessibleEx,
-                                    UnsafeNativeMethods.IRawElementProviderSimple,
-                                    UnsafeNativeMethods.IRawElementProviderFragment,
-                                    UnsafeNativeMethods.IRawElementProviderFragmentRoot,
-                                    UnsafeNativeMethods.IInvokeProvider,
-                                    UnsafeNativeMethods.IValueProvider,
-                                    UnsafeNativeMethods.IRangeValueProvider,
-                                    UnsafeNativeMethods.IExpandCollapseProvider,
-                                    UnsafeNativeMethods.IToggleProvider,
-                                    UnsafeNativeMethods.ITableProvider,
-                                    UnsafeNativeMethods.ITableItemProvider,
-                                    UnsafeNativeMethods.IGridProvider,
-                                    UnsafeNativeMethods.IGridItemProvider,
-                                    UnsafeNativeMethods.IEnumVariant,
-                                    UnsafeNativeMethods.IOleWindow,
-                                    UnsafeNativeMethods.ILegacyIAccessibleProvider,
-                                    UnsafeNativeMethods.ISelectionProvider,
-                                    UnsafeNativeMethods.ISelectionItemProvider,
-                                    UnsafeNativeMethods.IScrollItemProvider,
-                                    UnsafeNativeMethods.IRawElementProviderHwndOverride
+    internal sealed class InternalAccessibleObject :
+        StandardOleMarshalObject,
+        UnsafeNativeMethods.IAccessibleInternal,
+        IReflect,
+        UnsafeNativeMethods.IServiceProvider,
+        UnsafeNativeMethods.IAccessibleEx,
+        UnsafeNativeMethods.IRawElementProviderSimple,
+        UnsafeNativeMethods.IRawElementProviderFragment,
+        UnsafeNativeMethods.IRawElementProviderFragmentRoot,
+        UnsafeNativeMethods.IInvokeProvider,
+        UnsafeNativeMethods.IValueProvider,
+        UnsafeNativeMethods.IRangeValueProvider,
+        UnsafeNativeMethods.IExpandCollapseProvider,
+        UnsafeNativeMethods.IToggleProvider,
+        UnsafeNativeMethods.ITableProvider,
+        UnsafeNativeMethods.ITableItemProvider,
+        UnsafeNativeMethods.IGridProvider,
+        UnsafeNativeMethods.IGridItemProvider,
+        Ole32.IEnumVariant,
+        UnsafeNativeMethods.IOleWindow,
+        UnsafeNativeMethods.ILegacyIAccessibleProvider,
+        UnsafeNativeMethods.ISelectionProvider,
+        UnsafeNativeMethods.ISelectionItemProvider,
+        UnsafeNativeMethods.IScrollItemProvider,
+        UnsafeNativeMethods.IRawElementProviderHwndOverride
     {
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
-        private readonly UnsafeNativeMethods.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
+        private readonly Ole32.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
         private readonly UnsafeNativeMethods.IOleWindow publicIOleWindow;     // AccessibleObject as IOleWindow
         private readonly IReflect publicIReflect;                             // AccessibleObject as IReflect
 
@@ -2724,7 +2749,7 @@ namespace System.Windows.Forms
         {
             // Get all the casts done here to catch any issues early
             publicIAccessible = (IAccessible)accessibleImplemention;
-            publicIEnumVariant = (UnsafeNativeMethods.IEnumVariant)accessibleImplemention;
+            publicIEnumVariant = (Ole32.IEnumVariant)accessibleImplemention;
             publicIOleWindow = (UnsafeNativeMethods.IOleWindow)accessibleImplemention;
             publicIReflect = (IReflect)accessibleImplemention;
             publicIServiceProvider = (UnsafeNativeMethods.IServiceProvider)accessibleImplemention;
@@ -2885,25 +2910,19 @@ namespace System.Windows.Forms
             publicIAccessible.set_accValue(childID, newValue);
         }
 
-        void UnsafeNativeMethods.IEnumVariant.Clone(UnsafeNativeMethods.IEnumVariant[] v)
+        HRESULT Ole32.IEnumVariant.Clone(Ole32.IEnumVariant[] ppEnum)
         {
-            publicIEnumVariant.Clone(v);
+            return publicIEnumVariant.Clone(ppEnum);
         }
 
-        int UnsafeNativeMethods.IEnumVariant.Next(int n, IntPtr rgvar, int[] ns)
+        unsafe HRESULT Ole32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
         {
-            return publicIEnumVariant.Next(n, rgvar, ns);
+            return publicIEnumVariant.Next(celt, rgVar, pCeltFetched);
         }
 
-        void UnsafeNativeMethods.IEnumVariant.Reset()
-        {
-            publicIEnumVariant.Reset();
-        }
+        HRESULT Ole32.IEnumVariant.Reset() => publicIEnumVariant.Reset();
 
-        void UnsafeNativeMethods.IEnumVariant.Skip(int n)
-        {
-            publicIEnumVariant.Skip(n);
-        }
+        HRESULT Ole32.IEnumVariant.Skip(uint celt) => publicIEnumVariant.Skip(celt);
 
         int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd)
         {

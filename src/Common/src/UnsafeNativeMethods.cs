@@ -2933,29 +2933,6 @@ namespace System.Windows.Forms
             int EnumConnections(out object pEnum);
         }
 
-        [ComImport(), Guid("00020404-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IEnumVariant
-        {
-            [PreserveSig]
-            int Next(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int celt,
-                   [In, Out]
-                 IntPtr rgvar,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 int[] pceltFetched);
-
-            void Skip(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int celt);
-
-            void Reset();
-
-            void Clone(
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   IEnumVariant[] ppenum);
-        }
-
         [ComImport(), Guid("00000104-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IEnumOLEVERB
         {

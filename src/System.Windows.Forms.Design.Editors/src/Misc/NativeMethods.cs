@@ -905,7 +905,6 @@ namespace System.Windows.Forms.Design
         public const int OBJID_WINDOW = 0x00000000;
         public const int OBJID_CLIENT = unchecked((int)0xFFFFFFFC);
         public const string uuid_IAccessible = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
-        public const string uuid_IEnumVariant = "{00020404-0000-0000-C000-000000000046}";
 
         public const int QS_KEY = 0x0001,
             QS_MOUSEMOVE = 0x0002,

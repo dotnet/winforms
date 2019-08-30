@@ -1594,7 +1594,6 @@ namespace System.Windows.Forms
         public const int UiaAppendRuntimeId = 3;
 
         public const string uuid_IAccessible = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
-        public const string uuid_IEnumVariant = "{00020404-0000-0000-C000-000000000046}";
 
         /*
         * MISCELLANEOUS
