@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -236,7 +237,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (bstr != IntPtr.Zero)
                         {
                             strs[i] = Marshal.PtrToStringUni(bstr);
-                            SafeNativeMethods.SysFreeString(new HandleRef(null, bstr));
+                            Oleaut32.SysFreeString(bstr);
                         }
                         else
                         {

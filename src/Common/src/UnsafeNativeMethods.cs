@@ -118,9 +118,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
         public static extern IFont OleCreateFontIndirect(NativeMethods.tagFONTDESC fontdesc, [In]ref Guid refiid);
 
-        [DllImport(ExternDll.Oleaut32, ExactSpelling = true)]
-        public static extern int VarFormat(ref object pvarIn, HandleRef pstrFormat, int iFirstDay, int iFirstWeek, uint dwFlags, [In, Out]ref IntPtr pbstr);
-
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder lpszFile, int cch);
 
@@ -1185,18 +1182,6 @@ namespace System.Windows.Forms
                 out IEnumUnknown ppenum);
         }
 
-        [ComImport(), Guid("91733A60-3F4C-101B-A3F6-00AA0034E4E9"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IGetVBAObject
-        {
-            [PreserveSig]
-            int GetObject(
-                 [In]
-                ref Guid riid,
-                 [Out, MarshalAs(UnmanagedType.LPArray)]
-                IVBFormat[] rval,
-                 int dwReserved);
-        }
-
         [ComImport(), Guid("9BFBBC02-EFF1-101A-84ED-00AA00341D07"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IPropertyNotifySink
         {
@@ -1204,23 +1189,6 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int OnRequestEdit(int dispID);
-        }
-
-        [ComImport(), Guid("9849FD60-3768-101B-8D72-AE6164FFE3CF"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IVBFormat
-        {
-            [PreserveSig]
-            int Format(
-                [In]
-                ref object var,
-                IntPtr pszFormat,
-                IntPtr lpBuffer,
-                short cpBuffer,
-                int lcid,
-                short firstD,
-                short firstW,
-                [Out, MarshalAs(UnmanagedType.LPArray)]
-                short[] result);
         }
 
         [ComImport(), Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

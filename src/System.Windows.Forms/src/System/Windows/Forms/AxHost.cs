@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         private static Guid ifontDisp_Guid = typeof(SafeNativeMethods.IFontDisp).GUID;
         private static Guid ipicture_Guid = typeof(Ole32.IPicture).GUID;
         private static Guid ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
-        private static Guid ivbformat_Guid = typeof(UnsafeNativeMethods.IVBFormat).GUID;
+        private static Guid ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
         private static Guid ioleobject_Guid = typeof(UnsafeNativeMethods.IOleObject).GUID;
         private static Guid dataSource_Guid = new Guid("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
         private static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
@@ -3997,7 +3997,7 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.IOleInPlaceSite,
             Ole32.ISimpleFrameSite,
             UnsafeNativeMethods.IVBGetControl,
-            UnsafeNativeMethods.IGetVBAObject,
+            Ole32.IGetVBAObject,
             UnsafeNativeMethods.IPropertyNotifySink,
             IReflect,
             IDisposable
@@ -4090,26 +4090,23 @@ namespace System.Windows.Forms
             }
 
             // IGetVBAObject methods:
-
-            int UnsafeNativeMethods.IGetVBAObject.GetObject(ref Guid riid, UnsafeNativeMethods.IVBFormat[] rval, int dwReserved)
+            unsafe HRESULT Ole32.IGetVBAObject.GetObject(Guid* riid, Ole32.IVBFormat[] rval, uint dwReserved)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetObject");
 
-                if (rval == null || riid.Equals(Guid.Empty))
+                if (rval == null || riid == null)
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
-                if (riid.Equals(ivbformat_Guid))
-                {
-                    rval[0] = new VBFormat();
-                    return NativeMethods.S_OK;
-                }
-                else
+                if (!riid->Equals(ivbformat_Guid))
                 {
                     rval[0] = null;
-                    return NativeMethods.E_NOINTERFACE;
+                    return HRESULT.E_NOINTERFACE;
                 }
+
+                rval[0] = new VBFormat();
+                return HRESULT.S_OK;
             }
 
             // IVBGetControl methods:
@@ -5429,48 +5426,52 @@ namespace System.Windows.Forms
             base.OnMouseDown(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        private class VBFormat : UnsafeNativeMethods.IVBFormat
+        private class VBFormat : Ole32.IVBFormat
         {
             // IVBFormat methods:
-            //
-            int UnsafeNativeMethods.IVBFormat.Format(ref object var, IntPtr pszFormat, IntPtr lpBuffer, short cpBuffer, int lcid, short firstD, short firstW, short[] result)
+            unsafe HRESULT Ole32.IVBFormat.Format(IntPtr vData, IntPtr bstrFormat, IntPtr lpBuffer, ushort cb, int lcid, short sFirstDayOfWeek, ushort sFirstWeekOfYear, ushort* rcb)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in Format");
-                if (result == null)
+                if (rcb == null)
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
-                result[0] = 0;
-                if (lpBuffer == IntPtr.Zero || cpBuffer < 2)
+                *rcb = 0;
+                if (lpBuffer == IntPtr.Zero || cb < 2)
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
                 IntPtr pbstr = IntPtr.Zero;
-                int hr = UnsafeNativeMethods.VarFormat(ref var, new HandleRef(null, pszFormat), firstD, firstW, 32 /* VAR_FORMAT_NOSUBSTITUTE */, ref pbstr);
-
+                HRESULT hr = Oleaut32.VarFormat(
+                    vData,
+                    bstrFormat,
+                    sFirstDayOfWeek,
+                    sFirstWeekOfYear,
+                    Oleaut32.VarFormatFlags.VAR_FORMAT_NOSUBSTITUTE,
+                    ref pbstr);
                 try
                 {
-                    int i = 0;
+                    ushort i = 0;
                     if (pbstr != IntPtr.Zero)
                     {
                         short ch = 0;
-                        cpBuffer--;
-                        for (; i < cpBuffer && (ch = Marshal.ReadInt16(pbstr, i * 2)) != 0; i++)
+                        cb--;
+                        for (; i < cb && (ch = Marshal.ReadInt16(pbstr, i * 2)) != 0; i++)
                         {
                             Marshal.WriteInt16(lpBuffer, i * 2, ch);
                         }
                     }
                     Marshal.WriteInt16(lpBuffer, i * 2, (short)0);
-                    result[0] = (short)i;
+                    *rcb = i;
                 }
                 finally
                 {
-                    SafeNativeMethods.SysFreeString(new HandleRef(null, pbstr));
+                    Oleaut32.SysFreeString(pbstr);
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
         }
 
@@ -6425,7 +6426,12 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// </summary>
-            private class ExtenderProxy : UnsafeNativeMethods.IExtender, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IGetOleObject, IReflect
+            private class ExtenderProxy :
+                UnsafeNativeMethods.IExtender,
+                UnsafeNativeMethods.IVBGetControl,
+                Ole32.IGetVBAObject,
+                UnsafeNativeMethods.IGetOleObject,
+                IReflect
             {
                 private readonly WeakReference pRef;
                 private readonly WeakReference pContainer;
@@ -6470,24 +6476,22 @@ namespace System.Windows.Forms
                     throw E_FAIL;
                 }
 
-                int UnsafeNativeMethods.IGetVBAObject.GetObject(ref Guid riid, UnsafeNativeMethods.IVBFormat[] rval, int dwReserved)
+                unsafe HRESULT Ole32.IGetVBAObject.GetObject(Guid* riid, Ole32.IVBFormat[] rval, uint dwReserved)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetObject for proxy");
-                    if (rval == null || riid.Equals(Guid.Empty))
+                    if (rval == null || riid == null)
                     {
-                        return NativeMethods.E_INVALIDARG;
+                        return HRESULT.E_INVALIDARG;
                     }
 
-                    if (riid.Equals(ivbformat_Guid))
-                    {
-                        rval[0] = new VBFormat();
-                        return NativeMethods.S_OK;
-                    }
-                    else
+                    if (!riid->Equals(ivbformat_Guid))
                     {
                         rval[0] = null;
-                        return NativeMethods.E_NOINTERFACE;
+                        return HRESULT.E_NOINTERFACE;
                     }
+
+                    rval[0] = new VBFormat();
+                    return HRESULT.S_OK;
                 }
 
                 public int Align
