@@ -1174,34 +1174,6 @@ namespace System.Windows.Forms
                 NativeMethods.COMRECT lprcPosRect);
         }
 
-        [ComImport(), Guid("742B0E01-14E6-101B-914E-00AA00300CAB"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ISimpleFrameSite
-        {
-            [PreserveSig]
-            int PreMessageFilter(
-                IntPtr hwnd,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int msg,
-                IntPtr wp,
-                IntPtr lp,
-                [In, Out]
-                ref IntPtr plResult,
-                [In, Out, MarshalAs(UnmanagedType.U4)]
-                ref int pdwCookie);
-
-            [PreserveSig]
-            int PostMessageFilter(
-                IntPtr hwnd,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int msg,
-                IntPtr wp,
-                IntPtr lp,
-                [In, Out]
-                ref IntPtr plResult,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwCookie);
-        }
-
         [ComImport(), Guid("40A050A0-3C31-101B-A82E-08002B2B2337"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IVBGetControl
         {

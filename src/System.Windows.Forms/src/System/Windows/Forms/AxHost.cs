@@ -24,17 +24,14 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Wraps ActiveX controls and exposes them as
-    ///  fully featured windows forms controls.
+    ///  Wraps ActiveX controls and exposes them as fully featured windows forms controls.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultEvent(nameof(Enter)),
-    Designer("System.Windows.Forms.Design.AxHostDesigner, " + AssemblyRef.SystemDesign),
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultEvent(nameof(Enter))]
+    [Designer("System.Windows.Forms.Design.AxHostDesigner, " + AssemblyRef.SystemDesign)]
     public abstract class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
     {
         private static readonly TraceSwitch AxHTraceSwitch = new TraceSwitch("AxHTrace", "ActiveX handle tracing");
@@ -3994,8 +3991,16 @@ namespace System.Windows.Forms
         // This private class encapsulates all of the ole interfaces so that users
         // will not be able to access and call them directly...
 
-        private class OleInterfaces
-            : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IPropertyNotifySink, IReflect, IDisposable
+        private class OleInterfaces :
+            UnsafeNativeMethods.IOleControlSite,
+            UnsafeNativeMethods.IOleClientSite,
+            UnsafeNativeMethods.IOleInPlaceSite,
+            Ole32.ISimpleFrameSite,
+            UnsafeNativeMethods.IVBGetControl,
+            UnsafeNativeMethods.IGetVBAObject,
+            UnsafeNativeMethods.IPropertyNotifySink,
+            IReflect,
+            IDisposable
         {
             private readonly AxHost host;
             private ConnectionPointCookie connectionPoint;
@@ -4118,15 +4123,14 @@ namespace System.Windows.Forms
             }
 
             // ISimpleFrameSite methods:
-
-            int UnsafeNativeMethods.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, ref int pdwCookie)
+            unsafe HRESULT Ole32.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint* pdwCookie)
             {
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, int dwCookie)
+            unsafe HRESULT Ole32.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint dwCookie)
             {
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             // IReflect methods:
