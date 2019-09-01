@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1419,29 +1420,22 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void WmDrawItem(ref Message m)
+        internal unsafe void WmDrawItem(ref Message m)
         {
             // Handles the OnDrawItem message sent from ContainerControl
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
             Debug.WriteLineIf(Control.s_paletteTracing.TraceVerbose, Handle + ": Force set palette in MenuItem drawitem");
-            IntPtr oldPal = Control.SetUpPalette(dis.hDC, false /*force*/, false);
+            IntPtr oldPal = Control.SetUpPalette(dis->hDC, force: false, realizePalette: false);
             try
             {
-                Graphics g = Graphics.FromHdcInternal(dis.hDC);
-                try
-                {
-                    OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom), Index, (DrawItemState)dis.itemState));
-                }
-                finally
-                {
-                    g.Dispose();
-                }
+                Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, dis->rcItem, Index, (DrawItemState)dis->itemState));
             }
             finally
             {
                 if (oldPal != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectPalette(new HandleRef(null, dis.hDC), new HandleRef(null, oldPal), 0);
+                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
                 }
             }
 

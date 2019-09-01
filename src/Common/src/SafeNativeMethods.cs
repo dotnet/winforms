@@ -313,9 +313,6 @@ namespace System.Windows.Forms
         public static extern int SetBkColor(HandleRef hDC, int clr);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr /* HPALETTE */SelectPalette(HandleRef hdc, HandleRef hpal, int bForceBackground);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetViewportOrgEx(IntPtr hdc, int x, int y, Point *lppt);
 
         public static unsafe bool SetViewportOrgEx(HandleRef hdc, int x, int y, Point *lppt)
@@ -324,9 +321,6 @@ namespace System.Windows.Forms
             GC.KeepAlive(hdc.Wrapper);
             return result;
         }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int RealizePalette(HandleRef hDC);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern bool LPtoDP(HandleRef hDC, ref RECT lpRect, int nCount);

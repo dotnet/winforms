@@ -2453,45 +2453,36 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmReflectDrawItem(ref Message m)
+        private unsafe void WmReflectDrawItem(ref Message m)
         {
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-            IntPtr dc = dis.hDC;
-            IntPtr oldPal = SetUpPalette(dc, false /*force*/, false /*realize*/);
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
             try
             {
-                Graphics g = Graphics.FromHdcInternal(dc);
-
-                try
+                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                Rectangle bounds = dis->rcItem;
+                if (HorizontalScrollbar)
                 {
-                    Rectangle bounds = Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom);
-
-                    if (HorizontalScrollbar)
+                    if (MultiColumn)
                     {
-                        if (MultiColumn)
-                        {
-                            bounds.Width = Math.Max(ColumnWidth, bounds.Width);
-                        }
-                        else
-                        {
-                            bounds.Width = Math.Max(MaxItemWidth, bounds.Width);
-                        }
+                        bounds.Width = Math.Max(ColumnWidth, bounds.Width);
                     }
+                    else
+                    {
+                        bounds.Width = Math.Max(MaxItemWidth, bounds.Width);
+                    }
+                }
 
-                    OnDrawItem(new DrawItemEventArgs(g, Font, bounds, dis.itemID, (DrawItemState)dis.itemState, ForeColor, BackColor));
-                }
-                finally
-                {
-                    g.Dispose();
-                }
+                OnDrawItem(new DrawItemEventArgs(g, Font, bounds, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
             }
             finally
             {
                 if (oldPal != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectPalette(new HandleRef(null, dc), new HandleRef(null, oldPal), 0);
+                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
                 }
             }
+
             m.Result = (IntPtr)1;
         }
 

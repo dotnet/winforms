@@ -11079,11 +11079,10 @@ namespace System.Windows.Forms
             IntPtr halftonePalette = Graphics.GetHalftonePalette();
 
             Debug.WriteLineIf(s_paletteTracing.TraceVerbose, "select palette " + !force);
-            IntPtr result = SafeNativeMethods.SelectPalette(new HandleRef(null, dc), new HandleRef(null, halftonePalette), (force ? 0 : 1));
-
+            IntPtr result = Gdi32.SelectPalette(dc, halftonePalette, force ? BOOL.FALSE : BOOL.TRUE);
             if (result != IntPtr.Zero && realizePalette)
             {
-                SafeNativeMethods.RealizePalette(new HandleRef(null, dc));
+                Gdi32.RealizePalette(dc);
             }
 
             return result;
@@ -12006,21 +12005,18 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmDrawItemMenuItem(ref Message m)
+        private unsafe void WmDrawItemMenuItem(ref Message m)
         {
             // Obtain the menu item object
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
 
             // A pointer to the correct MenuItem is stored in the draw item
             // information sent with the message.
             // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(dis.itemData);
+            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(dis->itemData);
 
             // Delegate this message to the menu item
-            if (menuItem != null)
-            {
-                menuItem.WmDrawItem(ref m);
-            }
+            menuItem?.WmDrawItem(ref m);
         }
 
         /// <summary>
@@ -12898,13 +12894,10 @@ namespace System.Windows.Forms
                     {
                         if (oldPal != IntPtr.Zero)
                         {
-                            SafeNativeMethods.SelectPalette(new HandleRef(null, dc), new HandleRef(null, oldPal), 0);
+                            Gdi32.SelectPalette(dc, oldPal, BOOL.FALSE);
                         }
-                        if (bufferedGraphics != null)
-                        {
-                            bufferedGraphics.Dispose();
-                        }
-
+                        
+                        bufferedGraphics?.Dispose();
                     }
                 }
             }

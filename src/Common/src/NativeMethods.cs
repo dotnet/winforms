@@ -931,17 +931,6 @@ namespace System.Windows.Forms
         OLEMISC_ACTIVATEWHENVISIBLE = 0x0000100,
         OLEMISC_ACTSLIKEBUTTON = 0x00001000,
         OLEMISC_SETCLIENTSITEFIRST = 0x00020000,
-        ODS_CHECKED = 0x0008,
-        ODS_COMBOBOXEDIT = 0x1000,
-        ODS_DEFAULT = 0x0020,
-        ODS_DISABLED = 0x0004,
-        ODS_FOCUS = 0x0010,
-        ODS_GRAYED = 0x0002,
-        ODS_HOTLIGHT = 0x0040,
-        ODS_INACTIVE = 0x0080,
-        ODS_NOACCEL = 0x0100,
-        ODS_NOFOCUSRECT = 0x0200,
-        ODS_SELECTED = 0x0001,
         OLECLOSE_SAVEIFDIRTY = 0,
         OLECLOSE_PROMPTSAVE = 2;
 
@@ -3172,20 +3161,6 @@ namespace System.Windows.Forms
         {
             public IntPtr prc;        // pointer to a RECT
             public IntPtr pwpos;      // pointer to a WINDOWPOS
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class DRAWITEMSTRUCT
-        {
-            public int CtlType = 0;
-            public int CtlID = 0;
-            public int itemID = 0;
-            public int itemAction = 0;
-            public int itemState = 0;
-            public IntPtr hwndItem = IntPtr.Zero;
-            public IntPtr hDC = IntPtr.Zero;
-            public RECT rcItem;
-            public IntPtr itemData = IntPtr.Zero;
         }
 
         [StructLayout(LayoutKind.Sequential)]
