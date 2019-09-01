@@ -428,7 +428,6 @@ namespace System.Windows.Forms
         HTBOTTOMLEFT = 16,
         HTBOTTOMRIGHT = 17,
         HTBORDER = 18,
-        HELPINFO_WINDOW = 0x0001,
         HCF_HIGHCONTRASTON = 0x00000001,
         HDI_ORDER = 0x0080,
         HDI_WIDTH = 0x0001,
@@ -3092,17 +3091,6 @@ namespace System.Windows.Forms
         {
             public IntPtr prc;        // pointer to a RECT
             public IntPtr pwpos;      // pointer to a WINDOWPOS
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class HELPINFO
-        {
-            public int cbSize = Marshal.SizeOf<HELPINFO>();
-            public int iContextType = 0;
-            public int iCtrlId = 0;
-            public IntPtr hItemHandle = IntPtr.Zero;
-            public IntPtr dwContextId = IntPtr.Zero;
-            public Point MousePos;
         }
 
         [StructLayout(LayoutKind.Sequential)]
