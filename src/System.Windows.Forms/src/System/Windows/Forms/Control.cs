@@ -12204,7 +12204,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_HELP message
         /// </summary>
-        private void WmHelp(ref Message m)
+        private unsafe void WmHelp(ref Message m)
         {
             // if there's currently a message box open - grab the help info from it.
             HelpInfo hpi = MessageBox.HelpInfo;
@@ -12228,15 +12228,13 @@ namespace System.Windows.Forms
             }
 
             // Note: info.hItemHandle is the handle of the window that sent the help message.
-            NativeMethods.HELPINFO info = (NativeMethods.HELPINFO)m.GetLParam(typeof(NativeMethods.HELPINFO));
-
-            HelpEventArgs hevent = new HelpEventArgs(info.MousePos);
+            User32.HELPINFO* info = (User32.HELPINFO*)m.LParam;
+            var hevent = new HelpEventArgs(info->MousePos);
             OnHelpRequested(hevent);
             if (!hevent.Handled)
             {
                 DefWndProc(ref m);
             }
-
         }
 
         /// <summary>
