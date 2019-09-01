@@ -1384,11 +1384,10 @@ namespace System.Windows.Forms
                 tooltipHwnd = SendMessage(NativeMethods.TCM_GETTOOLTIPS, 0, 0);
                 if (tooltipHwnd != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHwnd),
-                                         NativeMethods.HWND_TOPMOST,
-                                         0, 0, 0, 0,
-                                         NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                         NativeMethods.SWP_NOACTIVATE);
+                    User32.SetWindowPos(
+                        new HandleRef(this, tooltipHwnd),
+                        User32.HWND_TOPMOST,
+                        flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
                 }
             }
 

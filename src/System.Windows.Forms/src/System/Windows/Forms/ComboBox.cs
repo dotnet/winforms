@@ -3538,8 +3538,14 @@ namespace System.Windows.Forms
                     int count = Math.Min(Math.Max(itemCount, 1), maxDropDownItems);
                     height = (ItemHeight * count + 2);
                 }
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, dropDownHandle), NativeMethods.NullHandleRef, 0, 0, DropDownWidth, height,
-                                     NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOZORDER);
+                User32.SetWindowPos(
+                    new HandleRef(this, dropDownHandle),
+                    User32.HWND_TOP,
+                    0,
+                    0,
+                    DropDownWidth,
+                    height,
+                    User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOZORDER);
             }
         }
 

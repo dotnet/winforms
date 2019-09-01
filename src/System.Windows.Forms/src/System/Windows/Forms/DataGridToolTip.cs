@@ -47,7 +47,10 @@ namespace System.Windows.Forms
                 tipWindow.CreateHandle(cparams);
 
                 User32.SendMessageW(tipWindow, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                SafeNativeMethods.SetWindowPos(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.HWND_NOTOPMOST, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(tipWindow, tipWindow.Handle),
+                    User32.HWND_NOTOPMOST,
+                    flags: User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOACTIVATE);
                 User32.SendMessageW(tipWindow, WindowMessages.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
             }
         }

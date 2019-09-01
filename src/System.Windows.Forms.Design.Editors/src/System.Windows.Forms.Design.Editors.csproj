@@ -83,7 +83,10 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.TextFormatFlags.cs" Link="Interop\User32\Interop.TextFormatFlags.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowPosition.cs" Link="Interop\User32\Interop.WindowPosition.cs" />
     <Compile Include="..\..\Common\src\Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" Link="Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" />
   </ItemGroup>
 

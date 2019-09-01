@@ -1945,10 +1945,14 @@ namespace System.Windows.Forms
                 moveToLocation.Y = screen.WorkingArea.Bottom - tipSize.Height;
             }
 
-            SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
-            NativeMethods.HWND_TOPMOST,
-            moveToLocation.X, moveToLocation.Y, tipSize.Width, tipSize.Height,
-            NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOOWNERZORDER);
+            User32.SetWindowPos(
+                new HandleRef(this, Handle),
+                User32.HWND_TOPMOST,
+                moveToLocation.X,
+                moveToLocation.Y,
+                tipSize.Width,
+                tipSize.Height,
+                User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOOWNERZORDER);
         }
 
         private IntPtr GetCurrentToolHwnd()
@@ -2093,23 +2097,24 @@ namespace System.Windows.Forms
             if (e.Cancel)
             {
                 _cancelled = true;
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    NativeMethods.HWND_TOPMOST,
-                    0, 0, 0, 0,
-                    NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
-
+                    User32.HWND_TOPMOST,
+                    flags: User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOOWNERZORDER);
             }
             else
             {
                 _cancelled = false;
 
                 // Only width/height changes are respected, so set top,left to what we got earlier
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    NativeMethods.HWND_TOPMOST,
-                    r.left, r.top, currentTooltipSize.Width, currentTooltipSize.Height,
-                    NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOOWNERZORDER);
+                    User32.HWND_TOPMOST,
+                    r.left,
+                    r.top,
+                    currentTooltipSize.Width,
+                    currentTooltipSize.Height,
+                    User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOOWNERZORDER);
             }
         }
 
@@ -2139,7 +2144,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
+            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
 
             Cursor currentCursor = Cursor.Current;
             Point cursorPos = Cursor.Position;

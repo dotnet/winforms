@@ -673,7 +673,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private unsafe void WmWindowPosChanging(ref Message m)
         {
-            NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
+            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
             bool updateSize = _inAutoscale;
             if (!updateSize)
             {
@@ -686,7 +686,7 @@ namespace System.Windows.Forms.Design
             // we want to update the size if we have a menu and...
             // 1) we're doing an autoscale
             // 2) we're loading a form without an inherited menu (inherited forms will already have the right size)
-            if (updateSize && Menu != null && (wp->flags & NativeMethods.SWP_NOSIZE) == 0 && (IsMenuInherited || _inAutoscale))
+            if (updateSize && Menu != null && (wp->flags & User32.WindowPosition.SWP_NOSIZE) == 0 && (IsMenuInherited || _inAutoscale))
             {
                 _heightDelta = GetMenuHeight();
             }

@@ -4646,7 +4646,7 @@ namespace System.Windows.Forms
         ///  Helper method for retrieving an ActiveX property.  We abstract these
         ///  to another method so we do not force JIT the ActiveX codebase.
         /// </summary>
-        private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, int flags)
+        private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.WindowPosition flags)
         {
             ActiveXInstance.UpdateBounds(ref x, ref y, ref width, ref height, flags);
         }
@@ -4816,10 +4816,10 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel() && SafeNativeMethods.IsWindowEnabled(new HandleRef(_window, Handle)))
             {
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(_window, Handle),
-                    NativeMethods.HWND_TOP,
-                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                    User32.HWND_TOP,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
             }
         }
 
@@ -10779,10 +10779,10 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel())
             {
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(_window, Handle),
-                    NativeMethods.HWND_BOTTOM,
-                    flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                    User32.HWND_BOTTOM,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
             }
         }
 
@@ -10900,24 +10900,24 @@ namespace System.Windows.Forms
                     {
                         if (!GetState(States.SizeLockedByOS))
                         {
-                            int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE;
+                            User32.WindowPosition flags = User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE;
 
                             if (_x == x && _y == y)
                             {
-                                flags |= NativeMethods.SWP_NOMOVE;
+                                flags |= User32.WindowPosition.SWP_NOMOVE;
                             }
                             if (_width == width && _height == height)
                             {
-                                flags |= NativeMethods.SWP_NOSIZE;
+                                flags |= User32.WindowPosition.SWP_NOSIZE;
                             }
 
                             //
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
 
-                            SafeNativeMethods.SetWindowPos(
+                            User32.SetWindowPos(
                                 new HandleRef(_window, Handle),
-                                NativeMethods.NullHandleRef,
+                                IntPtr.Zero,
                                 x,
                                 y,
                                 width,
@@ -11170,14 +11170,14 @@ namespace System.Windows.Forms
                             CreateControl();
                         }
 
-                        SafeNativeMethods.SetWindowPos(
+                        User32.SetWindowPos(
                             new HandleRef(_window, Handle),
-                            NativeMethods.NullHandleRef,
-                            flags: NativeMethods.SWP_NOSIZE
-                                | NativeMethods.SWP_NOMOVE
-                                | NativeMethods.SWP_NOZORDER
-                                | NativeMethods.SWP_NOACTIVATE
-                                | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                            IntPtr.Zero,
+                            flags: User32.WindowPosition.SWP_NOSIZE
+                                | User32.WindowPosition.SWP_NOMOVE
+                                | User32.WindowPosition.SWP_NOZORDER
+                                | User32.WindowPosition.SWP_NOACTIVATE
+                                | (value ? User32.WindowPosition.SWP_SHOWWINDOW : User32.WindowPosition.SWP_HIDEWINDOW));
                     }
                     catch
                     {
@@ -11229,14 +11229,14 @@ namespace System.Windows.Forms
                 // but the child control has already been created.
                 if (IsHandleCreated)
                 {
-                    SafeNativeMethods.SetWindowPos(
+                    User32.SetWindowPos(
                         new HandleRef(_window, Handle),
-                        NativeMethods.NullHandleRef,
-                        flags: NativeMethods.SWP_NOSIZE
-                            | NativeMethods.SWP_NOMOVE
-                            | NativeMethods.SWP_NOZORDER
-                            | NativeMethods.SWP_NOACTIVATE
-                            | (value ? NativeMethods.SWP_SHOWWINDOW : NativeMethods.SWP_HIDEWINDOW));
+                        User32.HWND_TOP,
+                        flags: User32.WindowPosition.SWP_NOSIZE
+                            | User32.WindowPosition.SWP_NOMOVE
+                            | User32.WindowPosition.SWP_NOZORDER
+                            | User32.WindowPosition.SWP_NOACTIVATE
+                            | (value ? User32.WindowPosition.SWP_SHOWWINDOW : User32.WindowPosition.SWP_HIDEWINDOW));
                 }
             }
         }
@@ -11738,7 +11738,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr prevHandle = (IntPtr)NativeMethods.HWND_TOP;
+            IntPtr prevHandle = User32.HWND_TOP;
             for (int i = Controls.GetChildIndex(ctl); --i >= 0;)
             {
                 Control c = Controls[i];
@@ -11753,10 +11753,10 @@ namespace System.Windows.Forms
                 _state |= States.NoZOrder;
                 try
                 {
-                    SafeNativeMethods.SetWindowPos(
+                    User32.SetWindowPos(
                         new HandleRef(ctl._window, ctl.Handle),
-                        new HandleRef(null, prevHandle),
-                        flags: NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                        prevHandle,
+                        flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
                 }
                 finally
                 {
@@ -11809,14 +11809,14 @@ namespace System.Windows.Forms
                     SetState(States.Mirrored, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
                 }
 
-                SafeNativeMethods.SetWindowPos(
+                User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    NativeMethods.NullHandleRef,
-                    flags: NativeMethods.SWP_DRAWFRAME
-                        | NativeMethods.SWP_NOACTIVATE
-                        | NativeMethods.SWP_NOMOVE
-                        | NativeMethods.SWP_NOSIZE
-                        | NativeMethods.SWP_NOZORDER);
+                    User32.HWND_TOP,
+                    flags: User32.WindowPosition.SWP_DRAWFRAME
+                        | User32.WindowPosition.SWP_NOACTIVATE
+                        | User32.WindowPosition.SWP_NOMOVE
+                        | User32.WindowPosition.SWP_NOSIZE
+                        | User32.WindowPosition.SWP_NOZORDER);
 
                 Invalidate(true);
             }
@@ -12972,16 +12972,16 @@ namespace System.Windows.Forms
             //
             if (IsActiveX)
             {
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
+                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
                 // Only call UpdateBounds if the new bounds are different.
                 //
                 bool different = false;
 
-                if ((wp->flags & NativeMethods.SWP_NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
+                if ((wp->flags & User32.WindowPosition.SWP_NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
                 {
                     different = true;
                 }
-                if ((wp->flags & NativeMethods.SWP_NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
+                if ((wp->flags & User32.WindowPosition.SWP_NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
                 {
                     different = true;
                 }
@@ -13230,8 +13230,8 @@ namespace System.Windows.Forms
                 (_state & States.NoZOrder) == 0)
             {
 
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
-                if ((wp->flags & NativeMethods.SWP_NOZORDER) == 0)
+                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
+                if ((wp->flags & User32.WindowPosition.SWP_NOZORDER) == 0)
                 {
                     _parent.UpdateChildControlIndex(this);
                 }

@@ -80,6 +80,9 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.PAINTSTRUCT.cs" Link="Interop\User32\Interop.PAINTSTRUCT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RedrawWindow.cs" Link="Interop\User32\Interop.RedrawWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowPosition.cs" Link="Interop\User32\Interop.WindowPosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">

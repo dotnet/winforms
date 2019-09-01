@@ -369,20 +369,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool ShowWindow(HandleRef hWnd, int nCmdShow);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(
-            HandleRef hWnd,
-            HandleRef hWndInsertAfter,
-            int x = 0,
-            int y = 0,
-            int cx = 0,
-            int cy = 0,
-            int flags = 0);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
-                                       int x, int y, int cx, int cy, int flags);
-
         // this is a wrapper that comctl exposes for the NT function since it doesn't exist natively on 95.
         [DllImport(ExternDll.Comctl32, ExactSpelling = true)]
 

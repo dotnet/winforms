@@ -474,12 +474,6 @@ namespace System.Windows.Forms
         HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
 
-        public static HandleRef HWND_TOP = new HandleRef(null, (IntPtr)0);
-        public static HandleRef HWND_BOTTOM = new HandleRef(null, (IntPtr)1);
-        public static HandleRef HWND_TOPMOST = new HandleRef(null, new IntPtr(-1));
-        public static HandleRef HWND_NOTOPMOST = new HandleRef(null, new IntPtr(-2));
-        public static HandleRef HWND_MESSAGE = new HandleRef(null, new IntPtr(-3));
-
         public const int IME_CMODE_NATIVE = 0x0001,
         IME_CMODE_KATAKANA = 0x0002,
         IME_CMODE_FULLSHAPE = 0x0008,
@@ -1083,14 +1077,7 @@ namespace System.Windows.Forms
         SW_SHOWNA = 8,
         SW_RESTORE = 9,
         SW_MAX = 10,
-        SWP_NOSIZE = 0x0001,
-        SWP_NOMOVE = 0x0002,
-        SWP_NOZORDER = 0x0004,
-        SWP_NOACTIVATE = 0x0010,
-        SWP_SHOWWINDOW = 0x0040,
-        SWP_HIDEWINDOW = 0x0080,
-        SWP_DRAWFRAME = 0x0020,
-        SWP_NOOWNERZORDER = 0x0200;
+        SWP_NOSIZE = 0x0001;
 
         public const int HLP_FILE = 1,
         HLP_KEYWORD = 2,
@@ -3247,18 +3234,6 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U2)]
             public short wVarFlags;
             public    /*NativeMethods.tagVARKIND*/ int varkind;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct WINDOWPOS
-        {
-            public IntPtr hwnd;
-            public IntPtr hwndInsertAfter;
-            public int x;
-            public int y;
-            public int cx;
-            public int cy;
-            public int flags;
         }
 
         [StructLayout(LayoutKind.Sequential)]

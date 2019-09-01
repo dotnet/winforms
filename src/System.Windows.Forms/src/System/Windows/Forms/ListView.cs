@@ -4833,7 +4833,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.WINDOWPOS>());
+                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf<User32.WINDOWPOS>());
 
                     if (prc == IntPtr.Zero)
                     {
@@ -4854,16 +4854,17 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, hdrHWND), NativeMethods.HDM_LAYOUT, 0, ref hd);
 
                     // now take the information from the native wpos struct and put it into a managed WINDOWPOS
-                    NativeMethods.WINDOWPOS wpos = Marshal.PtrToStructure<NativeMethods.WINDOWPOS>(pwpos);
+                    User32.WINDOWPOS wpos = Marshal.PtrToStructure<User32.WINDOWPOS>(pwpos);
 
                     // position the header control
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, hdrHWND),
-                                                   new HandleRef(this, wpos.hwndInsertAfter),
-                                                   wpos.x,
-                                                   wpos.y,
-                                                   wpos.cx,
-                                                   wpos.cy,
-                                                   wpos.flags | NativeMethods.SWP_SHOWWINDOW);
+                    User32.SetWindowPos(
+                        new HandleRef(this, hdrHWND),
+                        new HandleRef(this, wpos.hwndInsertAfter),
+                        wpos.x,
+                        wpos.y,
+                        wpos.cx,
+                        wpos.cy,
+                        wpos.flags | User32.WindowPosition.SWP_SHOWWINDOW);
                 }
                 finally
                 {

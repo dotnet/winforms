@@ -900,7 +900,10 @@ namespace System.Windows.Forms
                     _tipWindow.CreateHandle(cparams);
 
                     User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                    SafeNativeMethods.SetWindowPos(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
+                    User32.SetWindowPos(
+                        new HandleRef(_tipWindow, _tipWindow.Handle),
+                        User32.HWND_TOP,
+                        flags: User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOACTIVATE);
                     User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
                 }
 
@@ -926,16 +929,14 @@ namespace System.Windows.Forms
                 // Hide the window and invalidate the parent to ensure
                 // that we leave no visual artifacts. given that we
                 // have a bizare region window, this is needed.
-                //
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
-                                               NativeMethods.HWND_TOP,
-                                               _windowBounds.X,
-                                               _windowBounds.Y,
-                                               _windowBounds.Width,
-                                               _windowBounds.Height,
-                                               NativeMethods.SWP_HIDEWINDOW
-                                               | NativeMethods.SWP_NOSIZE
-                                               | NativeMethods.SWP_NOMOVE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    _windowBounds.X,
+                    _windowBounds.Y,
+                    _windowBounds.Width,
+                    _windowBounds.Height,
+                    User32.WindowPosition.SWP_HIDEWINDOW | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOMOVE);
                 _parent?.Invalidate(true);
                 DestroyHandle();
 
@@ -1238,8 +1239,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, _windowBounds.X, _windowBounds.Y,
-                                     _windowBounds.Width, _windowBounds.Height, NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    _windowBounds.X,
+                    _windowBounds.Y,
+                    _windowBounds.Width,
+                    _windowBounds.Height,
+                    User32.WindowPosition.SWP_NOACTIVATE);
                 User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
             }
 

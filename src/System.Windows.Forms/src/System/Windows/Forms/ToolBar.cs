@@ -1781,7 +1781,14 @@ namespace System.Windows.Forms
                                     leftTop.X -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
-                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.X, leftTop.Y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                                User32.SetWindowPos(
+                                    note.hwndFrom,
+                                    User32.HWND_TOP,
+                                    leftTop.X,
+                                    leftTop.Y,
+                                    0,
+                                    0,
+                                    User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE);
                                 m.Result = (IntPtr)1;
                                 return;
                             }

@@ -1864,7 +1864,7 @@ namespace System.Windows.Forms
 
             private unsafe void WmWindowPosChanging(ref Message m)
             {
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
+                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
                 wp->x = 0;
                 wp->y = 0;
                 Size s = WebBrowserBase.webBrowserBaseChangingSize;

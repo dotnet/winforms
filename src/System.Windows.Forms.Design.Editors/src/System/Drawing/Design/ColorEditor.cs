@@ -1122,10 +1122,16 @@ namespace System.Drawing.Design
                         NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
                         NativeMethods.EnableWindow(hwndCtl, false);
-                        NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
+                        User32.SetWindowPos(
+                            hwndCtl,
+                            User32.HWND_TOP,
+                            flags: User32.WindowPosition.SWP_HIDEWINDOW);
                         hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
                         NativeMethods.EnableWindow(hwndCtl, false);
-                        NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
+                        User32.SetWindowPos(
+                            hwndCtl,
+                            User32.HWND_TOP,
+                            flags: User32.WindowPosition.SWP_HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
                     case WindowMessages.WM_COMMAND:

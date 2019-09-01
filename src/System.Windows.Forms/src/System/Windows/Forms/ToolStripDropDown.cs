@@ -1104,9 +1104,10 @@ namespace System.Windows.Forms
         {
             if (TopMost)
             {
-                HandleRef topMostFlag = (topMost) ? NativeMethods.HWND_TOPMOST : NativeMethods.HWND_NOTOPMOST;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), topMostFlag, 0, 0, 0, 0,
-                                             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    topMost ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
+                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
             }
         }
 
@@ -1910,8 +1911,10 @@ namespace System.Windows.Forms
                             }
                             else if (IsHandleCreated && SafeNativeMethods.IsWindowEnabled(new HandleRef(this, Handle)))
                             {
-                                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                                             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+                                User32.SetWindowPos(
+                                    new HandleRef(this, Handle),
+                                    User32.HWND_TOP,
+                                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
                             }
                         }
                     }

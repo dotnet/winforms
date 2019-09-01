@@ -2070,14 +2070,28 @@ namespace System.Windows.Forms
 
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = Width;
-                int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, int.MaxValue, Height, flags);
+                User32.WindowPosition flags = User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOMOVE;
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    Left,
+                    Top,
+                    int.MaxValue,
+                    Height,
+                    flags);
 
                 root.Realize(false);
 
                 if (oldSize != 0)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, oldSize, Height, flags);
+                    User32.SetWindowPos(
+                        new HandleRef(this, Handle),
+                        User32.HWND_TOP,
+                        Left,
+                        Top,
+                        oldSize,
+                        Height,
+                        flags);
                 }
             }
             finally
@@ -2983,8 +2997,14 @@ namespace System.Windows.Forms
                         bounds.Location = PointToScreen(bounds.Location);
 
                         User32.SendMessageW(tooltipHandle, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), bounds);
-                        SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHandle),
-                                NativeMethods.HWND_TOPMOST, bounds.Left, bounds.Top, 0, 0, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER);
+                        User32.SetWindowPos(
+                            new HandleRef(this, tooltipHandle),
+                            User32.HWND_TOPMOST,
+                            bounds.Left,
+                            bounds.Top,
+                            0,
+                            0,
+                            User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOZORDER);
                         return true;
                     }
                 }
