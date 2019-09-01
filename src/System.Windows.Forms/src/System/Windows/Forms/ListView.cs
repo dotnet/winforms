@@ -4821,64 +4821,28 @@ namespace System.Windows.Forms
             IntPtr hdrHWND = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
             if (hdrHWND != IntPtr.Zero)
             {
+                var rc = new RECT();
+                var wpos = new User32.WINDOWPOS();
+                UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rc);
 
-                IntPtr prc = IntPtr.Zero;
-                IntPtr pwpos = IntPtr.Zero;
-
-                prc = Marshal.AllocHGlobal(Marshal.SizeOf<RECT>());
-                if (prc == IntPtr.Zero)
+                var hd = new User32.HDLAYOUT
                 {
-                    return;
-                }
+                    prc = &rc,
+                    pwpos = &wpos
+                };
 
-                try
-                {
-                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf<User32.WINDOWPOS>());
+                // get the layout information
+                User32.SendMessageW(new HandleRef(this, hdrHWND), WindowMessages.HDM_LAYOUT, IntPtr.Zero, &hd);
 
-                    if (prc == IntPtr.Zero)
-                    {
-                        // we could not allocate memory.
-                        // return
-                        return;
-                    }
-
-                    UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), prc);
-
-                    NativeMethods.HDLAYOUT hd = new NativeMethods.HDLAYOUT
-                    {
-                        prc = prc,
-                        pwpos = pwpos
-                    };
-
-                    // get the layout information
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, hdrHWND), NativeMethods.HDM_LAYOUT, 0, ref hd);
-
-                    // now take the information from the native wpos struct and put it into a managed WINDOWPOS
-                    User32.WINDOWPOS wpos = Marshal.PtrToStructure<User32.WINDOWPOS>(pwpos);
-
-                    // position the header control
-                    User32.SetWindowPos(
-                        new HandleRef(this, hdrHWND),
-                        new HandleRef(this, wpos.hwndInsertAfter),
-                        wpos.x,
-                        wpos.y,
-                        wpos.cx,
-                        wpos.cy,
-                        wpos.flags | User32.WindowPosition.SWP_SHOWWINDOW);
-                }
-                finally
-                {
-
-                    // clean up our memory
-                    if (prc != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(prc);
-                    }
-                    if (pwpos != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(pwpos);
-                    }
-                }
+                // position the header control
+                User32.SetWindowPos(
+                    new HandleRef(this, hdrHWND),
+                    new HandleRef(this, wpos.hwndInsertAfter),
+                    wpos.x,
+                    wpos.y,
+                    wpos.cx,
+                    wpos.cy,
+                    wpos.flags | User32.WindowPosition.SWP_SHOWWINDOW);
             }
         }
 

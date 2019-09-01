@@ -249,5 +249,7 @@ internal static partial class Interop
         public const uint TTM_UPDATETIPTEXTW    = WM_USER + 57;
         public const uint TTM_ENUMTOOLSW        = WM_USER + 58;
         public const uint TTM_GETCURRENTTOOLW   = WM_USER + 59;
+
+        public const uint HDM_LAYOUT = (0x1200 + 5);
     }
 }

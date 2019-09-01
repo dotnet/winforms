@@ -18,6 +18,17 @@ internal static partial class Interop
             IntPtr lParam);
 
         public static IntPtr SendMessageW(
+            HandleRef hWnd,
+            uint Msg,
+            IntPtr wParam,
+            IntPtr lParam)
+        {
+            IntPtr result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
+            GC.KeepAlive(hWnd.Wrapper);
+            return result;
+        }
+
+        public static IntPtr SendMessageW(
             IHandle hWnd,
             uint Msg,
             IntPtr wParam = default,
@@ -55,7 +66,16 @@ internal static partial class Interop
             IntPtr wParam,
             RECT lParam)
         {
-             return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)&lParam);
+            return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)&lParam);
+        }
+
+        public unsafe static IntPtr SendMessageW(
+            HandleRef hWnd,
+            uint Msg,
+            IntPtr wParam,
+            HDLAYOUT* lParam)
+        {
+            return SendMessageW(hWnd, Msg, wParam, (IntPtr)lParam);
         }
     }
 }

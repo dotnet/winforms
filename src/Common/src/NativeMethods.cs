@@ -444,7 +444,6 @@ namespace System.Windows.Forms
         HDM_GETITEMCOUNT = (0x1200 + 0),
         HDM_INSERTITEMW = (0x1200 + 10),
         HDM_GETITEMW = (0x1200 + 11),
-        HDM_LAYOUT = (0x1200 + 5),
         HDM_SETITEMW = (0x1200 + 12),
         HDN_ITEMCHANGING = ((0 - 300) - 20),
         HDN_ITEMCHANGED = ((0 - 300) - 21),
@@ -3234,13 +3233,6 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U2)]
             public short wVarFlags;
             public    /*NativeMethods.tagVARKIND*/ int varkind;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct HDLAYOUT
-        {
-            public IntPtr prc;        // pointer to a RECT
-            public IntPtr pwpos;      // pointer to a WINDOWPOS
         }
 
         [ComImport]
