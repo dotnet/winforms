@@ -2487,29 +2487,22 @@ namespace System.Windows.Forms
         }
 
         // This method is only called if in owner draw mode
-        private void WmReflectMeasureItem(ref Message m)
+        private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
+            User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
-            if (drawMode == DrawMode.OwnerDrawVariable && mis.itemID >= 0)
+            if (drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
-                Graphics graphics = CreateGraphicsInternal();
-                MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, mis.itemID, ItemHeight);
-                try
-                {
-                    OnMeasureItem(mie);
-                    mis.itemHeight = mie.ItemHeight;
-                }
-                finally
-                {
-                    graphics.Dispose();
-                }
+                using Graphics graphics = CreateGraphicsInternal();
+                var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
+                OnMeasureItem(mie);
+                mis->itemHeight = unchecked((uint)mie.ItemHeight);
             }
             else
             {
-                mis.itemHeight = ItemHeight;
+                mis->itemHeight = unchecked((uint)ItemHeight);
             }
-            Marshal.StructureToPtr(mis, m.LParam, false);
+
             m.Result = (IntPtr)1;
         }
 

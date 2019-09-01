@@ -3791,25 +3791,24 @@ namespace System.Windows.Forms
             m.Result = (IntPtr)1;
         }
 
-        private void WmReflectMeasureItem(ref Message m)
+        private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
+            User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
             // Determine if message was sent by a combo item or the combo edit field
-            if (DrawMode == DrawMode.OwnerDrawVariable && mis.itemID >= 0)
+            if (DrawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
-                Graphics graphics = CreateGraphicsInternal();
-                MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, mis.itemID, ItemHeight);
+                using Graphics graphics = CreateGraphicsInternal();
+                var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
                 OnMeasureItem(mie);
-                mis.itemHeight = mie.ItemHeight;
-                graphics.Dispose();
+                mis->itemHeight = unchecked((uint)mie.ItemHeight);
             }
             else
             {
                 // Message was sent by the combo edit field
-                mis.itemHeight = ItemHeight;
+                mis->itemHeight = (uint)ItemHeight;
             }
-            Marshal.StructureToPtr(mis, m.LParam, false);
+
             m.Result = (IntPtr)1;
         }
 

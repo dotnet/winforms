@@ -12249,29 +12249,24 @@ namespace System.Windows.Forms
         /// <summary>
         ///  WM_MEASUREITEM handler
         /// </summary>
-        private void WmMeasureItem(ref Message m)
+        private unsafe void WmMeasureItem(ref Message m)
         {
             // If the wparam is zero, then the message was sent by a menu.
             // See WM_MEASUREITEM in MSDN.
             if (m.WParam == IntPtr.Zero)
             {
-
                 // Obtain the menu item object
-                NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
-
                 Debug.Assert(m.LParam != IntPtr.Zero, "m.lparam is null");
+                User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
                 // A pointer to the correct MenuItem is stored in the measure item
                 // information sent with the message.
                 // (See MenuItem.CreateMenuItemInfo)
-                MenuItem menuItem = MenuItem.GetMenuItemFromItemData(mis.itemData);
+                MenuItem menuItem = MenuItem.GetMenuItemFromItemData(mis->itemData);
                 Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
 
                 // Delegate this message to the menu item
-                if (menuItem != null)
-                {
-                    menuItem.WmMeasureItem(ref m);
-                }
+                menuItem?.WmMeasureItem(ref m);
             }
             else
             {

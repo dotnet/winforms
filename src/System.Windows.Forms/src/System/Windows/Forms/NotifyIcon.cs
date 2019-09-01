@@ -895,24 +895,20 @@ namespace System.Windows.Forms
             window.DefWndProc(ref m);
         }
 
-        private void WmMeasureMenuItem(ref Message m)
+        private unsafe void WmMeasureMenuItem(ref Message m)
         {
             // Obtain the menu item object
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
-
             Debug.Assert(m.LParam != IntPtr.Zero, "m.lparam is null");
+            User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
             // A pointer to the correct MenuItem is stored in the measure item
             // information sent with the message.
             // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(mis.itemData);
+            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(mis->itemData);
             Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
 
             // Delegate this message to the menu item
-            if (menuItem != null)
-            {
-                menuItem.WmMeasureItem(ref m);
-            }
+            menuItem?.WmMeasureItem(ref m);
         }
 
         private unsafe void WmDrawItemMenuItem(ref Message m)

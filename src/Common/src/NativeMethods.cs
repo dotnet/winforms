@@ -3164,17 +3164,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class MEASUREITEMSTRUCT
-        {
-            public int CtlType = 0;
-            public int CtlID = 0;
-            public int itemID = 0;
-            public int itemWidth = 0;
-            public int itemHeight = 0;
-            public IntPtr itemData = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class HELPINFO
         {
             public int cbSize = Marshal.SizeOf<HELPINFO>();
