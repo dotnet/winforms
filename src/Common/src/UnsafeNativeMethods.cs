@@ -310,9 +310,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DestroyAcceleratorTable(HandleRef hAccel);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern short VkKeyScan(char key);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCapture();
 

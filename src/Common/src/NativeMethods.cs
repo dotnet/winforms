@@ -357,19 +357,16 @@ namespace System.Windows.Forms
         public const int ERROR_INVALID_HANDLE = 6;
         public const int ERROR_CLASS_ALREADY_EXISTS = 1410;
 
-        public const int FNERR_SUBCLASSFAILURE = 0x3001,
-        FNERR_INVALIDFILENAME = 0x3002,
-        FNERR_BUFFERTOOSMALL = 0x3003,
-        FRERR_BUFFERLENGTHZERO = 0x4001,
-        FADF_BSTR = (0x100),
-        FADF_UNKNOWN = (0x200),
-        FADF_DISPATCH = (0x400),
-        FADF_VARIANT = (unchecked((int)0x800)),
-        FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
-        FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
-        FVIRTKEY = 0x01,
-        FSHIFT = 0x04,
-        FALT = 0x10;
+        public const int FNERR_SUBCLASSFAILURE = 0x3001;
+        public const int FNERR_INVALIDFILENAME = 0x3002;
+        public const int FNERR_BUFFERTOOSMALL = 0x3003;
+        public const int FRERR_BUFFERLENGTHZERO = 0x4001;
+        public const int FADF_BSTR = (0x100);
+        public const int FADF_UNKNOWN = (0x200);
+        public const int FADF_DISPATCH = (0x400);
+        public const int FADF_VARIANT = (unchecked((int)0x800));
+        public const int FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000;
+        public const int FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200;
 
         public const int GMEM_FIXED = 0x0000,
         GMEM_MOVEABLE = 0x0002,
@@ -3269,14 +3266,6 @@ namespace System.Windows.Forms
         {
             public IntPtr prc;        // pointer to a RECT
             public IntPtr pwpos;      // pointer to a WINDOWPOS
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class ACCEL
-        {
-            public byte fVirt;
-            public short key;
-            public short cmd;
         }
 
         [StructLayout(LayoutKind.Sequential)]

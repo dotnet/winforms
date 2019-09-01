@@ -669,16 +669,14 @@ namespace System.Windows.Forms
 
                     if (_accelCount > 0)
                     {
-                        int accelSize = Marshal.SizeOf<NativeMethods.ACCEL>();
+                        int accelSize = Marshal.SizeOf<User32.ACCEL>();
 
                         // In the worst case we may have two accelerators per mnemonic:  one lower case and
                         // one upper case, hence the * 2 below.
-                        //
                         IntPtr accelBlob = Marshal.AllocHGlobal(accelSize * _accelCount * 2);
-
                         try
                         {
-                            NativeMethods.ACCEL accel = new NativeMethods.ACCEL
+                            var accel = new User32.ACCEL
                             {
                                 cmd = 0
                             };
@@ -696,26 +694,26 @@ namespace System.Windows.Forms
                                 if (ch >= 'A' && ch <= 'Z')
                                 {
                                     // Lower case letter
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY;
-                                    accel.key = (short)(UnsafeNativeMethods.VkKeyScan(ch) & 0x00FF);
+                                    accel.fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY;
+                                    accel.key = (ushort)(User32.VkKeyScanW(ch) & 0x00FF);
                                     Marshal.StructureToPtr(accel, structAddr, false);
 
                                     // Upper case letter
                                     _accelCount++;
                                     structAddr = (IntPtr)((long)structAddr + accelSize);
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY | NativeMethods.FSHIFT;
+                                    accel.fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY | User32.AcceleratorFlags.FSHIFT;
                                     Marshal.StructureToPtr(accel, structAddr, false);
                                 }
                                 else
                                 {
                                     // Some non-printable character.
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY;
-                                    short scan = (short)(UnsafeNativeMethods.VkKeyScan(ch));
+                                    accel.fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY;
+                                    short scan = User32.VkKeyScanW(ch);
                                     if ((scan & 0x0100) != 0)
                                     {
-                                        accel.fVirt |= NativeMethods.FSHIFT;
+                                        accel.fVirt |= User32.AcceleratorFlags.FSHIFT;
                                     }
-                                    accel.key = (short)(scan & 0x00FF);
+                                    accel.key = (ushort)(scan & 0x00FF);
                                     Marshal.StructureToPtr(accel, structAddr, false);
                                 }
 
