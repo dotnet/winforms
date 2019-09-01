@@ -93,6 +93,19 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
+        ''' <summary>
+        ''' This property returns the primary display screen.
+        ''' </summary>
+        ''' <value>A System.Windows.Forms.Screen object as the primary screen.</value>
+        Public ReadOnly Property Screen() As System.Windows.Forms.Screen
+            Get
+                'Don't cache this.  The Screen class responds to display resolution changes by nulling out AllScreens, which
+                'PrimaryScreen relies on to find the primary.  So we always need to access the latest PrimaryScreen so we
+                'will get the current resolution reported.
+                Return System.Windows.Forms.Screen.PrimaryScreen
+            End Get
+        End Property
+
         Private m_Audio As Audio 'Lazy initialized cache for the Audio class.
         Private m_Ports As Ports 'Lazy initialized cache for the Ports class
         Private Shared m_Clipboard As ClipboardProxy 'Lazy initialized cacche for the clipboard class. (proxies can be shared - they have no state)

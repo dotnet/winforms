@@ -34,5 +34,12 @@ namespace Microsoft.VisualBasic.Devices.Tests
             Assert.NotNull(ports);
             Assert.Same(ports, computer.Ports);
         }
+
+        [Fact]
+        public void Screen()
+        {
+            var computer = new Computer();
+            Assert.Equal(System.Windows.Forms.Screen.PrimaryScreen, computer.Screen);
+        }
     }
 }

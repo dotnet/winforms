@@ -37,5 +37,12 @@ namespace Microsoft.VisualBasic.Devices.Tests
                 Assert.Throws<PlatformNotSupportedException>(() => info.TotalVirtualMemory);
             }
         }
+
+        [Fact]
+        public void OSFullName()
+        {
+            var info = new ComputerInfo();
+            Assert.False(string.IsNullOrEmpty(info.OSFullName));
+        }
     }
 }

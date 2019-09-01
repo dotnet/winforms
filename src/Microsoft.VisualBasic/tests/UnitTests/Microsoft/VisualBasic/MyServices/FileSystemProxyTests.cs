@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
+using Microsoft.VisualBasic.Tests;
 using Xunit;
 
 namespace Microsoft.VisualBasic.MyServices.Tests
