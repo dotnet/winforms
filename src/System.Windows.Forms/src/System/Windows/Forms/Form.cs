@@ -6831,14 +6831,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds)
+        private unsafe void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds)
         {
-            NativeMethods.MINMAXINFO mmi = (NativeMethods.MINMAXINFO)m.GetLParam(typeof(NativeMethods.MINMAXINFO));
-
+            User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)m.LParam;
             if (!minTrack.IsEmpty)
             {
-                mmi.ptMinTrackSize.X = minTrack.Width;
-                mmi.ptMinTrackSize.Y = minTrack.Height;
+                mmi->ptMinTrackSize.X = minTrack.Width;
+                mmi->ptMinTrackSize.Y = minTrack.Height;
 
                 // When the MinTrackSize is set to a value larger than the screen
                 // size but the MaxTrackSize is not set to a value equal to or greater than the
@@ -6855,11 +6854,11 @@ namespace System.Windows.Forms
                     Size virtualScreen = SystemInformation.VirtualScreen.Size;
                     if (minTrack.Height > virtualScreen.Height)
                     {
-                        mmi.ptMaxTrackSize.Y = int.MaxValue;
+                        mmi->ptMaxTrackSize.Y = int.MaxValue;
                     }
                     if (minTrack.Width > virtualScreen.Width)
                     {
-                        mmi.ptMaxTrackSize.X = int.MaxValue;
+                        mmi->ptMaxTrackSize.X = int.MaxValue;
                     }
                 }
             }
@@ -6868,19 +6867,18 @@ namespace System.Windows.Forms
             {
                 // Is the specified MaxTrackSize smaller than the smallest allowable Window size?
                 Size minTrackWindowSize = SystemInformation.MinWindowTrackSize;
-                mmi.ptMaxTrackSize.X = Math.Max(maxTrack.Width, minTrackWindowSize.Width);
-                mmi.ptMaxTrackSize.Y = Math.Max(maxTrack.Height, minTrackWindowSize.Height);
+                mmi->ptMaxTrackSize.X = Math.Max(maxTrack.Width, minTrackWindowSize.Width);
+                mmi->ptMaxTrackSize.Y = Math.Max(maxTrack.Height, minTrackWindowSize.Height);
             }
 
             if (!maximizedBounds.IsEmpty)
             {
-                mmi.ptMaxPosition.X = maximizedBounds.X;
-                mmi.ptMaxPosition.Y = maximizedBounds.Y;
-                mmi.ptMaxSize.X = maximizedBounds.Width;
-                mmi.ptMaxSize.Y = maximizedBounds.Height;
+                mmi->ptMaxPosition.X = maximizedBounds.X;
+                mmi->ptMaxPosition.Y = maximizedBounds.Y;
+                mmi->ptMaxSize.X = maximizedBounds.Width;
+                mmi->ptMaxSize.Y = maximizedBounds.Height;
             }
 
-            Marshal.StructureToPtr(mmi, m.LParam, false);
             m.Result = IntPtr.Zero;
         }
 

@@ -3268,16 +3268,6 @@ namespace System.Windows.Forms
             public IntPtr pwpos;      // pointer to a WINDOWPOS
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class MINMAXINFO
-        {
-            public Point ptReserved;
-            public Point ptMaxSize;
-            public Point ptMaxPosition;
-            public Point ptMinTrackSize;
-            public Point ptMaxTrackSize;
-        }
-
         [ComImport]
         [Guid("B196B28B-BAB4-101A-B69C-00AA00341D07")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
