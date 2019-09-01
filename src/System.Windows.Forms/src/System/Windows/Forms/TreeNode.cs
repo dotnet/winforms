@@ -367,7 +367,7 @@ namespace System.Windows.Forms
                     stateMask = ComCtl32.TVIS.STATEIMAGEMASK
                 };
                 item.state |= value ? CHECKED : UNCHECKED;
-                User32.SendMessageW(tv.Handle, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
+                User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
             }
         }
 
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
                         hItem = handle,
                         stateMask = ComCtl32.TVIS.STATEIMAGEMASK
                     };
-                    User32.SendMessageW(tv.Handle, NativeMethods.TVM_GETITEM, IntPtr.Zero, ref item);
+                    User32.SendMessageW(tv, User32.WindowMessage.TVM_GETITEMW, IntPtr.Zero, ref item);
                     Debug.Assert(!tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                         "isChecked on node '" + Name + "' did not match the state in TVM_GETITEM.");
                 }
@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms
                     mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
                     stateMask = ComCtl32.TVIS.SELECTED | ComCtl32.TVIS.EXPANDED
                 };
-                User32.SendMessageW(tv.Handle, NativeMethods.TVM_GETITEM, IntPtr.Zero, ref item);
+                User32.SendMessageW(tv, User32.WindowMessage.TVM_GETITEMW, IntPtr.Zero, ref item);
                 return item.state;
             }
         }
@@ -1972,7 +1972,7 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_ENDEDITLABELNOW, 0 /* fCancel==FALSE */, 0);
                 }
 
-                handle = User32.SendMessageW(tv.Handle, NativeMethods.TVM_INSERTITEM, IntPtr.Zero, ref tvis);
+                handle = User32.SendMessageW(tv, User32.WindowMessage.TVM_INSERTITEMW, IntPtr.Zero, ref tvis);
                 tv.nodeTable[handle] = this;
 
                 // Lets update the Lparam to the Handle ....
@@ -2105,7 +2105,7 @@ namespace System.Windows.Forms
                 stateMask = ComCtl32.TVIS.EXPANDEDONCE,
                 state = 0
             };
-            User32.SendMessageW(tv.Handle, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
         }
 
         private bool ShouldSerializeBackColor()
@@ -2241,7 +2241,7 @@ namespace System.Windows.Forms
                 item.lParam = handle;
             }
 
-            User32.SendMessageW(tv.Handle, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
             if ((mask & ComCtl32.TVIF.TEXT) != 0)
             {
                 Marshal.FreeHGlobal(item.pszText);
@@ -2266,7 +2266,7 @@ namespace System.Windows.Forms
                 hItem = Handle,
                 iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
             };
-            User32.SendMessageW(tv, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
         }
 
         /// <summary>

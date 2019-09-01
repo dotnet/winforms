@@ -1384,11 +1384,10 @@ namespace System.Windows.Forms
                 tooltipHwnd = SendMessage(NativeMethods.TCM_GETTOOLTIPS, 0, 0);
                 if (tooltipHwnd != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHwnd),
-                                         NativeMethods.HWND_TOPMOST,
-                                         0, 0, 0, 0,
-                                         NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                         NativeMethods.SWP_NOACTIVATE);
+                    User32.SetWindowPos(
+                        new HandleRef(this, tooltipHwnd),
+                        User32.HWND_TOPMOST,
+                        flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
                 }
             }
 
@@ -2206,7 +2205,7 @@ namespace System.Windows.Forms
                             break;
                         case NativeMethods.TTN_GETDISPINFO:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

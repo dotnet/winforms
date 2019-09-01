@@ -94,8 +94,12 @@ namespace System.Windows.Forms
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
-            SafeNativeMethods.SetWindowPos(new HandleRef(null, hWnd), NativeMethods.NullHandleRef, x, y, 0, 0, NativeMethods.SWP_NOSIZE |
-                                 NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+            User32.SetWindowPos(
+                hWnd,
+                User32.HWND_TOP,
+                x,
+                y,
+                flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
         }
 
         /// <summary>

@@ -221,33 +221,5 @@ internal static partial class Interop
         public const int WM_USER = 0x0400;
         public const int WM_REFLECT = WM_USER + 0x1C00;
         public const int WM_CHOOSEFONT_GETLOGFONT = (0x0400 + 1);
-
-        public const uint TTM_ACTIVATE          = WM_USER + 1;
-        public const uint TTM_SETDELAYTIME      = WM_USER + 3;
-        public const uint TTM_RELAYEVENT        = WM_USER + 7;
-        public const uint TTM_WINDOWFROMPOINT   = WM_USER + 16;
-        public const uint TTM_TRACKACTIVATE     = WM_USER + 17;
-        public const uint TTM_TRACKPOSITION     = WM_USER + 18;
-        public const uint TTM_SETTIPBKCOLOR     = WM_USER + 19;
-        public const uint TTM_SETTIPTEXTCOLOR   = WM_USER + 20;
-        public const uint TTM_GETDELAYTIME      = WM_USER + 21;
-        public const uint TTM_GETTIPBKCOLOR     = WM_USER + 22;
-        public const uint TTM_GETTIPTEXTCOLOR   = WM_USER + 23;
-        public const uint TTM_SETMAXTIPWIDTH    = WM_USER + 24;
-        public const uint TTM_POP               = WM_USER + 28;
-        public const uint TTM_UPDATE            = WM_USER + 29;
-        public const uint TTM_GETBUBBLESIZE     = WM_USER + 30;
-        public const uint TTM_ADJUSTRECT        = WM_USER + 31;
-        public const uint TTM_SETTITLEW         = WM_USER + 33;
-        public const uint TTM_ADDTOOLW          = WM_USER + 50;
-        public const uint TTM_DELTOOLW          = WM_USER + 51;
-        public const uint TTM_NEWTOOLRECTW      = WM_USER + 52;
-        public const uint TTM_GETTOOLINFOW      = WM_USER + 53;
-        public const uint TTM_SETTOOLINFOW      = WM_USER + 54;
-        public const uint TTM_HITTESTW          = WM_USER + 55;
-        public const uint TTM_GETTEXTW          = WM_USER + 56;
-        public const uint TTM_UPDATETIPTEXTW    = WM_USER + 57;
-        public const uint TTM_ENUMTOOLSW        = WM_USER + 58;
-        public const uint TTM_GETCURRENTTOOLW   = WM_USER + 59;
     }
 }

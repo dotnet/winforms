@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     public sealed partial class Application
@@ -30,7 +32,7 @@ namespace System.Windows.Forms
 
                     // Message only windows are cheaper and have fewer issues than
                     // full blown invisible windows.
-                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
+                    cp.Parent = User32.HWND_MESSAGE;
                     return cp;
                 }
             }

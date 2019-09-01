@@ -452,7 +452,10 @@ namespace System.Windows.Forms.Design
             private void ParentOverlay(Control control)
             {
                 NativeMethods.SetParent(control.Handle, Handle);
-                SafeNativeMethods.SetWindowPos(control.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                User32.SetWindowPos(
+                    control.Handle,
+                    User32.HWND_TOP,
+                    flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
             }
 
             /// <summary>
@@ -561,7 +564,10 @@ namespace System.Windows.Forms.Design
                         {
                             foreach (Control c in _overlayList)
                             {
-                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                                User32.SetWindowPos(
+                                    c.Handle,
+                                    User32.HWND_TOP,
+                                    flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
                             }
                         }
                     }

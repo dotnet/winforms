@@ -4821,63 +4821,28 @@ namespace System.Windows.Forms
             IntPtr hdrHWND = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
             if (hdrHWND != IntPtr.Zero)
             {
+                var rc = new RECT();
+                var wpos = new User32.WINDOWPOS();
+                UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rc);
 
-                IntPtr prc = IntPtr.Zero;
-                IntPtr pwpos = IntPtr.Zero;
-
-                prc = Marshal.AllocHGlobal(Marshal.SizeOf<RECT>());
-                if (prc == IntPtr.Zero)
+                var hd = new User32.HDLAYOUT
                 {
-                    return;
-                }
+                    prc = &rc,
+                    pwpos = &wpos
+                };
 
-                try
-                {
-                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.WINDOWPOS>());
+                // get the layout information
+                User32.SendMessageW(hdrHWND, User32.WindowMessage.HDM_LAYOUT, IntPtr.Zero, ref hd);
 
-                    if (prc == IntPtr.Zero)
-                    {
-                        // we could not allocate memory.
-                        // return
-                        return;
-                    }
-
-                    UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), prc);
-
-                    NativeMethods.HDLAYOUT hd = new NativeMethods.HDLAYOUT
-                    {
-                        prc = prc,
-                        pwpos = pwpos
-                    };
-
-                    // get the layout information
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, hdrHWND), NativeMethods.HDM_LAYOUT, 0, ref hd);
-
-                    // now take the information from the native wpos struct and put it into a managed WINDOWPOS
-                    NativeMethods.WINDOWPOS wpos = Marshal.PtrToStructure<NativeMethods.WINDOWPOS>(pwpos);
-
-                    // position the header control
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, hdrHWND),
-                                                   new HandleRef(this, wpos.hwndInsertAfter),
-                                                   wpos.x,
-                                                   wpos.y,
-                                                   wpos.cx,
-                                                   wpos.cy,
-                                                   wpos.flags | NativeMethods.SWP_SHOWWINDOW);
-                }
-                finally
-                {
-
-                    // clean up our memory
-                    if (prc != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(prc);
-                    }
-                    if (pwpos != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(pwpos);
-                    }
-                }
+                // position the header control
+                User32.SetWindowPos(
+                    new HandleRef(this, hdrHWND),
+                    new HandleRef(this, wpos.hwndInsertAfter),
+                    wpos.x,
+                    wpos.y,
+                    wpos.cx,
+                    wpos.cy,
+                    wpos.flags | User32.SWP.SHOWWINDOW);
             }
         }
 
@@ -6501,7 +6466,7 @@ namespace System.Windows.Forms
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
                                 // Setting the max width has the added benefit of enabling multiline tool tips
-                                User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                                User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves
