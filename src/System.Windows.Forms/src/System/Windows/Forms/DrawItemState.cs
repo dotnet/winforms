@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -13,57 +15,57 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The item is checked. Only menu controls use this value.
         /// </summary>
-        Checked = NativeMethods.ODS_CHECKED,
+        Checked = (int)User32.DrawItemState.ODS_CHECKED,
 
         /// <summary>
         ///  The item is the editing portion of a <see cref='ComboBox'/> .
         /// </summary>
-        ComboBoxEdit = NativeMethods.ODS_COMBOBOXEDIT,
+        ComboBoxEdit = (int)User32.DrawItemState.ODS_COMBOBOXEDIT,
 
         /// <summary>
         ///  The item is the default item of the control.
         /// </summary>
-        Default = NativeMethods.ODS_DEFAULT,
+        Default = (int)User32.DrawItemState.ODS_DEFAULT,
 
         /// <summary>
         ///  The item is disabled.
         /// </summary>
-        Disabled = NativeMethods.ODS_DISABLED,
+        Disabled = (int)User32.DrawItemState.ODS_DISABLED,
 
         /// <summary>
         ///  The item has focus.
         /// </summary>
-        Focus = NativeMethods.ODS_FOCUS,
+        Focus = (int)User32.DrawItemState.ODS_FOCUS,
 
         /// <summary>
         ///  The item is grayed. Only menu controls use this value.
         /// </summary>
-        Grayed = NativeMethods.ODS_GRAYED,
+        Grayed = (int)User32.DrawItemState.ODS_GRAYED,
 
         /// <summary>
         ///  The item is being hot-tracked.
         /// </summary>
-        HotLight = NativeMethods.ODS_HOTLIGHT,
+        HotLight = (int)User32.DrawItemState.ODS_HOTLIGHT,
 
         /// <summary>
         ///  The item is inactive.
         /// </summary>
-        Inactive = NativeMethods.ODS_INACTIVE,
+        Inactive = (int)User32.DrawItemState.ODS_INACTIVE,
 
         /// <summary>
         ///  The item displays without a keyboard accelarator.
         /// </summary>
-        NoAccelerator = NativeMethods.ODS_NOACCEL,
+        NoAccelerator = (int)User32.DrawItemState.ODS_NOACCEL,
 
         /// <summary>
         ///  The item displays without the visual cue that indicates it has the focus.
         /// </summary>
-        NoFocusRect = NativeMethods.ODS_NOFOCUSRECT,
+        NoFocusRect = (int)User32.DrawItemState.ODS_NOFOCUSRECT,
 
         /// <summary>
         ///  The item is selected.
         /// </summary>
-        Selected = NativeMethods.ODS_SELECTED,
+        Selected = (int)User32.DrawItemState.ODS_SELECTED,
 
         /// <summary>
         ///  The item is in its default visual state.
