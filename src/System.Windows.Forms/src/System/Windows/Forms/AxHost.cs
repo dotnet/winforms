@@ -2004,9 +2004,9 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    NativeMethods.tagCONTROLINFO ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    int hr = GetOleControl().GetControlInfo(ctlInfo);
-                    if (NativeMethods.Failed(hr))
+                    var ctlInfo = new NativeMethods.tagCONTROLINFO();
+                    HRESULT hr = GetOleControl().GetControlInfo(ctlInfo);
+                    if (!hr.Succeeded())
                     {
                         return false;
                     }

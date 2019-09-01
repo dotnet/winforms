@@ -152,7 +152,7 @@ namespace System.Windows.Forms
         // Helper function for ParseKeys for doing simple, self-describing characters.
         private static bool AddSimpleKey(char character, int repeat, IntPtr hwnd, int[] haveKeys, bool fStartNewChar, int cGrp)
         {
-            int vk = UnsafeNativeMethods.VkKeyScan(character);
+            int vk = User32.VkKeyScanW(character);
 
             if (vk != -1)
             {

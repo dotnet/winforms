@@ -263,15 +263,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
 
-        [DllImport(ExternDll.User32)]
-        public static extern IntPtr CreateAcceleratorTable(/*ACCEL*/ HandleRef pentries, int cCount);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DestroyAcceleratorTable(HandleRef hAccel);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern short VkKeyScan(char key);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCapture();
 
@@ -2038,9 +2029,8 @@ namespace System.Windows.Forms
         public interface IOleControl
         {
             [PreserveSig]
-            int GetControlInfo(
-                   [Out]
-                      NativeMethods.tagCONTROLINFO pCI);
+            HRESULT GetControlInfo(
+                [Out] NativeMethods.tagCONTROLINFO pCI);
 
             [PreserveSig]
             int OnMnemonic(
