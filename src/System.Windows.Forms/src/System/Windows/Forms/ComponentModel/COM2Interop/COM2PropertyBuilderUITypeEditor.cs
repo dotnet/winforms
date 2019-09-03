@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -31,7 +32,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  the user to modify the value.  Host assistance in presenting UI to the user
         ///  can be found through the valueAccess.getService function.
         /// </summary>
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public unsafe override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             IntPtr parentHandle = (IntPtr)UnsafeNativeMethods.GetFocus();
 
@@ -45,14 +46,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            bool useValue = false;
-            //VARIANT pValue = null;
+            BOOL useValue = BOOL.FALSE;
             object pValue = value;
 
             try
             {
                 object obj = propDesc.TargetObject;
-
                 if (obj is ICustomTypeDescriptor)
                 {
                     obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(propDesc);
@@ -61,26 +60,27 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Debug.Assert(obj is NativeMethods.IProvidePropertyBuilder, "object is not IProvidePropertyBuilder");
                 NativeMethods.IProvidePropertyBuilder propBuilder = (NativeMethods.IProvidePropertyBuilder)obj;
 
-                if (NativeMethods.Failed(propBuilder.ExecuteBuilder(propDesc.DISPID,
-                                                          guidString,
-                                                          null,
-                                                          new HandleRef(null, parentHandle),
-                                                          ref pValue, ref useValue)))
+                if (!propBuilder.ExecuteBuilder(
+                    propDesc.DISPID,
+                    guidString,
+                    null,
+                    parentHandle,
+                    ref pValue,
+                    &useValue).Succeeded())
                 {
-                    useValue = false;
+                    useValue = BOOL.FALSE;
                 }
-
             }
             catch (ExternalException ex)
             {
                 Debug.Fail("Failed to show property frame: " + ex.ErrorCode.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (useValue && (bldrType & _CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJDIRECTLY) == 0)
+            if (useValue != BOOL.FALSE && (bldrType & _CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJDIRECTLY) == 0)
             {
-
-                return pValue;//pValue.ToVariant();
+                return pValue;
             }
+
             return value;
         }
 

@@ -428,9 +428,9 @@ namespace System.Windows.Forms
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { scriptName };
-                    int dispid = Ole32.DISPID_UNKNOWN;
-                    HRESULT hr = scriptObject.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), &dispid);
-                    if (Succeeded(hr) && dispid != Ole32.DISPID_UNKNOWN)
+                    Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
+                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
+                    if (hr.Succeeded() && dispid != Ole32.DispatchID.UNKNOWN)
                     {
                         if (args != null)
                         {
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
                         hr = scriptObject.Invoke(
                             dispid,
                             ref g,
-                            SafeNativeMethods.GetThreadLCID(),
+                           Kernel32.GetThreadLocale(),
                             NativeMethods.DISPATCH_METHOD, dp,
                             retVals,
                             new NativeMethods.tagEXCEPINFO(),

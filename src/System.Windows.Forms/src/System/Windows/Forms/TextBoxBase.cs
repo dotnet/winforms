@@ -281,7 +281,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the background color of the control.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId(Ole32.DISPID_BACKCOLOR)]
+        [DispId((int)Ole32.DispatchID.BACKCOLOR)]
         [SRDescription(nameof(SR.ControlBackColorDescr))]
         public override Color BackColor
         {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.Fixed3D)]
-        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
         [SRDescription(nameof(SR.TextBoxBorderDescr))]
         public BorderStyle BorderStyle
         {
@@ -549,7 +549,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the foreground color of the control.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId(Ole32.DISPID_FORECOLOR)]
+        [DispId((int)Ole32.DispatchID.FORECOLOR)]
         [SRDescription(nameof(SR.ControlForeColorDescr))]
         public override Color ForeColor
         {

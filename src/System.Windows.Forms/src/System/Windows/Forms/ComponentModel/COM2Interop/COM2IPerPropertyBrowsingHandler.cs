@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -35,32 +36,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private Guid GetPropertyPageGuid(NativeMethods.IPerPropertyBrowsing target, int dispid)
+        private unsafe Guid GetPropertyPageGuid(NativeMethods.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
             // check for a property page
-            int hr = target.MapPropertyToPage(dispid, out Guid guid);
-            if (hr == NativeMethods.S_OK)
+            Guid guid = Guid.Empty;
+            HRESULT hr = target.MapPropertyToPage(dispid, &guid);
+            if (hr == HRESULT.S_OK)
             {
                 return guid;
             }
+
             return Guid.Empty;
         }
 
-        internal static string GetDisplayString(NativeMethods.IPerPropertyBrowsing ppb, int dispid, ref bool success)
+        internal static string GetDisplayString(NativeMethods.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
         {
-            string[] strVal = new string[1];
-            int hr = ppb.GetDisplayString(dispid, strVal);
-            if (hr == NativeMethods.S_OK)
-            {
-                success = (strVal[0] != null);
-                //Debug.Assert(success, "IPerPropertyBrowsing::GetDisplayString returned NULL and S_OK -- this is not a valid state. This component does not property implement IPerPropertyBrowsing. (component class=" + TypeDescriptor.GetClassName(ppb) + ")");
-                return strVal[0];
-            }
-            else
+            var strVal = new string[1];
+            HRESULT hr = ppb.GetDisplayString(dispid, strVal);
+            if (hr != HRESULT.S_OK)
             {
                 success = false;
+                return null;
             }
-            return null;
+
+            success = strVal[0] != null;
+            return strVal[0];
         }
 
         /// <summary>
@@ -125,15 +125,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 NativeMethods.CA_STRUCT caStrings = new NativeMethods.CA_STRUCT();
                 NativeMethods.CA_STRUCT caCookies = new NativeMethods.CA_STRUCT();
 
-                int hr = NativeMethods.S_OK;
-
+                HRESULT hr = NativeMethods.S_OK;
                 try
                 {
                     hr = ppb.GetPredefinedStrings(sender.DISPID, caStrings, caCookies);
                 }
                 catch (ExternalException ex)
                 {
-                    hr = ex.ErrorCode;
+                    hr = (HRESULT)ex.ErrorCode;
                     Debug.Fail("An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid=" + sender.DISPID + "), object type=" + new ComNativeDescriptor().GetClassName(ppb) + ".  This is caused by an exception (usually an AV) inside the object being browsed, and is not a problem in the properties window.");
                 }
 
@@ -145,7 +144,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     gveevent.TypeConverter = null;
                 }
 
-                if (hr != NativeMethods.S_OK)
+                if (hr != HRESULT.S_OK)
                 {
                     hasStrings = false;
                 }
@@ -320,8 +319,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 continue;
                             }
                             var.vt = (short)NativeMethods.tagVT.VT_EMPTY;
-                            int hr = ppb.GetPredefinedValue(target.DISPID, cookie, var);
-                            if (hr == NativeMethods.S_OK && var.vt != (short)NativeMethods.tagVT.VT_EMPTY)
+                            HRESULT hr = ppb.GetPredefinedValue(target.DISPID, (uint)cookie, var);
+                            if (hr == HRESULT.S_OK && var.vt != (short)NativeMethods.tagVT.VT_EMPTY)
                             {
                                 valueItems[i] = var.ToObject();
                                 if (valueItems[i].GetType() != targetType)

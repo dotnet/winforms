@@ -238,7 +238,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.Fixed3D)]
-        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
         [SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))]
         public BorderStyle BorderStyle
         {

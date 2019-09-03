@@ -2907,7 +2907,7 @@ namespace System.Windows.Forms
         ///  Called when a property on an Ole32 Object changes.
         ///  See IPropertyNotifySink::OnChanged
         /// </summary>
-        HRESULT Ole32.IPropertyNotifySink.OnChanged(int dispID)
+        HRESULT Ole32.IPropertyNotifySink.OnChanged(Ole32.DispatchID dispID)
         {
             // we don't want the grid's own property sets doing this, but if we're getting
             // an OnChanged that isn't the DispID of the property we're currently changing,
@@ -2920,7 +2920,7 @@ namespace System.Windows.Forms
                 DispIdAttribute dispIdAttr = (DispIdAttribute)selectedEntry.PropertyDescriptor.Attributes[(typeof(DispIdAttribute))];
                 if (dispIdAttr != null && !dispIdAttr.IsDefaultAttribute())
                 {
-                    fullRefresh = (dispID != dispIdAttr.Value);
+                    fullRefresh = (dispID != (Ole32.DispatchID)dispIdAttr.Value);
                 }
             }
 
@@ -2934,7 +2934,7 @@ namespace System.Windows.Forms
                 // this is so changes to names of native
                 // objects will be reflected in the combo box
                 object obj = GetUnwrappedObject(0);
-                if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == Ole32.DISPID_Name)
+                if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == Ole32.DispatchID.Name)
                 {
                     OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
                 }
@@ -3413,10 +3413,10 @@ namespace System.Windows.Forms
         ///  Called when a property on an Ole32 Object that is tagged with "requestedit" is
         ///  about to be edited. See IPropertyNotifySink::OnRequestEdit
         /// </summary>
-        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(int dispID)
+        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispID)
         {
             // Don't do anything here.
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         protected override void OnResize(EventArgs e)

@@ -15,10 +15,10 @@ internal static partial class Interop
         public interface IPropertyNotifySink
         {
             [PreserveSig]
-            HRESULT OnChanged(int dispID);
+            HRESULT OnChanged(Ole32.DispatchID dispID);
 
             [PreserveSig]
-            HRESULT OnRequestEdit(int dispID);
+            HRESULT OnRequestEdit(Ole32.DispatchID dispID);
         }
     }
 }

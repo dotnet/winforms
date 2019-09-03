@@ -89,9 +89,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool PatBlt(HandleRef hdc, int left, int top, int width, int height, int rop);
 
-        [DllImport(ExternDll.Kernel32, EntryPoint = "GetThreadLocale", CharSet = CharSet.Auto)]
-        public static extern uint GetThreadLCID();
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetMessagePos();
 
@@ -432,9 +429,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true)]
         public static extern int ScrollWindowEx(HandleRef hWnd, int nXAmount, int nYAmount, NativeMethods.COMRECT rectScrollRegion, ref Interop.RECT rectClip, HandleRef hrgnUpdate, ref Interop.RECT prcUpdate, int flags);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetThreadLocale();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool MessageBeep(int type);

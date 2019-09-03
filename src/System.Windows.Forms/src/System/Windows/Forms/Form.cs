@@ -764,7 +764,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(FormBorderStyle.Sizable)]
-        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
         [SRDescription(nameof(SR.FormBorderStyleDescr))]
         public FormBorderStyle FormBorderStyle
         {
@@ -2354,7 +2354,7 @@ namespace System.Windows.Forms
         [DefaultValue(true)]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [DispId(Ole32.DISPID_TABSTOP)]
+        [DispId((int)Ole32.DispatchID.TABSTOP)]
         [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {

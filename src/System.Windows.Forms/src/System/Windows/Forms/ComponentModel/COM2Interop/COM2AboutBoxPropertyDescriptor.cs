@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private TypeConverter converter;
         private UITypeEditor editor;
 
-        public Com2AboutBoxPropertyDescriptor() : base(Ole32.DISPID_ABOUTBOX, "About", new Attribute[]{new DispIdAttribute(Ole32.DISPID_ABOUTBOX),
+        public Com2AboutBoxPropertyDescriptor() : base(Ole32.DispatchID.ABOUTBOX, "About", new Attribute[]{new DispIdAttribute((int)Ole32.DispatchID.ABOUTBOX),
                                                                                       DesignerSerializationVisibilityAttribute.Hidden,
                                                                                       new DescriptionAttribute(SR.AboutBoxDesc),
                                                                                       new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false)
@@ -167,15 +167,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     Guid g = Guid.Empty;
 
                     HRESULT hr = pDisp.Invoke(
-                        Ole32.DISPID_ABOUTBOX,
+                        Ole32.DispatchID.ABOUTBOX,
                         ref g,
-                        SafeNativeMethods.GetThreadLCID(),
+                       Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_METHOD,
                         new NativeMethods.tagDISPPARAMS(),
                         null,
                         pExcepInfo,
                         null);
-                    Debug.Assert(Succeeded(hr), "Failed to launch about box.");
+                    Debug.Assert(hr.Succeeded(), "Failed to launch about box.");
                 }
                 return value;
             }

@@ -54,15 +54,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal static Attribute[] GetComponentAttributes(NativeMethods.IManagedPerPropertyBrowsing target, int dispid)
+        internal static Attribute[] GetComponentAttributes(NativeMethods.IManagedPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
             int cItems = 0;
             IntPtr pbstrs = IntPtr.Zero;
             IntPtr pvars = IntPtr.Zero;
 
-            int hr = target.GetPropertyAttributes(dispid, ref cItems, ref pbstrs, ref pvars);
-
-            if (hr != NativeMethods.S_OK || cItems == 0)
+            HRESULT hr = target.GetPropertyAttributes(dispid, ref cItems, ref pbstrs, ref pvars);
+            if (hr != HRESULT.S_OK || cItems == 0)
             {
                 return Array.Empty<Attribute>();
             }

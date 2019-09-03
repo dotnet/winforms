@@ -271,7 +271,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.None)]
-        [DispId(Ole32.DISPID_BORDERSTYLE)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
         [SRDescription(nameof(SR.ToolBarBorderStyleDescr))]
         public BorderStyle BorderStyle
         {

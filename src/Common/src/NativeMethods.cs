@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -901,10 +902,10 @@ namespace System.Windows.Forms
         NIIF_INFO = 0x00000001,
         NIIF_WARNING = 0x00000002,
         NIIF_ERROR = 0x00000003,
-        NIN_BALLOONSHOW = (Interop.WindowMessages.WM_USER + 2),
-        NIN_BALLOONHIDE = (Interop.WindowMessages.WM_USER + 3),
-        NIN_BALLOONTIMEOUT = (Interop.WindowMessages.WM_USER + 4),
-        NIN_BALLOONUSERCLICK = (Interop.WindowMessages.WM_USER + 5),
+        NIN_BALLOONSHOW = (WindowMessages.WM_USER + 2),
+        NIN_BALLOONHIDE = (WindowMessages.WM_USER + 3),
+        NIN_BALLOONTIMEOUT = (WindowMessages.WM_USER + 4),
+        NIN_BALLOONUSERCLICK = (WindowMessages.WM_USER + 5),
         NFR_ANSI = 1,
         NFR_UNICODE = 2,
         NM_CLICK = ((0 - 0) - 2),
@@ -1698,7 +1699,7 @@ namespace System.Windows.Forms
             internal Point pt;
             internal int clrForeground = -1;
             internal int clrBackground = -1;
-            internal Interop.RECT rcMargins = new Interop.RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
+            internal RECT rcMargins = new RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
             internal string pszFont = null;
         }
 
@@ -1723,8 +1724,8 @@ namespace System.Windows.Forms
         public class MONITORINFOEX
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFOEX>();
-            internal Interop.RECT rcMonitor = new Interop.RECT();
-            internal Interop.RECT rcWork = new Interop.RECT();
+            internal RECT rcMonitor = new RECT();
+            internal RECT rcWork = new RECT();
             internal int dwFlags = 0;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
             internal char[] szDevice = new char[32];
@@ -1734,8 +1735,8 @@ namespace System.Windows.Forms
         public class MONITORINFO
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFO>();
-            internal Interop.RECT rcMonitor = new Interop.RECT();
-            internal Interop.RECT rcWork = new Interop.RECT();
+            internal RECT rcMonitor = new RECT();
+            internal RECT rcWork = new RECT();
             internal int dwFlags = 0;
         }
 
@@ -1799,7 +1800,7 @@ namespace System.Windows.Forms
         [ComImport]
         [Guid("0FF510A3-5FA5-49F1-8CCC-190D71083F3E")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IVsPerPropertyBrowsing
+        public unsafe interface IVsPerPropertyBrowsing
         {
             /// <summary>
             ///  Hides the property at the given dispid from the properties window
@@ -1807,41 +1808,46 @@ namespace System.Windows.Forms
             ///  are otherwise browsable.
             /// </summary>
             [PreserveSig]
-            int HideProperty(int dispid, ref bool pfHide);
+            HRESULT HideProperty(
+                Ole32.DispatchID dispid,
+                BOOL* pfHide);
 
             /// <summary>
             ///  Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
             ///  Returning a non-S_OK return code or false for pfDisplay will suppress this feature
             /// </summary>
             [PreserveSig]
-            int DisplayChildProperties(int dispid,
-                                       ref bool pfDisplay);
+            HRESULT DisplayChildProperties(
+                Ole32.DispatchID dispid,
+                BOOL* pfDisplay);
 
             /// <summary>
             ///  Retrieves the localized name and description for a property.
             ///  returning a non-S_OK return code will display the default values
             /// </summary>
             [PreserveSig]
-            int GetLocalizedPropertyInfo(int dispid, int localeID,
-                                         [Out, MarshalAs(UnmanagedType.LPArray)]
-                                         string[] pbstrLocalizedName,
-                                         [Out, MarshalAs(UnmanagedType.LPArray)]
-                                         string[] pbstrLocalizeDescription);
+            HRESULT GetLocalizedPropertyInfo(
+                Ole32.DispatchID dispid,
+                int localeID,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizedName,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizeDescription);
 
             /// <summary>
             ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
             ///  the property will be shown as bold in the browser to indcate that it has been modified from the default.
             /// </summary>
             [PreserveSig]
-            int HasDefaultValue(int dispid,
-                               ref bool fDefault);
+            HRESULT HasDefaultValue(
+                Ole32.DispatchID dispid,
+                BOOL* fDefault);
 
             /// <summary>
             ///  Determines if a property should be made read only.  This only applies to properties that are writeable,
             /// </summary>
             [PreserveSig]
-            int IsPropertyReadOnly(int dispid,
-                                   ref bool fReadOnly);
+            HRESULT IsPropertyReadOnly(
+                Ole32.DispatchID dispid,
+                BOOL* fReadOnly);
 
             /// <summary>
             ///  Returns the classname for this object. The class name is the non-bolded text
@@ -1856,14 +1862,17 @@ namespace System.Windows.Forms
             ///  If return value is non-S_OK or *pfCanReset is
             /// </summary>
             [PreserveSig]
-            int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
+            HRESULT CanResetPropertyValue(
+                Ole32.DispatchID dispid,
+                BOOL* pfCanReset);
 
             /// <summary>
             ///  If the return value is S_OK, the property's value will then be refreshed to the
             ///  new default values.
             /// </summary>
             [PreserveSig]
-            int ResetPropertyValue(int dispid);
+            HRESULT ResetPropertyValue(
+                Ole32.DispatchID dispid);
         }
 
         [ComImport]
@@ -1872,40 +1881,33 @@ namespace System.Windows.Forms
         public interface IManagedPerPropertyBrowsing
         {
             [PreserveSig]
-            int GetPropertyAttributes(int dispid,
-                                      ref int pcAttributes,
-                                      ref IntPtr pbstrAttrNames,
-                                      ref IntPtr pvariantInitValues);
+            HRESULT GetPropertyAttributes(
+                Ole32.DispatchID dispid,
+                ref int pcAttributes,
+                ref IntPtr pbstrAttrNames,
+                ref IntPtr pvariantInitValues);
         }
 
         [ComImport]
         [Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IProvidePropertyBuilder
+        public unsafe interface IProvidePropertyBuilder
         {
             [PreserveSig]
-            int MapPropertyToBuilder(
-                int dispid,
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] pdwCtlBldType,
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                string[] pbstrGuidBldr,
-                [In, Out, MarshalAs(UnmanagedType.Bool)]
-                ref bool builderAvailable);
+            HRESULT MapPropertyToBuilder(
+                Ole32.DispatchID dispid,
+                [In, Out, MarshalAs(UnmanagedType.LPArray)] int[] pdwCtlBldType,
+                [In, Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrGuidBldr,
+                BOOL* builderAvailable);
 
             [PreserveSig]
-            int ExecuteBuilder(
-                int dispid,
-                [In, MarshalAs(UnmanagedType.BStr)]
-                string bstrGuidBldr,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pdispApp,
-
-                HandleRef hwndBldrOwner,
-                [Out, In, MarshalAs(UnmanagedType.Struct)]
-                ref object pvarValue,
-                [In, Out, MarshalAs(UnmanagedType.Bool)]
-                ref bool actionCommitted);
+            HRESULT ExecuteBuilder(
+                Ole32.DispatchID dispid,
+                [In, MarshalAs(UnmanagedType.BStr)] string bstrGuidBldr,
+                [In, MarshalAs(UnmanagedType.Interface)] object pdispApp,
+                IntPtr hwndBldrOwner,
+                [Out, In, MarshalAs(UnmanagedType.Struct)] ref object pvarValue,
+                BOOL* actionCommitted);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2533,9 +2535,9 @@ namespace System.Windows.Forms
             public int nMaxCustFilter = 0;
             public int nFilterIndex;
             public IntPtr lpstrFile;
-            public int nMaxFile = Interop.Kernel32.MAX_PATH;
+            public int nMaxFile = Kernel32.MAX_PATH;
             public IntPtr lpstrFileTitle = IntPtr.Zero;
-            public int nMaxFileTitle = Interop.Kernel32.MAX_PATH;
+            public int nMaxFileTitle = Kernel32.MAX_PATH;
             public string lpstrInitialDir;
             public string lpstrTitle;
             public int Flags;
@@ -2712,35 +2714,29 @@ namespace System.Windows.Forms
         [ComImport]
         [Guid("376BD3AA-3845-101B-84ED-08002B2EC713")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPerPropertyBrowsing
+        public unsafe interface IPerPropertyBrowsing
         {
             [PreserveSig]
-            int GetDisplayString(
-                int dispID,
-                [Out, MarshalAs(UnmanagedType.LPArray)]
-                string[] pBstr);
+            HRESULT GetDisplayString(
+                Ole32.DispatchID dispID,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstr);
 
             [PreserveSig]
-            int MapPropertyToPage(
-                int dispID,
-                [Out]
-                out Guid pGuid);
+            HRESULT MapPropertyToPage(
+                Ole32.DispatchID dispID,
+                Guid* pGuid);
 
             [PreserveSig]
-            int GetPredefinedStrings(
-                int dispID,
-                [Out]
-                CA_STRUCT pCaStringsOut,
-                [Out]
-                CA_STRUCT pCaCookiesOut);
+            HRESULT GetPredefinedStrings(
+                Ole32.DispatchID dispID,
+                [Out] CA_STRUCT pCaStringsOut,
+                [Out] CA_STRUCT pCaCookiesOut);
 
             [PreserveSig]
-            int GetPredefinedValue(
-                int dispID,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwCookie,
-                [Out]
-                VARIANT pVarOut);
+            HRESULT GetPredefinedValue(
+                Ole32.DispatchID dispID,
+                uint dwCookie,
+                [Out] VARIANT pVarOut);
         }
 
         [ComImport]
@@ -2749,8 +2745,8 @@ namespace System.Windows.Forms
         public interface ICategorizeProperties
         {
             [PreserveSig]
-            int MapPropertyToCategory(
-                int dispID,
+            HRESULT MapPropertyToCategory(
+                Ole32.DispatchID dispID,
                 ref int categoryID);
 
             [PreserveSig]
@@ -3294,15 +3290,6 @@ namespace System.Windows.Forms
             public IntPtr lpszDefaultScheme;
         }
 
-        public enum HRESULT : long
-        {
-            S_FALSE = 0x0001,
-            S_OK = 0x0000,
-            E_INVALIDARG = 0x80070057,
-            E_OUTOFMEMORY = 0x8007000E,
-            ERROR_CANCELLED = 0x800704C7
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TCITEM_T
         {
@@ -3370,7 +3357,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct tagFUNCDESC
         {
-            public int memid;
+            public Ole32.DispatchID memid;
 
             public IntPtr lprgscode;
 
@@ -3405,7 +3392,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct tagVARDESC
         {
-            public int memid;
+            public Ole32.DispatchID memid;
             public IntPtr lpstrSchema;
             public IntPtr unionMember;
             public tagELEMDESC elemdescVar;
@@ -3443,7 +3430,7 @@ namespace System.Windows.Forms
             public int itemState = 0;
             public IntPtr hwndItem = IntPtr.Zero;
             public IntPtr hDC = IntPtr.Zero;
-            public Interop.RECT rcItem;
+            public RECT rcItem;
             public IntPtr itemData = IntPtr.Zero;
         }
 
@@ -3619,7 +3606,7 @@ namespace System.Windows.Forms
             public NMHDR nmcd;
             public int dwDrawStage;
             public IntPtr hdc;
-            public Interop.RECT rc;
+            public RECT rc;
             public IntPtr dwItemSpec;
             public int uItemState;
             public IntPtr lItemlParam;
@@ -3682,7 +3669,7 @@ namespace System.Windows.Forms
             public int iPartId;
             public int iStateId;
             // Group Custom Draw
-            public Interop.RECT rcText;
+            public RECT rcText;
             public uint uAlign;
         }
 
@@ -3860,7 +3847,7 @@ namespace System.Windows.Forms
             public int dwFlags;
             public Size sizeTile;
             public int cLines;
-            public Interop.RECT rcLabelMargin;
+            public RECT rcLabelMargin;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -4065,7 +4052,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class TEXTRANGE
         {
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
             public IntPtr lpstrText; /* allocated by caller, zero terminated by RichEdit */
         }
 
@@ -4080,7 +4067,7 @@ namespace System.Windows.Forms
         public class SELCHANGE
         {
             public NMHDR nmhdr;
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
             public int seltyp = 0;
         }
 
@@ -4104,7 +4091,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class FINDTEXT
         {
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
             public string lpstrText;
         }
 
@@ -4115,7 +4102,7 @@ namespace System.Windows.Forms
             public int msg = 0;
             public IntPtr wParam = IntPtr.Zero;
             public IntPtr lParam = IntPtr.Zero;
-            public Interop.Richedit.CHARRANGE charrange;
+            public Richedit.CHARRANGE charrange;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4133,7 +4120,7 @@ namespace System.Windows.Forms
             public int iType;
             public int nCount;
             public int nRgnSize;
-            // public Interop.RECT rcBound; // Note that we don't define this field as part of the marshaling
+            // public RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -4149,7 +4136,7 @@ namespace System.Windows.Forms
             public int pageCount = 1;
             public IntPtr uuid;
             public int lcid = Application.CurrentCulture.LCID;
-            public int dispidInitial;
+            public Ole32.DispatchID dispidInitial;
         }
 
         [ComVisible(true), StructLayout(LayoutKind.Sequential)]
@@ -4234,7 +4221,7 @@ namespace System.Windows.Forms
         public class REQRESIZE
         {
             public NMHDR nmhdr;
-            public Interop.RECT rc;
+            public RECT rc;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -4244,7 +4231,7 @@ namespace System.Windows.Forms
             public int msg;
             public IntPtr wParam;
             public IntPtr lParam;
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4450,7 +4437,8 @@ namespace System.Windows.Forms
             // since the inheritance doesn't seem to work...
             // these are from IProvideClassInfo & IProvideClassInfo2
             [PreserveSig]
-            Interop.HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
+            void GetClassInfo_Stub();
+            // HRESULT GetClassInfo(out ITypeInfo ppTI);
 
             [PreserveSig]
             int GetGUID(int dwGuidKind, [In, Out] ref Guid pGuid);
@@ -4485,7 +4473,7 @@ namespace System.Windows.Forms
         public interface IProvideClassInfo
         {
             [PreserveSig]
-            Interop.HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
+            HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -5001,7 +4989,7 @@ namespace System.Windows.Forms
         internal const int UIA_AppBarControlTypeId = 50040;
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Interop.RECT rect, int cPoints);
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point pt, uint cPoints);
@@ -5025,7 +5013,7 @@ namespace System.Windows.Forms
         public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetUpdateRect(IntPtr hwnd, ref Interop.RECT rc, bool fErase);
+        public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCursor();

@@ -1682,9 +1682,9 @@ namespace System.Windows.Forms
             //
             // Internal methods
             //
-            internal override void OnPropertyChanged(int dispid)
+            internal override void OnPropertyChanged(Ole32.DispatchID dispid)
             {
-                if (dispid != Ole32.DISPID_READYSTATE)
+                if (dispid != Ole32.DispatchID.READYSTATE)
                 {
                     base.OnPropertyChanged(dispid);
                 }

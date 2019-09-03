@@ -349,10 +349,8 @@ namespace System.Windows.Forms
             return HRESULT.S_FALSE;
         }
 
-        //
         // IPropertyNotifySink methods:
-        //
-        HRESULT Ole32.IPropertyNotifySink.OnChanged(int dispid)
+        HRESULT Ole32.IPropertyNotifySink.OnChanged(Ole32.DispatchID dispid)
         {
             // Some controls fire OnChanged() notifications when getting values of some properties.
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
@@ -379,13 +377,12 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(int dispid)
+        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispid)
         {
             return HRESULT.S_OK;
         }
 
-        // Virtual overrides:
-        internal virtual void OnPropertyChanged(int dispid)
+        internal virtual void OnPropertyChanged(Ole32.DispatchID dispid)
         {
             try
             {

@@ -12,10 +12,17 @@ internal partial class Interop
         [Flags]
         public enum VarFormatFlags : uint
         {
+            VAR_CALENDAR_HIJRI = 0x008,
             VAR_FORMAT_NOSUBSTITUTE = 0x020,
         }
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        public static extern HRESULT VarFormat(IntPtr pvarIn, IntPtr pstrFormat, int iFirstDay, int iFirstWeek, VarFormatFlags dwFlags, ref IntPtr pbstrOut);
+        public static extern HRESULT VarFormat(
+            IntPtr pvarIn,
+            IntPtr pstrFormat,
+            Ole32.VarFormatFirstDayOfWeek iFirstDay,
+            Ole32.VarFormatFirstWeekOfYear iFirstWeek,
+            VarFormatFlags dwFlags,
+            ref IntPtr pbstrOut);
     }
 }

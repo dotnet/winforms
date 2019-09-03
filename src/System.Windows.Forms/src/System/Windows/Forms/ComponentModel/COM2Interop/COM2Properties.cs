@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -429,8 +430,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private unsafe long GetTypeInfoVersion(UnsafeNativeMethods.ITypeInfo pTypeInfo)
         {
             IntPtr pTypeAttr = IntPtr.Zero;
-            int hr = pTypeInfo.GetTypeAttr(ref pTypeAttr);
-            if (!NativeMethods.Succeeded(hr))
+            HRESULT hr = pTypeInfo.GetTypeAttr(ref pTypeAttr);
+            if (!hr.Succeeded())
             {
                 return 0;
             }

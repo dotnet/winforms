@@ -12,8 +12,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;
 
-using static Interop;
-
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
@@ -44,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  The dispid. This is also in a DispIDAttiribute, but we
         ///  need it a lot.
         /// </summary>
-        private readonly int dispid;
+        private readonly Ole32.DispatchID dispid;
 
         private TypeConverter converter;
         private object editor;
@@ -147,7 +145,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Ctor.
         /// </summary>
-        public Com2PropertyDescriptor(int dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
+        public Com2PropertyDescriptor(Ole32.DispatchID dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
             : base(name, attrs)
         {
             baseReadOnly = readOnly;
@@ -277,7 +275,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         HRESULT hr = new ComNativeDescriptor().GetPropertyValue(target, dispid, new object[1]);
 
                         // if not, go ahead and make this a browsable item
-                        if (Succeeded(hr))
+                        if (hr.Succeeded())
                         {
                             // make it browsable
                             if (newAttributes == null)
@@ -429,7 +427,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves the DISPID for this item
         /// </summary>
-        public int DISPID
+        public Ole32.DispatchID DISPID
         {
             get
             {
@@ -916,7 +914,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             HRESULT hr = pDisp.Invoke(
                 dispid,
                 ref g,
-                SafeNativeMethods.GetThreadLCID(),
+               Kernel32.GetThreadLocale(),
                 NativeMethods.DISPATCH_PROPERTYGET,
                 new NativeMethods.tagDISPPARAMS(),
                 pVarResult,
@@ -1293,7 +1291,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             NativeMethods.tagEXCEPINFO excepInfo = new NativeMethods.tagEXCEPINFO();
             dp.cArgs = 1;
             dp.cNamedArgs = 1;
-            int[] namedArgs = new int[] { Ole32.DISPID_PROPERTYPUT };
+            Ole32.DispatchID[] namedArgs = new Ole32.DispatchID[] { Ole32.DispatchID.PROPERTYPUT };
             GCHandle gcHandle = GCHandle.Alloc(namedArgs, GCHandleType.Pinned);
 
             try
@@ -1312,7 +1310,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = pDisp.Invoke(
                         dispid,
                         ref g,
-                        SafeNativeMethods.GetThreadLCID(),
+                       Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_PROPERTYPUT,
                         dp,
                         null,

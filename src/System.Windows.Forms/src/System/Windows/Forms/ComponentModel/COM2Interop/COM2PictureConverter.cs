@@ -6,8 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
-using static Interop;
-
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
@@ -23,7 +21,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public Com2PictureConverter(Com2PropertyDescriptor pd)
         {
-            if (pd.DISPID == Ole32.DISPID_MOUSEICON || pd.Name.IndexOf("Icon") != -1)
+            if (pd.DISPID == Ole32.DispatchID.MOUSEICON || pd.Name.IndexOf("Icon") != -1)
             {
                 _pictureType = typeof(Icon);
             }

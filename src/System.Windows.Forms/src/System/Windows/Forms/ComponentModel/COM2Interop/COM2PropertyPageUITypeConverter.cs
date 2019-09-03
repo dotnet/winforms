@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -51,8 +52,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
 
-                propPageSvc.ShowPropertyPage(propDesc.Name, instance, propDesc.DISPID, guid, hWndParent);
-
+                propPageSvc.ShowPropertyPage(propDesc.Name, instance, (int)propDesc.DISPID, guid, hWndParent);
             }
             catch (Exception ex1)
             {
@@ -105,7 +105,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         new HandleRef(null, (IntPtr)(long)pAddrs),
                         1,
                         new HandleRef(null, guidsAddr),
-                        (int)SafeNativeMethods.GetThreadLCID(),
+                        (int)Kernel32.GetThreadLocale(),
                         0, IntPtr.Zero);
                 }
             }

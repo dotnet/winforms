@@ -1944,7 +1944,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
-        [DispId(Ole32.DISPID_TABSTOP)]
+        [DispId((int)Ole32.DispatchID.TABSTOP)]
         [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {

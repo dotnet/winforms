@@ -967,7 +967,7 @@ namespace System.Windows.Forms
         ///  will always return a non-null value.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId(Ole32.DISPID_BACKCOLOR)]
+        [DispId((int)Ole32.DispatchID.BACKCOLOR)]
         [SRDescription(nameof(SR.ControlBackColorDescr))]
         public virtual Color BackColor
         {
@@ -2171,7 +2171,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
-        [DispId(Ole32.DISPID_ENABLED)]
+        [DispId((int)Ole32.DispatchID.ENABLED)]
         [SRDescription(nameof(SR.ControlEnabledDescr))]
         public bool Enabled
         {
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
-        [DispId(Ole32.DISPID_FONT)]
+        [DispId((int)Ole32.DispatchID.FONT)]
         [AmbientValue(null)]
         [SRDescription(nameof(SR.ControlFontDescr))]
         public virtual Font Font
@@ -2469,7 +2469,7 @@ namespace System.Windows.Forms
         ///  The foreground color of the control.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId(Ole32.DISPID_FORECOLOR)]
+        [DispId((int)Ole32.DispatchID.FORECOLOR)]
         [SRDescription(nameof(SR.ControlForeColorDescr))]
         public virtual Color ForeColor
         {
@@ -2611,7 +2611,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [DispId(Ole32.DISPID_HWND)]
+        [DispId((int)Ole32.DispatchID.HWND)]
         [SRDescription(nameof(SR.ControlHandleDescr))]
         public IntPtr Handle
         {
@@ -3632,7 +3632,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
-        [DispId(Ole32.DISPID_TABSTOP)]
+        [DispId((int)Ole32.DispatchID.TABSTOP)]
         [SRDescription(nameof(SR.ControlTabStopDescr))]
         public bool TabStop
         {
@@ -3692,7 +3692,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
         [Bindable(true)]
-        [DispId(Ole32.DISPID_TEXT)]
+        [DispId((int)Ole32.DispatchID.TEXT)]
         [SRDescription(nameof(SR.ControlTextDescr))]
         public virtual string Text
         {
@@ -13892,7 +13892,7 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(int dispID)
+        HRESULT UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(Ole32.DispatchID dispID)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnAmbientPropertyChange.  Dispid: " + dispID);
             Debug.Indent();

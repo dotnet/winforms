@@ -2570,7 +2570,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT OnAmbientPropertyChange(
-                int dispID);
+                Ole32.DispatchID dispID);
 
             [PreserveSig]
             int FreezeEvents(
@@ -3036,15 +3036,15 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT GetIDsOfNames(
-                [In] ref Guid riid,
-                [In, MarshalAs(UnmanagedType.LPArray)] string[] rgszNames,
+                Guid* riid,
+                [MarshalAs(UnmanagedType.LPArray)] string[] rgszNames,
                 uint cNames,
                 uint lcid,
-                int* rgDispId);
+                Ole32.DispatchID* rgDispId);
 
             [PreserveSig]
             HRESULT Invoke(
-                int dispIdMember,
+                Ole32.DispatchID dispIdMember,
                 [In] ref Guid riid,
                 uint lcid,
                 uint dwFlags,
@@ -3058,7 +3058,7 @@ namespace System.Windows.Forms
         public interface ITypeInfo
         {
             [PreserveSig]
-            int GetTypeAttr(ref IntPtr pTypeAttr);
+            HRESULT GetTypeAttr(ref IntPtr pTypeAttr);
 
             [PreserveSig]
             int GetTypeComp(
@@ -3066,14 +3066,13 @@ namespace System.Windows.Forms
                        ITypeComp[] ppTComp);
 
             [PreserveSig]
-            int GetFuncDesc(
-                    [In, MarshalAs(UnmanagedType.U4)]
-                     int index, ref IntPtr pFuncDesc);
+            HRESULT GetFuncDesc(
+                [MarshalAs(UnmanagedType.U4)] int index, ref IntPtr pFuncDesc);
 
             [PreserveSig]
-            int GetVarDesc(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int index, ref IntPtr pVarDesc);
+            HRESULT GetVarDesc(
+                [MarshalAs(UnmanagedType.U4)] int index,
+                ref IntPtr pVarDesc);
 
             [PreserveSig]
             int GetNames(
@@ -3106,14 +3105,12 @@ namespace System.Windows.Forms
             int Invoke();
 
             [PreserveSig]
-            int GetDocumentation(
-                     int memid,
-                      ref string pBstrName,
-                      ref string pBstrDocString,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      int[] pdwHelpContext,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      string[] pBstrHelpFile);
+            HRESULT GetDocumentation(
+                Ole32.DispatchID memid,
+                ref string pBstrName,
+                ref string pBstrDocString,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pdwHelpContext,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrHelpFile);
 
             [PreserveSig]
             int GetDllEntry(
@@ -3127,9 +3124,9 @@ namespace System.Windows.Forms
                       short[] pwOrdinal);
 
             [PreserveSig]
-            int GetRefTypeInfo(
-                    IntPtr hreftype,
-                    ref ITypeInfo pTypeInfo);
+            HRESULT GetRefTypeInfo(
+                IntPtr hreftype,
+                ref ITypeInfo pTypeInfo);
 
             [PreserveSig]
             int AddressOfMember();

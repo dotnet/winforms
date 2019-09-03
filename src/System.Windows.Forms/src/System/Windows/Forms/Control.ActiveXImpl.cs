@@ -78,9 +78,9 @@ namespace System.Windows.Forms
                 _adviseList = new ArrayList();
                 _activeXState = new BitVector32();
                 _ambientProperties = new AmbientProperty[] {
-                    new AmbientProperty("Font", Ole32.DISPID_AMBIENT_FONT),
-                    new AmbientProperty("BackColor", Ole32.DISPID_AMBIENT_BACKCOLOR),
-                    new AmbientProperty("ForeColor", Ole32.DISPID_AMBIENT_FORECOLOR)
+                    new AmbientProperty("Font", Ole32.DispatchID.AMBIENT_FONT),
+                    new AmbientProperty("BackColor", Ole32.DispatchID.AMBIENT_BACKCOLOR),
+                    new AmbientProperty("ForeColor", Ole32.DispatchID.AMBIENT_FORECOLOR)
                 };
             }
 
@@ -92,12 +92,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AmbientProperty prop = LookupAmbient(Ole32.DISPID_AMBIENT_BACKCOLOR);
+                    AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
 
                     if (prop.Empty)
                     {
                         object obj = null;
-                        if (GetAmbientProperty(Ole32.DISPID_AMBIENT_BACKCOLOR, ref obj))
+                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_BACKCOLOR, ref obj))
                         {
                             if (obj != null)
                             {
@@ -138,12 +138,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AmbientProperty prop = LookupAmbient(Ole32.DISPID_AMBIENT_FONT);
+                    AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FONT);
 
                     if (prop.Empty)
                     {
                         object obj = null;
-                        if (GetAmbientProperty(Ole32.DISPID_AMBIENT_FONT, ref obj))
+                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_FONT, ref obj))
                         {
                             try
                             {
@@ -182,12 +182,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AmbientProperty prop = LookupAmbient(Ole32.DISPID_AMBIENT_FORECOLOR);
+                    AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FORECOLOR);
 
                     if (prop.Empty)
                     {
                         object obj = null;
-                        if (GetAmbientProperty(Ole32.DISPID_AMBIENT_FORECOLOR, ref obj))
+                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_FORECOLOR, ref obj))
                         {
                             if (obj != null)
                             {
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
             ///  Helper function to retrieve an ambient property.  Returns false if the
             ///  property wasn't found.
             /// </summary>
-            private bool GetAmbientProperty(int dispid, ref object obj)
+            private bool GetAmbientProperty(Ole32.DispatchID dispid, ref object obj)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
@@ -635,17 +635,15 @@ namespace System.Windows.Forms
                         pvt,
                         null,
                         null);
-                    if (Succeeded(hr))
+                    if (hr.Succeeded())
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke succeeded. VT=" + pvt[0].GetType().FullName);
                         obj = pvt[0];
                         Debug.Unindent();
                         return true;
                     }
-                    else
-                    {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
-                    }
+                    
+                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
                 }
 
                 Debug.Unindent();
@@ -1233,7 +1231,7 @@ namespace System.Windows.Forms
             ///  Simple lookup to find the AmbientProperty corresponding to the given
             ///  dispid.
             /// </summary>
-            private AmbientProperty LookupAmbient(int dispid)
+            private AmbientProperty LookupAmbient(Ole32.DispatchID dispid)
             {
                 for (int i = 0; i < _ambientProperties.Length; i++)
                 {
@@ -1308,9 +1306,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleControl::OnAmbientPropertyChanged
             /// </summary>
-            internal void OnAmbientPropertyChange(int dispID)
+            internal void OnAmbientPropertyChange(Ole32.DispatchID dispID)
             {
-                if (dispID != Ole32.DISPID_UNKNOWN)
+                if (dispID != Ole32.DispatchID.UNKNOWN)
                 {
                     // Look for a specific property that has changed.
                     for (int i = 0; i < _ambientProperties.Length; i++)
@@ -1328,15 +1326,15 @@ namespace System.Windows.Forms
 
                     switch (dispID)
                     {
-                        case Ole32.DISPID_AMBIENT_UIDEAD:
-                            if (GetAmbientProperty(Ole32.DISPID_AMBIENT_UIDEAD, ref obj))
+                        case Ole32.DispatchID.AMBIENT_UIDEAD:
+                            if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                             {
                                 _activeXState[s_uiDead] = (bool)obj;
                             }
                             break;
 
-                        case Ole32.DISPID_AMBIENT_DISPLAYASDEFAULT:
-                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(Ole32.DISPID_AMBIENT_DISPLAYASDEFAULT, ref obj))
+                        case Ole32.DispatchID.AMBIENT_DISPLAYASDEFAULT:
+                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_DISPLAYASDEFAULT, ref obj))
                             {
                                 ibuttonControl.NotifyDefault((bool)obj);
                             }
@@ -1408,16 +1406,16 @@ namespace System.Windows.Forms
             internal void QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
             {
                 // Hookup our ambient colors
-                AmbientProperty prop = LookupAmbient(Ole32.DISPID_AMBIENT_BACKCOLOR);
+                AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
                 prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorBack));
 
-                prop = LookupAmbient(Ole32.DISPID_AMBIENT_FORECOLOR);
+                prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FORECOLOR);
                 prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorFore));
 
                 // And our ambient font
                 if (pQaContainer.pFont != null)
                 {
-                    prop = LookupAmbient(Ole32.DISPID_AMBIENT_FONT);
+                    prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FONT);
 
                     try
                     {
@@ -1971,12 +1969,12 @@ namespace System.Windows.Forms
 
                 // Get the ambient properties that effect us...
                 object obj = new object();
-                if (GetAmbientProperty(Ole32.DISPID_AMBIENT_UIDEAD, ref obj))
+                if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                 {
                     _activeXState[s_uiDead] = (bool)obj;
                 }
 
-                if (_control is IButtonControl && GetAmbientProperty(Ole32.DISPID_AMBIENT_UIDEAD, ref obj))
+                if (_control is IButtonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                 {
                     ((IButtonControl)_control).NotifyDefault((bool)obj);
                 }

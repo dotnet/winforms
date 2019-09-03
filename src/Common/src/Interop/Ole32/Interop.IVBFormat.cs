@@ -21,8 +21,8 @@ internal partial class Interop
                 IntPtr lpBuffer,
                 ushort cb,
                 int lcid,
-                short sFirstDayOfWeek,
-                ushort sFirstWeekOfYear,
+                VarFormatFirstDayOfWeek sFirstDayOfWeek,
+                VarFormatFirstWeekOfYear sFirstWeekOfYear,
                 ushort* rcb);
         }
     }

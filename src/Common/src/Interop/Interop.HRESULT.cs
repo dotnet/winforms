@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 internal static partial class Interop
 {
     internal enum HRESULT : int
@@ -24,7 +26,13 @@ internal static partial class Interop
         STG_E_INVALIDFLAG = unchecked((int)0x800300FF),
         E_ACCESSDENIED = unchecked((int)0x80070005L),
         E_INVALIDARG = unchecked((int)0x80070057),
+        ERROR_CANCELLED = unchecked((int)0x800704C7),
     }
+}
 
-    public static bool Succeeded(HRESULT hr) => hr >= 0;
+internal static class HResultExtensions
+{
+    public static bool Succeeded(this HRESULT hr) => hr >= 0;
+
+    public static bool Failed(this HRESULT hr) => hr < 0;
 }

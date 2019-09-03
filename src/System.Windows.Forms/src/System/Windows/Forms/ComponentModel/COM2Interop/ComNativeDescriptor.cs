@@ -102,7 +102,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 string desc = null;
                 try
                 {
-                    pTypeInfo.GetDocumentation(NativeMethods.MEMBERID_NIL, ref name, ref desc, null, null);
+                    pTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, ref name, ref desc, null, null);
 
                     // strip the leading underscores
                     while (name != null && name.Length > 0 && name[0] == '_')
@@ -135,8 +135,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return "";
             }
 
-            int dispid = Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)component);
-            if (dispid != Ole32.DISPID_UNKNOWN)
+            Ole32.DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)component);
+            if (dispid != Ole32.DispatchID.UNKNOWN)
             {
                 bool success = false;
                 object value = GetPropertyValue(component, dispid, ref success);
@@ -146,7 +146,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return value.ToString();
                 }
             }
-            return "";
+
+            return string.Empty;
         }
 
         internal unsafe object GetPropertyValue(object component, string propertyName, ref bool succeeded)
@@ -158,25 +159,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)component;
             string[] names = new string[] { propertyName };
-            int dispid = Ole32.DISPID_UNKNOWN;
+            Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
             Guid g = Guid.Empty;
             try
             {
-                HRESULT hr = iDispatch.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), &dispid);
-                if (dispid == Ole32.DISPID_UNKNOWN || !Succeeded(hr))
+                HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
+                if (dispid == Ole32.DispatchID.UNKNOWN || !hr.Succeeded())
                 {
                     return null;
                 }
+
+                return GetPropertyValue(component, dispid, ref succeeded);
             }
             catch
             {
                 return null;
             }
-
-            return GetPropertyValue(component, dispid, ref succeeded);
         }
 
-        internal object GetPropertyValue(object component, int dispid, ref bool succeeded)
+        internal object GetPropertyValue(object component, Ole32.DispatchID dispid, ref bool succeeded)
         {
             if (!(component is UnsafeNativeMethods.IDispatch))
             {
@@ -195,7 +196,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal HRESULT GetPropertyValue(object component, int dispid, object[] retval)
+        internal HRESULT GetPropertyValue(object component, Ole32.DispatchID dispid, object[] retval)
         {
             if (!(component is UnsafeNativeMethods.IDispatch))
             {
@@ -212,7 +213,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = iDispatch.Invoke(
                         dispid,
                         ref g,
-                        SafeNativeMethods.GetThreadLCID(),
+                       Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_PROPERTYGET,
                         new NativeMethods.tagDISPPARAMS(),
                         retval,
@@ -241,12 +242,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Checks if the given dispid matches the dispid that the Object would like to specify
         ///  as its identification proeprty (Name, ID, etc).
         /// </summary>
-        internal bool IsNameDispId(object obj, int dispid)
+        internal bool IsNameDispId(object obj, Ole32.DispatchID dispid)
         {
             if (obj == null || !obj.GetType().IsCOMObject)
             {
                 return false;
             }
+
             return dispid == Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
         }
 
@@ -344,7 +346,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (component is NativeMethods.IManagedPerPropertyBrowsing)
             {
-                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)component, NativeMethods.MEMBERID_NIL);
+                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)component, Ole32.DispatchID.MEMBERID_NIL);
                 for (int i = 0; i < temp.Length; ++i)
                 {
                     attrs.Add(temp[i]);
