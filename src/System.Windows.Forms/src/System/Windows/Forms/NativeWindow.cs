@@ -8,8 +8,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -18,7 +16,7 @@ namespace System.Windows.Forms
     ///  Provides a low-level encapsulation of a window handle
     ///  and a window procedure. The class automatically manages window class creation and registration.
     /// </summary>
-    public class NativeWindow : MarshalByRefObject, IWin32Window, IHandle
+    public partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle
     {
 #if DEBUG
         private static readonly BooleanSwitch AlwaysUseNormalWndProc = new BooleanSwitch("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
@@ -1293,170 +1291,6 @@ namespace System.Windows.Forms
 #if DEBUG
             public string owner;    // owner of this handle
 #endif
-        }
-
-        /// <summary>
-        ///  WindowClass encapsulates a window class.
-        /// </summary>
-        private class WindowClass
-        {
-            internal static WindowClass s_cache;
-
-            internal WindowClass _next;
-            internal string _className;
-            internal NativeMethods.ClassStyle _classStyle;
-            internal string _windowClassName;
-            internal int _hashCode;
-            internal IntPtr _defaultWindowProc;
-            internal NativeMethods.WndProc _windowProc;
-            internal NativeWindow _targetWindow;
-
-            // There is only ever one AppDomain
-            private static string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
-
-            private static readonly object s_wcInternalSyncObject = new object();
-
-            internal WindowClass(string className, NativeMethods.ClassStyle classStyle)
-            {
-                _className = className;
-                _classStyle = classStyle;
-                RegisterClass();
-            }
-
-            public IntPtr Callback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
-            {
-                Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
-
-                // Set the window procedure to the default window procedure
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defaultWindowProc));
-                _targetWindow.AssignHandle(hWnd);
-                return _targetWindow.Callback(hWnd, msg, wparam, lparam);
-            }
-
-            /// <summary>
-            ///  Retrieves a WindowClass object for use.  This will create a new
-            ///  object if there is no such class/style available, or retrun a
-            ///  cached object if one exists.
-            /// </summary>
-            internal static WindowClass Create(string className, NativeMethods.ClassStyle classStyle)
-            {
-                lock (s_wcInternalSyncObject)
-                {
-                    WindowClass wc = s_cache;
-                    if (className == null)
-                    {
-                        // If we weren't given a class name, look for a window
-                        // that has the exact class style.
-                        while (wc != null
-                            && (wc._className != null || wc._classStyle != classStyle))
-                        {
-                            wc = wc._next;
-                        }
-                    }
-                    else
-                    {
-                        while (wc != null && !className.Equals(wc._className))
-                        {
-                            wc = wc._next;
-                        }
-                    }
-
-                    if (wc == null)
-                    {
-                        // Didn't find an existing class, create one and attatch it to
-                        // the end of the linked list.
-                        wc = new WindowClass(className, classStyle)
-                        {
-                            _next = s_cache
-                        };
-                        s_cache = wc;
-                    }
-
-                    return wc;
-                }
-            }
-
-            /// <summary>
-            ///  Fabricates a full class name from a partial.
-            /// </summary>
-            private string GetFullClassName(string className)
-            {
-                StringBuilder b = new StringBuilder(50);
-                b.Append(Application.WindowsFormsVersion);
-                b.Append('.');
-                b.Append(className);
-
-                // While we don't have multiple AppDomains any more, we'll still include the information
-                // to keep the names in the same historical format for now.
-
-                b.Append(".app.0.");
-
-                // VersioningHelper does a lot of string allocations, and on .NET Core for our purposes
-                // it always returns the exact same string (process is hardcoded to r3 and the AppDomain
-                // id is always 1 as there is only one AppDomain).
-
-                const string versionSuffix = "_r3_ad1";
-                Debug.Assert(string.Equals(
-                    VersioningHelper.MakeVersionSafeName(s_currentAppDomainHash, ResourceScope.Process, ResourceScope.AppDomain),
-                    s_currentAppDomainHash + versionSuffix));
-                b.Append(s_currentAppDomainHash);
-                b.Append(versionSuffix);
-
-                return b.ToString();
-            }
-
-            /// <summary>
-            ///  Once the classname and style bits have been set, this can be called to register the class.
-            /// </summary>
-            private unsafe void RegisterClass()
-            {
-                NativeMethods.WNDCLASS windowClass = new NativeMethods.WNDCLASS();
-
-                string localClassName = _className;
-
-                if (localClassName == null)
-                {
-                    // If we don't use a hollow brush here, Windows will "pre paint" us with COLOR_WINDOW which
-                    // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.
-                    // Make this hollow to avoid all flicker.
-
-                    windowClass.hbrBackground = Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH);
-                    windowClass.style = _classStyle;
-
-                    _defaultWindowProc = DefaultWindowProc;
-                    localClassName = "Window." + Convert.ToString((int)_classStyle, 16);
-                    _hashCode = 0;
-                }
-                else
-                {
-                    // A system defined Window class was specified, get its info
-
-                    if (!UnsafeNativeMethods.GetClassInfoW(NativeMethods.NullHandleRef, _className, ref windowClass))
-                    {
-                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
-                    }
-
-                    localClassName = _className;
-                    _defaultWindowProc = windowClass.lpfnWndProc;
-                    _hashCode = _className.GetHashCode();
-                }
-
-                _windowClassName = GetFullClassName(localClassName);
-                _windowProc = new NativeMethods.WndProc(Callback);
-                windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windowProc);
-                windowClass.hInstance = Kernel32.GetModuleHandleW(null);
-
-                fixed (char* c = _windowClassName)
-                {
-                    windowClass.lpszClassName = c;
-
-                    if (UnsafeNativeMethods.RegisterClassW(ref windowClass) == 0)
-                    {
-                        _windowProc = null;
-                        throw new Win32Exception();
-                    }
-                }
-            }
         }
     }
 }
