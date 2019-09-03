@@ -24,30 +24,14 @@ namespace System.Windows.Forms
 
         private static readonly TraceSwitch WndProcChoice = new TraceSwitch("WndProcChoice", "Info about choice of WndProc");
 
-        // Table of prime numbers to use as hash table sizes. Each entry is the
-        // smallest prime number larger than twice the previous entry.
-        private readonly static int[] s_primes = {
-            11,17,23,29,37,47,59,71,89,107,131,163,197,239,293,353,431,521,631,761,919,
-            1103,1327,1597,1931,2333,2801,3371,4049,4861,5839,7013,8419,10103,12143,14591,
-            17519,21023,25229,30293,36353,43627,52361,62851,75431,90523, 108631, 130363,
-            156437, 187751, 225307, 270371, 324449, 389357, 467237, 560689, 672827, 807403,
-            968897, 1162687, 1395263, 1674319, 2009191, 2411033, 2893249, 3471899, 4166287,
-            4999559, 5999471, 7199369
-        };
-
         private const int InitializedFlags = 0x01;
         private const int UseDebuggableWndProc = 0x04;
 
         // do we have any active HWNDs?
         [ThreadStatic]
         private static bool t_anyHandleCreated;
-        private static bool t_anyHandleCreatedInApp;
+        private static bool s_anyHandleCreatedInApp;
 
-        private const float HashLoadFactor = .72F;
-
-        private static int s_handleCount;
-        private static int s_hashLoadSize;
-        private static HandleBucket[] s_hashBuckets;
         [ThreadStatic]
         private static byte t_wndProcFlags = 0;
         [ThreadStatic]
@@ -56,13 +40,13 @@ namespace System.Windows.Forms
 
         //nned to Store Table of Ids and Handles
         private static short s_globalID = 1;
-        private static readonly Dictionary<short, IntPtr> s_hashForIdHandle;
-        private static readonly Dictionary<IntPtr, short> s_hashForHandleId;
+        private static readonly Dictionary<IntPtr, GCHandle> s_windowHandles = new Dictionary<IntPtr, GCHandle>();
+        private static readonly Dictionary<short, IntPtr> s_windowIds = new Dictionary<short, IntPtr>();
         private static readonly object s_internalSyncObject = new object();
         private static readonly object s_createWindowSyncObject = new object();
 
         private NativeMethods.WndProc _windowProc;
-        private static IntPtr _defaultWindowProc;
+        private static IntPtr s_defaultWindowProc;
         private IntPtr _windowProcPtr;
         private IntPtr _defWindowProc;
         private bool _suppressedGC;
@@ -72,24 +56,7 @@ namespace System.Windows.Forms
 
         static NativeWindow()
         {
-            EventHandler shutdownHandler = new EventHandler(OnShutdown);
-            AppDomain.CurrentDomain.ProcessExit += shutdownHandler;
-
-            // Initialize our static hash of handles.  I have chosen
-            // a prime bucket based on a typical number of window handles
-            // needed to start up a decent sized app.
-            int hashSize = s_primes[4];
-            s_hashBuckets = new HandleBucket[hashSize];
-
-            s_hashLoadSize = (int)(HashLoadFactor * hashSize);
-            if (s_hashLoadSize >= hashSize)
-            {
-                s_hashLoadSize = hashSize - 1;
-            }
-
-            //Intilialize the Hashtable for Id...
-            s_hashForIdHandle = new Dictionary<short, IntPtr>();
-            s_hashForHandleId = new Dictionary<IntPtr, short>();
+            AppDomain.CurrentDomain.ProcessExit += OnShutdown;
         }
 
         public NativeWindow()
@@ -147,7 +114,7 @@ namespace System.Windows.Forms
                         {
                             if (UnsafeNativeMethods.SendMessageTimeout(new HandleRef(null, Handle),
                                 NativeMethods.WM_UIUNSUBCLASS, IntPtr.Zero, IntPtr.Zero,
-                                UnsafeNativeMethods.SMTO_ABORTIFHUNG, 100, out IntPtr result) == IntPtr.Zero)
+                                UnsafeNativeMethods.SMTO_ABORTIFHUNG, 100, out _) == IntPtr.Zero)
                             {
 
                                 //Debug.Fail("unable to ping HWND:" + handle.ToString() + " during finalization");
@@ -203,19 +170,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_defaultWindowProc == IntPtr.Zero)
+                if (s_defaultWindowProc == IntPtr.Zero)
                 {
                     // Cache the default windows procedure address
-                    _defaultWindowProc = Kernel32.GetProcAddress(
+                    s_defaultWindowProc = Kernel32.GetProcAddress(
                         Kernel32.GetModuleHandleW(Libraries.User32),
                         "DefWindowProcW");
-                    if (_defaultWindowProc == IntPtr.Zero)
+                    if (s_defaultWindowProc == IntPtr.Zero)
                     {
                         throw new Win32Exception();
                     }
                 }
 
-                return _defaultWindowProc;
+                return s_defaultWindowProc;
             }
         }
 
@@ -295,128 +262,51 @@ namespace System.Windows.Forms
 
             lock (s_internalSyncObject)
             {
-
-                if (s_handleCount >= s_hashLoadSize)
-                {
-                    ExpandTable();
-                }
-
-                // set a flag that this thread is tracking an HWND
                 t_anyHandleCreated = true;
-                // ...same for the application
-                t_anyHandleCreatedInApp = true;
-
-                // Assume we only have one thread writing concurrently.  Modify
-                // buckets to contain new data, as long as we insert in the right order.
-                uint hashcode = InitHash(handle, s_hashBuckets.Length, out uint seed, out uint incr);
-
-                int ntry = 0;
-                int emptySlotNumber = -1; // We use the empty slot number to cache the first empty slot. We chose to reuse slots
-                // create by remove that have the collision bit set over using up new slots.
+                s_anyHandleCreatedInApp = true;
 
                 GCHandle root = GCHandle.Alloc(window, GCHandleType.Weak);
 
-                do
+                if (s_windowHandles.TryGetValue(handle, out GCHandle oldRoot))
                 {
-                    int bucketNumber = (int)(seed % (uint)s_hashBuckets.Length);
+                    // This handle exists with another NativeWindow, replace it and
+                    // hook up the previous and next window pointers so we can get
+                    // back to the right window.
 
-                    if (emptySlotNumber == -1 && (s_hashBuckets[bucketNumber].handle == new IntPtr(-1)) && (s_hashBuckets[bucketNumber].hash_coll < 0))
+                    if (oldRoot.IsAllocated)
                     {
-                        emptySlotNumber = bucketNumber;
-                    }
-
-                    // We need to check if the collision bit is set because we have the possibility where the first
-                    // item in the hash-chain has been deleted.
-                    if ((s_hashBuckets[bucketNumber].handle == IntPtr.Zero) ||
-                        (s_hashBuckets[bucketNumber].handle == new IntPtr(-1) && ((s_hashBuckets[bucketNumber].hash_coll & unchecked(0x80000000)) == 0)))
-                    {
-
-                        if (emptySlotNumber != -1)
+                        if (oldRoot.Target != null)
                         {
-                            // Reuse slot
-                            bucketNumber = emptySlotNumber;
+                            window.PreviousWindow = ((NativeWindow)oldRoot.Target);
+                            Debug.Assert(window.PreviousWindow._nextWindow == null, "Last window in chain should have null next ptr");
+                            window.PreviousWindow._nextWindow = window;
                         }
-
-                        // Always set the hash_coll last because there may be readers
-                        // reading the table right now on other threads.
-                        s_hashBuckets[bucketNumber].window = root;
-                        s_hashBuckets[bucketNumber].handle = handle;
-#if DEBUG
-                        s_hashBuckets[bucketNumber].owner = window.ToString();
-#endif
-                        s_hashBuckets[bucketNumber].hash_coll |= (int)hashcode;
-                        s_handleCount++;
-                        return;
+                        oldRoot.Free();
                     }
-
-                    // If there is an existing window in this slot, reuse it.  Be sure to hook up the previous and next
-                    // window pointers so we can get back to the right window.
-                    if (((s_hashBuckets[bucketNumber].hash_coll & 0x7FFFFFFF) == hashcode) && handle == s_hashBuckets[bucketNumber].handle)
-                    {
-                        GCHandle prevWindow = s_hashBuckets[bucketNumber].window;
-                        if (prevWindow.IsAllocated)
-                        {
-                            if (prevWindow.Target != null)
-                            {
-                                window.PreviousWindow = ((NativeWindow)prevWindow.Target);
-                                Debug.Assert(window.PreviousWindow._nextWindow == null, "Last window in chain should have null next ptr");
-                                window.PreviousWindow._nextWindow = window;
-                            }
-                            prevWindow.Free();
-                        }
-                        s_hashBuckets[bucketNumber].window = root;
-#if DEBUG
-                        string ownerString = string.Empty;
-                        NativeWindow w = window;
-                        while (w != null)
-                        {
-                            ownerString += ("->" + w.ToString());
-                            w = w.PreviousWindow;
-                        }
-                        s_hashBuckets[bucketNumber].owner = ownerString;
-#endif
-                        return;
-                    }
-
-                    if (emptySlotNumber == -1)
-                    {// We don't need to set the collision bit here since we already have an empty slot
-                        s_hashBuckets[bucketNumber].hash_coll |= unchecked((int)0x80000000);
-                    }
-
-                    seed += incr;
-
-                } while (++ntry < s_hashBuckets.Length);
-
-                if (emptySlotNumber != -1)
-                {
-                    // Always set the hash_coll last because there may be readers
-                    // reading the table right now on other threads.
-                    s_hashBuckets[emptySlotNumber].window = root;
-                    s_hashBuckets[emptySlotNumber].handle = handle;
-#if DEBUG
-                    s_hashBuckets[emptySlotNumber].owner = window.ToString();
-#endif
-                    s_hashBuckets[emptySlotNumber].hash_coll |= (int)hashcode;
-                    s_handleCount++;
-                    return;
                 }
-            }
 
-            // If you see this assert, make sure load factor & count are reasonable.
-            // Then verify that our double hash function (h2, described at top of file)
-            // meets the requirements described above. You should never see this assert.
-            Debug.Fail("native window hash table insert failed!  Load factor too high, or our double hashing function is incorrect.");
+                s_windowHandles[handle] = root;
+            }
         }
 
         /// <summary>
-        ///  Inserts an entry into this ID hashtable.
+        ///  Creates and applies a unique identifier to the given window <paramref name="handle"/>.
         /// </summary>
-        internal static void AddWindowToIDTable(object wrapper, IntPtr handle)
+        /// <returns>
+        ///  The identifier given to the window.
+        /// </returns>
+        internal static short CreateWindowId(IHandle handle)
         {
-            s_hashForIdHandle[s_globalID] = handle;
-            s_hashForHandleId[handle] = s_globalID;
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(wrapper, handle), NativeMethods.GWL_ID, new HandleRef(wrapper, (IntPtr)s_globalID));
-            s_globalID++;
+            short id = s_globalID++;
+            s_windowIds[id] = handle.Handle;
+
+            // Set the Window ID
+            User32.SetWindowLong(
+                handle,
+                User32.GWL.ID,
+                (IntPtr)id);
+
+            return id;
         }
 
         /// <summary>
@@ -701,131 +591,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Increases the bucket count of this hashtable. This method is called from
-        ///  the Insert method when the actual load factor of the hashtable reaches
-        ///  the upper limit specified when the hashtable was constructed. The number
-        ///  of buckets in the hashtable is increased to the smallest prime number
-        ///  that is larger than twice the current number of buckets, and the entries
-        ///  in the hashtable are redistributed into the new buckets using the cached
-        ///  hashcodes.
-        /// </summary>
-        private static void ExpandTable()
-        {
-            // Allocate new Array
-            int oldhashsize = s_hashBuckets.Length;
-
-            int hashsize = GetPrime(1 + oldhashsize * 2);
-
-            // Don't replace any internal state until we've finished adding to the
-            // new bucket[].  This serves two purposes: 1) Allow concurrent readers
-            // to see valid hashtable contents at all times and 2) Protect against
-            // an OutOfMemoryException while allocating this new bucket[].
-            HandleBucket[] newBuckets = new HandleBucket[hashsize];
-
-            // rehash table into new buckets
-            int nb;
-            for (nb = 0; nb < oldhashsize; nb++)
-            {
-                HandleBucket oldb = s_hashBuckets[nb];
-                if ((oldb.handle != IntPtr.Zero) && (oldb.handle != new IntPtr(-1)))
-                {
-
-                    // Now re-fit this entry into the table
-                    //
-                    uint seed = (uint)oldb.hash_coll & 0x7FFFFFFF;
-                    uint incr = (uint)(1 + (((seed >> 5) + 1) % ((uint)newBuckets.Length - 1)));
-
-                    do
-                    {
-                        int bucketNumber = (int)(seed % (uint)newBuckets.Length);
-
-                        if ((newBuckets[bucketNumber].handle == IntPtr.Zero) || (newBuckets[bucketNumber].handle == new IntPtr(-1)))
-                        {
-                            newBuckets[bucketNumber].window = oldb.window;
-                            newBuckets[bucketNumber].handle = oldb.handle;
-                            newBuckets[bucketNumber].hash_coll |= oldb.hash_coll & 0x7FFFFFFF;
-                            break;
-                        }
-                        newBuckets[bucketNumber].hash_coll |= unchecked((int)0x80000000);
-                        seed += incr;
-                    } while (true);
-                }
-            }
-
-            // New bucket[] is good to go - replace buckets and other internal state.
-            s_hashBuckets = newBuckets;
-
-            s_hashLoadSize = (int)(HashLoadFactor * hashsize);
-            if (s_hashLoadSize >= hashsize)
-            {
-                s_hashLoadSize = hashsize - 1;
-            }
-        }
-
-        /// <summary>
-        ///  Retrieves the window associated with the specified
-        ///  <paramref name="handle"/>.
+        ///  Retrieves the window associated with the specified <paramref name="handle"/>.
         /// </summary>
         public static NativeWindow FromHandle(IntPtr handle)
-        {
-            if (handle != IntPtr.Zero && s_handleCount > 0)
-            {
-                return GetWindowFromTable(handle);
-            }
-            return null;
-        }
-
-        /// <summary>
-        ///  Calculates a prime number of at least minSize using a static table, and
-        ///  if we overflow it, we calculate directly.
-        /// </summary>
-        private static int GetPrime(int minSize)
-        {
-            if (minSize < 0)
-            {
-                Debug.Fail("NativeWindow hashtable capacity overflow");
-                throw new OutOfMemoryException();
-            }
-            for (int i = 0; i < s_primes.Length; i++)
-            {
-                int size = s_primes[i];
-                if (size >= minSize)
-                {
-                    return size;
-                }
-            }
-            //outside of our predefined table.
-            //compute the hard way.
-            for (int j = ((minSize - 2) | 1); j < int.MaxValue; j += 2)
-            {
-                bool prime = true;
-
-                if ((j & 1) != 0)
-                {
-                    int target = (int)Math.Sqrt(j);
-                    for (int divisor = 3; divisor < target; divisor += 2)
-                    {
-                        if ((j % divisor) == 0)
-                        {
-                            prime = false;
-                            break;
-                        }
-                    }
-                    if (prime)
-                    {
-                        return j;
-                    }
-                }
-                else
-                {
-                    if (j == 2)
-                    {
-                        return j;
-                    }
-                }
-            }
-            return minSize;
-        }
+            => handle != IntPtr.Zero ? GetWindowFromTable(handle) : null;
 
         /// <summary>
         ///  Returns the native window for the given handle, or null if
@@ -833,64 +602,25 @@ namespace System.Windows.Forms
         /// </summary>
         private static NativeWindow GetWindowFromTable(IntPtr handle)
         {
-            Debug.Assert(handle != IntPtr.Zero, "Zero handles cannot be stored in the table");
-
-            // Take a snapshot of buckets, in case another thread does a resize
-            HandleBucket[] buckets = s_hashBuckets;
-            int ntry = 0;
-            uint hashcode = InitHash(handle, buckets.Length, out uint seed, out uint incr);
-
-            HandleBucket b;
-            do
+            if (s_windowHandles.TryGetValue(handle, out GCHandle value) && value.IsAllocated)
             {
-                int bucketNumber = (int)(seed % (uint)buckets.Length);
-                b = buckets[bucketNumber];
-                if (b.handle == IntPtr.Zero)
-                {
-                    return null;
-                }
-                if (((b.hash_coll & 0x7FFFFFFF) == hashcode) && handle == b.handle)
-                {
-                    if (b.window.IsAllocated)
-                    {
-                        return (NativeWindow)b.window.Target;
-                    }
-                }
-                seed += incr;
+                return (NativeWindow)value.Target;
             }
-            while (b.hash_coll < 0 && ++ntry < buckets.Length);
             return null;
         }
 
-        internal IntPtr GetHandleFromID(short id)
+        /// <summary>
+        ///  Returns the handle from the given <paramref name="id"/> if found, otherwise returns
+        ///  <see cref="IntPtr.Zero"/>.
+        /// </summary>
+        internal IntPtr GetHandleFromWindowId(short id)
         {
-            if (s_hashForIdHandle == null || !s_hashForIdHandle.TryGetValue(id, out IntPtr handle))
+            if (s_windowIds == null || !s_windowIds.TryGetValue(id, out IntPtr handle))
             {
                 handle = IntPtr.Zero;
             }
 
             return handle;
-        }
-
-        /// <summary>
-        ///  Computes the hash function:  H(key, i) = h1(key) + i*h2(key, hashSize).
-        ///  The out parameter 'seed' is h1(key), while the out parameter
-        ///  'incr' is h2(key, hashSize).  Callers of this function should
-        ///  add 'incr' each time through a loop.
-        /// </summary>
-        private static uint InitHash(IntPtr handle, int hashsize, out uint seed, out uint incr)
-        {
-            // Hashcode must be positive.  Also, we must not use the sign bit, since
-            // that is used for the collision bit.
-            uint hashcode = ((uint)handle.GetHashCode()) & 0x7FFFFFFF;
-            seed = hashcode;
-            // Restriction: incr MUST be between 1 and hashsize - 1, inclusive for
-            // the modular arithmetic to work correctly.  This guarantees you'll
-            // visit every bucket in the table exactly once within hashsize
-            // iterations.  Violate this and it'll cause obscure bugs forever.
-            // If you change this calculation for h2(key), update putEntry too!
-            incr = 1 + (((seed >> 5) + 1) % ((uint)hashsize - 1));
-            return hashcode;
         }
 
         /// <summary>
@@ -919,52 +649,41 @@ namespace System.Windows.Forms
             // we cannot call DestroyWindow because this API will fail if called from
             // an incorrect thread.
 
-            if (s_handleCount > 0)
+            if (s_windowHandles.Count > 0)
             {
                 Debug.Assert(DefaultWindowProc != IntPtr.Zero, "We have active windows but no user window proc?");
 
                 lock (s_internalSyncObject)
                 {
-                    for (int i = 0; i < s_hashBuckets.Length; i++)
+                    foreach (KeyValuePair<IntPtr, GCHandle> entry in s_windowHandles)
                     {
-                        HandleBucket b = s_hashBuckets[i];
-                        if (b.handle != IntPtr.Zero && b.handle != new IntPtr(-1))
+                        IntPtr handle = entry.Key;
+                        if (handle != IntPtr.Zero && handle != new IntPtr(-1))
                         {
-                            HandleRef href = new HandleRef(b, b.handle);
-                            UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(null, DefaultWindowProc));
-                            UnsafeNativeMethods.SetClassLong(href, NativeMethods.GCL_WNDPROC, DefaultWindowProc);
-                            UnsafeNativeMethods.PostMessage(href, WindowMessages.WM_CLOSE, 0, 0);
+                            User32.SetWindowLong(handle, User32.GWL.WNDPROC, DefaultWindowProc);
+                            User32.SetClassLong(handle, User32.GCL.WNDPROC, DefaultWindowProc);
+                            UnsafeNativeMethods.PostMessage(handle, WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
 
                             // Fish out the Window object, if it is valid, and NULL the handle pointer.  This
                             // way the rest of WinForms won't think the handle is still valid here.
-                            if (b.window.IsAllocated)
+                            if (entry.Value.IsAllocated)
                             {
-                                NativeWindow w = (NativeWindow)b.window.Target;
+                                NativeWindow w = (NativeWindow)entry.Value.Target;
                                 if (w != null)
                                 {
                                     w.Handle = IntPtr.Zero;
                                 }
                             }
-
-#if DEBUG && FINALIZATION_WATCH
-                            Debug.Fail("Window did not clean itself up: " + b.owner);
-#endif
-
-                            b.window.Free();
                         }
-                        s_hashBuckets[i].handle = IntPtr.Zero;
-                        s_hashBuckets[i].hash_coll = 0;
                     }
 
-                    s_handleCount = 0;
+                    s_windowHandles.Clear();
                 }
             }
         }
 
         /// <summary>
-        ///  When overridden in a derived class,
-        ///  manages an unhandled thread
-        ///  exception.
+        ///  When overridden in a derived class, manages an unhandled thread exception.
         /// </summary>
         protected virtual void OnThreadException(Exception e)
         {
@@ -1032,75 +751,45 @@ namespace System.Windows.Forms
 
             lock (s_internalSyncObject)
             {
-
-                // Assuming only one concurrent writer, write directly into buckets.
-                uint hashcode = InitHash(handle, s_hashBuckets.Length, out uint seed, out uint incr);
-                int ntry = 0;
-                NativeWindow prevWindow = window.PreviousWindow;
-                HandleBucket b;
-
-                int bn; // bucketNumber
-                do
+                if (!s_windowHandles.TryGetValue(handle, out GCHandle root))
                 {
-                    bn = (int)(seed % (uint)s_hashBuckets.Length);  // bucketNumber
-                    b = s_hashBuckets[bn];
-                    if (((b.hash_coll & 0x7FFFFFFF) == hashcode) && handle == b.handle)
+                    return;
+                }
+
+                bool shouldRemoveBucket = (window._nextWindow == null);
+                bool shouldReplaceBucket = IsRootWindowInListWithChildren(window);
+
+                // We need to fixup the link pointers of window here.
+                if (window.PreviousWindow != null)
+                {
+                    window.PreviousWindow._nextWindow = window._nextWindow;
+                }
+                if (window._nextWindow != null)
+                {
+                    window._nextWindow._defWindowProc = window._defWindowProc;
+                    window._nextWindow.PreviousWindow = window.PreviousWindow;
+                }
+
+                window._nextWindow = null;
+                NativeWindow previousWindow = window.PreviousWindow;
+                window.PreviousWindow = null;
+
+                if (shouldReplaceBucket)
+                {
+                    if (root.IsAllocated)
                     {
-
-                        bool shouldRemoveBucket = (window._nextWindow == null);
-                        bool shouldReplaceBucket = IsRootWindowInListWithChildren(window);
-
-                        // We need to fixup the link pointers of window here.
-                        //
-                        if (window.PreviousWindow != null)
-                        {
-                            window.PreviousWindow._nextWindow = window._nextWindow;
-                        }
-                        if (window._nextWindow != null)
-                        {
-                            window._nextWindow._defWindowProc = window._defWindowProc;
-                            window._nextWindow.PreviousWindow = window.PreviousWindow;
-                        }
-
-                        window._nextWindow = null;
-                        window.PreviousWindow = null;
-
-                        if (shouldReplaceBucket)
-                        {
-                            // Free the existing GC handle
-                            if (s_hashBuckets[bn].window.IsAllocated)
-                            {
-                                s_hashBuckets[bn].window.Free();
-                            }
-
-                            s_hashBuckets[bn].window = GCHandle.Alloc(prevWindow, GCHandleType.Weak);
-                        }
-                        else if (shouldRemoveBucket)
-                        {
-
-                            // Clear hash_coll field, then key, then value
-                            s_hashBuckets[bn].hash_coll &= unchecked((int)0x80000000);
-                            if (s_hashBuckets[bn].hash_coll != 0)
-                            {
-                                s_hashBuckets[bn].handle = new IntPtr(-1);
-                            }
-                            else
-                            {
-                                s_hashBuckets[bn].handle = IntPtr.Zero;
-                            }
-
-                            if (s_hashBuckets[bn].window.IsAllocated)
-                            {
-                                s_hashBuckets[bn].window.Free();
-                            }
-
-                            Debug.Assert(s_handleCount > 0, "Underflow on handle count");
-                            s_handleCount--;
-                        }
-                        return;
+                        root.Free();
                     }
-                    seed += incr;
-                } while (s_hashBuckets[bn].hash_coll < 0 && ++ntry < s_hashBuckets.Length);
+                    s_windowHandles[handle] = GCHandle.Alloc(previousWindow, GCHandleType.Weak);
+                }
+                else if (shouldRemoveBucket)
+                {
+                    s_windowHandles.Remove(handle);
+                    if (root.IsAllocated)
+                    {
+                        root.Free();
+                    }
+                }
             }
         }
 
@@ -1117,14 +806,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inserts an entry into this ID hashtable.
+        ///  Removes the given Window from the lookup table.
         /// </summary>
-        internal static void RemoveWindowFromIDTable(IntPtr handle)
-        {
-            short id = s_hashForHandleId[handle];
-            s_hashForHandleId.Remove(handle);
-            s_hashForIdHandle.Remove(id);
-        }
+        internal static void RemoveWindowFromIDTable(short id) => s_windowIds.Remove(id);
 
         /// <summary>
         ///  This method can be used to modify the exception handling behavior of
@@ -1149,7 +833,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void SetUnhandledExceptionModeInternal(UnhandledExceptionMode mode, bool threadScope)
         {
-            if (!threadScope && t_anyHandleCreatedInApp)
+            if (!threadScope && s_anyHandleCreatedInApp)
             {
                 throw new InvalidOperationException(SR.ApplicationCannotChangeApplicationExceptionMode);
             }
@@ -1267,30 +951,6 @@ namespace System.Windows.Forms
         protected virtual void WndProc(ref Message m)
         {
             DefWndProc(ref m);
-        }
-
-        /// <summary>
-        ///  A struct that contains a single bucket for our handle / GCHandle hash table.
-        ///  The hash table algorithm we use here was stolen selfishly from the framework's
-        ///  Hashtable class.  We don't use Hashtable directly, however, because of boxing
-        ///  concerns.  It's algorithm is perfect for our needs, however:  Multiple
-        ///  reader, single writer without the need for locks and constant lookup time.
-        ///
-        ///  Differences between this implementation and Hashtable:
-        ///
-        ///  Keys are IntPtrs; their hash code is their value.  Collision is still
-        ///  marked with the high bit.
-        ///
-        ///  Reclaimed buckets store -1 in their handle, not the hash table reference.
-        /// </summary>
-        private struct HandleBucket
-        {
-            public IntPtr handle;   // Win32 window handle
-            public GCHandle window; // a weak GC handle to the NativeWindow class
-            public int hash_coll;   // Store hash code; sign bit means there was a collision.
-#if DEBUG
-            public string owner;    // owner of this handle
-#endif
         }
     }
 }
