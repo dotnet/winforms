@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             internal NativeWindow _targetWindow;
 
             // There is only ever one AppDomain
-            private static string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
+            private static readonly string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
 
             private static readonly object s_wcInternalSyncObject = new object();
 
