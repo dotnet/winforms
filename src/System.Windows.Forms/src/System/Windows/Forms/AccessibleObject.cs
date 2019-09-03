@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.ITableItemProvider,
         UnsafeNativeMethods.IGridProvider,
         UnsafeNativeMethods.IGridItemProvider,
-        Ole32.IEnumVariant,
+        OleAut32.IEnumVariant,
         UnsafeNativeMethods.IOleWindow,
         UnsafeNativeMethods.ILegacyIAccessibleProvider,
         UnsafeNativeMethods.ISelectionProvider,
@@ -52,11 +52,11 @@ namespace System.Windows.Forms
         private IAccessible systemIAccessible = null;
 
         /// <summary>
-        ///  Specifies the <see cref='Ole32.IEnumVariant'/> used by this
+        ///  Specifies the <see cref='OleAut32.IEnumVariant'/> used by this
         /// <see cref='AccessibleObject'/> .
         /// </summary>
-        private Ole32.IEnumVariant systemIEnumVariant = null;
-        private Ole32.IEnumVariant enumVariant = null;
+        private OleAut32.IEnumVariant systemIEnumVariant = null;
+        private OleAut32.IEnumVariant enumVariant = null;
 
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
         private UnsafeNativeMethods.IOleWindow systemIOleWindow = null;
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Ole32.IEnumVariant EnumVariant
+        private OleAut32.IEnumVariant EnumVariant
         {
             get => enumVariant ?? (enumVariant = new EnumVariantObject(this));
         }
@@ -1934,7 +1934,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Clone this accessible object.
         /// </summary>
-        HRESULT Ole32.IEnumVariant.Clone(Ole32.IEnumVariant[] ppEnum)
+        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
         {
             return EnumVariant.Clone(ppEnum);
         }
@@ -1942,7 +1942,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Obtain the next n children of this accessible object.
         /// </summary>
-        unsafe HRESULT Ole32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
+        unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
         {
             return EnumVariant.Next(celt, rgVar, pCeltFetched);
         }
@@ -1950,12 +1950,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Resets the child accessible object enumerator.
         /// </summary>
-        HRESULT Ole32.IEnumVariant.Reset() => EnumVariant.Reset();
+        HRESULT OleAut32.IEnumVariant.Reset() => EnumVariant.Reset();
 
         /// <summary>
         ///  Skip the next n child accessible objects
         /// </summary>
-        HRESULT Ole32.IEnumVariant.Skip(uint celt) => EnumVariant.Skip(celt);
+        HRESULT OleAut32.IEnumVariant.Skip(uint celt) => EnumVariant.Skip(celt);
 
         /// <summary>
         ///  When overridden in a derived class, navigates to another object.
@@ -2100,7 +2100,7 @@ namespace System.Windows.Forms
                             ref acc);
 
             // Get the IEnumVariant interface
-            Guid IID_IEnumVariant = typeof(Ole32.IEnumVariant).GUID;
+            Guid IID_IEnumVariant = typeof(OleAut32.IEnumVariant).GUID;
             object en = null;
             result = UnsafeNativeMethods.CreateStdAccessibleObject(
                         new HandleRef(this, handle),
@@ -2111,7 +2111,7 @@ namespace System.Windows.Forms
             if (acc != null || en != null)
             {
                 systemIAccessible = (IAccessible)acc;
-                systemIEnumVariant = (Ole32.IEnumVariant)en;
+                systemIEnumVariant = (OleAut32.IEnumVariant)en;
                 systemIOleWindow = acc as UnsafeNativeMethods.IOleWindow;
             }
         }
@@ -2472,7 +2472,7 @@ namespace System.Windows.Forms
             Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
         }
 
-        private class EnumVariantObject : Ole32.IEnumVariant
+        private class EnumVariantObject : OleAut32.IEnumVariant
         {
             private uint currentChild = 0;
             private readonly AccessibleObject owner;
@@ -2490,7 +2490,7 @@ namespace System.Windows.Forms
                 this.currentChild = currentChild;
             }
 
-            HRESULT Ole32.IEnumVariant.Clone(Ole32.IEnumVariant[] ppEnum)
+            HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
             {
                 if (ppEnum == null)
                 {
@@ -2504,7 +2504,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Resets the child accessible object enumerator.
             /// </summary>
-            HRESULT Ole32.IEnumVariant.Reset()
+            HRESULT OleAut32.IEnumVariant.Reset()
             {
                 currentChild = 0;
                 owner.systemIEnumVariant?.Reset();
@@ -2514,7 +2514,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Skips the next n child accessible objects.
             /// </summary>
-            HRESULT Ole32.IEnumVariant.Skip(uint celt)
+            HRESULT OleAut32.IEnumVariant.Skip(uint celt)
             {
                 currentChild += celt;
                 owner.systemIEnumVariant?.Skip(celt);
@@ -2524,7 +2524,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the next n child accessible objects.
             /// </summary>
-            unsafe HRESULT Ole32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
+            unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
                 // NOTE: rgvar is a pointer to an array of variants
                 if (owner.IsClientObject)
@@ -2664,7 +2664,7 @@ namespace System.Windows.Forms
             ///  Given an IEnumVariant interface, this method jumps to a specific
             ///  item in the collection and extracts the result for that one item.
             /// </summary>
-            private unsafe static bool GotoItem(Ole32.IEnumVariant iev, int index, IntPtr variantPtr)
+            private unsafe static bool GotoItem(OleAut32.IEnumVariant iev, int index, IntPtr variantPtr)
             {
                 uint celtFetched = 0;
 
@@ -2707,7 +2707,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.ITableItemProvider,
         UnsafeNativeMethods.IGridProvider,
         UnsafeNativeMethods.IGridItemProvider,
-        Ole32.IEnumVariant,
+        OleAut32.IEnumVariant,
         UnsafeNativeMethods.IOleWindow,
         UnsafeNativeMethods.ILegacyIAccessibleProvider,
         UnsafeNativeMethods.ISelectionProvider,
@@ -2716,7 +2716,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IRawElementProviderHwndOverride
     {
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
-        private readonly Ole32.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
+        private readonly OleAut32.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
         private readonly UnsafeNativeMethods.IOleWindow publicIOleWindow;     // AccessibleObject as IOleWindow
         private readonly IReflect publicIReflect;                             // AccessibleObject as IReflect
 
@@ -2749,7 +2749,7 @@ namespace System.Windows.Forms
         {
             // Get all the casts done here to catch any issues early
             publicIAccessible = (IAccessible)accessibleImplemention;
-            publicIEnumVariant = (Ole32.IEnumVariant)accessibleImplemention;
+            publicIEnumVariant = (OleAut32.IEnumVariant)accessibleImplemention;
             publicIOleWindow = (UnsafeNativeMethods.IOleWindow)accessibleImplemention;
             publicIReflect = (IReflect)accessibleImplemention;
             publicIServiceProvider = (UnsafeNativeMethods.IServiceProvider)accessibleImplemention;
@@ -2910,19 +2910,19 @@ namespace System.Windows.Forms
             publicIAccessible.set_accValue(childID, newValue);
         }
 
-        HRESULT Ole32.IEnumVariant.Clone(Ole32.IEnumVariant[] ppEnum)
+        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
         {
             return publicIEnumVariant.Clone(ppEnum);
         }
 
-        unsafe HRESULT Ole32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
+        unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
         {
             return publicIEnumVariant.Next(celt, rgVar, pCeltFetched);
         }
 
-        HRESULT Ole32.IEnumVariant.Reset() => publicIEnumVariant.Reset();
+        HRESULT OleAut32.IEnumVariant.Reset() => publicIEnumVariant.Reset();
 
-        HRESULT Ole32.IEnumVariant.Skip(uint celt) => publicIEnumVariant.Skip(celt);
+        HRESULT OleAut32.IEnumVariant.Skip(uint celt) => publicIEnumVariant.Skip(celt);
 
         int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd)
         {
