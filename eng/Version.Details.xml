@@ -10,9 +10,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-alpha1.19453.4">
+    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-alpha1.19453.5">
       <Uri>https://github.com/dotnet/core-setup</Uri>
-      <Sha>90f266a6fb5d3dd08c6b2fdd98d3e3a517a1497e</Sha>
+      <Sha>d0bc0a02eba7f261597905629aa75268eef92761</Sha>
     </Dependency>
     <!-- CoreFX via Core Setup -->
     <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.0-alpha1.19453.1" CoherentParentDependency="Microsoft.NETCore.App">
@@ -56,12 +56,12 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Sha>5b2c6b7d286265d3bdaddb8445c1bbf3d9141461</Sha>
     </Dependency>
     <!-- CoreCLR via Core Setup -->
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-alpha1.19452.3" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-alpha1.19453.1" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/coreclr</Uri>
       <Sha>b18ea9c7a4a7e8e940e77898b11f375879e63faf</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-alpha1.19452.3" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-alpha1.19453.1" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/coreclr</Uri>
       <Sha>b18ea9c7a4a7e8e940e77898b11f375879e63faf</Sha>
       <SourceBuildId>5596</SourceBuildId>
