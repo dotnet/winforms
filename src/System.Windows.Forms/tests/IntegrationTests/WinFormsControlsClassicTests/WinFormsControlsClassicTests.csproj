@@ -308,6 +308,10 @@
       <Link>PropertyGrid.resx</Link>
       <DependentUpon>PropertyGrid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\RichTextBoxes.resx">
+      <Link>RichTextBoxes.resx</Link>
+      <DependentUpon>RichTextBoxes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\ScalingBeforeChanges.resx">
       <Link>ScalingBeforeChanges.resx</Link>
       <DependentUpon>ScalingBeforeChanges.cs</DependentUpon>
