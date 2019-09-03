@@ -52,6 +52,7 @@ namespace WinformsControlsTest
             this.fontNameEditor = new System.Windows.Forms.Button();
             this.collectionEditors = new System.Windows.Forms.Button();
             this.richTextBoxes = new System.Windows.Forms.Button();
+            this.PictureBoxes = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -236,6 +237,7 @@ namespace WinformsControlsTest
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.fontNameEditor);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.collectionEditors);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.richTextBoxes);
+            this.flowLayoutPanelUITypeEditors.Controls.Add(this.PictureBoxes);
             this.flowLayoutPanelUITypeEditors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelUITypeEditors.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelUITypeEditors.Location = new System.Drawing.Point(8, 8);
@@ -272,6 +274,16 @@ namespace WinformsControlsTest
             this.richTextBoxes.Text = "RichTextBoxes";
             this.richTextBoxes.UseVisualStyleBackColor = true;
             this.richTextBoxes.Click += new System.EventHandler(this.RichTextBoxes_Click);
+            // 
+            // PictureBoxes
+            // 
+            this.PictureBoxes.Location = new System.Drawing.Point(268, 235);
+            this.PictureBoxes.Name = "PictureBoxes";
+            this.PictureBoxes.Size = new System.Drawing.Size(258, 23);
+            this.PictureBoxes.TabIndex = 19;
+            this.PictureBoxes.Text = "PictureBoxes";
+            this.PictureBoxes.UseVisualStyleBackColor = true;
+            this.PictureBoxes.Click += new System.EventHandler(this.PictureBoxes_Click);
             // 
             // MainForm
             // 
@@ -311,6 +323,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button fontNameEditor;
         private System.Windows.Forms.Button collectionEditors;
         private System.Windows.Forms.Button richTextBoxes;
+        private System.Windows.Forms.Button PictureBoxes;
     }
 }
 

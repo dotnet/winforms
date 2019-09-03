@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -48,6 +49,7 @@ namespace System.Windows.Forms
 
         // Instance members for asynchronous behavior
         private AsyncOperation _currentAsyncLoadOperation;
+
         private string _imageLocation;
         private Image _initialImage;
         private Image errorImage;
@@ -555,19 +557,11 @@ namespace System.Windows.Forms
 
             WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
 
-            // Invoke BeginGetResponse on a threadpool thread, as it has
-            // unpredictable latency, since, on first call, it may load in the
-            // configuration system (this is NCL
-            (new WaitCallback(BeginGetResponseDelegate)).BeginInvoke(req, null, null);
-        }
-
-        /// <summary>
-        ///  Solely for calling BeginGetResponse itself asynchronously.
-        /// </summary>
-        private void BeginGetResponseDelegate(object arg)
-        {
-            WebRequest req = (WebRequest)arg;
-            req.BeginGetResponse(new AsyncCallback(GetResponseCallback), req);
+            Task.Run(() =>
+            {
+                // Invoke BeginGetResponse on a threadpool thread, as it has unpredictable latency
+                req.BeginGetResponse(new AsyncCallback(GetResponseCallback), req);
+            });
         }
 
         private void PostCompleted(Exception error, bool cancelled)
