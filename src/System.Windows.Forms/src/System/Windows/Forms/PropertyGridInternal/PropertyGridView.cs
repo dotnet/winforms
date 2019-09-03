@@ -5333,6 +5333,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int items = totalProps;
 
                 gridEntry.InternalExpanded = value;
+
+                var oldExpandedState = value ? UnsafeNativeMethods.ExpandCollapseState.Collapsed : UnsafeNativeMethods.ExpandCollapseState.Expanded;
+                var newExpandedState = value ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
+                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                    oldExpandedState,
+                    newExpandedState);
+
                 RecalculateProps();
                 GridEntry ipeSelect = selectedGridEntry;
                 if (!value)

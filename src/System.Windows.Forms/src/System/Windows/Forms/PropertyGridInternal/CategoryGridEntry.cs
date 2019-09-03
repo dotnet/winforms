@@ -311,6 +311,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.FragmentNavigate(direction);
             }
 
+            internal override object GetPropertyValue(int propertyID)
+            {
+                switch (propertyID)
+                {
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        // To announce expanded collapsed state control type should be appropriate:
+                        // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
+                        return NativeMethods.UIA_TreeItemControlTypeId;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
             public override AccessibleRole Role
             {
                 get
