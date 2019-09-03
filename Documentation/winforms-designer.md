@@ -38,7 +38,7 @@ dotnet sln add SimpleWinForms
 
 After creating the project, you can run the application:
 ```cmd
-dotnet run
+dotnet run --project SimpleWinForms\SimpleWinForms.csproj
 ```
 
 
@@ -68,12 +68,6 @@ There are few options available to help you to design UI for your .NET Core proj
        <Compile Update="Form1.Designer.cs">
          <DependentUpon>Form1.cs</DependentUpon>
        </Compile>
-     </ItemGroup>
-    
-     <ItemGroup>
-       <EmbeddedResource Update="Form1.resx">
-         <DependentUpon>Form1.cs</DependentUpon>
-       </EmbeddedResource>
      </ItemGroup>
     ```
 
