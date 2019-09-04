@@ -12,7 +12,7 @@ If you do not want to modify your local SDK, you may with to perform technique 2
 
 copy the resulting assembly(-ies) from the base of the repository  
 
-`[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0_`
+`[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp5.0_`
 
 to your dotnet folder at:  
 
@@ -28,11 +28,11 @@ Add references to the binary(-ies) to your project ported to Core. For example, 
 
 ```xml
 <ItemGroup>
-    <Reference Include="[Drive]:[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0\System.Windows.Forms.dll" />
+    <Reference Include="[Drive]:[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp5.0\System.Windows.Forms.dll" />
 </ItemGroup>
 ```
 
-where **[Drive]** is the drive you have our repository in and **[path-to-repo]** is the additional path to our repository from the base drive (this may be nothing). Note netcoreapp3.0 may change.
+where **[Drive]** is the drive you have our repository in and **[path-to-repo]** is the additional path to our repository from the base drive (this may be nothing). Note netcoreapp5.0 may change.
 
 [comment]: <> (URI Links)
 

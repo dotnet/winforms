@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.IL">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
     <!-- Package this as both a reference and implementation -->
     <PackageAsRefAndLib>true</PackageAsRefAndLib>
     <!-- ILAsm doesn't produce a PDB - https://github.com/dotnet/coreclr/issues/15299 -->

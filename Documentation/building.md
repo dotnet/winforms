@@ -30,7 +30,7 @@ Note that this does **not** build using your machine-wide installed version of t
 
 * All build outputs are generated under the `artifacts` folder.
 * Binaries are under `artifacts\bin`
-  * For example, `System.Windows.Forms.dll` can be found under `artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0`
+  * For example, `System.Windows.Forms.dll` can be found under `artifacts\bin\System.Windows.Forms\Debug\netcoreapp5.0`
 * Logs are found under `artifacts\log`
 * Packages are found under `artifacts\packages`
 

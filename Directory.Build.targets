@@ -25,17 +25,17 @@
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
     <FrameworkReference Update="Microsoft.NETCore.App" 
-      Condition=" '$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) ">
+      Condition=" '$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp5.')) ">
     <TargetingPackVersion>$(MicrosoftNETCoreAppPackageVersion)</TargetingPackVersion>
     </FrameworkReference>
   </ItemGroup>
 
   <PropertyGroup>
     <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppPackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) ">$(MicrosoftNETCoreAppPackageVersion)</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp5.')) ">$(MicrosoftNETCoreAppPackageVersion)</RuntimeFrameworkVersion>
 
-    <!-- If TargetFramework is not netcoreapp3.x, then reset RuntimeFrameworkVersion -->
-    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('netcoreapp3.'))" />
+    <!-- If TargetFramework is not netcoreapp5.x, then reset RuntimeFrameworkVersion -->
+    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('netcoreapp5.'))" />
   </PropertyGroup>
 
 </Project>

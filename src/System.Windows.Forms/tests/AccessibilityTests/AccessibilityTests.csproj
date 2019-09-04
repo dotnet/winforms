@@ -5,8 +5,7 @@
     <RootNamespace>AccessibilityTests</RootNamespace>
     <AssemblyName>AccessibilityTests</AssemblyName>
     <RootNamespace>AccessibilityTests</RootNamespace>
-    <!--<TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>-->
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <!--<TargetFrameworks>net472;netcoreapp5.0</TargetFrameworks>-->
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <UsingToolXliff>false</UsingToolXliff>
   </PropertyGroup>
