@@ -8968,7 +8968,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="RichTextBoxIMEChange">
         <source>Occurs when the control's IME conversion status changes. (East Asian versions of OS only.)</source>
-        <target state="translated">Tiene lugar cuando cambia el estado de conversión de IME del control (sólo la versión asiática oriental del sistema operativo [OS]).</target>
+        <target state="translated">Tiene lugar cuando cambia el estado de conversión de IME del control (solo la versión asiática del este del sistema operativo [OS]).</target>
         <note />
       </trans-unit>
       <trans-unit id="RichTextBoxLinkClick">

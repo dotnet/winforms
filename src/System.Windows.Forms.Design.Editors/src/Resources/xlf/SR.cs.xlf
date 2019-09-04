@@ -64,7 +64,7 @@
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="translated">Volba barev</target>
+        <target state="translated">Výběr barev</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">

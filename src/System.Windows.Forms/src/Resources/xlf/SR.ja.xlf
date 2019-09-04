@@ -4616,7 +4616,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DateTimePickerLocalizedControlType">
         <source>date and time picker</source>
-        <target state="translated">日付と時刻の選択</target>
+        <target state="translated">日付と時刻のピッカー</target>
         <note />
       </trans-unit>
       <trans-unit id="DateTimePickerMaxDate">
