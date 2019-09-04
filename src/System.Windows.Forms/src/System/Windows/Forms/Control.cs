@@ -12826,8 +12826,8 @@ namespace System.Windows.Forms
             }
             if (!ReflectMessage(p, ref m))
             {
-                //Additional Check For Control .... TabControl truncates the Hwnd value...
-                IntPtr handle = _window.GetHandleFromID((short)NativeMethods.Util.LOWORD(m.WParam));
+                // Additional Check For Control .... TabControl truncates the Hwnd value...
+                IntPtr handle = _window.GetHandleFromWindowId((short)NativeMethods.Util.LOWORD(m.WParam));
                 if (handle != IntPtr.Zero)
                 {
                     Control control = FromHandle(handle);

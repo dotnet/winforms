@@ -84,6 +84,7 @@ namespace System.Windows.Forms
         private TabPage[] tabPages;
         private int tabPageCount;
         private int lastSelection;
+        private short _windowId;
 
         private bool rightToLeftLayout = false;
         private bool skipUpdateSize;
@@ -1358,7 +1359,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             //Add the handle to hashtable for Ids ..
-            NativeWindow.AddWindowToIDTable(this, Handle);
+            _windowId = NativeWindow.CreateWindowId(this);
             handleInTable = true;
 
             // Set the padding BEFORE setting the control's font (as done
@@ -1430,7 +1431,7 @@ namespace System.Windows.Forms
             if (handleInTable)
             {
                 handleInTable = false;
-                NativeWindow.RemoveWindowFromIDTable(Handle);
+                NativeWindow.RemoveWindowFromIDTable(_windowId);
             }
 
             base.OnHandleDestroyed(e);
