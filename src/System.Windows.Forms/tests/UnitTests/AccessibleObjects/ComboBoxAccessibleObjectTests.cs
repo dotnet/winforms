@@ -58,5 +58,17 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             UnsafeNativeMethods.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UnsafeNativeMethods.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
         }
+
+        [Theory]
+        [InlineData("Test text")]
+        [InlineData(null)]
+        public void ComboBoxEditAccessibleObject_NameNotNull(string name)
+        {
+            ComboBox comboBox = new ComboBox();
+            comboBox.AccessibleName = name;
+            comboBox.CreateControl(false);
+            object editAccessibleName = comboBox.ChildEditAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
+            Assert.NotNull(editAccessibleName);
+        }
     }
 }
