@@ -265,9 +265,9 @@ namespace System.Windows.Forms
 
                     if (oldRoot.IsAllocated)
                     {
-                        if (oldRoot.Target != null)
+                        if (oldRoot.Target is NativeWindow target)
                         {
-                            window.PreviousWindow = (NativeWindow)oldRoot.Target;
+                            window.PreviousWindow = target;
                             Debug.Assert(window.PreviousWindow._nextWindow == null, "Last window in chain should have null next ptr");
                             window.PreviousWindow._nextWindow = window;
                         }

@@ -22,11 +22,14 @@ namespace System.Windows.Forms
 
             internal WindowClass _next;
             internal string _className;
-            private NativeMethods.ClassStyle _classStyle;
             internal string _windowClassName;
-            private IntPtr _defaultWindProc;
-            private NativeMethods.WndProc _windProc;
             internal NativeWindow _targetWindow;
+
+            private readonly NativeMethods.ClassStyle _classStyle;
+            private IntPtr _defaultWindProc;
+
+            // This needs to be a field so the GC doesn't collect the managed callback
+            private NativeMethods.WndProc _windProc;
 
             // There is only ever one AppDomain
             private static readonly string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
