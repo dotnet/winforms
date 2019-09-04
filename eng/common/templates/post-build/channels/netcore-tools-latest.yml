@@ -3,6 +3,8 @@ parameters:
   symbolPublishingAdditionalParameters: ''
   artifactsPublishingAdditionalParameters: ''
   publishInstallersAndChecksums: false
+  publishToAzureDevOpsFeeds: false
+  azureDevOpsToolsFeed: 'https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json'
 
 stages:
 - stage: NetCore_Tools_Latest_Publish
@@ -108,6 +110,11 @@ stages:
             /p:InstallersAzureAccountKey=$(dotnetcli-storage-key)
             /p:ChecksumsTargetStaticFeed=$(ChecksumsBlobFeedUrl)
             /p:ChecksumsAzureAccountKey=$(dotnetclichecksums-storage-key)
+            /p:PublishToAzureDevOpsNuGetFeeds=${{ parameters.publishToAzureDevOpsFeeds }}
+            /p:AzureDevOpsStaticShippingFeed=${{ parameters.azureDevOpsToolsFeed }}
+            /p:AzureDevOpsStaticShippingFeedKey='$(dn-bot-dnceng-artifact-feeds-rw)'
+            /p:AzureDevOpsStaticTransportFeed=${{ parameters.azureDevOpsToolsFeed }}
+            /p:AzureDevOpsStaticTransportFeedKey='$(dn-bot-dnceng-artifact-feeds-rw)
             ${{ parameters.artifactsPublishingAdditionalParameters }}
         
       - task: NuGetCommand@2
