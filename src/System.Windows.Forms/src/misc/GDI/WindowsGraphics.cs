@@ -21,17 +21,15 @@ namespace System.Windows.Forms.Internal
     ///  Note: WindowsGraphics is a stateful component, DC properties are persisted from
     ///  method calls, as opposed to Graphics (GDI+) which performs attomic operations and
     ///  always restores the hdc.
+    ///
     ///  The underlying hdc is always saved and restored on dispose so external HDCs won't
     ///  be modified by WindowsGraphics.  So we don't need to restore previous objects into
     ///  the dc in method calls.
     ///</summary>
     internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
-        // Wrapper around the window dc this object refers to.
-        // Note: this dc is only disposed when owned (created) by the WindowsGraphics.
-        DeviceContext dc;
-        bool disposeDc;
-        Graphics graphics; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
+        private bool _disposeDc;
+        private Graphics _graphics; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
 
 #if GDI_FINALIZATION_WATCH
         private string AllocationSite = DbgUtil.StackTrace;
@@ -42,8 +40,8 @@ namespace System.Windows.Forms.Internal
         public WindowsGraphics(DeviceContext dc)
         {
             Debug.Assert(dc != null, "null dc!");
-            this.dc = dc;
-            this.dc.SaveHdc();
+            DeviceContext = dc;
+            DeviceContext.SaveHdc();
             //this.disposeDc = false; // the dc is not owned by this object.
         }
 
@@ -57,7 +55,7 @@ namespace System.Windows.Forms.Internal
             DeviceContext dc = DeviceContext.FromCompatibleDC(IntPtr.Zero);
             WindowsGraphics wg = new WindowsGraphics(dc)
             {
-                disposeDc = true // we create it, we dispose it.
+                _disposeDc = true // we create it, we dispose it.
             };
 
             return wg;
@@ -73,7 +71,7 @@ namespace System.Windows.Forms.Internal
             DeviceContext dc = DeviceContext.FromCompatibleDC(screenDC);
             WindowsGraphics wg = new WindowsGraphics(dc)
             {
-                disposeDc = true // we create it, we dispose it.
+                _disposeDc = true // we create it, we dispose it.
             };
 
             return wg;
@@ -84,7 +82,7 @@ namespace System.Windows.Forms.Internal
             DeviceContext dc = DeviceContext.FromHwnd(hWnd);
             WindowsGraphics wg = new WindowsGraphics(dc)
             {
-                disposeDc = true // we create it, we dispose it.
+                _disposeDc = true // we create it, we dispose it.
             };
 
             return wg;
@@ -97,7 +95,7 @@ namespace System.Windows.Forms.Internal
             DeviceContext dc = DeviceContext.FromHdc(hDc);
             WindowsGraphics wg = new WindowsGraphics(dc)
             {
-                disposeDc = true // we create it, we dispose it.
+                _disposeDc = true // we create it, we dispose it.
             };
 
             return wg;
@@ -127,10 +125,7 @@ namespace System.Windows.Forms.Internal
         ///  things get a lot more complicated.
         /// </summary>
         public static WindowsGraphics FromGraphics(Graphics g)
-        {
-            ApplyGraphicsProperties properties = ApplyGraphicsProperties.All;
-            return WindowsGraphics.FromGraphics(g, properties);
-        }
+            => FromGraphics(g, ApplyGraphicsProperties.All);
 
         public static WindowsGraphics FromGraphics(Graphics g, ApplyGraphicsProperties properties)
         {
@@ -177,8 +172,8 @@ namespace System.Windows.Forms.Internal
                 }
             }
 
-            WindowsGraphics wg = WindowsGraphics.FromHdc(g.GetHdc()); // This locks the Graphics object.
-            wg.graphics = g;
+            WindowsGraphics wg = FromHdc(g.GetHdc()); // This locks the Graphics object.
+            wg._graphics = g;
 
             // Apply transform and clip
             if (wr != null)
@@ -207,13 +202,7 @@ namespace System.Windows.Forms.Internal
             Dispose(false);
         }
 
-        public DeviceContext DeviceContext
-        {
-            get
-            {
-                return dc;
-            }
-        }
+        public DeviceContext DeviceContext { get; private set; }
 
         // Okay to suppress.
         //"WindowsGraphics object does not own the Graphics object.  For instance in a control’s Paint event we pass the
@@ -227,24 +216,24 @@ namespace System.Windows.Forms.Internal
 
         internal void Dispose(bool disposing)
         {
-            if (dc != null)
+            if (DeviceContext != null)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
                 try
                 {
                     // Restore original dc.
-                    dc.RestoreHdc();
+                    DeviceContext.RestoreHdc();
 
-                    if (disposeDc)
+                    if (_disposeDc)
                     {
-                        dc.Dispose(disposing);
+                        DeviceContext.Dispose(disposing);
                     }
 
-                    if (graphics != null)    // if created from a Graphics object...
+                    if (_graphics != null)    // if created from a Graphics object...
                     {
-                        graphics.ReleaseHdcInternal(dc.Hdc);
-                        graphics = null;
+                        _graphics.ReleaseHdcInternal(DeviceContext.Hdc);
+                        _graphics = null;
                     }
 
                 }
@@ -258,19 +247,13 @@ namespace System.Windows.Forms.Internal
                 }
                 finally
                 {
-                    dc = null;
+                    DeviceContext = null;
                 }
             }
         }
 
-        public IntPtr GetHdc()
-        {
-            return dc.Hdc;
-        }
+        public IntPtr GetHdc() => DeviceContext.Hdc;
 
-        public void ReleaseHdc()
-        {
-            dc.Dispose();
-        }
+        public void ReleaseHdc() => DeviceContext.Dispose();
     }
 }

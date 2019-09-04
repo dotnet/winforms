@@ -150,25 +150,21 @@ namespace System.Windows.Forms
             // leave everything else 0
 
             // Set up color table --
-            int entryCount = 0;
             IntPtr palette = SafeNativeMethods.CreateHalftonePalette(new HandleRef(null, hdcS));
-            UnsafeNativeMethods.GetObject(new HandleRef(null, palette), 2, ref entryCount);
-            int[] entries = new int[entryCount];
-            SafeNativeMethods.GetPaletteEntries(new HandleRef(null, palette), 0, entryCount, entries);
+            Gdi32.GetObject(palette, out uint entryCount);
+            var entries = new Gdi32.PALETTEENTRY[entryCount];
+            Gdi32.GetPaletteEntries(palette, entries);
             int[] colors = new int[entryCount];
             for (int i = 0; i < entryCount; i++)
             {
-                int entry = entries[i];
-                colors[i]
-                = (entry & unchecked((int)0xff000000)) >> 6 // red
-                  + (entry & 0x00ff0000) >> 4 // blue
-                  + (entry & 0x0000ff00) >> 2; // green
+                Gdi32.PALETTEENTRY entry = entries[i];
+                colors[i] = entry.peRed >> 6 + entry.peBlue >> 4 + entry.peGreen >> 2;
             }
             Gdi32.DeleteObject(palette);
 
-            IntPtr address = Marshal.AllocCoTaskMem(Marshal.SizeOf(header) + entryCount * 4);
+            IntPtr address = Marshal.AllocCoTaskMem(Marshal.SizeOf(header) + (int)entryCount * 4);
             Marshal.StructureToPtr(header, address, false);
-            Marshal.Copy(colors, 0, (IntPtr)((long)address + Marshal.SizeOf(header)), entryCount);
+            Marshal.Copy(colors, 0, (IntPtr)((long)address + Marshal.SizeOf(header)), (int)entryCount);
             return address;
         }
 

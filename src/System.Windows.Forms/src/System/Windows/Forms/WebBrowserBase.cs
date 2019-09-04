@@ -353,7 +353,7 @@ namespace System.Windows.Forms
                             time = SafeNativeMethods.GetTickCount()
                         };
 
-                        UnsafeNativeMethods.GetCursorPos(out Point p);
+                        User32.GetCursorPos(out Point p);
                         msg.pt = p;
                         if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                         {

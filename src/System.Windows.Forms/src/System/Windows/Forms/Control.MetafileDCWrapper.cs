@@ -109,8 +109,7 @@ namespace System.Windows.Forms
                     // Restore original bitmap
                     Gdi32.SelectObject(hdcSrc, hBitmap);
 
-                    NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
-                    if (UnsafeNativeMethods.GetObject(new HandleRef(null, hBitmap), Marshal.SizeOf(bmp), bmp) == 0)
+                    if (!Gdi32.GetObject(hBitmap, out Gdi32.BITMAP bmp))
                     {
                         return false;
                     }
@@ -121,7 +120,7 @@ namespace System.Windows.Forms
                         bmiHeader_biWidth = bmp.bmWidth,
                         bmiHeader_biHeight = bmp.bmHeight,
                         bmiHeader_biPlanes = 1,
-                        bmiHeader_biBitCount = bmp.bmBitsPixel,
+                        bmiHeader_biBitCount = (short)bmp.bmBitsPixel,
                         bmiHeader_biCompression = NativeMethods.BI_RGB,
                         bmiHeader_biSizeImage = 0,               //Not needed since using BI_RGB
                         bmiHeader_biXPelsPerMeter = 0,

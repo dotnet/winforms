@@ -5,6 +5,8 @@
 using System.Diagnostics;
 using System.Drawing;
 
+using static Interop;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
@@ -12,18 +14,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
     {
-        object lastManaged;
-        IntPtr lastNativeHandle;
-        WeakReference pictureRef;
-        IntPtr lastPalette = IntPtr.Zero;
+        private object _lastManaged;
+        private IntPtr _lastNativeHandle;
+        private WeakReference _pictureRef;
 
-        Type pictureType = typeof(Bitmap);
+        private Type _pictureType = typeof(Bitmap);
 
         public Com2PictureConverter(Com2PropertyDescriptor pd)
         {
             if (pd.DISPID == NativeMethods.ActiveX.DISPID_MOUSEICON || pd.Name.IndexOf("Icon") != -1)
             {
-                pictureType = typeof(Icon);
+                _pictureType = typeof(Icon);
             }
         }
 
@@ -34,7 +35,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return pictureType;
+                return _pictureType;
             }
         }
 
@@ -48,42 +49,42 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
 
-            Debug.Assert(nativeValue is UnsafeNativeMethods.IPicture, "nativevalue is not IPicture");
+            Debug.Assert(nativeValue is Ole32.IPicture, "nativevalue is not IPicture");
 
-            UnsafeNativeMethods.IPicture nativePicture = (UnsafeNativeMethods.IPicture)nativeValue;
-            IntPtr handle = nativePicture.GetHandle();
+            Ole32.IPicture nativePicture = (Ole32.IPicture)nativeValue;
+            IntPtr handle = (IntPtr)nativePicture.Handle;
 
-            if (lastManaged != null && handle == lastNativeHandle)
+            if (_lastManaged != null && handle == _lastNativeHandle)
             {
-                return lastManaged;
+                return _lastManaged;
             }
 
-            lastNativeHandle = handle;
-            //lastPalette = nativePicture.GetHPal();
             if (handle != IntPtr.Zero)
             {
-                switch (nativePicture.GetPictureType())
+                switch ((Ole32.PICTYPE)nativePicture.Type)
                 {
-                    case NativeMethods.Ole.PICTYPE_ICON:
-                        pictureType = typeof(Icon);
-                        lastManaged = Icon.FromHandle(handle);
+                    case Ole32.PICTYPE.ICON:
+                        _pictureType = typeof(Icon);
+                        _lastManaged = Icon.FromHandle(handle);
                         break;
-                    case NativeMethods.Ole.PICTYPE_BITMAP:
-                        pictureType = typeof(Bitmap);
-                        lastManaged = Image.FromHbitmap(handle);
+                    case Ole32.PICTYPE.BITMAP:
+                        _pictureType = typeof(Bitmap);
+                        _lastManaged = Image.FromHbitmap(handle);
                         break;
                     default:
                         Debug.Fail("Unknown picture type");
-                        break;
+                        return null;
                 }
-                pictureRef = new WeakReference(nativePicture);
+
+                _lastNativeHandle = handle;
+                _pictureRef = new WeakReference(nativePicture);
             }
             else
             {
-                lastManaged = null;
-                pictureRef = null;
+                _lastManaged = null;
+                _pictureRef = null;
             }
-            return lastManaged;
+            return _lastManaged;
         }
 
         /// <summary>
@@ -91,50 +92,53 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
-            // don't cancel the set
+            // Don't cancel the set
             cancelSet = false;
 
-            if (lastManaged != null && lastManaged.Equals(managedValue) && pictureRef != null && pictureRef.IsAlive)
+            if (_lastManaged?.Equals(managedValue) == true)
             {
-                return pictureRef.Target;
+                object target = _pictureRef?.Target;
+                if (target != null)
+                {
+                    return target;
+                }
             }
 
-            // we have to build an IPicture
-            lastManaged = managedValue;
-
+            // We have to build an IPicture
             if (managedValue != null)
             {
-                Guid g = typeof(UnsafeNativeMethods.IPicture).GUID;
-                NativeMethods.PICTDESC pictdesc = null;
-                bool own = false;
+                BOOL own = BOOL.FALSE;
 
-                if (lastManaged is Icon)
+                Ole32.PICTDESC pictdesc;
+                if (managedValue is Icon icon)
                 {
-                    pictdesc = NativeMethods.PICTDESC.CreateIconPICTDESC(((Icon)lastManaged).Handle);
+                    pictdesc = Ole32.PICTDESC.FromIcon(icon, copy: false);
                 }
-                else if (lastManaged is Bitmap)
+                else if (managedValue is Bitmap bitmap)
                 {
-                    pictdesc = NativeMethods.PICTDESC.CreateBitmapPICTDESC(((Bitmap)lastManaged).GetHbitmap(), lastPalette);
-                    own = true;
+                    pictdesc = Ole32.PICTDESC.FromBitmap(bitmap);
+                    own = BOOL.TRUE;
                 }
                 else
                 {
-                    Debug.Fail("Unknown Image type: " + managedValue.GetType().Name);
+                    Debug.Fail($"Unknown Image type: {managedValue.GetType().Name}");
+                    return null;
                 }
 
-                UnsafeNativeMethods.IPicture pict = UnsafeNativeMethods.OleCreatePictureIndirect(pictdesc, ref g, own);
-                lastNativeHandle = pict.GetHandle();
-                pictureRef = new WeakReference(pict);
+                Guid iid = typeof(Ole32.IPicture).GUID;
+                Ole32.IPicture pict = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(ref pictdesc, ref iid, own);
+                _lastManaged = managedValue;
+                _lastNativeHandle = (IntPtr)pict.Handle;
+                _pictureRef = new WeakReference(pict);
                 return pict;
             }
             else
             {
-                lastManaged = null;
-                lastNativeHandle = lastPalette = IntPtr.Zero;
-                pictureRef = null;
+                _lastManaged = null;
+                _lastNativeHandle = IntPtr.Zero;
+                _pictureRef = null;
                 return null;
             }
         }
     }
 }
-

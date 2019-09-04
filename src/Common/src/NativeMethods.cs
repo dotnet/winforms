@@ -1651,52 +1651,6 @@ namespace System.Windows.Forms
             public bool fStrikethrough;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class PICTDESCbmp
-        {
-            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCbmp>();
-            internal int picType = Ole.PICTYPE_BITMAP;
-            internal IntPtr hbitmap = IntPtr.Zero;
-            internal IntPtr hpalette = IntPtr.Zero;
-            internal int unused = 0;
-
-            public PICTDESCbmp(Drawing.Bitmap bitmap)
-            {
-                hbitmap = bitmap.GetHbitmap();
-                // gpr: What about palettes?
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class PICTDESCicon
-        {
-            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCicon>();
-            internal int picType = Ole.PICTYPE_ICON;
-            internal IntPtr hicon = IntPtr.Zero;
-            internal int unused1 = 0;
-            internal int unused2 = 0;
-
-            public PICTDESCicon(Drawing.Icon icon)
-            {
-                hicon = SafeNativeMethods.CopyImage(new HandleRef(icon, icon.Handle), NativeMethods.IMAGE_ICON, icon.Size.Width, icon.Size.Height, 0);
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class PICTDESCemf
-        {
-            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCemf>();
-            internal int picType = Ole.PICTYPE_ENHMETAFILE;
-            internal IntPtr hemf = IntPtr.Zero;
-            internal int unused1 = 0;
-            internal int unused2 = 0;
-
-            public PICTDESCemf(Drawing.Imaging.Metafile metafile)
-            {
-                //gpr                hemf = metafile.CopyHandle();
-            }
-        }
-
         public struct USEROBJECTFLAGS
         {
             public int fInherit;
@@ -2377,40 +2331,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class PICTDESC
-        {
-            internal int cbSizeOfStruct;
-            public int picType;
-            internal IntPtr union1;
-            internal int union2;
-            internal int union3;
-
-            public static PICTDESC CreateBitmapPICTDESC(IntPtr hbitmap, IntPtr hpal)
-            {
-                PICTDESC pictdesc = new PICTDESC
-                {
-                    cbSizeOfStruct = 16,
-                    picType = Ole.PICTYPE_BITMAP,
-                    union1 = hbitmap,
-                    union2 = (int)(((long)hpal) & 0xffffffff),
-                    union3 = (int)(((long)hpal) >> 32)
-                };
-                return pictdesc;
-            }
-
-            public static PICTDESC CreateIconPICTDESC(IntPtr hicon)
-            {
-                PICTDESC pictdesc = new PICTDESC
-                {
-                    cbSizeOfStruct = 12,
-                    picType = Ole.PICTYPE_ICON,
-                    union1 = hicon
-                };
-                return pictdesc;
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public sealed class tagFONTDESC
         {
             public int cbSizeofstruct = Marshal.SizeOf<tagFONTDESC>();
@@ -2452,28 +2372,6 @@ namespace System.Windows.Forms
         }
 
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class BITMAP
-        {
-            public int bmType = 0;
-            public int bmWidth = 0;
-            public int bmHeight = 0;
-            public int bmWidthBytes = 0;
-            public short bmPlanes = 0;
-            public short bmBitsPixel = 0;
-            public IntPtr bmBits = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ICONINFO
-        {
-            public int fIcon;
-            public int xHotspot;
-            public int yHotspot;
-            public IntPtr hbmMask;
-            public IntPtr hbmColor;
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct LOGBRUSH
@@ -2693,16 +2591,6 @@ namespace System.Windows.Forms
             public int biYPelsPerMeter = 0;
             public int biClrUsed = 0;
             public int biClrImportant = 0;
-        }
-
-        public class Ole
-        {
-            public const int PICTYPE_UNINITIALIZED = -1;
-            public const int PICTYPE_NONE = 0;
-            public const int PICTYPE_BITMAP = 1;
-            public const int PICTYPE_METAFILE = 2;
-            public const int PICTYPE_ICON = 3;
-            public const int PICTYPE_ENHMETAFILE = 4;
         }
 
         [StructLayout(LayoutKind.Sequential)]

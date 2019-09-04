@@ -407,7 +407,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Props!
         /// </summary>
-        internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
+        internal PropertyDescriptorCollection GetProperties(object component)
         {
             Com2Properties propsInfo = GetPropsInfo(component);
 
@@ -591,7 +591,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
             {
-                return _handler.GetProperties(_instance, null);
+                return _handler.GetProperties(_instance);
             }
 
             /// <summary>
@@ -599,7 +599,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
             {
-                return _handler.GetProperties(_instance, attributes);
+                return _handler.GetProperties(_instance);
             }
 
             /// <summary>

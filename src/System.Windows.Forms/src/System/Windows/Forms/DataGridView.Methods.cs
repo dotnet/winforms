@@ -3356,7 +3356,7 @@ namespace System.Windows.Forms
         private void CaptureMouse(Rectangle cursorClip)
         {
             CaptureInternal = true;
-            Cursor.ClipInternal = RectangleToScreen(cursorClip);
+            Cursor.Clip = RectangleToScreen(cursorClip);
         }
 
         private void ClearRegionCache()
@@ -25169,7 +25169,7 @@ namespace System.Windows.Forms
 
         private void RealeaseMouse()
         {
-            Cursor.ClipInternal = Rectangle.Empty;
+            Cursor.Clip = Rectangle.Empty;
             CaptureInternal = false;
         }
 
