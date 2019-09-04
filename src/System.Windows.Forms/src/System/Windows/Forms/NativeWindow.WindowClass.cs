@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     public partial class NativeWindow
     {
         /// <summary>
-        ///  WindowClass encapsulates a window class.
+        ///  WindowClass encapsulates a Windows window class.
         /// </summary>
         private class WindowClass
         {
@@ -22,11 +22,10 @@ namespace System.Windows.Forms
 
             internal WindowClass _next;
             internal string _className;
-            internal NativeMethods.ClassStyle _classStyle;
+            private NativeMethods.ClassStyle _classStyle;
             internal string _windowClassName;
-            internal int _hashCode;
-            internal IntPtr _defaultWindowProc;
-            internal NativeMethods.WndProc _windowProc;
+            private IntPtr _defaultWindProc;
+            private NativeMethods.WndProc _windProc;
             internal NativeWindow _targetWindow;
 
             // There is only ever one AppDomain
@@ -46,7 +45,7 @@ namespace System.Windows.Forms
                 Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
 
                 // Set the window procedure to the default window procedure
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defaultWindowProc));
+                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defaultWindProc));
                 _targetWindow.AssignHandle(hWnd);
                 return _targetWindow.Callback(hWnd, msg, wparam, lparam);
             }
@@ -141,9 +140,8 @@ namespace System.Windows.Forms
                     windowClass.hbrBackground = Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH);
                     windowClass.style = _classStyle;
 
-                    _defaultWindowProc = DefaultWindowProc;
+                    _defaultWindProc = DefaultWindowProc;
                     localClassName = "Window." + Convert.ToString((int)_classStyle, 16);
-                    _hashCode = 0;
                 }
                 else
                 {
@@ -155,13 +153,12 @@ namespace System.Windows.Forms
                     }
 
                     localClassName = _className;
-                    _defaultWindowProc = windowClass.lpfnWndProc;
-                    _hashCode = _className.GetHashCode();
+                    _defaultWindProc = windowClass.lpfnWndProc;
                 }
 
                 _windowClassName = GetFullClassName(localClassName);
-                _windowProc = new NativeMethods.WndProc(Callback);
-                windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windowProc);
+                _windProc = new NativeMethods.WndProc(Callback);
+                windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windProc);
                 windowClass.hInstance = Kernel32.GetModuleHandleW(null);
 
                 fixed (char* c = _windowClassName)
@@ -170,7 +167,7 @@ namespace System.Windows.Forms
 
                     if (UnsafeNativeMethods.RegisterClassW(ref windowClass) == 0)
                     {
-                        _windowProc = null;
+                        _windProc = null;
                         throw new Win32Exception();
                     }
                 }
