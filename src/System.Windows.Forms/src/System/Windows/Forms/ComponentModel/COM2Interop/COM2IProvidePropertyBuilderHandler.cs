@@ -28,7 +28,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return false;
             }
 
-            if (valid != BOOL.FALSE && (bldrType[0] & _CTLBLDTYPE.CTLBLDTYPE_FINTERNALBUILDER) == 0)
+            if (valid.IsTrue() && (bldrType[0] & _CTLBLDTYPE.CTLBLDTYPE_FINTERNALBUILDER) == 0)
             {
                 Debug.Fail("Property Browser doesn't support standard builders -- NYI");
                 return false;

@@ -4865,25 +4865,15 @@ namespace System.Windows.Forms
             }
 
             // Process MDI accelerator keys.
-
             bool retValue = false;
-
-            NativeMethods.MSG win32Message = new NativeMethods.MSG
-            {
-                message = msg.Msg,
-                wParam = msg.WParam,
-                lParam = msg.LParam,
-                hwnd = msg.HWnd
-            };
-
+            User32.MSG win32Message = msg;
             if (ctlClient != null && ctlClient.Handle != IntPtr.Zero &&
-                UnsafeNativeMethods.TranslateMDISysAccel(ctlClient.Handle, ref win32Message))
+                User32.TranslateMDISysAccel(ctlClient.Handle, ref win32Message).IsTrue())
             {
-
                 retValue = true;
             }
 
-            msg.Msg = win32Message.message;
+            msg.Msg = (int)win32Message.message;
             msg.WParam = win32Message.wParam;
             msg.LParam = win32Message.lParam;
             msg.HWnd = win32Message.hwnd;

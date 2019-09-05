@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         ///  display rectangle.  When the message is received, the control calls
         ///  updateTabSelection() to layout the TabPages correctly.
         /// </summary>
-        private readonly int tabBaseReLayoutMessage = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_TabBaseReLayout");
+        private readonly User32.WindowMessage tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_TabBaseReLayout");
 
         //state
         private TabPage[] tabPages;
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
         internal int AddNativeTabPage(NativeMethods.TCITEM_T tcitem)
         {
             int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_INSERTITEM, tabPageCount + 1, tcitem);
-            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), tabBaseReLayoutMessage, IntPtr.Zero, IntPtr.Zero);
+            User32.PostMessageW(this, tabBaseReLayoutMessage);
             return index;
         }
 
@@ -2133,14 +2133,10 @@ namespace System.Windows.Forms
             Invalidate(true);
 
             // Remove other TabBaseReLayout messages from the message queue
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            IntPtr hwnd = Handle;
-            while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, hwnd),
-                                       tabBaseReLayoutMessage,
-                                       tabBaseReLayoutMessage,
-                                       NativeMethods.PM_REMOVE))
+            var msg = new User32.MSG();
+            while (User32.PeekMessageW(ref msg, this, tabBaseReLayoutMessage, tabBaseReLayoutMessage).IsTrue())
             {
-                ; // NULL loop
+                // No-op.
             }
         }
 
@@ -2212,7 +2208,7 @@ namespace System.Windows.Forms
                     }
                     break;
             }
-            if (m.Msg == tabBaseReLayoutMessage)
+            if (m.Msg == (int)tabBaseReLayoutMessage)
             {
                 WmTabBaseReLayout(ref m);
                 return;

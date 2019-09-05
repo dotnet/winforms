@@ -907,13 +907,12 @@ namespace System.Windows.Forms
                     if (!IsDisposed)
                     {
                         if (_numPaintsServiced == 0)
-                        { // protect against re-entrancy.
+                        {
+                            // protect against re-entrancy.
                             try
                             {
-                                NativeMethods.MSG msg = new NativeMethods.MSG();
-                                while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, IntPtr.Zero),
-                                                           WindowMessages.WM_PAINT, WindowMessages.WM_PAINT,
-                                                           NativeMethods.PM_REMOVE))
+                                var msg = new User32.MSG();
+                                while (User32.PeekMessageW(ref msg, msgMin: User32.WindowMessage.WM_PAINT, msgMax: User32.WindowMessage.WM_PAINT).IsTrue())
                                 {
                                     SafeNativeMethods.UpdateWindow(new HandleRef(null, msg.hwnd));
 

@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     {
         private static readonly object s_helpRequestEvent = new object();
         private const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
-        private static int s_helpMsg;
+        private static User32.WindowMessage s_helpMsg;
 
         private IntPtr _defOwnerWndProc;
 
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == s_helpMsg)
+            if (msg == (int)s_helpMsg)
             {
                 if (NativeWindow.WndProcShouldBeDebuggable)
                 {
@@ -189,9 +189,9 @@ namespace System.Windows.Forms
                     hwndOwner = native.Handle;
                 }
 
-                if (s_helpMsg == 0)
+                if (s_helpMsg == (User32.WindowMessage)0)
                 {
-                    s_helpMsg = SafeNativeMethods.RegisterWindowMessage("commdlg_help");
+                    s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
                 }
 
                 NativeMethods.WndProc ownerProc = new NativeMethods.WndProc(OwnerWndProc);

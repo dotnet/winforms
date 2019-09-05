@@ -124,23 +124,6 @@ namespace System.Windows.Forms.Design
             OLECLOSE_NOSAVE = 1,
             OLECLOSE_PROMPTSAVE = 2;
 
-        public const int
-            PM_NOREMOVE = 0x0000,
-            PM_REMOVE = 0x0001;
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MSG
-        {
-            public IntPtr hwnd;
-            public int message;
-            public IntPtr wParam;
-            public IntPtr lParam;
-
-            public int time;
-
-            public Point pt;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class COMRECT
         {
@@ -181,11 +164,11 @@ namespace System.Windows.Forms.Design
             public readonly IntPtr hwndFrame;
         }
 
-        [ComVisible(true)]
         [ComImport]
+        [ComVisible(true)]
         [Guid("00000116-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceFrame
+        public unsafe interface IOleInPlaceFrame
         {
             IntPtr GetWindow();
 
@@ -224,11 +207,10 @@ namespace System.Windows.Forms.Design
             void EnableModeless(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnable);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int TranslateAccelerator(
-                [In] ref MSG lpmsg,
-                [In] [MarshalAs(UnmanagedType.U2)] short wID);
+            HRESULT TranslateAccelerator(
+                User32.MSG* lpmsg,
+                ushort wID);
         }
 
         [ComVisible(true)]
@@ -257,21 +239,20 @@ namespace System.Windows.Forms.Design
                 [In] [MarshalAs(UnmanagedType.LPWStr)] string pszObjName);
         }
 
-        [ComVisible(true)]
         [ComImport]
+        [ComVisible(true)]
         [Guid("00000117-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceActiveObject
+        public unsafe interface IOleInPlaceActiveObject
         {
             int GetWindow(out IntPtr hwnd);
 
             void ContextSensitiveHelp(
                 [In] [MarshalAs(UnmanagedType.I4)] int fEnterMode);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int TranslateAccelerator(
-                [In] ref MSG lpmsg);
+            HRESULT TranslateAccelerator(
+                User32.MSG* lpmsg);
 
             void OnFrameWindowActivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fActivate);
@@ -369,7 +350,7 @@ namespace System.Windows.Forms.Design
                 [In] [Out] tagOIFI lpFrameInfo);
 
             [PreserveSig]
-            Interop.HRESULT Scroll(Size scrollExtant);
+            HRESULT Scroll(Size scrollExtant);
 
             void OnUIDeactivate(
                 [In] [MarshalAs(UnmanagedType.I4)] int fUndoable);
@@ -386,7 +367,21 @@ namespace System.Windows.Forms.Design
                 [In] COMRECT lprcPosRect);
         }
 
-        public static readonly int WM_MOUSEENTER = Util.RegisterWindowMessage("WinFormsMouseEnter");
+        private static uint wmMouseEnterMessage = uint.MaxValue;
+
+        public static User32.WindowMessage WM_MOUSEENTER
+        {
+            get
+            {
+                if (wmMouseEnterMessage == uint.MaxValue)
+                {
+                    wmMouseEnterMessage = (uint)User32.RegisterWindowMessageW("WinFormsMouseEnter");
+                }
+
+                return (User32.WindowMessage)wmMouseEnterMessage;
+            }
+        }
+        
         public static readonly int HDN_ENDTRACK = HDN_ENDTRACKW;
 
         public const int WS_DISABLED = 0x08000000;
@@ -663,9 +658,6 @@ namespace System.Windows.Forms.Design
             {
                 return n & 0xffff;
             }
-
-            [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-            internal static extern int RegisterWindowMessage(string msg);
         }
 
         internal class ActiveX

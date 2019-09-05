@@ -146,23 +146,21 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers)
+        unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, uint grfModifiers)
         {
+            if (pMsg == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
             Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
 
-            Message msg = new Message
-            {
-                Msg = pMsg.message,
-                WParam = pMsg.wParam,
-                LParam = pMsg.lParam,
-                HWnd = pMsg.hwnd
-            };
-
+            Message msg = *pMsg;
             try
             {
                 bool f = ((Control)Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
-                return f ? NativeMethods.S_OK : NativeMethods.S_FALSE;
+                return f ? HRESULT.S_OK : HRESULT.S_FALSE;
             }
             finally
             {

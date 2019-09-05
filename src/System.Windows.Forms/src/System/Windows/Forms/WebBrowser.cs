@@ -1639,26 +1639,26 @@ namespace System.Windows.Forms
                 return NativeMethods.S_OK;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(ref NativeMethods.MSG msg, ref Guid group, int nCmdID)
+            unsafe HRESULT UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(User32.MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
             {
-                //
+                if (lpMsg == null || pguidCmdGroup == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 // Returning S_FALSE will allow the native control to do default processing,
                 // i.e., execute the shortcut key. Returning S_OK will cancel the shortcut key.
-
                 WebBrowser wb = (WebBrowser)Host;
-
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
-                    int keyCode = (int)msg.wParam | (int)Control.ModifierKeys;
-
-                    if (msg.message != WindowMessages.WM_CHAR
-                            && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                    int keyCode = (int)lpMsg->wParam | (int)Control.ModifierKeys;
+                    if (lpMsg->message != User32.WindowMessage.WM_CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                     {
-                        return NativeMethods.S_OK;
+                        return HRESULT.S_OK;
                     }
-                    return NativeMethods.S_FALSE;
                 }
-                return NativeMethods.S_FALSE;
+
+                return HRESULT.S_FALSE;
             }
 
             int UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut)

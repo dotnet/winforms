@@ -1005,9 +1005,6 @@ namespace System.Windows.Forms
         PRF_CLIENT = 0x00000004,
         PRF_ERASEBKGND = 0x00000008,
         PRF_CHILDREN = 0x00000010,
-        PM_NOREMOVE = 0x0000,
-        PM_REMOVE = 0x0001,
-        PM_NOYIELD = 0x0002,
         PBM_SETRANGE = (0x0400 + 1),
         PBM_SETPOS = (0x0400 + 2),
         PBM_SETSTEP = (0x0400 + 4),
@@ -1501,30 +1498,32 @@ namespace System.Windows.Forms
         public const int PD_RESULT_PRINT = 1;
         public const int PD_RESULT_APPLY = 2;
 
-        private static int wmMouseEnterMessage = -1;
+        private static uint wmMouseEnterMessage = uint.MaxValue;
 
-        public static int WM_MOUSEENTER
+        public static User32.WindowMessage WM_MOUSEENTER
         {
             get
             {
-                if (wmMouseEnterMessage == -1)
+                if (wmMouseEnterMessage == uint.MaxValue)
                 {
-                    wmMouseEnterMessage = SafeNativeMethods.RegisterWindowMessage("WinFormsMouseEnter");
+                    wmMouseEnterMessage = (uint)User32.RegisterWindowMessageW("WinFormsMouseEnter");
                 }
-                return wmMouseEnterMessage;
+
+                return (User32.WindowMessage)wmMouseEnterMessage;
             }
         }
 
-        private static int wmUnSubclass = -1;
-        public static int WM_UIUNSUBCLASS
+        private static uint wmUnSubclass = uint.MaxValue;
+        public static User32.WindowMessage WM_UIUNSUBCLASS
         {
             get
             {
-                if (wmUnSubclass == -1)
+                if (wmUnSubclass == uint.MaxValue)
                 {
-                    wmUnSubclass = SafeNativeMethods.RegisterWindowMessage("WinFormsUnSubclass");
+                    wmUnSubclass = (uint)User32.RegisterWindowMessageW("WinFormsUnSubclass");
                 }
-                return wmUnSubclass;
+
+                return (User32.WindowMessage)wmUnSubclass;
             }
         }
 
@@ -1963,17 +1962,6 @@ namespace System.Windows.Forms
 
             // This is supported on Windows vista and later
             public int iPaddedBorderWidth;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MSG
-        {
-            public IntPtr hwnd;
-            public int message;
-            public IntPtr wParam;
-            public IntPtr lParam;
-            public int time;
-            public Point pt;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2984,32 +2972,6 @@ namespace System.Windows.Forms
             VT_ILLEGAL = 65535,
             VT_ILLEGALMASKED = 4095,
             VT_TYPEMASK = 4095
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TOOLINFO_T
-        {
-            public int cbSize = Marshal.SizeOf<TOOLINFO_T>();
-            public int uFlags;
-            public IntPtr hwnd;
-            public IntPtr uId;
-            public Interop.RECT rect;
-            public IntPtr hinst = IntPtr.Zero;
-            public string lpszText;
-            public IntPtr lParam = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TOOLINFO_TOOLTIP
-        {
-            public int cbSize = Marshal.SizeOf<TOOLINFO_TOOLTIP>();
-            public int uFlags;
-            public IntPtr hwnd;
-            public IntPtr uId;
-            public Interop.RECT rect;
-            public IntPtr hinst = IntPtr.Zero;
-            public IntPtr lpszText;
-            public IntPtr lParam = IntPtr.Zero;
         }
 
         [StructLayout(LayoutKind.Sequential)]

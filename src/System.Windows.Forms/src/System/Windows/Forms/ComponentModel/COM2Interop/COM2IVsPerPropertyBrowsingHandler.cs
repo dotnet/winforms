@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 HRESULT hr = ((NativeMethods.IVsPerPropertyBrowsing)propDesc.TargetObject).DisplayChildProperties(propDesc.DISPID, &pfHide);
                 if (hr == HRESULT.S_OK)
                 {
-                    return pfHide != BOOL.FALSE;
+                    return pfHide.IsTrue();
                 }
             }
 
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     hr = vsObj.HideProperty(sender.DISPID, &pfHide);
                     if (hr == HRESULT.S_OK)
                     {
-                        attrEvent.Add(pfHide != BOOL.FALSE ? BrowsableAttribute.No : BrowsableAttribute.Yes);
+                        attrEvent.Add(pfHide.IsTrue() ? BrowsableAttribute.No : BrowsableAttribute.Yes);
                     }
                 }
 
@@ -122,7 +122,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     BOOL pfDisplay = BOOL.FALSE;
                     hr = vsObj.DisplayChildProperties(sender.DISPID, &pfDisplay);
-                    if (hr == HRESULT.S_OK && pfDisplay != BOOL.FALSE)
+                    if (hr == HRESULT.S_OK && pfDisplay.IsTrue())
                     {
                         attrEvent.Add(BrowsableAttribute.Yes);
                     }
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 HRESULT hr = target.CanResetPropertyValue(sender.DISPID, &canReset);
                 if (hr.Succeeded())
                 {
-                    boolEvent.Value = canReset != BOOL.FALSE;
+                    boolEvent.Value = canReset.IsTrue();
                 }
             }
 
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 HRESULT hr = vsObj.IsPropertyReadOnly(sender.DISPID, &pfResult);
                 if (hr == HRESULT.S_OK)
                 {
-                    gbvevent.Value = pfResult != BOOL.FALSE;
+                    gbvevent.Value = pfResult.IsTrue();
                 }
             }
         }
@@ -200,11 +200,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = vsObj.DisplayChildProperties(sender.DISPID, &pfResult);
                     if (gveevent.TypeConverter is Com2IDispatchConverter)
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult != BOOL.FALSE));
+                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult.IsTrue()));
                     }
                     else
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult != BOOL.FALSE), gveevent.TypeConverter);
+                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == HRESULT.S_OK && pfResult.IsTrue()), gveevent.TypeConverter);
                     }
                 }
             }
@@ -234,7 +234,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // by default we say it's default
                 BOOL pfResult = BOOL.TRUE;
                 HRESULT hr = vsObj.HasDefaultValue(sender.DISPID, &pfResult);
-                if (hr == HRESULT.S_OK && pfResult == BOOL.FALSE)
+                if (hr == HRESULT.S_OK && pfResult.IsFalse())
                 {
                     // specify a default value editor
                     gbvevent.Value = true;

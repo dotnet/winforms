@@ -12,8 +12,8 @@ internal static partial class Interop
         public const uint WM_KEYFIRST       = 0x0100;
         public const uint WM_KEYLAST        = 0x0109;
         public const uint WM_IME_KEYLAST    = 0x010F;
-        public const uint WM_MOUSEFIRST     = 0x0200;
-        public const uint WM_MOUSELAST      = 0x020E;
+        public const WindowMessage WM_MOUSEFIRST = (WindowMessage)0x0200;
+        public const WindowMessage WM_MOUSELAST = (WindowMessage)0x020E;
         public const uint WM_USER           = 0x0400;
         public const uint WM_APP            = 0x8000;
 
@@ -42,8 +42,9 @@ internal static partial class Interop
                 {
                     if (s_wmUnSubclass == uint.MaxValue)
                     {
-                        s_wmUnSubclass = RegisterWindowMessageW("WinFormsUnSubclass");
+                        s_wmUnSubclass = (uint)RegisterWindowMessageW("WinFormsUnSubclass");
                     }
+
                     return (WindowMessage)s_wmUnSubclass;
                 }
             }
@@ -649,10 +650,10 @@ internal static class WindowMessageExtensions
         => message.Msg == (int)windowMessage;
 
     public static bool IsMouseMessage(this ref Message message)
-        => message.IsBetween((WindowMessage)WM_MOUSEFIRST, (WindowMessage)WM_MOUSELAST);
+        => message.IsBetween(WM_MOUSEFIRST, WM_MOUSELAST);
 
     public static bool IsMouseMessage(this ref MSG message)
-        => message.IsBetween((WindowMessage)WM_MOUSEFIRST, (WindowMessage)WM_MOUSELAST);
+        => message.IsBetween(WM_MOUSEFIRST, WM_MOUSELAST);
 
     public static bool IsKeyMessage(this ref Message message)
         => message.IsBetween((WindowMessage)WM_KEYFIRST, (WindowMessage)WM_KEYLAST);

@@ -225,22 +225,20 @@ namespace System.Windows.Forms
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
         }
-
-        //
-        // Let us assume that TAB key was pressed. In this case, we should first
-        // give a chance to the ActiveX control to see if it wants to change focus
-        // to other subitems within it. If we did not give the ActiveX control the
-        // first chance to handle the key stroke, and called base.PreProcessMessage,
-        // the focus would be changed to the next control on the form! We don't want
-        // that!!
-        //
-        // If the ActiveX control doesn't want to handle the key, it calls back into
-        // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
-        // set a flag and call back into this method. In this method, we first check
-        // if this flag is set. If so, we call base.PreProcessMessage.
-        //
-        public override bool PreProcessMessage(ref Message msg)
+        public unsafe override bool PreProcessMessage(ref Message msg)
         {
+            // Let us assume that TAB key was pressed. In this case, we should first
+            // give a chance to the ActiveX control to see if it wants to change focus
+            // to other subitems within it. If we did not give the ActiveX control the
+            // first chance to handle the key stroke, and called base.PreProcessMessage,
+            // the focus would be changed to the next control on the form! We don't want
+            // that
+
+
+            // If the ActiveX control doesn't want to handle the key, it calls back into
+            // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
+            // set a flag and call back into this method. In this method, we first check
+            // if this flag is set. If so, we call base.PreProcessMessage.
             if (IsUserMode)
             {
                 if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
@@ -250,15 +248,8 @@ namespace System.Windows.Forms
                     return base.PreProcessMessage(ref msg);
                 }
 
-                // Convert Message to NativeMethods.MSG
-                NativeMethods.MSG win32Message = new NativeMethods.MSG
-                {
-                    message = msg.Msg,
-                    wParam = msg.WParam,
-                    lParam = msg.LParam,
-                    hwnd = msg.HWnd
-                };
-
+                // Convert Message to MSG
+                User32.MSG win32Message = msg;
                 SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
                 try
                 {
@@ -266,23 +257,21 @@ namespace System.Windows.Forms
                     {
                         // Give the ActiveX control a chance to process this key by calling
                         // IOleInPlaceActiveObject::TranslateAccelerator.
-                        int hr = axOleInPlaceActiveObject.TranslateAccelerator(ref win32Message);
-
-                        if (hr == NativeMethods.S_OK)
+                        HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
+                        if (hr == HRESULT.S_OK)
                         {
                             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
                             return true;
                         }
                         else
                         {
-                            //
                             // win32Message may have been modified. Lets copy it back.
-                            msg.Msg = win32Message.message;
+                            msg.Msg = (int)win32Message.message;
                             msg.WParam = win32Message.wParam;
                             msg.LParam = win32Message.lParam;
                             msg.HWnd = win32Message.hwnd;
 
-                            if (hr == NativeMethods.S_FALSE)
+                            if (hr == HRESULT.S_FALSE)
                             {
                                 // Same code as in AxHost (ignore dialog keys here).
                                 // We have the same problem here
@@ -328,7 +317,7 @@ namespace System.Windows.Forms
         // We can't decide just by ourselves whether we can process the
         // mnemonic. We have to ask the ActiveX control for it.
         //
-        protected internal override bool ProcessMnemonic(char charCode)
+        protected internal unsafe override bool ProcessMnemonic(char charCode)
         {
             bool processed = false;
 
@@ -344,18 +333,18 @@ namespace System.Windows.Forms
                         // Sadly, we don't have a message so we must fake one ourselves.
                         // The message we are faking is a WM_SYSKEYDOWN with the right
                         // alt key setting.
-                        NativeMethods.MSG msg = new NativeMethods.MSG
+                        var msg = new User32.MSG
                         {
                             hwnd = IntPtr.Zero,
-                            message = WindowMessages.WM_SYSKEYDOWN,
+                            message = User32.WindowMessage.WM_SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
-                            time = (int)Kernel32.GetTickCount()
+                            time = Kernel32.GetTickCount()
                         };
 
                         User32.GetCursorPos(out Point p);
                         msg.pt = p;
-                        if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
+                        if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsFalse())
                         {
                             axOleControl.OnMnemonic(ref msg);
                             Focus();
@@ -481,7 +470,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m.Msg == WebBrowserHelper.REGMSG_MSG)
+                    if (m.Msg == (int)WebBrowserHelper.REGMSG_MSG)
                     {
                         m.Result = (IntPtr)WebBrowserHelper.REGMSG_RETVAL;
                     }
@@ -717,13 +706,11 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool DoVerb(int verb)
+        internal unsafe bool DoVerb(int verb)
         {
-            int hr = axOleObject.DoVerb(verb, IntPtr.Zero, ActiveXSite, 0, Handle,
-                    new NativeMethods.COMRECT(Bounds));
-
-            Debug.Assert(hr == NativeMethods.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
-            return hr == NativeMethods.S_OK;
+            HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, new NativeMethods.COMRECT(Bounds));
+            Debug.Assert(hr == HRESULT.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
+            return hr == HRESULT.S_OK;
         }
 
         //
