@@ -579,17 +579,7 @@ namespace System.Windows.Forms
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefMDIChildProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr CallWindowProc(IntPtr wndProc, IntPtr hWnd, int msg,
-                                                IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern bool GetClassInfoW(HandleRef hInstance, string lpClassName, ref NativeMethods.WNDCLASS lpWndClass);
 
         [DllImport(ExternDll.Gdi32, CharSet = CharSet.Auto)]
         public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
@@ -891,27 +881,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr WindowFromPoint(Point pt);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr CreateWindowEx(
-            int dwExStyle,
-            string lpClassName,
-            string lpWindowName,
-            int dwStyle,
-            int X,
-            int Y,
-            int nWidth,
-            int nHeight,
-            HandleRef hWndParent,
-            HandleRef hMenu,
-            HandleRef hInst,
-            [MarshalAs(UnmanagedType.AsAny)] object lpParam);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DestroyWindow(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        public static extern ushort RegisterClassW(ref NativeMethods.WNDCLASS lpWndClass);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern void PostQuitMessage(int nExitCode);

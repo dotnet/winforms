@@ -5287,37 +5287,6 @@ namespace System.Windows.Forms
                 Debug.Assert(savedCheckedItems.Contains(item), "somehow we lost track of one item");
                 savedCheckedItems.Remove(item);
             }
-#if FALSE
-            if (savedCheckedItems != null && savedCheckedItems.Length > 0) {
-                ListViewItem[] newSavedCheckedItems;
-                int index = 0;
-                if (!addItem) {
-                    int current = 0;
-                    newSavedCheckedItems = new ListViewItem[savedCheckedItems.Length -1];
-                    for(index = 0 ; index < savedCheckedItems.Length ; index++)
-                    {
-                        if (savedCheckedItems[index] == item) {
-                            current = 1;
-                            continue;
-                        }
-                        newSavedCheckedItems[index - current] = savedCheckedItems[index];
-                    }
-                }
-                else {
-                    newSavedCheckedItems = new ListViewItem[savedCheckedItems.Length +1];
-                    for(index = 0 ; index < savedCheckedItems.Length ; index++)
-                    {
-                        newSavedCheckedItems[index] = savedCheckedItems[index];
-                    }
-                    newSavedCheckedItems[index] = item;
-                }
-                savedCheckedItems = newSavedCheckedItems;
-            }
-            else if (addItem) {
-                savedCheckedItems = new ListViewItem[1];
-                savedCheckedItems[0] = item;
-            }
-#endif // FALSE
         }
 
         /// <summary>
@@ -5326,9 +5295,10 @@ namespace System.Windows.Forms
         internal void SetToolTip(ToolTip toolTip, string toolTipCaption)
         {
             this.toolTipCaption = toolTipCaption;
-            //native ListView expects tooltip HWND as a wParam and ignores lParam
+
+            // native ListView expects tooltip HWND as a wParam and ignores lParam
             IntPtr oldHandle = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
-            UnsafeNativeMethods.DestroyWindow(new HandleRef(null, oldHandle));
+            User32.DestroyWindow(oldHandle);
         }
 
         internal void SetItemImage(int index, int image)

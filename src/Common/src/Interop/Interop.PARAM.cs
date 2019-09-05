@@ -20,5 +20,28 @@ internal partial class Interop
 
         public static IntPtr FromColor(Color color)
             => (IntPtr)ColorTranslator.ToWin32(color);
+
+        /// <summary>
+        ///  Hard casts to <see langword="int" /> without bounds checks.
+        /// </summary>
+        public static int ToInt(IntPtr param) => (int)(long)param;
+
+        /// <summary>
+        ///  Hard casts to <see langword="uint" /> without bounds checks.
+        /// </summary>
+        public static uint ToUInt(IntPtr param) => (uint)(long)param;
+
+        /// <summary>
+        ///  Hard casts to <see langword="long" /> without bounds checks.
+        /// </summary>
+        /// <remarks>
+        ///  Technically not needed, but here for completeness.
+        /// </remarks>
+        public static long ToLong(IntPtr param) => (long)param;
+
+        /// <summary>
+        ///  Hard casts to <see langword="ulong" /> without bounds checks.
+        /// </summary>
+        public static ulong ToULong(IntPtr param) => (ulong)(long)param;
     }
 }

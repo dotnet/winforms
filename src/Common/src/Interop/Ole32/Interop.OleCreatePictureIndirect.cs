@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class Ole32
     {
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
+        [DllImport(Libraries.Oleaut32, PreserveSig = false)]
         [return: MarshalAs(UnmanagedType.Interface)]
         private unsafe static extern object OleCreatePictureIndirect(PICTDESC* pictdesc, ref Guid refiid, BOOL fOwn);
 
