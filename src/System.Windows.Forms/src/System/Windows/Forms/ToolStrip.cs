@@ -191,8 +191,8 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.Selectable, false);
             SetToolStripState(STATE_USEDEFAULTRENDERER | STATE_ALLOWMERGE, true);
 
-            SetState2(STATE2_MAINTAINSOWNCAPTUREMODE // A toolstrip does not take capture on MouseDown.
-                      | STATE2_USEPREFERREDSIZECACHE, // this class overrides GetPreferredSizeCore, let Control automatically cache the result
+            SetExtendedState(ExtendedStates.MaintainsOwnCaptureMode // A toolstrip does not take capture on MouseDown.
+                      | ExtendedStates.UserPreferredSizeCache, // this class overrides GetPreferredSizeCore, let Control automatically cache the result
                        true);
 
             //add a weak ref link in ToolstripManager
@@ -5214,7 +5214,7 @@ namespace System.Windows.Forms
 
         bool IArrangedElement.ParticipatesInLayout
         {
-            get { return GetState(STATE_VISIBLE); }
+            get { return GetState(States.Visible); }
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()

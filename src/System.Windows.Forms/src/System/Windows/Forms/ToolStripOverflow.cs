@@ -75,7 +75,7 @@ namespace System.Windows.Forms
 
         bool IArrangedElement.ParticipatesInLayout
         {
-            get { return GetState(STATE_VISIBLE); }
+            get { return GetState(States.Visible); }
         }
 
         PropertyStore IArrangedElement.Properties

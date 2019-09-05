@@ -16908,7 +16908,7 @@ namespace System.Windows.Forms
         internal override void OnParentBecameInvisible()
         {
             base.OnParentBecameInvisible();
-            if (GetState(STATE_VISIBLE))
+            if (GetState(States.Visible))
             {
                 // This control became invisible too - Update the Displayed properties of the bands.
                 OnVisibleChangedPrivate();

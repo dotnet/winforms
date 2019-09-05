@@ -149,7 +149,7 @@ namespace System.Windows.Forms
             requestedHeight = DefaultSimpleStyleHeight;
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
         }
 
         /// <summary>

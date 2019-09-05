@@ -6989,7 +6989,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (m.Msg == WindowMessages.WM_ACTIVATE)
                 {
-                    SetState(STATE_MODAL, true);
+                    SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
                     IntPtr activatedWindow = (IntPtr)m.LParam;
                     if (Visible && NativeMethods.Util.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !OwnsWindow(activatedWindow))

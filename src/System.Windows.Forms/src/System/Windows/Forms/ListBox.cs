@@ -143,7 +143,7 @@ namespace System.Windows.Forms
                      ControlStyles.UseTextForAccessibility, false);
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             SetBounds(0, 0, 120, 96);
 
@@ -803,7 +803,7 @@ namespace System.Windows.Forms
                 {
                     // don't try to get item heights from the LB when items haven't been
                     // added to the LB yet. Just return current height.
-                    if (RecreatingHandle || GetState(STATE_CREATINGHANDLE))
+                    if (RecreatingHandle || GetState(States.CreatingHandle))
                     {
                         height = Height;
                     }
@@ -2592,7 +2592,7 @@ namespace System.Windows.Forms
                     // where we can get disposed as an effect of external code (form.Close() for instance) and then pass the
                     // message to the base class.
                     //
-                    if (GetState(STATE_DISPOSED))
+                    if (GetState(States.Disposed))
                     {
                         base.DefWndProc(ref m);
                     }

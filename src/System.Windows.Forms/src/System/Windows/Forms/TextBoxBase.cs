@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         internal TextBoxBase() : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             textBoxFlags[autoSize | hideSelection | wordWrap | shortcutsEnabled] = true;
             SetStyle(ControlStyles.FixedHeight, textBoxFlags[autoSize]);

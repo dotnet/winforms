@@ -1063,8 +1063,8 @@ namespace System.Windows.Forms
         {
             public SKWindow()
             {
-                SetState(STATE_TOPLEVEL, true);
-                SetState2(STATE2_INTERESTEDINUSERPREFERENCECHANGED, false);
+                SetState(States.TopLevel, true);
+                SetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged, false);
                 SetBounds(-1, -1, 0, 0);
                 Visible = false;
             }

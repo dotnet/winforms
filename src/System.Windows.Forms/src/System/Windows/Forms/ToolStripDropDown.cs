@@ -1332,13 +1332,13 @@ namespace System.Windows.Forms
         /// </summary>	
         internal virtual void Initialize()
         {
-            SetState(STATE_VISIBLE, false);
+            SetState(States.Visible, false);
             SetTopLevelInternal(true);
 
             // Marking this as a modal form prevents it from being activated
             // by the IMsoComponentManager, which will break keyboard routing in VS.
             //
-            SetState(STATE_MODAL, true);
+            SetState(States.Modal, true);
 
             SetStyle(ControlStyles.ResizeRedraw, true);
             UpdateStyles();

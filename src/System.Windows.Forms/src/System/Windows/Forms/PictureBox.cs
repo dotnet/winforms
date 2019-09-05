@@ -102,7 +102,7 @@ namespace System.Windows.Forms
         public PictureBox()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             _pictureBoxState = new BitVector32(UseDefaultErrorImageState | UseDefaultInitialImageState);
 

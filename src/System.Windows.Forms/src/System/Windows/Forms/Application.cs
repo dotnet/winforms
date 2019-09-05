@@ -3991,7 +3991,7 @@ namespace System.Windows.Forms
                 : base(false)
             {
                 Visible = false;
-                SetState2(STATE2_INTERESTEDINUSERPREFERENCECHANGED, false);
+                SetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged, false);
                 SetTopLevel(true);
                 CreateControl();
                 CreateHandle();
@@ -4036,8 +4036,8 @@ namespace System.Windows.Forms
 
             public ParkingWindow()
             {
-                SetState2(STATE2_INTERESTEDINUSERPREFERENCECHANGED, false);
-                SetState(STATE_TOPLEVEL, true);
+                SetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged, false);
+                SetState(States.TopLevel, true);
                 Text = "WindowsFormsParkingWindow";
                 Visible = false;
                 DpiHelper.FirstParkingWindowCreated = true;
