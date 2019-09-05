@@ -48,7 +48,7 @@ namespace System.Windows.Forms.VisualStyles
                         UxTheme.GetCurrentThemeName(pFilename, filename.Length, null, 0, null, 0);
                     }
 
-                    return filename.ToString();
+                    return filename.SliceAtFirstNull().ToString();
                 }
 
                 return string.Empty;
@@ -70,7 +70,7 @@ namespace System.Windows.Forms.VisualStyles
                         UxTheme.GetCurrentThemeName(null, 0, pColorScheme, colorScheme.Length, null, 0);
                     }
 
-                    return colorScheme.ToString();
+                    return colorScheme.SliceAtFirstNull().ToString();
                 }
 
                 return string.Empty;
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.VisualStyles
                         UxTheme.GetCurrentThemeName(null, 0, null, 0, pSize, size.Length);
                     }
 
-                    return size.ToString();
+                    return size.SliceAtFirstNull().ToString();
                 }
 
                 return string.Empty;

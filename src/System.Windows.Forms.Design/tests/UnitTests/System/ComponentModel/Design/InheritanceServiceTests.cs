@@ -5,7 +5,7 @@
 using System.ComponentModel.Design;
 using Xunit;
 
-namespace System.Windows.Forms.Design.Tests
+namespace System.ComponentModel.Design.Tests
 {
     public class InheritanceServicerTests
     {

@@ -22,11 +22,9 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides <see langword='static '/>
-    ///  methods and properties
-    ///  to manage an application, such as methods to run and quit an application,
-    ///  to process Windows messages, and properties to get information about an application. This
-    ///  class cannot be inherited.
+    ///  Provides <see langword='static'/> methods and properties to manage an application, such as methods to run and quit an application,
+    ///  to process Windows messages, and properties to get information about an application. 
+    ///  This class cannot be inherited.
     /// </summary>
     public sealed class Application
     {
@@ -42,7 +40,6 @@ namespace System.Windows.Forms
         static string productName;
         static string productVersion;
         static string safeTopLevelCaptionSuffix;
-        private static bool s_useVisualStyles = false;
         static bool comCtlSupportsVisualStylesInitialized = false;
         static bool comCtlSupportsVisualStyles = false;
         private static FormCollection s_forms = null;
@@ -118,7 +115,7 @@ namespace System.Windows.Forms
 
         private static bool InitializeComCtlSupportsVisualStyles()
         {
-            if (s_useVisualStyles)
+            if (UseVisualStyles)
             {
                 // At this point, we may not have loaded ComCtl6 yet, but it will eventually be loaded,
                 // so we return true here. This works because UseVisualStyles, once set, cannot be
@@ -370,8 +367,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the current HighDpi mode for the process.
+        ///  Gets the current high DPI mode for the application.
         /// </summary>
+        /// <value>One of the enumeration values that indicates the high DPI mode.</value>
         public static HighDpiMode HighDpiMode
         {
             get
@@ -381,10 +379,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the HighDpi mode for process.
+        ///  Sets the high DPI mode of the process.
         /// </summary>
-        /// <param name="highDpiMode">The HighDpi mode to set.</param>
-        /// <returns></returns>
+        /// <param name="highDpiMode">One of the enumeration values that specifies the high DPI mode to set.</param>
+        /// <returns><see langword="true" /> if the high DPI mode was set; otherwise, <see langword="false" />.</returns>
         public static bool SetHighDpiMode(HighDpiMode highDpiMode)
         {
             if (DpiHelper.FirstParkingWindowCreated)
@@ -672,7 +670,15 @@ namespace System.Windows.Forms
             }
         }
 
-        public static bool UseVisualStyles => s_useVisualStyles;
+        /// <summary>
+        ///  Gets a value that indicates whether visual styles are enabled for the application.
+        /// </summary>
+        /// <value><see langword="true" /> if visual styles are enabled; otherwise, <see langword="false" />.</value>
+        /// <remarks>
+        ///  The visual styles can be enabled by calling <see cref="EnableVisualStyles"/>.
+        ///  The visual styles will not be enabled if the OS does not support them, or theming is disabled at the OS level.
+        /// </remarks>
+        public static bool UseVisualStyles { get; private set; } = false;
 
         /// <remarks>
         ///  Don't never ever change this name, since the window class and partner teams
@@ -960,7 +966,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
+        ///  Enables visual styles for all subsequent <see cref="Application.Run"/> and <see cref="CreateHandle"/> calls.
         ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
         public static void EnableVisualStyles()
@@ -970,8 +976,8 @@ namespace System.Windows.Forms
             if (assemblyLoc != null)
             {
                 // CSC embeds DLL manifests as resource ID 2
-                s_useVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
-                Debug.Assert(s_useVisualStyles, "Enable Visual Styles failed");
+                UseVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
+                Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
             }
         }
 
@@ -3217,7 +3223,7 @@ namespace System.Windows.Forms
                 // that might create a window.
 
                 IntPtr userCookie = IntPtr.Zero;
-                if (s_useVisualStyles)
+                if (UseVisualStyles)
                 {
                     userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 }

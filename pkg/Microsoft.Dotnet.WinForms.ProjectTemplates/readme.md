@@ -2,9 +2,7 @@
 
 We provide the following templates:
 * [Windows Forms app (C#)](./content/WinFormsApplication-CSharp)
-* [Windows Forms app (VB)](./content/WinFormsApplication-VisualBasic)
 * [Windows Forms class library (C#)](./content/WinFormsLibrary-CSharp)
-* [Windows Forms class library (C#)](./content/WinFormsLibrary-VisualBasic)
 
 ## Testing Templates
 

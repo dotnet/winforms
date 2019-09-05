@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or Sets whether the dialog will be automatically upgraded to enable new features.
+        ///  Gets or sets whether the dialog will be automatically upgraded to enable new features.
         /// </summary>
         [DefaultValue(true)]
         public bool AutoUpgradeEnabled { get; set; } = true;
@@ -148,8 +148,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Implements running of a folder browser dialog.
+        ///  Displays a folder browser dialog box.
         /// </summary>
+        /// <param name="hWndOwner">A handle to the window that owns the folder browser dialog.</param>
+        /// <returns>
+        ///  <see langword="true" /> if the folder browser dialog was successfully run; otherwise, <see langword="false" />.
+        /// </returns>
         protected override bool RunDialog(IntPtr hWndOwner)
         {
             return UseVistaDialogInternal ? RunDialogVista(hWndOwner) : RunDialogOld(hWndOwner);

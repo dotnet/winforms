@@ -15,9 +15,9 @@
     "version": "3.0.100-preview9-013796"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.19419.12",
-    "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.19419.12",
-    "Microsoft.NET.Sdk.IL": "3.0.0-preview9.19409.2"
+    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.19453.5",
+    "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.19453.5",
+    "Microsoft.NET.Sdk.IL": "3.0.0-preview9.19421.2"
   },
   "native-tools": {
     "dotnet-api-docs_netcoreapp3.0": "0.0.0.1"

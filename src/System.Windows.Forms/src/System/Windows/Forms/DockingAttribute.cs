@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
-        ///  This <see langword='static '/>field is read-only.
+        ///  This <see langword='static'/> field is read-only.
         /// </summary>
         public static readonly DockingAttribute Default = new DockingAttribute();
 

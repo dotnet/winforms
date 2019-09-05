@@ -57,9 +57,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the current Value of this grid Item. This may be null.
         /// </summary>
-        /// <remarks>
-        ///  We don't do set because of the value class semantics, etc.
-        /// </remarks>
+        // We don't do set because of the value class semantics, etc.
         public abstract object Value { get; }
 
         /// <summary>

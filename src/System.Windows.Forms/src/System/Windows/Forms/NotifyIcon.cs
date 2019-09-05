@@ -419,9 +419,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the
-        ///  <see cref='NotifyIcon'/>.
+        ///  Releases the unmanaged resources used by the <see cref="NotifyIcon" />
+        ///  and optionally releases the managed resources.
         /// </summary>
+        /// <param name="disposing">
+        ///  <see langword="true" /> to release both managed and unmanaged resources;
+        ///  <see langword="false" /> to release only unmanaged resources.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

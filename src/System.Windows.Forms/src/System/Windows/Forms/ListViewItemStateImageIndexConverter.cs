@@ -8,11 +8,18 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  ListViewItemStateImageIndexConverter is a class that can be used to convert
-    ///  image index values one data type to another.
+    ///  Provides a type converter to convert state image index values from one data type to another.
     /// </summary>
     public class ListViewItemStateImageIndexConverter : ImageIndexConverter
     {
+        /// <summary>
+        ///  Gets a value that indicates whether a <see cref="none" /> or <see langword="null" /> value
+        ///  is valid in the <see cref="TypeConverter.StandardValuesCollection" /> collection.
+        /// </summary>
+        /// <value>
+        ///  Always returns <see langword="false" /> to indicate that a <see cref="none" /> or
+        ///  <see langword="null" /> value isn't valid in the standard values collection.
+        /// </value>
         protected override bool IncludeNoneAsStandardValue
         {
             get
@@ -22,11 +29,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a collection containing a set of standard values
-        ///  for the data type this validator is designed for.  This
-        ///  will return null if the data type does not support a
-        ///  standard set of values.
+        ///  Retrieves a collection containing a set of standard values for the data type this validator is designed for.
         /// </summary>
+        /// <param name="context">
+        ///  An object that provides a format context, which can be used to extract additional
+        ///  information about the environment this type converter is being invoked from. 
+        ///  This parameter or its properties can be <see langword="null" />.
+        /// </param>
+        /// <returns>
+        ///  A collection that holds a standard set of valid index values.If no image list is found,
+        ///  this collection contains a single object with a value of -1. This method returns<see langword="null" />
+        ///  if the data type doesn't support a standard set of values.
+        /// </returns>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
             if (context != null && context.Instance != null)

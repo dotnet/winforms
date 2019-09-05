@@ -7,7 +7,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Note: This is a public enum wrapping the internal <see cref="User32.TextFormatFlags"/>.
+    ///  Specifies the display and layout information for text strings.
     /// </summary>
     [Flags]
     public enum TextFormatFlags
@@ -21,9 +21,7 @@ namespace System.Windows.Forms
         HorizontalCenter = (int)User32.TextFormatFlags.DT_CENTER,
         Internal = (int)User32.TextFormatFlags.DT_INTERNAL,
 
-        /// <remarks>
-        ///  This is the default.
-        /// </remarks>
+        // This is the default.
         Left = (int)User32.TextFormatFlags.DT_LEFT,
         ModifyString = (int)User32.TextFormatFlags.DT_MODIFYSTRING,
         NoClipping = (int)User32.TextFormatFlags.DT_NOCLIP,
@@ -36,9 +34,7 @@ namespace System.Windows.Forms
         SingleLine = (int)User32.TextFormatFlags.DT_SINGLELINE,
         TextBoxControl = (int)User32.TextFormatFlags.DT_EDITCONTROL,
 
-        /// <remarks>
-        ///  This is the default.
-        /// </remarks>
+        // This is the default.
         Top = (int)User32.TextFormatFlags.DT_TOP,
 
         VerticalCenter = (int)User32.TextFormatFlags.DT_VCENTER,
@@ -58,9 +54,7 @@ namespace System.Windows.Forms
         ///  Adds padding related to the drawing binding box, computed according to the font size.
         ///  Match the System.Internal.GDI.TextPaddingOptions.
         /// </summary>
-        /// <remarks>
-        ///  This is the default.
-        /// </remarks>
+        // This is the default.
         GlyphOverhangPadding = 0x00000000,
         NoPadding = 0x10000000,
         LeftAndRightPadding = 0x20000000

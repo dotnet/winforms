@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the <see cref='TreeView.OnBeforeLabelEdit'/>
+    ///  Represents a method that will handle the <see cref='TreeView.OnBeforeLabelEdit'/>
     ///  or <see cref='TreeView.OnAfterLabelEdit'/> event of
     ///  a <see cref='TreeView'/>.
     /// </summary>

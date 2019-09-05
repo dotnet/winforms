@@ -138,9 +138,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  When overridden in a derived class, indicates whether
-        ///  resetting the <paramref name="component "/>will change the value of the
+        ///  resetting the <paramref name="component"/> will change the value of the
         ///  <paramref name="component"/>.
-            /// </summary>
+        /// </summary>
         public override bool CanResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::CanResetValue called with non-array value");

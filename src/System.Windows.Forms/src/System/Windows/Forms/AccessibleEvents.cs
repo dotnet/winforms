@@ -115,22 +115,18 @@ namespace System.Windows.Forms
         ///  <c>EVENT_SYSTEM_DRAGDROPSTART</c>
         ///  Sent when a window enters drag drop mode.
         /// </summary>
-        /// <remarks>
-        ///  Note that it is up to apps and OLE to generate this, since the system doesn't know. 
-        ///  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
-        /// </remarks>
         /// <seealso cref="SystemDragDropEnd"/>.
+        //  Note that it is up to apps and OLE to generate this, since the system doesn't know. 
+        //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
         SystemDragDropStart = 0x000E,
 
         /// <summary>
         ///  <c>EVENT_SYSTEM_DRAGDROPEND</c>
         ///  Sent when a window leaves drag drop mode.
         /// </summary>
-        /// <remarks>
-        ///  Note that it is up to apps and OLE to generate this, since the system doesn't know. 
-        ///  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
-        /// </remarks>
         /// <seealso cref="SystemDragDropStart"/>.
+        //  Note that it is up to apps and OLE to generate this, since the system doesn't know. 
+        //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
         SystemDragDropEnd = 0x000F,
 
         /// <summary>
@@ -308,14 +304,14 @@ namespace System.Windows.Forms
         ///  query the container control what the new bunch of selected items
         ///  are.
         /// </summary>
-        StateChange = 0x800A,  // hwnd + ID + idChild is item w/ state change
-        LocationChange = 0x800B,  // hwnd + ID + idChild is moved/sized item
-        NameChange = 0x800C,  // hwnd + ID + idChild is item w/ name change
-        DescriptionChange = 0x800D,  // hwnd + ID + idChild is item w/ desc change
-        ValueChange = 0x800E,  // hwnd + ID + idChild is item w/ value change
-        ParentChange = 0x800F,  // hwnd + ID + idChild is item w/ new parent
-        HelpChange = 0x8010,  // hwnd + ID + idChild is item w/ help change
-        DefaultActionChange = 0x8011,  // hwnd + ID + idChild is item w/ def action change
-        AcceleratorChange = 0x8012,  // hwnd + ID + idChild is item w/ keybd accel change
+        StateChange = 0x800A,           // hwnd + ID + idChild is item w/ state change
+        LocationChange = 0x800B,        // hwnd + ID + idChild is moved/sized item
+        NameChange = 0x800C,            // hwnd + ID + idChild is item w/ name change
+        DescriptionChange = 0x800D,     // hwnd + ID + idChild is item w/ desc change
+        ValueChange = 0x800E,           // hwnd + ID + idChild is item w/ value change
+        ParentChange = 0x800F,          // hwnd + ID + idChild is item w/ new parent
+        HelpChange = 0x8010,            // hwnd + ID + idChild is item w/ help change
+        DefaultActionChange = 0x8011,   // hwnd + ID + idChild is item w/ def action change
+        AcceleratorChange = 0x8012,     // hwnd + ID + idChild is item w/ keybd accel change
     }
 }

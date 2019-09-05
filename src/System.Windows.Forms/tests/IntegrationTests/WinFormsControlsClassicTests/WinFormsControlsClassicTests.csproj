@@ -201,6 +201,14 @@
       <Link>Panels.Designer.cs</Link>
       <DependentUpon>Panels.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\WinformsControlsTest\PictureBoxes.cs">
+      <Link>PictureBoxes.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\PictureBoxes.Designer.cs">
+      <Link>PictureBoxes.Designer.cs</Link>
+      <DependentUpon>PictureBoxes.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\WinformsControlsTest\PropertyGrid.cs">
       <Link>PropertyGrid.cs</Link>
       <SubType>Form</SubType>
@@ -304,9 +312,17 @@
       <Link>Panels.resx</Link>
       <DependentUpon>Panels.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\PictureBoxes.resx">
+      <Link>PictureBoxes.resx</Link>
+      <DependentUpon>PictureBoxes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\PropertyGrid.resx">
       <Link>PropertyGrid.resx</Link>
       <DependentUpon>PropertyGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\RichTextBoxes.resx">
+      <Link>RichTextBoxes.resx</Link>
+      <DependentUpon>RichTextBoxes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\ScalingBeforeChanges.resx">
       <Link>ScalingBeforeChanges.resx</Link>
@@ -364,6 +380,4 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="Build" Condition="'$(OS)' != 'Windows_NT'">
-  </Target>
 </Project>
