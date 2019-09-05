@@ -8,13 +8,6 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    /// <summary>
-    /// Provides <see langword='static '/>
-    /// methods and properties
-    /// to manage an application, such as methods to run and quit an application,
-    /// to process Windows messages, and properties to get information about an application. This
-    /// class cannot be inherited.
-    /// </summary>
     public sealed partial class Application
     {
         /// <summary>
@@ -23,13 +16,12 @@ namespace System.Windows.Forms
         /// </summary>
         internal sealed class ParkingWindow : ContainerControl, IArrangedElement
         {
-            // WHIDBEY CHANGES
-            //   in whidbey we now aggressively tear down the parking window
+            // In .NET 2.0 we now aggressively tear down the parking window
             //   when the last control has been removed off of it.
 
             private const int WM_CHECKDESTROY = Interop.WindowMessages.WM_USER + 0x01;
 
-            private int childCount = 0;
+            private int _childCount = 0;
 
             public ParkingWindow()
             {
@@ -55,56 +47,58 @@ namespace System.Windows.Forms
 
             internal override void AddReflectChild()
             {
-                if (childCount < 0)
+                if (_childCount < 0)
                 {
                     Debug.Fail("How did parkingwindow childcount go negative???");
-                    childCount = 0;
+                    _childCount = 0;
                 }
-                childCount++;
+                _childCount++;
             }
 
             internal override void RemoveReflectChild()
             {
-                if (--childCount < 0)
+                if (--_childCount < 0)
                 {
                     Debug.Fail("How did parkingwindow childcount go negative???");
-                    childCount = 0;
+                    _childCount = 0;
                 }
 
-                if (childCount == 0 && IsHandleCreated)
+                if (_childCount != 0 || !IsHandleCreated)
                 {
-                    // Check to see if we are running on the thread that owns the parkingwindow.
-                    // If so, we can destroy immediately.
-                    //
-                    // This is important for scenarios where apps leak controls until after the
-                    // messagepump is gone and then decide to clean them up.  We should clean
-                    // up the parkingwindow in this case and a postmessage won't do it.
+                    return;
+                }
 
-                    uint id = Interop.User32.GetWindowThreadProcessId(this, out _);
-                    ThreadContext context = ThreadContext.FromId(id);
+                // Check to see if we are running on the thread that owns the parkingwindow.
+                // If so, we can destroy immediately.
+                //
+                // This is important for scenarios where apps leak controls until after the
+                // messagepump is gone and then decide to clean them up.  We should clean
+                // up the parkingwindow in this case and a postmessage won't do it.
 
-                    //We only do this if the ThreadContext tells us that we are currently
-                    //handling a window message.
-                    if (context == null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
-                    {
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, HandleInternal), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
-                    }
-                    else
-                    {
-                        CheckDestroy();
-                    }
+                uint id = Interop.User32.GetWindowThreadProcessId(this, out _);
+                ThreadContext context = ThreadContext.FromId(id);
+
+                // We only do this if the ThreadContext tells us that we are currently
+                // handling a window message.
+                if (context == null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
+                {
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, HandleInternal), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
+                }
+                else
+                {
+                    CheckDestroy();
                 }
             }
 
             private void CheckDestroy()
             {
-                if (childCount == 0)
+                if (_childCount != 0)
+                    return;
+
+                IntPtr hwndChild = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+                if (hwndChild == IntPtr.Zero)
                 {
-                    IntPtr hwndChild = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
-                    if (hwndChild == IntPtr.Zero)
-                    {
-                        DestroyHandle();
-                    }
+                    DestroyHandle();
                 }
             }
 
@@ -133,12 +127,15 @@ namespace System.Windows.Forms
             /// </summary>
             internal void UnparkHandle(HandleRef handle)
             {
-                if (IsHandleCreated)
-                {
-                    Debug.Assert(UnsafeNativeMethods.GetParent(handle) != Handle, "Always set the handle's parent to someone else before calling UnparkHandle");
-                    // If there are no child windows in this handle any longer, destroy the parking window.
-                    CheckDestroy();
-                }
+                if (!IsHandleCreated)
+                    return;
+
+                Debug.Assert(
+                    UnsafeNativeMethods.GetParent(handle) != Handle,
+                    "Always set the handle's parent to someone else before calling UnparkHandle");
+
+                // If there are no child windows in this handle any longer, destroy the parking window.
+                CheckDestroy();
             }
 
             // Do nothing on layout to reduce the calls into the LayoutEngine while debugging.
@@ -147,20 +144,22 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg != Interop.WindowMessages.WM_SHOWWINDOW)
+                if (m.Msg == Interop.WindowMessages.WM_SHOWWINDOW)
+                    return;
+
+                base.WndProc(ref m);
+                switch (m.Msg)
                 {
-                    base.WndProc(ref m);
-                    if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY)
-                    {
+                    case Interop.WindowMessages.WM_PARENTNOTIFY:
                         if (NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == Interop.WindowMessages.WM_DESTROY)
                         {
                             UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
                         }
-                    }
-                    else if (m.Msg == WM_CHECKDESTROY)
-                    {
+
+                        break;
+                    case WM_CHECKDESTROY:
                         CheckDestroy();
-                    }
+                        break;
                 }
             }
         }
