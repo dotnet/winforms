@@ -1775,7 +1775,7 @@ namespace System.Windows.Forms
         {
             if (toolTip != null)
             {
-                User32.SendMessageW(toolTip, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(toolTip, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
                 controlToolTipText = toolTipText;
             }
@@ -2070,7 +2070,7 @@ namespace System.Windows.Forms
 
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = Width;
-                User32.WindowPosition flags = User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOMOVE;
+                User32.WindowPosition flags = User32.WindowPosition.NOZORDER | User32.WindowPosition.NOACTIVATE | User32.WindowPosition.NOMOVE;
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOP,
@@ -2996,7 +2996,7 @@ namespace System.Windows.Forms
                         Rectangle bounds = tn.Bounds;
                         bounds.Location = PointToScreen(bounds.Location);
 
-                        User32.SendMessageW(tooltipHandle, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), bounds);
+                        User32.SendMessageW(tooltipHandle, User32.WindowMessage.TTM_ADJUSTRECT, PARAM.FromBool(true), ref bounds);
                         User32.SetWindowPos(
                             new HandleRef(this, tooltipHandle),
                             User32.HWND_TOPMOST,
@@ -3004,7 +3004,7 @@ namespace System.Windows.Forms
                             bounds.Top,
                             0,
                             0,
-                            User32.WindowPosition.SWP_NOACTIVATE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOZORDER);
+                            User32.WindowPosition.NOACTIVATE | User32.WindowPosition.NOSIZE | User32.WindowPosition.NOZORDER);
                         return true;
                     }
                 }
@@ -3281,7 +3281,7 @@ namespace System.Windows.Forms
                     {
                         case NativeMethods.TTN_GETDISPINFO:
                             // Setting the max width has the added benefit of enabling multiline tool tips
-                            User32.SendMessageW(nmhdr.hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr.hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

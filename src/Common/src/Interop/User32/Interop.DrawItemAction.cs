@@ -12,9 +12,9 @@ internal static partial class Interop
         [Flags]
         public enum DrawItemAction : uint
         {
-            ODA_DRAWENTIRE = 0x1,
-            ODA_SELECT = 0x2,
-            ODA_FOCUS = 0x4,
+            DRAWENTIRE = 0x1,
+            SELECT = 0x2,
+            FOCUS = 0x4,
         }
     }
 }

@@ -1454,12 +1454,12 @@ namespace System.Windows.Forms
             using ScreenDC screendc = ScreenDC.Create();
             using Graphics graphics = Graphics.FromHdcInternal(screendc);
 
-            MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, Index);
+            var mie = new MeasureItemEventArgs(graphics, Index);
             OnMeasureItem(mie);
 
             // Update the measure item struct with the new width and height
-            mis->itemHeight = mie.ItemHeight;
-            mis->itemWidth = mie.ItemWidth;
+            mis->itemHeight = unchecked((uint)mie.ItemHeight);
+            mis->itemWidth = unchecked((uint)mie.ItemWidth);
 
             m.Result = (IntPtr)1;
         }

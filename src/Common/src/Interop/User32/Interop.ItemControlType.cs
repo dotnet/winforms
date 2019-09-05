@@ -11,11 +11,14 @@ internal static partial class Interop
     {
         public enum ItemControlType : uint
         {
-            ODT_MENU = 1,
-            ODT_LISTBOX = 2,
-            ODT_COMBOBOX = 3,
-            ODT_BUTTON = 4,
-            ODT_STATIC = 5,
+            MENU = 1,
+            LISTBOX = 2,
+            COMBOBOX = 3,
+            BUTTON = 4,
+            STATIC = 5,
+            HEADER = 100,
+            TAB = 101,
+            LISTVIEW = 102
         }
     }
 }

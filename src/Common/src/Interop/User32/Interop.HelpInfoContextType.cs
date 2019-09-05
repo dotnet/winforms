@@ -8,8 +8,8 @@ internal static partial class Interop
     {
         public enum HelpInfoContextType : int
         {
-            HELPINFO_WINDOW = 0x1,
-            HELPINFO_MENUITEM = 0x2,
+            WINDOW = 0x0001,
+            MENUITEM = 0x0002,
         }
     }
 }

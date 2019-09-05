@@ -1637,7 +1637,7 @@ namespace System.Windows.Forms
                             Location.Y,
                             Size.Width,
                             Size.Height,
-                            User32.WindowPosition.SWP_NOZORDER);
+                            User32.WindowPosition.NOZORDER);
                     }
 
                     OnMinimumSizeChanged(EventArgs.Empty);
@@ -2448,7 +2448,7 @@ namespace System.Windows.Forms
                     User32.SetWindowPos(
                         new HandleRef(this, Handle),
                         value ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
-                        flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
+                        flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE);
                 }
 
                 formState[FormStateTopMost] = value ? 1 : 0;
@@ -4706,7 +4706,7 @@ namespace System.Windows.Forms
                             e.SuggestedRectangle.Y,
                             e.SuggestedRectangle.Width,
                             e.SuggestedRectangle.Height,
-                            User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE);
+                            User32.WindowPosition.NOZORDER | User32.WindowPosition.NOACTIVATE);
                         if (AutoScaleMode != AutoScaleMode.Font)
                         {
                             Font = new Font(Font.FontFamily, Font.Size * factor, Font.Style);

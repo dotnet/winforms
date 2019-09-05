@@ -2473,7 +2473,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                OnDrawItem(new DrawItemEventArgs(g, Font, bounds, dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
+                OnDrawItem(new DrawItemEventArgs(g, Font, bounds, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
             }
             finally
             {
@@ -2494,13 +2494,13 @@ namespace System.Windows.Forms
             if (drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
                 using Graphics graphics = CreateGraphicsInternal();
-                var mie = new MeasureItemEventArgs(graphics, mis->itemID, ItemHeight);
+                var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
                 OnMeasureItem(mie);
-                mis->itemHeight = mie.ItemHeight;
+                mis->itemHeight = unchecked((uint)mie.ItemHeight);
             }
             else
             {
-                mis->itemHeight = ItemHeight;
+                mis->itemHeight = unchecked((uint)ItemHeight);
             }
 
             m.Result = (IntPtr)1;

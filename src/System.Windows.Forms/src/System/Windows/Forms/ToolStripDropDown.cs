@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     topMost ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
-                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
+                    flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE | User32.WindowPosition.NOACTIVATE);
             }
         }
 
@@ -1914,7 +1914,7 @@ namespace System.Windows.Forms
                                 User32.SetWindowPos(
                                     new HandleRef(this, Handle),
                                     User32.HWND_TOP,
-                                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
+                                    flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE | User32.WindowPosition.NOACTIVATE);
                             }
                         }
                     }

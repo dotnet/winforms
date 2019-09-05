@@ -12,13 +12,6 @@ internal static partial class Interop
         [DllImport(Libraries.Gdi32, ExactSpelling = true, SetLastError = true)]
         public static extern IntPtr SelectPalette(IntPtr hdc, IntPtr hPal, BOOL bForceBkgd);
 
-        public static IntPtr SelectPalette(HandleRef hdc, IntPtr hPal, BOOL bForceBkgd)
-        {
-            IntPtr result = SelectPalette(hdc.Handle, hPal, bForceBkgd);
-            GC.KeepAlive(hdc.Wrapper);
-            return result;
-        }
-
         public static IntPtr SelectPalette(HandleRef hdc, HandleRef hPal, BOOL bForceBkgd)
         {
             IntPtr result = SelectPalette(hdc.Handle, hPal.Handle, bForceBkgd);

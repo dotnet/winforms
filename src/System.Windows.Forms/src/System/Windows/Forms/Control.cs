@@ -4819,7 +4819,7 @@ namespace System.Windows.Forms
                 User32.SetWindowPos(
                     new HandleRef(_window, Handle),
                     User32.HWND_TOP,
-                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
+                    flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE);
             }
         }
 
@@ -10782,7 +10782,7 @@ namespace System.Windows.Forms
                 User32.SetWindowPos(
                     new HandleRef(_window, Handle),
                     User32.HWND_BOTTOM,
-                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
+                    flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE);
             }
         }
 
@@ -10900,15 +10900,15 @@ namespace System.Windows.Forms
                     {
                         if (!GetState(States.SizeLockedByOS))
                         {
-                            User32.WindowPosition flags = User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE;
+                            User32.WindowPosition flags = User32.WindowPosition.NOZORDER | User32.WindowPosition.NOACTIVATE;
 
                             if (_x == x && _y == y)
                             {
-                                flags |= User32.WindowPosition.SWP_NOMOVE;
+                                flags |= User32.WindowPosition.NOMOVE;
                             }
                             if (_width == width && _height == height)
                             {
-                                flags |= User32.WindowPosition.SWP_NOSIZE;
+                                flags |= User32.WindowPosition.NOSIZE;
                             }
 
                             //
@@ -11173,11 +11173,11 @@ namespace System.Windows.Forms
                         User32.SetWindowPos(
                             new HandleRef(_window, Handle),
                             IntPtr.Zero,
-                            flags: User32.WindowPosition.SWP_NOSIZE
-                                | User32.WindowPosition.SWP_NOMOVE
-                                | User32.WindowPosition.SWP_NOZORDER
-                                | User32.WindowPosition.SWP_NOACTIVATE
-                                | (value ? User32.WindowPosition.SWP_SHOWWINDOW : User32.WindowPosition.SWP_HIDEWINDOW));
+                            flags: User32.WindowPosition.NOSIZE
+                                | User32.WindowPosition.NOMOVE
+                                | User32.WindowPosition.NOZORDER
+                                | User32.WindowPosition.NOACTIVATE
+                                | (value ? User32.WindowPosition.SHOWWINDOW : User32.WindowPosition.HIDEWINDOW));
                     }
                     catch
                     {
@@ -11232,11 +11232,11 @@ namespace System.Windows.Forms
                     User32.SetWindowPos(
                         new HandleRef(_window, Handle),
                         User32.HWND_TOP,
-                        flags: User32.WindowPosition.SWP_NOSIZE
-                            | User32.WindowPosition.SWP_NOMOVE
-                            | User32.WindowPosition.SWP_NOZORDER
-                            | User32.WindowPosition.SWP_NOACTIVATE
-                            | (value ? User32.WindowPosition.SWP_SHOWWINDOW : User32.WindowPosition.SWP_HIDEWINDOW));
+                        flags: User32.WindowPosition.NOSIZE
+                            | User32.WindowPosition.NOMOVE
+                            | User32.WindowPosition.NOZORDER
+                            | User32.WindowPosition.NOACTIVATE
+                            | (value ? User32.WindowPosition.SHOWWINDOW : User32.WindowPosition.HIDEWINDOW));
                 }
             }
         }
@@ -11756,7 +11756,7 @@ namespace System.Windows.Forms
                     User32.SetWindowPos(
                         new HandleRef(ctl._window, ctl.Handle),
                         prevHandle,
-                        flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE);
+                        flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE);
                 }
                 finally
                 {
@@ -11812,11 +11812,11 @@ namespace System.Windows.Forms
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOP,
-                    flags: User32.WindowPosition.SWP_DRAWFRAME
-                        | User32.WindowPosition.SWP_NOACTIVATE
-                        | User32.WindowPosition.SWP_NOMOVE
-                        | User32.WindowPosition.SWP_NOSIZE
-                        | User32.WindowPosition.SWP_NOZORDER);
+                    flags: User32.WindowPosition.DRAWFRAME
+                        | User32.WindowPosition.NOACTIVATE
+                        | User32.WindowPosition.NOMOVE
+                        | User32.WindowPosition.NOSIZE
+                        | User32.WindowPosition.NOZORDER);
 
                 Invalidate(true);
             }
@@ -12977,11 +12977,11 @@ namespace System.Windows.Forms
                 //
                 bool different = false;
 
-                if ((wp->flags & User32.WindowPosition.SWP_NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
+                if ((wp->flags & User32.WindowPosition.NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
                 {
                     different = true;
                 }
-                if ((wp->flags & User32.WindowPosition.SWP_NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
+                if ((wp->flags & User32.WindowPosition.NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
                 {
                     different = true;
                 }
@@ -13231,7 +13231,7 @@ namespace System.Windows.Forms
             {
 
                 User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
-                if ((wp->flags & User32.WindowPosition.SWP_NOZORDER) == 0)
+                if ((wp->flags & User32.WindowPosition.NOZORDER) == 0)
                 {
                     _parent.UpdateChildControlIndex(this);
                 }

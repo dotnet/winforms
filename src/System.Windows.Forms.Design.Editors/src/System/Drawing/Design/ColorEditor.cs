@@ -1125,13 +1125,13 @@ namespace System.Drawing.Design
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
-                            flags: User32.WindowPosition.SWP_HIDEWINDOW);
+                            flags: User32.WindowPosition.HIDEWINDOW);
                         hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
                         NativeMethods.EnableWindow(hwndCtl, false);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
-                            flags: User32.WindowPosition.SWP_HIDEWINDOW);
+                            flags: User32.WindowPosition.HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
                     case WindowMessages.WM_COMMAND:

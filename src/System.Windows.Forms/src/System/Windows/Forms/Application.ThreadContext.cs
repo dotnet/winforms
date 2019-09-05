@@ -212,7 +212,7 @@ namespace System.Windows.Forms
                             Debug.Fail($"Failed to query service: {e.Message}");
                             return null;
                         }
-#pragma warning enable CA1031
+#pragma warning restore CA1031
 
                         // We have the component manager service, now get the component manager interface
                         HRESULT hr = (HRESULT)Marshal.QueryInterface(serviceHandle, ref iid, out IntPtr componentManagerHandle);

@@ -12,21 +12,21 @@ internal static partial class Interop
         [Flags]
         public enum WindowPosition : uint
         {
-            SWP_NOSIZE = 0x0001,
-            SWP_NOMOVE = 0x0002,
-            SWP_NOZORDER = 0x0004,
-            SWP_NOREDRAW = 0x0008,
-            SWP_NOACTIVATE = 0x0010,
-            SWP_FRAMECHANGED = 0x0020,
-            SWP_SHOWWINDOW = 0x0040,
-            SWP_HIDEWINDOW = 0x0080,
-            SWP_NOCOPYBITS = 0x0100,
-            SWP_NOOWNERZORDER = 0x0200,
-            SWP_NOSENDCHANGING = 0x0400,
-            SWP_DEFERERASE = 0x2000,
-            SWP_ASYNCWINDOWPOS = 0x4000,
-            SWP_DRAWFRAME = SWP_FRAMECHANGED,
-            SWP_NOREPOSITION = SWP_NOOWNERZORDER
+            NOSIZE = 0x0001,
+            NOMOVE = 0x0002,
+            NOZORDER = 0x0004,
+            NOREDRAW = 0x0008,
+            NOACTIVATE = 0x0010,
+            FRAMECHANGED = 0x0020,
+            SHOWWINDOW = 0x0040,
+            HIDEWINDOW = 0x0080,
+            NOCOPYBITS = 0x0100,
+            NOOWNERZORDER = 0x0200,
+            NOSENDCHANGING = 0x0400,
+            DEFERERASE = 0x2000,
+            ASYNCWINDOWPOS = 0x4000,
+            DRAWFRAME = FRAMECHANGED,
+            NOREPOSITION = NOOWNERZORDER
         }
     }
 }

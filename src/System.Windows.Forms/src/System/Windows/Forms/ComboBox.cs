@@ -3545,7 +3545,7 @@ namespace System.Windows.Forms
                     0,
                     DropDownWidth,
                     height,
-                    User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOZORDER);
+                    User32.WindowPosition.NOMOVE | User32.WindowPosition.NOZORDER);
             }
         }
 
@@ -3784,7 +3784,7 @@ namespace System.Windows.Forms
             try
             {
                 using Graphics g = Graphics.FromHdcInternal(dis->hDC);
-                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
+                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
             }
             finally
             {
@@ -3805,14 +3805,14 @@ namespace System.Windows.Forms
             if (DrawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
                 using Graphics graphics = CreateGraphicsInternal();
-                MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, mis->itemID, ItemHeight);
+                var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
                 OnMeasureItem(mie);
-                mis->itemHeight = mie.ItemHeight;
+                mis->itemHeight = unchecked((uint)mie.ItemHeight);
             }
             else
             {
                 // Message was sent by the combo edit field
-                mis->itemHeight = ItemHeight;
+                mis->itemHeight = (uint)ItemHeight;
             }
 
             m.Result = (IntPtr)1;

@@ -13,7 +13,7 @@ internal static partial class Interop
         {
             public ItemControlType CtlType;
             public uint CtlID;
-            public int itemID;
+            public uint itemID;
             public DrawItemAction itemAction;
             public DrawItemState itemState;
             public IntPtr hwndItem;

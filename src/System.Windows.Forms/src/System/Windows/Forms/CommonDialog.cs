@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                 y,
                 0,
                 0,
-                User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOZORDER | User32.WindowPosition.SWP_NOACTIVATE);
+                User32.WindowPosition.NOSIZE | User32.WindowPosition.NOZORDER | User32.WindowPosition.NOACTIVATE);
         }
 
         /// <summary>

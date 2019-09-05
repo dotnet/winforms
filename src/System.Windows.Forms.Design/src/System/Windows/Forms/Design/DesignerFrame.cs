@@ -455,7 +455,7 @@ namespace System.Windows.Forms.Design
                 User32.SetWindowPos(
                     control.Handle,
                     User32.HWND_TOP,
-                    flags: User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOMOVE);
+                    flags: User32.WindowPosition.NOSIZE | User32.WindowPosition.NOMOVE);
             }
 
             /// <summary>
@@ -567,7 +567,7 @@ namespace System.Windows.Forms.Design
                                 User32.SetWindowPos(
                                     c.Handle,
                                     User32.HWND_TOP,
-                                    flags: User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOMOVE);
+                                    flags: User32.WindowPosition.NOSIZE | User32.WindowPosition.NOMOVE);
                             }
                         }
                     }

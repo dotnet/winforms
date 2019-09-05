@@ -12,17 +12,17 @@ internal static partial class Interop
         [Flags]
         public enum DrawItemState : uint
         {
-            ODS_CHECKED = 0x0008,
-            ODS_COMBOBOXEDIT = 0x1000,
-            ODS_DEFAULT = 0x0020,
-            ODS_DISABLED = 0x0004,
-            ODS_FOCUS = 0x0010,
-            ODS_GRAYED = 0x0002,
-            ODS_HOTLIGHT = 0x0040,
-            ODS_INACTIVE = 0x0080,
-            ODS_NOACCEL = 0x0100,
-            ODS_NOFOCUSRECT = 0x0200,
-            ODS_SELECTED = 0x0001,
+            SELECTED = 0x0001,
+            GRAYED = 0x0002,
+            DISABLED = 0x0004,
+            CHECKED = 0x0008,
+            FOCUS = 0x0010,
+            DEFAULT = 0x0020,
+            HOTLIGHT = 0x0040,
+            INACTIVE = 0x0080,
+            NOACCEL = 0x0100,
+            NOFOCUSRECT = 0x0200,
+            COMBOBOXEDIT = 0x1000,
         }
     }
 }

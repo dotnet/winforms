@@ -997,9 +997,9 @@ namespace System.Windows.Forms
             }
 
             // The itemState is not defined for a statusbar control
-            StatusBarPanel panel = (StatusBarPanel)panels[dis->itemID];
+            StatusBarPanel panel = (StatusBarPanel)panels[(int)dis->itemID];
             Graphics g = Graphics.FromHdcInternal(dis->hDC);
-            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
+            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
         }
 
         private void WmNotifyNMClick(NativeMethods.NMHDR note)
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms
                     StatusBar p = (StatusBar)parent;
 
                     ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1785,7 +1785,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ComCtl32.ToolInfoWrapper info = GetMinTOOLINFO(tool);
-                    info.SendMessage(this, WindowMessages.TTM_DELTOOLW);
+                    info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
                 }
             }
 
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
-                    info.SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
+                    info.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1812,10 +1812,10 @@ namespace System.Windows.Forms
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOPMOST,
-                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
+                    flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE | User32.WindowPosition.NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>

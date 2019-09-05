@@ -4832,7 +4832,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the layout information
-                User32.SendMessageW(new HandleRef(this, hdrHWND), WindowMessages.HDM_LAYOUT, IntPtr.Zero, &hd);
+                User32.SendMessageW(hdrHWND, User32.WindowMessage.HDM_LAYOUT, IntPtr.Zero, ref hd);
 
                 // position the header control
                 User32.SetWindowPos(
@@ -4842,7 +4842,7 @@ namespace System.Windows.Forms
                     wpos.y,
                     wpos.cx,
                     wpos.cy,
-                    wpos.flags | User32.WindowPosition.SWP_SHOWWINDOW);
+                    wpos.flags | User32.WindowPosition.SHOWWINDOW);
             }
         }
 
@@ -6496,7 +6496,7 @@ namespace System.Windows.Forms
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
                                 // Setting the max width has the added benefit of enabling multiline tool tips
-                                User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                                User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves

@@ -13,9 +13,9 @@ internal static partial class Interop
         {
             public ItemControlType CtlType;
             public uint CtlID;
-            public int itemID;
-            public int itemWidth;
-            public int itemHeight;
+            public uint itemID;
+            public uint itemWidth;
+            public uint itemHeight;
             public IntPtr itemData;
         }
     }

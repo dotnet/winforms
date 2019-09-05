@@ -13,13 +13,13 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr SendMessageW(
             IntPtr hWnd,
-            uint Msg,
+            WindowMessage Msg,
             IntPtr wParam,
             IntPtr lParam);
 
         public static IntPtr SendMessageW(
             HandleRef hWnd,
-            uint Msg,
+            WindowMessage Msg,
             IntPtr wParam,
             IntPtr lParam)
         {
@@ -30,7 +30,7 @@ internal static partial class Interop
 
         public static IntPtr SendMessageW(
             IHandle hWnd,
-            uint Msg,
+            WindowMessage Msg,
             IntPtr wParam = default,
             IntPtr lParam = default)
         {
@@ -41,7 +41,7 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW(
             IHandle hWnd,
-            uint Msg,
+            WindowMessage Msg,
             IntPtr wParam,
             string lParam)
         {
@@ -51,31 +51,28 @@ internal static partial class Interop
             }
         }
 
-        public unsafe static IntPtr SendMessageW(
+        public unsafe static IntPtr SendMessageW<T>(
             IntPtr hWnd,
-            uint Msg,
+            WindowMessage Msg,
             IntPtr wParam,
-            RECT lParam)
+            ref T lParam) where T : unmanaged
         {
-            return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)&lParam);
+            fixed (void* l = &lParam)
+            {
+                return SendMessageW(hWnd, Msg, wParam, (IntPtr)l);
+            }
         }
 
-        public unsafe static IntPtr SendMessageW(
+        public unsafe static IntPtr SendMessageW<T>(
             IHandle hWnd,
-            uint Msg,
+            WindowMessage Msg,
             IntPtr wParam,
-            RECT lParam)
+            ref T lParam) where T : unmanaged
         {
-            return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)&lParam);
-        }
-
-        public unsafe static IntPtr SendMessageW(
-            HandleRef hWnd,
-            uint Msg,
-            IntPtr wParam,
-            HDLAYOUT* lParam)
-        {
-            return SendMessageW(hWnd, Msg, wParam, (IntPtr)lParam);
+            fixed (void* l = &lParam)
+            {
+                return SendMessageW(hWnd, Msg, wParam, (IntPtr)l);
+            }
         }
     }
 }

@@ -15,57 +15,57 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The item is checked. Only menu controls use this value.
         /// </summary>
-        Checked = (int)User32.DrawItemState.ODS_CHECKED,
+        Checked = (int)User32.DrawItemState.CHECKED,
 
         /// <summary>
         ///  The item is the editing portion of a <see cref='ComboBox'/> .
         /// </summary>
-        ComboBoxEdit = (int)User32.DrawItemState.ODS_COMBOBOXEDIT,
+        ComboBoxEdit = (int)User32.DrawItemState.COMBOBOXEDIT,
 
         /// <summary>
         ///  The item is the default item of the control.
         /// </summary>
-        Default = (int)User32.DrawItemState.ODS_DEFAULT,
+        Default = (int)User32.DrawItemState.DEFAULT,
 
         /// <summary>
         ///  The item is disabled.
         /// </summary>
-        Disabled = (int)User32.DrawItemState.ODS_DISABLED,
+        Disabled = (int)User32.DrawItemState.DISABLED,
 
         /// <summary>
         ///  The item has focus.
         /// </summary>
-        Focus = (int)User32.DrawItemState.ODS_FOCUS,
+        Focus = (int)User32.DrawItemState.FOCUS,
 
         /// <summary>
         ///  The item is grayed. Only menu controls use this value.
         /// </summary>
-        Grayed = (int)User32.DrawItemState.ODS_GRAYED,
+        Grayed = (int)User32.DrawItemState.GRAYED,
 
         /// <summary>
         ///  The item is being hot-tracked.
         /// </summary>
-        HotLight = (int)User32.DrawItemState.ODS_HOTLIGHT,
+        HotLight = (int)User32.DrawItemState.HOTLIGHT,
 
         /// <summary>
         ///  The item is inactive.
         /// </summary>
-        Inactive = (int)User32.DrawItemState.ODS_INACTIVE,
+        Inactive = (int)User32.DrawItemState.INACTIVE,
 
         /// <summary>
         ///  The item displays without a keyboard accelarator.
         /// </summary>
-        NoAccelerator = (int)User32.DrawItemState.ODS_NOACCEL,
+        NoAccelerator = (int)User32.DrawItemState.NOACCEL,
 
         /// <summary>
         ///  The item displays without the visual cue that indicates it has the focus.
         /// </summary>
-        NoFocusRect = (int)User32.DrawItemState.ODS_NOFOCUSRECT,
+        NoFocusRect = (int)User32.DrawItemState.NOFOCUSRECT,
 
         /// <summary>
         ///  The item is selected.
         /// </summary>
-        Selected = (int)User32.DrawItemState.ODS_SELECTED,
+        Selected = (int)User32.DrawItemState.SELECTED,
 
         /// <summary>
         ///  The item is in its default visual state.

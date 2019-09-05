@@ -849,7 +849,7 @@ namespace System.Windows.Forms
                 }
 
                 var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
-                toolInfo.SendMessage(_tipWindow, WindowMessages.TTM_ADDTOOLW);
+                toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_ADDTOOLW);
 
                 Update(timerCaused: false);
             }
@@ -899,12 +899,12 @@ namespace System.Windows.Forms
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     User32.SetWindowPos(
                         new HandleRef(_tipWindow, _tipWindow.Handle),
                         User32.HWND_TOP,
-                        flags: User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
+                        flags: User32.WindowPosition.NOSIZE | User32.WindowPosition.NOMOVE | User32.WindowPosition.NOACTIVATE);
+                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
                 }
 
                 return true;
@@ -936,7 +936,7 @@ namespace System.Windows.Forms
                     _windowBounds.Y,
                     _windowBounds.Width,
                     _windowBounds.Height,
-                    User32.WindowPosition.SWP_HIDEWINDOW | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOMOVE);
+                    User32.WindowPosition.HIDEWINDOW | User32.WindowPosition.NOSIZE | User32.WindowPosition.NOMOVE);
                 _parent?.Invalidate(true);
                 DestroyHandle();
 
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
                 if (_tipWindow != null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
-                    info .SendMessage(_tipWindow, WindowMessages.TTM_DELTOOLW);
+                    info .SendMessage(_tipWindow, User32.WindowMessage.TTM_DELTOOLW);
                 }
 
                 if (items.Count == 0)
@@ -1184,7 +1184,7 @@ namespace System.Windows.Forms
                             }
 
                             var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, flags, item.Error, iconBounds);
-                            toolInfo.SendMessage(_tipWindow, WindowMessages.TTM_SETTOOLINFOW);
+                            toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_SETTOOLINFOW);
                         }
 
                         if (timerCaused && item.BlinkPhase > 0)
@@ -1246,7 +1246,7 @@ namespace System.Windows.Forms
                     _windowBounds.Y,
                     _windowBounds.Width,
                     _windowBounds.Height,
-                    User32.WindowPosition.SWP_NOACTIVATE);
+                    User32.WindowPosition.NOACTIVATE);
                 User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
             }
 

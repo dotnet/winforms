@@ -2406,7 +2406,7 @@ namespace System.Windows.Forms
                     {
                         NativeMethods.COMRECT rc = new NativeMethods.COMRECT();
 
-                        if ((flags & User32.WindowPosition.SWP_NOMOVE) != 0)
+                        if ((flags & User32.WindowPosition.NOMOVE) != 0)
                         {
                             rc.left = _control.Left;
                             rc.top = _control.Top;
@@ -2417,7 +2417,7 @@ namespace System.Windows.Forms
                             rc.top = y;
                         }
 
-                        if ((flags & User32.WindowPosition.SWP_NOSIZE) != 0)
+                        if ((flags & User32.WindowPosition.NOSIZE) != 0)
                         {
                             rc.right = rc.left + _control.Width;
                             rc.bottom = rc.top + _control.Height;
@@ -2443,12 +2443,12 @@ namespace System.Windows.Forms
                         }
 
                         // On output, the new bounds will be reflected in  rc
-                        if ((flags & User32.WindowPosition.SWP_NOMOVE) == 0)
+                        if ((flags & User32.WindowPosition.NOMOVE) == 0)
                         {
                             x = rc.left;
                             y = rc.top;
                         }
-                        if ((flags & User32.WindowPosition.SWP_NOSIZE) == 0)
+                        if ((flags & User32.WindowPosition.NOSIZE) == 0)
                         {
                             width = rc.right - rc.left;
                             height = rc.bottom - rc.top;

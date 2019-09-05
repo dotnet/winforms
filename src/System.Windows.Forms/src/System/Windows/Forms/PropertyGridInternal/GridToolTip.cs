@@ -71,7 +71,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     for (int i = 0; i < controls.Length; i++)
                     {
                         ComCtl32.ToolInfoWrapper info = GetTOOLINFO(controls[i]);
-                        info.SendMessage(this, WindowMessages.TTM_UPDATETIPTEXTW);
+                        info.SendMessage(this, User32.WindowMessage.TTM_UPDATETIPTEXTW);
                     }
 
                     if (visible && !dontShow)
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                GetTOOLINFO((Control)sender).SendMessage(this, WindowMessages.TTM_DELTOOLW);
+                GetTOOLINFO((Control)sender).SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
             }
         }
 
@@ -141,16 +141,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOPMOST,
-                    flags: User32.WindowPosition.SWP_NOMOVE | User32.WindowPosition.SWP_NOSIZE | User32.WindowPosition.SWP_NOACTIVATE);
+                    flags: User32.WindowPosition.NOMOVE | User32.WindowPosition.NOSIZE | User32.WindowPosition.NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper info = GetTOOLINFO(control);
-                if (info.SendMessage(this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
+                if (info.SendMessage(this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
                 {
                     Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
                 }
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -166,14 +166,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             for (int i = 0; i < controls.Length; i++)
             {
                 ComCtl32.ToolInfoWrapper info = GetTOOLINFO(controls[i]);
-                if (info.SendMessage(this, WindowMessages.TTM_UPDATETIPTEXTW) == IntPtr.Zero)
+                if (info.SendMessage(this, User32.WindowMessage.TTM_UPDATETIPTEXTW) == IntPtr.Zero)
                 {
                     // Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);
                 }
             }
 
             toolTipText = oldText;
-            User32.SendMessageW(this, WindowMessages.TTM_UPDATE);
+            User32.SendMessageW(this, User32.WindowMessage.TTM_UPDATE);
         }
 
         protected override void WndProc(ref Message msg)
