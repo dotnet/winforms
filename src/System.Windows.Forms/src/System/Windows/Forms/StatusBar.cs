@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms
             g.Dispose();
         }
 
-        private void WmNotifyNMClick(NativeMethods.NMHDR note)
+        private void WmNotifyNMClick(User32.NMHDR note)
         {
             if (!showPanels)
             {
@@ -1143,7 +1143,7 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
-                    NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    User32.NMHDR note = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
                     switch (note.code)
                     {
                         case NativeMethods.NM_CLICK:

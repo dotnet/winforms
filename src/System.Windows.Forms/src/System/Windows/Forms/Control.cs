@@ -12683,7 +12683,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmNotify(ref Message m)
         {
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
             if (!ReflectMessage(nmhdr->hwndFrom, ref m))
             {
                 if (nmhdr->code == NativeMethods.TTN_SHOW)

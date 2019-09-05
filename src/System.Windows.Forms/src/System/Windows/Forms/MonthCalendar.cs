@@ -2413,12 +2413,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_COMMAND messages reflected from the parent control.
         /// </summary>
-        private void WmReflectCommand(ref Message m)
+        private unsafe void WmReflectCommand(ref Message m)
         {
             if (m.HWnd == Handle)
             {
-                NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                switch (nmhdr.code)
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                switch (nmhdr->code)
                 {
                     case NativeMethods.MCN_SELECT:
                         WmDateSelected(ref m);

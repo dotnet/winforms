@@ -1719,7 +1719,7 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
-                    NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    User32.NMHDR note = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
                     switch (note.code)
                     {
                         case NativeMethods.TTN_NEEDTEXT:

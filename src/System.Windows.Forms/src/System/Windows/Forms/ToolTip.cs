@@ -2070,7 +2070,7 @@ namespace System.Windows.Forms
             if (IsBalloon)
             {
                 // Get the text display rectangle
-                User32.SendMessageW(this, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), r);
+                User32.SendMessageW(this, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), ref r);
                 if (r.Size.Height > currentTooltipSize.Height)
                 {
                     currentTooltipSize.Height = r.Size.Height;
@@ -2279,7 +2279,7 @@ namespace System.Windows.Forms
             switch (msg.Msg)
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
-                    NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)msg.GetLParam(typeof(NativeMethods.NMHDR));
+                    User32.NMHDR nmhdr = (User32.NMHDR)msg.GetLParam(typeof(User32.NMHDR));
                     if (nmhdr.code == NativeMethods.TTN_SHOW && !_trackPosition)
                     {
                         WmShow();

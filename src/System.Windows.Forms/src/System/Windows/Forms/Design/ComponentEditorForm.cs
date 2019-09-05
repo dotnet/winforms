@@ -880,7 +880,7 @@ namespace System.Windows.Forms.Design
             {
                 if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
                 {
-                    NativeMethods.NMHDR nmh = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    User32.NMHDR nmh = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
                     if (nmh.code == NativeMethods.NM_CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);
