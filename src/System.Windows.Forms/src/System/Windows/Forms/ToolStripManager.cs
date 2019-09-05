@@ -1590,10 +1590,11 @@ namespace System.Windows.Forms
 
                         hookProc = new NativeMethods.HookProc(MessageHookProc);
 
-                        messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_GETMESSAGE,
-                                                                   hookProc,
-                                                                   new HandleRef(null, IntPtr.Zero),
-                                                                   SafeNativeMethods.GetCurrentThreadId());
+                        messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
+                            NativeMethods.WH_GETMESSAGE,
+                            hookProc,
+                            new HandleRef(null, IntPtr.Zero),
+                            (int)Interop.Kernel32.GetCurrentThreadId());
 
                         if (messageHookHandle != IntPtr.Zero)
                         {

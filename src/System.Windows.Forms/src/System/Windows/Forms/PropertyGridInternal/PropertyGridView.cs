@@ -8079,7 +8079,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly Control control;
             private readonly IMouseHookClient client;
 
-            internal int thisProcessID = 0;
+            internal uint _thisProcessID = 0;
             private GCHandle mouseHookRoot;
             private IntPtr mouseHookHandle = IntPtr.Zero;
             private bool hookDisable = false;
@@ -8156,18 +8156,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return;
                     }
 
-                    if (thisProcessID == 0)
+                    if (_thisProcessID == 0)
                     {
-                        SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(control, control.Handle), out thisProcessID);
+                        Interop.User32.GetWindowThreadProcessId(control, out _thisProcessID);
                     }
 
                     NativeMethods.HookProc hook = new NativeMethods.HookProc(new MouseHookObject(this).Callback);
                     mouseHookRoot = GCHandle.Alloc(hook);
 
-                    mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE,
-                                                               hook,
-                                                               NativeMethods.NullHandleRef,
-                                                               SafeNativeMethods.GetCurrentThreadId());
+                    mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
+                        NativeMethods.WH_MOUSE,
+                        hook,
+                        NativeMethods.NullHandleRef,
+                        (int)Interop.Kernel32.GetCurrentThreadId());
                     Debug.Assert(mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }
@@ -8230,11 +8231,9 @@ namespace System.Windows.Forms.PropertyGridInternal
            */
             private bool ProcessMouseDown(IntPtr hWnd, int x, int y)
             {
-
-                // if we put up the "invalid" message box, it appears this
+                // If we put up the "invalid" message box, it appears this
                 // method is getting called re-entrantly when it shouldn't be.
                 // this prevents us from recursing.
-                //
                 if (processing)
                 {
                     return false;
@@ -8242,19 +8241,18 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 IntPtr hWndAtPoint = hWnd;
                 IntPtr handle = control.Handle;
-                Control ctrlAtPoint = Control.FromHandle(hWndAtPoint);
+                Control ctrlAtPoint = FromHandle(hWndAtPoint);
 
                 // if it's us or one of our children, just process as normal
-                //
                 if (hWndAtPoint != handle && !control.Contains(ctrlAtPoint))
                 {
-                    Debug.Assert(thisProcessID != 0, "Didn't get our process id!");
+                    Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
-                    // make sure the window is in our process
-                    SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWndAtPoint), out int pid);
+                    // Make sure the window is in our process
+                    Interop.User32.GetWindowThreadProcessId(hWndAtPoint, out uint pid);
 
                     // if this isn't our process, unhook the mouse.
-                    if (pid != thisProcessID)
+                    if (pid != _thisProcessID)
                     {
                         HookMouseDown = false;
                         return false;

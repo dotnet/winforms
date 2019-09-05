@@ -5124,9 +5124,10 @@ namespace System.Windows.Forms
                 if (etwcb != null)
                 {
                     callback = new SafeNativeMethods.EnumThreadWindowsCallback(etwcb.Callback);
-                    UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(),
-                                                          new NativeMethods.EnumThreadWindowsCallback(callback),
-                                                          new HandleRef(this, Handle));
+                    UnsafeNativeMethods.EnumThreadWindows(
+                        (int)Interop.Kernel32.GetCurrentThreadId(),
+                        new NativeMethods.EnumThreadWindowsCallback(callback),
+                        new HandleRef(this, Handle));
                     // Reset the owner of the windows in the list
                     etwcb.ResetOwners();
                 }

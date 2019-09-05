@@ -1034,7 +1034,7 @@ namespace System.Windows.Forms.Design.Behavior
             private class MouseHook
             {
                 private AdornerWindow _currentAdornerWindow;
-                private int _thisProcessID = 0;
+                private uint _thisProcessID = 0;
                 private GCHandle _mouseHookRoot;
                 private IntPtr _mouseHookHandle = IntPtr.Zero;
                 private bool _processingMessage;
@@ -1064,18 +1064,18 @@ namespace System.Windows.Forms.Design.Behavior
 
                 private void HookMouse()
                 {
-                    Debug.Assert(AdornerWindow.s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
+                    Debug.Assert(s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
                     lock (this)
                     {
-                        if (_mouseHookHandle != IntPtr.Zero || AdornerWindow.s_adornerWindowList.Count == 0)
+                        if (_mouseHookHandle != IntPtr.Zero || s_adornerWindowList.Count == 0)
                         {
                             return;
                         }
 
                         if (_thisProcessID == 0)
                         {
-                            AdornerWindow adornerWindow = AdornerWindow.s_adornerWindowList[0];
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(adornerWindow, adornerWindow.Handle), out _thisProcessID);
+                            AdornerWindow adornerWindow = s_adornerWindowList[0];
+                            Interop.User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                         }
 
                         NativeMethods.HookProc hook = new NativeMethods.HookProc(MouseHookProc);
@@ -1167,9 +1167,11 @@ namespace System.Windows.Forms.Design.Behavior
                         if (adornerWindow.ProcessingDrag || (hWnd != handle && SafeNativeMethods.IsChild(new HandleRef(this, handle), new HandleRef(this, hWnd))))
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
-                            // make sure the window is in our process
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWnd), out int pid);
-                            // if this isn't our process, bail
+
+                            // Make sure the window is in our process
+                            Interop.User32.GetWindowThreadProcessId(hWnd, out uint pid);
+
+                            // If this isn't our process, bail
                             if (pid != _thisProcessID)
                             {
                                 return false;

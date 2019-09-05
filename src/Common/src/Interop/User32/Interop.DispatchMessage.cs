@@ -4,20 +4,15 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        public static extern IntPtr DispatchMessageA(ref MSG msg);
 
-        public static uint GetWindowThreadProcessId(Control hWnd, out uint lpdwProcessId)
-        {
-            uint result = GetWindowThreadProcessId(hWnd.Handle, out lpdwProcessId);
-            GC.KeepAlive(hWnd);
-            return result;
-        }
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public static extern IntPtr DispatchMessageW(ref MSG msg);
     }
 }

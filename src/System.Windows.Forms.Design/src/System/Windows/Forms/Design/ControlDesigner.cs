@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design
     public class ControlDesigner : ComponentDesigner
     {
         protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
-        private static int s_currentProcessId;
+        private static uint s_currentProcessId;
         private IDesignerHost _host; // the host for our designer
         private IDesignerTarget _designerTarget; // the target window proc for the control.
 
@@ -2664,17 +2664,17 @@ namespace System.Windows.Forms.Design
 
         private bool IsWindowInCurrentProcess(IntPtr hwnd)
         {
-            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hwnd), out int pid);
+            Interop.User32.GetWindowThreadProcessId(hwnd, out uint pid);
             return pid == CurrentProcessId;
         }
 
-        private int CurrentProcessId
+        private uint CurrentProcessId
         {
             get
             {
                 if (s_currentProcessId == 0)
                 {
-                    s_currentProcessId = SafeNativeMethods.GetCurrentProcessId();
+                    s_currentProcessId = Interop.Kernel32.GetCurrentProcessId();
                 }
                 return s_currentProcessId;
             }
