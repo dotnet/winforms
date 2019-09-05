@@ -33,6 +33,22 @@ internal static partial class Interop
             return result;
         }
 
+        public static IntPtr SetWindowLong(IHandle hWnd, GWL nIndex, WNDPROC dwNewLong)
+        {
+            IntPtr pointer = Marshal.GetFunctionPointerForDelegate(dwNewLong);
+            IntPtr result = SetWindowLong(hWnd, nIndex, pointer);
+            GC.KeepAlive(dwNewLong);
+            return result;
+        }
+
+        public static IntPtr SetWindowLong(IntPtr hWnd, GWL nIndex, WNDPROC dwNewLong)
+        {
+            IntPtr pointer = Marshal.GetFunctionPointerForDelegate(dwNewLong);
+            IntPtr result = SetWindowLong(hWnd, nIndex, pointer);
+            GC.KeepAlive(dwNewLong);
+            return result;
+        }
+
         public enum GWL : int
         {
             WNDPROC = (-4),
