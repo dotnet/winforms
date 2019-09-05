@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                 int result = dialog.Show(owner);
                 if (result < 0)
                 {
-                    if ((uint)result == (uint)NativeMethods.HRESULT.ERROR_CANCELLED)
+                    if ((HRESULT)result == HRESULT.ERROR_CANCELLED)
                     {
                         return false;
                     }

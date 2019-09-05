@@ -2980,9 +2980,10 @@ namespace System.Windows.Forms
             /// </summary>
             internal CultureInfo GetCulture()
             {
-                if (culture == null || culture.LCID != SafeNativeMethods.GetThreadLocale())
+                int threadLcid = unchecked((int)Kernel32.GetThreadLocale());
+                if (culture == null || culture.LCID != threadLcid)
                 {
-                    culture = new CultureInfo(SafeNativeMethods.GetThreadLocale());
+                    culture = new CultureInfo(threadLcid);
                 }
 
                 return culture;
@@ -3681,7 +3682,8 @@ namespace System.Windows.Forms
             /// </summary>
             internal void SetCulture(CultureInfo culture)
             {
-                if (culture != null && culture.LCID != SafeNativeMethods.GetThreadLocale())
+                int threadLcid = unchecked((int)Kernel32.GetThreadLocale());
+                if (culture != null && culture.LCID != threadLcid)
                 {
                     SafeNativeMethods.SetThreadLocale(culture.LCID);
                 }

@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Globalization;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -17,7 +18,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private string GetCategoryFromObject(object obj, int dispid)
+        private string GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
         {
             if (obj == null)
             {
@@ -30,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     int categoryID = 0;
 
-                    if (NativeMethods.S_OK == catObj.MapPropertyToCategory(dispid, ref categoryID))
+                    if (catObj.MapPropertyToCategory(dispid, ref categoryID) == HRESULT.S_OK)
                     {
 
                         switch (categoryID)

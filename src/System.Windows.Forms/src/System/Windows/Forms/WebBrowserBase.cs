@@ -559,7 +559,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_FONT);
         }
 
         //
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_FORECOLOR);
         }
 
         //
@@ -579,7 +579,7 @@ namespace System.Windows.Forms
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_BACKCOLOR);
         }
 
         internal override void RecreateHandleCore()
@@ -1284,7 +1284,7 @@ namespace System.Windows.Forms
             return cc;
         }
 
-        private void AmbientChanged(int dispid)
+        private void AmbientChanged(Ole32.DispatchID dispid)
         {
             if (activeXInstance != null)
             {
@@ -1293,12 +1293,8 @@ namespace System.Windows.Forms
                     Invalidate();
                     axOleControl.OnAmbientPropertyChange(dispid);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
                     Debug.Fail(ex.ToString());
                 }
             }

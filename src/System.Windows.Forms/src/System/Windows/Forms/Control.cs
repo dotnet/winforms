@@ -911,11 +911,9 @@ namespace System.Windows.Forms
         ///  The background color of this control. This is an ambient property and
         ///  will always return a non-null value.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
-            SRDescription(nameof(SR.ControlBackColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DispId((int)Ole32.DispatchID.BACKCOLOR)]
+        [SRDescription(nameof(SR.ControlBackColorDescr))]
         public virtual Color BackColor
         {
             get
@@ -2116,12 +2114,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the control is currently enabled.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            Localizable(true),
-            DispId(NativeMethods.ActiveX.DISPID_ENABLED),
-            SRDescription(nameof(SR.ControlEnabledDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DispId((int)Ole32.DispatchID.ENABLED)]
+        [SRDescription(nameof(SR.ControlEnabledDescr))]
         public bool Enabled
         {
             get
@@ -2182,13 +2178,11 @@ namespace System.Windows.Forms
         ///  Retrieves the current font for this control. This will be the font used
         ///  by default for painting and text in the control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            Localizable(true),
-            DispId(NativeMethods.ActiveX.DISPID_FONT),
-            AmbientValue(null),
-            SRDescription(nameof(SR.ControlFontDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DispId((int)Ole32.DispatchID.FONT)]
+        [AmbientValue(null)]
+        [SRDescription(nameof(SR.ControlFontDescr))]
         public virtual Font Font
         {
             [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
@@ -2419,11 +2413,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The foreground color of the control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
-            SRDescription(nameof(SR.ControlForeColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DispId((int)Ole32.DispatchID.FORECOLOR)]
+        [SRDescription(nameof(SR.ControlForeColorDescr))]
         public virtual Color ForeColor
         {
             get
@@ -2562,12 +2554,10 @@ namespace System.Windows.Forms
         ///  The HWND handle that this control is bound to. If the handle
         ///  has not yet been created, this will force handle creation.
         /// </summary>
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            DispId(NativeMethods.ActiveX.DISPID_HWND),
-            SRDescription(nameof(SR.ControlHandleDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DispId((int)Ole32.DispatchID.HWND)]
+        [SRDescription(nameof(SR.ControlHandleDescr))]
         public IntPtr Handle
         {
             get
@@ -3585,12 +3575,10 @@ namespace System.Windows.Forms
         ///  Indicates whether the user can give the focus to this control using the TAB
         ///  key. This property is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(nameof(SR.ControlTabStopDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [SRDescription(nameof(SR.ControlTabStopDescr))]
         public bool TabStop
         {
             get => TabStopInternal;
@@ -3646,13 +3634,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current text associated with this control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        Bindable(true),
-        DispId(NativeMethods.ActiveX.DISPID_TEXT),
-        SRDescription(nameof(SR.ControlTextDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [Bindable(true)]
+        [DispId((int)Ole32.DispatchID.TEXT)]
+        [SRDescription(nameof(SR.ControlTextDescr))]
         public virtual string Text
         {
             get => CacheTextInternal ? _text ?? "" :  WindowText;
@@ -13835,13 +13821,13 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(int dispID)
+        HRESULT UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(Ole32.DispatchID dispID)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnAmbientPropertyChange.  Dispid: " + dispID);
             Debug.Indent();
             ActiveXInstance.OnAmbientPropertyChange(dispID);
             Debug.Unindent();
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleControl.FreezeEvents(int bFreeze)

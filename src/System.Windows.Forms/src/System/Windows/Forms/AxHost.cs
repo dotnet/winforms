@@ -24,17 +24,14 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Wraps ActiveX controls and exposes them as
-    ///  fully featured windows forms controls.
+    ///  Wraps ActiveX controls and exposes them as fully featured windows forms controls.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultEvent(nameof(Enter)),
-    Designer("System.Windows.Forms.Design.AxHostDesigner, " + AssemblyRef.SystemDesign),
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultEvent(nameof(Enter))]
+    [Designer("System.Windows.Forms.Design.AxHostDesigner, " + AssemblyRef.SystemDesign)]
     public abstract class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
     {
         private static readonly TraceSwitch AxHTraceSwitch = new TraceSwitch("AxHTrace", "ActiveX handle tracing");
@@ -112,7 +109,7 @@ namespace System.Windows.Forms
         private static Guid ifontDisp_Guid = typeof(SafeNativeMethods.IFontDisp).GUID;
         private static Guid ipicture_Guid = typeof(Ole32.IPicture).GUID;
         private static Guid ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
-        private static Guid ivbformat_Guid = typeof(UnsafeNativeMethods.IVBFormat).GUID;
+        private static Guid ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
         private static Guid ioleobject_Guid = typeof(UnsafeNativeMethods.IOleObject).GUID;
         private static Guid dataSource_Guid = new Guid("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
         private static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
@@ -937,22 +934,22 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_FONT);
         }
 
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_FORECOLOR);
         }
 
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_BACKCOLOR);
         }
 
-        private void AmbientChanged(int dispid)
+        private void AmbientChanged(Ole32.DispatchID dispid)
         {
             if (GetOcx() != null)
             {
@@ -1028,7 +1025,7 @@ namespace System.Windows.Forms
                 //
                 if (GetOcx() is UnsafeNativeMethods.IOleControl oleCtl)
                 {
-                    oleCtl.OnAmbientPropertyChange(NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME);
+                    oleCtl.OnAmbientPropertyChange(Ole32.DispatchID.AMBIENT_DISPLAYNAME);
                 }
             }
         }
@@ -2340,53 +2337,53 @@ namespace System.Windows.Forms
             return site == null || !site.DesignMode;
         }
 
-        private object GetAmbientProperty(int dispid)
+        private object GetAmbientProperty(Ole32.DispatchID dispid)
         {
             Control richParent = ParentInternal;
 
             switch (dispid)
             {
-                case NativeMethods.ActiveX.DISPID_AMBIENT_USERMODE:
+                case Ole32.DispatchID.AMBIENT_USERMODE:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for usermode");
                     return IsUserMode();
-                case NativeMethods.ActiveX.DISPID_AMBIENT_AUTOCLIP:
+                case Ole32.DispatchID.AMBIENT_AUTOCLIP:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for autoclip");
                     return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_MESSAGEREFLECT:
+                case Ole32.DispatchID.AMBIENT_MESSAGEREFLECT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for message reflect");
                     return true;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD:
+                case Ole32.DispatchID.AMBIENT_UIDEAD:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for uidead");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT:
+                case Ole32.DispatchID.AMBIENT_DISPLAYASDEFAULT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for displayasdefault");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FONT:
+                case Ole32.DispatchID.AMBIENT_FONT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for font");
                     if (richParent != null)
                     {
                         return GetIFontFromFont(richParent.Font);
                     }
                     return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWGRABHANDLES:
+                case Ole32.DispatchID.AMBIENT_SHOWGRABHANDLES:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for showGrabHandles");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_SHOWHATCHING:
+                case Ole32.DispatchID.AMBIENT_SHOWHATCHING:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for showHatching");
                     return false;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR:
+                case Ole32.DispatchID.AMBIENT_BACKCOLOR:
                     if (richParent != null)
                     {
                         return GetOleColorFromColor(richParent.BackColor);
                     }
                     return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR:
+                case Ole32.DispatchID.AMBIENT_FORECOLOR:
                     if (richParent != null)
                     {
                         return GetOleColorFromColor(richParent.ForeColor);
                     }
                     return null;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
+                case Ole32.DispatchID.AMBIENT_DISPLAYNAME:
                     string rval = GetParentContainer().GetNameForControl(this);
                     if (rval == null)
                     {
@@ -2394,10 +2391,10 @@ namespace System.Windows.Forms
                     }
 
                     return rval;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
+                case Ole32.DispatchID.AMBIENT_LOCALEID:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for localeid");
                     return Thread.CurrentThread.CurrentCulture.LCID;
-                case NativeMethods.ActiveX.DISPID_AMBIENT_RIGHTTOLEFT:
+                case Ole32.DispatchID.AMBIENT_RIGHTTOLEFT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for right to left");
                     Control ctl = this;
                     while (ctl != null)
@@ -2613,7 +2610,7 @@ namespace System.Windows.Forms
             return instance;
         }
 
-        private CategoryAttribute GetCategoryForDispid(int dispid)
+        private CategoryAttribute GetCategoryForDispid(Ole32.DispatchID dispid)
         {
             NativeMethods.ICategorizeProperties icp = GetCategorizeProperties();
             if (icp == null)
@@ -3032,9 +3029,9 @@ namespace System.Windows.Forms
             return this;
         }
 
-        private AxPropertyDescriptor GetPropertyDescriptorFromDispid(int dispid)
+        private AxPropertyDescriptor GetPropertyDescriptorFromDispid(Ole32.DispatchID dispid)
         {
-            Debug.Assert(dispid != NativeMethods.ActiveX.DISPID_UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");
+            Debug.Assert(dispid != Ole32.DispatchID.UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");
 
             PropertyDescriptorCollection props = FillProperties(null);
             foreach (PropertyDescriptor prop in props)
@@ -3335,7 +3332,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        unsafe private void ShowPropertyPageForDispid(int dispid, Guid guid)
+        unsafe private void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
         {
             try
             {
@@ -3441,7 +3438,7 @@ namespace System.Windows.Forms
                 {
                     if (oleSite != null)
                     {
-                        ((UnsafeNativeMethods.IPropertyNotifySink)oleSite).OnChanged(NativeMethods.MEMBERID_NIL);
+                        ((Ole32.IPropertyNotifySink)oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
                     }
 
                     if (trans != null)
@@ -3973,8 +3970,16 @@ namespace System.Windows.Forms
         // This private class encapsulates all of the ole interfaces so that users
         // will not be able to access and call them directly...
 
-        private class OleInterfaces
-            : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IPropertyNotifySink, IReflect, IDisposable
+        private class OleInterfaces :
+            UnsafeNativeMethods.IOleControlSite,
+            UnsafeNativeMethods.IOleClientSite,
+            UnsafeNativeMethods.IOleInPlaceSite,
+            Ole32.ISimpleFrameSite,
+            UnsafeNativeMethods.IVBGetControl,
+            Ole32.IGetVBAObject,
+            Ole32.IPropertyNotifySink,
+            IReflect,
+            IDisposable
         {
             private readonly AxHost host;
             private ConnectionPointCookie connectionPoint;
@@ -4030,7 +4035,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(UnsafeNativeMethods.IPropertyNotifySink));
+                    connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(Ole32.IPropertyNotifySink));
                 }
                 catch
                 {
@@ -4064,26 +4069,23 @@ namespace System.Windows.Forms
             }
 
             // IGetVBAObject methods:
-
-            int UnsafeNativeMethods.IGetVBAObject.GetObject(ref Guid riid, UnsafeNativeMethods.IVBFormat[] rval, int dwReserved)
+            unsafe HRESULT Ole32.IGetVBAObject.GetObject(Guid* riid, Ole32.IVBFormat[] rval, uint dwReserved)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetObject");
 
-                if (rval == null || riid.Equals(Guid.Empty))
+                if (rval == null || riid == null)
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
-                if (riid.Equals(ivbformat_Guid))
-                {
-                    rval[0] = new VBFormat();
-                    return NativeMethods.S_OK;
-                }
-                else
+                if (!riid->Equals(ivbformat_Guid))
                 {
                     rval[0] = null;
-                    return NativeMethods.E_NOINTERFACE;
+                    return HRESULT.E_NOINTERFACE;
                 }
+
+                rval[0] = new VBFormat();
+                return HRESULT.S_OK;
             }
 
             // IVBGetControl methods:
@@ -4097,15 +4099,14 @@ namespace System.Windows.Forms
             }
 
             // ISimpleFrameSite methods:
-
-            int UnsafeNativeMethods.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, ref int pdwCookie)
+            unsafe HRESULT Ole32.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint* pdwCookie)
             {
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, int dwCookie)
+            unsafe HRESULT Ole32.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint dwCookie)
             {
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             // IReflect methods:
@@ -4160,13 +4161,12 @@ namespace System.Windows.Forms
                 return Array.Empty<MemberInfo>();
             }
 
-            object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder,
-                                                    object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
+            object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
             {
                 if (name.StartsWith("[DISPID="))
                 {
                     int endIndex = name.IndexOf(']');
-                    int dispid = int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
+                    Ole32.DispatchID dispid = (Ole32.DispatchID)int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
                     object ambient = host.GetAmbientProperty(dispid);
                     if (ambient != null)
                     {
@@ -4522,14 +4522,13 @@ namespace System.Windows.Forms
 
             // IPropertyNotifySink methods
 
-            void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid)
+            HRESULT Ole32.IPropertyNotifySink.OnChanged(Ole32.DispatchID dispid)
             {
                 // Some controls fire OnChanged() notifications when getting values of some properties.
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
-                //
                 if (host.NoComponentChangeEvents != 0)
                 {
-                    return;
+                    return HRESULT.S_OK;
                 }
 
                 host.NoComponentChangeEvents++;
@@ -4539,7 +4538,7 @@ namespace System.Windows.Forms
 
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnChanged");
 
-                    if (dispid != NativeMethods.ActiveX.DISPID_UNKNOWN)
+                    if (dispid != Ole32.DispatchID.UNKNOWN)
                     {
                         prop = host.GetPropertyDescriptorFromDispid(dispid);
                         if (prop != null)
@@ -4554,7 +4553,6 @@ namespace System.Windows.Forms
                     else
                     {
                         // update them all for DISPID_UNKNOWN.
-                        //
                         PropertyDescriptorCollection props = ((ICustomTypeDescriptor)host).GetProperties();
                         foreach (PropertyDescriptor p in props)
                         {
@@ -4581,7 +4579,7 @@ namespace System.Windows.Forms
                             {
                                 if (coEx == CheckoutException.Canceled)
                                 {
-                                    return;
+                                    return HRESULT.S_OK;
                                 }
                                 throw coEx;
                             }
@@ -4601,12 +4599,14 @@ namespace System.Windows.Forms
                 {
                     host.NoComponentChangeEvents--;
                 }
+
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispid)
+            HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispid)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnRequestEdit for " + host.ToString());
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
         }
 
@@ -5404,48 +5404,59 @@ namespace System.Windows.Forms
             base.OnMouseDown(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        private class VBFormat : UnsafeNativeMethods.IVBFormat
+        private class VBFormat : Ole32.IVBFormat
         {
-            // IVBFormat methods:
-            //
-            int UnsafeNativeMethods.IVBFormat.Format(ref object var, IntPtr pszFormat, IntPtr lpBuffer, short cpBuffer, int lcid, short firstD, short firstW, short[] result)
+            unsafe HRESULT Ole32.IVBFormat.Format(
+                IntPtr vData,
+                IntPtr bstrFormat,
+                IntPtr lpBuffer,
+                ushort cb,
+                int lcid,
+                Ole32.VarFormatFirstDayOfWeek sFirstDayOfWeek,
+                Ole32.VarFormatFirstWeekOfYear sFirstWeekOfYear,
+                ushort* rcb)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in Format");
-                if (result == null)
+                if (rcb == null)
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
-                result[0] = 0;
-                if (lpBuffer == IntPtr.Zero || cpBuffer < 2)
+                *rcb = 0;
+                if (lpBuffer == IntPtr.Zero || cb < 2)
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
                 IntPtr pbstr = IntPtr.Zero;
-                int hr = UnsafeNativeMethods.VarFormat(ref var, new HandleRef(null, pszFormat), firstD, firstW, 32 /* VAR_FORMAT_NOSUBSTITUTE */, ref pbstr);
-
+                HRESULT hr = Oleaut32.VarFormat(
+                    vData,
+                    bstrFormat,
+                    sFirstDayOfWeek,
+                    sFirstWeekOfYear,
+                    Oleaut32.VarFormatFlags.VAR_FORMAT_NOSUBSTITUTE,
+                    ref pbstr);
                 try
                 {
-                    int i = 0;
+                    ushort i = 0;
                     if (pbstr != IntPtr.Zero)
                     {
                         short ch = 0;
-                        cpBuffer--;
-                        for (; i < cpBuffer && (ch = Marshal.ReadInt16(pbstr, i * 2)) != 0; i++)
+                        cb--;
+                        for (; i < cb && (ch = Marshal.ReadInt16(pbstr, i * 2)) != 0; i++)
                         {
                             Marshal.WriteInt16(lpBuffer, i * 2, ch);
                         }
                     }
                     Marshal.WriteInt16(lpBuffer, i * 2, (short)0);
-                    result[0] = (short)i;
+                    *rcb = i;
                 }
                 finally
                 {
-                    SafeNativeMethods.SysFreeString(new HandleRef(null, pbstr));
+                    Oleaut32.SysFreeString(pbstr);
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
         }
 
@@ -6400,7 +6411,12 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// </summary>
-            private class ExtenderProxy : UnsafeNativeMethods.IExtender, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IGetOleObject, IReflect
+            private class ExtenderProxy :
+                UnsafeNativeMethods.IExtender,
+                UnsafeNativeMethods.IVBGetControl,
+                Ole32.IGetVBAObject,
+                UnsafeNativeMethods.IGetOleObject,
+                IReflect
             {
                 private readonly WeakReference pRef;
                 private readonly WeakReference pContainer;
@@ -6445,24 +6461,22 @@ namespace System.Windows.Forms
                     throw E_FAIL;
                 }
 
-                int UnsafeNativeMethods.IGetVBAObject.GetObject(ref Guid riid, UnsafeNativeMethods.IVBFormat[] rval, int dwReserved)
+                unsafe HRESULT Ole32.IGetVBAObject.GetObject(Guid* riid, Ole32.IVBFormat[] rval, uint dwReserved)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetObject for proxy");
-                    if (rval == null || riid.Equals(Guid.Empty))
+                    if (rval == null || riid == null)
                     {
-                        return NativeMethods.E_INVALIDARG;
+                        return HRESULT.E_INVALIDARG;
                     }
 
-                    if (riid.Equals(ivbformat_Guid))
-                    {
-                        rval[0] = new VBFormat();
-                        return NativeMethods.S_OK;
-                    }
-                    else
+                    if (!riid->Equals(ivbformat_Guid))
                     {
                         rval[0] = null;
-                        return NativeMethods.E_NOINTERFACE;
+                        return HRESULT.E_NOINTERFACE;
                     }
+
+                    rval[0] = new VBFormat();
+                    return HRESULT.S_OK;
                 }
 
                 public int Align
@@ -7405,8 +7419,7 @@ namespace System.Windows.Forms
                     //
                     if (!IsBrowsable && !IsReadOnly)
                     {
-                        Guid g = GetPropertyPage(dispid.Value);
-
+                        Guid g = GetPropertyPage((Ole32.DispatchID)dispid.Value);
                         if (!Guid.Empty.Equals(g))
                         {
                             Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + Name + " browsable because we found an property page.");
@@ -7415,8 +7428,7 @@ namespace System.Windows.Forms
                     }
 
                     // Use the CategoryAttribute provided by the OCX.
-                    //
-                    CategoryAttribute cat = owner.GetCategoryForDispid(dispid.Value);
+                    CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)dispid.Value);
                     if (cat != null)
                     {
                         AddAttribute(cat);
@@ -7453,17 +7465,17 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal int Dispid
+            internal Ole32.DispatchID Dispid
             {
                 get
                 {
                     DispIdAttribute dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
                     if (dispid != null)
                     {
-                        return dispid.Value;
+                        return (Ole32.DispatchID)dispid.Value;
                     }
 
-                    return NativeMethods.ActiveX.DISPID_UNKNOWN;
+                    return Ole32.DispatchID.UNKNOWN;
                 }
             }
 
@@ -7503,8 +7515,7 @@ namespace System.Windows.Forms
 
             public override object GetEditor(Type editorBaseType)
             {
-
-                UpdateTypeConverterAndTypeEditorInternal(false, dispid.Value);
+                UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)dispid.Value);
 
                 if (editorBaseType.Equals(typeof(UITypeEditor)) && editor != null)
                 {
@@ -7519,7 +7530,7 @@ namespace System.Windows.Forms
                 return ((flags & flagValue) == flagValue);
             }
 
-            private Guid GetPropertyPage(int dispid)
+            private unsafe Guid GetPropertyPage(Ole32.DispatchID dispid)
             {
                 try
                 {
@@ -7529,7 +7540,8 @@ namespace System.Windows.Forms
                         return Guid.Empty;
                     }
 
-                    if (NativeMethods.Succeeded(ippb.MapPropertyToPage(dispid, out Guid rval)))
+                    Guid rval = Guid.Empty;
+                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded())
                     {
                         return rval;
                     }
@@ -7677,7 +7689,7 @@ namespace System.Windows.Forms
             ///  This simply sets flags so this will happen, it doesn't actually to the update...
             ///  we wait and do that on-demand for perf.
             /// </summary>
-            internal void UpdateTypeConverterAndTypeEditorInternal(bool force, int dispid)
+            internal void UpdateTypeConverterAndTypeEditorInternal(bool force, Ole32.DispatchID dispid)
             {
 
                 // check to see if we're being forced here or if the work really
@@ -7705,20 +7717,19 @@ namespace System.Windows.Forms
                         NativeMethods.CA_STRUCT caStrings = new NativeMethods.CA_STRUCT();
                         NativeMethods.CA_STRUCT caCookies = new NativeMethods.CA_STRUCT();
 
-                        int hr = NativeMethods.S_OK;
-
+                        HRESULT hr = HRESULT.S_OK;
                         try
                         {
                             hr = ppb.GetPredefinedStrings(dispid, caStrings, caCookies);
                         }
                         catch (ExternalException ex)
                         {
-                            hr = ex.ErrorCode;
+                            hr = (HRESULT)ex.ErrorCode;
                             Debug.Fail("An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid=" +
                                        dispid + "), object type=" + new ComNativeDescriptor().GetClassName(ppb));
                         }
 
-                        if (hr != NativeMethods.S_OK)
+                        if (hr != HRESULT.S_OK)
                         {
                             hasStrings = false;
                             // Destroy the existing editor if we created the current one
@@ -7962,8 +7973,8 @@ namespace System.Windows.Forms
                                 continue;
                             }
                             var.vt = (short)NativeMethods.tagVT.VT_EMPTY;
-                            int hr = ppb.GetPredefinedValue(target.Dispid, cookie, var);
-                            if (hr == NativeMethods.S_OK && var.vt != (short)NativeMethods.tagVT.VT_EMPTY)
+                            HRESULT hr = ppb.GetPredefinedValue(target.Dispid, (uint)cookie, var);
+                            if (hr == HRESULT.S_OK && var.vt != (short)NativeMethods.tagVT.VT_EMPTY)
                             {
                                 valueItems[i] = var.ToObject();
                             }

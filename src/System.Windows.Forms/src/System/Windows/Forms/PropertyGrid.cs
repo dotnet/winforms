@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
-    public class PropertyGrid : ContainerControl, IComPropertyBrowser, UnsafeNativeMethods.IPropertyNotifySink
+    public class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
     {
         private readonly DocComment doccomment;
         private int dcSizeRatio = -1;
@@ -2907,24 +2907,20 @@ namespace System.Windows.Forms
         ///  Called when a property on an Ole32 Object changes.
         ///  See IPropertyNotifySink::OnChanged
         /// </summary>
-        void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispID)
+        HRESULT Ole32.IPropertyNotifySink.OnChanged(Ole32.DispatchID dispID)
         {
             // we don't want the grid's own property sets doing this, but if we're getting
             // an OnChanged that isn't the DispID of the property we're currently changing,
             // we need to cause a refresh.
-            //
-            //
             bool fullRefresh = false;
             if (gridView.SelectedGridEntry is PropertyDescriptorGridEntry selectedEntry && selectedEntry.PropertyDescriptor != null && selectedEntry.PropertyDescriptor.Attributes != null)
             {
-
                 // fish out the DispIdAttribute which will tell us the DispId of the
                 // property that we're changing.
-                //
                 DispIdAttribute dispIdAttr = (DispIdAttribute)selectedEntry.PropertyDescriptor.Attributes[(typeof(DispIdAttribute))];
                 if (dispIdAttr != null && !dispIdAttr.IsDefaultAttribute())
                 {
-                    fullRefresh = (dispID != dispIdAttr.Value);
+                    fullRefresh = (dispID != (Ole32.DispatchID)dispIdAttr.Value);
                 }
             }
 
@@ -2938,11 +2934,13 @@ namespace System.Windows.Forms
                 // this is so changes to names of native
                 // objects will be reflected in the combo box
                 object obj = GetUnwrappedObject(0);
-                if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == NativeMethods.ActiveX.DISPID_Name)
+                if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == Ole32.DispatchID.Name)
                 {
                     OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
                 }
             }
+
+            return HRESULT.S_OK;
         }
 
         /// <summary>
@@ -3412,17 +3410,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Called when a property on an Ole32 Object that is tagged
-        ///  with "requestedit" is about to be edited.
-        ///  See IPropertyNotifySink::OnRequestEdit
+        ///  Called when a property on an Ole32 Object that is tagged with "requestedit" is
+        ///  about to be edited. See IPropertyNotifySink::OnRequestEdit
         /// </summary>
-        int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispID)
+        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispID)
         {
-            // we don't do anything here...
-            return NativeMethods.S_OK;
+            // Don't do anything here.
+            return HRESULT.S_OK;
         }
 
-        //
         protected override void OnResize(EventArgs e)
         {
             if (IsHandleCreated && Visible)
@@ -4917,7 +4913,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
-                    connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(UnsafeNativeMethods.IPropertyNotifySink), /*throwException*/ false);
+                    connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(Ole32.IPropertyNotifySink), /*throwException*/ false);
                 }
                 catch
                 {

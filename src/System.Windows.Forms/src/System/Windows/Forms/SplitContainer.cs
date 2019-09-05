@@ -327,22 +327,15 @@ namespace System.Windows.Forms
         ///  Indicates what type of border the Splitter control has.  This value
         ///  comes from the System.Windows.Forms.BorderStyle enumeration.
         /// </summary>
-        [
-        DefaultValue(BorderStyle.None),
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.SplitterBorderStyleDescr))
-        ]
+        [DefaultValue(BorderStyle.None)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [SRDescription(nameof(SR.SplitterBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
-                //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
@@ -984,18 +977,13 @@ namespace System.Windows.Forms
         ///  Indicates whether the user can give the focus to this control using the TAB
         ///  key. This property is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(nameof(SR.ControlTabStopDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {
-            get
-            {
-                return tabStop;
-            }
+            get => tabStop;
             set
             {
                 if (TabStop != value)

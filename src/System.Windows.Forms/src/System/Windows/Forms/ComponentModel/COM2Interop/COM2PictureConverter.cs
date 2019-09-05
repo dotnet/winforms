@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -22,7 +21,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public Com2PictureConverter(Com2PropertyDescriptor pd)
         {
-            if (pd.DISPID == NativeMethods.ActiveX.DISPID_MOUSEICON || pd.Name.IndexOf("Icon") != -1)
+            if (pd.DISPID == Ole32.DispatchID.MOUSEICON || pd.Name.IndexOf("Icon") != -1)
             {
                 _pictureType = typeof(Icon);
             }

@@ -23,8 +23,13 @@ namespace System.Windows.Forms
     ///  means that inheritors who want to override even a single method of one
     ///  of these interfaces will have to implement the whole interface.
     /// </summary>
-    public class WebBrowserSiteBase
-        : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable
+    public class WebBrowserSiteBase :
+        UnsafeNativeMethods.IOleControlSite,
+        UnsafeNativeMethods.IOleClientSite,
+        UnsafeNativeMethods.IOleInPlaceSite,
+        Ole32.ISimpleFrameSite,
+        Ole32.IPropertyNotifySink,
+        IDisposable
     {
         private readonly WebBrowserBase host;
         private AxHost.ConnectionPointCookie connectionPoint;
@@ -333,30 +338,25 @@ namespace System.Windows.Forms
             return OnActiveXRectChange(lprcPosRect);
         }
 
-        //
         // ISimpleFrameSite methods:
-        //
-        int UnsafeNativeMethods.ISimpleFrameSite.PreMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, ref int pdwCookie)
+        unsafe HRESULT Ole32.ISimpleFrameSite.PreMessageFilter(IntPtr hWnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint* pdwCookie)
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.ISimpleFrameSite.PostMessageFilter(IntPtr hwnd, int msg, IntPtr wp, IntPtr lp, ref IntPtr plResult, int dwCookie)
+        unsafe HRESULT Ole32.ISimpleFrameSite.PostMessageFilter(IntPtr hWnd, uint msg, IntPtr wp, IntPtr lp, IntPtr* plResult, uint dwCookie)
         {
-            return NativeMethods.S_FALSE;
+            return HRESULT.S_FALSE;
         }
 
-        //
         // IPropertyNotifySink methods:
-        //
-        void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispid)
+        HRESULT Ole32.IPropertyNotifySink.OnChanged(Ole32.DispatchID dispid)
         {
             // Some controls fire OnChanged() notifications when getting values of some properties.
             // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
-            //
             if (Host.NoComponentChangeEvents != 0)
             {
-                return;
+                return HRESULT.S_OK;
             }
 
             Host.NoComponentChangeEvents++;
@@ -373,17 +373,16 @@ namespace System.Windows.Forms
             {
                 Host.NoComponentChangeEvents--;
             }
+
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispid)
+        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispid)
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        //
-        // Virtual overrides:
-        //
-        internal virtual void OnPropertyChanged(int dispid)
+        internal virtual void OnPropertyChanged(Ole32.DispatchID dispid)
         {
             try
             {
@@ -440,7 +439,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(UnsafeNativeMethods.IPropertyNotifySink));
+                    connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(Ole32.IPropertyNotifySink));
                 }
                 catch (Exception ex)
                 {

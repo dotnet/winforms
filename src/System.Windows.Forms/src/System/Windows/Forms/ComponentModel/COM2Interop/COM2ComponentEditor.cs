@@ -5,19 +5,20 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2ComponentEditor : WindowsFormsComponentEditor
     {
-        public static bool NeedsComponentEditor(object obj)
+        public unsafe static bool NeedsComponentEditor(object obj)
         {
             if (obj is NativeMethods.IPerPropertyBrowsing)
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                int hr = ((NativeMethods.IPerPropertyBrowsing)obj).MapPropertyToPage(NativeMethods.MEMBERID_NIL, out guid);
-                if ((hr == NativeMethods.S_OK) && !guid.Equals(Guid.Empty))
+                HRESULT hr = ((NativeMethods.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
                 {
                     return true;
                 }
@@ -53,7 +54,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return false;
         }
 
-        public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
+        public unsafe override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
         {
             IntPtr handle = (parent == null ? IntPtr.Zero : parent.Handle);
 
@@ -62,15 +63,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                int hr = ((NativeMethods.IPerPropertyBrowsing)obj).MapPropertyToPage(NativeMethods.MEMBERID_NIL, out guid);
-                if (hr == NativeMethods.S_OK)
+                HRESULT hr = ((NativeMethods.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
                 {
-                    if (!guid.Equals(Guid.Empty))
-                    {
-                        object o = obj;
-                        SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, 1, new Guid[] { guid }, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
-                        return true;
-                    }
+                    object o = obj;
+                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, 1, new Guid[] { guid }, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
+                    return true;
                 }
             }
 

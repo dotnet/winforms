@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -251,16 +252,12 @@ namespace System.Windows.Forms
         CTRLINFO_EATS_RETURN = 1,
         CTRLINFO_EATS_ESCAPE = 2;
 
-        public const int DUPLICATE = 0x06,
-        DISPID_UNKNOWN = (-1),
-        DISPID_PROPERTYPUT = (-3),
-        DISPATCH_METHOD = 0x1,
-        DISPATCH_PROPERTYGET = 0x2,
-        DISPATCH_PROPERTYPUT = 0x4,
-        DV_E_DVASPECT = unchecked((int)0x8004006B),
+        public const uint DISPATCH_METHOD = 0x1;
+        public const uint DISPATCH_PROPERTYGET = 0x2;
+        public const uint DISPATCH_PROPERTYPUT = 0x4;
+        public const int DV_E_DVASPECT = unchecked((int)0x8004006B),
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
-        DISP_E_EXCEPTION = unchecked((int)0x80020009),
         DIB_RGB_COLORS = 0,
         DUPLICATE_SAME_ACCESS = 0x00000002,
         DFC_CAPTION = 1,
@@ -328,7 +325,6 @@ namespace System.Windows.Forms
         E_NOINTERFACE = unchecked((int)0x80004002),
         E_POINTER = unchecked((int)0x80004003),
         E_FAIL = unchecked((int)0x80004005),
-        E_ABORT = unchecked((int)0x80004004),
         E_UNEXPECTED = unchecked((int)0x8000FFFF),
         INET_E_DEFAULT_ACTION = unchecked((int)0x800C0011),
         ETO_OPAQUE = 0x0002,
@@ -789,18 +785,18 @@ namespace System.Windows.Forms
         public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
         public const int TVS_EX_DOUBLEBUFFER = 0x0004;
 
-        public static readonly int LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
-        public static readonly int LANG_USER_DEFAULT = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
+        public static readonly uint LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
+        public static readonly uint LANG_USER_DEFAULT = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 
-        public static int MAKELANGID(int primary, int sub)
+        public static uint MAKELANGID(uint primary, uint sub)
         {
-            return ((((ushort)(sub)) << 10) | (ushort)(primary));
+            return unchecked((uint)((((ushort)(sub)) << 10) | (ushort)(primary)));
         }
 
         /// <summary>
         ///  Creates an LCID from a LangId
         /// </summary>
-        public static int MAKELCID(int lgid)
+        public static uint MAKELCID(uint lgid)
         {
             return MAKELCID(lgid, SORT_DEFAULT);
         }
@@ -808,7 +804,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates an LCID from a LangId
         /// </summary>
-        public static int MAKELCID(int lgid, int sort)
+        public static uint MAKELCID(uint lgid, uint sort)
         {
             return ((0xFFFF & lgid) | (((0x000f) & sort) << 16));
         }
@@ -906,10 +902,10 @@ namespace System.Windows.Forms
         NIIF_INFO = 0x00000001,
         NIIF_WARNING = 0x00000002,
         NIIF_ERROR = 0x00000003,
-        NIN_BALLOONSHOW = (Interop.WindowMessages.WM_USER + 2),
-        NIN_BALLOONHIDE = (Interop.WindowMessages.WM_USER + 3),
-        NIN_BALLOONTIMEOUT = (Interop.WindowMessages.WM_USER + 4),
-        NIN_BALLOONUSERCLICK = (Interop.WindowMessages.WM_USER + 5),
+        NIN_BALLOONSHOW = (WindowMessages.WM_USER + 2),
+        NIN_BALLOONHIDE = (WindowMessages.WM_USER + 3),
+        NIN_BALLOONTIMEOUT = (WindowMessages.WM_USER + 4),
+        NIN_BALLOONUSERCLICK = (WindowMessages.WM_USER + 5),
         NFR_ANSI = 1,
         NFR_UNICODE = 2,
         NM_CLICK = ((0 - 0) - 2),
@@ -943,7 +939,6 @@ namespace System.Windows.Forms
         OLEIVERB_PROPERTIES = -7,
         OLE_E_INVALIDRECT = unchecked((int)0x8004000D),
         OLE_E_NOCONNECTION = unchecked((int)0x80040004),
-        OLE_E_PROMPTSAVECANCELLED = unchecked((int)0x8004000C),
         OLEMISC_RECOMPOSEONRESIZE = 0x00000001,
         OLEMISC_INSIDEOUT = 0x00000080,
         OLEMISC_ACTIVATEWHENVISIBLE = 0x0000100,
@@ -1695,7 +1690,7 @@ namespace System.Windows.Forms
             internal Point pt;
             internal int clrForeground = -1;
             internal int clrBackground = -1;
-            internal Interop.RECT rcMargins = new Interop.RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
+            internal RECT rcMargins = new RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
             internal string pszFont = null;
         }
 
@@ -1720,8 +1715,8 @@ namespace System.Windows.Forms
         public class MONITORINFOEX
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFOEX>();
-            internal Interop.RECT rcMonitor = new Interop.RECT();
-            internal Interop.RECT rcWork = new Interop.RECT();
+            internal RECT rcMonitor = new RECT();
+            internal RECT rcWork = new RECT();
             internal int dwFlags = 0;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
             internal char[] szDevice = new char[32];
@@ -1731,8 +1726,8 @@ namespace System.Windows.Forms
         public class MONITORINFO
         {
             internal int cbSize = Marshal.SizeOf<MONITORINFO>();
-            internal Interop.RECT rcMonitor = new Interop.RECT();
-            internal Interop.RECT rcWork = new Interop.RECT();
+            internal RECT rcMonitor = new RECT();
+            internal RECT rcWork = new RECT();
             internal int dwFlags = 0;
         }
 
@@ -1796,7 +1791,7 @@ namespace System.Windows.Forms
         [ComImport]
         [Guid("0FF510A3-5FA5-49F1-8CCC-190D71083F3E")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IVsPerPropertyBrowsing
+        public unsafe interface IVsPerPropertyBrowsing
         {
             /// <summary>
             ///  Hides the property at the given dispid from the properties window
@@ -1804,41 +1799,46 @@ namespace System.Windows.Forms
             ///  are otherwise browsable.
             /// </summary>
             [PreserveSig]
-            int HideProperty(int dispid, ref bool pfHide);
+            HRESULT HideProperty(
+                Ole32.DispatchID dispid,
+                BOOL* pfHide);
 
             /// <summary>
             ///  Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
             ///  Returning a non-S_OK return code or false for pfDisplay will suppress this feature
             /// </summary>
             [PreserveSig]
-            int DisplayChildProperties(int dispid,
-                                       ref bool pfDisplay);
+            HRESULT DisplayChildProperties(
+                Ole32.DispatchID dispid,
+                BOOL* pfDisplay);
 
             /// <summary>
             ///  Retrieves the localized name and description for a property.
             ///  returning a non-S_OK return code will display the default values
             /// </summary>
             [PreserveSig]
-            int GetLocalizedPropertyInfo(int dispid, int localeID,
-                                         [Out, MarshalAs(UnmanagedType.LPArray)]
-                                         string[] pbstrLocalizedName,
-                                         [Out, MarshalAs(UnmanagedType.LPArray)]
-                                         string[] pbstrLocalizeDescription);
+            HRESULT GetLocalizedPropertyInfo(
+                Ole32.DispatchID dispid,
+                int localeID,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizedName,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizeDescription);
 
             /// <summary>
             ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
             ///  the property will be shown as bold in the browser to indcate that it has been modified from the default.
             /// </summary>
             [PreserveSig]
-            int HasDefaultValue(int dispid,
-                               ref bool fDefault);
+            HRESULT HasDefaultValue(
+                Ole32.DispatchID dispid,
+                BOOL* fDefault);
 
             /// <summary>
             ///  Determines if a property should be made read only.  This only applies to properties that are writeable,
             /// </summary>
             [PreserveSig]
-            int IsPropertyReadOnly(int dispid,
-                                   ref bool fReadOnly);
+            HRESULT IsPropertyReadOnly(
+                Ole32.DispatchID dispid,
+                BOOL* fReadOnly);
 
             /// <summary>
             ///  Returns the classname for this object. The class name is the non-bolded text
@@ -1853,14 +1853,17 @@ namespace System.Windows.Forms
             ///  If return value is non-S_OK or *pfCanReset is
             /// </summary>
             [PreserveSig]
-            int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
+            HRESULT CanResetPropertyValue(
+                Ole32.DispatchID dispid,
+                BOOL* pfCanReset);
 
             /// <summary>
             ///  If the return value is S_OK, the property's value will then be refreshed to the
             ///  new default values.
             /// </summary>
             [PreserveSig]
-            int ResetPropertyValue(int dispid);
+            HRESULT ResetPropertyValue(
+                Ole32.DispatchID dispid);
         }
 
         [ComImport]
@@ -1869,40 +1872,33 @@ namespace System.Windows.Forms
         public interface IManagedPerPropertyBrowsing
         {
             [PreserveSig]
-            int GetPropertyAttributes(int dispid,
-                                      ref int pcAttributes,
-                                      ref IntPtr pbstrAttrNames,
-                                      ref IntPtr pvariantInitValues);
+            HRESULT GetPropertyAttributes(
+                Ole32.DispatchID dispid,
+                ref int pcAttributes,
+                ref IntPtr pbstrAttrNames,
+                ref IntPtr pvariantInitValues);
         }
 
         [ComImport]
         [Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IProvidePropertyBuilder
+        public unsafe interface IProvidePropertyBuilder
         {
             [PreserveSig]
-            int MapPropertyToBuilder(
-                int dispid,
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] pdwCtlBldType,
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                string[] pbstrGuidBldr,
-                [In, Out, MarshalAs(UnmanagedType.Bool)]
-                ref bool builderAvailable);
+            HRESULT MapPropertyToBuilder(
+                Ole32.DispatchID dispid,
+                [In, Out, MarshalAs(UnmanagedType.LPArray)] int[] pdwCtlBldType,
+                [In, Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrGuidBldr,
+                BOOL* builderAvailable);
 
             [PreserveSig]
-            int ExecuteBuilder(
-                int dispid,
-                [In, MarshalAs(UnmanagedType.BStr)]
-                string bstrGuidBldr,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pdispApp,
-
-                HandleRef hwndBldrOwner,
-                [Out, In, MarshalAs(UnmanagedType.Struct)]
-                ref object pvarValue,
-                [In, Out, MarshalAs(UnmanagedType.Bool)]
-                ref bool actionCommitted);
+            HRESULT ExecuteBuilder(
+                Ole32.DispatchID dispid,
+                [In, MarshalAs(UnmanagedType.BStr)] string bstrGuidBldr,
+                [In, MarshalAs(UnmanagedType.Interface)] object pdispApp,
+                IntPtr hwndBldrOwner,
+                [Out, In, MarshalAs(UnmanagedType.Struct)] ref object pvarValue,
+                BOOL* actionCommitted);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2508,9 +2504,9 @@ namespace System.Windows.Forms
             public int nMaxCustFilter = 0;
             public int nFilterIndex;
             public IntPtr lpstrFile;
-            public int nMaxFile = Interop.Kernel32.MAX_PATH;
+            public int nMaxFile = Kernel32.MAX_PATH;
             public IntPtr lpstrFileTitle = IntPtr.Zero;
-            public int nMaxFileTitle = Interop.Kernel32.MAX_PATH;
+            public int nMaxFileTitle = Kernel32.MAX_PATH;
             public string lpstrInitialDir;
             public string lpstrTitle;
             public int Flags;
@@ -2687,35 +2683,29 @@ namespace System.Windows.Forms
         [ComImport]
         [Guid("376BD3AA-3845-101B-84ED-08002B2EC713")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPerPropertyBrowsing
+        public unsafe interface IPerPropertyBrowsing
         {
             [PreserveSig]
-            int GetDisplayString(
-                int dispID,
-                [Out, MarshalAs(UnmanagedType.LPArray)]
-                string[] pBstr);
+            HRESULT GetDisplayString(
+                Ole32.DispatchID dispID,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstr);
 
             [PreserveSig]
-            int MapPropertyToPage(
-                int dispID,
-                [Out]
-                out Guid pGuid);
+            HRESULT MapPropertyToPage(
+                Ole32.DispatchID dispID,
+                Guid* pGuid);
 
             [PreserveSig]
-            int GetPredefinedStrings(
-                int dispID,
-                [Out]
-                CA_STRUCT pCaStringsOut,
-                [Out]
-                CA_STRUCT pCaCookiesOut);
+            HRESULT GetPredefinedStrings(
+                Ole32.DispatchID dispID,
+                [Out] CA_STRUCT pCaStringsOut,
+                [Out] CA_STRUCT pCaCookiesOut);
 
             [PreserveSig]
-            int GetPredefinedValue(
-                int dispID,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwCookie,
-                [Out]
-                VARIANT pVarOut);
+            HRESULT GetPredefinedValue(
+                Ole32.DispatchID dispID,
+                uint dwCookie,
+                [Out] VARIANT pVarOut);
         }
 
         [ComImport]
@@ -2724,8 +2714,8 @@ namespace System.Windows.Forms
         public interface ICategorizeProperties
         {
             [PreserveSig]
-            int MapPropertyToCategory(
-                int dispID,
+            HRESULT MapPropertyToCategory(
+                Ole32.DispatchID dispID,
                 ref int categoryID);
 
             [PreserveSig]
@@ -3269,15 +3259,6 @@ namespace System.Windows.Forms
             public IntPtr lpszDefaultScheme;
         }
 
-        public enum HRESULT : long
-        {
-            S_FALSE = 0x0001,
-            S_OK = 0x0000,
-            E_INVALIDARG = 0x80070057,
-            E_OUTOFMEMORY = 0x8007000E,
-            ERROR_CANCELLED = 0x800704C7
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TCITEM_T
         {
@@ -3345,7 +3326,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct tagFUNCDESC
         {
-            public int memid;
+            public Ole32.DispatchID memid;
 
             public IntPtr lprgscode;
 
@@ -3380,7 +3361,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct tagVARDESC
         {
-            public int memid;
+            public Ole32.DispatchID memid;
             public IntPtr lpstrSchema;
             public IntPtr unionMember;
             public tagELEMDESC elemdescVar;
@@ -3418,7 +3399,7 @@ namespace System.Windows.Forms
             public int itemState = 0;
             public IntPtr hwndItem = IntPtr.Zero;
             public IntPtr hDC = IntPtr.Zero;
-            public Interop.RECT rcItem;
+            public RECT rcItem;
             public IntPtr itemData = IntPtr.Zero;
         }
 
@@ -3594,7 +3575,7 @@ namespace System.Windows.Forms
             public NMHDR nmcd;
             public int dwDrawStage;
             public IntPtr hdc;
-            public Interop.RECT rc;
+            public RECT rc;
             public IntPtr dwItemSpec;
             public int uItemState;
             public IntPtr lItemlParam;
@@ -3657,7 +3638,7 @@ namespace System.Windows.Forms
             public int iPartId;
             public int iStateId;
             // Group Custom Draw
-            public Interop.RECT rcText;
+            public RECT rcText;
             public uint uAlign;
         }
 
@@ -3835,7 +3816,7 @@ namespace System.Windows.Forms
             public int dwFlags;
             public Size sizeTile;
             public int cLines;
-            public Interop.RECT rcLabelMargin;
+            public RECT rcLabelMargin;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -4040,7 +4021,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class TEXTRANGE
         {
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
             public IntPtr lpstrText; /* allocated by caller, zero terminated by RichEdit */
         }
 
@@ -4055,7 +4036,7 @@ namespace System.Windows.Forms
         public class SELCHANGE
         {
             public NMHDR nmhdr;
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
             public int seltyp = 0;
         }
 
@@ -4079,7 +4060,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class FINDTEXT
         {
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
             public string lpstrText;
         }
 
@@ -4090,7 +4071,7 @@ namespace System.Windows.Forms
             public int msg = 0;
             public IntPtr wParam = IntPtr.Zero;
             public IntPtr lParam = IntPtr.Zero;
-            public Interop.Richedit.CHARRANGE charrange;
+            public Richedit.CHARRANGE charrange;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4108,7 +4089,7 @@ namespace System.Windows.Forms
             public int iType;
             public int nCount;
             public int nRgnSize;
-            // public Interop.RECT rcBound; // Note that we don't define this field as part of the marshaling
+            // public RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -4124,7 +4105,7 @@ namespace System.Windows.Forms
             public int pageCount = 1;
             public IntPtr uuid;
             public int lcid = Application.CurrentCulture.LCID;
-            public int dispidInitial;
+            public Ole32.DispatchID dispidInitial;
         }
 
         [ComVisible(true), StructLayout(LayoutKind.Sequential)]
@@ -4209,7 +4190,7 @@ namespace System.Windows.Forms
         public class REQRESIZE
         {
             public NMHDR nmhdr;
-            public Interop.RECT rc;
+            public RECT rc;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -4219,7 +4200,7 @@ namespace System.Windows.Forms
             public int msg;
             public IntPtr wParam;
             public IntPtr lParam;
-            public Interop.Richedit.CHARRANGE chrg;
+            public Richedit.CHARRANGE chrg;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4232,70 +4213,6 @@ namespace System.Windows.Forms
         public class ActiveX
         {
             public const int OCM__BASE = 0x2000;
-            public const int DISPID_VALUE = unchecked((int)0x0);
-            public const int DISPID_UNKNOWN = unchecked((int)0xFFFFFFFF);
-            public const int DISPID_AUTOSIZE = unchecked((int)0xFFFFFE0C);
-            public const int DISPID_BACKCOLOR = unchecked((int)0xFFFFFE0B);
-            public const int DISPID_BACKSTYLE = unchecked((int)0xFFFFFE0A);
-            public const int DISPID_BORDERCOLOR = unchecked((int)0xFFFFFE09);
-            public const int DISPID_BORDERSTYLE = unchecked((int)0xFFFFFE08);
-            public const int DISPID_BORDERWIDTH = unchecked((int)0xFFFFFE07);
-            public const int DISPID_DRAWMODE = unchecked((int)0xFFFFFE05);
-            public const int DISPID_DRAWSTYLE = unchecked((int)0xFFFFFE04);
-            public const int DISPID_DRAWWIDTH = unchecked((int)0xFFFFFE03);
-            public const int DISPID_FILLCOLOR = unchecked((int)0xFFFFFE02);
-            public const int DISPID_FILLSTYLE = unchecked((int)0xFFFFFE01);
-            public const int DISPID_FONT = unchecked((int)0xFFFFFE00);
-            public const int DISPID_FORECOLOR = unchecked((int)0xFFFFFDFF);
-            public const int DISPID_ENABLED = unchecked((int)0xFFFFFDFE);
-            public const int DISPID_HWND = unchecked((int)0xFFFFFDFD);
-            public const int DISPID_TABSTOP = unchecked((int)0xFFFFFDFC);
-            public const int DISPID_TEXT = unchecked((int)0xFFFFFDFB);
-            public const int DISPID_CAPTION = unchecked((int)0xFFFFFDFA);
-            public const int DISPID_BORDERVISIBLE = unchecked((int)0xFFFFFDF9);
-            public const int DISPID_APPEARANCE = unchecked((int)0xFFFFFDF8);
-            public const int DISPID_MOUSEPOINTER = unchecked((int)0xFFFFFDF7);
-            public const int DISPID_MOUSEICON = unchecked((int)0xFFFFFDF6);
-            public const int DISPID_PICTURE = unchecked((int)0xFFFFFDF5);
-            public const int DISPID_VALID = unchecked((int)0xFFFFFDF4);
-            public const int DISPID_READYSTATE = unchecked((int)0xFFFFFDF3);
-            public const int DISPID_REFRESH = unchecked((int)0xFFFFFDDA);
-            public const int DISPID_DOCLICK = unchecked((int)0xFFFFFDD9);
-            public const int DISPID_ABOUTBOX = unchecked((int)0xFFFFFDD8);
-            public const int DISPID_CLICK = unchecked((int)0xFFFFFDA8);
-            public const int DISPID_DBLCLICK = unchecked((int)0xFFFFFDA7);
-            public const int DISPID_KEYDOWN = unchecked((int)0xFFFFFDA6);
-            public const int DISPID_KEYPRESS = unchecked((int)0xFFFFFDA5);
-            public const int DISPID_KEYUP = unchecked((int)0xFFFFFDA4);
-            public const int DISPID_MOUSEDOWN = unchecked((int)0xFFFFFDA3);
-            public const int DISPID_MOUSEMOVE = unchecked((int)0xFFFFFDA2);
-            public const int DISPID_MOUSEUP = unchecked((int)0xFFFFFDA1);
-            public const int DISPID_ERROREVENT = unchecked((int)0xFFFFFDA0);
-            public const int DISPID_RIGHTTOLEFT = unchecked((int)0xFFFFFD9D);
-            public const int DISPID_READYSTATECHANGE = unchecked((int)0xFFFFFD9F);
-            public const int DISPID_AMBIENT_BACKCOLOR = unchecked((int)0xFFFFFD43);
-            public const int DISPID_AMBIENT_DISPLAYNAME = unchecked((int)0xFFFFFD42);
-            public const int DISPID_AMBIENT_FONT = unchecked((int)0xFFFFFD41);
-            public const int DISPID_AMBIENT_FORECOLOR = unchecked((int)0xFFFFFD40);
-            public const int DISPID_AMBIENT_LOCALEID = unchecked((int)0xFFFFFD3F);
-            public const int DISPID_AMBIENT_MESSAGEREFLECT = unchecked((int)0xFFFFFD3E);
-            public const int DISPID_AMBIENT_SCALEUNITS = unchecked((int)0xFFFFFD3D);
-            public const int DISPID_AMBIENT_TEXTALIGN = unchecked((int)0xFFFFFD3C);
-            public const int DISPID_AMBIENT_USERMODE = unchecked((int)0xFFFFFD3B);
-            public const int DISPID_AMBIENT_UIDEAD = unchecked((int)0xFFFFFD3A);
-            public const int DISPID_AMBIENT_SHOWGRABHANDLES = unchecked((int)0xFFFFFD39);
-            public const int DISPID_AMBIENT_SHOWHATCHING = unchecked((int)0xFFFFFD38);
-            public const int DISPID_AMBIENT_DISPLAYASDEFAULT = unchecked((int)0xFFFFFD37);
-            public const int DISPID_AMBIENT_SUPPORTSMNEMONICS = unchecked((int)0xFFFFFD36);
-            public const int DISPID_AMBIENT_AUTOCLIP = unchecked((int)0xFFFFFD35);
-            public const int DISPID_AMBIENT_APPEARANCE = unchecked((int)0xFFFFFD34);
-            public const int DISPID_AMBIENT_PALETTE = unchecked((int)0xFFFFFD2A);
-            public const int DISPID_AMBIENT_TRANSFERPRIORITY = unchecked((int)0xFFFFFD28);
-            public const int DISPID_AMBIENT_RIGHTTOLEFT = unchecked((int)0xFFFFFD24);
-            public const int DISPID_Name = unchecked((int)0xFFFFFCE0);
-            public const int DISPID_Delete = unchecked((int)0xFFFFFCDF);
-            public const int DISPID_Object = unchecked((int)0xFFFFFCDE);
-            public const int DISPID_Parent = unchecked((int)0xFFFFFCDD);
             public const int DVASPECT_CONTENT = 0x1;
             public const int DVASPECT_THUMBNAIL = 0x2;
             public const int DVASPECT_ICON = 0x4;
@@ -4489,7 +4406,8 @@ namespace System.Windows.Forms
             // since the inheritance doesn't seem to work...
             // these are from IProvideClassInfo & IProvideClassInfo2
             [PreserveSig]
-            UnsafeNativeMethods.ITypeInfo GetClassInfo();
+            void GetClassInfo_Stub();
+            // HRESULT GetClassInfo(out ITypeInfo ppTI);
 
             [PreserveSig]
             int GetGUID(int dwGuidKind, [In, Out] ref Guid pGuid);
@@ -4523,8 +4441,8 @@ namespace System.Windows.Forms
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IProvideClassInfo
         {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            UnsafeNativeMethods.ITypeInfo GetClassInfo();
+            [PreserveSig]
+            HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -5040,7 +4958,7 @@ namespace System.Windows.Forms
         internal const int UIA_AppBarControlTypeId = 50040;
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Interop.RECT rect, int cPoints);
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point pt, uint cPoints);
@@ -5064,7 +4982,7 @@ namespace System.Windows.Forms
         public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetUpdateRect(IntPtr hwnd, ref Interop.RECT rc, bool fErase);
+        public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetCursor();

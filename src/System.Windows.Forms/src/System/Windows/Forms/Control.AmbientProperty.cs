@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     public partial class Control
@@ -16,7 +18,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates a new, empty ambient property.
             ///</summary>
-            internal AmbientProperty(string name, int dispID)
+            internal AmbientProperty(string name, Ole32.DispatchID dispID)
             {
                 Name = name;
                 DispID = dispID;
@@ -32,7 +34,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The DispID for the property.
             /// </summary>
-            internal int DispID { get; }
+            internal Ole32.DispatchID DispID { get; }
 
             /// <summary>
             ///  Returns true if this property has not been set.
@@ -44,10 +46,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal object Value
             {
-                get
-                {
-                    return _value;
-                }
+                get => _value;
                 set
                 {
                     _value = value;

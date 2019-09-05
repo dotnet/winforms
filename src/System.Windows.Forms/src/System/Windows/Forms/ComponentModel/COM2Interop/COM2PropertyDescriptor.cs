@@ -10,7 +10,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -43,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  The dispid. This is also in a DispIDAttiribute, but we
         ///  need it a lot.
         /// </summary>
-        private readonly int dispid;
+        private readonly Ole32.DispatchID dispid;
 
         private TypeConverter converter;
         private object editor;
@@ -146,8 +145,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Ctor.
         /// </summary>
-        public Com2PropertyDescriptor(int dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
-        : base(name, attrs)
+        public Com2PropertyDescriptor(Ole32.DispatchID dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
+            : base(name, attrs)
         {
             baseReadOnly = readOnly;
             this.readOnly = readOnly;
@@ -273,10 +272,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     object target = TargetObject;
                     if (target != null)
                     {
-                        int hr = new ComNativeDescriptor().GetPropertyValue(target, dispid, new object[1]);
+                        HRESULT hr = new ComNativeDescriptor().GetPropertyValue(target, dispid, new object[1]);
 
                         // if not, go ahead and make this a browsable item
-                        if (NativeMethods.Succeeded(hr))
+                        if (hr.Succeeded())
                         {
                             // make it browsable
                             if (newAttributes == null)
@@ -428,7 +427,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves the DISPID for this item
         /// </summary>
-        public int DISPID
+        public Ole32.DispatchID DISPID
         {
             get
             {
@@ -912,18 +911,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
             Guid g = Guid.Empty;
 
-            int hr = pDisp.Invoke(dispid,
-                                  ref g,
-                                  SafeNativeMethods.GetThreadLCID(),
-                                  NativeMethods.DISPATCH_PROPERTYGET,
-                                  new NativeMethods.tagDISPPARAMS(),
-                                  pVarResult,
-                                  pExcepInfo, null);
+            HRESULT hr = pDisp.Invoke(
+                dispid,
+                ref g,
+               Kernel32.GetThreadLocale(),
+                NativeMethods.DISPATCH_PROPERTYGET,
+                new NativeMethods.tagDISPPARAMS(),
+                pVarResult,
+                pExcepInfo,
+                null);
 
             switch (hr)
             {
-                case NativeMethods.S_OK:
-                case NativeMethods.S_FALSE:
+                case HRESULT.S_OK:
+                case HRESULT.S_FALSE:
 
                     if (pVarResult[0] == null || Convert.IsDBNull(pVarResult[0]))
                     {
@@ -934,11 +935,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         lastValue = pVarResult[0];
                     }
                     return lastValue;
-                case NativeMethods.DISP_E_EXCEPTION:
-                    //PrintExceptionInfo(pExcepInfo);
+                case HRESULT.DISP_E_EXCEPTION:
                     return null;
                 default:
-                    throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), hr);
+                    throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
             }
         }
 
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             NativeMethods.tagEXCEPINFO excepInfo = new NativeMethods.tagEXCEPINFO();
             dp.cArgs = 1;
             dp.cNamedArgs = 1;
-            int[] namedArgs = new int[] { NativeMethods.DISPID_PROPERTYPUT };
+            Ole32.DispatchID[] namedArgs = new Ole32.DispatchID[] { Ole32.DispatchID.PROPERTYPUT };
             GCHandle gcHandle = GCHandle.Alloc(namedArgs, GCHandleType.Pinned);
 
             try
@@ -1307,29 +1307,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
 
                     Guid g = Guid.Empty;
-                    int hr = pDisp.Invoke(dispid,
-                                          ref g,
-                                          SafeNativeMethods.GetThreadLCID(),
-                                          NativeMethods.DISPATCH_PROPERTYPUT,
-                                          dp,
-                                          null,
-                                          excepInfo, new IntPtr[1]);
+                    HRESULT hr = pDisp.Invoke(
+                        dispid,
+                        ref g,
+                       Kernel32.GetThreadLocale(),
+                        NativeMethods.DISPATCH_PROPERTYPUT,
+                        dp,
+                        null,
+                        excepInfo, new IntPtr[1]);
 
                     string errorInfo = null;
-                    if (hr == NativeMethods.DISP_E_EXCEPTION && excepInfo.scode != 0)
+                    if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
                     {
-                        hr = excepInfo.scode;
+                        hr = (HRESULT)excepInfo.scode;
                         errorInfo = excepInfo.bstrDescription;
                     }
 
                     switch (hr)
                     {
-                        case NativeMethods.E_ABORT:
-                        case NativeMethods.OLE_E_PROMPTSAVECANCELLED:
+                        case HRESULT.E_ABORT:
+                        case HRESULT.OLE_E_PROMPTSAVECANCELLED:
                             // cancelled checkout, etc.
                             return;
-                        case NativeMethods.S_OK:
-                        case NativeMethods.S_FALSE:
+                        case HRESULT.S_OK:
+                        case HRESULT.S_FALSE:
                             OnValueChanged(component, EventArgs.Empty);
                             lastValue = value;
                             return;
@@ -1349,7 +1350,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                             errorInfo = info;
                                         }
                                     }
-
                                 }
                             }
                             else if (errorInfo == null)
@@ -1357,13 +1357,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 StringBuilder strMessage = new StringBuilder(256);
 
                                 int result = SafeNativeMethods.FormatMessage(NativeMethods.FORMAT_MESSAGE_FROM_SYSTEM |
-                                                                        NativeMethods.FORMAT_MESSAGE_IGNORE_INSERTS,
-                                                                        NativeMethods.NullHandleRef,
-                                                                        hr,
-                                                                        CultureInfo.CurrentCulture.LCID,
-                                                                        strMessage,
-                                                                        255,
-                                                                        NativeMethods.NullHandleRef);
+                                                NativeMethods.FORMAT_MESSAGE_IGNORE_INSERTS,
+                                                NativeMethods.NullHandleRef,
+                                                (int)hr,
+                                                CultureInfo.CurrentCulture.LCID,
+                                                strMessage,
+                                                255,
+                                                NativeMethods.NullHandleRef);
 
                                 if (result == 0)
                                 {
@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                     }
                                 }
                             }
-                            throw new ExternalException(errorInfo, hr);
+                            throw new ExternalException(errorInfo, (int)hr);
                     }
                 }
                 finally
