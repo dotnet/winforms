@@ -592,13 +592,17 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void OnBackColorChanged(EventArgs e)
+        protected unsafe override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(
+                    new HandleRef(this, Handle),
+                    null,
+                    IntPtr.Zero,
+                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_FRAME);
             }
         }
 

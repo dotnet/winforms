@@ -6,6 +6,7 @@ using Accessibility;
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -285,11 +286,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override void SelectItem()
+            internal unsafe override void SelectItem()
             {
                 _owningListBox.SelectedIndex = CurrentIndex;
 
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, false);
+                User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, BOOL.FALSE);
                 RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
                 RaiseAutomationEvent(NativeMethods.UIA_SelectionItem_ElementSelectedEventId);
             }

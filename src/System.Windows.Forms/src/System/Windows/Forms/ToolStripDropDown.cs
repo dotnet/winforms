@@ -2272,12 +2272,13 @@ namespace System.Windows.Forms
         #region WMNCACTIVATE
         private bool sendingActivateMessage = false;
 
-        // WmNcActivate
-        // if someone clicks on a child control of the toolstrip dropdown, we want
-        // the title bar to continue appearing active.  Normally we just show without
-        // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
-        // child controls from taking focus.
-        private void WmNCActivate(ref Message m)
+        /// <summary>
+        ///  If someone clicks on a child control of the toolstrip dropdown, we want
+        ///  the title bar to continue appearing active.  Normally we just show without
+        ///  taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
+        ///  child controls from taking focus.
+        /// </summary>
+        private unsafe void WmNCActivate(ref Message m)
         {
             if (m.WParam != IntPtr.Zero /*activating*/)
             {
@@ -2292,7 +2293,11 @@ namespace System.Windows.Forms
                         HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
                         UnsafeNativeMethods.SendMessage(activeHwndHandleRef, WindowMessages.WM_NCACTIVATE, (IntPtr)1, NativeMethods.InvalidIntPtr);
-                        SafeNativeMethods.RedrawWindow(activeHwndHandleRef, null, NativeMethods.NullHandleRef, NativeMethods.RDW_FRAME | NativeMethods.RDW_INVALIDATE);
+                        User32.RedrawWindow(
+                            activeHwndHandleRef,
+                            null,
+                            IntPtr.Zero,
+                            User32.RedrawWindowOptions.RDW_FRAME | User32.RedrawWindowOptions.RDW_INVALIDATE);
                         m.WParam = (IntPtr)1;
                     }
                     finally

@@ -1063,15 +1063,7 @@ namespace System.Windows.Forms
                                                     //public const int RECO_DRAG  = 0x00000004;    // drag
 
         public const int RPC_E_CHANGED_MODE = unchecked((int)0x80010106),
-            RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D),
-            RDW_INVALIDATE = 0x0001,
-            RDW_ERASE = 0x0004,
-            RDW_ALLCHILDREN = 0x0080,
-            RDW_ERASENOW = 0x0200,
-            RDW_UPDATENOW = 0x0100,
-            RDW_FRAME = 0x0400,
-            RB_INSERTBANDA = (0x0400 + 1),
-            RB_INSERTBANDW = (0x0400 + 10);
+            RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D);
 
         public const int stc4 = 0x0443,
         STARTF_USESHOWWINDOW = 0x00000001,
@@ -2013,28 +2005,6 @@ namespace System.Windows.Forms
             public IntPtr lParam;
             public int time;
             public Point pt;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct PAINTSTRUCT
-        {
-            public IntPtr hdc;
-            public bool fErase;
-            // rcPaint was a by-value RECT structure
-            public int rcPaint_left;
-            public int rcPaint_top;
-            public int rcPaint_right;
-            public int rcPaint_bottom;
-            public bool fRestore;
-            public bool fIncUpdate;
-            public int reserved1;
-            public int reserved2;
-            public int reserved3;
-            public int reserved4;
-            public int reserved5;
-            public int reserved6;
-            public int reserved7;
-            public int reserved8;
         }
 
         [StructLayout(LayoutKind.Sequential)]

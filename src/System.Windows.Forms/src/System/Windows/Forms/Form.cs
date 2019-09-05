@@ -6411,7 +6411,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Updates the window icon.
         /// </summary>
-        private void UpdateWindowIcon(bool redrawFrame)
+        private unsafe void UpdateWindowIcon(bool redrawFrame)
         {
             if (IsHandleCreated)
             {
@@ -6456,7 +6456,11 @@ namespace System.Windows.Forms
 
                 if (redrawFrame)
                 {
-                    SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);
+                    User32.RedrawWindow(
+                    new HandleRef(this, Handle),
+                    null,
+                    IntPtr.Zero,
+                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_FRAME);
                 }
             }
         }

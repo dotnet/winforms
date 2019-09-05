@@ -409,21 +409,6 @@ namespace System.Windows.Forms
             return _TrackMouseEvent(tme);
         }
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool RedrawWindow(HandleRef hwnd, ref Interop.RECT rcUpdate, IntPtr hrgnUpdate, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool RedrawWindow(HandleRef hwnd, NativeMethods.COMRECT rcUpdate, HandleRef hrgnUpdate, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool RedrawWindow(IntPtr hwnd, NativeMethods.COMRECT rcUpdate, IntPtr hrgnUpdate, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool InvalidateRect(HandleRef hWnd, ref Interop.RECT rect, bool erase);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool InvalidateRect(HandleRef hWnd, NativeMethods.COMRECT rect, bool erase);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool InvalidateRgn(HandleRef hWnd, HandleRef hrgn, bool erase);
 

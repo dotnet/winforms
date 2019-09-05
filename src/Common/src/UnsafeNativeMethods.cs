@@ -780,21 +780,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
         public static extern void GetErrorInfo(int reserved, [In, Out] ref IErrorInfo errorInfo);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "BeginPaint", CharSet = CharSet.Auto)]
-        private static extern IntPtr IntBeginPaint(HandleRef hWnd, [In, Out] ref NativeMethods.PAINTSTRUCT lpPaint);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr BeginPaint(HandleRef hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr BeginPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool EndPaint(HandleRef hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool EndPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
 

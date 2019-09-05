@@ -2320,14 +2320,12 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
-                        NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                        IntPtr dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                        var ps = new User32.PAINTSTRUCT();
+                        IntPtr dc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
                         Graphics g = Graphics.FromHdcInternal(dc);
                         try
                         {
-                            Rectangle bounds = new Rectangle(ps.rcPaint_left, ps.rcPaint_top,
-                            ps.rcPaint_right - ps.rcPaint_left,
-                            ps.rcPaint_bottom - ps.rcPaint_top);
+                            Rectangle bounds = ps.rcPaint;
                             if (bounds == Rectangle.Empty)
                             {
                                 return;
@@ -2358,7 +2356,7 @@ namespace System.Windows.Forms
                         finally
                         {
                             g.Dispose();
-                            UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+                            User32.EndPaint(new HandleRef(this, Handle), ref ps);
                         }
                     }
 

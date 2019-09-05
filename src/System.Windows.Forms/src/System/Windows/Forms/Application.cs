@@ -722,7 +722,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
-        private static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
+        private unsafe static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
         {
             int thisPID = SafeNativeMethods.GetCurrentProcessId();
             SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, handle), out int processId);
@@ -730,12 +730,11 @@ namespace System.Windows.Forms
             {
 
                 SendThemeChangedRecursive(handle, IntPtr.Zero);
-                SafeNativeMethods.RedrawWindow(new HandleRef(null, handle),
-                                               null, NativeMethods.NullHandleRef,
-                                               NativeMethods.RDW_INVALIDATE |
-                                               NativeMethods.RDW_FRAME |
-                                               NativeMethods.RDW_ERASE |
-                                               NativeMethods.RDW_ALLCHILDREN);
+                User32.RedrawWindow(
+                    handle,
+                    null,
+                    IntPtr.Zero,
+                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_FRAME | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
             }
             return true;
         }

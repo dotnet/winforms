@@ -991,8 +991,8 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnPaint(ref Message m)
             {
-                NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                IntPtr hdc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                var ps = new User32.PAINTSTRUCT();
+                IntPtr hdc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
                 try
                 {
                     CreateMirrorDC(hdc, _windowBounds.Width - 1);
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+                    User32.EndPaint(new HandleRef(this, Handle), ref ps);
                 }
             }
 
@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms
             ///  rectangles and descriptions. This basically brings the error window up to date with
             ///  the internal data structures.
             /// </summary>
-            public void Update(bool timerCaused)
+            public unsafe void Update(bool timerCaused)
             {
                 IconRegion iconRegion = _provider.Region;
                 Size size = iconRegion.Size;
@@ -1240,7 +1240,7 @@ namespace System.Windows.Forms
 
                 SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, _windowBounds.X, _windowBounds.Y,
                                      _windowBounds.Width, _windowBounds.Height, NativeMethods.SWP_NOACTIVATE);
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), null, false);
+                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
             }
 
             /// <summary>

@@ -68,9 +68,13 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGM.cs" Link="Interop\Ole32\Interop.STGM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.PAINTSTRUCT.cs" Link="Interop\User32\Interop.PAINTSTRUCT.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.RedrawWindow.cs" Link="Interop\User32\Interop.RedrawWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
   </ItemGroup>
   <ItemGroup>

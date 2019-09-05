@@ -97,12 +97,12 @@ namespace System.Windows.Forms.Design
             base.Dispose(disposing);
         }
 
-        private void ForceDesignerRedraw(bool focus)
+        private unsafe void ForceDesignerRedraw(bool focus)
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
                 NativeMethods.SendMessage(_designer.Handle, WindowMessages.WM_NCACTIVATE, focus ? 1 : 0, 0);
-                SafeNativeMethods.RedrawWindow(_designer.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RedrawWindowOptions.RDW_FRAME);
             }
         }
 

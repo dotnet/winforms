@@ -2076,10 +2076,10 @@ namespace System.Windows.Forms.Design
                                 }
                                 else
                                 {
-                                    NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                                    UnsafeNativeMethods.BeginPaint(m.HWnd, ref ps);
+                                    var ps = new User32.PAINTSTRUCT();
+                                    User32.BeginPaint(m.HWnd, ref ps);
                                     PaintException(pevent, _thrownException);
-                                    UnsafeNativeMethods.EndPaint(m.HWnd, ref ps);
+                                    User32.EndPaint(m.HWnd, ref ps);
                                 }
                             }
                             finally
