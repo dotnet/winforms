@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -36,6 +37,9 @@ namespace System.Windows.Forms
         ///  Gets the <see cref='Message.lparam'/> value, and converts the value to an object.
         /// </summary>
         public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
+
+        internal static Message Create(IntPtr hWnd, User32.WindowMessage msg, IntPtr wparam, IntPtr lparam)
+            => Create(hWnd, (int)msg, wparam, lparam);
 
         /// <summary>
         ///  Creates a new <see cref='Message'/> object.
