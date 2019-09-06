@@ -10,50 +10,50 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="3.1.0-preview1.19455.16">
+    <Dependency Name="Microsoft.NETCore.App" Version="3.1.0-preview1.19455.25">
       <Uri>https://github.com/dotnet/core-setup</Uri>
-      <Sha>8cdffdc87fb6c1d63adb575df18645e5e45c0d94</Sha>
+      <Sha>db11b05953ca56752b3da4cce203472c40fa6c3c</Sha>
     </Dependency>
     <!-- CoreFX via Core Setup -->
-    <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.Registry" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.Win32.Registry" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="System.CodeDom" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.CodeDom" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="System.Drawing.Common" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Drawing.Common" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="System.Resources.Extensions" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Resources.Extensions" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Cng" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Security.Cryptography.Cng" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Security.Permissions" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="4.7.0-rc1.19454.8" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Windows.Extensions" Version="4.6.0-rc1.19455.6" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6019e0ce528d0743cce92a28b6ee31c445ab8884</Sha>
+      <Sha>333c603bdbdbb29e21b6f253e60458f9ea7cda60</Sha>
     </Dependency>
     <!-- CoreCLR via Core Setup -->
     <Dependency Name="Microsoft.NET.Sdk.IL" Version="3.0.0-rc1.19430.3" CoherentParentDependency="Microsoft.NETCore.App">
