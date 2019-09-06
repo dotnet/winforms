@@ -115,7 +115,7 @@ namespace System.Windows.Forms
 
                     if (threadHandle != IntPtr.Zero)
                     {
-                        Kernel32.GetExitCodeThread(threadHandle, out int exitCode);
+                        Kernel32.GetExitCodeThread(threadHandle, out uint exitCode);
                         if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && exitCode == NativeMethods.STATUS_PENDING)
                         {
                             if (User32.SendMessageTimeoutW(

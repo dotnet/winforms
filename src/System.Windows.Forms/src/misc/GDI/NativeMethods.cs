@@ -31,12 +31,7 @@ namespace System.Windows.Forms.Internal
         CLEARTYPE_NATURAL_QUALITY = 6,
 
         // Brush styles
-        BS_SOLID = 0,
-
-        FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
-        FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
-        FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
-        FORMAT_MESSAGE_DEFAULT = FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM;
+        BS_SOLID = 0;
 
         // some others...
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

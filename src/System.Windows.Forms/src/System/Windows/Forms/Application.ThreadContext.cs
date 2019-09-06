@@ -516,7 +516,7 @@ namespace System.Windows.Forms
                                     // We can always clean up this handle, though
                                     if (_handle != IntPtr.Zero)
                                     {
-                                        UnsafeNativeMethods.CloseHandle(new HandleRef(this, _handle));
+                                        Kernel32.CloseHandle(new HandleRef(this, _handle));
                                         _handle = IntPtr.Zero;
                                     }
 
@@ -708,7 +708,7 @@ namespace System.Windows.Forms
                 // We can always clean up this handle, though
                 if (_handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.CloseHandle(new HandleRef(this, _handle));
+                    Kernel32.CloseHandle(new HandleRef(this, _handle));
                     _handle = IntPtr.Zero;
                 }
             }
@@ -950,7 +950,7 @@ namespace System.Windows.Forms
                 //
                 // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
                 // to.
-                UnsafeNativeMethods.PostThreadMessage((int)_id, WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+                User32.PostThreadMessageW(_id, User32.WindowMessage.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
             }
 
@@ -1448,7 +1448,7 @@ namespace System.Windows.Forms
             {
                 if (culture != null && culture.LCID != (int)Kernel32.GetThreadLocale())
                 {
-                    SafeNativeMethods.SetThreadLocale(culture.LCID);
+                    Kernel32.SetThreadLocale((uint)culture.LCID);
                 }
             }
 

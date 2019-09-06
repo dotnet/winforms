@@ -7,15 +7,15 @@ using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
-    public static partial class Shell32
+    internal static partial class Shell32
     {
-        [DllImport(ExternDll.Shell32, EntryPoint = "SHGetPathFromIDListEx", ExactSpelling = true)]
+        [DllImport(Libraries.Shell32, ExactSpelling = true)]
         private static extern bool SHGetPathFromIDListEx(IntPtr pidl, IntPtr pszPath, int cchPath, int flags);
 
         public static bool SHGetPathFromIDListLongPath(IntPtr pidl, out string path)
         {
-            IntPtr pszPath = Marshal.AllocHGlobal((Interop.Kernel32.MAX_PATH + 1) * sizeof(char));
-            int length = Interop.Kernel32.MAX_PATH;
+            IntPtr pszPath = Marshal.AllocHGlobal((Kernel32.MAX_PATH + 1) * sizeof(char));
+            int length = Kernel32.MAX_PATH;
             try
             {
                 if (!SHGetPathFromIDListLongPath(pidl, ref pszPath, length))

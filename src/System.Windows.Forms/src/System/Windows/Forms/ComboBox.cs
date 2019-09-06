@@ -6256,10 +6256,12 @@ namespace System.Windows.Forms
 
                 // Look for a popped up dropdown
                 shouldSubClass = subclass;
-                UnsafeNativeMethods.EnumThreadWindows(
-                    (int)Interop.Kernel32.GetCurrentThreadId(),
-                    new NativeMethods.EnumThreadWindowsCallback(Callback),
-                    new HandleRef(null, IntPtr.Zero));
+                var callback = new User32.EnumThreadWindowsCallback(Callback);
+                User32.EnumThreadWindows(
+                    Kernel32.GetCurrentThreadId(),
+                    callback,
+                    IntPtr.Zero);
+                GC.KeepAlive(callback);
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lParam)

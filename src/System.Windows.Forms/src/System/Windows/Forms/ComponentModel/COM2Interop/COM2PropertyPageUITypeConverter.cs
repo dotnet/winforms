@@ -106,7 +106,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         1,
                         new HandleRef(null, guidsAddr),
                         (int)Kernel32.GetThreadLocale(),
-                        0, IntPtr.Zero);
+                        0,
+                        IntPtr.Zero);
                 }
             }
             finally

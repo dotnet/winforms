@@ -259,7 +259,6 @@ namespace System.Windows.Forms
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DIB_RGB_COLORS = 0,
-        DUPLICATE_SAME_ACCESS = 0x00000002,
         DFC_CAPTION = 1,
         DFC_MENU = 2,
         DFC_SCROLL = 3,
@@ -365,8 +364,6 @@ namespace System.Windows.Forms
         FADF_UNKNOWN = (0x200),
         FADF_DISPATCH = (0x400),
         FADF_VARIANT = (unchecked((int)0x800)),
-        FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
-        FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
         FVIRTKEY = 0x01,
         FSHIFT = 0x04,
         FALT = 0x10;
@@ -1086,18 +1083,6 @@ namespace System.Windows.Forms
         ESB_DISABLE_BOTH = 0x0003,
         SORT_DEFAULT = 0x0,
         SUBLANG_DEFAULT = 0x01,
-        SW_HIDE = 0,
-        SW_NORMAL = 1,
-        SW_SHOWMINIMIZED = 2,
-        SW_SHOWMAXIMIZED = 3,
-        SW_MAXIMIZE = 3,
-        SW_SHOWNOACTIVATE = 4,
-        SW_SHOW = 5,
-        SW_MINIMIZE = 6,
-        SW_SHOWMINNOACTIVE = 7,
-        SW_SHOWNA = 8,
-        SW_RESTORE = 9,
-        SW_MAX = 10,
         SWP_NOSIZE = 0x0001,
         SWP_NOMOVE = 0x0002,
         SWP_NOZORDER = 0x0004,
@@ -1499,7 +1484,6 @@ namespace System.Windows.Forms
         public const int WS_EX_TOPMOST = 0x00000008;
         public const int WS_EX_LAYOUTRTL = 0x00400000;
         public const int WS_EX_NOINHERITLAYOUT = 0x00100000;
-        public const int WPF_SETMINPOSITION = 0x0001;
 
         public const int WHEEL_DELTA = 120;
 
@@ -2029,21 +2013,6 @@ namespace System.Windows.Forms
             public int rcExclude_bottom;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct WINDOWPLACEMENT
-        {
-            public int length;
-            public int flags;
-            public int showCmd;
-            public Point ptMinPosition;
-            public Point ptMaxPosition;
-            // rcNormalPosition was a by-value RECT structure
-            public int rcNormalPosition_left;
-            public int rcNormalPosition_top;
-            public int rcNormalPosition_right;
-            public int rcNormalPosition_bottom;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class STARTUPINFO_I
         {
@@ -2490,8 +2459,6 @@ namespace System.Windows.Forms
                 pszWText = text;
             }
         }
-
-        public delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class OPENFILENAME_I
@@ -4255,10 +4222,6 @@ namespace System.Windows.Forms
                     return s.Length;
                 }
             }
-
-            [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-
-            private static extern int lstrlen(string s);
         }
 
         public enum tagTYPEKIND

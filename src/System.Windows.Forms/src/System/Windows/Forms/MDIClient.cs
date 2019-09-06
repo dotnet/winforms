@@ -226,12 +226,6 @@ namespace System.Windows.Forms
                     // NOTE: This logic is to keep minimized MDI children anchored to
                     // the bottom left of the client area, normally they are anchored
                     // to the top right which just looks wierd!
-                    //
-                    NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT
-                    {
-                        length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>()
-                    };
-
                     for (int i = 0; i < Controls.Count; i++)
                     {
                         Control ctl = Controls[i];
@@ -242,7 +236,7 @@ namespace System.Windows.Forms
                             // them from being re-displayed.
                             if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
                             {
-                                UnsafeNativeMethods.GetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
+                                User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
                                 wp.ptMinPosition.Y -= yDelta;
                                 if (wp.ptMinPosition.Y == -1)
                                 {
@@ -255,9 +249,8 @@ namespace System.Windows.Forms
                                         wp.ptMinPosition.Y = -2;
                                     }
                                 }
-                                wp.flags = NativeMethods.WPF_SETMINPOSITION;
-                                UnsafeNativeMethods.SetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
-                                wp.flags = 0;
+                                wp.flags = User32.WindowPlacementOptions.SETMINPOSITION;
+                                User32.SetWindowPlacement(child, ref wp);
                             }
                         }
                     }

@@ -1729,13 +1729,12 @@ namespace System.Windows.Forms
                         case NativeMethods.TTN_SHOW:
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
-                            NativeMethods.WINDOWPLACEMENT wndPlacement = new NativeMethods.WINDOWPLACEMENT();
-                            int nRet = UnsafeNativeMethods.GetWindowPlacement(new HandleRef(null, note.hwndFrom), ref wndPlacement);
+                            User32.GetWindowPlacement(note.hwndFrom, out User32.WINDOWPLACEMENT wndPlacement);
 
                             // Is this tooltip going to be positioned in the upper left corner of the display,
                             // but nowhere near the toolbar button?
-                            if (wndPlacement.rcNormalPosition_left == 0 &&
-                                wndPlacement.rcNormalPosition_top == 0 &&
+                            if (wndPlacement.rcNormalPosition.left == 0 &&
+                                wndPlacement.rcNormalPosition.top == 0 &&
                                 hotItem != -1)
                             {
 
@@ -1751,8 +1750,8 @@ namespace System.Windows.Forms
                                 }
 
                                 // Where can we place this tooltip so that it will be completely visible on the current display?
-                                int tooltipWidth = wndPlacement.rcNormalPosition_right - wndPlacement.rcNormalPosition_left;
-                                int tooltipHeight = wndPlacement.rcNormalPosition_bottom - wndPlacement.rcNormalPosition_top;
+                                int tooltipWidth = wndPlacement.rcNormalPosition.right - wndPlacement.rcNormalPosition.left;
+                                int tooltipHeight = wndPlacement.rcNormalPosition.bottom - wndPlacement.rcNormalPosition.top;
 
                                 // We'll need screen coordinates of this position for setting the tooltip's position
                                 int x = Location.X + buttonRight + 1;

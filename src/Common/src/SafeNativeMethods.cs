@@ -113,10 +113,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern int FormatMessage(int dwFlags, HandleRef lpSource, int dwMessageId,
-                                               int dwLanguageId, StringBuilder lpBuffer, int nSize, HandleRef arguments);
-
         [DllImport(ExternDll.Comctl32)]
         public static extern void InitCommonControls();
 
@@ -366,15 +362,6 @@ namespace System.Windows.Forms
 
         internal delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
 
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetExitCodeThread(HandleRef hWnd, out int lpdwExitCode);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetWindowThreadProcessId(HandleRef hWnd, out int lpdwProcessId);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ShowWindow(HandleRef hWnd, int nCmdShow);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetWindowPos(
             HandleRef hWnd,
@@ -427,14 +414,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int MessageBox(HandleRef hWnd, string text, string caption, int type);
 
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetTickCount();
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool ScrollWindow(HandleRef hWnd, int nXAmount, int nYAmount, ref Interop.RECT rectScrollRegion, ref Interop.RECT rectClip);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public extern static bool SetThreadLocale(int Locale);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindowUnicode(HandleRef hWnd);
@@ -591,16 +572,11 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool SetProcessDpiAwarenessContext(int dpiFlag);
 
-        [DllImport(ExternDll.Kernel32, SetLastError = true)]
-        public static extern IntPtr OpenProcess(uint dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, int dwProcessId);
-
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool RoundRect(HandleRef hDC, int left, int top, int right, int bottom, int width, int height);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
-
-        internal const int PROCESS_QUERY_INFORMATION = 0x0400;
 
         // Color conversion
         public static int RGBToCOLORREF(int rgbValue)

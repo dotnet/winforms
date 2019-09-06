@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Globalization;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
@@ -15,18 +16,6 @@ namespace System.Windows.Forms.Internal
     /// </summary>
     internal sealed class DbgUtil
     {
-        public const int
-            FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
-            FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
-            FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
-            FORMAT_MESSAGE_DEFAULT = FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM;
-
-        [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int GetUserDefaultLCID();
-
-        [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int FormatMessage(int dwFlags, HandleRef lpSource, int dwMessageId, int dwLanguageId, StringBuilder lpBuffer, int nSize, HandleRef arguments);
-
         public static int gdipInitMaxFrameCount = 8;
         // disable csharp compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
@@ -181,16 +170,14 @@ namespace System.Windows.Forms.Internal
             try
             {
                 err = Marshal.GetLastWin32Error();
-
-                int retVal = FormatMessage(
-                    FORMAT_MESSAGE_DEFAULT,
-                    new HandleRef(null, IntPtr.Zero),
-                    err,
-                    GetUserDefaultLCID(),
+                uint retVal = Kernel32.FormatMessage(
+                    Kernel32.FormatMessageOptions.IGNORE_INSERTS | Kernel32.FormatMessageOptions.FROM_SYSTEM,
+                    IntPtr.Zero,
+                    (uint)err,
+                    Kernel32.GetUserDefaultLCID(),
                     buffer,
                     MAX_SIZE,
-                    new HandleRef(null, IntPtr.Zero));
-
+                    IntPtr.Zero);
                 message = retVal != 0 ? buffer.ToString() : "<error returned>";
             }
             catch (Exception ex)

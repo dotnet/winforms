@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL PeekMessageA(
             ref MSG msg,
             IntPtr hwnd = default,
@@ -17,7 +17,7 @@ internal static partial class Interop
             uint msgMax = 0,
             PeekMessageFlags remove = PeekMessageFlags.PM_NOREMOVE);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
+        [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL PeekMessageW(
             ref MSG msg,
             IntPtr hwnd = default,

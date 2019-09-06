@@ -1777,8 +1777,8 @@ namespace System.Windows.Forms
         ///  created yet, this method will return the current thread's ID.
         /// </summary>
         internal uint CreateThreadId => IsHandleCreated 
-            ? Interop.User32.GetWindowThreadProcessId(this, out _)
-            : Interop.Kernel32.GetCurrentThreadId();
+            ? User32.GetWindowThreadProcessId(this, out _)
+            : Kernel32.GetCurrentThreadId();
 
         /// <summary>
         ///  Retrieves the cursor that will be displayed when the mouse is over this
@@ -2799,8 +2799,7 @@ namespace System.Windows.Forms
                         control = marshalingControl;
                     }
 
-                    return Interop.User32.GetWindowThreadProcessId(control, out _)
-                        != Interop.Kernel32.GetCurrentThreadId();
+                    return User32.GetWindowThreadProcessId(control, out _) != Kernel32.GetCurrentThreadId();
                 }
             }
         }
@@ -3854,7 +3853,7 @@ namespace System.Windows.Forms
         }
 
         // The parameter used in the call to ShowWindow for this control
-        internal virtual int ShowParams => NativeMethods.SW_SHOW;
+        internal virtual User32.ShowWindowCommand ShowParams => User32.ShowWindowCommand.SHOW;
 
         /// <summary>
         ///  When this property in true the Cursor Property is set to WaitCursor as well as the Cursor Property
@@ -3986,18 +3985,18 @@ namespace System.Windows.Forms
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;
-            bool returnValue = false;
+            BOOL returnValue = BOOL.FALSE;
             while (!processed)
             {
                 //Get the thread's exit code, if we found the thread as expected
                 if (threadHandle != null)
                 {
-                    returnValue = UnsafeNativeMethods.GetExitCodeThread(threadHandle, out exitCode);
+                    returnValue = Kernel32.GetExitCodeThread(threadHandle, out exitCode);
                 }
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
-                if ((returnValue && exitCode != NativeMethods.STILL_ACTIVE) ||
-                    (!returnValue && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
+                if ((returnValue != BOOL.FALSE && exitCode != NativeMethods.STILL_ACTIVE) ||
+                    (returnValue == BOOL.FALSE && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload())
                 {
                     if (waitHandle.WaitOne(1, false))
@@ -5466,7 +5465,7 @@ namespace System.Windows.Forms
                 if (!asyncResult.IsCompleted)
                 {
                     Control marshaler = FindMarshalingControl();
-                    if (Interop.User32.GetWindowThreadProcessId(marshaler, out _) == Interop.Kernel32.GetCurrentThreadId())
+                    if (User32.GetWindowThreadProcessId(marshaler, out _) == Kernel32.GetCurrentThreadId())
                     {
                         marshaler.InvokeMarshaledCallbacks();
                     }
@@ -7050,7 +7049,7 @@ namespace System.Windows.Forms
             // It is important that syncSameThread always be false for asynchronous calls.
             bool syncSameThread = false;
 
-            if (Interop.User32.GetWindowThreadProcessId(this, out _) == Interop.Kernel32.GetCurrentThreadId())
+            if (User32.GetWindowThreadProcessId(this, out _) == Kernel32.GetCurrentThreadId())
             {
                 if (synchronous)
                 {
@@ -11150,10 +11149,9 @@ namespace System.Windows.Forms
                 {
                     // The processing of WmShowWindow will set the visibility
                     // bit and call CreateControl()
-
                     if (IsHandleCreated || value)
                     {
-                        SafeNativeMethods.ShowWindow(new HandleRef(this, Handle), value ? ShowParams : NativeMethods.SW_HIDE);
+                        User32.ShowWindow(Handle, value ? ShowParams : User32.ShowWindowCommand.HIDE);
                     }
                 }
                 else if (IsHandleCreated || value && _parent != null && _parent.Created)

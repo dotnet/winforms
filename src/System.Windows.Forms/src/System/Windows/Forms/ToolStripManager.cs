@@ -1593,8 +1593,8 @@ namespace System.Windows.Forms
                         messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
                             NativeMethods.WH_GETMESSAGE,
                             hookProc,
-                            new HandleRef(null, IntPtr.Zero),
-                            (int)Interop.Kernel32.GetCurrentThreadId());
+                            IntPtr.Zero,
+                            Kernel32.GetCurrentThreadId());
 
                         if (messageHookHandle != IntPtr.Zero)
                         {
