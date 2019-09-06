@@ -463,7 +463,7 @@ namespace System.Windows.Forms
                         hr = scriptObject.Invoke(
                             dispid,
                             ref g,
-                           Kernel32.GetThreadLocale(),
+                            Kernel32.GetThreadLocale(),
                             NativeMethods.DISPATCH_METHOD,
                             dp,
                             retVals,

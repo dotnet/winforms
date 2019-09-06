@@ -914,7 +914,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             HRESULT hr = pDisp.Invoke(
                 dispid,
                 ref g,
-               Kernel32.GetThreadLocale(),
+                Kernel32.GetThreadLocale(),
                 NativeMethods.DISPATCH_PROPERTYGET,
                 new NativeMethods.tagDISPPARAMS(),
                 pVarResult,
@@ -1310,7 +1310,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = pDisp.Invoke(
                         dispid,
                         ref g,
-                       Kernel32.GetThreadLocale(),
+                        Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_PROPERTYPUT,
                         dp,
                         null,
@@ -1356,14 +1356,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 StringBuilder strMessage = new StringBuilder(256);
 
-                                int result = SafeNativeMethods.FormatMessage(NativeMethods.FORMAT_MESSAGE_FROM_SYSTEM |
-                                                NativeMethods.FORMAT_MESSAGE_IGNORE_INSERTS,
-                                                NativeMethods.NullHandleRef,
-                                                (int)hr,
-                                                CultureInfo.CurrentCulture.LCID,
-                                                strMessage,
-                                                255,
-                                                NativeMethods.NullHandleRef);
+                                uint result = Kernel32.FormatMessage(
+                                    Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
+                                    IntPtr.Zero,
+                                    (uint)hr,
+                                    (uint)CultureInfo.CurrentCulture.LCID,
+                                    strMessage,
+                                    255,
+                                    IntPtr.Zero);
 
                                 if (result == 0)
                                 {

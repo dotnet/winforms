@@ -169,7 +169,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = pDisp.Invoke(
                         Ole32.DispatchID.ABOUTBOX,
                         ref g,
-                       Kernel32.GetThreadLocale(),
+                        Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_METHOD,
                         new NativeMethods.tagDISPPARAMS(),
                         null,

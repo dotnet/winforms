@@ -213,7 +213,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = iDispatch.Invoke(
                         dispid,
                         ref g,
-                       Kernel32.GetThreadLocale(),
+                        Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_PROPERTYGET,
                         new NativeMethods.tagDISPPARAMS(),
                         retval,

@@ -940,13 +940,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override int ShowParams
-        {
-            get
-            {
-                return NativeMethods.SW_SHOWNOACTIVATE;
-            }
-        }
+        internal override User32.ShowWindowCommand ShowParams => User32.ShowWindowCommand.SHOWNOACTIVATE;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Security;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -241,13 +242,14 @@ namespace System.Windows.Forms
             {
                 hook = new NativeMethods.HookProc(new SendKeysHookProc().Callback);
                 stopHook = false;
-                hhook = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_JOURNALPLAYBACK,
-                                                 hook,
-                                                 new HandleRef(null, Kernel32.GetModuleHandleW(null)),
-                                                 0);
+                hhook = UnsafeNativeMethods.SetWindowsHookEx(
+                    NativeMethods.WH_JOURNALPLAYBACK,
+                    hook,
+                    Kernel32.GetModuleHandleW(null),
+                    0);
                 if (hhook == IntPtr.Zero)
                 {
-                    throw new Security.SecurityException(SR.SendKeysHookFailed);
+                    throw new SecurityException(SR.SendKeysHookFailed);
                 }
             }
         }
@@ -259,11 +261,11 @@ namespace System.Windows.Forms
             {
 
                 NativeMethods.HookProc hookProc = new NativeMethods.HookProc(EmptyHookCallback);
-                IntPtr hookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_JOURNALPLAYBACK,
-                                                 hookProc,
-                                                 new HandleRef(null, Kernel32.GetModuleHandleW(null)),
-                                                 0);
-
+                IntPtr hookHandle = UnsafeNativeMethods.SetWindowsHookEx(
+                    NativeMethods.WH_JOURNALPLAYBACK,
+                    hookProc,
+                    Kernel32.GetModuleHandleW(null),
+                    0);
                 hookSupported = (hookHandle != IntPtr.Zero);
 
                 if (hookHandle != IntPtr.Zero)
@@ -1178,7 +1180,7 @@ namespace System.Windows.Forms
                         eventmsg.paramL = evt.paramL;
                         eventmsg.paramH = evt.paramH;
                         eventmsg.hwnd = evt.hwnd;
-                        eventmsg.time = SafeNativeMethods.GetTickCount();
+                        eventmsg.time = (int)Kernel32.GetTickCount();
                         Marshal.StructureToPtr(eventmsg, lparam, true);
                         break;
 

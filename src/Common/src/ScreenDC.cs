@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace System.Windows.Forms
     ///  This will return the DC for the primary monitor. (Not the entire desktop.)
     /// </summary>
     /// <remarks>
-    ///   <see cref="Interop.Gdi32.CreateDC(string, string, string, IntPtr)" /> is
+    ///   <see cref="Gdi32.CreateDC(string, string, string, IntPtr)" /> is
     ///   the API to get the DC for the entire desktop.
     /// </remarks>
     internal ref struct ScreenDC
@@ -17,7 +19,7 @@ namespace System.Windows.Forms
         private IntPtr _handle;
 
         public static ScreenDC Create()
-            => new ScreenDC { _handle = Interop.User32.GetDC(IntPtr.Zero) };
+            => new ScreenDC { _handle = User32.GetDC(IntPtr.Zero) };
 
         public static implicit operator IntPtr(ScreenDC screenDC) => screenDC._handle;
 
@@ -25,7 +27,7 @@ namespace System.Windows.Forms
         {
             if (_handle != IntPtr.Zero)
             {
-                Interop.User32.ReleaseDC(IntPtr.Zero, _handle);
+                User32.ReleaseDC(IntPtr.Zero, _handle);
             }
         }
     }

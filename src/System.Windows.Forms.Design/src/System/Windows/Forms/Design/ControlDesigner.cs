@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
         private int _lastMoveScreenX;
         private int _lastMoveScreenY;
         // Values used to simulate double clicks for controls that don't support them.
-        private int _lastClickMessageTime;
+        private uint _lastClickMessageTime;
         private int _lastClickMessagePositionX;
         private int _lastClickMessagePositionY;
 
@@ -2353,7 +2353,7 @@ namespace System.Windows.Forms.Design
         {
             bool doubleClick = false;
             int wait = SystemInformation.DoubleClickTime;
-            int elapsed = SafeNativeMethods.GetTickCount() - _lastClickMessageTime;
+            uint elapsed = Kernel32.GetTickCount() - _lastClickMessageTime;
             if (elapsed <= wait)
             {
                 Size dblClick = SystemInformation.DoubleClickSize;
@@ -2370,7 +2370,7 @@ namespace System.Windows.Forms.Design
             {
                 _lastClickMessagePositionX = x;
                 _lastClickMessagePositionY = y;
-                _lastClickMessageTime = SafeNativeMethods.GetTickCount();
+                _lastClickMessageTime = Kernel32.GetTickCount();
             }
             else
             {
@@ -2664,7 +2664,7 @@ namespace System.Windows.Forms.Design
 
         private bool IsWindowInCurrentProcess(IntPtr hwnd)
         {
-            Interop.User32.GetWindowThreadProcessId(hwnd, out uint pid);
+            User32.GetWindowThreadProcessId(hwnd, out uint pid);
             return pid == CurrentProcessId;
         }
 
@@ -2674,8 +2674,9 @@ namespace System.Windows.Forms.Design
             {
                 if (s_currentProcessId == 0)
                 {
-                    s_currentProcessId = Interop.Kernel32.GetCurrentProcessId();
+                    s_currentProcessId = Kernel32.GetCurrentProcessId();
                 }
+
                 return s_currentProcessId;
             }
         }

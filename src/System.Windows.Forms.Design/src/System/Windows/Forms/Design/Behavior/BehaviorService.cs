@@ -1075,17 +1075,18 @@ namespace System.Windows.Forms.Design.Behavior
                         if (_thisProcessID == 0)
                         {
                             AdornerWindow adornerWindow = s_adornerWindowList[0];
-                            Interop.User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
+                            User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                         }
 
                         NativeMethods.HookProc hook = new NativeMethods.HookProc(MouseHookProc);
                         _mouseHookRoot = GCHandle.Alloc(hook);
 
 #pragma warning disable 618
-                        _mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE,
-                                                                   hook,
-                                                                   new HandleRef(null, IntPtr.Zero),
-                                                                   AppDomain.GetCurrentThreadId());
+                        _mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
+                            NativeMethods.WH_MOUSE,
+                            hook,
+                            IntPtr.Zero,
+                            (uint)AppDomain.GetCurrentThreadId());
 #pragma warning restore 618
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
@@ -1169,7 +1170,7 @@ namespace System.Windows.Forms.Design.Behavior
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
                             // Make sure the window is in our process
-                            Interop.User32.GetWindowThreadProcessId(hWnd, out uint pid);
+                            User32.GetWindowThreadProcessId(hWnd, out uint pid);
 
                             // If this isn't our process, bail
                             if (pid != _thisProcessID)

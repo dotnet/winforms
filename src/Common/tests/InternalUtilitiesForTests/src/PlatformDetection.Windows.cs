@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.Win32;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
 using Xunit;
+using static Interop;
 
 namespace System
 {
@@ -180,7 +179,7 @@ namespace System
                     return false;
                 }
 
-                Assert.True(OpenProcessToken(GetCurrentProcess(), TOKEN_READ, out IntPtr processToken));
+                Assert.True(OpenProcessToken(Kernel32.GetCurrentProcess(), TOKEN_READ, out IntPtr processToken));
 
                 try
                 {
@@ -191,7 +190,7 @@ namespace System
                 }
                 finally
                 {
-                    CloseHandle(processToken);
+                    Kernel32.CloseHandle(processToken);
                 }
 
                 return s_isWindowsElevated == 1;
@@ -300,14 +299,7 @@ namespace System
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern int GetCurrentApplicationUserModelId(ref uint applicationUserModelIdLength, byte[] applicationUserModelId);
 
-        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        private static extern bool CloseHandle(IntPtr handle);
-
         [DllImport("advapi32.dll", SetLastError = true, ExactSpelling = true)]
         private static extern bool OpenProcessToken(IntPtr ProcessHandle, uint DesiredAccess, out IntPtr TokenHandle);
-
-        // The process handle does NOT need closing
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        private static extern IntPtr GetCurrentProcess();
     }
 }

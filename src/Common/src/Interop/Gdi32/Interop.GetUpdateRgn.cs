@@ -10,7 +10,7 @@ internal partial class Interop
 {
     internal partial class User32
     {
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true)]
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
         public static extern RegionType GetUpdateRgn(IntPtr hWnd, IntPtr hRgn, bool bErase);
     }
 }

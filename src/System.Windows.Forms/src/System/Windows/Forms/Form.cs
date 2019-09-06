@@ -2205,7 +2205,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override int ShowParams
+        internal override User32.ShowWindowCommand ShowParams
         {
             get
             {
@@ -2221,20 +2221,20 @@ namespace System.Windows.Forms
                 switch (WindowState)
                 {
                     case FormWindowState.Maximized:
-                        return NativeMethods.SW_SHOWMAXIMIZED;
+                        return User32.ShowWindowCommand.SHOWMAXIMIZED;
                     case FormWindowState.Minimized:
-                        return NativeMethods.SW_SHOWMINIMIZED;
+                        return User32.ShowWindowCommand.SHOWMINIMIZED;
                 }
                 if (ShowWithoutActivation)
                 {
-                    return NativeMethods.SW_SHOWNOACTIVATE;
+                    return User32.ShowWindowCommand.SHOWNOACTIVATE;
                 }
-                return NativeMethods.SW_SHOW;
+                return User32.ShowWindowCommand.SHOW;
             }
         }
 
         /// <summary>
-        ///  When this property returns true, the internal ShowParams property will return NativeMethods.SW_SHOWNOACTIVATE.
+        ///  When this property returns true, the internal ShowParams property will return User32.ShowWindowCommand.SHOWNOACTIVATE.
         /// </summary>
         [Browsable(false)]
         protected virtual bool ShowWithoutActivation
@@ -2590,7 +2590,7 @@ namespace System.Windows.Forms
                         SuspendLayout();
                         try
                         {
-                            SafeNativeMethods.ShowWindow(new HandleRef(this, Handle), NativeMethods.SW_SHOW);
+                            User32.ShowWindow(this, User32.ShowWindowCommand.SHOW);
                             CreateControl();
 
                             // If this form is mdichild and maximized, we need to redraw the MdiParent non-client area to
@@ -2655,13 +2655,13 @@ namespace System.Windows.Forms
                     switch (value)
                     {
                         case FormWindowState.Normal:
-                            SafeNativeMethods.ShowWindow(new HandleRef(this, hWnd), NativeMethods.SW_NORMAL);
+                            User32.ShowWindow(this, User32.ShowWindowCommand.NORMAL);
                             break;
                         case FormWindowState.Maximized:
-                            SafeNativeMethods.ShowWindow(new HandleRef(this, hWnd), NativeMethods.SW_MAXIMIZE);
+                            User32.ShowWindow(this, User32.ShowWindowCommand.MAXIMIZE);
                             break;
                         case FormWindowState.Minimized:
-                            SafeNativeMethods.ShowWindow(new HandleRef(this, hWnd), NativeMethods.SW_MINIMIZE);
+                            User32.ShowWindow(this, User32.ShowWindowCommand.MINIMIZE);
                             break;
                     }
                 }
@@ -5097,14 +5097,12 @@ namespace System.Windows.Forms
 
         internal override void RecreateHandleCore()
         {
-            //Debug.Assert( CanRecreateHandle(), "Recreating handle when form is not ready yet." );
-            NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT();
+            var wp = new User32.WINDOWPLACEMENT();
             FormStartPosition oldStartPosition = FormStartPosition.Manual;
 
             if (!IsMdiChild && (WindowState == FormWindowState.Minimized || WindowState == FormWindowState.Maximized))
             {
-                wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
-                UnsafeNativeMethods.GetWindowPlacement(new HandleRef(this, Handle), ref wp);
+                User32.GetWindowPlacement(Handle, out wp);
             }
 
             if (StartPosition != FormStartPosition.Manual)
@@ -5124,10 +5122,10 @@ namespace System.Windows.Forms
                 if (etwcb != null)
                 {
                     callback = new SafeNativeMethods.EnumThreadWindowsCallback(etwcb.Callback);
-                    UnsafeNativeMethods.EnumThreadWindows(
-                        (int)Interop.Kernel32.GetCurrentThreadId(),
-                        new NativeMethods.EnumThreadWindowsCallback(callback),
-                        new HandleRef(this, Handle));
+                    User32.EnumThreadWindows(
+                        Kernel32.GetCurrentThreadId(),
+                        new User32.EnumThreadWindowsCallback(callback),
+                        this);
                     // Reset the owner of the windows in the list
                     etwcb.ResetOwners();
                 }
@@ -5148,7 +5146,7 @@ namespace System.Windows.Forms
 
             if (wp.length > 0)
             {
-                UnsafeNativeMethods.SetWindowPlacement(new HandleRef(this, Handle), ref wp);
+                User32.SetWindowPlacement(this, ref wp);
             }
 
             if (callback != null)
@@ -6470,39 +6468,35 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 FormWindowState oldState = WindowState;
-                NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT
-                {
-                    length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>()
-                };
-                UnsafeNativeMethods.GetWindowPlacement(new HandleRef(this, Handle), ref wp);
+                User32.GetWindowPlacement(this, out User32.WINDOWPLACEMENT wp);
 
                 switch (wp.showCmd)
                 {
-                    case NativeMethods.SW_NORMAL:
-                    case NativeMethods.SW_RESTORE:
-                    case NativeMethods.SW_SHOW:
-                    case NativeMethods.SW_SHOWNA:
-                    case NativeMethods.SW_SHOWNOACTIVATE:
+                    case User32.ShowWindowCommand.NORMAL:
+                    case User32.ShowWindowCommand.RESTORE:
+                    case User32.ShowWindowCommand.SHOW:
+                    case User32.ShowWindowCommand.SHOWNA:
+                    case User32.ShowWindowCommand.SHOWNOACTIVATE:
                         if (formState[FormStateWindowState] != (int)FormWindowState.Normal)
                         {
                             formState[FormStateWindowState] = (int)FormWindowState.Normal;
                         }
                         break;
-                    case NativeMethods.SW_SHOWMAXIMIZED:
+                    case User32.ShowWindowCommand.SHOWMAXIMIZED:
                         if (formState[FormStateMdiChildMax] == 0)
                         {
                             formState[FormStateWindowState] = (int)FormWindowState.Maximized;
                         }
                         break;
-                    case NativeMethods.SW_SHOWMINIMIZED:
-                    case NativeMethods.SW_MINIMIZE:
-                    case NativeMethods.SW_SHOWMINNOACTIVE:
+                    case User32.ShowWindowCommand.SHOWMINIMIZED:
+                    case User32.ShowWindowCommand.MINIMIZE:
+                    case User32.ShowWindowCommand.SHOWMINNOACTIVE:
                         if (formState[FormStateMdiChildMax] == 0)
                         {
                             formState[FormStateWindowState] = (int)FormWindowState.Minimized;
                         }
                         break;
-                    case NativeMethods.SW_HIDE:
+                    case User32.ShowWindowCommand.HIDE:
                     default:
                         break;
                 }
@@ -6619,10 +6613,10 @@ namespace System.Windows.Forms
             {
                 switch (si.wShowWindow)
                 {
-                    case NativeMethods.SW_MAXIMIZE:
+                    case (short)User32.ShowWindowCommand.MAXIMIZE:
                         WindowState = FormWindowState.Maximized;
                         break;
-                    case NativeMethods.SW_MINIMIZE:
+                    case (short)User32.ShowWindowCommand.MINIMIZE:
                         WindowState = FormWindowState.Minimized;
                         break;
                 }

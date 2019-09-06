@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -31,10 +30,12 @@ namespace System.Windows.Forms
             {
                 _windows = new IntPtr[16];
                 _onlyWinForms = onlyWinForms;
-                UnsafeNativeMethods.EnumThreadWindows(
-                    (int)Kernel32.GetCurrentThreadId(),
-                    new NativeMethods.EnumThreadWindowsCallback(Callback),
-                    NativeMethods.NullHandleRef);
+                var callback = new User32.EnumThreadWindowsCallback(Callback);
+                User32.EnumThreadWindows(
+                    Kernel32.GetCurrentThreadId(),
+                    callback,
+                    IntPtr.Zero);
+                GC.KeepAlive(callback);
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lparam)

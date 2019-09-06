@@ -1937,7 +1937,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // We are not touching this for this relase. We may revisit it in next release.
             UnsafeNativeMethods.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(this, Handle));
             dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
-            SafeNativeMethods.ShowWindow(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.SW_SHOWNA);
+            User32.ShowWindow(dropDownHolder, User32.ShowWindowCommand.SHOWNA);
             Edit.Filter = true;
             dropDownHolder.Visible = true;
             dropDownHolder.FocusComponent();
@@ -8158,7 +8158,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (_thisProcessID == 0)
                     {
-                        Interop.User32.GetWindowThreadProcessId(control, out _thisProcessID);
+                        User32.GetWindowThreadProcessId(control, out _thisProcessID);
                     }
 
                     NativeMethods.HookProc hook = new NativeMethods.HookProc(new MouseHookObject(this).Callback);
@@ -8167,8 +8167,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
                         NativeMethods.WH_MOUSE,
                         hook,
-                        NativeMethods.NullHandleRef,
-                        (int)Interop.Kernel32.GetCurrentThreadId());
+                        IntPtr.Zero,
+                        Kernel32.GetCurrentThreadId());
                     Debug.Assert(mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }
@@ -8249,7 +8249,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
                     // Make sure the window is in our process
-                    Interop.User32.GetWindowThreadProcessId(hWndAtPoint, out uint pid);
+                    User32.GetWindowThreadProcessId(hWndAtPoint, out uint pid);
 
                     // if this isn't our process, unhook the mouse.
                     if (pid != _thisProcessID)

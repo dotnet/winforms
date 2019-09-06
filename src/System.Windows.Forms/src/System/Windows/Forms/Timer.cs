@@ -242,8 +242,7 @@ namespace System.Windows.Forms
             {
                 if (hWnd != IntPtr.Zero)
                 {
-                    return Interop.User32.GetWindowThreadProcessId(hWnd, out _)
-                        != Interop.Kernel32.GetCurrentThreadId();
+                    return User32.GetWindowThreadProcessId(hWnd, out _) != Kernel32.GetCurrentThreadId();
                 }
 
                 return false;

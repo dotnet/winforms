@@ -2020,7 +2020,7 @@ namespace System.Windows.Forms
                         message = WindowMessages.WM_SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = (IntPtr)0x20180001,
-                        time = SafeNativeMethods.GetTickCount()
+                        time = (int)Kernel32.GetTickCount()
                     };
                     User32.GetCursorPos(out Point p);
                     msg.pt = p;
@@ -5434,7 +5434,7 @@ namespace System.Windows.Forms
                     bstrFormat,
                     sFirstDayOfWeek,
                     sFirstWeekOfYear,
-                    Oleaut32.VarFormatFlags.VAR_FORMAT_NOSUBSTITUTE,
+                    Oleaut32.VarFormatOptions.FORMAT_NOSUBSTITUTE,
                     ref pbstr);
                 try
                 {

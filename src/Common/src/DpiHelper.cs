@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 
 using CAPS = System.Windows.Forms.NativeMethods;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -38,7 +39,7 @@ namespace System.Windows.Forms
                 return;
 
             using ScreenDC dc = ScreenDC.Create();
-            s_deviceDpi = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+            s_deviceDpi = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
             s_isInitialized = true;
         }
 
@@ -55,11 +56,10 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows10_1607OrGreater)
             {
                 // We are on Windows 10/1603 or greater, but we could still be DpiUnaware or SystemAware, so let's find that out...
-                IntPtr hProcess = SafeNativeMethods.OpenProcess(
-                    SafeNativeMethods.PROCESS_QUERY_INFORMATION,
-                    false,
-                    (int)Interop.Kernel32.GetCurrentProcessId());
-
+                IntPtr hProcess = Kernel32.OpenProcess(
+                    Kernel32.ProcessAccessOptions.QUERY_INFORMATION,
+                    BOOL.FALSE,
+                    Kernel32.GetCurrentProcessId());
                 SafeNativeMethods.GetProcessDpiAwareness(hProcess, out CAPS.PROCESS_DPI_AWARENESS processDpiAwareness);
 
                 // Only if we're not, it makes sense to query for PerMonitorV2 awareness from now on, if needed.

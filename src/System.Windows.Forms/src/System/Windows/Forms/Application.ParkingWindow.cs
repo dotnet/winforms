@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -75,7 +76,7 @@ namespace System.Windows.Forms
                 // messagepump is gone and then decide to clean them up.  We should clean
                 // up the parkingwindow in this case and a postmessage won't do it.
 
-                uint id = Interop.User32.GetWindowThreadProcessId(this, out _);
+                uint id = User32.GetWindowThreadProcessId(this, out _);
                 ThreadContext context = ThreadContext.FromId(id);
 
                 // We only do this if the ThreadContext tells us that we are currently

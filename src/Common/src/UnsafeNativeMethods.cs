@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                     // passing null for buffer will return actual number of charectors in the file name.
                     // So, one extra call would be suffice to avoid while loop in case of long path.
                     int capacity = DragQueryFile(hDrop, iFile, null, 0);
-                    if (capacity < Interop.Kernel32.MAX_UNICODESTRING_LEN)
+                    if (capacity < Kernel32.MAX_UNICODESTRING_LEN)
                     {
                         lpszFile.EnsureCapacity(capacity);
                         resultValue = DragQueryFile(hDrop, iFile, lpszFile, capacity);
@@ -157,9 +157,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool EnumChildWindows(HandleRef hwndParent, NativeMethods.EnumChildrenCallback lpEnumFunc, HandleRef lParam);
-
-        [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto, EntryPoint = "ShellExecute", BestFitMapping = false)]
-        public static extern IntPtr ShellExecute_NoBFM(HandleRef hwnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory, int nShowCmd);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int SetScrollPos(HandleRef hWnd, int nBar, int nPos, bool bRedraw);
@@ -210,7 +207,7 @@ namespace System.Windows.Forms
         public static extern void CopyMemoryW(IntPtr pdst, char[] psrc, int cb);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetWindowsHookEx(int hookid, NativeMethods.HookProc pfnhook, HandleRef hinst, int threadid);
+        public static extern IntPtr SetWindowsHookEx(int idHook, NativeMethods.HookProc lpfn, IntPtr hmod, uint dwThreadId);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetKeyboardState(byte[] keystate);
@@ -235,17 +232,17 @@ namespace System.Windows.Forms
 
         public static StringBuilder GetModuleFileNameLongPath(HandleRef hModule)
         {
-            StringBuilder buffer = new StringBuilder(Interop.Kernel32.MAX_PATH);
+            StringBuilder buffer = new StringBuilder(Kernel32.MAX_PATH);
             int noOfTimes = 1;
             int length = 0;
             // Iterating by allocating chunk of memory each time we find the length is not sufficient.
             // Performance should not be an issue for current MAX_PATH length due to this change.
             while (((length = GetModuleFileName(hModule, buffer, buffer.Capacity)) == buffer.Capacity)
                 && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INSUFFICIENT_BUFFER
-                && buffer.Capacity < Interop.Kernel32.MAX_UNICODESTRING_LEN)
+                && buffer.Capacity < Kernel32.MAX_UNICODESTRING_LEN)
             {
                 noOfTimes += 2; // Increasing buffer size by 520 in each iteration.
-                int capacity = noOfTimes * Interop.Kernel32.MAX_PATH < Interop.Kernel32.MAX_UNICODESTRING_LEN ? noOfTimes * Interop.Kernel32.MAX_PATH : Interop.Kernel32.MAX_UNICODESTRING_LEN;
+                int capacity = noOfTimes * Kernel32.MAX_PATH < Kernel32.MAX_UNICODESTRING_LEN ? noOfTimes * Kernel32.MAX_PATH : Kernel32.MAX_UNICODESTRING_LEN;
                 buffer.EnsureCapacity(capacity);
             }
             buffer.Length = length;
@@ -264,17 +261,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr DispatchMessageW([In] ref NativeMethods.MSG msg);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int PostThreadMessage(int id, int msg, IntPtr wparam, IntPtr lparam);
-
         [DllImport(ExternDll.Ole32, ExactSpelling = true, SetLastError = true)]
         public static extern int OleInitialize(int val = 0);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public extern static bool EnumThreadWindows(int dwThreadId, NativeMethods.EnumThreadWindowsCallback lpfn, HandleRef lParam);
-
-        [DllImport(ExternDll.Kernel32, SetLastError = true)]
-        public extern static bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendDlgItemMessage(HandleRef hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
@@ -287,9 +275,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, SetLastError = true)]
-        public static extern bool CloseHandle(HandleRef handle);
 
         #region SendKeys SendInput functionality
 
@@ -865,9 +850,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public extern static bool SetMenu(HandleRef hWnd, HandleRef hMenu);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetWindowPlacement(HandleRef hWnd, ref NativeMethods.WINDOWPLACEMENT placement);
-
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetStartupInfo([In, Out] NativeMethods.STARTUPINFO_I startupinfo_i);
 
@@ -936,9 +918,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern void WaitMessage();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPlacement(HandleRef hWnd, [In] ref NativeMethods.WINDOWPLACEMENT placement);
 
         // This method is not available until Windows 8.1
         [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true)]

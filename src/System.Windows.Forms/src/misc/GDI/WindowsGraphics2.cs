@@ -446,7 +446,7 @@ namespace System.Windows.Forms.Internal
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
 
-            // Ok if any Top (Cannot test Interop.User32.TextFormatFlags.Top because it is 0), single line text or measuring text.
+            // Ok if any Top (Cannot test User32.TextFormatFlags.Top because it is 0), single line text or measuring text.
             bool isTop = (flags & User32.TextFormatFlags.DT_BOTTOM) == 0 && (flags & User32.TextFormatFlags.DT_VCENTER) == 0;
             if (isTop || ((flags & User32.TextFormatFlags.DT_SINGLELINE) != 0) || ((flags & User32.TextFormatFlags.DT_CALCRECT) != 0))
             {
