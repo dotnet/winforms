@@ -483,9 +483,9 @@ namespace System.Windows.Forms
                     if (!showColor)
                     {
                         IntPtr hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.cmb4);
-                        User32.ShowWindow(hWndCtl, User32.ShowWindowCommand.HIDE);
+                        User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                         hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.stc4);
-                        User32.ShowWindow(hWndCtl, User32.ShowWindowCommand.HIDE);
+                        User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                     }
                     break;
             }

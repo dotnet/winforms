@@ -291,7 +291,7 @@ namespace System.Windows.Forms
             }
 
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "\tExecuting '" + file.ToString() + "'");
-            Shell32.ShellExecuteW(handle, null, file.ToString(), null, null, User32.ShowWindowCommand.NORMAL);
+            Shell32.ShellExecuteW(handle, null, file.ToString(), null, null, User32.SW.NORMAL);
         }
 
         private static Uri Resolve(string partialUri)

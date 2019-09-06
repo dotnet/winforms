@@ -15,7 +15,7 @@ internal static partial class Interop
             IntPtr hwnd = default,
             uint msgMin = 0,
             uint msgMax = 0,
-            PeekMessageFlags remove = PeekMessageFlags.PM_NOREMOVE);
+            PM remove = PM.NOREMOVE);
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL PeekMessageW(
@@ -23,14 +23,14 @@ internal static partial class Interop
             IntPtr hwnd = default,
             uint msgMin = 0,
             uint msgMax = 0,
-            PeekMessageFlags remove = PeekMessageFlags.PM_NOREMOVE);
+            PM remove = PM.NOREMOVE);
 
         [Flags]
-        public enum PeekMessageFlags : uint
+        public enum PM : uint
         {
-            PM_NOREMOVE = 0x0000,
-            PM_REMOVE = 0x0001,
-            PM_NOYIELD = 0x0002
+            NOREMOVE = 0x0000,
+            REMOVE = 0x0001,
+            NOYIELD = 0x0002
         }
     }
 }

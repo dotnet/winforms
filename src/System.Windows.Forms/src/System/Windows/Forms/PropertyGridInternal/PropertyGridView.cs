@@ -1937,7 +1937,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // We are not touching this for this relase. We may revisit it in next release.
             UnsafeNativeMethods.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(this, Handle));
             dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
-            User32.ShowWindow(dropDownHolder, User32.ShowWindowCommand.SHOWNA);
+            User32.ShowWindow(dropDownHolder, User32.SW.SHOWNA);
             Edit.Filter = true;
             dropDownHolder.Visible = true;
             dropDownHolder.FocusComponent();

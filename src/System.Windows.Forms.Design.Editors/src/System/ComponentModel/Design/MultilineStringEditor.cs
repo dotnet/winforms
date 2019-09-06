@@ -236,7 +236,7 @@ namespace System.ComponentModel.Design
 
                     try
                     {
-                        User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.TextFormatFlags.DT_CALCRECT);
+                        User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);
                     }
                     finally
                     {

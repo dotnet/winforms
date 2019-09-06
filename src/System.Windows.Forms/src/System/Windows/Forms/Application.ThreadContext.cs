@@ -1584,7 +1584,7 @@ namespace System.Windows.Forms
 
                             // For DoEvents, just see if there are more messages on the queue.
                             User32.MSG temp = default;
-                            if (User32.PeekMessageW(ref temp, IntPtr.Zero, 0, 0, User32.PeekMessageFlags.PM_NOREMOVE).IsFalse())
+                            if (User32.PeekMessageW(ref temp, IntPtr.Zero, 0, 0, User32.PM.NOREMOVE).IsFalse())
                             {
                                 continueLoop = false;
                             }

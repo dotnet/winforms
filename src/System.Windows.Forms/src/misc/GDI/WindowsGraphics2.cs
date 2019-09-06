@@ -107,27 +107,27 @@ namespace System.Windows.Forms.Internal
         ///  CR/LF are honored.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor)
-            => DrawText(text, font, pt, foreColor, Color.Empty, User32.TextFormatFlags.DT_DEFAULT);
+            => DrawText(text, font, pt, foreColor, Color.Empty, User32.DT.DEFAULT);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font, foreColor and backColor.
         ///  CR/LF are honored.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor)
-            =>  DrawText(text, font, pt, foreColor, backColor, User32.TextFormatFlags.DT_DEFAULT);
+            =>  DrawText(text, font, pt, foreColor, backColor, User32.DT.DEFAULT);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font and foreColor, and according to the
         ///  specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, User32.TextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, User32.DT flags)
             => DrawText(text, font, pt, foreColor, Color.Empty, flags);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font, foreColor and backColor, and according
         ///  to the specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, User32.TextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, User32.DT flags)
             =>  DrawText(text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
 
         /// <summary>
@@ -140,12 +140,12 @@ namespace System.Windows.Forms.Internal
         ///  Draws the text centered in the given rectangle and using the given Font, foreColor and backColor.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor)
-            => DrawText(text, font, bounds, foreColor, backColor, User32.TextFormatFlags.DT_CENTER | User32.TextFormatFlags.DT_VCENTER);
+            => DrawText(text, font, bounds, foreColor, backColor, User32.DT.CENTER | User32.DT.VCENTER);
 
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color color, User32.TextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color color, User32.DT flags)
             => DrawText(text, font, bounds, color, Color.Empty, flags);
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Internal
         ///  
         ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, User32.TextFormatFlags flags)
+        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, User32.DT flags)
         {
             if (string.IsNullOrEmpty(text) || foreColor == Color.Transparent)
             {
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Internal
             }
 
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
-            Debug.Assert((flags & User32.TextFormatFlags.DT_CALCRECT) == 0, "DT_CALCRECT flag is set, text won't be drawn");
+            Debug.Assert((flags & User32.DT.CALCRECT) == 0, "CALCRECT flag is set, text won't be drawn");
 
             HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Internal
         ///  CR/LF/TAB are taken into account.
         /// </summary>
         public Size MeasureText(string text, WindowsFont font)
-            => MeasureText(text, font, MaxSize, User32.TextFormatFlags.DT_BOTTOM);
+            => MeasureText(text, font, MaxSize, User32.DT.BOTTOM);
 
         /// <summary>
         ///  Returns the Size in logical units of the given text using the given Font and using the specified rectangle
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Internal
         ///  TAB/CR/LF are taken into account.
         /// </summary>
         public Size MeasureText(string text, WindowsFont font, Size proposedSize)
-            =>  MeasureText(text, font, proposedSize, User32.TextFormatFlags.DT_BOTTOM);
+            =>  MeasureText(text, font, proposedSize, User32.DT.BOTTOM);
 
         /// <summary>
         ///  Returns the Size in logical units of the given text using the given Font, and according to the formatting flags.
@@ -356,7 +356,7 @@ namespace System.Windows.Forms.Internal
         ///  - This function assumes that the text is horizontal, that is, that the escapement is always 0. This is true for both
         ///  the horizontal and vertical measurements of the text.  The application must convert it explicitly.
         /// </summary>
-        public Size MeasureText(string text, WindowsFont font, Size proposedSize, User32.TextFormatFlags flags)
+        public Size MeasureText(string text, WindowsFont font, Size proposedSize, User32.DT flags)
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
 
@@ -403,31 +403,31 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.SelectFont(font);
             }
 
-            // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain DT_SINGLELINE and
-            // DT_VCENTER or DT_BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
-            // it assumes the text is to be vertically aligned; we need to clear the DT_VCENTER and DT_BOTTOM flags to
+            // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SINGLELINE and
+            // VCENTER or BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
+            // it assumes the text is to be vertically aligned; we need to clear the VCENTER and BOTTOM flags to
             // get the actual text bounds.
-            if (proposedSize.Height >= MaxSize.Height && (flags & User32.TextFormatFlags.DT_SINGLELINE) != 0)
+            if (proposedSize.Height >= MaxSize.Height && (flags & User32.DT.SINGLELINE) != 0)
             {
                 // Clear vertical-alignment flags.
-                flags &= ~(User32.TextFormatFlags.DT_BOTTOM | User32.TextFormatFlags.DT_VCENTER);
+                flags &= ~(User32.DT.BOTTOM | User32.DT.VCENTER);
             }
 
             if (proposedSize.Width == MaxSize.Width)
             {
                 // PERF: No constraining width means no word break.
                 // in this case, we dont care about word wrapping - there should be enough room to fit it all
-                flags &= ~(User32.TextFormatFlags.DT_WORDBREAK);
+                flags &= ~(User32.DT.WORDBREAK);
             }
 
-            flags |= User32.TextFormatFlags.DT_CALCRECT;
+            flags |= User32.DT.CALCRECT;
             User32.DrawTextExW(DeviceContext.Hdc, text, text.Length, ref rect, flags, ref dtparams);
 
             return rect.Size;
         }
 
         /// <summary>
-        ///  The GDI DrawText does not do multiline alignment when User32.TextFormatFlags.DT_SINGLELINE is not set. This
+        ///  The GDI DrawText does not do multiline alignment when User32.DT.SINGLELINE is not set. This
         ///  adjustment is to workaround that limitation. We don't want to duplicate SelectObject calls here,
         ///  so put your Font in the dc before calling this.
         ///
@@ -441,14 +441,14 @@ namespace System.Windows.Forms.Internal
             HandleRef hdc,
             string text,
             Rectangle bounds,
-            User32.TextFormatFlags flags,
+            User32.DT flags,
             ref User32.DRAWTEXTPARAMS dtparams)
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
 
-            // Ok if any Top (Cannot test User32.TextFormatFlags.Top because it is 0), single line text or measuring text.
-            bool isTop = (flags & User32.TextFormatFlags.DT_BOTTOM) == 0 && (flags & User32.TextFormatFlags.DT_VCENTER) == 0;
-            if (isTop || ((flags & User32.TextFormatFlags.DT_SINGLELINE) != 0) || ((flags & User32.TextFormatFlags.DT_CALCRECT) != 0))
+            // Ok if any Top (Cannot test User32.DT.Top because it is 0), single line text or measuring text.
+            bool isTop = (flags & User32.DT.BOTTOM) == 0 && (flags & User32.DT.VCENTER) == 0;
+            if (isTop || ((flags & User32.DT.SINGLELINE) != 0) || ((flags & User32.DT.CALCRECT) != 0))
             {
                 return bounds;
             }
@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Internal
             RECT rect = new RECT(bounds);
 
             // Get the text bounds.
-            flags |= User32.TextFormatFlags.DT_CALCRECT;
+            flags |= User32.DT.CALCRECT;
             int textHeight = User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
 
             // if the text does not fit inside the bounds then return the bounds that were passed in
@@ -467,7 +467,7 @@ namespace System.Windows.Forms.Internal
 
             Rectangle adjustedBounds = bounds;
 
-            if ((flags & User32.TextFormatFlags.DT_VCENTER) != 0)  // Middle
+            if ((flags & User32.DT.VCENTER) != 0)  // Middle
             {
                 adjustedBounds.Y = adjustedBounds.Top + adjustedBounds.Height / 2 - textHeight / 2;
             }

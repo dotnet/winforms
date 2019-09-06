@@ -11,6 +11,7 @@ internal static partial class Interop
         /// <summary>
         ///  Window styles
         /// </summary>
+        [Flags]
         public enum WS : uint
         {
             OVERLAPPED = 0x00000000,

@@ -7,43 +7,43 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Note: This is a public enum wrapping the internal <see cref="User32.TextFormatFlags"/>.
+    ///  Note: This is a public enum wrapping the internal <see cref="User32.DT"/>.
     /// </summary>
     [Flags]
     public enum TextFormatFlags
     {
-        Bottom = (int)User32.TextFormatFlags.DT_BOTTOM,
-        EndEllipsis = (int)User32.TextFormatFlags.DT_END_ELLIPSIS,
-        ExpandTabs = (int)User32.TextFormatFlags.DT_EXPANDTABS,
-        ExternalLeading = (int)User32.TextFormatFlags.DT_EXTERNALLEADING,
-        Default = (int)User32.TextFormatFlags.DT_DEFAULT,
-        HidePrefix = (int)User32.TextFormatFlags.DT_HIDEPREFIX,
-        HorizontalCenter = (int)User32.TextFormatFlags.DT_CENTER,
-        Internal = (int)User32.TextFormatFlags.DT_INTERNAL,
+        Bottom = (int)User32.DT.BOTTOM,
+        EndEllipsis = (int)User32.DT.END_ELLIPSIS,
+        ExpandTabs = (int)User32.DT.EXPANDTABS,
+        ExternalLeading = (int)User32.DT.EXTERNALLEADING,
+        Default = (int)User32.DT.DEFAULT,
+        HidePrefix = (int)User32.DT.HIDEPREFIX,
+        HorizontalCenter = (int)User32.DT.CENTER,
+        Internal = (int)User32.DT.INTERNAL,
 
         /// <remarks>
         ///  This is the default.
         /// </remarks>
-        Left = (int)User32.TextFormatFlags.DT_LEFT,
-        ModifyString = (int)User32.TextFormatFlags.DT_MODIFYSTRING,
-        NoClipping = (int)User32.TextFormatFlags.DT_NOCLIP,
-        NoPrefix = (int)User32.TextFormatFlags.DT_NOPREFIX,
-        NoFullWidthCharacterBreak = (int)User32.TextFormatFlags.DT_NOFULLWIDTHCHARBREAK,
-        PathEllipsis = (int)User32.TextFormatFlags.DT_PATH_ELLIPSIS,
-        PrefixOnly = (int)User32.TextFormatFlags.DT_PREFIXONLY,
-        Right = (int)User32.TextFormatFlags.DT_RIGHT,
-        RightToLeft = (int)User32.TextFormatFlags.DT_RTLREADING,
-        SingleLine = (int)User32.TextFormatFlags.DT_SINGLELINE,
-        TextBoxControl = (int)User32.TextFormatFlags.DT_EDITCONTROL,
+        Left = (int)User32.DT.LEFT,
+        ModifyString = (int)User32.DT.MODIFYSTRING,
+        NoClipping = (int)User32.DT.NOCLIP,
+        NoPrefix = (int)User32.DT.NOPREFIX,
+        NoFullWidthCharacterBreak = (int)User32.DT.NOFULLWIDTHCHARBREAK,
+        PathEllipsis = (int)User32.DT.PATH_ELLIPSIS,
+        PrefixOnly = (int)User32.DT.PREFIXONLY,
+        Right = (int)User32.DT.RIGHT,
+        RightToLeft = (int)User32.DT.RTLREADING,
+        SingleLine = (int)User32.DT.SINGLELINE,
+        TextBoxControl = (int)User32.DT.EDITCONTROL,
 
         /// <remarks>
         ///  This is the default.
         /// </remarks>
-        Top = (int)User32.TextFormatFlags.DT_TOP,
+        Top = (int)User32.DT.TOP,
 
-        VerticalCenter = (int)User32.TextFormatFlags.DT_VCENTER,
-        WordBreak = (int)User32.TextFormatFlags.DT_WORDBREAK,
-        WordEllipsis = (int)User32.TextFormatFlags.DT_WORD_ELLIPSIS,
+        VerticalCenter = (int)User32.DT.VCENTER,
+        WordBreak = (int)User32.DT.WORDBREAK,
+        WordEllipsis = (int)User32.DT.WORD_ELLIPSIS,
 
         /// <summary>
         ///  The following flags are exclusive of TextRenderer (no Windows native flags)

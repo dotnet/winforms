@@ -11,9 +11,9 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL ShowWindow(IntPtr hWnd, ShowWindowCommand nCmdShow);
+        public static extern BOOL ShowWindow(IntPtr hWnd, SW nCmdShow);
 
-        public static BOOL ShowWindow(IHandle hWnd, ShowWindowCommand nCmdShow)
+        public static BOOL ShowWindow(IHandle hWnd, SW nCmdShow)
         {
             BOOL result = ShowWindow(hWnd.Handle, nCmdShow);
             GC.KeepAlive(hWnd);

@@ -567,7 +567,7 @@ namespace System.Windows.Forms.Design
             if (control != null && control.IsHandleCreated)
             {
                 NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 1, 0);
-                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RedrawWindowOptions.RDW_FRAME);
+                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
 
@@ -580,7 +580,7 @@ namespace System.Windows.Forms.Design
             if (control != null && control.IsHandleCreated)
             {
                 NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 0, 0);
-                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RedrawWindowOptions.RDW_FRAME);
+                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
 

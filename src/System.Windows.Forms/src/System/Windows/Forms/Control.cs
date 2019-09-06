@@ -3853,7 +3853,7 @@ namespace System.Windows.Forms
         }
 
         // The parameter used in the call to ShowWindow for this control
-        internal virtual User32.ShowWindowCommand ShowParams => User32.ShowWindowCommand.SHOW;
+        internal virtual User32.SW ShowParams => User32.SW.SHOW;
 
         /// <summary>
         ///  When this property in true the Cursor Property is set to WaitCursor as well as the Cursor Property
@@ -6423,7 +6423,7 @@ namespace System.Windows.Forms
                             new HandleRef(this, Handle),
                             null,
                             new HandleRef(region, regionHandle),
-                            User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
+                            User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
                     }
                     else
                     {
@@ -6478,7 +6478,7 @@ namespace System.Windows.Forms
                         new HandleRef(_window, Handle),
                         null,
                         IntPtr.Zero,
-                        User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
+                        User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
                 }
                 else
                 {
@@ -6528,7 +6528,7 @@ namespace System.Windows.Forms
                         new HandleRef(_window, Handle),
                         &rcArea,
                         IntPtr.Zero,
-                        User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
+                        User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
                 }
                 else
                 {
@@ -11151,7 +11151,7 @@ namespace System.Windows.Forms
                     // bit and call CreateControl()
                     if (IsHandleCreated || value)
                     {
-                        User32.ShowWindow(Handle, value ? ShowParams : User32.ShowWindowCommand.HIDE);
+                        User32.ShowWindow(Handle, value ? ShowParams : User32.SW.HIDE);
                     }
                 }
                 else if (IsHandleCreated || value && _parent != null && _parent.Created)

@@ -546,17 +546,17 @@ namespace System.Windows.Forms
                 {
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
                     {
-                        User32.TextFormatFlags flags = User32.TextFormatFlags.DT_WORDBREAK | User32.TextFormatFlags.DT_EDITCONTROL;
+                        User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
 
                         if (!ShowKeyboardCues)
                         {
-                            flags |= User32.TextFormatFlags.DT_HIDEPREFIX;
+                            flags |= User32.DT.HIDEPREFIX;
                         }
 
                         if (RightToLeft == RightToLeft.Yes)
                         {
-                            flags |= User32.TextFormatFlags.DT_RTLREADING;
-                            flags |= User32.TextFormatFlags.DT_RIGHT;
+                            flags |= User32.DT.RTLREADING;
+                            flags |= User32.DT.RIGHT;
                         }
 
                         using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font))

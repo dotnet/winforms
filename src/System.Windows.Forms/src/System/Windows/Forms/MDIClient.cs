@@ -249,7 +249,7 @@ namespace System.Windows.Forms
                                         wp.ptMinPosition.Y = -2;
                                     }
                                 }
-                                wp.flags = User32.WindowPlacementOptions.SETMINPOSITION;
+                                wp.flags = User32.WPF.SETMINPOSITION;
                                 User32.SetWindowPlacement(child, ref wp);
                             }
                         }

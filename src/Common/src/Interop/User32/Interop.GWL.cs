@@ -3,20 +3,23 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
         /// <summary>
-        ///  Class styles for <see cref="WNDCLASS"/>
+        ///  Window long values for <see cref="SetWindowLong"/> and <see cref="GetWindowLong"/>.
         /// </summary>
-        [Flags]
-        public enum CS : uint
+        public enum GWL : int
         {
-            DBLCLKS = 0x0008,
-            DROPSHADOW = 0x00020000,
-            SAVEBITS = 0x0800
+            WNDPROC = (-4),
+            HWNDPARENT = (-8),
+            STYLE = (-16),
+            EXSTYLE = (-20),
+            ID = (-12),
         }
     }
 }

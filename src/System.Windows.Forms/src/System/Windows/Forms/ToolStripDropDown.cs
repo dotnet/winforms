@@ -940,7 +940,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override User32.ShowWindowCommand ShowParams => User32.ShowWindowCommand.SHOWNOACTIVATE;
+        internal override User32.SW ShowParams => User32.SW.SHOWNOACTIVATE;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged
@@ -2291,7 +2291,7 @@ namespace System.Windows.Forms
                             activeHwndHandleRef,
                             null,
                             IntPtr.Zero,
-                            User32.RedrawWindowOptions.RDW_FRAME | User32.RedrawWindowOptions.RDW_INVALIDATE);
+                            User32.RDW.FRAME | User32.RDW.INVALIDATE);
                         m.WParam = (IntPtr)1;
                     }
                     finally
