@@ -45,26 +45,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto, EntryPoint = "SetClassLongPtr")]
         public static extern IntPtr SetClassLongPtr64(HandleRef hwnd, int nIndex, IntPtr dwNewLong);
 
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, PreserveSig = false)]
-        public static extern IClassFactory2 CoGetClassObject(
-            [In]
-            ref Guid clsid,
-            int dwContext,
-            int serverInfo,
-            [In]
-            ref Guid refiid);
-
-        [return: MarshalAs(UnmanagedType.Interface)]
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, PreserveSig = false)]
-        public static extern object CoCreateInstance(
-            [In]
-            ref Guid clsid,
-            [MarshalAs(UnmanagedType.Interface)]
-            object punkOuter,
-            int context,
-            [In]
-            ref Guid iid);
-
         [DllImport(ExternDll.Kernel32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetLocaleInfo(uint Locale, int LCType, StringBuilder lpLCData, int cchData);
 
@@ -261,14 +241,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr DispatchMessageW([In] ref NativeMethods.MSG msg);
 
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, SetLastError = true)]
-        public static extern int OleInitialize(int val = 0);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendDlgItemMessage(HandleRef hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int OleUninitialize();
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
@@ -2426,43 +2400,6 @@ namespace System.Windows.Forms
                     buffer[offset++] = (char)0;
                 }
             }
-        }
-
-        [ComImport(), Guid("B196B28F-BAB4-101A-B69C-00AA00341D07"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IClassFactory2
-        {
-            void CreateInstance(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  object unused,
-                           [In]
-                  ref Guid refiid,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  object[] ppunk);
-
-            void LockServer(
-                    int fLock);
-
-            void GetLicInfo(
-                   [Out]
-                  NativeMethods.tagLICINFO licInfo);
-
-            void RequestLicKey(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int dwReserved,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   string[] pBstrKey);
-
-            void CreateInstanceLic(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  object pUnkOuter,
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  object pUnkReserved,
-                           [In]
-                  ref Guid riid,
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                  string bstrKey,
-                   [Out, MarshalAs(UnmanagedType.Interface)]
-                  out object ppVal);
         }
 
         [ComImport(),

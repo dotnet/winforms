@@ -4,11 +4,12 @@
 
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSoucr property.
+    ///  Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSource property.
     ///  This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
     ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
@@ -39,7 +40,16 @@ namespace System.Windows.Forms
             size = (strings == null) ? 0 : strings.Length;
 
             Guid iid_iunknown = typeof(UnsafeNativeMethods.IAutoComplete2).GUID;
-            object obj = UnsafeNativeMethods.CoCreateInstance(ref autoCompleteClsid, null, NativeMethods.CLSCTX_INPROC_SERVER, ref iid_iunknown);
+            HRESULT hr = Ole32.CoCreateInstance(
+                ref autoCompleteClsid,
+                IntPtr.Zero,
+                Ole32.CLSCTX.INPROC_SERVER,
+                ref iid_iunknown,
+                out object obj);
+            if (!hr.Succeeded())
+            {
+                throw Marshal.GetExceptionForHR((int)hr);
+            }
 
             autoCompleteObject2 = (UnsafeNativeMethods.IAutoComplete2)obj;
         }

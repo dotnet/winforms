@@ -913,19 +913,25 @@ namespace System.Windows.Forms
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Passive, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.Passive)
             {
-                //
                 // First, create the ActiveX control
                 Debug.Assert(activeXInstance == null, "activeXInstance must be null");
-                activeXInstance = UnsafeNativeMethods.CoCreateInstance(ref clsid, null, NativeMethods.CLSCTX_INPROC_SERVER, ref NativeMethods.ActiveX.IID_IUnknown);
+                HRESULT hr = Ole32.CoCreateInstance(
+                    ref clsid,
+                    IntPtr.Zero,
+                    Ole32.CLSCTX.INPROC_SERVER,
+                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    out activeXInstance);
+                if (!hr.Succeeded())
+                {
+                    throw Marshal.GetExceptionForHR((int)hr);
+                }
+
                 Debug.Assert(activeXInstance != null, "w/o an exception being thrown we must have an object...");
 
-                //
-                // We are now Loaded!
+                // We are now loaded.
                 ActiveXState = WebBrowserHelper.AXState.Loaded;
 
-                //
-                // Lets give them a chance to cast the ActiveX object
-                // to the appropriate interfaces.
+                // Lets give them a chance to cast the ActiveX object to the appropriate interfaces.
                 AttachInterfacesInternal();
             }
         }
