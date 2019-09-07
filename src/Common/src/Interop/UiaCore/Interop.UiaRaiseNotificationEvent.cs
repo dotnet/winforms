@@ -10,12 +10,12 @@ internal partial class Interop
 {
     internal static partial class UiaCore
     {
-        [DllImport(Libraries.UiaCore, ExactSpelling = true)]
+        [DllImport(Libraries.UiaCore, ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern HRESULT UiaRaiseNotificationEvent(
             IRawElementProviderSimple provider,
             AutomationNotificationKind notificationKind,
             AutomationNotificationProcessing notificationProcessing,
-            string notificationText,
-            string activityId);
+            [MarshalAs(UnmanagedType.BStr)] string displayString,
+            [MarshalAs(UnmanagedType.BStr)] string activityId);
     }
 }

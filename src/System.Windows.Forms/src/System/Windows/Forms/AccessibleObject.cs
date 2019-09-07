@@ -2714,18 +2714,18 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IScrollItemProvider,
         UiaCore.IRawElementProviderHwndOverride
     {
-        private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
-        private readonly OleAut32.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
-        private readonly UnsafeNativeMethods.IOleWindow publicIOleWindow;     // AccessibleObject as IOleWindow
-        private readonly IReflect publicIReflect;                             // AccessibleObject as IReflect
+        private IAccessible publicIAccessible;                            // AccessibleObject as IAccessible
+        private readonly OleAut32.IEnumVariant publicIEnumVariant;        // AccessibleObject as IEnumVariant
+        private readonly UnsafeNativeMethods.IOleWindow publicIOleWindow; // AccessibleObject as IOleWindow
+        private readonly IReflect publicIReflect;                         // AccessibleObject as IReflect
 
-        private readonly UnsafeNativeMethods.IServiceProvider publicIServiceProvider;             // AccessibleObject as IServiceProvider
-        private readonly UnsafeNativeMethods.IAccessibleEx publicIAccessibleEx;                   // AccessibleObject as IAccessibleEx
+        private readonly UnsafeNativeMethods.IServiceProvider publicIServiceProvider; // AccessibleObject as IServiceProvider
+        private readonly UnsafeNativeMethods.IAccessibleEx publicIAccessibleEx;       // AccessibleObject as IAccessibleEx
 
         // UIAutomation
-        private readonly UiaCore.IRawElementProviderSimple publicIRawElementProviderSimple;    // AccessibleObject as IRawElementProviderSimple
-        private readonly UiaCore.IRawElementProviderFragment publicIRawElementProviderFragment;// AccessibleObject as IRawElementProviderFragment
-        private readonly UiaCore.IRawElementProviderFragmentRoot publicIRawElementProviderFragmentRoot;// AccessibleObject as IRawElementProviderFragmentRoot
+        private readonly UiaCore.IRawElementProviderSimple publicIRawElementProviderSimple;                // AccessibleObject as IRawElementProviderSimple
+        private readonly UiaCore.IRawElementProviderFragment publicIRawElementProviderFragment;            // AccessibleObject as IRawElementProviderFragment
+        private readonly UiaCore.IRawElementProviderFragmentRoot publicIRawElementProviderFragmentRoot;    // AccessibleObject as IRawElementProviderFragmentRoot
         private readonly UnsafeNativeMethods.IInvokeProvider publicIInvokeProvider;                        // AccessibleObject as IInvokeProvider
         private readonly UnsafeNativeMethods.IValueProvider publicIValueProvider;                          // AccessibleObject as IValueProvider
         private readonly UnsafeNativeMethods.IRangeValueProvider publicIRangeValueProvider;                // AccessibleObject as IRangeValueProvider
@@ -2734,12 +2734,12 @@ namespace System.Windows.Forms
         private readonly UnsafeNativeMethods.ITableProvider publicITableProvider;                          // AccessibleObject as ITableProvider
         private readonly UnsafeNativeMethods.ITableItemProvider publicITableItemProvider;                  // AccessibleObject as ITableItemProvider
         private readonly UnsafeNativeMethods.IGridProvider publicIGridProvider;                            // AccessibleObject as IGridProvider
-        private readonly UiaCore.IGridItemProvider publicIGridItemProvider;                    // AccessibleObject as IGridItemProvider
-        private readonly UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;   // AccessibleObject as ILegayAccessibleProvider
+        private readonly UiaCore.IGridItemProvider publicIGridItemProvider;                                // AccessibleObject as IGridItemProvider
+        private readonly UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;  // AccessibleObject as ILegayAccessibleProvider
         private readonly UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
-        private readonly UiaCore.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
-        private readonly UnsafeNativeMethods.IScrollItemProvider publicIScrollItemProvider;          // AccessibleObject as IScrollItemProvider
-        private readonly UiaCore.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
+        private readonly UiaCore.ISelectionItemProvider publicISelectionItemProvider;                      // AccessibleObject as ISelectionItemProvider
+        private readonly UnsafeNativeMethods.IScrollItemProvider publicIScrollItemProvider;                // AccessibleObject as IScrollItemProvider
+        private readonly UiaCore.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride;    // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
         ///  Create a new wrapper.
