@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.OcxState);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
-            Assert.Equal("WindowsFormsApp1", control.ProductName);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.OcxState);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
-            Assert.Equal("WindowsFormsApp1", control.ProductName);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
