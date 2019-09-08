@@ -37,6 +37,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(scrollBar.ClientSize.Width > 0);
             Assert.True(scrollBar.ClientSize.Height > 0);
             Assert.Null(scrollBar.Container);
+            Assert.Null(scrollBar.ContextMenu);
+            Assert.Null(scrollBar.ContextMenuStrip);
             Assert.Empty(scrollBar.Controls);
             Assert.Same(scrollBar.Controls, scrollBar.Controls);
             Assert.False(scrollBar.Created);

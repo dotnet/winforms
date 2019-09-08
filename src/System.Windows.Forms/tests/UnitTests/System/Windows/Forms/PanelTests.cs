@@ -33,10 +33,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.Bounds);
             Assert.True(panel.CanEnableIme);
             Assert.True(panel.CanRaiseEvents);
+            Assert.True(panel.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.ClientRectangle);
             Assert.Equal(new Size(200, 100), panel.ClientSize);
             Assert.Null(panel.Container);
-            Assert.True(panel.CausesValidation);
+            Assert.Null(panel.ContextMenu);
+            Assert.Null(panel.ContextMenuStrip);
             Assert.Empty(panel.Controls);
             Assert.Same(panel.Controls, panel.Controls);
             Assert.False(panel.Created);
@@ -101,8 +103,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.AutoSize);
 
             // Set different.
-            control.AutoSize = value;
-            Assert.Equal(value, control.AutoSize);
+            control.AutoSize = !value;
+            Assert.Equal(!value, control.AutoSize);
         }
 
         [Fact]

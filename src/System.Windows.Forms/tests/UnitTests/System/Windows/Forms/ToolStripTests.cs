@@ -31,15 +31,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(toolStrip.BindingContext);
             Assert.Equal(25, toolStrip.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 25), toolStrip.Bounds);
+            Assert.True(toolStrip.CanEnableIme);
             Assert.True(toolStrip.CanOverflow);
             Assert.True(toolStrip.CanRaiseEvents);
             Assert.False(toolStrip.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 100, 25), toolStrip.ClientRectangle);
             Assert.Equal(new Size(100, 25), toolStrip.ClientSize);
-            Assert.False(toolStrip.Created);
             Assert.Null(toolStrip.Container);
+            Assert.Null(toolStrip.ContextMenu);
+            Assert.Null(toolStrip.ContextMenu);
             Assert.Empty(toolStrip.Controls);
             Assert.Same(toolStrip.Controls, toolStrip.Controls);
+            Assert.False(toolStrip.Created);
             Assert.Same(Cursors.Default, toolStrip.Cursor);
             Assert.Same(Cursors.Default, toolStrip.DefaultCursor);
             Assert.Equal(DockStyle.Top, toolStrip.DefaultDock);
@@ -322,6 +325,8 @@ namespace System.Windows.Forms.Tests
             public SubToolStrip(ToolStripItem[] items) : base(items)
             {
             }
+
+            public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 

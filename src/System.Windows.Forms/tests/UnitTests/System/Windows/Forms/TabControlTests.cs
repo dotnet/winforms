@@ -27,11 +27,14 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(100, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 200, 100), control.Bounds);
+            Assert.True(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), control.ClientRectangle);
             Assert.Equal(new Size(200, 100), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.True(control.CausesValidation);
+            Assert.Null(control.ContextMenu);
+            Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
             Assert.False(control.Created);
@@ -231,6 +234,8 @@ namespace System.Windows.Forms.Tests
 
         public class SubTabControl : TabControl
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;

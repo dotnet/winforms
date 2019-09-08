@@ -37,6 +37,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(100, 50), pictureBox.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 100, 50), pictureBox.ClientRectangle);
             Assert.Null(pictureBox.Container);
+            Assert.Null(pictureBox.ContextMenu);
+            Assert.Null(pictureBox.ContextMenuStrip);
+            Assert.Empty(pictureBox.Controls);
+            Assert.Same(pictureBox.Controls, pictureBox.Controls);
             Assert.False(pictureBox.Created);
             Assert.Same(Cursors.Default, pictureBox.Cursor);
             Assert.Same(Cursors.Default, pictureBox.DefaultCursor);
@@ -442,15 +446,17 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void PictureBox_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new PictureBox
+            var control = new SubPictureBox
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
         }
 
         [Fact]
@@ -1530,8 +1536,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Visible);
 
             // Set different.
-            control.Visible = value;
-            Assert.Equal(value, control.Visible);
+            control.Visible = !value;
+            Assert.Equal(!value, control.Visible);
         }
 
         [Theory]
@@ -2565,6 +2571,12 @@ namespace System.Windows.Forms.Tests
             public new bool DesignMode => base.DesignMode;
 
             public new EventHandlerList Events => base.Events;
+
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
 
             public new ImeMode ImeModeBase
             {

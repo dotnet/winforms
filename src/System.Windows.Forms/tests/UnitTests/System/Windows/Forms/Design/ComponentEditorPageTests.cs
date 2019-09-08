@@ -34,13 +34,16 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(BorderStyle.None, page.BorderStyle);
             Assert.Equal(100, page.Bottom);
             Assert.Equal(new Rectangle(0, 0, 200, 100), page.Bounds);
+            Assert.True(page.CanEnableIme);
             Assert.True(page.CanRaiseEvents);
+            Assert.True(page.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), page.ClientRectangle);
             Assert.Equal(new Size(200, 100), page.ClientSize);
-            Assert.Null(page.Container);
-            Assert.True(page.CausesValidation);
             Assert.False(page.CommitOnDeactivate);
             Assert.Null(page.Component);
+            Assert.Null(page.Container);
+            Assert.Null(page.ContextMenu);
+            Assert.Null(page.ContextMenuStrip);
             Assert.Empty(page.Controls);
             Assert.Same(page.Controls, page.Controls);
             Assert.False(page.Created);
@@ -131,8 +134,8 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(value, control.AutoSize);
 
             // Set different.
-            control.AutoSize = value;
-            Assert.Equal(value, control.AutoSize);
+            control.AutoSize = !value;
+            Assert.Equal(!value, control.AutoSize);
         }
 
         [Fact]
@@ -723,6 +726,8 @@ namespace System.Windows.Forms.Design.Tests
 
         private class SubComponentEditorPage : ComponentEditorPage
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new IComponent Component

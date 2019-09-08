@@ -426,6 +426,10 @@ namespace System.Windows.Forms.Tests
             // Set same.
             item.AutoSize = value;
             Assert.Equal(value, item.AutoSize);
+
+            // Set different.
+            item.AutoSize = !value;
+            Assert.Equal(!value, item.AutoSize);
         }
 
         [Theory]
@@ -442,6 +446,10 @@ namespace System.Windows.Forms.Tests
             // Set same.
             item.AutoSize = value;
             Assert.Equal(value, item.AutoSize);
+
+            // Set different.
+            item.AutoSize = !value;
+            Assert.Equal(!value, item.AutoSize);
         }
 
         [Theory]
@@ -457,6 +465,10 @@ namespace System.Windows.Forms.Tests
             // Set same.
             item.AutoToolTip = value;
             Assert.Equal(value, item.AutoToolTip);
+
+            // Set different.
+            item.AutoToolTip = !value;
+            Assert.Equal(!value, item.AutoToolTip);
         }
 
         [Theory]
@@ -472,6 +484,10 @@ namespace System.Windows.Forms.Tests
             // Set same.
             item.Available = value;
             Assert.Equal(value, item.Available);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
         }
 
         [Fact]

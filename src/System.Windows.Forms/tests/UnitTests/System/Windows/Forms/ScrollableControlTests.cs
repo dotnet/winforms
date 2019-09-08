@@ -35,6 +35,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
+            Assert.Null(control.ContextMenu);
+            Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
             Assert.False(control.Created);
@@ -305,22 +307,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.RightToLeft);
         }
 
-        [Fact]
-        public void ScrollableControl_Visible_Set_GetReturnsExpected()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ScrollableControl_Visible_Set_GetReturnsExpected(bool value)
         {
             var control = new ScrollableControl
             {
-                Visible = false
+                Visible = value
             };
-            Assert.False(control.Visible);
+            Assert.Equal(value, control.Visible);
 
             // Set same.
-            control.Visible = false;
-            Assert.False(control.Visible);
+            control.Visible = value;
+            Assert.Equal(value, control.Visible);
 
             // Set different.
-            control.Visible = true;
-            Assert.True(control.Visible);
+            control.Visible = !value;
+            Assert.Equal(!value, control.Visible);
         }
 
         [Fact]

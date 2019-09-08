@@ -350,15 +350,17 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new ComboBox
+            var control = new SubComboBox
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
         }
 
         [Fact]
@@ -914,6 +916,12 @@ namespace System.Windows.Forms.Tests
             public new Padding DefaultPadding => base.DefaultPadding;
 
             public new Size DefaultSize => base.DefaultSize;
+
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
 
             public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
         }
