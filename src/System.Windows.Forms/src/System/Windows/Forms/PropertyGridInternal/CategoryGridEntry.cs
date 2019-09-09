@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -290,21 +291,21 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 PropertyGridView.PropertyGridViewAccessibleObject parent = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
 
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return Parent;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         return parent.GetNextCategory(_owningCategoryGridEntry);
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         return parent.GetPreviousCategory(_owningCategoryGridEntry);
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         return parent.GetFirstChildProperty(_owningCategoryGridEntry);
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         return parent.GetLastChildProperty(_owningCategoryGridEntry);
                 }
 

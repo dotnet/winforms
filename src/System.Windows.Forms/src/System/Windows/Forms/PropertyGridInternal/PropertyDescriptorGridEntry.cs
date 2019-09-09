@@ -10,6 +10,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -1155,30 +1156,30 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
                         var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
                         bool currentGridEntryFound = false;
                         return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
                         propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
                         currentGridEntryFound = false;
                         return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         return GetFirstChild();
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         return GetLastChild();
                 }
 
                 return base.FragmentNavigate(direction);
             }
 
-            private UnsafeNativeMethods.IRawElementProviderFragment GetFirstChild()
+            private UiaCore.IRawElementProviderFragment GetFirstChild()
             {
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {
@@ -1200,7 +1201,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            private UnsafeNativeMethods.IRawElementProviderFragment GetLastChild()
+            private UiaCore.IRawElementProviderFragment GetLastChild()
             {
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {

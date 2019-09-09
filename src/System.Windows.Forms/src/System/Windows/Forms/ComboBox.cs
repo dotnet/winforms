@@ -4137,7 +4137,7 @@ namespace System.Windows.Forms
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                     InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
-                    m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
+                    m.Result = UiaCore.UiaReturnRawElementProvider(
                         new HandleRef(this, Handle),
                         m.WParam,
                         m.LParam,
@@ -4729,13 +4729,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return _owningComboBox.ChildListAccessibleObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         int currentIndex = GetCurrentIndex();
                         if (_owningComboBox.ChildListAccessibleObject is ComboBoxChildListUiaProvider comboBoxChildListUiaProvider)
                         {
@@ -4747,7 +4747,7 @@ namespace System.Windows.Forms
                             }
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         currentIndex = GetCurrentIndex();
                         comboBoxChildListUiaProvider = _owningComboBox.ChildListAccessibleObject as ComboBoxChildListUiaProvider;
                         if (comboBoxChildListUiaProvider != null)
@@ -4766,7 +4766,7 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -4947,7 +4947,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple ItemSelectionContainer
+            internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
             {
                 get
                 {
@@ -5154,13 +5154,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild)
+                if (direction == UiaCore.NavigateDirection.FirstChild)
                 {
                     return GetChildFragment(0);
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                else if (direction == UiaCore.NavigateDirection.LastChild)
                 {
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
@@ -5172,7 +5172,7 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5180,7 +5180,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
+            internal override UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
             {
                 if (hwnd == _owningComboBox.childEdit.Handle)
                 {
@@ -5342,14 +5342,14 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         Debug.WriteLine("Edit parent " + _owner.AccessibilityObject.GetPropertyValue(NativeMethods.UIA_ControlTypePropertyId));
                         return _owner.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (_owner.DropDownStyle == ComboBoxStyle.Simple)
                         {
                             return null;
@@ -5365,7 +5365,7 @@ namespace System.Windows.Forms
                         }
 
                         return null;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
                         if (comboBoxAccessibleObject != null)
                         {
@@ -5385,7 +5385,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5434,11 +5434,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider
+            internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
             {
                 get
                 {
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
+                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out UiaCore.IRawElementProviderSimple provider);
                     return provider;
                 }
             }
@@ -5489,7 +5489,7 @@ namespace System.Windows.Forms
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 var systemIAccessible = GetSystemIAccessibleInternal();
                 if (systemIAccessible != null)
@@ -5513,13 +5513,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         return GetChildFragment(0);
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         var childFragmentCount = GetChildFragmentCount();
                         if (childFragmentCount > 0)
                         {
@@ -5535,7 +5535,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5607,7 +5607,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment GetFocus()
             {
                 return GetFocused();
             }
@@ -5618,19 +5618,19 @@ namespace System.Windows.Forms
                 return GetChildFragment(selectedIndex);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetSelection()
+            internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
                 int selectedIndex = _owningComboBox.SelectedIndex;
 
                 AccessibleObject itemAccessibleObject = GetChildFragment(selectedIndex);
                 if (itemAccessibleObject != null)
                 {
-                    return new UnsafeNativeMethods.IRawElementProviderSimple[] {
+                    return new UiaCore.IRawElementProviderSimple[] {
                         itemAccessibleObject
                     };
                 }
 
-                return new UnsafeNativeMethods.IRawElementProviderSimple[0];
+                return new UiaCore.IRawElementProviderSimple[0];
             }
 
             internal override bool CanSelectMultiple
@@ -5665,11 +5665,11 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider
+            internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
             {
                 get
                 {
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
+                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out UiaCore.IRawElementProviderSimple provider);
                     return provider;
                 }
             }
@@ -5767,13 +5767,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return _owner.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                         {
                             int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
@@ -5784,7 +5784,7 @@ namespace System.Windows.Forms
                         }
 
                         return null;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
                         if (comboBoxAccessibleObject != null)
                         {
@@ -5804,7 +5804,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5949,13 +5949,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                if (direction == UiaCore.NavigateDirection.Parent)
                 {
                     return _owner.AccessibilityObject;
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling)
+                else if (direction == UiaCore.NavigateDirection.PreviousSibling)
                 {
                     if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                     {
@@ -5975,7 +5975,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {

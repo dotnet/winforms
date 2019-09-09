@@ -5752,7 +5752,7 @@ namespace System.Windows.Forms
         ///  otherwise return this element if the point is on this element,
         ///  otherwise return null.
         /// </returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+        internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
         {
             Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
 
@@ -5770,15 +5770,15 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.Parent:
+                case UiaCore.NavigateDirection.Parent:
                     return null;
-                case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                case UiaCore.NavigateDirection.FirstChild:
                     return GetChildFragment(0);
-                case UnsafeNativeMethods.NavigateDirection.LastChild:
+                case UiaCore.NavigateDirection.LastChild:
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
                     {
@@ -5796,13 +5796,13 @@ namespace System.Windows.Forms
         /// <param name="childFragment">The child element regarding which the target element is searched.</param>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal UnsafeNativeMethods.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UnsafeNativeMethods.NavigateDirection direction)
+        internal UiaCore.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.Parent:
+                case UiaCore.NavigateDirection.Parent:
                     return this;
-                case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                case UiaCore.NavigateDirection.NextSibling:
                     int fragmentCount = GetChildFragmentCount();
                     int childFragmentIndex = GetChildFragmentIndex(childFragment);
                     int nextChildFragmentIndex = childFragmentIndex + 1;
@@ -5812,7 +5812,7 @@ namespace System.Windows.Forms
                     }
 
                     return null;
-                case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                case UiaCore.NavigateDirection.PreviousSibling:
                     fragmentCount = GetChildFragmentCount();
                     childFragmentIndex = GetChildFragmentIndex(childFragment);
                     if (childFragmentIndex > 0)
@@ -5829,7 +5829,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the element that is the root node of this fragment of UI.
         /// </summary>
-        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
         {
             get
             {
@@ -5926,7 +5926,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <returns>Return the element in this fragment which has the keyboard focus,
         ///  if any; otherwise return null.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+        internal override UiaCore.IRawElementProviderFragment GetFocus()
         {
             return GetFocused();
         }
@@ -6008,11 +6008,11 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
-                UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget != null)
                 {
                     return navigationTarget;

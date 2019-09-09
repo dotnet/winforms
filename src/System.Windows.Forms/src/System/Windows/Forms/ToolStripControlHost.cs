@@ -8,6 +8,7 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1214,10 +1215,10 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
-                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                if (direction == UiaCore.NavigateDirection.FirstChild ||
+                    direction == UiaCore.NavigateDirection.LastChild)
                 {
                     return _ownerItem.Control.AccessibilityObject;
                 }
@@ -1229,7 +1230,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get => _ownerItem.RootToolStrip.AccessibilityObject;
             }
@@ -1405,7 +1406,7 @@ namespace System.Windows.Forms
                 _toolStripHostedControl = toolStripHostedControl;
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -1420,16 +1421,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_toolStripHostedControl != null &&
                     _toolStripControlHost != null)
                 {
                     switch (direction)
                     {
-                        case UnsafeNativeMethods.NavigateDirection.Parent:
-                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        case UiaCore.NavigateDirection.Parent:
+                        case UiaCore.NavigateDirection.PreviousSibling:
+                        case UiaCore.NavigateDirection.NextSibling:
                             return _toolStripControlHost.AccessibilityObject.FragmentNavigate(direction);
                     }
                 }

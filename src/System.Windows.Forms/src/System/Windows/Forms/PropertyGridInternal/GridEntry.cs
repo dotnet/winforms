@@ -3144,11 +3144,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         GridEntry parentGridEntry = owner.ParentGridEntry;
                         if (parentGridEntry != null)
                         {
@@ -3163,9 +3163,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
 
                         return Parent;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         return Navigate(AccessibleNavigation.Previous);
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         return Navigate(AccessibleNavigation.Next);
                 }
 
@@ -3175,7 +3175,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {

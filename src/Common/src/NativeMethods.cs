@@ -4478,23 +4478,6 @@ namespace System.Windows.Forms
         // Threading stuff
         public const uint STILL_ACTIVE = 259;
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct UiaRect
-        {
-            public double left;
-            public double top;
-            public double width;
-            public double height;
-
-            public UiaRect(Drawing.Rectangle r)
-            {
-                left = r.Left;
-                top = r.Top;
-                width = r.Width;
-                height = r.Height;
-            }
-        }
-
         // UIAutomation IDs
         // obtained from uiautomationclient.idl and uiautomationcore.idl
 

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1402,7 +1403,7 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderFragment Implementation
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (Owner.OwningRow == null)
                 {
@@ -1411,9 +1412,9 @@ namespace System.Windows.Forms
 
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return Owner.OwningRow.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0)
                         {
                             // go to the next sibling
@@ -1423,7 +1424,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                     default:
                         return null;
                 }

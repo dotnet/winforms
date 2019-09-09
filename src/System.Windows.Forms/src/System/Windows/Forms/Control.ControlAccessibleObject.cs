@@ -467,11 +467,11 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider
+            internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
             {
                 get
                 {
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
+                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out UiaCore.IRawElementProviderSimple provider);
                     return provider;
                 }
             }

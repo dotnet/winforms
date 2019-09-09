@@ -5247,7 +5247,7 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 return HitTest((int)x, (int)y);
             }
@@ -5552,7 +5552,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5560,18 +5560,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         int childCount = GetChildFragmentCount();
                         if (childCount > 0)
                         {
                             return GetChildFragment(0);
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         childCount = GetChildFragmentCount();
                         if (childCount > 0)
                         {

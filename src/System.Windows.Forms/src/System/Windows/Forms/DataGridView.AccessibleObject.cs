@@ -3,14 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        [
-            Runtime.InteropServices.ComVisible(true)
-        ]
+        [ComVisible(true)]
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
             private int[] runtimeId = null; // Used by UIAutomation
@@ -313,14 +313,14 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetRowHeaders()
+            internal override UiaCore.IRawElementProviderSimple[] GetRowHeaders()
             {
                 if (!owner.RowHeadersVisible)
                 {
                     return null;
                 }
 
-                UnsafeNativeMethods.IRawElementProviderSimple[] result = new UnsafeNativeMethods.IRawElementProviderSimple[owner.Rows.Count];
+                UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[owner.Rows.Count];
                 for (int i = 0; i < owner.Rows.Count; i++)
                 {
                     result[i] = owner.Rows[i].HeaderCell.AccessibilityObject;
@@ -328,14 +328,14 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetColumnHeaders()
+            internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaders()
             {
                 if (!owner.ColumnHeadersVisible)
                 {
                     return null;
                 }
 
-                UnsafeNativeMethods.IRawElementProviderSimple[] result = new UnsafeNativeMethods.IRawElementProviderSimple[owner.Columns.Count];
+                UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[owner.Columns.Count];
                 for (int i = 0; i < owner.Columns.Count; i++)
                 {
                     result[i] = owner.Columns[i].HeaderCell.AccessibilityObject;
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple GetItem(int row, int column)
+            internal override UiaCore.IRawElementProviderSimple GetItem(int row, int column)
             {
                 if (row >= 0 && row < owner.Rows.Count &&
                     column >= 0 && column < owner.Columns.Count)
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -396,18 +396,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         int childCount = GetChildCount();
                         if (childCount > 0)
                         {
                             return GetChild(0);
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         childCount = GetChildCount();
                         if (childCount > 0)
                         {
@@ -432,12 +432,12 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderFragmentRoot Implementation
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 return HitTest((int)x, (int)y);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment GetFocus()
             {
                 return GetFocused();
             }
@@ -466,7 +466,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -482,19 +482,19 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         DataGridViewCell currentCell = dataGridView.CurrentCell;
                         if (currentCell != null && dataGridView.IsCurrentCellInEditMode)
                         {
                             return currentCell.AccessibilityObject;
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         return dataGridView.EditingControlAccessibleObject;
                 }
 

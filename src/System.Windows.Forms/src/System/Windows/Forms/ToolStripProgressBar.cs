@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -457,7 +458,7 @@ namespace System.Windows.Forms
             {
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -470,13 +471,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (Owner is ToolStripProgressBarControl toolStripProgressBarControl)
                         {
                             return toolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);

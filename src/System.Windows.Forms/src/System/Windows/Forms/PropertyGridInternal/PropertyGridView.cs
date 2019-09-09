@@ -7131,13 +7131,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return _owningGridViewListBox.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         int currentIndex = GetCurrentIndex();
                         if (_owningGridViewListBox.AccessibilityObject is GridViewListBoxAccessibleObject gridViewListBoxAccessibleObject)
                         {
@@ -7149,7 +7149,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             }
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         currentIndex = GetCurrentIndex();
                         gridViewListBoxAccessibleObject = _owningGridViewListBox.AccessibilityObject as GridViewListBoxAccessibleObject;
                         if (gridViewListBoxAccessibleObject != null)
@@ -7168,7 +7168,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -7381,17 +7381,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                if (direction == UiaCore.NavigateDirection.Parent)
                 {
                     return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild)
+                else if (direction == UiaCore.NavigateDirection.FirstChild)
                 {
                     return GetChildFragment(0);
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                else if (direction == UiaCore.NavigateDirection.LastChild)
                 {
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
@@ -7399,7 +7399,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return GetChildFragment(childFragmentCount - 1);
                     }
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling)
+                else if (direction == UiaCore.NavigateDirection.NextSibling)
                 {
                     return _owningPropertyGridView.Edit.AccessibilityObject;
                 }
@@ -7410,7 +7410,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -7954,13 +7954,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// </summary>
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
-                internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
-                    if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                    if (direction == UiaCore.NavigateDirection.Parent)
                     {
                         return propertyGridView.SelectedGridEntry.AccessibilityObject;
                     }
-                    else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling)
+                    else if (direction == UiaCore.NavigateDirection.NextSibling)
                     {
                         if (propertyGridView.DropDownButton.Visible)
                         {
@@ -7978,7 +7978,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// <summary>
                 ///  Gets the top level element.
                 /// </summary>
-                internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 {
                     get
                     {
@@ -8360,7 +8360,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  otherwise return this element if the point is on this element,
             ///  otherwise return null.
             /// </returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 return HitTest((int)x, (int)y);
             }
@@ -8370,11 +8370,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
-                    UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                    UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                     if (navigationTarget != null)
                     {
                         return navigationTarget;
@@ -8385,9 +8385,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     switch (direction)
                     {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        case UiaCore.NavigateDirection.FirstChild:
                             return GetFirstCategory();
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        case UiaCore.NavigateDirection.LastChild:
                             return GetLastCategory();
                     }
                 }
@@ -8395,9 +8395,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     switch (direction)
                     {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        case UiaCore.NavigateDirection.FirstChild:
                             return GetChild(0);
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        case UiaCore.NavigateDirection.LastChild:
                             int childCount = GetChildCount();
                             if (childCount > 0)
                             {
@@ -8414,7 +8414,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -8426,7 +8426,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Gets the accessible object for the currently focused grid entry.
             /// </summary>
             /// <returns>The accessible object for the currently focused grid entry.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment GetFocus()
             {
                 return GetFocused();
             }

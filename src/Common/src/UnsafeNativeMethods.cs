@@ -3193,57 +3193,8 @@ namespace System.Windows.Forms
             }
         }
 
-        // UIAutomationCore methods
-
-        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode)]
-        internal static extern int UiaHostProviderFromHwnd(HandleRef hwnd, out IRawElementProviderSimple provider);
-
-        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode)]
-        internal static extern IntPtr UiaReturnRawElementProvider(HandleRef hwnd, IntPtr wParam, IntPtr lParam, IRawElementProviderSimple el);
-
-        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode)]
-        internal static extern bool UiaClientsAreListening();
-
-        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern int UiaRaiseAutomationEvent(IRawElementProviderSimple provider, int id);
-
-        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern int UiaRaiseAutomationPropertyChangedEvent(IRawElementProviderSimple provider, int id, object oldValue, object newValue);
-
-        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern int UiaRaiseNotificationEvent(
-            IRawElementProviderSimple provider,
-            Automation.AutomationNotificationKind notificationKind,
-            Automation.AutomationNotificationProcessing notificationProcessing,
-            string notificationText,
-            string activityId);
-
-        [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode)]
-        internal static extern int UiaRaiseStructureChangedEvent(IRawElementProviderSimple provider, StructureChangeType structureChangeType, int[] runtimeId, int runtimeIdLen);
-
         // UIAutomation interfaces and enums
         // obtained from UIAutomation source code
-
-        /// <summary>
-        ///  Logical structure change flags
-        /// </summary>
-        [ComVisible(true)]
-        [Guid("e4cfef41-071d-472c-a65c-c14f59ea81eb")]
-        public enum StructureChangeType
-        {
-            /// <summary>Logical child added</summary>
-            ChildAdded,
-            /// <summary>Logical child removed</summary>
-            ChildRemoved,
-            /// <summary>Logical children invalidated</summary>
-            ChildrenInvalidated,
-            /// <summary>Logical children were bulk added</summary>
-            ChildrenBulkAdded,
-            /// <summary>Logical children were bulk removed</summary>
-            ChildrenBulkRemoved,
-            /// <summary>The order of the children below their parent has changed.</summary>
-            ChildrenReordered,
-        }
 
         [ComVisible(true)]
         [Guid("76d12d7e-b227-4417-9ce2-42642ffa896a")]
@@ -3257,30 +3208,6 @@ namespace System.Windows.Forms
             PartiallyExpanded,
             /// <summary>Does not expand or collapse</summary>
             LeafNode
-        }
-
-        [Flags]
-        public enum ProviderOptions
-        {
-            /// <summary>Indicates that this is a client-side provider</summary>
-            ClientSideProvider = 0x0001,
-            /// <summary>Indicates that this is a server-side provider</summary>
-            ServerSideProvider = 0x0002,
-            /// <summary>Indicates that this is a non-client-area provider</summary>
-            NonClientAreaProvider = 0x0004,
-            /// <summary>Indicates that this is an override provider</summary>
-            OverrideProvider = 0x0008,
-
-            /// <summary>Indicates that this provider handles its own focus, and does not want
-            ///  UIA to set focus to the nearest HWND on its behalf when AutomationElement.SetFocus
-            ///  is used. This option is typically used by providers for HWNDs that appear to take
-            ///  focus without actually receiving actual Win32 focus, such as menus and dropdowns</summary>
-            ProviderOwnsSetFocus = 0x0010,
-
-            /// <summary>Indicates that this provider expects to be called according to COM threading rules:
-            ///  if the provider is in a Single-Threaded Apartment, it will be called only on the apartment
-            ///  thread. Only Server-side providers can use this option.</summary>
-            UseComThreading = 0x0020
         }
 
         public static readonly Guid guid_IAccessibleEx = new Guid("{F8B80ADA-2C44-48D0-89BE-5FF23C9CD875}");
@@ -3327,65 +3254,6 @@ namespace System.Windows.Forms
                 [return: MarshalAs(UnmanagedType.Bool)]
                 get;
             }
-        }
-
-        /// <summary>
-        ///  Define a Selectable Item (only supported on logical elements that are a
-        ///  child of an Element that supports SelectionPattern and is itself selectable).
-        ///  This allows for manipulation of Selection from the element itself.
-        /// </summary>
-        [ComImport()]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [ComVisible(true)]
-        [Guid("2acad808-b2d4-452d-a407-91ff1ad167b2")]
-        public interface ISelectionItemProvider
-        {
-            /// <summary>
-            ///  Sets the current element as the selection
-            ///  This clears the selection from other elements in the container.
-            /// </summary>
-            void Select();
-
-            /// <summary>
-            ///  Adds current element to selection.
-            /// </summary>
-            void AddToSelection();
-
-            /// <summary>
-            ///  Removes current element from selection.
-            /// </summary>
-            void RemoveFromSelection();
-
-            /// <summary>
-            ///  Check whether an element is selected.
-            /// </summary>
-            /// <returns>Returns true if the element is selected.</returns>
-            bool IsSelected { [return: MarshalAs(UnmanagedType.Bool)] get; }
-
-            /// <summary>
-            ///  The logical element that supports the SelectionPattern for this Item.
-            /// </summary>
-            /// <returns>Returns a IRawElementProviderSimple.</returns>
-            IRawElementProviderSimple SelectionContainer { [return: MarshalAs(UnmanagedType.Interface)] get; }
-        }
-
-        /// <summary>
-        ///  Implemented by providers which want to provide information about or want to
-        ///  reposition contained HWND-based elements.
-        /// </summary>
-        [ComVisible(true)]
-        [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRawElementProviderHwndOverride : IRawElementProviderSimple
-        {
-            /// <summary>
-            ///  Request a provider for the specified component. The returned provider can supply additional
-            ///  properties or override properties of the specified component.
-            /// </summary>
-            /// <param name="hwnd">The window handle of the component.</param>
-            /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd);
         }
 
         [ComImport()]
@@ -3445,7 +3313,7 @@ namespace System.Windows.Forms
             [PreserveSig]
             int ConvertReturnedElement(
             [In, MarshalAs(UnmanagedType.Interface)]
-            object /*UnsafeNativeMethods.IRawElementProviderSimple*/ pIn,
+            object /*UiaCore.IRawElementProviderSimple*/ pIn,
             [Out, MarshalAs(UnmanagedType.Interface)]
             out object /*UnsafeNativeMethods.IAccessibleEx*/ ppRetValOut);
         }
@@ -3519,185 +3387,6 @@ namespace System.Windows.Forms
             double LargeChange { get; }
 
             double SmallChange { get; }
-        }
-
-        [ComImport()]
-        [ComVisible(true)]
-        [Guid("D6DD68D1-86FD-4332-8666-9ABEDEA2D24C")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRawElementProviderSimple
-        {
-            /// <summary>
-            ///  Indicates the type of provider this is, for example, whether it is a client-side
-            ///  or server-side provider.
-            /// </summary>
-            /// <remarks>
-            ///  Providers must specify at least either one of ProviderOptions.ClientSideProvider
-            ///  or ProviderOptions.ServerSideProvider.
-            ///
-            ///  UIAutomation treats different types of providers
-            ///  differently - for example, events from server-side provider are broadcast to all listening
-            ///  clients, whereas events from client-side providers remain in that client.
-            /// </remarks>
-            ProviderOptions ProviderOptions
-            {
-                get;
-            }
-
-            /// <summary>
-            ///  Get a pattern interface from this object
-            /// </summary>
-            /// <param name="patternId">Identifier indicating the interface to return</param>
-            /// <returns>Returns the interface as an object, if supported; otherwise returns null/</returns>
-            [return: MarshalAs(UnmanagedType.IUnknown)]
-            object GetPatternProvider(int patternId);
-
-            /// <summary>
-            ///  Request value of specified property from an element.
-            /// </summary>
-            /// <param name="propertyId">Identifier indicating the property to return</param>
-            /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            object GetPropertyValue(int propertyId);
-
-            // Only native impl roots need to return something for this,
-            // proxies always return null (cause we already know their HWNDs)
-            // If proxies create themselves when handling winvents events, then they
-            // also need to implement this so we can determine the HWND. Still only
-            // lives on a root, however.
-            /// <summary>
-            ///  Returns a base provider for this element.
-            ///
-            ///  Typically only used by elements that correspond directly to a Win32 Window Handle,
-            ///  in which case the implementation returns AutomationInteropProvider.BaseElementFromHandle( hwnd ).
-            /// </summary>
-            IRawElementProviderSimple HostRawElementProvider
-            {
-                get;
-            }
-        }
-
-        /// <summary>
-        ///  Directions for navigation the UIAutomation tree
-        /// </summary>
-        [ComVisible(true)]
-        [Guid("670c3006-bf4c-428b-8534-e1848f645122")]
-        public enum NavigateDirection
-        {
-            /// <summary>Navigate to parent</summary>
-            Parent,
-            /// <summary>Navigate to next sibling</summary>
-            NextSibling,
-            /// <summary>Navigate to previous sibling</summary>
-            PreviousSibling,
-            /// <summary>Navigate to first child</summary>
-            FirstChild,
-            /// <summary>Navigate to last child</summary>
-            LastChild,
-        }
-
-        /// <summary>
-        ///  Implemented by providers to expose elements that are part of
-        ///  a structure more than one level deep. For simple one-level
-        ///  structures which have no children, IRawElementProviderSimple
-        ///  can be used instead.
-        ///
-        ///  The root node of the fragment must support the IRawElementProviderFragmentRoot
-        ///  interface, which is derived from this, and has some additional methods.
-        /// </summary>
-        [ComVisible(true)]
-        [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [ComImport()]
-        public interface IRawElementProviderFragment : IRawElementProviderSimple
-        {
-            /// <summary>
-            ///  Request to return the element in the specified direction
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate</param>
-            /// <returns>Returns the element in the specified direction</returns>
-            [return: MarshalAs(UnmanagedType.IUnknown)]
-            object /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
-
-            /// <summary>
-            ///  Gets the runtime ID of an elemenent. This should be unique
-            ///  among elements on a desktop.
-            /// </summary>
-            /// <remarks>
-            ///  Proxy implementations should return null for the top-level proxy which
-            ///  correpsonds to the HWND; and should return an array which starts
-            ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
-            ///  which are then unique within that proxy's HWNDs.
-            /// </remarks>
-            int[] GetRuntimeId();
-
-            /// <summary>
-            ///  Return a bounding rectangle of this element
-            /// </summary>
-            NativeMethods.UiaRect BoundingRectangle
-            {
-                get;
-            }
-
-            /// <summary>
-            ///  If this UI is capable of hosting other UI that also supports UIAutomation, and
-            ///  the subtree rooted at this element contains such hosted UI fragments, this should return
-            ///  an array of those fragments.
-            ///
-            ///  If this UI does not host other UI, it may return null.
-            /// </summary>
-            [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            object[] /*IRawElementProviderSimple[]*/ GetEmbeddedFragmentRoots();
-
-            /// <summary>
-            ///  Request that focus is set to this item.
-            ///  The UIAutomation framework will ensure that the UI hosting this fragment is already
-            ///  focused before calling this method, so this method should only update its internal
-            ///  focus state; it should not attempt to give its own HWND the focus, for example.
-            /// </summary>
-            void SetFocus();
-
-            /// <summary>
-            ///  Return the element that is the root node of this fragment of UI.
-            /// </summary>
-            IRawElementProviderFragmentRoot FragmentRoot
-            {
-                [return: MarshalAs(UnmanagedType.Interface)]
-                get;
-            }
-        }
-
-        /// <summary>
-        ///  The root element in a fragment of UI must support this interface. Other
-        ///  elements in the same fragment need to support the IRawElementProviderFragment
-        ///  interface.
-        /// </summary>
-        [ComVisible(true)]
-        [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [ComImport()]
-        public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment
-        {
-            /// <summary>
-            ///  Return the child element at the specified point, if one exists,
-            ///  otherwise return this element if the point is on this element,
-            ///  otherwise return null.
-            /// </summary>
-            /// <param name="x">x coordinate of point to check</param>
-            /// <param name="y">y coordinate of point to check</param>
-            /// <returns>Return the child element at the specified point, if one exists,
-            ///  otherwise return this element if the point is on this element,
-            ///  otherwise return null.
-            /// </returns>
-            [return: MarshalAs(UnmanagedType.IUnknown)]
-            object /*IRawElementProviderFragment*/ ElementProviderFromPoint(double x, double y);
-
-            /// <summary>
-            ///  Return the element in this fragment which has the keyboard focus,
-            /// </summary>
-            /// <returns>Return the element in this fragment which has the keyboard focus,
-            ///  if any; otherwise return null.</returns>
-            [return: MarshalAs(UnmanagedType.IUnknown)]
-            object /*IRawElementProviderFragment*/ GetFocus();
         }
 
 #pragma warning disable CA1712 // Don't prefix enum values with enum type
@@ -3784,43 +3473,6 @@ namespace System.Windows.Forms
             int ColumnCount
             {
                 [return: MarshalAs(UnmanagedType.I4)]
-                get;
-            }
-        }
-
-        [ComImport()]
-        [ComVisible(true)]
-        [Guid("d02541f1-fb81-4d64-ae32-f520f8a6dbd1")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IGridItemProvider
-        {
-            int Row
-            {
-                [return: MarshalAs(UnmanagedType.I4)]
-                get;
-            }
-
-            int Column
-            {
-                [return: MarshalAs(UnmanagedType.I4)]
-                get;
-            }
-
-            int RowSpan
-            {
-                [return: MarshalAs(UnmanagedType.I4)]
-                get;
-            }
-
-            int ColumnSpan
-            {
-                [return: MarshalAs(UnmanagedType.I4)]
-                get;
-            }
-
-            IRawElementProviderSimple ContainingGrid
-            {
-                [return: MarshalAs(UnmanagedType.Interface)]
                 get;
             }
         }
