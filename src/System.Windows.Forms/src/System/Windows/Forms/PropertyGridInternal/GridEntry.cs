@@ -3227,17 +3227,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case NativeMethods.UIA_NamePropertyId:
                         return Name;
                     case NativeMethods.UIA_ControlTypePropertyId:
+
                         // The accessible hierarchy is changed so we cannot use Button type
                         // for the grid items to not break automation logic that searches for the first
                         // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
                         // button is one of the first children of PropertyGridView.
-                        return NativeMethods.UIA_DataItemControlTypeId;
+                        return NativeMethods.UIA_TreeItemControlTypeId;
                     case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
                         return (Object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                }
-
-                switch (propertyID)
-                {
                     case NativeMethods.UIA_AccessKeyPropertyId:
                         return string.Empty;
                     case NativeMethods.UIA_HasKeyboardFocusPropertyId:
