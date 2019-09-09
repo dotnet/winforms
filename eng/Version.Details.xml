@@ -67,21 +67,21 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
     <!-- Arcade -->
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19455.21">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19458.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>e99f81b0e3289cfd851be0d927c1fcffa43af6b5</Sha>
+      <Sha>29ee79a10c58dd6863a46157e374521cac610ad8</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="1.0.0-beta.19455.21">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="1.0.0-beta.19458.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>e99f81b0e3289cfd851be0d927c1fcffa43af6b5</Sha>
+      <Sha>29ee79a10c58dd6863a46157e374521cac610ad8</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="2.0.0-beta.19455.21">
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="2.0.0-beta.19458.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>e99f81b0e3289cfd851be0d927c1fcffa43af6b5</Sha>
+      <Sha>29ee79a10c58dd6863a46157e374521cac610ad8</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="2.4.1-beta.19455.21">
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="2.4.1-beta.19458.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>e99f81b0e3289cfd851be0d927c1fcffa43af6b5</Sha>
+      <Sha>29ee79a10c58dd6863a46157e374521cac610ad8</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>
