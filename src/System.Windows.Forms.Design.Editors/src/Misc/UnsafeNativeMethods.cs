@@ -28,9 +28,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetFocus();
 
-        [DllImport(ExternDll.Ole32)]
-        public static extern int ReadClassStg(HandleRef pStg, ref Guid pclsid);
-
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         public const int OBJID_CLIENT = unchecked((int)0xFFFFFFFC);

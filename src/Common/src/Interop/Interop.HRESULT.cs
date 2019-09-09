@@ -27,6 +27,7 @@ internal static partial class Interop
         E_ACCESSDENIED = unchecked((int)0x80070005L),
         E_INVALIDARG = unchecked((int)0x80070057),
         ERROR_CANCELLED = unchecked((int)0x800704C7),
+        RPC_E_CHANGED_MODE = unchecked((int)0x80010106),
     }
 }
 

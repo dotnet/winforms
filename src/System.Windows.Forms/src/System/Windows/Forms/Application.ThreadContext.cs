@@ -212,7 +212,7 @@ namespace System.Windows.Forms
                             Debug.Fail($"Failed to query service: {e.Message}");
                             return null;
                         }
-#pragma warning enable CA1031
+#pragma warning restore CA1031
 
                         // We have the component manager service, now get the component manager interface
                         HRESULT hr = (HRESULT)Marshal.QueryInterface(serviceHandle, ref iid, out IntPtr componentManagerHandle);
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
                                             if (GetState(STATE_OLEINITIALIZED) && !GetState(STATE_EXTERNALOLEINIT))
                                             {
                                                 SetState(STATE_OLEINITIALIZED, false);
-                                                UnsafeNativeMethods.OleUninitialize();
+                                                Ole32.OleUninitialize();
                                             }
                                         }
                                     }
@@ -696,16 +696,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Our finalization.  Minimal stuff... this shouldn't be called... We should always be disposed.
+            ///  Our finalization. This shouldn't be called as we should always be disposed.
             /// </summary>
             ~ThreadContext()
             {
-                // We used to call OleUninitialize() here if we were
-                // still STATE_OLEINITIALIZED, but that's never the correct thing to do.
-                // At this point we're on the wrong thread and we should never have been
-                // called here in the first place.
-
-                // We can always clean up this handle, though
+                // Don't call OleUninitialize as the finalizer is called on the wrong thread.
+                // We can always clean up this handle, though.
                 if (_handle != IntPtr.Zero)
                 {
                     Kernel32.CloseHandle(new HandleRef(this, _handle));
@@ -859,10 +855,10 @@ namespace System.Windows.Forms
                 Thread current = Thread.CurrentThread;
                 if (!GetState(STATE_OLEINITIALIZED))
                 {
-                    int ret = UnsafeNativeMethods.OleInitialize();
+                    HRESULT ret = Ole32.OleInitialize(IntPtr.Zero);
 
                     SetState(STATE_OLEINITIALIZED, true);
-                    if (ret == NativeMethods.RPC_E_CHANGED_MODE)
+                    if (ret == HRESULT.RPC_E_CHANGED_MODE)
                     {
                         // This could happen if the thread was already initialized for MTA
                         // and then we call OleInitialize which tries to initialized it for STA

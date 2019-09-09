@@ -74,7 +74,6 @@ namespace System.Windows.Forms
         private static readonly COMException E_FAIL = new COMException(SR.AXUnknownError, unchecked((int)0x80004005));
         private static readonly COMException E_NOINTERFACE = new COMException(SR.AxInterfaceNotSupported, unchecked((int)0x80004002));
 
-        private const int INPROC_SERVER = 1;
         private const int OC_PASSIVE = 0;
         private const int OC_LOADED = 1;  // handler, but no server   [ocx created]
         private const int OC_RUNNING = 2; // server running, invisible [iqa & depersistance]
@@ -104,7 +103,7 @@ namespace System.Windows.Forms
         private static int logPixelsX = -1;
         private static int logPixelsY = -1;
 
-        private static Guid icf2_Guid = typeof(UnsafeNativeMethods.IClassFactory2).GUID;
+        private static Guid icf2_Guid = typeof(Ole32.IClassFactory2).GUID;
         private static Guid ifont_Guid = typeof(UnsafeNativeMethods.IFont).GUID;
         private static Guid ifontDisp_Guid = typeof(SafeNativeMethods.IFontDisp).GUID;
         private static Guid ipicture_Guid = typeof(Ole32.IPicture).GUID;
@@ -2494,72 +2493,79 @@ namespace System.Windows.Forms
             return GetLicenseKey(clsid);
         }
 
-        private string GetLicenseKey(Guid clsid)
+        private unsafe string GetLicenseKey(Guid clsid)
         {
             if (licenseKey != null || !axState[needLicenseKey])
             {
                 return licenseKey;
             }
 
-            try
+            HRESULT hr = Ole32.CoGetClassObject(
+                ref clsid,
+                Ole32.CLSCTX.INPROC_SERVER,
+                IntPtr.Zero,
+                ref icf2_Guid,
+                out Ole32.IClassFactory2 icf2);
+            if (!hr.Succeeded())
             {
-                UnsafeNativeMethods.IClassFactory2 icf2 = UnsafeNativeMethods.CoGetClassObject(ref clsid, INPROC_SERVER, 0, ref icf2_Guid);
-                NativeMethods.tagLICINFO licInfo = new NativeMethods.tagLICINFO();
-                icf2.GetLicInfo(licInfo);
-                if (licInfo.fRuntimeAvailable != 0)
-                {
-                    string[] rval = new string[1];
-                    icf2.RequestLicKey(0, rval);
-                    licenseKey = rval[0];
-                    return licenseKey;
-                }
-            }
-            catch (COMException e)
-            {
-                if (e.ErrorCode == E_NOINTERFACE.ErrorCode)
+                if (hr == HRESULT.E_NOINTERFACE)
                 {
                     return null;
                 }
 
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to get the license key: " + e.ToString());
                 axState[needLicenseKey] = false;
+                return null;
             }
-            catch (Exception t)
+
+            var licInfo = new Ole32.LICINFO
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to get the license key: " + t.ToString());
-                axState[needLicenseKey] = false;
+                cbLicInfo = sizeof(Ole32.LICINFO)
+            };
+            icf2.GetLicInfo(&licInfo);
+            if (licInfo.fRuntimeAvailable != BOOL.FALSE)
+            {
+                var rval = new string[1];
+                icf2.RequestLicKey(0, rval);
+                licenseKey = rval[0];
+                return licenseKey;
             }
+
             return null;
         }
 
         private void CreateWithoutLicense(Guid clsid)
         {
-            object ret = null;
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Creating object without license: " + clsid.ToString());
-            ret = UnsafeNativeMethods.CoCreateInstance(ref clsid, null, INPROC_SERVER, ref NativeMethods.ActiveX.IID_IUnknown);
-            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t" + (ret != null).ToString());
+            HRESULT hr = Ole32.CoCreateInstance(
+                ref clsid,
+                IntPtr.Zero,
+                Ole32.CLSCTX.INPROC_SERVER,
+                ref NativeMethods.ActiveX.IID_IUnknown,
+                out object ret);
+            if (!hr.Succeeded())
+            {
+                throw Marshal.GetExceptionForHR((int)hr);
+            }
+
             instance = ret;
+            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t" + (instance != null).ToString());
         }
 
         private void CreateWithLicense(string license, Guid clsid)
         {
             if (license != null)
             {
-                try
+                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Creating object with license: " + clsid.ToString());
+                HRESULT hr = Ole32.CoGetClassObject(
+                    ref clsid,
+                    Ole32.CLSCTX.INPROC_SERVER,
+                    IntPtr.Zero,
+                    ref icf2_Guid,
+                    out Ole32.IClassFactory2 icf2);
+                if (hr.Succeeded())
                 {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Creating object with license: " + clsid.ToString());
-                    UnsafeNativeMethods.IClassFactory2 icf2 = UnsafeNativeMethods.CoGetClassObject(ref clsid, INPROC_SERVER, 0, ref icf2_Guid);
-
-                    if (icf2 != null)
-                    {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\tClassFactory" + (icf2 != null).ToString());
-                        icf2.CreateInstanceLic(null, null, ref NativeMethods.ActiveX.IID_IUnknown, license, out instance);
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t" + (instance != null).ToString());
-                    }
-                }
-                catch (Exception t)
-                {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to create with license: " + t.ToString());
+                    icf2.CreateInstanceLic(IntPtr.Zero, IntPtr.Zero, ref NativeMethods.ActiveX.IID_IUnknown, license, out instance);
+                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t" + (instance != null).ToString());
                 }
             }
 

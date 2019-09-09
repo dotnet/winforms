@@ -173,8 +173,6 @@ namespace System.Windows.Forms
         CF_ENHMETAFILE = 14,
         CF_HDROP = 15,
         CF_LOCALE = 16,
-        CLSCTX_INPROC_SERVER = 0x1,
-        CLSCTX_LOCAL_SERVER = 0x4,
         CW_USEDEFAULT = (unchecked((int)0x80000000)),
         CWP_SKIPINVISIBLE = 0x0001,
         COLOR_WINDOW = 5,
@@ -1053,9 +1051,6 @@ namespace System.Windows.Forms
                                                     //public const int RECO_COPY  = 0x00000002;    // copy to the clipboard
                                                     //public const int RECO_CUT   = 0x00000003; // cut to the clipboard
                                                     //public const int RECO_DRAG  = 0x00000004;    // drag
-
-        public const int RPC_E_CHANGED_MODE = unchecked((int)0x80010106),
-            RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D);
 
         public const int stc4 = 0x0443,
         STARTF_USESHOWWINDOW = 0x00000001,
@@ -2941,16 +2936,6 @@ namespace System.Windows.Forms
             {
                 return Marshal.ReadIntPtr(value);
             }
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagLICINFO
-        {
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-            public int cbLicInfo = Marshal.SizeOf<tagLICINFO>();
-
-            public int fRuntimeAvailable = 0;
-            public int fLicVerified = 0;
         }
 
         public enum tagVT

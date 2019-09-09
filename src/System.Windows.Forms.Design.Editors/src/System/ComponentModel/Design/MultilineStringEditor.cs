@@ -512,11 +512,10 @@ namespace System.ComponentModel.Design
                 }
                 else
                 {
-                    Guid realClsid = new Guid();
-                    int hr = UnsafeNativeMethods.ReadClassStg(new HandleRef(null, lpstg), ref realClsid);
-                    Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X", CultureInfo.InvariantCulture) + ")");
+                    HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
+                    Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X") + ")");
 
-                    if (!NativeMethods.Succeeded(hr))
+                    if (!hr.Succeeded())
                     {
                         return HRESULT.S_FALSE;
                     }

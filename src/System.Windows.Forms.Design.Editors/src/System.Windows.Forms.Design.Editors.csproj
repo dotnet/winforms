@@ -67,6 +67,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStream.cs" Link="Interop\Ole32\Interop.IStream.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ReadClassStg.cs" Link="Interop\Ole32\Interop.ReadClassStg.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATSTG.cs" Link="Interop\Ole32\Interop.STATSTG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGC.cs" Link="Interop\Ole32\Interop.STGC.cs" />
