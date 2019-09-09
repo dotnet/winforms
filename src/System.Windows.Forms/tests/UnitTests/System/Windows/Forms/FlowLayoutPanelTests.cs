@@ -32,12 +32,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(BorderStyle.None, panel.BorderStyle);
             Assert.Equal(100, panel.Bottom);
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.Bounds);
+            Assert.True(panel.CanEnableIme);
             Assert.True(panel.CanRaiseEvents);
             Assert.True(panel.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.ClientRectangle);
             Assert.Equal(new Size(200, 100), panel.ClientSize);
             Assert.False(panel.Created);
             Assert.Null(panel.Container);
+            Assert.Null(panel.ContextMenu);
+            Assert.Null(panel.ContextMenuStrip);
             Assert.Empty(panel.Controls);
             Assert.Same(panel.Controls, panel.Controls);
             Assert.Same(Cursors.Default, panel.Cursor);
@@ -224,6 +227,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubFlowLayoutPanel : FlowLayoutPanel
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;

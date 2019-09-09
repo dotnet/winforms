@@ -32,6 +32,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Rectangle.Empty, scrollBar.ClientRectangle);
             Assert.Equal(Size.Empty, scrollBar.ClientSize);
             Assert.Null(scrollBar.Container);
+            Assert.Null(scrollBar.ContextMenu);
+            Assert.Null(scrollBar.ContextMenuStrip);
             Assert.Empty(scrollBar.Controls);
             Assert.Same(scrollBar.Controls, scrollBar.Controls);
             Assert.False(scrollBar.Created);
@@ -403,10 +405,12 @@ namespace System.Windows.Forms.Tests
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
         }
 
         [Fact]
@@ -1979,6 +1983,12 @@ namespace System.Windows.Forms.Tests
             public new bool DesignMode => base.DesignMode;
 
             public new EventHandlerList Events => base.Events;
+
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
 
             public new ImeMode ImeModeBase => base.ImeModeBase;
 

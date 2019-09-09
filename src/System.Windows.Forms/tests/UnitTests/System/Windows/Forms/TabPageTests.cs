@@ -33,7 +33,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(BorderStyle.None, page.BorderStyle);
             Assert.Equal(100, page.Bottom);
             Assert.Equal(new Rectangle(0, 0, 200, 100), page.Bounds);
+            Assert.True(page.CanEnableIme);
             Assert.True(page.CanRaiseEvents);
+            Assert.True(page.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), page.ClientRectangle);
             Assert.Equal(new Size(200, 100), page.ClientSize);
             Assert.Null(page.Container);
@@ -160,8 +162,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.AutoSize);
 
             // Set different.
-            control.AutoSize = value;
-            Assert.Equal(value, control.AutoSize);
+            control.AutoSize = !value;
+            Assert.Equal(!value, control.AutoSize);
         }
 
         [Fact]
