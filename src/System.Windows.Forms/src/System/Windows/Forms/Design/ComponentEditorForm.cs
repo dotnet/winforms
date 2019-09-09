@@ -745,7 +745,7 @@ namespace System.Windows.Forms.Design
                     itemText,
                     itemText.Length,
                     ref rc2,
-                    User32.TextFormatFlags.DT_LEFT | User32.TextFormatFlags.DT_VCENTER | User32.TextFormatFlags.DT_END_ELLIPSIS | User32.TextFormatFlags.DT_NOPREFIX);
+                    User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
 
                 SafeNativeMethods.ImageList_Draw(new HandleRef(imagelist, imagelist.Handle), imageIndex, new HandleRef(null, dc),
                                        PADDING_HORZ, rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),

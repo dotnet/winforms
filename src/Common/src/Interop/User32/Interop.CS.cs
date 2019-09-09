@@ -2,21 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
+using System;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
-        public struct WINDOWPLACEMENT
+        /// <summary>
+        ///  Class styles for <see cref="WNDCLASS"/>
+        /// </summary>
+        [Flags]
+        public enum CS : uint
         {
-            public uint length;
-            public WPF flags;
-            public SW showCmd;
-            public Point ptMinPosition;
-            public Point ptMaxPosition;
-            public RECT rcNormalPosition;
-            public RECT rcDevice;
+            DBLCLKS = 0x0008,
+            DROPSHADOW = 0x00020000,
+            SAVEBITS = 0x0800
         }
     }
 }

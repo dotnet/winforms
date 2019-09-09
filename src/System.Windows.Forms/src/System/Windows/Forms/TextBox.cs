@@ -602,7 +602,7 @@ namespace System.Windows.Forms
                     new HandleRef(this, Handle),
                     null,
                     IntPtr.Zero,
-                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_FRAME);
+                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
             }
         }
 

@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Design
             if (_designer != null && _designer.IsHandleCreated)
             {
                 NativeMethods.SendMessage(_designer.Handle, WindowMessages.WM_NCACTIVATE, focus ? 1 : 0, 0);
-                User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RedrawWindowOptions.RDW_FRAME);
+                User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
 

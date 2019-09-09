@@ -663,8 +663,8 @@ namespace System.Windows.Forms
                     new HandleRef(this, Handle),
                     null,
                     hNonClientRegion,
-                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_UPDATENOW
-                        | User32.RedrawWindowOptions.RDW_ERASENOW | User32.RedrawWindowOptions.RDW_FRAME);
+                    User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.UPDATENOW
+                        | User32.RDW.ERASENOW | User32.RDW.FRAME);
 
                 if (hNonClientRegion != IntPtr.Zero)
                 {

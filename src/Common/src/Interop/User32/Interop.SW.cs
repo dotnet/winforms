@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -6,7 +6,10 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public enum ShowWindowCommand : int
+        /// <summary>
+        ///  Show window flags for <see cref="ShowWindow"/> and <see cref="Shell32.ShellExecuteW"/>
+        /// </summary>
+        public enum SW : int
         {
             HIDE = 0,
             NORMAL = 1,

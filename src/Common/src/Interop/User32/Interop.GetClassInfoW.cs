@@ -3,17 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
-        [Flags]
-        public enum WindowPlacementOptions : uint
-        {
-            SETMINPOSITION = 0x0001,
-            RESTORETOMAXIMIZED = 0x0002,
-            ASYNCWINDOWPLACEMENT = 0x0004,
-        }
+        [DllImport(Libraries.User32, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern bool GetClassInfoW(HandleRef hInstance, string lpClassName, ref WNDCLASS lpWndClass);
     }
 }

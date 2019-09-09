@@ -16,14 +16,14 @@ internal static partial class Interop
             string lpFile,
             string lpParameters,
             string lpDirectory,
-            User32.ShowWindowCommand nShowCmd);
+            User32.SW nShowCmd);
         public static IntPtr ShellExecuteW(
             HandleRef hwnd,
             string lpOperation,
             string lpFile,
             string lpParameters,
             string lpDirectory,
-            User32.ShowWindowCommand nShowCmd)
+            User32.SW nShowCmd)
         {
             IntPtr result = ShellExecuteW(hwnd.Handle, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd);
             GC.KeepAlive(hwnd.Wrapper);

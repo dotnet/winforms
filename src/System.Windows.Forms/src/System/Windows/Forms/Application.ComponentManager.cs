@@ -393,7 +393,7 @@ namespace System.Windows.Forms
                                     // message appeared between processing and now WaitMessage
                                     // would wait for the next message.  We minimize this here
                                     // by calling PeekMessage.
-                                    if (User32.PeekMessageW(ref msg, IntPtr.Zero, 0, 0, User32.PeekMessageFlags.PM_NOREMOVE).IsFalse())
+                                    if (User32.PeekMessageW(ref msg, IntPtr.Zero, 0, 0, User32.PM.NOREMOVE).IsFalse())
                                     {
                                         UnsafeNativeMethods.WaitMessage();
                                     }

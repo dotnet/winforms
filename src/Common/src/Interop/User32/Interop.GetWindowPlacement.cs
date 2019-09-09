@@ -13,11 +13,11 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true, EntryPoint = "GetWindowPlacement")]
         private static extern BOOL GetWindowPlacementInternal(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
-        public static BOOL GetWindowPlacement(IntPtr hWnd, out WINDOWPLACEMENT lpwndpl)
+        public unsafe static BOOL GetWindowPlacement(IntPtr hWnd, out WINDOWPLACEMENT lpwndpl)
         {
             lpwndpl = new WINDOWPLACEMENT
             {
-                length = (uint)Marshal.SizeOf<WINDOWPLACEMENT>()
+                length = (uint)sizeof(WINDOWPLACEMENT)
             };
             return GetWindowPlacementInternal(hWnd, ref lpwndpl);
         }

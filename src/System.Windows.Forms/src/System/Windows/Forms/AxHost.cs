@@ -3645,7 +3645,7 @@ namespace System.Windows.Forms
             if (handle != IntPtr.Zero)
             {
                 IntPtr wndProc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
-                m.Result = UnsafeNativeMethods.CallWindowProc(wndProc, handle, m.Msg, m.WParam, m.LParam);
+                m.Result = User32.CallWindowProcW(wndProc, handle, m.WindowMessage(), m.WParam, m.LParam);
             }
         }
 

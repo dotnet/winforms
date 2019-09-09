@@ -2205,7 +2205,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override User32.ShowWindowCommand ShowParams
+        internal override User32.SW ShowParams
         {
             get
             {
@@ -2221,15 +2221,15 @@ namespace System.Windows.Forms
                 switch (WindowState)
                 {
                     case FormWindowState.Maximized:
-                        return User32.ShowWindowCommand.SHOWMAXIMIZED;
+                        return User32.SW.SHOWMAXIMIZED;
                     case FormWindowState.Minimized:
-                        return User32.ShowWindowCommand.SHOWMINIMIZED;
+                        return User32.SW.SHOWMINIMIZED;
                 }
                 if (ShowWithoutActivation)
                 {
-                    return User32.ShowWindowCommand.SHOWNOACTIVATE;
+                    return User32.SW.SHOWNOACTIVATE;
                 }
-                return User32.ShowWindowCommand.SHOW;
+                return User32.SW.SHOW;
             }
         }
 
@@ -2590,7 +2590,7 @@ namespace System.Windows.Forms
                         SuspendLayout();
                         try
                         {
-                            User32.ShowWindow(this, User32.ShowWindowCommand.SHOW);
+                            User32.ShowWindow(this, User32.SW.SHOW);
                             CreateControl();
 
                             // If this form is mdichild and maximized, we need to redraw the MdiParent non-client area to
@@ -2655,13 +2655,13 @@ namespace System.Windows.Forms
                     switch (value)
                     {
                         case FormWindowState.Normal:
-                            User32.ShowWindow(this, User32.ShowWindowCommand.NORMAL);
+                            User32.ShowWindow(this, User32.SW.NORMAL);
                             break;
                         case FormWindowState.Maximized:
-                            User32.ShowWindow(this, User32.ShowWindowCommand.MAXIMIZE);
+                            User32.ShowWindow(this, User32.SW.MAXIMIZE);
                             break;
                         case FormWindowState.Minimized:
-                            User32.ShowWindow(this, User32.ShowWindowCommand.MINIMIZE);
+                            User32.ShowWindow(this, User32.SW.MINIMIZE);
                             break;
                     }
                 }
@@ -6451,7 +6451,7 @@ namespace System.Windows.Forms
                     new HandleRef(this, Handle),
                     null,
                     IntPtr.Zero,
-                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_FRAME);
+                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
                 }
             }
         }
@@ -6472,41 +6472,39 @@ namespace System.Windows.Forms
 
                 switch (wp.showCmd)
                 {
-                    case User32.ShowWindowCommand.NORMAL:
-                    case User32.ShowWindowCommand.RESTORE:
-                    case User32.ShowWindowCommand.SHOW:
-                    case User32.ShowWindowCommand.SHOWNA:
-                    case User32.ShowWindowCommand.SHOWNOACTIVATE:
+                    case User32.SW.NORMAL:
+                    case User32.SW.RESTORE:
+                    case User32.SW.SHOW:
+                    case User32.SW.SHOWNA:
+                    case User32.SW.SHOWNOACTIVATE:
                         if (formState[FormStateWindowState] != (int)FormWindowState.Normal)
                         {
                             formState[FormStateWindowState] = (int)FormWindowState.Normal;
                         }
                         break;
-                    case User32.ShowWindowCommand.SHOWMAXIMIZED:
+                    case User32.SW.SHOWMAXIMIZED:
                         if (formState[FormStateMdiChildMax] == 0)
                         {
                             formState[FormStateWindowState] = (int)FormWindowState.Maximized;
                         }
                         break;
-                    case User32.ShowWindowCommand.SHOWMINIMIZED:
-                    case User32.ShowWindowCommand.MINIMIZE:
-                    case User32.ShowWindowCommand.SHOWMINNOACTIVE:
+                    case User32.SW.SHOWMINIMIZED:
+                    case User32.SW.MINIMIZE:
+                    case User32.SW.SHOWMINNOACTIVE:
                         if (formState[FormStateMdiChildMax] == 0)
                         {
                             formState[FormStateWindowState] = (int)FormWindowState.Minimized;
                         }
                         break;
-                    case User32.ShowWindowCommand.HIDE:
+                    case User32.SW.HIDE:
                     default:
                         break;
                 }
 
                 // If we used to be normal and we just became minimized or maximized,
                 // stash off our current bounds so we can properly restore.
-                //
                 if (oldState == FormWindowState.Normal && WindowState != FormWindowState.Normal)
                 {
-
                     if (WindowState == FormWindowState.Minimized)
                     {
                         SuspendLayoutForMinimize();
@@ -6519,7 +6517,7 @@ namespace System.Windows.Forms
                     restoredWindowBounds.Location = Location;
                     restoredWindowBoundsSpecified |= BoundsSpecified.Location;
 
-                    //stash off restoreBounds As well...
+                    // stash off restoreBounds As well...
                     restoreBounds.Size = Size;
                     restoreBounds.Location = Location;
                 }
@@ -6613,10 +6611,10 @@ namespace System.Windows.Forms
             {
                 switch (si.wShowWindow)
                 {
-                    case (short)User32.ShowWindowCommand.MAXIMIZE:
+                    case (short)User32.SW.MAXIMIZE:
                         WindowState = FormWindowState.Maximized;
                         break;
-                    case (short)User32.ShowWindowCommand.MINIMIZE:
+                    case (short)User32.SW.MINIMIZE:
                         WindowState = FormWindowState.Minimized;
                         break;
                 }

@@ -48,14 +48,5 @@ internal static partial class Interop
             GC.KeepAlive(dwNewLong);
             return result;
         }
-
-        public enum GWL : int
-        {
-            WNDPROC = (-4),
-            HWNDPARENT = (-8),
-            STYLE = (-16),
-            EXSTYLE = (-20),
-            ID = (-12),
-        }
     }
 }

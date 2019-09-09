@@ -10,14 +10,16 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL ShowWindow(IntPtr hWnd, SW nCmdShow);
-
-        public static BOOL ShowWindow(IHandle hWnd, SW nCmdShow)
+        /// <summary>
+        ///  Window long values for <see cref="SetWindowLong"/> and <see cref="GetWindowLong"/>.
+        /// </summary>
+        public enum GWL : int
         {
-            BOOL result = ShowWindow(hWnd.Handle, nCmdShow);
-            GC.KeepAlive(hWnd);
-            return result;
+            WNDPROC = (-4),
+            HWNDPARENT = (-8),
+            STYLE = (-16),
+            EXSTYLE = (-20),
+            ID = (-12),
         }
     }
 }

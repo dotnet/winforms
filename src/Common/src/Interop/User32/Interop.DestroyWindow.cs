@@ -4,18 +4,19 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal static partial class Interop
 {
-    internal static partial class Gdi32
+    internal static partial class User32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern ObjectType GetObjectType(IntPtr h);
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public static extern BOOL DestroyWindow(IntPtr hWnd);
 
-        public static ObjectType GetObjectType(HandleRef h)
+        public static BOOL DestroyWindow(IHandle hWnd)
         {
-            ObjectType result = GetObjectType(h.Handle);
-            GC.KeepAlive(h.Wrapper);
+            BOOL result = DestroyWindow(hWnd.Handle);
+            GC.KeepAlive(hWnd);
             return result;
         }
     }

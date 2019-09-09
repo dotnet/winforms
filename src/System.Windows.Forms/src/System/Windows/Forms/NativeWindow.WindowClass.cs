@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             internal string _windowClassName;
             internal NativeWindow _targetWindow;
 
-            private readonly NativeMethods.ClassStyle _classStyle;
+            private readonly User32.CS _classStyle;
             private IntPtr _defaultWindProc;
 
             // This needs to be a field so the GC doesn't collect the managed callback
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
             private static readonly object s_wcInternalSyncObject = new object();
 
-            internal WindowClass(string className, NativeMethods.ClassStyle classStyle)
+            internal WindowClass(string className, User32.CS classStyle)
             {
                 _className = className;
                 _classStyle = classStyle;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             ///  object if there is no such class/style available, or retrun a
             ///  cached object if one exists.
             /// </summary>
-            internal static WindowClass Create(string className, NativeMethods.ClassStyle classStyle)
+            internal static WindowClass Create(string className, User32.CS classStyle)
             {
                 lock (s_wcInternalSyncObject)
                 {
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void RegisterClass()
             {
-                NativeMethods.WNDCLASS windowClass = new NativeMethods.WNDCLASS();
+                User32.WNDCLASS windowClass = new User32.WNDCLASS();
 
                 string localClassName = _className;
 
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                 {
                     // A system defined Window class was specified, get its info
 
-                    if (!UnsafeNativeMethods.GetClassInfoW(NativeMethods.NullHandleRef, _className, ref windowClass))
+                    if (!User32.GetClassInfoW(NativeMethods.NullHandleRef, _className, ref windowClass))
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
                     }
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                 {
                     windowClass.lpszClassName = c;
 
-                    if (UnsafeNativeMethods.RegisterClassW(ref windowClass) == 0)
+                    if (User32.RegisterClassW(ref windowClass) == 0)
                     {
                         _windProc = null;
                         throw new Win32Exception();

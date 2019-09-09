@@ -619,7 +619,7 @@ namespace System.Windows.Forms
                     handle,
                     null,
                     IntPtr.Zero,
-                    User32.RedrawWindowOptions.RDW_INVALIDATE | User32.RedrawWindowOptions.RDW_FRAME | User32.RedrawWindowOptions.RDW_ERASE | User32.RedrawWindowOptions.RDW_ALLCHILDREN);
+                    User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
             return true;
         }

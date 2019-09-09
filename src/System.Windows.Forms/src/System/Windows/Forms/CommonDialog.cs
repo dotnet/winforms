@@ -134,8 +134,7 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
-            return UnsafeNativeMethods.CallWindowProc(_defOwnerWndProc, hWnd, msg, wparam, lparam);
-
+            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WindowMessage)msg, wparam, lparam);
         }
 
         /// <summary>

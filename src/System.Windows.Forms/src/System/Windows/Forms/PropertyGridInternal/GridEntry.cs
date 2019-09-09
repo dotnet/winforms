@@ -2488,10 +2488,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     oldTextColor = SafeNativeMethods.SetTextColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(textColor.ToArgb()));
                     oldBkColor = SafeNativeMethods.SetBkColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(bkColor.ToArgb()));
                     hfont = Gdi32.SelectObject(hdc, hfont);
-                    User32.TextFormatFlags format = User32.TextFormatFlags.DT_EDITCONTROL | User32.TextFormatFlags.DT_EXPANDTABS | User32.TextFormatFlags.DT_NOCLIP | User32.TextFormatFlags.DT_SINGLELINE | User32.TextFormatFlags.DT_NOPREFIX;
+                    User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
                     if (gridHost.DrawValuesRightToLeft)
                     {
-                        format |= User32.TextFormatFlags.DT_RIGHT | User32.TextFormatFlags.DT_RTLREADING;
+                        format |= User32.DT.RIGHT | User32.DT.RTLREADING;
                     }
 
                     // For password mode, replace the string value with a bullet.

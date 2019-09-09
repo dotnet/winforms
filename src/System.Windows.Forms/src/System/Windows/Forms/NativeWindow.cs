@@ -116,7 +116,7 @@ namespace System.Windows.Forms
                     if (threadHandle != IntPtr.Zero)
                     {
                         Kernel32.GetExitCodeThread(threadHandle, out uint exitCode);
-                        if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && exitCode == NativeMethods.STATUS_PENDING)
+                        if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && (NTSTATUS)exitCode == NTSTATUS.STATUS_PENDING)
                         {
                             if (User32.SendMessageTimeoutW(
                                 handle,
@@ -338,9 +338,9 @@ namespace System.Windows.Forms
                 // This shouldn't be possible.
                 Debug.Assert(_priorWindowProcHandle != _windowProcHandle, "Uh oh! Subclassed ourselves!!!");
 
-                if (assignUniqueID &&
-                    (unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE))) & NativeMethods.WS_CHILD) != 0 &&
-                     unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.ID))) == 0)
+                if (assignUniqueID
+                    && ((User32.WS)PARAM.ToUInt(User32.GetWindowLong(this, User32.GWL.STYLE))).HasFlag(User32.WS.CHILD)
+                    && User32.GetWindowLong(this, User32.GWL.ID) == IntPtr.Zero)
                 {
                     User32.SetWindowLong(this, User32.GWL.ID, handle);
                 }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
             lock (this)
             {
                 CheckReleased();
-                WindowClass windowClass = WindowClass.Create(cp.ClassName, (NativeMethods.ClassStyle)cp.ClassStyle);
+                WindowClass windowClass = WindowClass.Create(cp.ClassName, (User32.CS)cp.ClassStyle);
                 lock (s_createWindowSyncObject)
                 {
                     // The CLR will sometimes pump messages while we're waiting on the lock.
@@ -456,7 +456,7 @@ namespace System.Windows.Forms
                                 cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                             }
 
-                            createResult = UnsafeNativeMethods.CreateWindowEx(
+                            createResult = User32.CreateWindowExW(
                                 cp.ExStyle,
                                 windowClass._windowClassName,
                                 cp.Caption,
@@ -465,9 +465,9 @@ namespace System.Windows.Forms
                                 cp.Y,
                                 cp.Width,
                                 cp.Height,
-                                new HandleRef(cp, cp.Parent),
-                                NativeMethods.NullHandleRef,
-                                new HandleRef(null, modHandle),
+                                cp.Parent,
+                                IntPtr.Zero,
+                                modHandle,
                                 cp.Param);
 
                             lastWin32Error = Marshal.GetLastWin32Error();
@@ -504,14 +504,14 @@ namespace System.Windows.Forms
 
                     // At this point, there isn't much we can do.  There's a small chance the following
                     // line will allow the rest of the program to run, but don't get your hopes up.
-                    m.Result = UnsafeNativeMethods.DefWindowProc(m.HWnd, m.Msg, m.WParam, m.LParam);
+                    m.Result = User32.DefWindowProcW(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
                     return;
                 }
-                m.Result = UnsafeNativeMethods.CallWindowProc(_priorWindowProcHandle, m.HWnd, m.Msg, m.WParam, m.LParam);
+                m.Result = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
             }
             else
             {
-                m.Result = PreviousWindow.Callback(m.HWnd, (User32.WindowMessage)m.Msg, m.WParam, m.LParam);
+                m.Result = PreviousWindow.Callback(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
             }
         }
 
@@ -524,13 +524,14 @@ namespace System.Windows.Forms
             {
                 if (Handle != IntPtr.Zero)
                 {
-                    if (!UnsafeNativeMethods.DestroyWindow(new HandleRef(this, Handle)))
+                    if (User32.DestroyWindow(this).IsFalse())
                     {
                         UnSubclass();
 
                         // Now post a close and let it do whatever it needs to do on its own.
                         User32.PostMessageW(this, User32.WindowMessage.WM_CLOSE);
                     }
+
                     Handle = IntPtr.Zero;
                     _ownHandle = false;
                 }

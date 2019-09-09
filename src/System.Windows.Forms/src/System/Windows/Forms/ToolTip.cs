@@ -292,7 +292,7 @@ namespace System.Windows.Forms
             // for ToolStripDropDown ShowParams returns SW_SHOWNOACTIVATE, in which case we don't
             // want to check IsWindowActive and hence return true.
             if (window is Control windowControl &&
-                (windowControl.ShowParams & (User32.ShowWindowCommand)0xF) != User32.ShowWindowCommand.SHOWNOACTIVATE)
+                (windowControl.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
             {
                 IntPtr hWnd = UnsafeNativeMethods.GetActiveWindow();
                 IntPtr rootHwnd = UnsafeNativeMethods.GetAncestor(new HandleRef(window, window.Handle), NativeMethods.GA_ROOT);
@@ -2122,7 +2122,7 @@ namespace System.Windows.Forms
         {
             if (_cancelled)
             {
-                User32.ShowWindow(this, User32.ShowWindowCommand.HIDE);
+                User32.ShowWindow(this, User32.SW.HIDE);
                 return true;
             }
 
