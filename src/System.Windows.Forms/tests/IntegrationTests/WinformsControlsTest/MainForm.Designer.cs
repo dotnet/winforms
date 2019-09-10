@@ -53,6 +53,7 @@ namespace WinformsControlsTest
             this.collectionEditors = new System.Windows.Forms.Button();
             this.richTextBoxes = new System.Windows.Forms.Button();
             this.PictureBoxes = new System.Windows.Forms.Button();
+            this.formBorderStyles = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -238,6 +239,7 @@ namespace WinformsControlsTest
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.collectionEditors);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.richTextBoxes);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.PictureBoxes);
+            this.flowLayoutPanelUITypeEditors.Controls.Add(this.formBorderStyles);
             this.flowLayoutPanelUITypeEditors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelUITypeEditors.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelUITypeEditors.Location = new System.Drawing.Point(8, 8);
@@ -285,6 +287,16 @@ namespace WinformsControlsTest
             this.PictureBoxes.UseVisualStyleBackColor = true;
             this.PictureBoxes.Click += new System.EventHandler(this.PictureBoxes_Click);
             // 
+            // formBorderStyles
+            // 
+            this.formBorderStyles.Location = new System.Drawing.Point(268, 264);
+            this.formBorderStyles.Name = "formBorderStyles";
+            this.formBorderStyles.Size = new System.Drawing.Size(258, 23);
+            this.formBorderStyles.TabIndex = 19;
+            this.formBorderStyles.Text = "FormBorderStyles";
+            this.formBorderStyles.UseVisualStyleBackColor = true;
+            this.formBorderStyles.Click += new System.EventHandler(this.formBorderStyles_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -324,6 +336,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button collectionEditors;
         private System.Windows.Forms.Button richTextBoxes;
         private System.Windows.Forms.Button PictureBoxes;
+        private System.Windows.Forms.Button formBorderStyles;
     }
 }
 

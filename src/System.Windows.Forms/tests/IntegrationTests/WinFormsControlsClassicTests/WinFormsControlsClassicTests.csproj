@@ -145,6 +145,14 @@
       <Link>DesignTimeAligned.Designer.cs</Link>
       <DependentUpon>DesignTimeAligned.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\WinformsControlsTest\FormBorderStyles.cs">
+      <Link>FormBorderStyles.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\FormBorderStyles.Designer.cs">
+      <Link>FormBorderStyles.Designer.cs</Link>
+      <DependentUpon>FormBorderStyles.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\WinformsControlsTest\ListViewTest.cs">
       <Link>ListViewTest.cs</Link>
       <SubType>Form</SubType>
@@ -283,6 +291,10 @@
     <EmbeddedResource Include="..\WinformsControlsTest\DesignTimeAligned.resx">
       <Link>DesignTimeAligned.resx</Link>
       <DependentUpon>DesignTimeAligned.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\FormBorderStyles.resx">
+      <Link>FormBorderStyles.resx</Link>
+      <DependentUpon>FormBorderStyles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\ListViewTest.resx">
       <Link>ListViewTest.resx</Link>
