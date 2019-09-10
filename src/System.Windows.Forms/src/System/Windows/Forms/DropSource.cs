@@ -2,25 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    using System;
-
-    /// </summary>
-    internal class DropSource : UnsafeNativeMethods.IOleDropSource
+    internal class DropSource : Ole32.IDropSource
     {
-        private const int DragDropSDrop = 0x00040100;
-        private const int DragDropSCancel = 0x00040101;
-        private const int DragDropSUseDefaultCursors = 0x00040102;
-
-        private readonly ISupportOleDropSource peer;
+        private readonly ISupportOleDropSource _peer;
 
         public DropSource(ISupportOleDropSource peer)
         {
-            this.peer = peer ?? throw new ArgumentNullException(nameof(peer));
+            _peer = peer ?? throw new ArgumentNullException(nameof(peer));
         }
 
-        public int OleQueryContinueDrag(int fEscapePressed, int grfKeyState)
+        public HRESULT QueryContinueDrag(BOOL fEscapePressed, User32.MK grfKeyState)
         {
             QueryContinueDragEventArgs qcdevent = null;
             bool escapePressed = (fEscapePressed != 0);
@@ -29,40 +24,37 @@ namespace System.Windows.Forms
             {
                 action = DragAction.Cancel;
             }
-            else if ((grfKeyState & NativeMethods.MK_LBUTTON) == 0
-                     && (grfKeyState & NativeMethods.MK_RBUTTON) == 0
-                     && (grfKeyState & NativeMethods.MK_MBUTTON) == 0)
+            else if ((grfKeyState & User32.MK.LBUTTON) == 0
+                     && (grfKeyState & User32.MK.RBUTTON) == 0
+                     && (grfKeyState & User32.MK.MBUTTON) == 0)
             {
                 action = DragAction.Drop;
             }
 
-            qcdevent = new QueryContinueDragEventArgs(grfKeyState, escapePressed, action);
-            peer.OnQueryContinueDrag(qcdevent);
-
-            int hr = 0;
+            qcdevent = new QueryContinueDragEventArgs((int)grfKeyState, escapePressed, action);
+            _peer.OnQueryContinueDrag(qcdevent);
 
             switch (qcdevent.Action)
             {
                 case DragAction.Drop:
-                    hr = DragDropSDrop;
-                    break;
+                    return HRESULT.DRAGDROP_S_DROP;
                 case DragAction.Cancel:
-                    hr = DragDropSCancel;
-                    break;
+                    return HRESULT.DRAGDROP_S_CANCEL;
+                default:
+                    return HRESULT.S_OK;
             }
-
-            return hr;
         }
 
-        public int OleGiveFeedback(int dwEffect)
+        public HRESULT GiveFeedback(Ole32.DROPEFFECT dwEffect)
         {
-            GiveFeedbackEventArgs gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true);
-            peer.OnGiveFeedback(gfbevent);
+            var gfbevent = new GiveFeedbackEventArgs((DragDropEffects)dwEffect, true);
+            _peer.OnGiveFeedback(gfbevent);
             if (gfbevent.UseDefaultCursors)
             {
-                return DragDropSUseDefaultCursors;
+                return HRESULT.DRAGDROP_S_USEDEFAULTCURSORS;
             }
-            return 0;
+
+            return HRESULT.S_OK;
         }
     }
 }

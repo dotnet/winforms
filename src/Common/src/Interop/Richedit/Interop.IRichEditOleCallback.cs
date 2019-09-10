@@ -13,7 +13,7 @@ internal partial class Interop
         [ComImport]
         [Guid("00020D03-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRichEditOleCallback
+        public unsafe interface IRichEditOleCallback
         {
             [PreserveSig]
             HRESULT GetNewStorage(out Ole32.IStorage ret);
@@ -40,7 +40,10 @@ internal partial class Interop
             HRESULT GetClipboardData(ref CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj);
 
             [PreserveSig]
-            HRESULT GetDragDropEffect(BOOL fDrag, int grfKeyState, ref int pdwEffect);
+            HRESULT GetDragDropEffect(
+                BOOL fDrag,
+                User32.MK grfKeyState,
+                Ole32.DROPEFFECT* pdwEffect);
 
             [PreserveSig]
             HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref CHARRANGE lpchrg, out IntPtr hmenu);

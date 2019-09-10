@@ -3984,7 +3984,7 @@ namespace System.Windows.Forms
                         MouseButtons b = Control.MouseButtons;
                         Keys k = Control.ModifierKeys;
 
-                        int keyState = 0;
+                        User32.MK keyState = 0;
 
                         // Due to the order in which we get called, we have to set up the keystate here.
                         // First GetDragDropEffect is called with grfKeyState == 0, and then
@@ -3993,27 +3993,27 @@ namespace System.Windows.Forms
 
                         if ((b & MouseButtons.Left) == MouseButtons.Left)
                         {
-                            keyState |= NativeMethods.MK_LBUTTON;
+                            keyState |= User32.MK.LBUTTON;
                         }
 
                         if ((b & MouseButtons.Right) == MouseButtons.Right)
                         {
-                            keyState |= NativeMethods.MK_RBUTTON;
+                            keyState |= User32.MK.RBUTTON;
                         }
 
                         if ((b & MouseButtons.Middle) == MouseButtons.Middle)
                         {
-                            keyState |= NativeMethods.MK_MBUTTON;
+                            keyState |= User32.MK.MBUTTON;
                         }
 
                         if ((k & Keys.Control) == Keys.Control)
                         {
-                            keyState |= NativeMethods.MK_CONTROL;
+                            keyState |= User32.MK.CONTROL;
                         }
 
                         if ((k & Keys.Shift) == Keys.Shift)
                         {
-                            keyState |= NativeMethods.MK_SHIFT;
+                            keyState |= User32.MK.SHIFT;
                         }
 
                         lastDataObject = new DataObject(lpdataobj);
@@ -4023,12 +4023,12 @@ namespace System.Windows.Forms
                             lastEffect = DragDropEffects.None;
                         }
 
-                        DragEventArgs e = new DragEventArgs(lastDataObject,
-                                                        keyState,
-                                                        Control.MousePosition.X,
-                                                        Control.MousePosition.Y,
-                                                        DragDropEffects.All,
-                                                        lastEffect);
+                        var e = new DragEventArgs(lastDataObject,
+                                                  (int)keyState,
+                                                  Control.MousePosition.X,
+                                                  Control.MousePosition.Y,
+                                                  DragDropEffects.All,
+                                                  lastEffect);
                         if (fReally == 0)
                         {
                             // we are just querying
@@ -4039,7 +4039,7 @@ namespace System.Windows.Forms
                             // like in the local drag case. Then you drag into rtb2. rtb2 will first be called in this method,
                             // and not GetDragDropEffects. Now lastEffect is initialized to None for rtb2, so we would not allow
                             // the drag. Thus we need to set the effect here as well.
-                            e.Effect = ((keyState & NativeMethods.MK_CONTROL) == NativeMethods.MK_CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
+                            e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
                         }
                         else
@@ -4085,14 +4085,18 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            public HRESULT GetDragDropEffect(BOOL fDrag, int grfKeyState, ref int pdwEffect)
+            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
+                if (pdwEffect == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
 
                 if (owner.AllowDrop || owner.EnableAutoDragDrop)
                 {
-
-                    if (fDrag != BOOL.FALSE && grfKeyState == 0)
+                    if (fDrag.IsTrue() && grfKeyState == (User32.MK)0)
                     {
                         // This is the very first call we receive in a Drag-Drop operation,
                         // so we will let the control know what we support.
@@ -4122,11 +4126,10 @@ namespace System.Windows.Forms
                         // We only care about the drag.
                         //
                         // When we drop, lastEffect will have the right state
-                        if (fDrag == BOOL.FALSE && lastDataObject != null && grfKeyState != 0)
+                        if (fDrag.IsFalse() && lastDataObject != null && grfKeyState != (User32.MK)0)
                         {
-
                             DragEventArgs e = new DragEventArgs(lastDataObject,
-                                                                grfKeyState,
+                                                                (int)grfKeyState,
                                                                 Control.MousePosition.X,
                                                                 Control.MousePosition.Y,
                                                                 DragDropEffects.All,
@@ -4135,7 +4138,7 @@ namespace System.Windows.Forms
                             // Now tell which of the allowable effects we want to use, but only if we are not already none
                             if (lastEffect != DragDropEffects.None)
                             {
-                                e.Effect = ((grfKeyState & NativeMethods.MK_CONTROL) == NativeMethods.MK_CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
+                                e.Effect = ((grfKeyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             }
 
                             owner.OnDragOver(e);
@@ -4143,13 +4146,13 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    pdwEffect = (int)lastEffect;
-
+                    *pdwEffect = (Ole32.DROPEFFECT)lastEffect;
                 }
                 else
                 {
-                    pdwEffect = (int)DragDropEffects.None;
+                    *pdwEffect = Ole32.DROPEFFECT.NONE;
                 }
+
                 return HRESULT.S_OK;
             }
 

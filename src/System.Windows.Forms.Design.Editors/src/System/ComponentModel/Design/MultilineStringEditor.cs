@@ -575,9 +575,14 @@ namespace System.ComponentModel.Design
                 return HRESULT.E_NOTIMPL;
             }
 
-            public HRESULT GetDragDropEffect(BOOL fDrag, int grfKeyState, ref int pdwEffect)
+            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
-                pdwEffect = (int)DragDropEffects.None;
+                if (pdwEffect == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pdwEffect = Ole32.DROPEFFECT.NONE;
                 return HRESULT.S_OK;
             }
 

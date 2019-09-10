@@ -2618,8 +2618,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
-            int[] finalEffect = new int[] { (int)DragDropEffects.None };
-            UnsafeNativeMethods.IOleDropSource dropSource = DropSource;
+            Ole32.IDropSource dropSource = DropSource;
             IComDataObject dataObject = null;
 
             dataObject = data as IComDataObject;
@@ -2650,14 +2649,13 @@ namespace System.Windows.Forms
                 dataObject = (IComDataObject)iwdata;
             }
 
-            try
+            HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);
+            if (!hr.Succeeded())
             {
-                SafeNativeMethods.DoDragDrop(dataObject, dropSource, (int)allowedEffects, finalEffect);
+                return DragDropEffects.None;
             }
-            catch
-            {
-            }
-            return (DragDropEffects)finalEffect[0];
+
+            return (DragDropEffects)finalEffect;
         }
 
         internal void FireEvent(ToolStripItemEventType met)

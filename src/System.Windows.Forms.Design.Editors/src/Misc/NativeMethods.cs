@@ -525,14 +525,7 @@ namespace System.Windows.Forms.Design
         public const int SB_BOTTOM = 7;
         public const int SB_RIGHT = 7;
         public const int SB_ENDSCROLL = 8;
-        public const int MK_LBUTTON = 0x0001;
         public const int TVM_HITTEST = 0x1100 + 17;
-        public const int MK_RBUTTON = 0x0002;
-        public const int MK_SHIFT = 0x0004;
-        public const int MK_CONTROL = 0x0008;
-        public const int MK_MBUTTON = 0x0010;
-        public const int MK_XBUTTON1 = 0x0020;
-        public const int MK_XBUTTON2 = 0x0040;
         public const int LB_ADDSTRING = 0x0180;
         public const int LB_INSERTSTRING = 0x0181;
         public const int LB_DELETESTRING = 0x0182;

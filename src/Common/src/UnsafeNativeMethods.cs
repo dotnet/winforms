@@ -932,21 +932,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport(), Guid("00000121-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleDropSource
-        {
-            [PreserveSig]
-            int OleQueryContinueDrag(
-                int fEscapePressed,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfKeyState);
-
-            [PreserveSig]
-            int OleGiveFeedback(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwEffect);
-        }
-
         [ComImport()]
         [Guid("B196B289-BAB4-101A-B69C-00AA00341D07")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
