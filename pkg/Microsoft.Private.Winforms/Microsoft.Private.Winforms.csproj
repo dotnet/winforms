@@ -14,7 +14,7 @@
   -->
 
   <PropertyGroup>
-    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <!-- This is a Packaging Project -->

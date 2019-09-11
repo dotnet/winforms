@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -32,5 +32,4 @@
       <LogicalName>System.Windows.Forms.Design.Tests.CustomPropertyTab</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>

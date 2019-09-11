@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Design.Tests</AssemblyName>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

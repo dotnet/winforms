@@ -1,9 +1,7 @@
 ﻿<Project InitialTargets="BuildPackage">
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
   <PropertyGroup>
-    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
-    <TargetFrameworkVersion>5.0</TargetFrameworkVersion>
-    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     

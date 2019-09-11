@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
     <OutputType>WinExe</OutputType>
     <RootNamespace>AccessibilityTests</RootNamespace>
     <AssemblyName>AccessibilityTests</AssemblyName>
@@ -9,8 +9,6 @@
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <UsingToolXliff>false</UsingToolXliff>
   </PropertyGroup>
-
-
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
@@ -30,5 +28,4 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>

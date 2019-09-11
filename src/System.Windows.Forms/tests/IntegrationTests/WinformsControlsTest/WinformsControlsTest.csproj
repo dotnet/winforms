@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
     <AssemblyName>WinformsControlsTest</AssemblyName>
     <RootNamespace>WinformsControlsTest</RootNamespace>
     <ApplicationIcon />
@@ -151,5 +151,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

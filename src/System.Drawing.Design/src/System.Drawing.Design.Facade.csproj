@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>System.Drawing.Design</AssemblyName>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
   </ItemGroup>
-  
 </Project>

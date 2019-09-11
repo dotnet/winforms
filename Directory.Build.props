@@ -5,9 +5,9 @@
   <Import Project="eng\FacadeAssemblies.props" />
 
   <PropertyGroup>
-    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
-    <TargetFrameworkVersion>5.0</TargetFrameworkVersion>
-    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFrameworkPrivateName>netcoreapp</TargetFrameworkPrivateName>
+    <TargetFrameworkPrivateVersion>5.0</TargetFrameworkPrivateVersion>
+    <PrivateTargetFramework>$(TargetFrameworkPrivateName)$(TargetFrameworkPrivateVersion)</PrivateTargetFramework>
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -28,6 +28,9 @@ namespace System.Windows.Forms.IntegrationTests.Common
             }
         }
 
+        private static string TargetFramework
+            => "netcoreapp5.0";
+
         /// <summary>
         ///  Get the output exe path for a specified project.
         ///  Throws an exception if the path does not exist
@@ -40,7 +43,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 throw new ArgumentNullException(nameof(projectName));
 
             var repoRoot = GetRepoRoot();
-            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\netcoreapp5.0\\{projectName}.exe");
+            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
 
             if (!File.Exists(exePath))
                 throw new FileNotFoundException("File does not exist", exePath);

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>System.Drawing</AssemblyName>
+    <TargetFramework>$(PrivateTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,5 +13,4 @@
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
     <PackageReference Include="System.Windows.Extensions" Version="$(SystemWindowsExtensionsPackageVersion)" />
   </ItemGroup>
-  
 </Project>
