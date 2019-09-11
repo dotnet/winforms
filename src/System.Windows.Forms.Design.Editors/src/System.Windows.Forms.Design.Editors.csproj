@@ -64,6 +64,8 @@
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.CreateILockBytesOnHGlobal.cs" Link="Interop\Ole32\Interop.CreateILockBytesOnHGlobal.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DROPEFFECT.cs" Link="Interop\Ole32\Interop.DROPEFFECT.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropSource.cs" Link="Interop\Ole32\Interop.IDropSource.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStream.cs" Link="Interop\Ole32\Interop.IStream.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DT.cs" Link="Interop\User32\Interop.DT.cs" />

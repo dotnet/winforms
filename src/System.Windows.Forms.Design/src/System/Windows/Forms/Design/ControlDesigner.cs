@@ -1938,11 +1938,11 @@ namespace System.Windows.Forms.Design
 
                 case WindowMessages.WM_NCMOUSEMOVE:
                 case WindowMessages.WM_MOUSEMOVE:
-                    if ((unchecked((int)(long)m.WParam) & NativeMethods.MK_LBUTTON) != 0)
+                    if ((unchecked((User32.MK)(long)m.WParam) & User32.MK.LBUTTON) != 0)
                     {
                         button = MouseButtons.Left;
                     }
-                    else if ((unchecked((int)(long)m.WParam) & NativeMethods.MK_RBUTTON) != 0)
+                    else if ((unchecked((User32.MK)(long)m.WParam) & User32.MK.RBUTTON) != 0)
                     {
                         button = MouseButtons.Right;
                         _toolPassThrough = false;

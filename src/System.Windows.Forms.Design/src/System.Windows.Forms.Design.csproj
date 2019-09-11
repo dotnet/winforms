@@ -82,6 +82,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowThreadProcessId.cs" Link="Interop\User32\Interop.GetWindowThreadProcessId.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MSG.cs" Link="Interop\User32\Interop.MSG.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.PAINTSTRUCT.cs" Link="Interop\User32\Interop.PAINTSTRUCT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RedrawWindow.cs" Link="Interop\User32\Interop.RedrawWindow.cs" />

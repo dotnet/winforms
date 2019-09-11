@@ -10,6 +10,9 @@ internal static partial class Interop
     {
         S_OK = 0,
         S_FALSE = 1,
+        DRAGDROP_S_DROP = 0x00040100,
+        DRAGDROP_S_CANCEL = 0x00040101,
+        DRAGDROP_S_USEDEFAULTCURSORS = 0x00040102,
         DISP_E_EXCEPTION = unchecked((int)0x80020009),
         E_NOTIMPL = unchecked((int)0x80004001),
         E_NOINTERFACE = unchecked((int)0x80004002),

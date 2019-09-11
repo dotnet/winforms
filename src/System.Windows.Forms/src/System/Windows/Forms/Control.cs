@@ -5350,8 +5350,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
         {
-            int[] finalEffect = new int[] { (int)DragDropEffects.None };
-            UnsafeNativeMethods.IOleDropSource dropSource = new DropSource(this);
+            Ole32.IDropSource dropSource = new DropSource(this);
 
             IComDataObject dataObject = null;
 
@@ -5374,19 +5373,13 @@ namespace System.Windows.Forms
                 dataObject = (IComDataObject)iwdata;
             }
 
-            try
+            HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out Ole32.DROPEFFECT finalEffect);
+            if (!hr.Succeeded())
             {
-                SafeNativeMethods.DoDragDrop(dataObject, dropSource, (int)allowedEffects, finalEffect);
-            }
-            catch (Exception e)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(e))
-                {
-                    throw;
-                }
+                return DragDropEffects.None;
             }
 
-            return (DragDropEffects)finalEffect[0];
+            return (DragDropEffects)finalEffect;
         }
 
         /// <summary>
