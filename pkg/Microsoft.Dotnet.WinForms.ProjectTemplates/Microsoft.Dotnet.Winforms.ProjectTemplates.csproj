@@ -14,7 +14,7 @@
       <IsPackable>true</IsPackable>
   </PropertyGroup>
 
-    <PropertyGroup>
+  <PropertyGroup>
     <!-- Disable warning in Nuget for references in Nuspec not matching refs (we do not use references element in our Nuspec) -->
     <NoWarn>$(NoWarn);NU5128;NU5313</NoWarn>
   </PropertyGroup>
