@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!-- We need to specify a framework in order for the Restore target to work -->
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

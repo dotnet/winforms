@@ -14,9 +14,7 @@
   -->
 
   <PropertyGroup>
-    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
-    <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
-    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <!-- This is a Packaging Project -->
@@ -29,6 +27,11 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PublishWindowsPdb>false</PublishWindowsPdb>
     <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Disable warning in Nuget for references in Nuspec not matching refs (we do not use references element in our Nuspec) -->
+    <NoWarn>$(NoWarn);NU5131</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
