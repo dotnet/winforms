@@ -5954,6 +5954,36 @@ namespace System.Windows.Forms
 
             return -1;
         }
+
+        internal override object GetPropertyValue(int propertyID)
+        {
+            switch (propertyID)
+            {
+                case NativeMethods.UIA_NamePropertyId:
+                    return Name;
+            }
+
+            return base.GetPropertyValue(propertyID);
+        }
+
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return Owner.Name;
+            }
+
+            set
+            {
+                Owner.AccessibleName = value;
+            }
+        }
     }
 
     /// <summary>

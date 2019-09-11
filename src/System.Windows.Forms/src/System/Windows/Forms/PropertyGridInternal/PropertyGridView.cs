@@ -8530,10 +8530,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return name;
                     }
-                    else
-                    {
-                        return SR.PropertyGridDefaultAccessibleName;
-                    }
+
+                    return _owningPropertyGridView?.OwnerGrid?.Name;
                 }
             }
 
