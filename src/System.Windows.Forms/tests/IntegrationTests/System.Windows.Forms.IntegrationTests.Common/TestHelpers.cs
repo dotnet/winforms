@@ -29,6 +29,12 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
+        ///  Should always match the TargetFramework in the .csproj
+        /// </summary>
+        private static string TargetFramework
+            => "netcoreapp3.1";
+
+        /// <summary>
         ///  Get the output exe path for a specified project.
         ///  Throws an exception if the path does not exist
         /// </summary>
@@ -40,7 +46,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 throw new ArgumentNullException(nameof(projectName));
 
             var repoRoot = GetRepoRoot();
-            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\netcoreapp3.0\\{projectName}.exe");
+            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
 
             if (!File.Exists(exePath))
                 throw new FileNotFoundException("File does not exist", exePath);
