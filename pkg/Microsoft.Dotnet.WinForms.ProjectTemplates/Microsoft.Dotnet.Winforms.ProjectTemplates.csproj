@@ -14,6 +14,11 @@
       <IsPackable>true</IsPackable>
   </PropertyGroup>
 
+    <PropertyGroup>
+    <!-- Disable warning in Nuget for references in Nuspec not matching refs (we do not use references element in our Nuspec) -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PublishWindowsPdb>false</PublishWindowsPdb>
