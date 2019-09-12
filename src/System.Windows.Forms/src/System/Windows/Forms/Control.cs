@@ -13882,11 +13882,11 @@ namespace System.Windows.Forms
             return ActiveXInstance.UIDeactivate();
         }
 
-        HRESULT UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
         {
             if (lprcClipRect != null)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect.left + ", " + lprcClipRect.top + ", " + lprcClipRect.right + ", " + lprcClipRect.bottom + ")");
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect->left + ", " + lprcClipRect->top + ", " + lprcClipRect->right + ", " + lprcClipRect->bottom + ")");
             }
 
             Debug.Indent();
@@ -13960,7 +13960,7 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.IOleClientSite pActiveSite,
             int lindex,
             IntPtr hwndParent,
-            NativeMethods.COMRECT lprcPosRect)
+            RECT* lprcPosRect)
         {
             // In Office they are internally casting an iverb to a short and not
             // doing the proper sign extension.  So, we do it here.
@@ -13977,7 +13977,7 @@ namespace System.Windows.Forms
                 Debug.WriteLine("     activeSite: " + pActiveSite);
                 Debug.WriteLine("     index: " + lindex);
                 Debug.WriteLine("     hwndParent: " + hwndParent);
-                Debug.WriteLine("     posRect: " + (lprcPosRect != null ? lprcPosRect.ToString() : "null"));
+                Debug.WriteLine("     posRect: " + (lprcPosRect != null ? (*lprcPosRect).ToString() : "null"));
             }
 #endif
             Debug.Indent();

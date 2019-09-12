@@ -1266,15 +1266,6 @@ namespace System.Windows.Forms
             GetParentContainer().ControlCreated(this);
         }
 
-        private NativeMethods.COMRECT GetClipRect(NativeMethods.COMRECT clipRect)
-        {
-            if (clipRect != null)
-            {
-                FillInRect(clipRect, new Rectangle(0, 0, 32000, 32000));
-            }
-            return clipRect;
-        }
-
         private static HRESULT SetupLogPixels(bool force)
         {
             if (logPixelsX == -1 || force)
@@ -1370,16 +1361,16 @@ namespace System.Windows.Forms
             return bounds;
         }
 
-        private void SetObjectRects(Rectangle bounds)
+        private unsafe void SetObjectRects(Rectangle bounds)
         {
             if (GetOcState() < OC_INPLACE)
             {
                 return;
             }
 
-            NativeMethods.COMRECT posRect = new NativeMethods.COMRECT(bounds);
-            NativeMethods.COMRECT clipRect = WebBrowserHelper.GetClipRect();
-            GetInPlaceObject().SetObjectRects(posRect, clipRect);
+            RECT posRect = bounds;
+            RECT clipRect = WebBrowserHelper.GetClipRect();
+            GetInPlaceObject().SetObjectRects(&posRect, &clipRect);
         }
 
         /// <summary>
@@ -2417,8 +2408,8 @@ namespace System.Windows.Forms
         public unsafe void DoVerb(int verb)
         {
             Control parent = ParentInternal;
-            NativeMethods.COMRECT posRect = new NativeMethods.COMRECT(Bounds);
-            GetOleObject().DoVerb(verb, null, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, posRect);
+            RECT posRect = Bounds;
+            GetOleObject().DoVerb(verb, null, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, &posRect);
         }
 
         private bool AwaitingDefreezing()
@@ -4432,8 +4423,8 @@ namespace System.Windows.Forms
             unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
                 out UnsafeNativeMethods.IOleInPlaceFrame ppFrame,
                 out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
-                NativeMethods.COMRECT lprcPosRect,
-                NativeMethods.COMRECT lprcClipRect,
+                RECT* lprcPosRect,
+                RECT* lprcClipRect,
                 NativeMethods.tagOIFI lpFrameInfo)
             {
                 ppDoc = null;
@@ -4444,8 +4435,8 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                lprcPosRect = new NativeMethods.COMRECT(host.Bounds);
-                lprcClipRect = WebBrowserHelper.GetClipRect();
+                *lprcPosRect = host.Bounds;
+                *lprcClipRect = WebBrowserHelper.GetClipRect();
                 if (lpFrameInfo != null)
                 {
                     lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
@@ -4454,7 +4445,8 @@ namespace System.Windows.Forms
                     lpFrameInfo.cAccelEntries = 0;
                     lpFrameInfo.hwndFrame = host.ParentInternal.Handle;
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
 
             Interop.HRESULT UnsafeNativeMethods.IOleInPlaceSite.Scroll(Size scrollExtant)
@@ -4499,8 +4491,13 @@ namespace System.Windows.Forms
                 return host.GetInPlaceObject().UIDeactivate();
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect)
+            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(RECT* lprcPosRect)
             {
+                if (lprcPosRect == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
                 // The MediaPlayer control has a AllowChangeDisplaySize property that users
                 // can set to control size changes at runtime, but the control itself ignores that and sets the new size.
                 // We prevent this by not allowing controls to call OnPosRectChange(), unless we instantiated the resize.
@@ -4514,16 +4511,17 @@ namespace System.Windows.Forms
 
                 if (useRect)
                 {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnPosRectChange" + lprcPosRect.ToString());
-                    NativeMethods.COMRECT clipRect = WebBrowserHelper.GetClipRect();
-                    host.GetInPlaceObject().SetObjectRects(lprcPosRect, clipRect);
+                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnPosRectChange" + lprcPosRect->ToString());
+                    RECT clipRect = WebBrowserHelper.GetClipRect();
+                    host.GetInPlaceObject().SetObjectRects(lprcPosRect, &clipRect);
                     host.MakeDirty();
                 }
                 else
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Control directly called OnPosRectChange... ignoring the new size");
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
 
             // IPropertyNotifySink methods
@@ -4841,15 +4839,6 @@ namespace System.Windows.Forms
             {
                 GetOleObject().SetClientSite(oleSite);
             }
-        }
-
-        private static NativeMethods.COMRECT FillInRect(NativeMethods.COMRECT dest, Rectangle source)
-        {
-            dest.left = source.X;
-            dest.top = source.Y;
-            dest.right = source.Width + source.X;
-            dest.bottom = source.Height + source.Y;
-            return dest;
         }
 
         private AxContainer GetParentContainer()

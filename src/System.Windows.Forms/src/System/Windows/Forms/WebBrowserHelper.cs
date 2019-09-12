@@ -134,10 +134,9 @@ namespace System.Windows.Forms
         }
 
         // Returns a big COMRECT
-        internal static NativeMethods.COMRECT GetClipRect()
+        internal static RECT GetClipRect()
         {
-            return new NativeMethods.COMRECT(new Rectangle(0, 0, 32000, 32000));
+            return new Rectangle(0, 0, 32000, 32000);
         }
     }
 }
-
