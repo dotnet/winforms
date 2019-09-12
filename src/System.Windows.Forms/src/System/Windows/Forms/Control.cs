@@ -13882,12 +13882,17 @@ namespace System.Windows.Forms
             return ActiveXInstance.UIDeactivate();
         }
 
-        void UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect)
+        HRESULT UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect.left + ", " + lprcClipRect.top + ", " + lprcClipRect.right + ", " + lprcClipRect.bottom + ")");
+            if (lprcClipRect != null)
+            {
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect.left + ", " + lprcClipRect.top + ", " + lprcClipRect.right + ", " + lprcClipRect.bottom + ")");
+            }
+
             Debug.Indent();
-            ActiveXInstance.SetObjectRects(lprcPosRect, lprcClipRect);
+            HRESULT hr = ActiveXInstance.SetObjectRects(lprcPosRect, lprcClipRect);
             Debug.Unindent();
+            return hr;
         }
 
         void UnsafeNativeMethods.IOleInPlaceObject.ReactivateAndUndo()
@@ -13949,7 +13954,13 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleObject.DoVerb(int iVerb, User32.MSG* lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect)
+        unsafe HRESULT UnsafeNativeMethods.IOleObject.DoVerb(
+            int iVerb,
+            User32.MSG* lpmsg,
+            UnsafeNativeMethods.IOleClientSite pActiveSite,
+            int lindex,
+            IntPtr hwndParent,
+            NativeMethods.COMRECT lprcPosRect)
         {
             // In Office they are internally casting an iverb to a short and not
             // doing the proper sign extension.  So, we do it here.
@@ -13966,14 +13977,13 @@ namespace System.Windows.Forms
                 Debug.WriteLine("     activeSite: " + pActiveSite);
                 Debug.WriteLine("     index: " + lindex);
                 Debug.WriteLine("     hwndParent: " + hwndParent);
-                Debug.WriteLine("     posRect: " + lprcPosRect);
+                Debug.WriteLine("     posRect: " + (lprcPosRect != null ? lprcPosRect.ToString() : "null"));
             }
 #endif
             Debug.Indent();
             try
             {
-                ActiveXInstance.DoVerb(iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
-                return HRESULT.S_OK;
+                return ActiveXInstance.DoVerb(iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
             }
             catch (Exception e)
             {

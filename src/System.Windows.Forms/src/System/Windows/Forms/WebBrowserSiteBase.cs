@@ -202,7 +202,8 @@ namespace System.Windows.Forms
                         if (hwnd != IntPtr.Zero)
                         {
                             Host.AttachWindow(hwnd);
-                            OnActiveXRectChange(new NativeMethods.COMRECT(Host.Bounds));
+                            var posRect = new NativeMethods.COMRECT(Host.Bounds);
+                            OnActiveXRectChange(posRect);
                         }
                     }
                 }
@@ -249,7 +250,8 @@ namespace System.Windows.Forms
         int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()
         {
             Host.ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
-            OnActiveXRectChange(new NativeMethods.COMRECT(Host.Bounds));
+            var posRect = new NativeMethods.COMRECT(Host.Bounds);
+            OnActiveXRectChange(posRect);
             return NativeMethods.S_OK;
         }
 
@@ -260,11 +262,20 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(out UnsafeNativeMethods.IOleInPlaceFrame ppFrame, out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
-                                             NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect, NativeMethods.tagOIFI lpFrameInfo)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
+            out UnsafeNativeMethods.IOleInPlaceFrame ppFrame,
+            out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
+            NativeMethods.COMRECT lprcPosRect,
+            NativeMethods.COMRECT lprcClipRect,
+            NativeMethods.tagOIFI lpFrameInfo)
         {
             ppDoc = null;
             ppFrame = Host.GetParentContainer();
+
+            if (lprcPosRect == null || lprcClipRect == null)
+            {
+                return HRESULT.E_POINTER;
+            }
 
             lprcPosRect.left = Host.Bounds.X;
             lprcPosRect.top = Host.Bounds.Y;
@@ -320,7 +331,7 @@ namespace System.Windows.Forms
             return Host.AXInPlaceObject.UIDeactivate();
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(NativeMethods.COMRECT lprcPosRect)
         {
             return OnActiveXRectChange(lprcPosRect);
         }
@@ -447,11 +458,16 @@ namespace System.Windows.Forms
             }
         }
 
-        private int OnActiveXRectChange(NativeMethods.COMRECT lprcPosRect)
+        private HRESULT OnActiveXRectChange(NativeMethods.COMRECT lprcPosRect)
         {
-            Host.AXInPlaceObject.SetObjectRects(
-                NativeMethods.COMRECT.FromXYWH(0, 0, lprcPosRect.right - lprcPosRect.left, lprcPosRect.bottom - lprcPosRect.top),
-                WebBrowserHelper.GetClipRect());
+            if (lprcPosRect == null)
+            {
+                return HRESULT.E_INVALIDARG;
+            }
+
+            var posRect = new NativeMethods.COMRECT(0, 0, lprcPosRect.right - lprcPosRect.left, lprcPosRect.bottom - lprcPosRect.top);
+            NativeMethods.COMRECT clipRect = WebBrowserHelper.GetClipRect();
+            Host.AXInPlaceObject.SetObjectRects(posRect, clipRect);
             Host.MakeDirty();
             return NativeMethods.S_OK;
         }

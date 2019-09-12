@@ -932,7 +932,7 @@ namespace System.Windows.Forms
             int OnUIActivate();
 
             [PreserveSig]
-            int GetWindowContext(
+            HRESULT GetWindowContext(
                 [Out, MarshalAs(UnmanagedType.Interface)]
                 out IOleInPlaceFrame ppFrame,
                 [Out, MarshalAs(UnmanagedType.Interface)]
@@ -962,7 +962,7 @@ namespace System.Windows.Forms
             int DeactivateAndUndo();
 
             [PreserveSig]
-            int OnPosRectChange(
+            HRESULT OnPosRectChange(
                 [In]
                 NativeMethods.COMRECT lprcPosRect);
         }
@@ -1645,7 +1645,8 @@ namespace System.Windows.Forms
             [PreserveSig]
             int UIDeactivate();
 
-            void SetObjectRects(
+            [PreserveSig]
+            HRESULT SetObjectRects(
                    [In]
                       NativeMethods.COMRECT lprcPosRect,
                    [In]
