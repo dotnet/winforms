@@ -2630,16 +2630,6 @@ namespace System.Windows.Forms
 
             [MarshalAs(UnmanagedType.Interface)]
             public object pBindHost = null;
-
-            // visual basic6 uses a old version of the struct that is missing these two fields.
-            // So, ActiveX sourcing does not work, with the EE trying to read off the
-            // end of the stack to get to these variables. If I do not define these,
-            // Office or any of the other hosts will hopefully get nulls, otherwise they
-            // will crash.
-            //
-            //public Ole32.IOleControlSite pControlSite;
-
-            //public UnsafeNativeMethods.IOleServiceProvider pServiceProvider;
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]

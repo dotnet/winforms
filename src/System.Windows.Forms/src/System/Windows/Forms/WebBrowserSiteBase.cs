@@ -166,15 +166,9 @@ namespace System.Windows.Forms
             }
         }
 
-        HRESULT Ole32.IOleControlSite.OnFocus(BOOL fGotFocus)
-        {
-            return HRESULT.S_OK;
-        }
+        HRESULT Ole32.IOleControlSite.OnFocus(BOOL fGotFocus) => HRESULT.S_OK;
 
-        HRESULT Ole32.IOleControlSite.ShowPropertyFrame()
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT Ole32.IOleControlSite.ShowPropertyFrame() => HRESULT.E_NOTIMPL;
 
         //
         // IOleClientSite methods:

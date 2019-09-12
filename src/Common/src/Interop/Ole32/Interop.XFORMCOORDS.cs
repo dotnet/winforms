@@ -11,10 +11,10 @@ internal static partial class Interop
         [Flags]
         public enum XFORMCOORDS : uint
         {
-            POSITION = 0x1,
-            SIZE = 0x2,
-            HIMETRICTOCONTAINER = 0x4,
-            CONTAINERTOHIMETRIC = 0x8,
+            POSITION = 0x01,
+            SIZE = 0x02,
+            HIMETRICTOCONTAINER = 0x04,
+            CONTAINERTOHIMETRIC = 0x08,
             EVENTCOMPAT = 0x10,
         }
     }

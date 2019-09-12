@@ -4185,7 +4185,6 @@ namespace System.Windows.Forms
             }
 
             // IOleControlSite methods:
-
             HRESULT Ole32.IOleControlSite.OnControlInfoChanged()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnControlInfoChanged");
@@ -4290,11 +4289,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            HRESULT Ole32.IOleControlSite.OnFocus(BOOL fGotFocus)
-            {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnFocus " + ((fGotFocus == 0) ? "lost" : "gained"));
-                return NativeMethods.S_OK;
-            }
+            HRESULT Ole32.IOleControlSite.OnFocus(BOOL fGotFocus) => HRESULT.S_OK;
 
             HRESULT Ole32.IOleControlSite.ShowPropertyFrame()
             {
