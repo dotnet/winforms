@@ -3316,8 +3316,7 @@ namespace System.Windows.Forms
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
-                            int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                            SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                            Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                         }
                         else
                         {
@@ -3346,8 +3345,7 @@ namespace System.Windows.Forms
                         {
                             if (itemsCollection.Count == 0)
                             {
-                                int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                                SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                                Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                             }
                             else
                             {
@@ -3372,34 +3370,32 @@ namespace System.Windows.Forms
                     {
                         // Drop Down List special handling
                         Debug.Assert(DropDownStyle == ComboBoxStyle.DropDownList);
-                        int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                        SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                        Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                     }
                 }
                 else
                 {
-                    int mode = 0;
-
+                    Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
                     if (AutoCompleteMode == AutoCompleteMode.Suggest)
                     {
-                        mode |= NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
+                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
                     }
                     if (AutoCompleteMode == AutoCompleteMode.Append)
                     {
-                        mode |= NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
+                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
                     }
                     if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                     {
-                        mode |= NativeMethods.AUTOSUGGEST;
-                        mode |= NativeMethods.AUTOAPPEND;
+                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
+                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
                     }
-                    int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), (int)AutoCompleteSource | mode);
+
+                    Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), (Shlwapi.SHACF)AutoCompleteSource | mode);
                 }
             }
             else if (reset)
             {
-                int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
             }
         }
 

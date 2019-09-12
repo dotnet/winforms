@@ -14,9 +14,6 @@ namespace System.Windows.Forms
 {
     internal static class SafeNativeMethods
     {
-        [DllImport("shlwapi.dll")]
-        public static extern int SHAutoComplete(HandleRef hwndEdit, int flags);
-
         [DllImport(ExternDll.User32)]
         public static extern int OemKeyScan(short wAsciiVal);
 
