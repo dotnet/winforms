@@ -792,21 +792,22 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        int mode = 0;
+                        Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
                         if (AutoCompleteMode == AutoCompleteMode.Suggest)
                         {
-                            mode |= NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
+                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
                         }
                         if (AutoCompleteMode == AutoCompleteMode.Append)
                         {
-                            mode |= NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
+                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
                         }
                         if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                         {
-                            mode |= NativeMethods.AUTOSUGGEST;
-                            mode |= NativeMethods.AUTOAPPEND;
+                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
+                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
                         }
-                        int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle), (int)AutoCompleteSource | mode);
+
+                        Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource | mode);
                     }
                 }
             }
@@ -823,8 +824,7 @@ namespace System.Windows.Forms
         {
             if ((AutoCompleteMode != AutoCompleteMode.None || force) && IsHandleCreated)
             {
-                int mode = (int)AutoCompleteSource.AllSystemSources | NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle), mode);
+                Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource.AllSystemSources | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
             }
         }
 

@@ -46,11 +46,6 @@ namespace System.Windows.Forms
 
         public const int DM_DISPLAYORIENTATION = 0x00000080;
 
-        public const int AUTOSUGGEST = 0x10000000,
-        AUTOSUGGEST_OFF = 0x20000000,
-        AUTOAPPEND = 0x40000000,
-        AUTOAPPEND_OFF = (unchecked((int)0x80000000));
-
         public const int ARW_BOTTOMLEFT = 0x0000,
         ARW_BOTTOMRIGHT = 0x0001,
         ARW_TOPLEFT = 0x0002,

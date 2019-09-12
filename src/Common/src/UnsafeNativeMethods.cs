@@ -17,9 +17,6 @@ namespace System.Windows.Forms
 {
     internal static class UnsafeNativeMethods
     {
-        [DllImport(ExternDll.Shlwapi, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        internal static extern uint SHLoadIndirectString(string pszSource, StringBuilder pszOutBuf, uint cchOutBuf, IntPtr ppvReserved);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetMessageTime();
 
