@@ -1377,9 +1377,9 @@ namespace System.Windows.Forms
             internal void OnFocus(bool focus)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AXSource: SetFocus:  " + focus.ToString());
-                if (_activeXState[s_inPlaceActive] && _clientSite is UnsafeNativeMethods.IOleControlSite)
+                if (_activeXState[s_inPlaceActive] && _clientSite is Ole32.IOleControlSite)
                 {
-                    ((UnsafeNativeMethods.IOleControlSite)_clientSite).OnFocus(focus ? 1 : 0);
+                    ((Ole32.IOleControlSite)_clientSite).OnFocus(focus ? BOOL.TRUE : BOOL.FALSE);
                 }
 
                 if (focus && _activeXState[s_inPlaceActive] && !_activeXState[s_uiActive])
@@ -2322,30 +2322,29 @@ namespace System.Windows.Forms
                 }
 
                 // SITE processing.  We're not interested in the message, but the site may be.
-                HRESULT hr = HRESULT.S_FALSE;
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource: Control did not process accelerator, handing to site");
-                if (_clientSite is UnsafeNativeMethods.IOleControlSite ioleClientSite)
+                if (_clientSite is Ole32.IOleControlSite ioleClientSite)
                 {
-                    uint keyState = 0;
+                    Ole32.KEYMODIFIERS keyState = 0;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)
                     {
-                        keyState |= 1;
+                        keyState |= Ole32.KEYMODIFIERS.SHIFT;
                     }
 
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_CONTROL) < 0)
                     {
-                        keyState |= 2;
+                        keyState |= Ole32.KEYMODIFIERS.CONTROL;
                     }
 
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_MENU) < 0)
                     {
-                        keyState |= 4;
+                        keyState |= Ole32.KEYMODIFIERS.ALT;
                     }
 
-                    hr = ioleClientSite.TranslateAccelerator(lpmsg, keyState);
+                    return ioleClientSite.TranslateAccelerator(lpmsg, keyState);
                 }
 
-                return hr;
+                return HRESULT.S_FALSE;
             }
 
             /// <summary>
@@ -2467,7 +2466,7 @@ namespace System.Windows.Forms
                 // Setting the count to -1 will recreate the table on demand (when GetControlInfo is called).
                 _accelCount = -1;
 
-                if (_clientSite is UnsafeNativeMethods.IOleControlSite ioleClientSite)
+                if (_clientSite is Ole32.IOleControlSite ioleClientSite)
                 {
                     ioleClientSite.OnControlInfoChanged();
                 }

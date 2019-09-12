@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     ///  of these interfaces will have to implement the whole interface.
     /// </summary>
     public class WebBrowserSiteBase :
-        UnsafeNativeMethods.IOleControlSite,
+        Ole32.IOleControlSite,
         UnsafeNativeMethods.IOleClientSite,
         UnsafeNativeMethods.IOleInPlaceSite,
         Ole32.ISimpleFrameSite,
@@ -78,40 +78,38 @@ namespace System.Windows.Forms
         // Interface implementations:
         //
 
-        //
         // IOleControlSite methods:
-        //
-        int UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged()
+        HRESULT Ole32.IOleControlSite.OnControlInfoChanged()
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.LockInPlaceActive(int fLock)
+        HRESULT Ole32.IOleControlSite.LockInPlaceActive(BOOL fLock)
         {
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleControlSite.GetExtendedControl(out object ppDisp)
+        HRESULT Ole32.IOleControlSite.GetExtendedControl(out object ppDisp)
         {
             ppDisp = null;
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, uint dwFlags)
+        unsafe HRESULT Ole32.IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, Ole32.XFORMCOORDS dwFlags)
         {
             if (pPtlHimetric == null || pPtfContainer == null)
             {
                 return HRESULT.E_INVALIDARG;
             }
 
-            if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER) != 0)
+            if ((dwFlags & Ole32.XFORMCOORDS.HIMETRICTOCONTAINER) != 0)
             {
-                if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
+                if ((dwFlags & Ole32.XFORMCOORDS.SIZE) != 0)
                 {
                     pPtfContainer->X = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->X, WebBrowserHelper.LogPixelsX);
                     pPtfContainer->Y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->Y, WebBrowserHelper.LogPixelsY);
                 }
-                else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
+                else if ((dwFlags & Ole32.XFORMCOORDS.POSITION) != 0)
                 {
                     pPtfContainer->X = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->X, WebBrowserHelper.LogPixelsX);
                     pPtfContainer->Y = (float)WebBrowserHelper.HM2Pix(pPtlHimetric->Y, WebBrowserHelper.LogPixelsY);
@@ -121,14 +119,14 @@ namespace System.Windows.Forms
                     return HRESULT.E_INVALIDARG;
                 }
             }
-            else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC) != 0)
+            else if ((dwFlags & Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC) != 0)
             {
-                if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
+                if ((dwFlags & Ole32.XFORMCOORDS.SIZE) != 0)
                 {
                     pPtlHimetric->X = WebBrowserHelper.Pix2HM((int)pPtfContainer->X, WebBrowserHelper.LogPixelsX);
                     pPtlHimetric->Y = WebBrowserHelper.Pix2HM((int)pPtfContainer->Y, WebBrowserHelper.LogPixelsY);
                 }
-                else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
+                else if ((dwFlags & Ole32.XFORMCOORDS.POSITION) != 0)
                 {
                     pPtlHimetric->X = WebBrowserHelper.Pix2HM((int)pPtfContainer->X, WebBrowserHelper.LogPixelsX);
                     pPtlHimetric->Y = WebBrowserHelper.Pix2HM((int)pPtfContainer->Y, WebBrowserHelper.LogPixelsY);
@@ -146,14 +144,14 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, uint grfModifiers)
+        unsafe HRESULT Ole32.IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, Ole32.KEYMODIFIERS grfModifiers)
         {
             if (pMsg == null)
             {
                 return HRESULT.E_POINTER;
             }
 
-            Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
+            Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering Ole32.IOleControlSite.TranslateAccelerator!!!");
             Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
 
             Message msg = *pMsg;
@@ -168,15 +166,9 @@ namespace System.Windows.Forms
             }
         }
 
-        int UnsafeNativeMethods.IOleControlSite.OnFocus(int fGotFocus)
-        {
-            return NativeMethods.S_OK;
-        }
+        HRESULT Ole32.IOleControlSite.OnFocus(BOOL fGotFocus) => HRESULT.S_OK;
 
-        int UnsafeNativeMethods.IOleControlSite.ShowPropertyFrame()
-        {
-            return NativeMethods.E_NOTIMPL;
-        }
+        HRESULT Ole32.IOleControlSite.ShowPropertyFrame() => HRESULT.E_NOTIMPL;
 
         //
         // IOleClientSite methods:

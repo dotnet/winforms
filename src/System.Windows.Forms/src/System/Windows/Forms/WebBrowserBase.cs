@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms
         {
             var phm = new Point(sz.Width, sz.Height);
             var pcont = new PointF();
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
+            ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.HIMETRICTOCONTAINER);
             sz.Width = (int)pcont.X;
             sz.Height = (int)pcont.Y;
         }
@@ -1224,7 +1224,7 @@ namespace System.Windows.Forms
         {
             var phm = new Point();
             var pcont = new PointF(sz.Width, sz.Height);
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC);
             sz.Width = phm.X;
             sz.Height = phm.Y;
         }

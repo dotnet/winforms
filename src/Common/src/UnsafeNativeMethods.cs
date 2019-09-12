@@ -887,41 +887,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport]
-        [Guid("B196B289-BAB4-101A-B69C-00AA00341D07")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleControlSite
-        {
-            [PreserveSig]
-            int OnControlInfoChanged();
-
-            [PreserveSig]
-            int LockInPlaceActive(int fLock);
-
-            [PreserveSig]
-            int GetExtendedControl(
-                [Out, MarshalAs(UnmanagedType.IDispatch)]
-                out object ppDisp);
-
-            [PreserveSig]
-            HRESULT TransformCoords(
-                Point *pPtlHimetric,
-                PointF *pPtfContainer,
-                uint dwFlags);
-
-            [PreserveSig]
-            HRESULT TranslateAccelerator(
-                User32.MSG* pMsg,
-                uint grfModifiers);
-
-            [PreserveSig]
-            int OnFocus(int fGotFocus);
-
-            [PreserveSig]
-            int ShowPropertyFrame();
-
-        }
-
         [ComImport(), Guid("00000118-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleClientSite
         {
@@ -2656,16 +2621,6 @@ namespace System.Windows.Forms
 
             [MarshalAs(UnmanagedType.Interface)]
             public object pBindHost = null;
-
-            // visual basic6 uses a old version of the struct that is missing these two fields.
-            // So, ActiveX sourcing does not work, with the EE trying to read off the
-            // end of the stack to get to these variables. If I do not define these,
-            // Office or any of the other hosts will hopefully get nulls, otherwise they
-            // will crash.
-            //
-            //public UnsafeNativeMethods.IOleControlSite pControlSite;
-
-            //public UnsafeNativeMethods.IOleServiceProvider pServiceProvider;
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
