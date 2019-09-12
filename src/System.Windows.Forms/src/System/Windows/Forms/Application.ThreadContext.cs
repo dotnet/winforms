@@ -1192,15 +1192,13 @@ namespace System.Windows.Forms
                 try
                 {
                     // Execute the message loop until the active component tells us to stop.
-                    NativeMethods.MSG msg = new NativeMethods.MSG();
+                    var msg = new User32.MSG();
                     bool unicodeWindow = false;
                     bool continueLoop = true;
 
                     while (continueLoop)
                     {
-                        bool peeked = UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE);
-
-                        if (peeked)
+                        if (User32.PeekMessageW(ref msg).IsTrue())
                         {
                             // If the component wants us to process the message, do it.
                             // The component manager hosts windows from many places.  We must be sensitive
@@ -1208,7 +1206,7 @@ namespace System.Windows.Forms
                             if (msg.hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, msg.hwnd)))
                             {
                                 unicodeWindow = true;
-                                if (!UnsafeNativeMethods.GetMessageW(ref msg, NativeMethods.NullHandleRef, 0, 0))
+                                if (User32.GetMessageW(ref msg).IsFalse())
                                 {
                                     continue;
                                 }
@@ -1216,7 +1214,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 unicodeWindow = false;
-                                if (!UnsafeNativeMethods.GetMessageA(ref msg, NativeMethods.NullHandleRef, 0, 0))
+                                if (User32.GetMessageA(ref msg).IsFalse())
                                 {
                                     continue;
                                 }
@@ -1224,14 +1222,14 @@ namespace System.Windows.Forms
 
                             if (!PreTranslateMessage(ref msg))
                             {
-                                UnsafeNativeMethods.TranslateMessage(ref msg);
+                                User32.TranslateMessage(ref msg);
                                 if (unicodeWindow)
                                 {
-                                    UnsafeNativeMethods.DispatchMessageW(ref msg);
+                                    User32.DispatchMessageW(ref msg);
                                 }
                                 else
                                 {
-                                    UnsafeNativeMethods.DispatchMessageA(ref msg);
+                                    User32.DispatchMessageA(ref msg);
                                 }
                             }
 
@@ -1244,7 +1242,7 @@ namespace System.Windows.Forms
                         {
                             break;
                         }
-                        else if (!UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE))
+                        else if (User32.PeekMessageW(ref msg).IsFalse())
                         {
                             UnsafeNativeMethods.WaitMessage();
                         }
@@ -1257,7 +1255,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal bool ProcessFilters(ref NativeMethods.MSG msg, out bool modified)
+            internal bool ProcessFilters(ref User32.MSG msg, out bool modified)
             {
                 bool filtered = false;
 
@@ -1299,7 +1297,7 @@ namespace System.Windows.Forms
                             if (f is IMessageModifyAndFilter)
                             {
                                 msg.hwnd = m.HWnd;
-                                msg.message = m.Msg;
+                                msg.message = (User32.WindowMessage)m.Msg;
                                 msg.wParam = m.WParam;
                                 msg.lParam = m.LParam;
                                 modified = true;
@@ -1327,17 +1325,16 @@ namespace System.Windows.Forms
             ///  false, the message should be allowed to continue through the dispatch
             ///  mechanism.
             /// </summary>
-            internal bool PreTranslateMessage(ref NativeMethods.MSG msg)
+            internal bool PreTranslateMessage(ref User32.MSG msg)
             {
                 if (ProcessFilters(ref msg, out bool modified))
                 {
                     return true;
                 }
 
-                if (msg.message >= WindowMessages.WM_KEYFIRST
-                    && msg.message <= WindowMessages.WM_KEYLAST)
+                if (msg.IsKeyMessage())
                 {
-                    if (msg.message == WindowMessages.WM_CHAR)
+                    if (msg.message == User32.WindowMessage.WM_CHAR)
                     {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                         if (unchecked((int)(long)msg.wParam) == 3 && (unchecked((int)(long)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk
@@ -1392,7 +1389,7 @@ namespace System.Windows.Forms
 
                         // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
                         // so we should return true to prevent Translate/Dispatch from being called.
-                        if (hwndRoot != IntPtr.Zero && UnsafeNativeMethods.IsDialogMessage(new HandleRef(null, hwndRoot), ref msg))
+                        if (hwndRoot != IntPtr.Zero && User32.IsDialogMessageW(hwndRoot, ref msg).IsTrue())
                         {
                             return true;
                         }
@@ -1476,7 +1473,7 @@ namespace System.Windows.Forms
 
             /// <inheritdoc />
             unsafe BOOL IMsoComponent.FPreTranslateMessage(User32.MSG* msg)
-                => PreTranslateMessage(ref Unsafe.AsRef<NativeMethods.MSG>(msg)).ToBOOL();
+                => PreTranslateMessage(ref Unsafe.AsRef<User32.MSG>(msg)).ToBOOL();
 
             /// <inheritdoc />
             void IMsoComponent.OnEnterState(msocstate uStateID, BOOL fEnter)
@@ -1577,10 +1574,9 @@ namespace System.Windows.Forms
 
                         case msoloop.DoEvents:
                         case msoloop.DoEventsModal:
-
                             // For DoEvents, just see if there are more messages on the queue.
                             User32.MSG temp = default;
-                            if (User32.PeekMessageW(ref temp, IntPtr.Zero, 0, 0, User32.PM.NOREMOVE).IsFalse())
+                            if (User32.PeekMessageW(ref temp).IsFalse())
                             {
                                 continueLoop = false;
                             }

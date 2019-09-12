@@ -176,9 +176,9 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(ref NativeMethods.MSG lpmsg, short wID)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
         {
-            return NativeMethods.S_FALSE;
+            return HRESULT.S_FALSE;
         }
 
         //

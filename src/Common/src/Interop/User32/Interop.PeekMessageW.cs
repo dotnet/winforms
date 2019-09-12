@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -13,17 +14,29 @@ internal static partial class Interop
         public static extern BOOL PeekMessageA(
             ref MSG msg,
             IntPtr hwnd = default,
-            uint msgMin = 0,
-            uint msgMax = 0,
+            WindowMessage msgMin = (WindowMessage)0,
+            WindowMessage msgMax = (WindowMessage)0,
             PM remove = PM.NOREMOVE);
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL PeekMessageW(
             ref MSG msg,
             IntPtr hwnd = default,
-            uint msgMin = 0,
-            uint msgMax = 0,
+            WindowMessage msgMin = (WindowMessage)0,
+            WindowMessage msgMax = (WindowMessage)0,
             PM remove = PM.NOREMOVE);
+
+        public static BOOL PeekMessageW(
+            ref MSG msg,
+            IHandle hwnd,
+            WindowMessage msgMin = (WindowMessage)0,
+            WindowMessage msgMax = (WindowMessage)0,
+            PM remove = PM.NOREMOVE)
+        {
+            BOOL result = PeekMessageW(ref msg, hwnd.Handle, msgMin, msgMax, remove);
+            GC.KeepAlive(hwnd);
+            return result;
+        }
 
         [Flags]
         public enum PM : uint

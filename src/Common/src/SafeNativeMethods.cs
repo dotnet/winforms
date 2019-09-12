@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms
@@ -33,9 +34,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, [In, Out] NativeMethods.SCROLLINFO si);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsAccelerator(HandleRef hAccel, int cAccelEntries, [In] ref NativeMethods.MSG lpMsg, short[] lpwCmd);
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseFont([In, Out] NativeMethods.CHOOSEFONT cf);
@@ -100,9 +98,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseColor([In, Out] NativeMethods.CHOOSECOLOR cc);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int RegisterWindowMessage(string msg);
 
         [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreateFontIndirect", ExactSpelling = true, PreserveSig = false)]
         public static extern IFontDisp OleCreateIFontDispIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
@@ -282,7 +277,7 @@ namespace System.Windows.Forms
 
         // This API is available only starting Windows 10 RS1
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool AdjustWindowRectExForDpi(ref Interop.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle, uint dpi);
+        public static extern bool AdjustWindowRectExForDpi(ref RECT lpRect, int dwStyle, bool bMenu, int dwExStyle, uint dpi);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetSysColorBrush(int nIndex);
@@ -291,19 +286,19 @@ namespace System.Windows.Forms
         public static extern bool EnableWindow(HandleRef hWnd, bool enable);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetClientRect(HandleRef hWnd, ref Interop.RECT rect);
+        public static extern bool GetClientRect(HandleRef hWnd, ref RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDoubleClickTime();
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool ValidateRect(HandleRef hWnd, ref Interop.RECT rect);
+        public static extern bool ValidateRect(HandleRef hWnd, ref RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern int FillRect(HandleRef hdc, ref Interop.RECT rect, HandleRef hbrush);
+        public static extern int FillRect(HandleRef hdc, ref RECT rect, HandleRef hbrush);
 
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int /*COLORREF*/ GetTextColor(HandleRef hDC);
@@ -334,7 +329,7 @@ namespace System.Windows.Forms
         public static extern int RealizePalette(HandleRef hDC);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool LPtoDP(HandleRef hDC, ref Interop.RECT lpRect, int nCount);
+        public static extern bool LPtoDP(HandleRef hDC, ref RECT lpRect, int nCount);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetWindowOrgEx(IntPtr hdc, int x, int y, Point *lppt);
@@ -391,7 +386,7 @@ namespace System.Windows.Forms
         public static extern bool UpdateWindow(HandleRef hWnd);
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true)]
-        public static extern int ScrollWindowEx(HandleRef hWnd, int nXAmount, int nYAmount, NativeMethods.COMRECT rectScrollRegion, ref Interop.RECT rectClip, HandleRef hrgnUpdate, ref Interop.RECT prcUpdate, int flags);
+        public static extern int ScrollWindowEx(HandleRef hWnd, int nXAmount, int nYAmount, NativeMethods.COMRECT rectScrollRegion, ref RECT rectClip, HandleRef hrgnUpdate, ref RECT prcUpdate, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool MessageBeep(int type);
@@ -412,16 +407,16 @@ namespace System.Windows.Forms
         public static extern int MessageBox(HandleRef hWnd, string text, string caption, int type);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool ScrollWindow(HandleRef hWnd, int nXAmount, int nYAmount, ref Interop.RECT rectScrollRegion, ref Interop.RECT rectClip);
+        public static extern bool ScrollWindow(HandleRef hWnd, int nXAmount, int nYAmount, ref RECT rectScrollRegion, ref RECT rectClip);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindowUnicode(HandleRef hWnd);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DrawEdge(HandleRef hDC, ref Interop.RECT rect, int edge, int flags);
+        public static extern bool DrawEdge(HandleRef hDC, ref RECT rect, int edge, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DrawFrameControl(HandleRef hDC, ref Interop.RECT rect, int type, int state);
+        public static extern bool DrawFrameControl(HandleRef hDC, ref RECT rect, int type, int state);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern int SetROP2(IntPtr hDC, int nDrawMode);

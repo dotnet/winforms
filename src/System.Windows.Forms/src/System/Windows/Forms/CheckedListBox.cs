@@ -70,13 +70,13 @@ namespace System.Windows.Forms
         private CheckedItemCollection checkedItemCollection = null;
         private CheckedIndexCollection checkedIndexCollection = null;
 
-        private static readonly int LBC_GETCHECKSTATE;
-        private static readonly int LBC_SETCHECKSTATE;
+        private static readonly User32.WindowMessage LBC_GETCHECKSTATE;
+        private static readonly User32.WindowMessage LBC_SETCHECKSTATE;
 
         static CheckedListBox()
         {
-            LBC_GETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_GETCHECKSTATE");
-            LBC_SETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_SETCHECKSTATE");
+            LBC_GETCHECKSTATE = User32.RegisterWindowMessageW("LBC_GETCHECKSTATE");
+            LBC_SETCHECKSTATE = User32.RegisterWindowMessageW("LBC_SETCHECKSTATE");
         }
 
         /// <summary>
@@ -1054,7 +1054,7 @@ namespace System.Windows.Forms
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:
-                    if (m.Msg == LBC_GETCHECKSTATE)
+                    if (m.Msg == (int)LBC_GETCHECKSTATE)
                     {
                         int item = unchecked((int)(long)m.WParam);
                         if (item < 0 || item >= Items.Count)
@@ -1066,7 +1066,7 @@ namespace System.Windows.Forms
                             m.Result = (IntPtr)(GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED);
                         }
                     }
-                    else if (m.Msg == LBC_SETCHECKSTATE)
+                    else if (m.Msg == (int)LBC_SETCHECKSTATE)
                     {
                         int item = unchecked((int)(long)m.WParam);
                         int state = unchecked((int)(long)m.LParam);

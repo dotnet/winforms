@@ -2218,7 +2218,7 @@ namespace System.Windows.Forms.Design
                     }
                     break;
                 default:
-                    if (m.Msg == NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
                     {
                         OnMouseEnter();
                         BaseWndProc(ref m);

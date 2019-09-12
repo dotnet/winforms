@@ -58,8 +58,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly int _adornerWindowIndex = -1;
 
         //test hooks for SnapLines
-        private static int WM_GETALLSNAPLINES;
-        private static int WM_GETRECENTSNAPLINES;
+        private static User32.WindowMessage WM_GETALLSNAPLINES;
+        private static User32.WindowMessage WM_GETRECENTSNAPLINES;
 
         private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
 
@@ -102,8 +102,8 @@ namespace System.Windows.Forms.Design.Behavior
             _queriedSnapLines = false;
 
             //test hooks
-            WM_GETALLSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETALLSNAPLINES");
-            WM_GETRECENTSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
+            WM_GETALLSNAPLINES = User32.RegisterWindowMessageW("WM_GETALLSNAPLINES");
+            WM_GETRECENTSNAPLINES = User32.RegisterWindowMessageW("WM_GETRECENTSNAPLINES");
 
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
@@ -888,11 +888,11 @@ namespace System.Windows.Forms.Design.Behavior
             protected override void WndProc(ref Message m)
             {
                 //special test hooks
-                if (m.Msg == BehaviorService.WM_GETALLSNAPLINES)
+                if (m.Msg == (int)BehaviorService.WM_GETALLSNAPLINES)
                 {
                     _behaviorService.TestHook_GetAllSnapLines(ref m);
                 }
-                else if (m.Msg == BehaviorService.WM_GETRECENTSNAPLINES)
+                else if (m.Msg == (int)BehaviorService.WM_GETRECENTSNAPLINES)
                 {
                     _behaviorService.TestHook_GetRecentSnapLines(ref m);
                 }

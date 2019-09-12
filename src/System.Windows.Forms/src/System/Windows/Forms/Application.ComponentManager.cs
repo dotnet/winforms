@@ -242,9 +242,8 @@ namespace System.Windows.Forms
             BOOL IMsoComponentManager.FContinueIdle()
             {
                 // If we have a message on queue, then don't continue idle processing.
-                NativeMethods.MSG msg = new NativeMethods.MSG();
-                return !UnsafeNativeMethods.PeekMessage(ref msg, NativeMethods.NullHandleRef, 0, 0, NativeMethods.PM_NOREMOVE) 
-                    ? BOOL.TRUE : BOOL.FALSE;
+                var msg = new User32.MSG();
+                return User32.PeekMessageW(ref msg);
             }
 
             /// <inheritdoc/>
@@ -411,7 +410,7 @@ namespace System.Windows.Forms
                     _activeComponent = prevActive;
                 }
 
-                return continueLoop == BOOL.FALSE ? BOOL.TRUE : BOOL.FALSE;
+                return continueLoop.IsFalse() ? BOOL.TRUE : BOOL.FALSE;
             }
 
             /// <inheritdoc/>

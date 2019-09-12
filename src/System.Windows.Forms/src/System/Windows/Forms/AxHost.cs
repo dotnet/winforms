@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         private const int OLEIVERB_PROPERTIES = -7;
         private const int OLEIVERB_PRIMARY = 0;
 
-        private readonly int REGMSG_MSG = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_subclassCheck");
+        private readonly User32.WindowMessage REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
         private const int REGMSG_RETVAL = 123;
 
         private static int logPixelsX = -1;
@@ -1464,7 +1464,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            if (unchecked((int)(long)SendMessage(REGMSG_MSG, 0, 0)) == REGMSG_RETVAL)
+            if (unchecked((int)(long)SendMessage((int)REGMSG_MSG, 0, 0)) == (int)REGMSG_RETVAL)
             {
                 wndprocAddr = currentWndproc;
                 return true;
@@ -1912,7 +1912,7 @@ namespace System.Windows.Forms
         ///  -- If this returns S_FALSE, then it means that the control did not process this message,
         ///  but we did, and so we should route it through our PreProcessMessage().
         /// </summary>
-        public override bool PreProcessMessage(ref Message msg)
+        public unsafe override bool PreProcessMessage(ref Message msg)
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "AxHost.PreProcessMessage " + msg.ToString());
 
@@ -1930,33 +1930,25 @@ namespace System.Windows.Forms
                     return base.PreProcessMessage(ref msg);
                 }
 
-                NativeMethods.MSG win32Message = new NativeMethods.MSG
-                {
-                    message = msg.Msg,
-                    wParam = msg.WParam,
-                    lParam = msg.LParam,
-                    hwnd = msg.HWnd
-                };
-
+                User32.MSG win32Message = msg;
                 axState[siteProcessedInputKey] = false;
                 try
                 {
                     UnsafeNativeMethods.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
                     if (activeObj != null)
                     {
-                        int hr = activeObj.TranslateAccelerator(ref win32Message);
-
-                        msg.Msg = win32Message.message;
+                        HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
+                        msg.Msg = (int)win32Message.message;
                         msg.WParam = win32Message.wParam;
                         msg.LParam = win32Message.lParam;
                         msg.HWnd = win32Message.hwnd;
 
-                        if (hr == NativeMethods.S_OK)
+                        if (hr == HRESULT.S_OK)
                         {
                             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated by control to " + msg);
                             return true;
                         }
-                        else if (hr == NativeMethods.S_FALSE)
+                        else if (hr == HRESULT.S_FALSE)
                         {
                             bool ret = false;
 
@@ -1997,7 +1989,7 @@ namespace System.Windows.Forms
         ///  This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
         ///  ActiveX control.
         /// </summary>
-        protected internal override bool ProcessMnemonic(char charCode)
+        protected internal unsafe override bool ProcessMnemonic(char charCode)
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
             if (CanSelect)
@@ -2010,20 +2002,20 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
-                    NativeMethods.MSG msg = new NativeMethods.MSG
+                    var msg = new User32.MSG
                     {
                         // Sadly, we don't have a message so we must fake one ourselves...
                         // A bit of ugliness here (a bit?  more like a bucket...)
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
                         hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
-                        message = WindowMessages.WM_SYSKEYDOWN,
+                        message = User32.WindowMessage.WM_SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = (IntPtr)0x20180001,
-                        time = (int)Kernel32.GetTickCount()
+                        time = Kernel32.GetTickCount()
                     };
                     User32.GetCursorPos(out Point p);
                     msg.pt = p;
-                    if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
+                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsTrue())
                     {
                         GetOleControl().OnMnemonic(ref msg);
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Processed mnemonic " + msg);
@@ -2420,10 +2412,10 @@ namespace System.Windows.Forms
             }
         }
 
-        public void DoVerb(int verb)
+        public unsafe void DoVerb(int verb)
         {
             Control parent = ParentInternal;
-            GetOleObject().DoVerb(verb, IntPtr.Zero, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, FillInRect(new NativeMethods.COMRECT(), Bounds));
+            GetOleObject().DoVerb(verb, null, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, FillInRect(new NativeMethods.COMRECT(), Bounds));
         }
 
         private bool AwaitingDefreezing()
@@ -2522,7 +2514,7 @@ namespace System.Windows.Forms
                 cbLicInfo = sizeof(Ole32.LICINFO)
             };
             icf2.GetLicInfo(&licInfo);
-            if (licInfo.fRuntimeAvailable != BOOL.FALSE)
+            if (licInfo.fRuntimeAvailable.IsTrue())
             {
                 var rval = new string[1];
                 icf2.RequestLicKey(0, rval);
@@ -3628,7 +3620,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m.Msg == REGMSG_MSG)
+                    if (m.Msg == (int)REGMSG_MSG)
                     {
                         m.Result = (IntPtr)REGMSG_RETVAL;
                         return;
@@ -4276,23 +4268,21 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(ref NativeMethods.MSG pMsg, int grfModifiers)
+            unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, uint grfModifiers)
             {
+                if (pMsg == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 Debug.Assert(!host.GetAxState(AxHost.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
                 host.SetAxState(AxHost.siteProcessedInputKey, true);
 
-                Message msg = new Message
-                {
-                    Msg = pMsg.message,
-                    WParam = pMsg.wParam,
-                    LParam = pMsg.lParam,
-                    HWnd = pMsg.hwnd
-                };
-
+                Message msg = *pMsg;
                 try
                 {
                     bool f = ((Control)host).PreProcessMessage(ref msg);
-                    return f ? NativeMethods.S_OK : NativeMethods.S_FALSE;
+                    return f ? HRESULT.S_OK : HRESULT.S_FALSE;
                 }
                 finally
                 {
@@ -6412,10 +6402,11 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnableModeless");
                 return NativeMethods.E_NOTIMPL;
             }
-            int UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(ref NativeMethods.MSG lpmsg, short wID)
+
+            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             // EXPOSED

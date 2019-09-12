@@ -1366,7 +1366,7 @@ namespace System.Windows.Forms
             {
                 bool filterMessage = false;
 
-                if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
+                if (m.IsMouseMessage())
                 {
                     filterMessage = true;
                 }
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                else if (m.IsKeyMessage())
                 {
                     filterMessage = true;
                 }
@@ -1608,13 +1608,12 @@ namespace System.Windows.Forms
                 {
                     if (nCode == NativeMethods.HC_ACTION)
                     {
-                        if (isHooked && (int)wparam == NativeMethods.PM_REMOVE /*only process GetMessage, not PeekMessage*/)
+                        if (isHooked && (User32.PM)wparam == User32.PM.REMOVE)
                         {
                             // only process messages we've pulled off the queue
-                            NativeMethods.MSG* msg = (NativeMethods.MSG*)lparam;
+                            User32.MSG* msg = (User32.MSG*)lparam;
                             if (msg != null)
                             {
-                                //Debug.WriteLine("Got " + Message.Create(msg->hwnd, msg->message, wparam, lparam).ToString());
                                 // call pretranslate on the message - this should execute
                                 // the message filters and preprocess message.
                                 if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))

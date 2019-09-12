@@ -76,7 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Debug.Fail("Failed to show property frame: " + ex.ErrorCode.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (useValue != BOOL.FALSE && (bldrType & _CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJDIRECTLY) == 0)
+            if (useValue.IsTrue() && (bldrType & _CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJDIRECTLY) == 0)
             {
                 return pValue;
             }

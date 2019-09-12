@@ -689,19 +689,12 @@ namespace System.Windows.Forms
         public static bool FilterMessage(ref Message message)
         {
             // Create copy of MSG structure
-            NativeMethods.MSG msg = new NativeMethods.MSG
-            {
-                hwnd = message.HWnd,
-                message = message.Msg,
-                wParam = message.WParam,
-                lParam = message.LParam
-            };
-
+            User32.MSG msg = message;
             bool processed = ThreadContext.FromCurrent().ProcessFilters(ref msg, out bool modified);
             if (modified)
             {
                 message.HWnd = msg.hwnd;
-                message.Msg = msg.message;
+                message.Msg = (int)msg.message;
                 message.WParam = msg.wParam;
                 message.LParam = msg.lParam;
             }

@@ -338,7 +338,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::DoVerb
             /// </summary>
-            internal void DoVerb(int iVerb, IntPtr lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect)
+            internal unsafe void DoVerb(int iVerb, User32.MSG* lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:ActiveXImpl:DoVerb(" + iVerb + ")");
                 switch (iVerb)
@@ -352,19 +352,18 @@ namespace System.Windows.Forms
 
                         // Now that we're active, send the lpmsg to the control if it
                         // is valid.
-                        if (lpmsg != IntPtr.Zero)
+                        if (lpmsg != null)
                         {
-                            NativeMethods.MSG msg = Marshal.PtrToStructure<NativeMethods.MSG>(lpmsg);
                             Control target = _control;
 
-                            if (msg.hwnd != _control.Handle && msg.message >= WindowMessages.WM_MOUSEFIRST && msg.message <= WindowMessages.WM_MOUSELAST)
+                            if (lpmsg->hwnd != _control.Handle && lpmsg->IsMouseMessage())
                             {
                                 // Must translate message coordniates over to our HWND.  We first try
-                                IntPtr hwndMap = msg.hwnd == IntPtr.Zero ? hwndParent : msg.hwnd;
+                                IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
-                                    X = NativeMethods.Util.LOWORD(msg.lParam),
-                                    Y = NativeMethods.Util.HIWORD(msg.lParam)
+                                    X = NativeMethods.Util.LOWORD(lpmsg->lParam),
+                                    Y = NativeMethods.Util.HIWORD(lpmsg->lParam)
                                 };
                                 UnsafeNativeMethods.MapWindowPoints(new HandleRef(null, hwndMap), new HandleRef(_control, _control.Handle), ref pt, 1);
 
@@ -378,24 +377,24 @@ namespace System.Windows.Forms
                                     target = realTarget;
                                 }
 
-                                msg.lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
+                                lpmsg->lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
                             }
 
 #if DEBUG
                             if (CompModSwitches.ActiveX.TraceVerbose)
                             {
-                                Message m = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+                                Message m = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                                 Debug.WriteLine("Valid message pointer passed, sending to control: " + m.ToString());
                             }
 #endif
 
-                            if (msg.message == WindowMessages.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB)
+                            if (lpmsg->message == User32.WindowMessage.WM_KEYDOWN && lpmsg->wParam == (IntPtr)NativeMethods.VK_TAB)
                             {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
                             else
                             {
-                                target.SendMessage(msg.message, msg.wParam, msg.lParam);
+                                target.SendMessage((int)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                             }
                         }
                         break;
@@ -1829,7 +1828,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < props.Count; i++)
                 {
-                    if (fSaveAllProperties != BOOL.FALSE || props[i].ShouldSerializeValue(_control))
+                    if (fSaveAllProperties.IsTrue() || props[i].ShouldSerializeValue(_control))
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Saving property " + props[i].Name);
 
@@ -1873,7 +1872,7 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(pPropBag);
                 }
 
-                if (fClearDirty != BOOL.FALSE)
+                if (fClearDirty.IsTrue())
                 {
                     _activeXState[s_isDirty] = false;
                 }
@@ -2251,8 +2250,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Handles IOleControl::TranslateAccelerator
             /// </summary>
-            internal int TranslateAccelerator(ref NativeMethods.MSG lpmsg)
+            internal unsafe HRESULT TranslateAccelerator(User32.MSG* lpmsg)
             {
+                if (lpmsg == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo)
                 {
@@ -2262,29 +2266,27 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Message m = Message.Create(lpmsg.hwnd, lpmsg.message, lpmsg.wParam, lpmsg.lParam);
+                        Message m = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                         Debug.WriteLine("AxSource: TranslateAccelerator : " + m.ToString());
                     }
                 }
 #endif // DEBUG
 
                 bool needPreProcess = false;
-
-                switch (lpmsg.message)
+                switch (lpmsg->message)
                 {
-                    case WindowMessages.WM_KEYDOWN:
-                    case WindowMessages.WM_SYSKEYDOWN:
-                    case WindowMessages.WM_CHAR:
-                    case WindowMessages.WM_SYSCHAR:
+                    case User32.WindowMessage.WM_KEYDOWN:
+                    case User32.WindowMessage.WM_SYSKEYDOWN:
+                    case User32.WindowMessage.WM_CHAR:
+                    case User32.WindowMessage.WM_SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
 
-                Message msg = Message.Create(lpmsg.hwnd, lpmsg.message, lpmsg.wParam, lpmsg.lParam);
-
+                Message msg = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                 if (needPreProcess)
                 {
-                    Control target = FromChildHandle(lpmsg.hwnd);
+                    Control target = FromChildHandle(lpmsg->hwnd);
                     if (target != null && (_control == target || _control.Contains(target)))
                     {
                         PreProcessControlState messageState = PreProcessControlMessageInternal(target, ref msg);
@@ -2293,25 +2295,25 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg.message = msg.Msg;
-                                lpmsg.wParam = msg.WParam;
-                                lpmsg.lParam = msg.LParam;
+                                lpmsg->message = (User32.WindowMessage)msg.Msg;
+                                lpmsg->wParam = msg.WParam;
+                                lpmsg->lParam = msg.LParam;
                                 return NativeMethods.S_OK;
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves
                                 // otherwise the host may never send the key to our wndproc.
 
                                 // Someone returned true from IsInputKey or IsInputChar
-                                UnsafeNativeMethods.TranslateMessage(ref lpmsg);
-                                if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg.hwnd)))
+                                User32.TranslateMessage(ref *lpmsg);
+                                if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg->hwnd)))
                                 {
-                                    UnsafeNativeMethods.DispatchMessageW(ref lpmsg);
+                                    User32.DispatchMessageW(ref *lpmsg);
                                 }
                                 else
                                 {
-                                    UnsafeNativeMethods.DispatchMessageA(ref lpmsg);
+                                    User32.DispatchMessageA(ref *lpmsg);
                                 }
-                                return NativeMethods.S_OK;
+                                return HRESULT.S_OK;
                             case PreProcessControlState.MessageNotNeeded:
                                 // in this case we'll check the site to see if it wants the message.
                                 break;
@@ -2320,15 +2322,11 @@ namespace System.Windows.Forms
                 }
 
                 // SITE processing.  We're not interested in the message, but the site may be.
-
-                int hr = NativeMethods.S_FALSE;
-
+                HRESULT hr = HRESULT.S_FALSE;
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource: Control did not process accelerator, handing to site");
-
                 if (_clientSite is UnsafeNativeMethods.IOleControlSite ioleClientSite)
                 {
-                    int keyState = 0;
-
+                    uint keyState = 0;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)
                     {
                         keyState |= 1;
@@ -2344,7 +2342,7 @@ namespace System.Windows.Forms
                         keyState |= 4;
                     }
 
-                    hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
+                    hr = ioleClientSite.TranslateAccelerator(lpmsg, keyState);
                 }
 
                 return hr;
@@ -2522,7 +2520,7 @@ namespace System.Windows.Forms
             {
                 if (_activeXState[s_uiDead])
                 {
-                    if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
+                    if (m.IsMouseMessage())
                     {
                         return;
                     }
@@ -2530,7 +2528,7 @@ namespace System.Windows.Forms
                     {
                         return;
                     }
-                    if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                    if (m.IsKeyMessage())
                     {
                         return;
                     }

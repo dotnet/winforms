@@ -82,12 +82,15 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" Link="Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DT.cs" Link="Interop\User32\Interop.DT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.MSG.cs" Link="Interop\User32\Interop.MSG.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
-    <Compile Include="..\..\Common\src\Interop\User32\Interop.DT.cs" Link="Interop\User32\Interop.DT.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
     <Compile Include="..\..\Common\src\Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" Link="Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" />
   </ItemGroup>
 

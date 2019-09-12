@@ -138,8 +138,8 @@ namespace System.Windows.Forms
         private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
 #endif
 
-        private static readonly int WM_GETCONTROLNAME = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLNAME");
-        private static readonly int WM_GETCONTROLTYPE = SafeNativeMethods.RegisterWindowMessage("WM_GETCONTROLTYPE");
+        private static readonly User32.WindowMessage WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
+        private static readonly User32.WindowMessage WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
 
         private static readonly object s_autoSizeChangedEvent = new object();
         private static readonly object s_keyDownEvent = new object();
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
         private protected static readonly object s_paddingChangedEvent = new object();
         private static readonly object s_previewKeyDownEvent = new object();
 
-        private static int s_threadCallbackMessage;
+        private static User32.WindowMessage s_threadCallbackMessage;
         private static ContextCallback s_invokeMarshaledCallbackHelperDelegate;
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -3995,8 +3995,8 @@ namespace System.Windows.Forms
                 }
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
-                if ((returnValue != BOOL.FALSE && exitCode != NativeMethods.STILL_ACTIVE) ||
-                    (returnValue == BOOL.FALSE && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
+                if ((returnValue.IsTrue() && exitCode != NativeMethods.STILL_ACTIVE) ||
+                    (returnValue.IsFalse() && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload())
                 {
                     if (waitHandle.WaitOne(1, false))
@@ -5166,16 +5166,18 @@ namespace System.Windows.Forms
                 {
                     // See if we have a thread marshaling request pending.  If so, we will need to
                     // re-post it after recreating the handle.
-                    //
                     lock (_threadCallbackList)
                     {
                         if (s_threadCallbackMessage != 0)
                         {
-                            NativeMethods.MSG msg = new NativeMethods.MSG();
-                            if (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, Handle), s_threadCallbackMessage,
-                                                          s_threadCallbackMessage, NativeMethods.PM_NOREMOVE))
+                            var msg = new User32.MSG();
+                            BOOL result = User32.PeekMessageW(
+                                ref msg,
+                                this,
+                                s_threadCallbackMessage,
+                                s_threadCallbackMessage);
+                            if (result.IsTrue())
                             {
-
                                 SetState(States.ThreadMarshalPending, true);
                             }
                         }
@@ -7070,10 +7072,11 @@ namespace System.Windows.Forms
 
             lock (_threadCallbackList)
             {
-                if (s_threadCallbackMessage == 0)
+                if (s_threadCallbackMessage == (User32.WindowMessage)0)
                 {
-                    s_threadCallbackMessage = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_ThreadCallbackMessage");
+                    s_threadCallbackMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_ThreadCallbackMessage");
                 }
+
                 _threadCallbackList.Enqueue(tme);
             }
 
@@ -7083,7 +7086,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), s_threadCallbackMessage, IntPtr.Zero, IntPtr.Zero);
+                User32.PostMessageW(this, s_threadCallbackMessage);
             }
 
             if (synchronous)
@@ -7998,10 +8001,9 @@ namespace System.Windows.Forms
                 // Now, repost the thread callback message if we found it.  We should do
                 // this last, so we're as close to the same state as when the message
                 // was placed.
-                //
                 if (GetState(States.ThreadMarshalPending))
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), s_threadCallbackMessage, IntPtr.Zero, IntPtr.Zero);
+                    User32.PostMessageW(this, s_threadCallbackMessage);
                     SetState(States.ThreadMarshalPending, false);
                 }
             }
@@ -9394,7 +9396,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                success = Gdi32.DeleteObject(hClippingRegion) != BOOL.FALSE;
+                success = Gdi32.DeleteObject(hClippingRegion).IsTrue();
                 Debug.Assert(success, "DeleteObject() failed.");
             }
         }
@@ -9590,9 +9592,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress)
                 {
-                    RemovePendingMessages(WindowMessages.WM_CHAR, WindowMessages.WM_CHAR);
-                    RemovePendingMessages(WindowMessages.WM_SYSCHAR, WindowMessages.WM_SYSCHAR);
-                    RemovePendingMessages(WindowMessages.WM_IME_CHAR, WindowMessages.WM_IME_CHAR);
+                    RemovePendingMessages(User32.WindowMessage.WM_CHAR, User32.WindowMessage.WM_CHAR);
+                    RemovePendingMessages(User32.WindowMessage.WM_SYSCHAR, User32.WindowMessage.WM_SYSCHAR);
+                    RemovePendingMessages(User32.WindowMessage.WM_IME_CHAR, User32.WindowMessage.WM_IME_CHAR);
                 }
                 return ke.Handled;
             }
@@ -9768,17 +9770,14 @@ namespace System.Windows.Forms
             ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
         }
 
-        private void RemovePendingMessages(int msgMin, int msgMax)
+        private void RemovePendingMessages(User32.WindowMessage msgMin, User32.WindowMessage msgMax)
         {
             if (!IsDisposed)
             {
-                NativeMethods.MSG msg = new NativeMethods.MSG();
-                IntPtr hwnd = Handle;
-                while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, hwnd),
-                                                       msgMin, msgMax,
-                                                       NativeMethods.PM_REMOVE))
+                var msg = new User32.MSG();
+                while (User32.PeekMessageW(ref msg, this, msgMin, msgMax).IsTrue())
                 {
-                    ; // NULL loop
+                    // No-op.
                 }
             }
         }
@@ -13583,23 +13582,23 @@ namespace System.Windows.Forms
                 default:
 
                     // If we received a thread execute message, then execute it.
-                    if (m.Msg == s_threadCallbackMessage && m.Msg != 0)
+                    if (m.Msg == (int)s_threadCallbackMessage && m.Msg != 0)
                     {
                         InvokeMarshaledCallbacks();
                         return;
                     }
-                    else if (m.Msg == WM_GETCONTROLNAME)
+                    else if (m.Msg == (int)WM_GETCONTROLNAME)
                     {
                         WmGetControlName(ref m);
                         return;
                     }
-                    else if (m.Msg == WM_GETCONTROLTYPE)
+                    else if (m.Msg == (int)WM_GETCONTROLTYPE)
                     {
                         WmGetControlType(ref m);
                         return;
                     }
 
-                    if (m.Msg == NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
                     {
                         WmMouseEnter(ref m);
                         break;
@@ -13798,14 +13797,13 @@ namespace System.Windows.Forms
             return ActiveXInstance.GetControlInfo(pCI);
         }
 
-        int UnsafeNativeMethods.IOleControl.OnMnemonic(ref NativeMethods.MSG pMsg)
+        HRESULT UnsafeNativeMethods.IOleControl.OnMnemonic(ref User32.MSG pMsg)
         {
             // If we got a mnemonic here, then the appropriate control will focus itself which
             // will cause us to become UI active.
-            //
             bool processed = ProcessMnemonic((char)pMsg.wParam);
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnMnemonic processed: " + processed.ToString());
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         HRESULT UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(Ole32.DispatchID dispID)
@@ -13835,9 +13833,9 @@ namespace System.Windows.Forms
             return ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        int UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator(ref NativeMethods.MSG lpmsg)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator(User32.MSG* lpmsg)
         {
-            return ActiveXInstance.TranslateAccelerator(ref lpmsg);
+            return ActiveXInstance.TranslateAccelerator(lpmsg);
         }
 
         void UnsafeNativeMethods.IOleInPlaceActiveObject.OnFrameWindowActivate(bool fActivate)
@@ -13965,7 +13963,7 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleObject.DoVerb(int iVerb, IntPtr lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect)
+        unsafe HRESULT UnsafeNativeMethods.IOleObject.DoVerb(int iVerb, User32.MSG* lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect)
         {
             // In Office they are internally casting an iverb to a short and not
             // doing the proper sign extension.  So, we do it here.
@@ -13978,7 +13976,7 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLine("AxSource:DoVerb {");
                 Debug.WriteLine("     verb: " + iVerb);
-                Debug.WriteLine("     msg: " + lpmsg);
+                Debug.WriteLine("     msg: " + (IntPtr)lpmsg);
                 Debug.WriteLine("     activeSite: " + pActiveSite);
                 Debug.WriteLine("     index: " + lindex);
                 Debug.WriteLine("     hwndParent: " + hwndParent);
@@ -13989,6 +13987,7 @@ namespace System.Windows.Forms
             try
             {
                 ActiveXInstance.DoVerb(iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
+                return HRESULT.S_OK;
             }
             catch (Exception e)
             {
@@ -14000,7 +13999,6 @@ namespace System.Windows.Forms
                 Debug.Unindent();
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "}");
             }
-            return NativeMethods.S_OK;
         }
 
         int UnsafeNativeMethods.IOleObject.EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)

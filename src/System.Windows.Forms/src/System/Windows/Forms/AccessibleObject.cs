@@ -2434,7 +2434,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseAutomationEvent(int eventId)
         {
-            if (UiaCore.UiaClientsAreListening() != BOOL.FALSE)
+            if (UiaCore.UiaClientsAreListening().IsTrue())
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
                 return result == HRESULT.S_OK;
@@ -2445,7 +2445,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseAutomationPropertyChangedEvent(int propertyId, object oldValue, object newValue)
         {
-            if (UiaCore.UiaClientsAreListening() != BOOL.FALSE)
+            if (UiaCore.UiaClientsAreListening().IsTrue())
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
                 return result == HRESULT.S_OK;
@@ -2456,7 +2456,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
         {
-            if (UiaCore.UiaClientsAreListening() != BOOL.FALSE)
+            if (UiaCore.UiaClientsAreListening().IsTrue())
             {
                 HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId == null ? 0 : runtimeId.Length);
                 return result == HRESULT.S_OK;

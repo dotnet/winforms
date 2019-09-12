@@ -5742,14 +5742,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
-            while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
-                                                   NativeMethods.NullHandleRef,
-                                                   WindowMessages.WM_MOUSEFIRST,
-                                                   WindowMessages.WM_MOUSELAST,
-                                                   NativeMethods.PM_REMOVE))
+            var mouseMsg = new User32.MSG();
+            while (User32.PeekMessageW(ref mouseMsg,
+                IntPtr.Zero,
+                (User32.WindowMessage)WindowMessages.WM_MOUSEFIRST,
+                (User32.WindowMessage)WindowMessages.WM_MOUSELAST).IsTrue())
             {
-                ;
+                // No-op.
             }
 
             // These things are just plain useless.
@@ -5828,14 +5827,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
-            while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
-                                                   NativeMethods.NullHandleRef,
-                                                   WindowMessages.WM_MOUSEFIRST,
-                                                   WindowMessages.WM_MOUSELAST,
-                                                   NativeMethods.PM_REMOVE))
+            var mouseMsg = new User32.MSG();
+            while (User32.PeekMessageW(ref mouseMsg, msgMin: User32.WM_MOUSEFIRST, msgMax: User32.WM_MOUSELAST).IsTrue())
             {
-                ;
+                // No-op.
             }
 
             // These things are just plain useless.
