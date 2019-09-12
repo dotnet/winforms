@@ -336,9 +336,9 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    NativeMethods.tagCONTROLINFO ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    int hr = axOleControl.GetControlInfo(ctlInfo);
-                    if (NativeMethods.Succeeded(hr))
+                    var ctlInfo = new NativeMethods.tagCONTROLINFO();
+                    HRESULT hr = axOleControl.GetControlInfo(ctlInfo);
+                    if (hr.Succeeded())
                     {
                         //
                         // Sadly, we don't have a message so we must fake one ourselves.

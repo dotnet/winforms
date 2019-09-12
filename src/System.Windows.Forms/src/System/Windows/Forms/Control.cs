@@ -13777,7 +13777,7 @@ namespace System.Windows.Forms
             OnQueryContinueDrag(queryContinueDragEventArgs);
         }
 
-        int UnsafeNativeMethods.IOleControl.GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
+        HRESULT UnsafeNativeMethods.IOleControl.GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetControlInfo");
 
@@ -13795,8 +13795,7 @@ namespace System.Windows.Forms
                 pCI.dwFlags |= NativeMethods.CTRLINFO_EATS_ESCAPE;
             }
 
-            ActiveXInstance.GetControlInfo(pCI);
-            return NativeMethods.S_OK;
+            return ActiveXInstance.GetControlInfo(pCI);
         }
 
         int UnsafeNativeMethods.IOleControl.OnMnemonic(ref NativeMethods.MSG pMsg)

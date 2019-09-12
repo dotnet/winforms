@@ -658,7 +658,7 @@ namespace System.Windows.Forms
                 return _clientSite;
             }
 
-            internal int GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
+            internal unsafe HRESULT GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
             {
                 if (_accelCount == -1)
                 {
@@ -669,85 +669,77 @@ namespace System.Windows.Forms
 
                     if (_accelCount > 0)
                     {
-                        int accelSize = Marshal.SizeOf<NativeMethods.ACCEL>();
-
                         // In the worst case we may have two accelerators per mnemonic:  one lower case and
                         // one upper case, hence the * 2 below.
-                        //
-                        IntPtr accelBlob = Marshal.AllocHGlobal(accelSize * _accelCount * 2);
+                        var accelerators = new User32.ACCEL[_accelCount * 2];
+                        Debug.Indent();
 
-                        try
+                        ushort cmd = 0;
+                        _accelCount = 0;
+
+                        foreach (char ch in mnemonicList)
                         {
-                            NativeMethods.ACCEL accel = new NativeMethods.ACCEL
+                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
+
+                            short scan = User32.VkKeyScanW(ch);
+                            ushort key = (ushort)(scan & 0x00FF);
+                            if (ch >= 'A' && ch <= 'Z')
                             {
-                                cmd = 0
-                            };
+                                // Lower case letter
+                                accelerators[_accelCount++] = new User32.ACCEL
+                                {
+                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY,
+                                    key = key,
+                                    cmd = cmd
+                                };
 
-                            Debug.Indent();
-
-                            _accelCount = 0;
-
-                            foreach (char ch in mnemonicList)
+                                // Upper case letter
+                                accelerators[_accelCount++] = new User32.ACCEL
+                                {
+                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY | User32.AcceleratorFlags.FSHIFT,
+                                    key = key,
+                                    cmd = cmd
+                                };
+                            }
+                            else
                             {
-                                IntPtr structAddr = (IntPtr)((long)accelBlob + _accelCount * accelSize);
-
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
-
-                                if (ch >= 'A' && ch <= 'Z')
+                                // Some non-printable character.
+                                User32.AcceleratorFlags virt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY;
+                                if ((scan & 0x0100) != 0)
                                 {
-                                    // Lower case letter
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY;
-                                    accel.key = (short)(UnsafeNativeMethods.VkKeyScan(ch) & 0x00FF);
-                                    Marshal.StructureToPtr(accel, structAddr, false);
-
-                                    // Upper case letter
-                                    _accelCount++;
-                                    structAddr = (IntPtr)((long)structAddr + accelSize);
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY | NativeMethods.FSHIFT;
-                                    Marshal.StructureToPtr(accel, structAddr, false);
+                                    virt |= User32.AcceleratorFlags.FSHIFT;
                                 }
-                                else
+                                accelerators[_accelCount++] = new User32.ACCEL
                                 {
-                                    // Some non-printable character.
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY;
-                                    short scan = (short)(UnsafeNativeMethods.VkKeyScan(ch));
-                                    if ((scan & 0x0100) != 0)
-                                    {
-                                        accel.fVirt |= NativeMethods.FSHIFT;
-                                    }
-                                    accel.key = (short)(scan & 0x00FF);
-                                    Marshal.StructureToPtr(accel, structAddr, false);
-                                }
-
-                                accel.cmd++;
-                                _accelCount++;
+                                    fVirt = virt,
+                                    key = key,
+                                    cmd = cmd
+                                };
                             }
 
-                            Debug.Unindent();
-
-                            // Now create an accelerator table and then free our memory.
-
-                            if (_accelTable != IntPtr.Zero)
-                            {
-                                UnsafeNativeMethods.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
-                                _accelTable = IntPtr.Zero;
-                            }
-
-                            _accelTable = UnsafeNativeMethods.CreateAcceleratorTable(new HandleRef(null, accelBlob), _accelCount);
+                            cmd++;
                         }
-                        finally
+
+                        Debug.Unindent();
+
+                        // Now create an accelerator table and then free our memory.
+
+                        if (_accelTable != IntPtr.Zero)
                         {
-                            if (accelBlob != IntPtr.Zero)
-                            {
-                                Marshal.FreeHGlobal(accelBlob);
-                            }
+                            User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                            _accelTable = IntPtr.Zero;
+                        }
+
+                        fixed (User32.ACCEL* pAccelerators = accelerators)
+                        {
+                            _accelTable = User32.CreateAcceleratorTableW(pAccelerators, _accelCount);
                         }
                     }
                 }
 
                 pCI.cAccel = _accelCount;
                 pCI.hAccel = _accelTable;
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -1993,7 +1985,7 @@ namespace System.Windows.Forms
                 {
                     if (_accelTable != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                        User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
                         _accelTable = IntPtr.Zero;
                         _accelCount = -1;
                     }
