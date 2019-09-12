@@ -986,25 +986,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Processes messages for ownerdraw panels.
         /// </summary>
-        private void WmDrawItem(ref Message m)
+        private unsafe void WmDrawItem(ref Message m)
         {
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
 
             int length = panels.Count;
-            if (dis.itemID < 0 || dis.itemID >= length)
+            if (dis->itemID < 0 || dis->itemID >= length)
             {
                 Debug.Fail("OwnerDraw item out of range");
             }
 
-            StatusBarPanel panel = (StatusBarPanel)
-                                   panels[dis.itemID];
-
-            Graphics g = Graphics.FromHdcInternal(dis.hDC);
-            Rectangle r = Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom);
-
-            //The itemstate is not defined for a statusbar control
-            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, r, dis.itemID, DrawItemState.None, panel, ForeColor, BackColor));
-            g.Dispose();
+            // The itemState is not defined for a statusbar control
+            StatusBarPanel panel = (StatusBarPanel)panels[(int)dis->itemID];
+            Graphics g = Graphics.FromHdcInternal(dis->hDC);
+            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
         }
 
         private void WmNotifyNMClick(NativeMethods.NMHDR note)

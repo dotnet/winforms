@@ -2062,18 +2062,23 @@ namespace System.Windows.Forms
 
         }
 
-        private void WmReflectDrawItem(ref Message m)
+        private unsafe void WmReflectDrawItem(ref Message m)
         {
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-            IntPtr oldPal = SetUpPalette(dis.hDC, false /*force*/, false /*realize*/);
-            using (Graphics g = Graphics.FromHdcInternal(dis.hDC))
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
+            try
             {
-                OnDrawItem(new DrawItemEventArgs(g, Font, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom), dis.itemID, (DrawItemState)dis.itemState));
+                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState));
             }
-            if (oldPal != IntPtr.Zero)
+            finally
             {
-                SafeNativeMethods.SelectPalette(new HandleRef(null, dis.hDC), new HandleRef(null, oldPal), 0);
+                if (oldPal != IntPtr.Zero)
+                {
+                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
+                }
             }
+
             m.Result = (IntPtr)1;
         }
 

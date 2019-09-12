@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -129,7 +130,7 @@ namespace System.Windows.Forms
 
             if (oldPal != IntPtr.Zero && _dc != IntPtr.Zero)
             {
-                SafeNativeMethods.SelectPalette(new HandleRef(this, _dc), new HandleRef(this, oldPal), 0);
+                Gdi32.SelectPalette(new HandleRef(this, _dc), new HandleRef(this, oldPal), BOOL.FALSE);
                 oldPal = IntPtr.Zero;
             }
         }

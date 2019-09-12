@@ -3767,53 +3767,44 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmReflectDrawItem(ref Message m)
+        private unsafe void WmReflectDrawItem(ref Message m)
         {
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-            IntPtr oldPal = SetUpPalette(dis.hDC, false /*force*/, false /*realize*/);
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
             try
             {
-                Graphics g = Graphics.FromHdcInternal(dis.hDC);
-
-                try
-                {
-                    OnDrawItem(new DrawItemEventArgs(g, Font, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom),
-                                                     dis.itemID, (DrawItemState)dis.itemState, ForeColor, BackColor));
-                }
-                finally
-                {
-                    g.Dispose();
-                }
+                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
             }
             finally
             {
                 if (oldPal != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectPalette(new HandleRef(this, dis.hDC), new HandleRef(null, oldPal), 0);
+                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
                 }
             }
+
             m.Result = (IntPtr)1;
         }
 
-        private void WmReflectMeasureItem(ref Message m)
+        private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
+            User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
             // Determine if message was sent by a combo item or the combo edit field
-            if (DrawMode == DrawMode.OwnerDrawVariable && mis.itemID >= 0)
+            if (DrawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
-                Graphics graphics = CreateGraphicsInternal();
-                MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, mis.itemID, ItemHeight);
+                using Graphics graphics = CreateGraphicsInternal();
+                var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
                 OnMeasureItem(mie);
-                mis.itemHeight = mie.ItemHeight;
-                graphics.Dispose();
+                mis->itemHeight = unchecked((uint)mie.ItemHeight);
             }
             else
             {
                 // Message was sent by the combo edit field
-                mis.itemHeight = ItemHeight;
+                mis->itemHeight = (uint)ItemHeight;
             }
-            Marshal.StructureToPtr(mis, m.LParam, false);
+
             m.Result = (IntPtr)1;
         }
 

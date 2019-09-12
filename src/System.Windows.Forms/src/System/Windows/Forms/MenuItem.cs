@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1419,55 +1420,46 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void WmDrawItem(ref Message m)
+        internal unsafe void WmDrawItem(ref Message m)
         {
             // Handles the OnDrawItem message sent from ContainerControl
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
             Debug.WriteLineIf(Control.s_paletteTracing.TraceVerbose, Handle + ": Force set palette in MenuItem drawitem");
-            IntPtr oldPal = Control.SetUpPalette(dis.hDC, false /*force*/, false);
+            IntPtr oldPal = Control.SetUpPalette(dis->hDC, force: false, realizePalette: false);
             try
             {
-                Graphics g = Graphics.FromHdcInternal(dis.hDC);
-                try
-                {
-                    OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom), Index, (DrawItemState)dis.itemState));
-                }
-                finally
-                {
-                    g.Dispose();
-                }
+                Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, dis->rcItem, Index, (DrawItemState)dis->itemState));
             }
             finally
             {
                 if (oldPal != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectPalette(new HandleRef(null, dis.hDC), new HandleRef(null, oldPal), 0);
+                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
                 }
             }
 
             m.Result = (IntPtr)1;
         }
 
-        internal void WmMeasureItem(ref Message m)
+        /// <summary>
+        ///  Handles the OnMeasureItem message sent from ContainerControl
+        /// </summary>
+        internal unsafe void WmMeasureItem(ref Message m)
         {
-            // Handles the OnMeasureItem message sent from ContainerControl
-
             // Obtain the measure item struct
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
+            User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
             // The OnMeasureItem handler now determines the height and width of the item
             using ScreenDC screendc = ScreenDC.Create();
-            Graphics graphics = Graphics.FromHdcInternal(screendc);
-            MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, Index);
-            using (graphics)
-            {
-                OnMeasureItem(mie);
-            }
+            using Graphics graphics = Graphics.FromHdcInternal(screendc);
+
+            var mie = new MeasureItemEventArgs(graphics, Index);
+            OnMeasureItem(mie);
 
             // Update the measure item struct with the new width and height
-            mis.itemHeight = mie.ItemHeight;
-            mis.itemWidth = mie.ItemWidth;
-            Marshal.StructureToPtr(mis, m.LParam, false);
+            mis->itemHeight = unchecked((uint)mie.ItemHeight);
+            mis->itemWidth = unchecked((uint)mie.ItemWidth);
 
             m.Result = (IntPtr)1;
         }
