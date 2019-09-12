@@ -906,11 +906,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
                 get
                 {
-                    return ownerItem.DropDown.Visible ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                    return ownerItem.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
 
@@ -933,7 +933,7 @@ namespace System.Windows.Forms
                     // Do not expose child items when the drop-down is collapsed to prevent Narrator from announcing
                     // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
                     // in scan mode (CAPSLOCK + Space)
-                    if (ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed)
+                    if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
                     {
                         return 0;
                     }
@@ -981,7 +981,7 @@ namespace System.Windows.Forms
                 _accessibleObject.Collapse();
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
                 get
                 {

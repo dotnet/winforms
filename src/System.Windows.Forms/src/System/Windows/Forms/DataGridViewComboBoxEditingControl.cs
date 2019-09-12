@@ -233,11 +233,11 @@ namespace System.Windows.Forms
             return base.GetPropertyValue(propertyID);
         }
 
-        internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+        internal override UiaCore.ExpandCollapseState ExpandCollapseState
         {
             get
             {
-                return ownerControl.DroppedDown ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                return ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
             }
         }
 

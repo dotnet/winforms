@@ -42,7 +42,7 @@ internal static partial class Interop
             ChildrenBulkRemoved,
             /// <summary>
             ///  The order of the children below their parent has changed
-            /// .</summary>
+            /// </summary>
             ChildrenReordered,
         }
     }

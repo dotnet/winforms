@@ -1711,59 +1711,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /*
-        internal class TransparentToolStripUiaProvider : ControlUiaProvider, IExpandCollapseProvider
-        {
-            public TransparentToolStripUiaProvider(TransparentToolStrip owner) : base(owner)
-            {
-            }
-
-            private ToolStripTemplateNode TemplateNode
-            {
-                get => (_owner as TransparentToolStrip).TemplateNode;
-            }
-
-            #region IValueProvider
-            public override void SetValue(string newValue)
-            {
-                TemplateNode.CommitTextToDesigner(newValue, true, true, false);
-            }
-            #endregion
-
-            #region Expand/Collapse pattern
-            public override object GetPatternProvider(int patternId)
-            {
-                if (patternId == ExpandCollapsePatternIdentifiers.Pattern.Id && TemplateNode != null)
-                {
-                    return this as IExpandCollapseProvider;
-                }
-
-                return base.GetPatternProvider(patternId);
-            }
-
-            public ExpandCollapseState ExpandCollapseState
-            {
-                get
-                {
-                    NewItemsContextMenuStrip menu = TemplateNode._contextMenu;
-                    return ((menu != null) && menu.Visible) ? ExpandCollapseState.Expanded : ExpandCollapseState.Collapsed;
-                }
-            }
-
-            public void Expand()
-            {
-                TemplateNode.ShowDropDownMenu();
-            }
-
-            public void Collapse()
-            {
-                // Drop down for the MenuStrip is implemented as a context menu and thus closes  as soon as keyboard focus leaves it. When Collapse method  is invoked in Inspect,  context menu is already closed.
-                TemplateNode._contextMenu?.Hide();
-            }
-            #endregion
-        }
-        */
-
         /// <summary>
         ///  Private class that implements the custom Renderer for the TemplateNode ToolStrip.
         /// </summary>

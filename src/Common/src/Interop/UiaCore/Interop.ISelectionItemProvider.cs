@@ -40,13 +40,13 @@ internal static partial class Interop
             ///  Check whether an element is selected.
             /// </summary>
             /// <returns>Returns true if the element is selected.</returns>
-            bool IsSelected { [return: MarshalAs(UnmanagedType.Bool)] get; }
+            BOOL IsSelected { get; }
 
             /// <summary>
             ///  The logical element that supports the SelectionPattern for this Item.
             /// </summary>
             /// <returns>Returns a IRawElementProviderSimple.</returns>
-            IRawElementProviderSimple SelectionContainer { [return: MarshalAs(UnmanagedType.Interface)] get; }
+            IRawElementProviderSimple SelectionContainer { get; }
         }
     }
 }

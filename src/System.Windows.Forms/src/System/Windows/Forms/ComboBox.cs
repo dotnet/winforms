@@ -2661,8 +2661,8 @@ namespace System.Windows.Forms
             // Notify collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UnsafeNativeMethods.ExpandCollapseState.Collapsed,
-                UnsafeNativeMethods.ExpandCollapseState.Expanded);
+                UiaCore.ExpandCollapseState.Collapsed,
+                UiaCore.ExpandCollapseState.Expanded);
 
             if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
             {
@@ -3093,8 +3093,8 @@ namespace System.Windows.Forms
             // Notify Collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UnsafeNativeMethods.ExpandCollapseState.Expanded,
-                UnsafeNativeMethods.ExpandCollapseState.Collapsed);
+                UiaCore.ExpandCollapseState.Expanded,
+                UiaCore.ExpandCollapseState.Collapsed);
 
             // Collapsing the DropDown, so reset the flag.
             dropDownWillBeClosed = false;
@@ -4148,14 +4148,14 @@ namespace System.Windows.Forms
                     try
                     {
                         AccessibleObject wfAccessibleObject = null;
-                        UnsafeNativeMethods.IAccessibleInternal iacc = null;
+                        UiaCore.IAccessibleInternal iacc = null;
 
                         if (_accessibilityObject == null)
                         {
                             wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
                             _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
-                        iacc = (UnsafeNativeMethods.IAccessibleInternal)_accessibilityObject;
+                        iacc = (UiaCore.IAccessibleInternal)_accessibilityObject;
 
                         // Obtain the Lresult
                         //
@@ -5074,11 +5074,11 @@ namespace System.Windows.Forms
                 ComboBoxDefaultAction(false);
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
                 get
                 {
-                    return _owningComboBox.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                    return _owningComboBox.DroppedDown == true ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
 

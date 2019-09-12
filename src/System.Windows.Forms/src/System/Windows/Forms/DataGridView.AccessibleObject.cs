@@ -343,11 +343,11 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            internal override UnsafeNativeMethods.RowOrColumnMajor RowOrColumnMajor
+            internal override UiaCore.RowOrColumnMajor RowOrColumnMajor
             {
                 get
                 {
-                    return UnsafeNativeMethods.RowOrColumnMajor.RowOrColumnMajor_RowMajor;
+                    return UiaCore.RowOrColumnMajor.RowMajor;
                 }
             }
 

@@ -3317,17 +3317,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
                 get
                 {
                     if (owner.Expandable)
                     {
-                        return owner.Expanded ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                        return owner.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                     }
                     else
                     {
-                        return UnsafeNativeMethods.ExpandCollapseState.LeafNode;
+                        return UiaCore.ExpandCollapseState.LeafNode;
                     }
                 }
             }

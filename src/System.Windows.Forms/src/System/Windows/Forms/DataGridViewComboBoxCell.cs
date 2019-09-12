@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -3136,17 +3137,17 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
                 get
                 {
                     DataGridViewComboBoxEditingControl comboBox = Owner.Properties.GetObject(PropComboBoxCellEditingComboBox) as DataGridViewComboBoxEditingControl;
                     if (comboBox != null)
                     {
-                        return comboBox.DroppedDown ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                        return comboBox.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                     }
 
-                    return UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                    return UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
         }

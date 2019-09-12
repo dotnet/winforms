@@ -168,7 +168,7 @@ namespace System.Windows.Forms
 
                     return _componentManager;
 
-                    static IMsoComponentManager GetExternalComponentManager()
+                    unsafe static IMsoComponentManager GetExternalComponentManager()
                     {
                         Application.OleRequired();
                         IntPtr messageFilterHandle = default;
@@ -195,13 +195,11 @@ namespace System.Windows.Forms
 
                         // Check the service provider for the service that provides IMsoComponentManager
                         IntPtr serviceHandle = default;
-                        Guid sid = new Guid(ComponentIds.SID_SMsoComponentManager);
-                        Guid iid = new Guid(ComponentIds.IID_IMsoComponentManager);
-
+                        var sid = new Guid(ComponentIds.SID_SMsoComponentManager);
+                        var iid = new Guid(ComponentIds.IID_IMsoComponentManager);
                         try
                         {
-                            if (serviceProvider.QueryService(ref sid, ref iid, ref serviceHandle).Failed()
-                                || serviceHandle == IntPtr.Zero)
+                            if (serviceProvider.QueryService(&sid, &iid, &serviceHandle).Failed() || serviceHandle == IntPtr.Zero)
                             {
                                 return null;
                             }

@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -405,11 +406,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+        internal override UiaCore.ExpandCollapseState ExpandCollapseState
         {
             get
             {
-                return ownerItem.Expanded ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                return ownerItem.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
             }
         }
 
