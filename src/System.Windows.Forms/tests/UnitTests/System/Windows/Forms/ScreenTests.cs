@@ -210,8 +210,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(screen.Bounds.Height != 0);
             Assert.InRange(screen.DeviceName.Length, 1, 32);
             Assert.Equal(screen.DeviceName, screen.DeviceName.Trim('\0'));
-            Assert.InRange(screen.WorkingArea.Width, screen.Bounds.X, screen.Bounds.Width);
-            Assert.InRange(screen.WorkingArea.Height, screen.Bounds.Y, screen.Bounds.Height);
+            Assert.InRange(screen.WorkingArea.Width, 0, screen.Bounds.Width);
+            Assert.InRange(screen.WorkingArea.Height, 0, screen.Bounds.Height);
+            Assert.InRange(screen.WorkingArea.X, screen.Bounds.X, screen.Bounds.X + screen.Bounds.Width);
+            Assert.InRange(screen.WorkingArea.Y, screen.Bounds.Y, screen.Bounds.Y + screen.Bounds.Width);
         }
     }
 }
