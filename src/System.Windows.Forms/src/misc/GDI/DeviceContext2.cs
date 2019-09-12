@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Internal
     ///  of that; if you need to put back the old value after changing a property you need to get it
     ///  first and cache it.
     /// </summary>
-    internal sealed partial class DeviceContext : MarshalByRefObject, IDeviceContext, IDisposable
+    internal sealed partial class DeviceContext : MarshalByRefObject, IDeviceContext, IDisposable, IHandle
     {
         /// <summary>
         ///  See DeviceContext.cs for information about this class.  The class has been split to be able
@@ -260,10 +260,10 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  DC text alignment.
         /// </summary>
-        public DeviceContextTextAlignment TextAlignment
+        public Gdi32.TA TextAlignment
         {
-            get => (DeviceContextTextAlignment)IntUnsafeNativeMethods.GetTextAlign(new HandleRef(this, Hdc));
-            set => IntUnsafeNativeMethods.SetTextAlign(new HandleRef(this, Hdc), (int)value);
+            get => Gdi32.GetTextAlign(this);
+            set => Gdi32.SetTextAlign(this, value);
         }
 
         /// <summary>

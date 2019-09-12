@@ -32,9 +32,6 @@ namespace System.Windows.Forms.Internal
         public static extern int /*COLORREF*/ SetTextColor(HandleRef hDC, int crColor);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int GetTextAlign(HandleRef hdc);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int /*COLORREF*/ GetTextColor(HandleRef hDC);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
@@ -208,9 +205,6 @@ namespace System.Windows.Forms.Internal
         }
 
         // Misc.
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int SetTextAlign(HandleRef hDC, int nMode);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "Ellipse", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern bool IntEllipse(HandleRef hDc, int x1, int y1, int x2, int y2);
 
