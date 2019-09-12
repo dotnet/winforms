@@ -56,7 +56,10 @@
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextExtentPoint32.cs" Link="Interop\Gdi32\Interop.GetTextExtentPoint32.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextMetricsW.cs" Link="Interop\Gdi32\Interop.GetTextMetricsW.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.TEXTMETRICW.cs" Link="Interop\Gdi32\Interop.TEXTMETRICW.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.TMPF.cs" Link="Interop\Gdi32\Interop.TMPF.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetCurrentProcessId.cs" Link="Interop\Kernel32\Interop.GetCurrentProcessId.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetCurrentThreadId.cs" Link="Interop\Kernel32\Interop.GetCurrentThreadId.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetModuleHandle.cs" Link="Interop\Kernel32\Interop.GetModuleHandle.cs" />

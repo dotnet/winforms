@@ -723,18 +723,16 @@ namespace System.Windows.Forms
                 // they use GetTextExtentPoint32 and pass in a long a-Z string.
                 // We must do the same here if our dialogs are to scale in a
                 // similar fashion.
-
-                HandleRef hfont = new HandleRef(this, FontHandle);
-                IntPtr hfontOld = Gdi32.SelectObject(hdc, hfont);
+                IntPtr hfontOld = Gdi32.SelectObject(hdc, new HandleRef(this, FontHandle));
 
                 try
                 {
-                    NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
-                    SafeNativeMethods.GetTextMetricsW(hdc, ref tm);
+                    var tm = new Gdi32.TEXTMETRICW();
+                    Gdi32.GetTextMetricsW(hdc, ref tm);
 
                     retval.Height = tm.tmHeight;
 
-                    if ((tm.tmPitchAndFamily & NativeMethods.TMPF_FIXED_PITCH) != 0)
+                    if ((tm.tmPitchAndFamily & Gdi32.TMPF.FIXED_PITCH) != 0)
                     {
                         var size = new Size();
                         Gdi32.GetTextExtentPoint32W(hdc, FontMeasureString, FontMeasureString.Length, ref size);

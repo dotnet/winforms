@@ -4427,7 +4427,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // This creates a copy of the given Font, and as such we need to 
                     IntPtr hFont = Font.ToHfont();
 
-                    NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
+                    var tm = new Gdi32.TEXTMETRICW();
                     int iSel = -1;
                     try
                     {
@@ -4447,7 +4447,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 maxWidth = Math.Max(textSize.Width, maxWidth);
                             }
                         }
-                        SafeNativeMethods.GetTextMetricsW(new HandleRef(DropDownListBox, hdc), ref tm);
+
+                        Gdi32.GetTextMetricsW(new HandleRef(DropDownListBox, hdc), ref tm);
 
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;

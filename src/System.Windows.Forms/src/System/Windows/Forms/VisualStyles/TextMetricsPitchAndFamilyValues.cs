@@ -2,19 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms.VisualStyles
 {
     [Flags]
     public enum TextMetricsPitchAndFamilyValues
     {
-        FixedPitch = 0x01,
-        Vector = 0x02,
-        TrueType = 0x04,
-        Device = 0x08
-
-        //		#define TMPF_FIXED_PITCH    0x01
-        //		#define TMPF_VECTOR             0x02
-        //		#define TMPF_DEVICE             0x08
-        //		#define TMPF_TRUETYPE       0x04
+        FixedPitch = Gdi32.TMPF.FIXED_PITCH,
+        Vector = Gdi32.TMPF.VECTOR,
+        TrueType = Gdi32.TMPF.TRUETYPE,
+        Device = Gdi32.TMPF.DEVICE
     }
 }

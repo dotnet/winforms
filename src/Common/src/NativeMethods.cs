@@ -23,8 +23,6 @@ namespace System.Windows.Forms
             DESKTOP_SWITCHDESKTOP = 0x0100,
             ERROR_ACCESS_DENIED = 0x0005;
 
-        public const int BS_SOLID = 0;
-
         public const int SHGFI_ICON = 0x000000100,   // get icon
         SHGFI_DISPLAYNAME = 0x000000200,     // get display name
         SHGFI_TYPENAME = 0x000000400,     // get type name
@@ -1348,8 +1346,7 @@ namespace System.Windows.Forms
         TVM_SETLINECOLOR = (TV_FIRST + 40),
         TVM_SETTOOLTIPS = (TV_FIRST + 24),
         TVSIL_STATE = 2,
-        TVM_SORTCHILDRENCB = (TV_FIRST + 21),
-        TMPF_FIXED_PITCH = 0x01;
+        TVM_SORTCHILDRENCB = (TV_FIRST + 21);
 
         public const int TVHT_NOWHERE = 0x0001,
         TVHT_ONITEMICON = 0x0002,
@@ -2307,31 +2304,6 @@ namespace System.Windows.Forms
                 font.ToLogFont(logFont, graphics);
                 return (LOGFONTW)logFont;
             }
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct TEXTMETRIC
-        {
-            public int tmHeight;
-            public int tmAscent;
-            public int tmDescent;
-            public int tmInternalLeading;
-            public int tmExternalLeading;
-            public int tmAveCharWidth;
-            public int tmMaxCharWidth;
-            public int tmWeight;
-            public int tmOverhang;
-            public int tmDigitizedAspectX;
-            public int tmDigitizedAspectY;
-            public char tmFirstChar;
-            public char tmLastChar;
-            public char tmDefaultChar;
-            public char tmBreakChar;
-            public byte tmItalic;
-            public byte tmUnderlined;
-            public byte tmStruckOut;
-            public byte tmPitchAndFamily;
-            public byte tmCharSet;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
