@@ -318,7 +318,7 @@ namespace System.ComponentModel.Design
                         }
                         break;
                     case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
-                        NativeMethods.NMTREEVIEW nmtv = Marshal.PtrToStructure<NativeMethods.NMTREEVIEW>(m.LParam);
+                        ComCtl32.NMTREEVIEW nmtv = Marshal.PtrToStructure<ComCtl32.NMTREEVIEW>(m.LParam);
                         if (nmtv.nmhdr.code == NativeMethods.NM_CLICK)
                         {
                             clickSeen = true;

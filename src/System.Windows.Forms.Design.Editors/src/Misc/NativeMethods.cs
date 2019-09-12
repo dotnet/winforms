@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
-        public class TV_ITEM
+        public class TVITEMW
         {
             public readonly int cChildren = 0;
             public readonly int cchTextMax = 0;
@@ -68,24 +68,6 @@ namespace System.Windows.Forms.Design
 
             public readonly int state = 0;
             public readonly int stateMask = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMHDR
-        {
-            public readonly int code = 0;
-            public readonly int hwndFrom = 0;
-            public readonly int idFrom = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMTREEVIEW
-        {
-            public readonly int action = 0;
-            public readonly TV_ITEM itemNew = null;
-            public readonly TV_ITEM itemOld = null;
-            public readonly NMHDR nmhdr = null;
-            public readonly Point ptDrag;
         }
 
         [StructLayout(LayoutKind.Sequential)]

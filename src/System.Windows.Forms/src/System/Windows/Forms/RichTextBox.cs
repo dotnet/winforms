@@ -3558,12 +3558,12 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void WmReflectNotify(ref Message m)
+        internal unsafe void WmReflectNotify(ref Message m)
         {
             if (m.HWnd == Handle)
             {
-                NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                switch (nmhdr.code)
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                switch (nmhdr->code)
                 {
                     case RichTextBoxConstants.EN_LINK:
                         EnLinkMsgHandler(ref m);
@@ -3695,7 +3695,7 @@ namespace System.Windows.Forms
 
             fixed (byte* es64p = &es64.contents[0])
             {
-                es.nmhdr = new NativeMethods.NMHDR();
+                es.nmhdr = new User32.NMHDR();
                 es.chrg = new Richedit.CHARRANGE();
 
                 es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
@@ -3717,7 +3717,7 @@ namespace System.Windows.Forms
 
             fixed (byte* es64p = &es64.contents[0])
             {
-                es.nmhdr = new NativeMethods.NMHDR();
+                es.nmhdr = new User32.NMHDR();
                 es.charrange = new Richedit.CHARRANGE();
 
                 es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);

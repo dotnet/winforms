@@ -6087,7 +6087,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (m.LParam != IntPtr.Zero)
             {
-                NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
                 if (nmhdr->hwndFrom == ToolTip.Handle)
                 {
@@ -7815,7 +7815,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (m.LParam != IntPtr.Zero)
                 {
-                    NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
                     if (nmhdr->hwndFrom == psheet.ToolTip.Handle)
                     {

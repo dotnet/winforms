@@ -1246,15 +1246,15 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Called when the error window gets a windows message.
             /// </summary>
-            protected override void WndProc(ref Message m)
+            protected unsafe override void WndProc(ref Message m)
             {
                 switch (m.Msg)
                 {
                     case WindowMessages.WM_NOTIFY:
-                        NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                        if (nmhdr.code == NativeMethods.TTN_SHOW || nmhdr.code == NativeMethods.TTN_POP)
+                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                        if (nmhdr->code == NativeMethods.TTN_SHOW || nmhdr->code == NativeMethods.TTN_POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr.idFrom, nmhdr.code == NativeMethods.TTN_SHOW);
+                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == NativeMethods.TTN_SHOW);
                         }
                         break;
                     case WindowMessages.WM_ERASEBKGND:

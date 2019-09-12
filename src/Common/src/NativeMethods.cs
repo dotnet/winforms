@@ -1265,16 +1265,6 @@ namespace System.Windows.Forms
         TVS_NONEVENHEIGHT = 0x4000,
         TVS_INFOTIP = 0x0800,
         TVS_NOTOOLTIPS = 0x0080,
-        TVIF_TEXT = 0x0001,
-        TVIF_IMAGE = 0x0002,
-        TVIF_PARAM = 0x0004,
-        TVIF_STATE = 0x0008,
-        TVIF_HANDLE = 0x0010,
-        TVIF_SELECTEDIMAGE = 0x0020,
-        TVIS_SELECTED = 0x0002,
-        TVIS_EXPANDED = 0x0020,
-        TVIS_EXPANDEDONCE = 0x0040,
-        TVIS_STATEIMAGEMASK = 0xF000,
         TVI_ROOT = (unchecked((int)0xFFFF0000)),
         TVI_FIRST = (unchecked((int)0xFFFF0001)),
         TVM_INSERTITEM = (0x1100 + 50),
@@ -1309,11 +1299,8 @@ namespace System.Windows.Forms
         TVM_GETITEMHEIGHT = (0x1100 + 28),
         TVN_SELCHANGING = ((0 - 400) - 50),
         TVN_GETINFOTIP = ((0 - 400) - 14),
-        TVN_SELCHANGED = ((0 - 400) - 51),
-        TVC_UNKNOWN = 0x0000,
-        TVC_BYMOUSE = 0x0001,
-        TVC_BYKEYBOARD = 0x0002,
-        TVN_GETDISPINFO = ((0 - 400) - 52),
+        TVN_SELCHANGED = ((0 - 400) - 51);
+        public const int TVN_GETDISPINFO = ((0 - 400) - 52),
         TVN_SETDISPINFO = ((0 - 400) - 53),
         TVN_ITEMEXPANDING = ((0 - 400) - 54),
         TVN_ITEMEXPANDED = ((0 - 400) - 55),
@@ -2554,7 +2541,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct NMLISTVIEW
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public int iItem;
             public int iSubItem;
             public int uNewState;
@@ -2581,17 +2568,9 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct NMLVFINDITEM
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public int iStart;
             public LVFINDINFO lvfi;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMHDR
-        {
-            public IntPtr hwndFrom;
-            public IntPtr idFrom; //This is declared as UINT_PTR in winuser.h
-            public int code;
         }
 
         [ComImport]
@@ -2970,54 +2949,11 @@ namespace System.Windows.Forms
             public short tdExtDevmodeOffset = 0;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct TV_ITEM
-        {
-            public int mask;
-            public IntPtr hItem;
-            public int state;
-            public int stateMask;
-            public IntPtr /* LPTSTR */ pszText;
-            public int cchTextMax;
-            public int iImage;
-            public int iSelectedImage;
-            public int cChildren;
-            public IntPtr lParam;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct TV_INSERTSTRUCT
-        {
-            public IntPtr hParent;
-            public IntPtr hInsertAfter;
-            public int item_mask;
-            public IntPtr item_hItem;
-            public int item_state;
-            public int item_stateMask;
-            public IntPtr /* LPTSTR */ item_pszText;
-            public int item_cchTextMax;
-            public int item_iImage;
-            public int item_iSelectedImage;
-            public int item_cChildren;
-            public IntPtr item_lParam;
-            public int item_iIntegral;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMTREEVIEW
-        {
-            public NMHDR nmhdr;
-            public int action;
-            public TV_ITEM itemOld;
-            public TV_ITEM itemNew;
-            public Point ptDrag;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class NMTVDISPINFO
         {
-            public NMHDR hdr;
-            public TV_ITEM item;
+            public User32.NMHDR hdr;
+            public ComCtl32.TVITEMW item;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -3200,7 +3136,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct NMTOOLBAR
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public int iItem;
             public TBBUTTON tbButton;
             public int cchText;
@@ -3223,7 +3159,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TOOLTIPTEXT
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public string lpszText;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
@@ -3236,7 +3172,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct NMTBHOTITEM
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public int idOld;
             public int idNew;
             public int dwFlags;
@@ -3308,7 +3244,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct NMCUSTOMDRAW
         {
-            public NMHDR nmcd;
+            public User32.NMHDR nmcd;
             public int dwDrawStage;
             public IntPtr hdc;
             public RECT rc;
@@ -3337,7 +3273,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMSELCHANGE
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public SYSTEMTIME stSelStart = null;
             public SYSTEMTIME stSelEnd = null;
         }
@@ -3345,7 +3281,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMDAYSTATE
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public SYSTEMTIME stStart = null;
             public int cDayState = 0;
             public IntPtr prgDayState;
@@ -3354,7 +3290,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMVIEWCHANGE
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public uint uOldView;
             public uint uNewView;
         }
@@ -3381,7 +3317,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMLVGETINFOTIP
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public int flags = 0;
             public IntPtr lpszText = IntPtr.Zero;
             public int cchTextMax = 0;
@@ -3393,7 +3329,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class NMLVKEYDOWN
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public short wVKey = 0;
             public uint flags = 0;
         }
@@ -3558,7 +3494,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMLVCACHEHINT
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public int iFrom = 0;
             public int iTo = 0;
         }
@@ -3566,21 +3502,21 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMLVDISPINFO
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public LVITEM item;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMLVDISPINFO_NOTEXT
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public LVITEM_NOTEXT item;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         public class NMLVODSTATECHANGE
         {
-            public NMHDR hdr;
+            public User32.NMHDR hdr;
             public int iFrom = 0;
             public int iTo = 0;
             public int uNewState = 0;
@@ -3603,7 +3539,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMDATETIMECHANGE
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public int dwFlags = 0;
             public SYSTEMTIME st = null;
         }
@@ -3619,7 +3555,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class NMHEADER
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public int iItem = 0;
             public int iButton = 0;
             public IntPtr pItem = IntPtr.Zero;    // HDITEM*
@@ -3771,8 +3707,8 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 4)]
         public class SELCHANGE
         {
-            public NMHDR nmhdr;
-            public Richedit.CHARRANGE chrg;
+            public User32.NMHDR nmhdr;
+            public Interop.Richedit.CHARRANGE chrg;
             public int seltyp = 0;
         }
 
@@ -3803,7 +3739,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class ENLINK
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public int msg = 0;
             public IntPtr wParam = IntPtr.Zero;
             public IntPtr lParam = IntPtr.Zero;
@@ -3916,7 +3852,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public IntPtr hDrop = IntPtr.Zero;
             public int cp = 0;
             public bool fProtected = false;
@@ -3925,14 +3861,14 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class REQRESIZE
         {
-            public NMHDR nmhdr;
-            public RECT rc;
+            public User32.NMHDR nmhdr;
+            public Interop.RECT rc;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class ENPROTECTED
         {
-            public NMHDR nmhdr;
+            public User32.NMHDR nmhdr;
             public int msg;
             public IntPtr wParam;
             public IntPtr lParam;

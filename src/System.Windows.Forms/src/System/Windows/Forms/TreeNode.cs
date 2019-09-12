@@ -23,9 +23,9 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Text))]
     public class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
-        private const int SHIFTVAL = 12;
-        private const int CHECKED = 2 << SHIFTVAL;
-        private const int UNCHECKED = 1 << SHIFTVAL;
+        internal const int SHIFTVAL = 12;
+        private const ComCtl32.TVIS CHECKED = (ComCtl32.TVIS)(2 << SHIFTVAL);
+        private const ComCtl32.TVIS UNCHECKED = (ComCtl32.TVIS)(1 << SHIFTVAL);
         private const int ALLOWEDIMAGES = 14;
 
         //the threshold value used to optimize AddRange and Clear operations for a big number of nodes
@@ -151,10 +151,10 @@ namespace System.Windows.Forms
         private TreeNodeCollection nodes = null;
         object userData;
 
-        private readonly static int insertMask =
-                               NativeMethods.TVIF_TEXT
-                             | NativeMethods.TVIF_IMAGE
-                             | NativeMethods.TVIF_SELECTEDIMAGE;
+        private readonly static ComCtl32.TVIF insertMask =
+            ComCtl32.TVIF.TEXT
+            | ComCtl32.TVIF.IMAGE
+            | ComCtl32.TVIF.SELECTEDIMAGE;
 
         /// <summary>
         ///  Creates a TreeNode object.
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
 
         // Checked does sanity checking and fires Before/AfterCheck events, then forwards to this
         // property to get/set the actual checked value.
-        internal bool CheckedInternal
+        internal unsafe bool CheckedInternal
         {
             get
             {
@@ -360,26 +360,23 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+                var item = new ComCtl32.TVITEMW
                 {
-                    mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                    mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
                     hItem = handle,
-                    stateMask = NativeMethods.TVIS_STATEIMAGEMASK
+                    stateMask = ComCtl32.TVIS.STATEIMAGEMASK
                 };
                 item.state |= value ? CHECKED : UNCHECKED;
-                UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
-
+                User32.SendMessageW(tv.Handle, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
             }
         }
 
         /// <summary>	
         ///  Indicates whether the node's checkbox is checked.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.TreeNodeCheckedDescr)),
-        DefaultValue(false)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.TreeNodeCheckedDescr))]
+        [DefaultValue(false)]
         public bool Checked
         {
             get
@@ -387,14 +384,15 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (handle != IntPtr.Zero && !treeView.IsDisposed)
                 {
-                    NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+                    TreeView tv = TreeView;
+                    var item = new ComCtl32.TVITEMW
                     {
-                        mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                        mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
                         hItem = handle,
-                        stateMask = NativeMethods.TVIS_STATEIMAGEMASK
+                        stateMask = ComCtl32.TVIS.STATEIMAGEMASK
                     };
-                    UnsafeNativeMethods.SendMessage(new HandleRef(null, TreeView.Handle), NativeMethods.TVM_GETITEM, 0, ref item);
-                    Debug.Assert(!TreeView.CheckBoxes || ((item.state >> SHIFTVAL) > 1) == CheckedInternal,
+                    User32.SendMessageW(tv.Handle, NativeMethods.TVM_GETITEM, IntPtr.Zero, ref item);
+                    Debug.Assert(!tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                         "isChecked on node '" + Name + "' did not match the state in TVM_GETITEM.");
                 }
 #endif
@@ -603,7 +601,7 @@ namespace System.Windows.Forms
             set
             {
                 ImageIndexer.Index = value;
-                UpdateNode(NativeMethods.TVIF_IMAGE);
+                UpdateNode(ComCtl32.TVIF.IMAGE);
             }
         }
 
@@ -627,7 +625,7 @@ namespace System.Windows.Forms
             set
             {
                 ImageIndexer.Key = value;
-                UpdateNode(NativeMethods.TVIF_IMAGE);
+                UpdateNode(ComCtl32.TVIF.IMAGE);
             }
         }
 
@@ -674,7 +672,7 @@ namespace System.Windows.Forms
                 {
                     return expandOnRealization;
                 }
-                return (State & NativeMethods.TVIS_EXPANDED) != 0;
+                return (State & ComCtl32.TVIS.EXPANDED) != 0;
             }
         }
 
@@ -691,7 +689,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return (State & NativeMethods.TVIS_SELECTED) != 0;
+                return (State & ComCtl32.TVIS.SELECTED) != 0;
             }
         }
 
@@ -1002,7 +1000,7 @@ namespace System.Windows.Forms
             set
             {
                 SelectedImageIndexer.Index = value;
-                UpdateNode(NativeMethods.TVIF_SELECTEDIMAGE);
+                UpdateNode(ComCtl32.TVIF.SELECTEDIMAGE);
             }
         }
 
@@ -1029,14 +1027,14 @@ namespace System.Windows.Forms
             set
             {
                 SelectedImageIndexer.Key = value;
-                UpdateNode(NativeMethods.TVIF_SELECTEDIMAGE);
+                UpdateNode(ComCtl32.TVIF.SELECTEDIMAGE);
             }
         }
 
         /// <summary>
         ///  Retrieve state bits for this node
         /// </summary>
-        internal int State
+        internal ComCtl32.TVIS State
         {
             get
             {
@@ -1050,13 +1048,14 @@ namespace System.Windows.Forms
                 {
                     return 0;
                 }
-                NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+
+                var item = new ComCtl32.TVITEMW
                 {
                     hItem = Handle,
-                    mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
-                    stateMask = NativeMethods.TVIS_SELECTED | NativeMethods.TVIS_EXPANDED
+                    mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
+                    stateMask = ComCtl32.TVIS.SELECTED | ComCtl32.TVIS.EXPANDED
                 };
-                UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_GETITEM, 0, ref item);
+                User32.SendMessageW(tv.Handle, NativeMethods.TVM_GETITEM, IntPtr.Zero, ref item);
                 return item.state;
             }
         }
@@ -1087,7 +1086,7 @@ namespace System.Windows.Forms
                     StateImageIndexer.Key = value;
                     if (treeView != null && !treeView.CheckBoxes)
                     {
-                        UpdateNode(NativeMethods.TVIF_STATE);
+                        UpdateNode(ComCtl32.TVIF.STATE);
                     }
                 }
             }
@@ -1118,7 +1117,7 @@ namespace System.Windows.Forms
                 StateImageIndexer.Index = value;
                 if (treeView != null && !treeView.CheckBoxes)
                 {
-                    UpdateNode(NativeMethods.TVIF_STATE);
+                    UpdateNode(ComCtl32.TVIF.STATE);
                 }
             }
         }
@@ -1160,7 +1159,7 @@ namespace System.Windows.Forms
             set
             {
                 text = value;
-                UpdateNode(NativeMethods.TVIF_TEXT);
+                UpdateNode(ComCtl32.TVIF.TEXT);
             }
         }
 
@@ -1571,7 +1570,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void DoCollapse(TreeView tv)
         {
-            if ((State & NativeMethods.TVIS_EXPANDED) != 0)
+            if ((State & ComCtl32.TVIS.EXPANDED) != 0)
             {
                 TreeViewCancelEventArgs e = new TreeViewCancelEventArgs(this, false, TreeViewAction.Collapse);
                 tv.OnBeforeCollapse(e);
@@ -1897,7 +1896,6 @@ namespace System.Windows.Forms
 
         internal unsafe void Realize(bool insertFirst)
         {
-            // Debug.assert(handle == 0, "Node already realized");
             TreeView tv = TreeView;
             if (tv == null || !tv.IsHandleCreated || tv.IsDisposed)
             {
@@ -1905,18 +1903,19 @@ namespace System.Windows.Forms
             }
 
             if (parent != null)
-            { // Never realize the virtual root
-
+            {
+                // Never realize the virtual root
                 if (tv.InvokeRequired)
                 {
                     throw new InvalidOperationException(SR.InvalidCrossThreadControlCall);
                 }
 
-                NativeMethods.TV_INSERTSTRUCT tvis = new NativeMethods.TV_INSERTSTRUCT
+                var tvis = new ComCtl32.TVINSERTSTRUCTW
                 {
-                    item_mask = insertMask,
                     hParent = parent.handle
                 };
+                tvis.item.mask = insertMask;
+
                 TreeNode prev = PrevNode;
                 if (insertFirst || prev == null)
                 {
@@ -1925,38 +1924,37 @@ namespace System.Windows.Forms
                 else
                 {
                     tvis.hInsertAfter = prev.handle;
-                    // Debug.assert(tvis.hInsertAfter != 0);
                 }
 
-                tvis.item_pszText = Marshal.StringToHGlobalAuto(text);
-                tvis.item_iImage = (ImageIndexer.ActualIndex == -1) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
-                tvis.item_iSelectedImage = (SelectedImageIndexer.ActualIndex == -1) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
-                tvis.item_mask = NativeMethods.TVIF_TEXT;
+                tvis.item.pszText = Marshal.StringToHGlobalAuto(text);
+                tvis.item.iImage = (ImageIndexer.ActualIndex == -1) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
+                tvis.item.iSelectedImage = (SelectedImageIndexer.ActualIndex == -1) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
+                tvis.item.mask = ComCtl32.TVIF.TEXT;
 
-                tvis.item_stateMask = 0;
-                tvis.item_state = 0;
+                tvis.item.stateMask = 0;
+                tvis.item.state = 0;
 
                 if (tv.CheckBoxes)
                 {
-                    tvis.item_mask |= NativeMethods.TVIF_STATE;
-                    tvis.item_stateMask |= NativeMethods.TVIS_STATEIMAGEMASK;
-                    tvis.item_state |= CheckedInternal ? CHECKED : UNCHECKED;
+                    tvis.item.mask |= ComCtl32.TVIF.STATE;
+                    tvis.item.stateMask |= ComCtl32.TVIS.STATEIMAGEMASK;
+                    tvis.item.state |= CheckedInternal ? CHECKED : UNCHECKED;
                 }
                 else if (tv.StateImageList != null && StateImageIndexer.ActualIndex >= 0)
                 {
-                    tvis.item_mask |= NativeMethods.TVIF_STATE;
-                    tvis.item_stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
-                    tvis.item_state = ((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
+                    tvis.item.mask |= ComCtl32.TVIF.STATE;
+                    tvis.item.stateMask = ComCtl32.TVIS.STATEIMAGEMASK;
+                    tvis.item.state = (ComCtl32.TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
                 }
 
-                if (tvis.item_iImage >= 0)
+                if (tvis.item.iImage >= 0)
                 {
-                    tvis.item_mask |= NativeMethods.TVIF_IMAGE;
+                    tvis.item.mask |= ComCtl32.TVIF.IMAGE;
                 }
 
-                if (tvis.item_iSelectedImage >= 0)
+                if (tvis.item.iSelectedImage >= 0)
                 {
-                    tvis.item_mask |= NativeMethods.TVIF_SELECTEDIMAGE;
+                    tvis.item.mask |= ComCtl32.TVIF.SELECTEDIMAGE;
                 }
 
                 // If you are editing when you add a new node, then the edit control
@@ -1974,13 +1972,13 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_ENDEDITLABELNOW, 0 /* fCancel==FALSE */, 0);
                 }
 
-                handle = UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_INSERTITEM, 0, ref tvis);
+                handle = User32.SendMessageW(tv.Handle, NativeMethods.TVM_INSERTITEM, IntPtr.Zero, ref tvis);
                 tv.nodeTable[handle] = this;
 
                 // Lets update the Lparam to the Handle ....
-                UpdateNode(NativeMethods.TVIF_PARAM);
+                UpdateNode(ComCtl32.TVIF.PARAM);
 
-                Marshal.FreeHGlobal(tvis.item_pszText);
+                Marshal.FreeHGlobal(tvis.item.pszText);
 
                 if (editing)
                 {
@@ -2096,18 +2094,18 @@ namespace System.Windows.Forms
             return;
         }
 
-        private void ResetExpandedState(TreeView tv)
+        private unsafe void ResetExpandedState(TreeView tv)
         {
             Debug.Assert(tv.IsHandleCreated, "nonexistent handle");
 
-            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+            var item = new ComCtl32.TVITEMW
             {
-                mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
+                mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
                 hItem = handle,
-                stateMask = NativeMethods.TVIS_EXPANDEDONCE,
+                stateMask = ComCtl32.TVIS.EXPANDEDONCE,
                 state = 0
             };
-            UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
+            User32.SendMessageW(tv.Handle, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
         }
 
         private bool ShouldSerializeBackColor()
@@ -2197,7 +2195,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Tell the TreeView to refresh this node
         /// </summary>
-        private void UpdateNode(int mask)
+        private void UpdateNode(ComCtl32.TVIF mask)
         {
             if (handle == IntPtr.Zero)
             {
@@ -2207,44 +2205,44 @@ namespace System.Windows.Forms
             TreeView tv = TreeView;
             Debug.Assert(tv != null, "TreeNode has handle but no TreeView");
 
-            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+            var item = new ComCtl32.TVITEMW
             {
-                mask = NativeMethods.TVIF_HANDLE | mask,
+                mask = ComCtl32.TVIF.HANDLE | mask,
                 hItem = handle
             };
-            if ((mask & NativeMethods.TVIF_TEXT) != 0)
+            if ((mask & ComCtl32.TVIF.TEXT) != 0)
             {
                 item.pszText = Marshal.StringToHGlobalAuto(text);
             }
 
-            if ((mask & NativeMethods.TVIF_IMAGE) != 0)
+            if ((mask & ComCtl32.TVIF.IMAGE) != 0)
             {
                 item.iImage = (ImageIndexer.ActualIndex == -1) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
             }
 
-            if ((mask & NativeMethods.TVIF_SELECTEDIMAGE) != 0)
+            if ((mask & ComCtl32.TVIF.SELECTEDIMAGE) != 0)
             {
                 item.iSelectedImage = (SelectedImageIndexer.ActualIndex == -1) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
             }
 
-            if ((mask & NativeMethods.TVIF_STATE) != 0)
+            if ((mask & ComCtl32.TVIF.STATE) != 0)
             {
-                item.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
+                item.stateMask = ComCtl32.TVIS.STATEIMAGEMASK;
                 if (StateImageIndexer.ActualIndex != -1)
                 {
-                    item.state = ((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
+                    item.state = (ComCtl32.TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
                 }
                 // ActualIndex == -1 means "don't use custom image list"
                 // so just leave item.state set to zero, that tells the unmanaged control
                 // to use no state image for this node.
             }
-            if ((mask & NativeMethods.TVIF_PARAM) != 0)
+            if ((mask & ComCtl32.TVIF.PARAM) != 0)
             {
                 item.lParam = handle;
             }
 
-            UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
-            if ((mask & NativeMethods.TVIF_TEXT) != 0)
+            User32.SendMessageW(tv.Handle, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
+            if ((mask & ComCtl32.TVIF.TEXT) != 0)
             {
                 Marshal.FreeHGlobal(item.pszText);
                 if (tv.Scrollable)
@@ -2254,7 +2252,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void UpdateImage()
+        internal unsafe void UpdateImage()
         {
             TreeView tv = TreeView;
             if (tv.IsDisposed)
@@ -2262,13 +2260,13 @@ namespace System.Windows.Forms
                 return;
             }
 
-            NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM
+            var item = new ComCtl32.TVITEMW
             {
-                mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_IMAGE,
+                mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.IMAGE,
                 hItem = Handle,
                 iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
             };
-            UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
+            User32.SendMessageW(tv, NativeMethods.TVM_SETITEM, IntPtr.Zero, ref item);
         }
 
         /// <summary>
