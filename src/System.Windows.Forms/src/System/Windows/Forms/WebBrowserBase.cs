@@ -375,11 +375,11 @@ namespace System.Windows.Forms
             return processed;
         }
 
-        //
-        // Certain messages are forwarder directly to the ActiveX control,
-        // others are first processed by the wndproc of Control
-        //
-        protected override void WndProc(ref Message m)
+        /// <remarks>
+        /// Certain messages are forwarder directly to the ActiveX control,
+        /// others are first processed by the wndproc of Control
+        /// </remarks>
+        protected unsafe override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -454,7 +454,8 @@ namespace System.Windows.Forms
                     //
                     if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
-                        if (NativeMethods.Succeeded(AXInPlaceObject.GetWindow(out IntPtr hwndInPlaceObject)))
+                        IntPtr hwndInPlaceObject = IntPtr.Zero;
+                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
                         {
                             Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject));
                         }

@@ -997,13 +997,18 @@ namespace System.Windows.Forms
             int RequestNewObjectLayout();
         }
 
-        [ComImport(), Guid("00000119-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceSite
+        [ComImport]
+        [Guid("00000119-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleInPlaceSite
         {
-            IntPtr GetWindow();
+            [PreserveSig]
+            HRESULT GetWindow(
+                IntPtr* phwnd);
 
             [PreserveSig]
-            int ContextSensitiveHelp(int fEnterMode);
+            HRESULT ContextSensitiveHelp(
+                BOOL fEnterMode);
 
             [PreserveSig]
             int CanInPlaceActivate();
@@ -1110,13 +1115,18 @@ namespace System.Windows.Forms
                 bool fLock);
         }
 
-        [ComImport(), Guid("00000116-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceFrame
+        [ComImport]
+        [Guid("00000116-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleInPlaceFrame
         {
-            IntPtr GetWindow();
+            [PreserveSig]
+            HRESULT GetWindow(
+                IntPtr* phwnd);
 
             [PreserveSig]
-            int ContextSensitiveHelp(int fEnterMode);
+            HRESULT ContextSensitiveHelp(
+                BOOL fEnterMode);
 
             [PreserveSig]
             int GetBorder(
@@ -1640,14 +1650,18 @@ namespace System.Windows.Forms
             object GetEmbeddedObject();
         };
 
-        [ComImport(), Guid("00000115-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceUIWindow
+        [ComImport]
+        [Guid("00000115-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleInPlaceUIWindow
         {
-            IntPtr GetWindow();
+            [PreserveSig]
+            HRESULT GetWindow(
+                IntPtr* phwnd);
 
             [PreserveSig]
-            int ContextSensitiveHelp(
-                    int fEnterMode);
+            HRESULT ContextSensitiveHelp(
+                BOOL fEnterMode);
 
             [PreserveSig]
             int GetBorder(
@@ -1671,16 +1685,18 @@ namespace System.Windows.Forms
                       string pszObjName);
         }
 
-        [ComImport(),
-        Guid("00000117-0000-0000-C000-000000000046"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceActiveObject
+        [ComImport]
+        [Guid("00000117-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleInPlaceActiveObject
         {
             [PreserveSig]
-            int GetWindow(out IntPtr hwnd);
+            HRESULT GetWindow(
+                IntPtr* phwnd);
 
-            void ContextSensitiveHelp(
-                    int fEnterMode);
+            [PreserveSig]
+            HRESULT ContextSensitiveHelp(
+                BOOL fEnterMode);
 
             [PreserveSig]
             int TranslateAccelerator(
@@ -1704,26 +1720,18 @@ namespace System.Windows.Forms
                     int fEnable);
         }
 
-        [ComImport(), Guid("00000114-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleWindow
+        [ComImport]
+        [Guid("00000113-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IOleInPlaceObject
         {
             [PreserveSig]
-            int GetWindow([Out]out IntPtr hwnd);
+            HRESULT GetWindow(
+                IntPtr* phwnd);
 
-            void ContextSensitiveHelp(
-                    int fEnterMode);
-        }
-
-        [ComImport(),
-        Guid("00000113-0000-0000-C000-000000000046"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleInPlaceObject
-        {
             [PreserveSig]
-            int GetWindow([Out]out IntPtr hwnd);
-
-            void ContextSensitiveHelp(
-                    int fEnterMode);
+            HRESULT ContextSensitiveHelp(
+                BOOL fEnterMode);
 
             void InPlaceDeactivate();
 

@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IOleObject,
         UnsafeNativeMethods.IOleInPlaceObject,
         UnsafeNativeMethods.IOleInPlaceActiveObject,
-        UnsafeNativeMethods.IOleWindow,
+        Ole32.IOleWindow,
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,
         UnsafeNativeMethods.IPersist,
@@ -13826,14 +13826,14 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow(out IntPtr hwnd)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow(IntPtr* phwnd)
         {
-            return ((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
+            return ((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(phwnd);
         }
 
-        void UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp(int fEnterMode)
+        HRESULT UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
+            return ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
         int UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator(ref NativeMethods.MSG lpmsg)
@@ -13866,21 +13866,23 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnableModeless");
         }
 
-        int UnsafeNativeMethods.IOleInPlaceObject.GetWindow(out IntPtr hwnd)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceObject.GetWindow(IntPtr* phwnd)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetWindow");
-            int hr = ActiveXInstance.GetWindow(out hwnd);
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "\twin == " + hwnd);
+            HRESULT hr = ActiveXInstance.GetWindow(phwnd);
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "\twin == " + (phwnd == null ? IntPtr.Zero : *phwnd));
             return hr;
         }
 
-        void UnsafeNativeMethods.IOleInPlaceObject.ContextSensitiveHelp(int fEnterMode)
+        HRESULT UnsafeNativeMethods.IOleInPlaceObject.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ContextSensitiveHelp.  Mode: " + fEnterMode.ToString(CultureInfo.InvariantCulture));
-            if (fEnterMode != 0)
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ContextSensitiveHelp.  Mode: " + fEnterMode);
+            if (fEnterMode.IsTrue())
             {
                 OnHelpRequested(new HelpEventArgs(MousePosition));
             }
+
+            return HRESULT.S_OK;
         }
 
         void UnsafeNativeMethods.IOleInPlaceObject.InPlaceDeactivate()
@@ -14127,14 +14129,14 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd)
+        unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
         {
-            return ((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
+            return ((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(phwnd);
         }
 
-        void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode)
+        HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
+            return ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
         void UnsafeNativeMethods.IPersist.GetClassID(out Guid pClassID)
