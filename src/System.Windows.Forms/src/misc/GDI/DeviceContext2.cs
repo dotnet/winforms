@@ -271,8 +271,8 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Color TextColor
         {
-            get => ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetTextColor(new HandleRef(this, Hdc)));
-            set => ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetTextColor(new HandleRef(this, Hdc), ColorTranslator.ToWin32(value)));
+            get => ColorTranslator.FromWin32(Gdi32.GetTextColor(this));
+            set => ColorTranslator.FromWin32(Gdi32.SetTextColor(this, ColorTranslator.ToWin32(value)));
         }
 
         /// <summary>

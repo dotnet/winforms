@@ -739,7 +739,7 @@ namespace System.Windows.Forms.Design
                 rc2.top = rc.top + (((rc.bottom - rc.top) - size.Height) >> 1);
                 rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
-                SafeNativeMethods.SetTextColor(new HandleRef(null, dc), textColor);
+                Gdi32.SetTextColor(dc, textColor);
                 User32.DrawTextW(
                     dc,
                     itemText,
@@ -865,13 +865,11 @@ namespace System.Windows.Forms.Design
 
                 if (hbrushOld != IntPtr.Zero)
                 {
-                    int oldTextColor, oldBackColor;
-
-                    oldTextColor = SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.ControlLightLight));
-                    oldBackColor = SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.Control));
+                    int oldTextColor = Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                    int oldBackColor = SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.Control));
 
                     SafeNativeMethods.PatBlt(new HandleRef(null, dc), rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, NativeMethods.PATCOPY);
-                    SafeNativeMethods.SetTextColor(new HandleRef(null, dc), oldTextColor);
+                    Gdi32.SetTextColor(dc, oldTextColor);
                     SafeNativeMethods.SetBkColor(new HandleRef(null, dc), oldBackColor);
                 }
             }
