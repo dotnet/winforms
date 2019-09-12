@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IOleObject,
         UnsafeNativeMethods.IOleInPlaceObject,
         UnsafeNativeMethods.IOleInPlaceActiveObject,
-        UnsafeNativeMethods.IOleWindow,
+        Ole32.IOleWindow,
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,
         UnsafeNativeMethods.IPersist,

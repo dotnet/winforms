@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IGridProvider,
         UiaCore.IGridItemProvider,
         OleAut32.IEnumVariant,
-        UnsafeNativeMethods.IOleWindow,
+        Ole32.IOleWindow,
         UnsafeNativeMethods.ILegacyIAccessibleProvider,
         UnsafeNativeMethods.ISelectionProvider,
         UiaCore.ISelectionItemProvider,
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         private OleAut32.IEnumVariant enumVariant = null;
 
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
-        private UnsafeNativeMethods.IOleWindow systemIOleWindow = null;
+        private Ole32.IOleWindow systemIOleWindow = null;
 
         private readonly bool systemWrapper = false;     // Indicates this object is being used ONLY to wrap a system IAccessible
 
@@ -1888,47 +1888,51 @@ namespace System.Windows.Forms
         ///  accessible object, which will be able to return an hwnd back to the OS. So we are
         ///  effectively 'preempting' what WindowFromAccessibleObject() would do.
         /// </summary>
-        int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd)
+        unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
         {
             // See if we have an inner object that can provide the window handle
             if (systemIOleWindow != null)
             {
-                return systemIOleWindow.GetWindow(out hwnd);
+                return systemIOleWindow.GetWindow(phwnd);
             }
 
             // Otherwise delegate to the parent object
             AccessibleObject parent = Parent;
-            if (parent is UnsafeNativeMethods.IOleWindow parentWindow)
+            if (parent is Ole32.IOleWindow parentWindow)
             {
-                return parentWindow.GetWindow(out hwnd);
+                return parentWindow.GetWindow(phwnd);
             }
 
             // Or fail if there is no parent
-            hwnd = IntPtr.Zero;
-            return NativeMethods.E_FAIL;
+            if (phwnd == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *phwnd = IntPtr.Zero;
+            return HRESULT.E_FAIL;
         }
 
         /// <summary>
         ///  See GetWindow() above for details.
         /// </summary>
-        void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode)
+        HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
         {
             // See if we have an inner object that can provide help
             if (systemIOleWindow != null)
             {
-                systemIOleWindow.ContextSensitiveHelp(fEnterMode);
-                return;
+                return systemIOleWindow.ContextSensitiveHelp(fEnterMode);
             }
 
             // Otherwise delegate to the parent object
             AccessibleObject parent = Parent;
-            if (parent is UnsafeNativeMethods.IOleWindow parentWindow)
+            if (parent is Ole32.IOleWindow parentWindow)
             {
-                parentWindow.ContextSensitiveHelp(fEnterMode);
-                return;
+                return parentWindow.ContextSensitiveHelp(fEnterMode);
             }
 
             // Or do nothing if there is no parent
+            return HRESULT.S_OK;
         }
 
         /// <summary>
@@ -2112,7 +2116,7 @@ namespace System.Windows.Forms
             {
                 systemIAccessible = (IAccessible)acc;
                 systemIEnumVariant = (OleAut32.IEnumVariant)en;
-                systemIOleWindow = acc as UnsafeNativeMethods.IOleWindow;
+                systemIOleWindow = acc as Ole32.IOleWindow;
             }
         }
 
@@ -2707,17 +2711,17 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IGridProvider,
         UiaCore.IGridItemProvider,
         OleAut32.IEnumVariant,
-        UnsafeNativeMethods.IOleWindow,
+        Ole32.IOleWindow,
         UnsafeNativeMethods.ILegacyIAccessibleProvider,
         UnsafeNativeMethods.ISelectionProvider,
         UiaCore.ISelectionItemProvider,
         UnsafeNativeMethods.IScrollItemProvider,
         UiaCore.IRawElementProviderHwndOverride
     {
-        private IAccessible publicIAccessible;                            // AccessibleObject as IAccessible
-        private readonly OleAut32.IEnumVariant publicIEnumVariant;        // AccessibleObject as IEnumVariant
-        private readonly UnsafeNativeMethods.IOleWindow publicIOleWindow; // AccessibleObject as IOleWindow
-        private readonly IReflect publicIReflect;                         // AccessibleObject as IReflect
+        private IAccessible publicIAccessible;                      // AccessibleObject as IAccessible
+        private readonly OleAut32.IEnumVariant publicIEnumVariant;  // AccessibleObject as IEnumVariant
+        private readonly Ole32.IOleWindow publicIOleWindow;         // AccessibleObject as IOleWindow
+        private readonly IReflect publicIReflect;                   // AccessibleObject as IReflect
 
         private readonly UnsafeNativeMethods.IServiceProvider publicIServiceProvider; // AccessibleObject as IServiceProvider
         private readonly UnsafeNativeMethods.IAccessibleEx publicIAccessibleEx;       // AccessibleObject as IAccessibleEx
@@ -2749,7 +2753,7 @@ namespace System.Windows.Forms
             // Get all the casts done here to catch any issues early
             publicIAccessible = (IAccessible)accessibleImplemention;
             publicIEnumVariant = (OleAut32.IEnumVariant)accessibleImplemention;
-            publicIOleWindow = (UnsafeNativeMethods.IOleWindow)accessibleImplemention;
+            publicIOleWindow = (Ole32.IOleWindow)accessibleImplemention;
             publicIReflect = (IReflect)accessibleImplemention;
             publicIServiceProvider = (UnsafeNativeMethods.IServiceProvider)accessibleImplemention;
             publicIAccessibleEx = (UnsafeNativeMethods.IAccessibleEx)accessibleImplemention;
@@ -2923,14 +2927,14 @@ namespace System.Windows.Forms
 
         HRESULT OleAut32.IEnumVariant.Skip(uint celt) => publicIEnumVariant.Skip(celt);
 
-        int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd)
+        unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
         {
-            return publicIOleWindow.GetWindow(out hwnd);
+            return publicIOleWindow.GetWindow(phwnd);
         }
 
-        void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode)
+        HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            publicIOleWindow.ContextSensitiveHelp(fEnterMode);
+            return publicIOleWindow.ContextSensitiveHelp(fEnterMode);
         }
 
         MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)

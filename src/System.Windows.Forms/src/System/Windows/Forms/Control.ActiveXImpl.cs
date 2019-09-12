@@ -812,15 +812,21 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleWindow::GetWindow
             /// </summary>
-            internal int GetWindow(out IntPtr hwnd)
+            internal unsafe HRESULT GetWindow(IntPtr* phwnd)
             {
+                if (phwnd == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    hwnd = IntPtr.Zero;
-                    return NativeMethods.E_FAIL;
+                    *phwnd = IntPtr.Zero;
+                    return HRESULT.E_FAIL;
                 }
-                hwnd = _control.Handle;
-                return NativeMethods.S_OK;
+
+                *phwnd = _control.Handle;
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -839,7 +845,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  In place activates this Object.
             /// </summary>
-            internal void InPlaceActivate(int verb)
+            internal unsafe void InPlaceActivate(int verb)
             {
                 // If we don't have a client site, then there's not much to do.
                 // We also punt if this isn't an in-place site, since we can't
@@ -878,10 +884,14 @@ namespace System.Windows.Forms
                     {
                         cb = Marshal.SizeOf<NativeMethods.tagOIFI>()
                     };
-                    IntPtr hwndParent = IntPtr.Zero;
 
                     // We are entering a secure context here.
-                    hwndParent = inPlaceSite.GetWindow();
+                    IntPtr hwndParent = IntPtr.Zero;
+                    HRESULT hr = _inPlaceUiWindow.GetWindow(&hwndParent);
+                    if (!hr.Succeeded())
+                    {
+                        ThrowHr((int)hr);
+                    }
 
                     NativeMethods.COMRECT posRect = new NativeMethods.COMRECT();
                     NativeMethods.COMRECT clipRect = new NativeMethods.COMRECT();

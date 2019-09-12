@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -65,17 +66,21 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        //
         // IOleInPlaceFrame methods:
-        //
-        IntPtr UnsafeNativeMethods.IOleInPlaceFrame.GetWindow()
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
         {
-            return parent.Handle;
+            if (phwnd == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *phwnd = parent.Handle;
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceFrame.ContextSensitiveHelp(int fEnterMode)
+        HRESULT UnsafeNativeMethods.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleInPlaceFrame.GetBorder(NativeMethods.COMRECT lprectBorder)

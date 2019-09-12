@@ -200,11 +200,12 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.ShowObject()
+        unsafe int UnsafeNativeMethods.IOleClientSite.ShowObject()
         {
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
-                if (NativeMethods.Succeeded(Host.AXInPlaceObject.GetWindow(out IntPtr hwnd)))
+                IntPtr hwnd = IntPtr.Zero;
+                if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded())
                 {
                     if (Host.GetHandleNoCreate() != hwnd)
                     {
@@ -233,25 +234,21 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        //
         // IOleInPlaceSite methods:
-        //
-        IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow()
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindow(IntPtr* phwnd)
         {
-            try
+            if (phwnd == null)
             {
-                return UnsafeNativeMethods.GetParent(new HandleRef(Host, Host.Handle));
+                return HRESULT.E_POINTER;
             }
-            catch (Exception t)
-            {
-                Debug.Fail(t.ToString());
-                throw;
-            }
+
+            *phwnd = UnsafeNativeMethods.GetParent(new HandleRef(Host, Host.Handle));
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp(int fEnterMode)
+        HRESULT UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
         int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
