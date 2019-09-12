@@ -896,41 +896,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport]
-        [Guid("B196B289-BAB4-101A-B69C-00AA00341D07")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleControlSite
-        {
-            [PreserveSig]
-            int OnControlInfoChanged();
-
-            [PreserveSig]
-            int LockInPlaceActive(int fLock);
-
-            [PreserveSig]
-            int GetExtendedControl(
-                [Out, MarshalAs(UnmanagedType.IDispatch)]
-                out object ppDisp);
-
-            [PreserveSig]
-            HRESULT TransformCoords(
-                Point *pPtlHimetric,
-                PointF *pPtfContainer,
-                uint dwFlags);
-
-            [PreserveSig]
-            HRESULT TranslateAccelerator(
-                User32.MSG* pMsg,
-                uint grfModifiers);
-
-            [PreserveSig]
-            int OnFocus(int fGotFocus);
-
-            [PreserveSig]
-            int ShowPropertyFrame();
-
-        }
-
         [ComImport(), Guid("00000118-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleClientSite
         {
@@ -2672,7 +2637,7 @@ namespace System.Windows.Forms
             // Office or any of the other hosts will hopefully get nulls, otherwise they
             // will crash.
             //
-            //public UnsafeNativeMethods.IOleControlSite pControlSite;
+            //public Ole32.IOleControlSite pControlSite;
 
             //public UnsafeNativeMethods.IOleServiceProvider pServiceProvider;
         }

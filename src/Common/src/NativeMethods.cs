@@ -4024,10 +4024,6 @@ namespace System.Windows.Forms
             public const int QACONTAINER_AUTOCLIP = 0x20;
             public const int QACONTAINER_MESSAGEREFLECT = 0x40;
             public const int QACONTAINER_SUPPORTSMNEMONICS = 0x80;
-            public const int XFORMCOORDS_POSITION = 0x1;
-            public const int XFORMCOORDS_SIZE = 0x2;
-            public const int XFORMCOORDS_HIMETRICTOCONTAINER = 0x4;
-            public const int XFORMCOORDS_CONTAINERTOHIMETRIC = 0x8;
             public const int PROPCAT_Nil = unchecked((int)0xFFFFFFFF);
             public const int PROPCAT_Misc = unchecked((int)0xFFFFFFFE);
             public const int PROPCAT_Font = unchecked((int)0xFFFFFFFD);

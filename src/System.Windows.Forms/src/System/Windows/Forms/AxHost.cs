@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms
         {
             var phm = new Point(sz.Width, sz.Height);
             var pcont = new PointF();
-            ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
+            ((Ole32.IOleControlSite)oleSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.HIMETRICTOCONTAINER);
             sz.Width = (int)pcont.X;
             sz.Height = (int)pcont.Y;
         }
@@ -1306,7 +1306,7 @@ namespace System.Windows.Forms
         {
             var phm = new Point();
             var pcont = new PointF(sz.Width, sz.Height);
-            ((UnsafeNativeMethods.IOleControlSite)oleSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            ((Ole32.IOleControlSite)oleSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC);
             sz.Width = phm.X;
             sz.Height = phm.Y;
         }
@@ -3970,7 +3970,7 @@ namespace System.Windows.Forms
         // will not be able to access and call them directly...
 
         private class OleInterfaces :
-            UnsafeNativeMethods.IOleControlSite,
+            Ole32.IOleControlSite,
             UnsafeNativeMethods.IOleClientSite,
             UnsafeNativeMethods.IOleInPlaceSite,
             Ole32.ISimpleFrameSite,
@@ -4186,31 +4186,31 @@ namespace System.Windows.Forms
 
             // IOleControlSite methods:
 
-            int UnsafeNativeMethods.IOleControlSite.OnControlInfoChanged()
+            HRESULT Ole32.IOleControlSite.OnControlInfoChanged()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnControlInfoChanged");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleControlSite.LockInPlaceActive(int fLock)
+            HRESULT Ole32.IOleControlSite.LockInPlaceActive(BOOL fLock)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in LockInPlaceActive");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleControlSite.GetExtendedControl(out object ppDisp)
+            HRESULT Ole32.IOleControlSite.GetExtendedControl(out object ppDisp)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetExtendedControl " + host.ToString());
                 ppDisp = host.GetParentContainer().GetProxyForControl(host);
                 if (ppDisp == null)
                 {
-                    return NativeMethods.E_NOTIMPL;
+                    return HRESULT.E_NOTIMPL;
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, uint dwFlags)
+            unsafe HRESULT Ole32.IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, Ole32.XFORMCOORDS dwFlags)
             {
                 if (pPtlHimetric == null || pPtfContainer == null)
                 {
@@ -4223,14 +4223,14 @@ namespace System.Windows.Forms
                     return hr;
                 }
 
-                if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER) != 0)
+                if ((dwFlags & Ole32.XFORMCOORDS.HIMETRICTOCONTAINER) != 0)
                 {
-                    if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
+                    if ((dwFlags & Ole32.XFORMCOORDS.SIZE) != 0)
                     {
                         pPtfContainer->X = (float)host.HM2Pix(pPtlHimetric->X, logPixelsX);
                         pPtfContainer->Y = (float)host.HM2Pix(pPtlHimetric->Y, logPixelsY);
                     }
-                    else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
+                    else if ((dwFlags & Ole32.XFORMCOORDS.POSITION) != 0)
                     {
                         pPtfContainer->X = (float)host.HM2Pix(pPtlHimetric->X, logPixelsX);
                         pPtfContainer->Y = (float)host.HM2Pix(pPtlHimetric->Y, logPixelsY);
@@ -4241,14 +4241,14 @@ namespace System.Windows.Forms
                         return HRESULT.E_INVALIDARG;
                     }
                 }
-                else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC) != 0)
+                else if ((dwFlags & Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC) != 0)
                 {
-                    if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_SIZE) != 0)
+                    if ((dwFlags & Ole32.XFORMCOORDS.SIZE) != 0)
                     {
                         pPtlHimetric->X = host.Pix2HM((int)pPtfContainer->X, logPixelsX);
                         pPtlHimetric->Y = host.Pix2HM((int)pPtfContainer->Y, logPixelsY);
                     }
-                    else if ((dwFlags & NativeMethods.ActiveX.XFORMCOORDS_POSITION) != 0)
+                    else if ((dwFlags & Ole32.XFORMCOORDS.POSITION) != 0)
                     {
                         pPtlHimetric->X = host.Pix2HM((int)pPtfContainer->X, logPixelsX);
                         pPtlHimetric->Y = host.Pix2HM((int)pPtfContainer->Y, logPixelsY);
@@ -4268,14 +4268,14 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, uint grfModifiers)
+            unsafe HRESULT Ole32.IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, Ole32.KEYMODIFIERS grfModifiers)
             {
                 if (pMsg == null)
                 {
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.Assert(!host.GetAxState(AxHost.siteProcessedInputKey), "Re-entering UnsafeNativeMethods.IOleControlSite.TranslateAccelerator!!!");
+                Debug.Assert(!host.GetAxState(AxHost.siteProcessedInputKey), "Re-entering Ole32.IOleControlSite.TranslateAccelerator!!!");
                 host.SetAxState(AxHost.siteProcessedInputKey, true);
 
                 Message msg = *pMsg;
@@ -4290,20 +4290,21 @@ namespace System.Windows.Forms
                 }
             }
 
-            int UnsafeNativeMethods.IOleControlSite.OnFocus(int fGotFocus)
+            HRESULT Ole32.IOleControlSite.OnFocus(BOOL fGotFocus)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnFocus " + ((fGotFocus == 0) ? "lost" : "gained"));
                 return NativeMethods.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleControlSite.ShowPropertyFrame()
+            HRESULT Ole32.IOleControlSite.ShowPropertyFrame()
             {
                 if (host.CanShowPropertyPages())
                 {
                     host.ShowPropertyPages();
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
-                return NativeMethods.E_NOTIMPL;
+
+                return HRESULT.E_NOTIMPL;
             }
 
             // IOleClientSite methods:
@@ -7376,7 +7377,7 @@ namespace System.Windows.Forms
                     try
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in AxComponentEditor.EditComponent");
-                        ((UnsafeNativeMethods.IOleControlSite)host.oleSite).ShowPropertyFrame();
+                        ((Ole32.IOleControlSite)host.oleSite).ShowPropertyFrame();
                         return true;
                     }
                     catch (Exception t)
