@@ -21,7 +21,7 @@ internal static partial class Interop
             EXPANDPARTIAL = 0x0080,
             OVERLAYMASK = 0x0F00,
             STATEIMAGEMASK = 0xF000,
-            USERMASK = 0xF000,
+            USERMASK = STATEIMAGEMASK
         }
     }
 }
