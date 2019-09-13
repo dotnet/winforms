@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -4621,7 +4621,7 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
       </trans-unit>
       <trans-unit id="DateTimePickerLocalizedControlType">
         <source>date and time picker</source>
-        <target state="translated">selecionador de data e hora</target>
+        <target state="translated">seletor de data e hora</target>
         <note />
       </trans-unit>
       <trans-unit id="DateTimePickerMaxDate">

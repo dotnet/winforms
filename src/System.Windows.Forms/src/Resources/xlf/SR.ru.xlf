@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -7814,7 +7814,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="OnlyOneControl">
         <source>Cannot add or insert the item '{0}' in more than one place. You must first remove it from its current location or clone it.</source>
-        <target state="translated">Невозможно добавить или вставить элемент '{0}' в несколько позиций. Сначала удалите его из текущей позиции или создайте его копию.</target>
+        <target state="translated">Невозможно добавить или вставить элемент '{0}' в несколько позиций. Сначала удалите его из текущей позиции или создайте его клон.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">

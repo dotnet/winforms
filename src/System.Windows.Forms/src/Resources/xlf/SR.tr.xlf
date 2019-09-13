@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">

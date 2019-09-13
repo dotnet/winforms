@@ -904,7 +904,7 @@
       </trans-unit>
       <trans-unit id="Clipboard_InvalidPath">
         <source>Path "{0}" in the argument "{1}" is not valid.</source>
-        <target state="translated">Ścieżka "{0}" w argumencie "{1}" jest nieprawidłowa.</target>
+        <target state="translated">Ścieżka „{0}” w argumencie „{1}” jest nieprawidłowa.</target>
         <note />
       </trans-unit>
       <trans-unit id="CloseCaption">
@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
