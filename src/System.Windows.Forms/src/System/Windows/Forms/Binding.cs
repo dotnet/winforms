@@ -1086,6 +1086,7 @@ namespace System.Windows.Forms
 
         private class BindToObject
         {
+            private BindingManagerBase _bindingManager;
             private PropertyDescriptor _fieldInfo;
             private readonly Binding _owner;
             private string _errorText = string.Empty;
@@ -1095,7 +1096,7 @@ namespace System.Windows.Forms
 
             private void PropValueChanged(object sender, EventArgs e)
             {
-                _owner.BindingManagerBase?.OnCurrentChanged(EventArgs.Empty);
+                _bindingManager?.OnCurrentChanged(EventArgs.Empty);
             }
 
             private bool IsDataSourceInitialized
@@ -1157,13 +1158,19 @@ namespace System.Windows.Forms
 
             internal void SetBindingManagerBase(BindingManagerBase lManager)
             {
-                // remove notification from the backEnd
-                if (_owner.BindingManagerBase != null && _fieldInfo != null && _owner.BindingManagerBase.IsBinding && !(_owner.BindingManagerBase is CurrencyManager))
+                if (_bindingManager == lManager)
                 {
-                    _fieldInfo.RemoveValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
+                    return;
+                }
+
+                // remove notification from the backEnd
+                if (_bindingManager != null && _fieldInfo != null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
+                {
+                    _fieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                     _fieldInfo = null;
                 }
 
+                _bindingManager = lManager;
                 CheckBinding();
             }
 
@@ -1200,7 +1207,7 @@ namespace System.Windows.Forms
 
             internal object GetValue()
             {
-                object obj = _owner.BindingManagerBase.Current;
+                object obj = _bindingManager.Current;
 
                 // Update IDataErrorInfo text: it's ok to get this now because we're going to need
                 // this as part of the BindingCompleteEventArgs anyway.
@@ -1222,7 +1229,7 @@ namespace System.Windows.Forms
                     {
                         // if we are bound to a list w/o any properties, then
                         // take the type from the BindingManager
-                        Type type = _owner.BindingManagerBase.BindType;
+                        Type type = _bindingManager.BindType;
                         if (typeof(Array).IsAssignableFrom(type))
                         {
                             type = type.GetElementType();
@@ -1240,7 +1247,7 @@ namespace System.Windows.Forms
 
                 if (_fieldInfo != null)
                 {
-                    obj = _owner.BindingManagerBase.Current;
+                    obj = _bindingManager.Current;
                     if (obj is IEditableObject editableObject)
                     {
                         editableObject.BeginEdit();
@@ -1252,7 +1259,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_owner.BindingManagerBase is CurrencyManager cm)
+                    if (_bindingManager is CurrencyManager cm)
                     {
                         cm[cm.Position] = value;
                         obj = value;
@@ -1274,24 +1281,24 @@ namespace System.Windows.Forms
                 }
 
                 // Remove propertyChangedNotification when this binding is deleted
-                if (_owner.BindingManagerBase != null &&
+                if (_bindingManager != null &&
                     _fieldInfo != null &&
-                    _owner.BindingManagerBase.IsBinding &&
-                    !(_owner.BindingManagerBase is CurrencyManager))
+                    _bindingManager.IsBinding &&
+                    !(_bindingManager is CurrencyManager))
                 {
 
-                    _fieldInfo.RemoveValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
+                    _fieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                 }
 
-                if (_owner.BindingManagerBase != null &&
+                if (_bindingManager != null &&
                     _owner.BindableComponent != null &&
                     _owner.ComponentCreated &&
                     IsDataSourceInitialized)
                 {
                     string dataField = _owner.BindingMemberInfo.BindingField;
 
-                    _fieldInfo = _owner.BindingManagerBase.GetItemProperties().Find(dataField, true);
-                    if (_owner.BindingManagerBase.DataSource != null && _fieldInfo == null && dataField.Length > 0)
+                    _fieldInfo = _bindingManager.GetItemProperties().Find(dataField, true);
+                    if (_bindingManager.DataSource != null && _fieldInfo == null && dataField.Length > 0)
                     {
                         throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
                     }
@@ -1302,11 +1309,11 @@ namespace System.Windows.Forms
                     // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)
                     // then we want to get notification from Current.Property1.Property2 and not from DataSource
                     // when we get the backEnd notification we push the new value into the Control's property
-                    if (_fieldInfo != null && _owner.BindingManagerBase.IsBinding &&
-                        !(_owner.BindingManagerBase is CurrencyManager))
+                    if (_fieldInfo != null && _bindingManager.IsBinding &&
+                        !(_bindingManager is CurrencyManager))
                     {
 
-                        _fieldInfo.AddValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
+                        _fieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                     }
                 }
                 else
