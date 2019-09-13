@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -563,20 +564,19 @@ namespace System.Windows.Forms
                 if (base.MouseIsDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (User32.WindowFromPoint(pt) == Handle)
                     {
-                        //Paint in raised state...
-                        //
+                        // Paint in raised state.
                         ResetFlagsandPaint();
                         if (!ValidationCancelled)
                         {
                             OnClick(mevent);
                             OnMouseClick(mevent);
                         }
-
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 

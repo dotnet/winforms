@@ -816,11 +816,12 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.GetCursorPos(out Point pt);
+                    User32.GetCursorPos(out Point pt);
                     NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
 
                 }
+
                 _behaviorService.OnDragEnter(null, e);
             }
 
@@ -850,7 +851,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.GetCursorPos(out Point pt);
+                    User32.GetCursorPos(out Point pt);
                     NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
                 }
@@ -1410,7 +1411,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 if (_toolboxSvc != null && _toolboxSvc.SetCursor())
                 {
-                    cursor = new Cursor(NativeMethods.GetCursor());
+                    cursor = Cursor.Current;
                 }
             }
             _adornerWindow.Cursor = cursor;

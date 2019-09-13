@@ -169,7 +169,6 @@ namespace System.Windows.Forms
         CF_HDROP = 15,
         CF_LOCALE = 16,
         CW_USEDEFAULT = (unchecked((int)0x80000000)),
-        CWP_SKIPINVISIBLE = 0x0001,
         COLOR_WINDOW = 5,
         CB_ERR = (-1),
         CBN_SELCHANGE = 1,
@@ -477,8 +476,6 @@ namespace System.Windows.Forms
         INPLACE_E_NOTOOLSPACE = unchecked((int)0x800401A1),
         ICON_SMALL = 0,
         ICON_BIG = 1,
-        IMAGE_ICON = 1,
-        IMAGE_CURSOR = 2,
         ICC_LISTVIEW_CLASSES = 0x00000001,
         ICC_TREEVIEW_CLASSES = 0x00000002,
         ICC_BAR_CLASSES = 0x00000004,
@@ -1650,26 +1647,6 @@ namespace System.Windows.Forms
             internal bool fExecute = true;
             [MarshalAs(UnmanagedType.LPStr)]
             internal string pszWindow = null;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
-        public class MONITORINFOEX
-        {
-            internal int cbSize = Marshal.SizeOf<MONITORINFOEX>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
-            internal int dwFlags = 0;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            internal char[] szDevice = new char[32];
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
-        public class MONITORINFO
-        {
-            internal int cbSize = Marshal.SizeOf<MONITORINFO>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
-            internal int dwFlags = 0;
         }
 
         public delegate int EditStreamCallback(IntPtr dwCookie, IntPtr buf, int cb, out int transferred);
@@ -4060,8 +4037,6 @@ namespace System.Windows.Forms
             public short wParamFlags;
         }
 
-        public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
-
         [ComImport]
         [Guid("A7ABA9C1-8983-11cf-8F20-00805F2CD064")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -4608,10 +4583,7 @@ namespace System.Windows.Forms
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point pt, uint cPoints);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr WindowFromPoint(int x, int y);
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point pt, int cPoints);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
@@ -4630,12 +4602,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetCursor();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos(out Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);

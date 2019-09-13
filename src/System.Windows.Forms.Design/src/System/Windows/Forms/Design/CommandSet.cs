@@ -541,8 +541,8 @@ namespace System.Windows.Forms.Design
                 if (tbx != null && tbx.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) != null)
                 {
                     tbx.SelectedToolboxItemUsed();
-                    NativeMethods.GetCursorPos(out Point p);
-                    IntPtr hwnd = NativeMethods.WindowFromPoint(p.X, p.Y);
+                    User32.GetCursorPos(out Point p);
+                    IntPtr hwnd = User32.WindowFromPoint(p);
                     if (hwnd != IntPtr.Zero)
                     {
                         NativeMethods.SendMessage(hwnd, WindowMessages.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);

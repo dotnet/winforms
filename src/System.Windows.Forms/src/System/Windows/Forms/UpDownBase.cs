@@ -908,7 +908,7 @@ namespace System.Windows.Forms
             if (mevent.Button == MouseButtons.Left)
             {
                 Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle && !ValidationCancelled)
+                if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
                 {
                     if (!doubleClickFired)
                     {
@@ -1254,20 +1254,15 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///
             ///  Handles detecting when the mouse button is released.
-            ///
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
             {
-
-                Point pt = new Point(e.X, e.Y);
-                pt = PointToScreen(pt);
-
+                Point pt = PointToScreen(new Point(e.X, e.Y));
                 MouseEventArgs me = parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (!parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired)
                         {
@@ -1281,6 +1276,7 @@ namespace System.Windows.Forms
                             parent.OnMouseDoubleClick(me);
                         }
                     }
+
                     doubleClickFired = false;
                 }
 
@@ -1614,30 +1610,24 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///
             ///  Handles detecting when the mouse button is released.
-            ///
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
             {
-
                 if (!parent.ValidationCancelled && e.Button == MouseButtons.Left)
                 {
                     EndButtonPress();
                 }
 
-                // At no stage should a button be pushed, and the mouse
-                // not captured.
+                // At no stage should a button be pushed, and the mouse not captured.
                 Debug.Assert(!(pushed != ButtonID.None && captured == ButtonID.None),
                              "Invalid button pushed/captured combination");
 
-                Point pt = new Point(e.X, e.Y);
-                pt = PointToScreen(pt);
-
+                Point pt = PointToScreen(new Point(e.X, e.Y));
                 MouseEventArgs me = parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (!parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired)
                         {
@@ -1650,6 +1640,7 @@ namespace System.Windows.Forms
                             parent.OnMouseDoubleClick(me);
                         }
                     }
+
                     doubleClickFired = false;
                 }
 

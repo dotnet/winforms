@@ -5726,7 +5726,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
             }
 
-            IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(Handle, pt, value);
+            IntPtr hwnd = User32.ChildWindowFromPointEx(Handle, pt, (User32.CWP)value);
             Control ctl = FromChildHandle(hwnd);
 
             return (ctl == this) ? null : ctl;
@@ -12596,7 +12596,7 @@ namespace System.Windows.Forms
 
                 if ((_controlStyle & ControlStyles.StandardClick) == ControlStyles.StandardClick)
                 {
-                    if (GetState(States.MousePressed) && !IsDisposed && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (GetState(States.MousePressed) && !IsDisposed && User32.WindowFromPoint(pt) == Handle)
                     {
                         fireClick = true;
                     }

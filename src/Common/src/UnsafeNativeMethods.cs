@@ -232,9 +232,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
-
         #region SendKeys SendInput functionality
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -807,9 +804,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool GetClientRect(HandleRef hWnd, IntPtr rect);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr WindowFromPoint(Point pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern void PostQuitMessage(int nExitCode);

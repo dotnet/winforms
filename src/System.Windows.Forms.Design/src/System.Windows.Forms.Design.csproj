@@ -83,6 +83,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DefWindowProcW.cs" Link="Interop\User32\Interop.DefWindowProcW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCursorPos.cs" Link="Interop\User32\Interop.GetCursorPos.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowFromPoint.cs" Link="Interop\User32\Interop.WindowFromPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">
