@@ -3227,17 +3227,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case NativeMethods.UIA_NamePropertyId:
                         return Name;
                     case NativeMethods.UIA_ControlTypePropertyId:
+
                         // The accessible hierarchy is changed so we cannot use Button type
                         // for the grid items to not break automation logic that searches for the first
                         // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
                         // button is one of the first children of PropertyGridView.
-                        return NativeMethods.UIA_DataItemControlTypeId;
+                        return NativeMethods.UIA_TreeItemControlTypeId;
                     case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
                         return (Object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                }
-
-                switch (propertyID)
-                {
                     case NativeMethods.UIA_AccessKeyPropertyId:
                         return string.Empty;
                     case NativeMethods.UIA_HasKeyboardFocusPropertyId:
@@ -3254,10 +3251,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return false;
                     case NativeMethods.UIA_IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case NativeMethods.UIA_IsGridItemPatternAvailablePropertyId:
+                    case NativeMethods.UIA_IsTableItemPatternAvailablePropertyId:
+                        return true;
                     case NativeMethods.UIA_LegacyIAccessibleRolePropertyId:
                         return Role;
                     case NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId:
                         return DefaultAction;
+
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
@@ -3265,19 +3266,39 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (owner.Expandable &&
-                    patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                switch (patternId)
                 {
-                    return true;
+                    case NativeMethods.UIA_InvokePatternId:
+                    case NativeMethods.UIA_LegacyIAccessiblePatternId:
+                        return true;
+
+                    case NativeMethods.UIA_ExpandCollapsePatternId:
+                        if (owner != null && owner.Expandable)
+                        {
+                            return true;
+                        }
+
+                        break;
+
+                    case NativeMethods.UIA_GridItemPatternId:
+                    case NativeMethods.UIA_TableItemPatternId:
+                        if (owner == null || owner.OwnerGrid == null || owner.OwnerGrid.SortedByCategories)
+                        {
+                            break;
+                        }
+
+                        // Only top level rows are grid items.
+                        // Sub-items (for instance height in size is not a grid item)
+                        GridEntry parentGridEntry = owner.ParentGridEntry;
+                        if (parentGridEntry != null && parentGridEntry is SingleSelectRootGridEntry)
+                        {
+                            return true;
+                        }
+
+                        break;
                 }
 
-                if (patternId == NativeMethods.UIA_InvokePatternId ||
-                    patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
-                {
-                    return true;
-                }
-
-                return false;
+                return base.IsPatternSupported(patternId);
             }
 
             internal override void Expand()
@@ -3322,7 +3343,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return owner.PropertyLabel;
+                    return owner?.PropertyLabel;
                 }
             }
 
@@ -3330,7 +3351,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return ((Control)owner.GridEntryHost).AccessibilityObject;
+                    return owner?.GridEntryHost?.AccessibilityObject;
                 }
             }
 
@@ -3338,7 +3359,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return (PropertyGridView)((PropertyGridView.PropertyGridViewAccessibleObject)Parent).Owner;
+                    var propertyGridViewAccessibleObject = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
+                    if (propertyGridViewAccessibleObject != null)
+                    {
+                        return propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                    }
+
+                    return null;
                 }
             }
 
@@ -3505,6 +3532,48 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.SetFocus();
 
                 RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+
+            internal override int Row
+            {
+                get
+                {
+                    var parent = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
+                    if (parent == null)
+                    {
+                        return -1;
+                    }
+
+                    var gridView = parent.Owner as PropertyGridView;
+                    if (gridView == null)
+                    {
+                        return -1;
+                    }
+
+                    var topLevelGridEntries = gridView.TopLevelGridEntries;
+                    if (topLevelGridEntries == null)
+                    {
+                        return -1;
+                    }
+
+                    for (int i = 0; i < topLevelGridEntries.Count; i++)
+                    {
+                        var topLevelGridEntry = topLevelGridEntries[i];
+                        if (owner == topLevelGridEntry)
+                        {
+                            return i;
+                        }
+                    }
+
+                    return -1;
+                }
+            }
+
+            internal override int Column => 0;
+
+            internal override UnsafeNativeMethods.IRawElementProviderSimple ContainingGrid
+            {
+                get => this.PropertyGridView.AccessibilityObject;
             }
         }
 
