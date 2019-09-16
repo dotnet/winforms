@@ -314,7 +314,7 @@ namespace System.Windows.Forms
             // color, and all 0 bits to the foreground color.
             //
             SafeNativeMethods.SetBkColor(new HandleRef(null, target), 0x00ffffff); // white
-            SafeNativeMethods.SetTextColor(new HandleRef(null, target), 0); // black
+            Gdi32.SetTextColor(target, 0x00000000); // black
             SafeNativeMethods.BitBlt(new HandleRef(null, target), 0, 0, size.Width, size.Height, new HandleRef(null, source),
                                      0, 0, 0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 

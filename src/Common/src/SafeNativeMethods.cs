@@ -294,14 +294,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern int FillRect(HandleRef hdc, ref RECT rect, HandleRef hbrush);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int /*COLORREF*/ GetTextColor(HandleRef hDC);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetBkColor(HandleRef hDC);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int /*COLORREF*/ SetTextColor(HandleRef hDC, int crColor);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int SetBkColor(HandleRef hDC, int clr);

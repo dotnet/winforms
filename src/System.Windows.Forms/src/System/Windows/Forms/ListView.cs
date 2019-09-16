@@ -5766,37 +5766,32 @@ namespace System.Windows.Forms
                             }
                         case NativeMethods.CDDS_ITEMPREPAINT:
                             {
-                                Graphics g = Graphics.FromHdcInternal(nmcd->hdc);
-                                Rectangle r = Rectangle.FromLTRB(nmcd->rc.left, nmcd->rc.top, nmcd->rc.right, nmcd->rc.bottom);
-                                DrawListViewColumnHeaderEventArgs e = null;
-
-                                try
+                                using (Graphics g = Graphics.FromHdcInternal(nmcd->hdc))
                                 {
-                                    Color foreColor = ColorTranslator.FromWin32(SafeNativeMethods.GetTextColor(new HandleRef(this, nmcd->hdc)));
+                                    Color foreColor = ColorTranslator.FromWin32(Gdi32.GetTextColor(nmcd->hdc));
                                     Color backColor = ColorTranslator.FromWin32(SafeNativeMethods.GetBkColor(new HandleRef(this, nmcd->hdc)));
                                     Font font = GetListHeaderFont();
-                                    e = new DrawListViewColumnHeaderEventArgs(g, r, (int)(nmcd->dwItemSpec),
-                                                                        columnHeaders[(int)nmcd->dwItemSpec],
-                                                                        (ListViewItemStates)(nmcd->uItemState),
-                                                                        foreColor, backColor, font);
-
+                                    var e = new DrawListViewColumnHeaderEventArgs(
+                                        g,
+                                        nmcd->rc,
+                                        (int)(nmcd->dwItemSpec),
+                                        columnHeaders[(int)nmcd->dwItemSpec],
+                                        (ListViewItemStates)(nmcd->uItemState),
+                                        foreColor,
+                                        backColor,
+                                        font);
                                     OnDrawColumnHeader(e);
-                                }
-                                finally
-                                {
-                                    g.Dispose();
-                                }
+                                    if (e.DrawDefault)
+                                    {
+                                        m.Result = (IntPtr)(NativeMethods.CDRF_DODEFAULT);
+                                        return false;
+                                    }
+                                    else
+                                    {
 
-                                if (e.DrawDefault)
-                                {
-                                    m.Result = (IntPtr)(NativeMethods.CDRF_DODEFAULT);
-                                    return false;
-                                }
-                                else
-                                {
-
-                                    m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
-                                    return true; // we are done - don't do default handling
+                                        m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
+                                        return true; // we are done - don't do default handling
+                                    }
                                 }
                             }
 

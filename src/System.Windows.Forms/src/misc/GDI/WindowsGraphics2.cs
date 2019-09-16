@@ -169,9 +169,9 @@ namespace System.Windows.Forms.Internal
             HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             // DrawText requires default text alignment.
-            if (DeviceContext.TextAlignment != DeviceContextTextAlignment.Default)
+            if (DeviceContext.TextAlignment != default)
             {
-                DeviceContext.TextAlignment = DeviceContextTextAlignment.Default;
+                DeviceContext.TextAlignment = default;
             }
 
             // color empty means use the one currently selected in the dc.
