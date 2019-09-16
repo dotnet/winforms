@@ -51,16 +51,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static string GetDisplayString(Ole32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
         {
-            var strVal = new string[1];
-            HRESULT hr = ppb.GetDisplayString(dispid, strVal);
+            HRESULT hr = ppb.GetDisplayString(dispid, out string strVal);
             if (hr != HRESULT.S_OK)
             {
                 success = false;
                 return null;
             }
 
-            success = strVal[0] != null;
-            return strVal[0];
+            success = strVal != null;
+            return strVal;
         }
 
         /// <summary>

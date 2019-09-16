@@ -18,7 +18,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetDisplayString(
                 DispatchID dispID,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstr);
+                out string pBstr);
 
             [PreserveSig]
             HRESULT MapPropertyToPage(
