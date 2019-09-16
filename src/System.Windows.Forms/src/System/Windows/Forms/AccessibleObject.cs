@@ -46,8 +46,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IScrollItemProvider
     {
         /// <summary>
-        ///  Specifies the <see langword='IAccessible '/>interface used by this
-        /// <see cref='AccessibleObject'/>.
+        ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
         /// </summary>
         private IAccessible systemIAccessible = null;
 
@@ -61,9 +60,8 @@ namespace System.Windows.Forms
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
         private Ole32.IOleWindow systemIOleWindow = null;
 
-        private readonly bool systemWrapper = false;     // Indicates this object is being used ONLY to wrap a system IAccessible
-
-        private int accObjId = NativeMethods.OBJID_CLIENT;    // Indicates what kind of 'inner' system accessible object we are using
+        // Indicates this object is being used ONLY to wrap a system IAccessible
+        private readonly bool systemWrapper = false;
 
         // The support for the UIA Notification event begins in RS3.
         // Assume the UIA Notification event is available until we learn otherwise.
@@ -71,7 +69,7 @@ namespace System.Windows.Forms
         // controls should not attempt to raise it.
         private static bool notificationEventAvailable = true;
 
-        protected const int RuntimeIDFirstItem = 0x2a;
+        internal const int RuntimeIDFirstItem = 0x2a;
 
         public AccessibleObject()
         {
@@ -2067,11 +2065,7 @@ namespace System.Windows.Forms
         ///  for a *user-defined* accessible object, that has NO inner object, its important that the id is
         ///  left as OBJID_CLIENT, otherwise the object will be short-circuited into a total NOP!
         /// </summary>
-        internal int AccessibleObjectId
-        {
-            get => accObjId;
-            set => accObjId = value;
-        }
+        internal int AccessibleObjectId { get; set; } = NativeMethods.OBJID_CLIENT;
 
         /// <summary>
         ///  Indicates whether this accessible object represents the client area of

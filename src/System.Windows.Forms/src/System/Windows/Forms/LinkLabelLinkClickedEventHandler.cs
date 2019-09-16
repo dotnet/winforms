@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the <see cref='LinkLabel.LinkClicked'/> event of a <see cref='LinkLabel'/>.
+    ///  Represents a method that will handle the <see cref='LinkLabel.LinkClicked'/> event of a <see cref='LinkLabel'/>.
     /// </summary>
     public delegate void LinkLabelLinkClickedEventHandler(object sender, LinkLabelLinkClickedEventArgs e);
 }

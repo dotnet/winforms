@@ -3481,21 +3481,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Converts a CHARRANGE to a string. Note: The behavior of this is dependent on the current window
-        ///  class name being used. We have to create a CharBuffer of the type of RichTextBox DLL we're using,
-        ///  not based on the SystemCharWidth.
+        ///  Converts a CHARRANGE to a string.
         /// </summary>
+        /// <remarks>
+        ///  The behavior of this is dependent on the current window class name being used. 
+        ///  We have to create a CharBuffer of the type of RichTextBox DLL we're using,
+        ///  not based on the SystemCharWidth.
+        /// </remarks>
         private string CharRangeToString(Richedit.CHARRANGE c)
         {
             NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
             {
                 chrg = c
             };
+
             Debug.Assert((c.cpMax - c.cpMin) > 0, "CHARRANGE was null or negative - can't do it!");
-
-            //Windows
-
-            if (c.cpMax > Text.Length || c.cpMax - c.cpMin <= 0)
+            if (c.cpMax - c.cpMin <= 0)
             {
                 return string.Empty;
             }

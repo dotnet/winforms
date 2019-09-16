@@ -1522,6 +1522,8 @@ namespace System.Windows.Forms
 
         public const string uuid_IAccessible = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
 
+        public const string WinFormFrameworkId = "WinForm";
+
         /*
         * MISCELLANEOUS
         */

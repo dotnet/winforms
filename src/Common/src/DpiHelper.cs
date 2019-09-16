@@ -308,8 +308,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Set, when the first (Parking)Window has been created. From that moment on,
-        ///  we will not be able nor allow to change the Process' DpiMode.
+        ///  Indicates whether the first (Parking)Window has been created. From that moment on,
+        ///  we will not be able nor allowed to change the Process' DpiMode.
         /// </summary>
         internal static bool FirstParkingWindowCreated { get; set; }
 

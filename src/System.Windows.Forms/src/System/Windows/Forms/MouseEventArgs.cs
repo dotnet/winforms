@@ -8,8 +8,8 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see langword='MouseUp'/>, <see langword='MouseDown'/>, and
-    /// <see langword='MouseMove '/> events.
+    ///  Provides data for the <see cref='Control.MouseUp'/>, <see cref='Control.MouseDown'/> and
+    /// <see cref='Control.MouseMove'/> events.
     /// </summary>
     [ComVisible(true)]
     public class MouseEventArgs : EventArgs

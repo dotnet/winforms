@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         Label = NativeMethods.LVIR_LABEL,
 
         /// <summary>
-        ///  Both the icon and label portions. In Report view, this <see langword='Entire'/>.
+        ///  Both the icon and label portions. In Report view, this <see cref='Entire'/>.
         /// </summary>
         ItemOnly = NativeMethods.LVIR_SELECTBOUNDS,
     }

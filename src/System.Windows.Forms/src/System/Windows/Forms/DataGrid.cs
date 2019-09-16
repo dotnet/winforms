@@ -3656,24 +3656,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /*
-        /// <summary>
-        ///  Raises the <see cref='System.Windows.Forms.DataGrid.ColumnHeaderClick'/> event.
-        /// </summary>
-        /// <param name='e'>
-        ///  An <see cref='System.EventArgs'/> that contains the event data.
-        /// </param>
-        /// <remarks>
-        ///  Raising an event invokes the event-handling method through a delegate. For an
-        ///  overview, see <see topic='cpconProvidingEventFunctionality'/>.
-        /// <see langword='Notes to Inheritors '/>When overriding <see cref='System.Windows.Forms.DataGrid.OnColumnHeaderClick'/> in an
-        ///  derived class, be sure to call the base class's <see cref='System.Windows.Forms.DataGrid.OnColumnHeaderClick'/> method.
-        /// </remarks>
-        protected void OnColumnHeaderClick(EventArgs e) {
-            RaiseEvent(EVENT_COLUMNHEADERCLICK, e);
-        }
-        */
-
         protected virtual void OnFlatModeChanged(EventArgs e)
         {
             if (Events[EVENT_FLATMODECHANGED] is EventHandler eh)

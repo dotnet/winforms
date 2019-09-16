@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the <see cref='TreeView.OnAfterCheck'/>, <see cref='TreeView.OnAfterCollapse'/>, <see cref='TreeView.OnAfterExpand'/>, or <see cref='TreeView.OnAfterSelect'/>
+    ///  Represents a method that will handle the <see cref='TreeView.OnAfterCheck'/>, <see cref='TreeView.OnAfterCollapse'/>, <see cref='TreeView.OnAfterExpand'/>, or <see cref='TreeView.OnAfterSelect'/>
     ///  event of a <see cref='TreeView'/>
     /// </summary>
     public delegate void TreeViewEventHandler(object sender, TreeViewEventArgs e);

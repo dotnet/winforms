@@ -16,8 +16,8 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  The panel shares the available status bar space (the space not taken
-        ///  up by panels with the <see langword='None'/> and <see langword='Contents'/>
-        ///  settings) with other panels that have the <see langword='Spring'/> setting.
+        ///  up by panels with the <see cref='None'/> and <see cref='Contents'/>
+        ///  settings) with other panels that have the <see cref='Spring'/> setting.
         /// </summary>
         Spring = 2,
 

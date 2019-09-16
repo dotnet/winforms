@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see langword='IComDataObject'/>.
+        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IComDataObject'/>.
         /// </summary>
         internal DataObject(IComDataObject data)
         {
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a list of all formats that data stored in this
         ///  instance is associated with or can be converted to, using an automatic
-        ///  conversion parameter<paramref name=" "/>to
+        ///  conversion parameter <paramref name="autoConvert"/> to
         ///  determine whether to retrieve all formats that the data can be converted to or
         ///  only native data formats.
         /// </summary>
