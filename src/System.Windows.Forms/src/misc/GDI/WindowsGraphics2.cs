@@ -587,9 +587,9 @@ namespace System.Windows.Forms.Internal
         ///  Returns a TEXTMETRIC structure for the font selected in the device context
         ///  represented by this object, in units of pixels.
         /// </summary>
-        public IntNativeMethods.TEXTMETRIC GetTextMetrics()
+        public Gdi32.TEXTMETRICW GetTextMetrics()
         {
-            IntNativeMethods.TEXTMETRIC tm = new IntNativeMethods.TEXTMETRIC();
+            var tm = new Gdi32.TEXTMETRICW();
             HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             // Set the mapping mode to MM_TEXT so we deal with units of pixels.
@@ -611,7 +611,7 @@ namespace System.Windows.Forms.Internal
                     mapMode = DeviceContext.SetMapMode(DeviceContextMapMode.Text);
                 }
 
-                IntUnsafeNativeMethods.GetTextMetrics(hdc, ref tm);
+                Gdi32.GetTextMetricsW(hdc, ref tm);
             }
             finally
             {

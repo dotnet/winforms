@@ -606,8 +606,8 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     hFontOld = Gdi32.SelectObject(dc, hFont);
-                    NativeMethods.TEXTMETRIC metrics = new NativeMethods.TEXTMETRIC();
-                    UnsafeNativeMethods.GetTextMetrics(new HandleRef(ctrl, dc), metrics);
+                    var metrics = new Gdi32.TEXTMETRICW();
+                    Gdi32.GetTextMetricsW(new HandleRef(ctrl, dc), ref metrics);
                     //add the font ascent to the baseline
                     fontAscent = metrics.tmAscent + 1;
                     fontHeight = metrics.tmHeight;

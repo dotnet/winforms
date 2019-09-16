@@ -1959,7 +1959,7 @@ namespace System.ComponentModel.Design
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
                     IntPtr hdc = User32.GetDC(new HandleRef(listBox, listBox.Handle));
                     IntPtr hFont = listBox.Font.ToHfont();
-                    NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
+                    var tm = new Gdi32.TEXTMETRICW();
                     try
                     {
                         hFont = Gdi32.SelectObject(hdc, hFont);
@@ -1972,7 +1972,9 @@ namespace System.ComponentModel.Design
                                 maxWidth = Math.Max((int)textSize.Width, maxWidth);
                             }
                         }
-                        SafeNativeMethods.GetTextMetrics(new HandleRef(listBox, hdc), ref tm);
+
+                        Gdi32.GetTextMetricsW(hdc, ref tm);
+
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
                         hFont = Gdi32.SelectObject(hdc, hFont);
@@ -2531,56 +2533,6 @@ namespace System.ComponentModel.Design
                 {
                     public static int LOWORD(int n) => n & 0xffff;
                 }
-
-                [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-                public struct TEXTMETRIC
-                {
-                    public int tmHeight;
-                    public int tmAscent;
-                    public int tmDescent;
-                    public int tmInternalLeading;
-                    public int tmExternalLeading;
-                    public int tmAveCharWidth;
-                    public int tmMaxCharWidth;
-                    public int tmWeight;
-                    public int tmOverhang;
-                    public int tmDigitizedAspectX;
-                    public int tmDigitizedAspectY;
-                    public char tmFirstChar;
-                    public char tmLastChar;
-                    public char tmDefaultChar;
-                    public char tmBreakChar;
-                    public byte tmItalic;
-                    public byte tmUnderlined;
-                    public byte tmStruckOut;
-                    public byte tmPitchAndFamily;
-                    public byte tmCharSet;
-                }
-
-                [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-                public struct TEXTMETRICA
-                {
-                    public int tmHeight;
-                    public int tmAscent;
-                    public int tmDescent;
-                    public int tmInternalLeading;
-                    public int tmExternalLeading;
-                    public int tmAveCharWidth;
-                    public int tmMaxCharWidth;
-                    public int tmWeight;
-                    public int tmOverhang;
-                    public int tmDigitizedAspectX;
-                    public int tmDigitizedAspectY;
-                    public byte tmFirstChar;
-                    public byte tmLastChar;
-                    public byte tmDefaultChar;
-                    public byte tmBreakChar;
-                    public byte tmItalic;
-                    public byte tmUnderlined;
-                    public byte tmStruckOut;
-                    public byte tmPitchAndFamily;
-                    public byte tmCharSet;
-                }
             }
 
             private static class SafeNativeMethods
@@ -2590,48 +2542,6 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
-
-                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
-                public static extern int GetTextMetricsW(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRIC lptm);
-
-                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
-                public static extern int GetTextMetricsA(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRICA lptm);
-
-                public static int GetTextMetrics(HandleRef hDC, ref NativeMethods.TEXTMETRIC lptm)
-                {
-                    if (Marshal.SystemDefaultCharSize == 1)
-                    {
-                        // ANSI
-                        NativeMethods.TEXTMETRICA lptmA = new NativeMethods.TEXTMETRICA();
-                        int retVal = SafeNativeMethods.GetTextMetricsA(hDC, ref lptmA);
-                        lptm.tmHeight = lptmA.tmHeight;
-                        lptm.tmAscent = lptmA.tmAscent;
-                        lptm.tmDescent = lptmA.tmDescent;
-                        lptm.tmInternalLeading = lptmA.tmInternalLeading;
-                        lptm.tmExternalLeading = lptmA.tmExternalLeading;
-                        lptm.tmAveCharWidth = lptmA.tmAveCharWidth;
-                        lptm.tmMaxCharWidth = lptmA.tmMaxCharWidth;
-                        lptm.tmWeight = lptmA.tmWeight;
-                        lptm.tmOverhang = lptmA.tmOverhang;
-                        lptm.tmDigitizedAspectX = lptmA.tmDigitizedAspectX;
-                        lptm.tmDigitizedAspectY = lptmA.tmDigitizedAspectY;
-                        lptm.tmFirstChar = (char)lptmA.tmFirstChar;
-                        lptm.tmLastChar = (char)lptmA.tmLastChar;
-                        lptm.tmDefaultChar = (char)lptmA.tmDefaultChar;
-                        lptm.tmBreakChar = (char)lptmA.tmBreakChar;
-                        lptm.tmItalic = lptmA.tmItalic;
-                        lptm.tmUnderlined = lptmA.tmUnderlined;
-                        lptm.tmStruckOut = lptmA.tmStruckOut;
-                        lptm.tmPitchAndFamily = lptmA.tmPitchAndFamily;
-                        lptm.tmCharSet = lptmA.tmCharSet;
-                        return retVal;
-                    }
-                    else
-                    {
-                        // Unicode
-                        return SafeNativeMethods.GetTextMetricsW(hDC, ref lptm);
-                    }
-                }
             }
 
             private static class UnsafeNativeMethods

@@ -138,17 +138,6 @@ namespace System.Windows.Forms.Internal
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static unsafe extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, Point *point);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int GetTextMetricsW(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm);
-
-        public static int GetTextMetrics(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm)
-        {
-            int retVal = IntUnsafeNativeMethods.GetTextMetricsW(hDC, ref lptm);
-
-            DbgUtil.AssertWin32(retVal != 0, "GetTextMetrics(hdc=[0x{0:X8}], [out TEXTMETRIC] failed.", hDC.Handle);
-            return retVal;
-        }
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "BeginPath", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern bool IntBeginPath(HandleRef hDC);
 

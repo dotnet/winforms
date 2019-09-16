@@ -316,7 +316,7 @@ namespace System.Windows.Forms.Internal
                     // in WindowsGraphics methods.
                     wg.DeviceContext.SelectFont(this);
 
-                    IntNativeMethods.TEXTMETRIC tm = (IntNativeMethods.TEXTMETRIC)wg.GetTextMetrics();
+                    Gdi32.TEXTMETRICW tm = wg.GetTextMetrics();
                     _lineSpacing = tm.tmHeight;
                 }
 
@@ -369,7 +369,7 @@ namespace System.Windows.Forms.Internal
                     // in WindowsGraphics methods.
                     wg.DeviceContext.SelectFont(this);
 
-                    IntNativeMethods.TEXTMETRIC tm = wg.GetTextMetrics();
+                    Gdi32.TEXTMETRICW tm = wg.GetTextMetrics();
 
                     // Convert the font character height to points.  If lfHeight is negative, Windows
                     // treats the absolute value of that number as a desired font height compatible with
