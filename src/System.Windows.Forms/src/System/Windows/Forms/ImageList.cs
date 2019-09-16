@@ -630,14 +630,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Frees all resources assocaited with this component.
+        ///  Releases the unmanaged resources used by the <see cref="ImageList" />
+        ///  and optionally releases the managed resources.
         /// </summary>
+        /// <param name="disposing">
+        ///  <see langword="true" /> to release both managed and unmanaged resources;
+        ///  <see langword="false" /> to release only unmanaged resources.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 if (originals != null)
-                { // we might own some of the stuff that's not been created yet
+                {
+                    // we might own some of the stuff that's not been created yet
                     foreach (Original original in originals)
                     {
                         if ((original.options & OriginalOptions.OwnsImage) != 0)

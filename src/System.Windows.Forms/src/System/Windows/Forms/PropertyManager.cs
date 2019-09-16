@@ -14,6 +14,9 @@ namespace System.Windows.Forms
         private PropertyDescriptor _propInfo;
         private bool _bound;
 
+        /// <summary>
+        ///  An object that represents the object to which the property belongs.
+        /// </summary>
         public override object Current => _dataSource;
 
         private void PropertyChanged(object sender, EventArgs ea)
@@ -89,6 +92,9 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Resumes data binding.
+        /// </summary>
         public override void ResumeBinding()
         {
             OnCurrentChanged(EventArgs.Empty);
@@ -108,8 +114,15 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets the name of the list supplying the data for the binding.
+        /// </summary>
+        /// <returns>Always returns an empty string.</returns>
         protected internal override string GetListName(ArrayList listAccessors) => string.Empty;
 
+        /// <summary>
+        ///  Cancels the current edit.
+        /// </summary>
         public override void CancelCurrentEdit()
         {
             IEditableObject obj = Current as IEditableObject;
@@ -117,6 +130,9 @@ namespace System.Windows.Forms
             PushData();
         }
 
+        /// <summary>
+        ///  Ends the current edit.
+        /// </summary>
         public override void EndCurrentEdit()
         {
             PullData(out bool success);
@@ -136,6 +152,10 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Raises the <see cref="BindingManagerBase.CurrentChanged" /> event.
+        /// </summary>
+        /// <param name="ea">The event data.</param>
         internal protected override void OnCurrentChanged(EventArgs ea)
         {
             PushData();
@@ -144,6 +164,10 @@ namespace System.Windows.Forms
             _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
+        /// <summary>
+        ///  Raises the <see cref="BindingManagerBase.CurrentItemChanged" /> event.
+        /// </summary>
+        /// <param name="ea">The event data.</param>
         internal protected override void OnCurrentItemChanged(EventArgs ea)
         {
             PushData();
@@ -155,9 +179,10 @@ namespace System.Windows.Forms
 
         internal override bool IsBinding => _dataSource != null;
 
-        /// <remarks>
-        ///  no op on the propertyManager
-        /// </remarks>
+        /// <summary>
+        ///  Gets the position in the underlying list that controls bound to this data source point to.
+        /// </summary>
+        /// <value>Always returns 0.</value>
         public override int Position
         {
             get => 0;
@@ -166,13 +191,26 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets the number of rows managed by the <see cref="BindingManagerBase" />.
+        /// </summary>
+        /// <value>Always returns 1.</value>
         public override int Count => 1;
 
+        /// <summary>
+        /// Throws a <see cref="NotSupportedException" /> in all cases.
+        /// </summary>
+        /// <exception cref="NotSupportedException">In all cases.</exception>
         public override void AddNew()
         {
             throw new NotSupportedException(SR.DataBindingAddNewNotSupportedOnPropertyManager);
         }
 
+        /// <summary>
+        ///  Throws a <see cref="NotSupportedException" /> in all cases.
+        /// </summary>
+        /// <param name="index">The index of the row to delete.</param>
+        /// <exception cref="NotSupportedException">In all cases.</exception>
         public override void RemoveAt(int index)
         {
             throw new NotSupportedException(SR.DataBindingRemoveAtNotSupportedOnPropertyManager);

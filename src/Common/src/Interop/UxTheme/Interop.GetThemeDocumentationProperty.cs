@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -20,7 +21,7 @@ internal static partial class Interop
                 GetThemeDocumentationPropertyInternal(pszThemeName, pszPropertyName, pBuffer, buffer.Length);
             }
 
-            return buffer.ToString();
+            return buffer.SliceAtFirstNull().ToString();
         }
 
         public static class VisualStyleDocProperty

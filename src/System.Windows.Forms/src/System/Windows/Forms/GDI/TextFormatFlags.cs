@@ -7,8 +7,11 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Note: This is a public enum wrapping the internal <see cref="User32.DT"/>.
+    ///  Specifies the display and layout information for text strings.
     /// </summary>
+    /// <remarks>
+    ///  This is a public enum wrapping the internal <see cref="User32.DT"/>.
+    /// </remarks>
     [Flags]
     public enum TextFormatFlags
     {

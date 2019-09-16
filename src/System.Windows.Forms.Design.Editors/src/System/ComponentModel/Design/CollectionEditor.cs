@@ -1891,7 +1891,8 @@ namespace System.ComponentModel.Design
                 public override Type PropertyType { get; }
 
                 /// <summary>
-                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
+                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component"/> 
+                ///  will change the value of the <paramref name="component"/>.
                 /// </summary>
                 public override bool CanResetValue(object component) => false;
 

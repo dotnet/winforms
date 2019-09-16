@@ -852,8 +852,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the text that is displayed when the control has no Text and is not on focus.
+        ///  Gets or sets the text that is displayed when the control has no text and does not have the focus.
         /// </summary>
+        /// <value>The text that is displayed when the control has no text and does not have the focus.</value>
         [
         Localizable(true),
         DefaultValue(""),
@@ -886,7 +887,7 @@ namespace System.Windows.Forms
         //-------------------------------------------------------------------------------------------------
 
         /// <summary>
-        ///  Draws the PlaceholderText in the client area of the TextBox using the default font and color.
+        ///  Draws the <see cref="PlaceholderText"/> in the client area of the <see cref="TextBox"/> using the default font and color.
         /// </summary>
         private void DrawPlaceholderText(Graphics graphics)
         {

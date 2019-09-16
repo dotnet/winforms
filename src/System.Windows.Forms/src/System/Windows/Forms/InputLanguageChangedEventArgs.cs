@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='InputLanguageChangedEventArgs'/>class with the specified input language and
+        ///  Initializes a new instance of the <see cref='InputLanguageChangedEventArgs'/> class with the specified input language and
         ///  character set.
         /// </summary>
         public InputLanguageChangedEventArgs(InputLanguage inputLanguage, byte charSet)

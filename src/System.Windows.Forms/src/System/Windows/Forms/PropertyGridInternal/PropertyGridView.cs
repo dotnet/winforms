@@ -11,6 +11,7 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -2439,7 +2440,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return rect;
         }
 
-        private /*protected virtual*/ int GetRowFromGridEntry(GridEntry gridEntry)
+        internal /*protected virtual*/ int GetRowFromGridEntry(GridEntry gridEntry)
         {
             GridEntryCollection rgipesAll = GetAllGridEntries();
             if (gridEntry == null || rgipesAll == null)
@@ -5332,6 +5333,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int items = totalProps;
 
                 gridEntry.InternalExpanded = value;
+
+                var oldExpandedState = value ? UnsafeNativeMethods.ExpandCollapseState.Collapsed : UnsafeNativeMethods.ExpandCollapseState.Expanded;
+                var newExpandedState = value ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
+                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                    oldExpandedState,
+                    newExpandedState);
+
                 RecalculateProps();
                 GridEntry ipeSelect = selectedGridEntry;
                 if (!value)
@@ -7633,6 +7642,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.IsInputChar(keyChar);
             }
 
+            protected override void OnGotFocus(EventArgs e)
+            {
+                base.OnGotFocus(e);
+
+                this.AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+
             protected override void OnKeyDown(KeyEventArgs ke)
             {
 
@@ -7983,21 +7999,24 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 internal override object GetPropertyValue(int propertyID)
                 {
-                    if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
+                    switch (propertyID)
                     {
-                        return !IsReadOnly;
-                    }
-                    else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId)
-                    {
-                        return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
-                    }
-                    else if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
-                    {
-                        return NativeMethods.UIA_EditControlTypeId;
-                    }
-                    else if (propertyID == NativeMethods.UIA_NamePropertyId)
-                    {
-                        return Name;
+                        case NativeMethods.UIA_RuntimeIdPropertyId:
+                            return RuntimeId;
+                        case NativeMethods.UIA_ControlTypePropertyId:
+                            return NativeMethods.UIA_EditControlTypeId;
+                        case NativeMethods.UIA_NamePropertyId:
+                            return Name;
+                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                            return Owner.Focused;
+                        case NativeMethods.UIA_IsEnabledPropertyId:
+                            return !IsReadOnly;
+                        case NativeMethods.UIA_ClassNamePropertyId:
+                            return Owner.GetType().ToString();
+                        case NativeMethods.UIA_FrameworkIdPropertyId:
+                            return NativeMethods.WinFormFrameworkId;
+                        case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
+                            return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
                     }
 
                     return base.GetPropertyValue(propertyID);
@@ -8011,6 +8030,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     return base.IsPatternSupported(patternId);
+                }
+
+                internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+                {
+                    get
+                    {
+                        // Prevent sending same runtime ID for all edit boxes. Individual edit in 
+                        // each row should have unique runtime ID to prevent incorrect announcement.
+                        // For instance screen reader may announce row 2 for the third row edit 
+                        // as the sme TextBox control is used both in row 2 and row 3.
+                        return null;
+                    }
                 }
 
                 public override string Name
@@ -8037,6 +8068,30 @@ namespace System.Windows.Forms.PropertyGridInternal
                     set
                     {
                         base.Name = value;
+                    }
+                }
+
+                internal override int[] RuntimeId
+                {
+                    get
+                    {
+                        var selectedGridEntryAccessibleRuntimeId =
+                            propertyGridView?.SelectedGridEntry?.AccessibilityObject?.RuntimeId;
+
+                        if (selectedGridEntryAccessibleRuntimeId == null)
+                        {
+                            return null;
+                        }
+
+                        int[] runtimeId = new int[selectedGridEntryAccessibleRuntimeId.Length + 1];
+                        for (int i = 0; i < selectedGridEntryAccessibleRuntimeId.Length; i++)
+                        {
+                            runtimeId[i] = selectedGridEntryAccessibleRuntimeId[i];
+                        }
+
+                        runtimeId[runtimeId.Length - 1] = 1;
+
+                        return runtimeId;
                     }
                 }
 
@@ -8433,16 +8488,30 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
             internal override object GetPropertyValue(int propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                switch (propertyID)
                 {
-                    return NativeMethods.UIA_TableControlTypeId;
-                }
-                else if (propertyID == NativeMethods.UIA_NamePropertyId)
-                {
-                    return Name;
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_TableControlTypeId;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
+                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
+                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
+                        return true;
                 }
 
                 return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                switch (patternId)
+                {
+                    case NativeMethods.UIA_TablePatternId:
+                    case NativeMethods.UIA_GridPatternId:
+                        return true;
+                }
+
+                return base.IsPatternSupported(patternId);
             }
 
             public override string Name
@@ -8843,6 +8912,41 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 return null;    // Perform default behavior
             }
+
+            internal override UiaCore.IRawElementProviderSimple GetItem(int row, int column)
+            {
+                return GetChild(row);
+            }
+
+            internal override int RowCount
+            {
+                get
+                {
+                    var topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
+                    if (topLevelGridEntries == null)
+                    {
+                        return 0;
+                    }
+
+                    if (!_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                    {
+                        return topLevelGridEntries.Count;
+                    }
+
+                    int categoriesCount = 0;
+                    foreach (var topLevelGridEntry in topLevelGridEntries)
+                    {
+                        if (topLevelGridEntry is CategoryGridEntry)
+                        {
+                            categoriesCount++;
+                        }
+                    }
+
+                    return categoriesCount;
+                }
+            }
+
+            internal override int ColumnCount => 1; // There is one column: grid item represents both label and input.
         }
 
         internal class GridPositionData

@@ -18,9 +18,9 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides <see langword='static '/> methods and properties to manage an application,
-    ///  such as methods to run and quit an application, to process Windows messages, and
-    ///  properties to get information about an application. This class cannot be inherited.
+    ///  Provides <see langword='static'/> methods and properties to manage an application, such as methods to run and quit an application,
+    ///  to process Windows messages, and properties to get information about an application. 
+    ///  This class cannot be inherited.
     /// </summary>
     public sealed partial class Application
     {
@@ -315,14 +315,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the current <see cref="HighDpiMode"/> mode for the process.
         /// </summary>
+        /// <value>One of the enumeration values that indicates the high DPI mode.</value>
         public static HighDpiMode HighDpiMode
             => DpiHelper.GetWinformsApplicationDpiAwareness();
 
         /// <summary>
         ///  Sets the <see cref="HighDpiMode"/> mode for process.
         /// </summary>
-        /// <param name="highDpiMode">The <see cref="HighDpiMode"/> mode to set.</param>
-        /// <returns><see langword="true" /> if successful.</returns>
+        /// <param name="highDpiMode">One of the enumeration values that specifies the high DPI mode to set.</param>
+        /// <returns><see langword="true" /> if the high DPI mode was set; otherwise, <see langword="false" />.</returns>
         public static bool SetHighDpiMode(HighDpiMode highDpiMode)
             => !DpiHelper.FirstParkingWindowCreated && DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
 
@@ -558,7 +559,14 @@ namespace System.Windows.Forms
         public static RegistryKey UserAppDataRegistry
             => Registry.CurrentUser.CreateSubKey($"Software\\{CompanyName}\\{ProductName}\\{ProductVersion}");
 
-
+        /// <summary>
+        ///  Gets a value that indicates whether visual styles are enabled for the application.
+        /// </summary>
+        /// <value><see langword="true" /> if visual styles are enabled; otherwise, <see langword="false" />.</value>
+        /// <remarks>
+        ///  The visual styles can be enabled by calling <see cref="EnableVisualStyles"/>.
+        ///  The visual styles will not be enabled if the OS does not support them, or theming is disabled at the OS level.
+        /// </remarks>
         public static bool UseVisualStyles { get; private set; } = false;
 
         /// <remarks>
@@ -829,7 +837,7 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.DoEventsModal, null);
 
         /// <summary>
-        ///  Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
+        ///  Enables visual styles for all subsequent <see cref="Application.Run"/> and <see cref="CreateHandle"/> calls.
         ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
         public static void EnableVisualStyles()

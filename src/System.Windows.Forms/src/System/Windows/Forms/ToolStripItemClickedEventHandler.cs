@@ -5,9 +5,9 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the  <see langword='MouseDown'/>,
-    /// <see langword='MouseUp'/>, or <see langword='MouseMove '/>event of a form,
-    ///  control, or other component.
+    ///  Represents a method that will handle the <see cref='Control.MouseDown'/>,
+    ///  <see cref='Control.MouseUp'/> or <see cref='Control.MouseMove'/> events of a form,
+    ///  control or other component.
     /// </summary>
     public delegate void ToolStripItemClickedEventHandler(object sender, ToolStripItemClickedEventArgs e);
 }

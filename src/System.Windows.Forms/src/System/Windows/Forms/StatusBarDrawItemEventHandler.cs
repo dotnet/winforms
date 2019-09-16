@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the method that will handle the <see cref='StatusBar.OnDrawItem'/>
+    ///  Represents a method that will handle the <see cref='StatusBar.OnDrawItem'/>
     ///  event of a <see cref='StatusBar'/>.
     /// </summary>
     public delegate void StatusBarDrawItemEventHandler(object sender, StatusBarDrawItemEventArgs sbdevent);

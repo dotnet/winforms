@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.IntegrationTests.Common;
+using WindowsFormsApp1;
 using WinformsControlsTest.UserControls;
 
 namespace WinformsControlsTest
@@ -14,7 +16,7 @@ namespace WinformsControlsTest
         public MainForm()
         {
             this.BringToForeground();
-            InitializeComponent();          
+            InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -111,6 +113,16 @@ namespace WinformsControlsTest
         private void RichTextBoxes_Click(object sender, EventArgs e)
         {
             new RichTextBoxes().Show();
+        }
+
+        private void PictureBoxes_Click(object sender, EventArgs e)
+        {
+            new PictureBoxes().Show();
+        }
+
+        private void formBorderStyles_Click(object sender, EventArgs e)
+        {
+            new FormBorderStyles().Show();
         }
     }
 }
