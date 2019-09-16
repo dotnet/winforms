@@ -186,16 +186,16 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.SelectFont(font);
             }
 
-            DeviceContextBackgroundMode newBackGndMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
-                DeviceContextBackgroundMode.Transparent :
-                DeviceContextBackgroundMode.Opaque;
+            Gdi32.BKMODE newBackGndMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
+                Gdi32.BKMODE.TRANSPARENT :
+                Gdi32.BKMODE.OPAQUE;
 
             if (DeviceContext.BackgroundMode != newBackGndMode)
             {
                 DeviceContext.SetBackgroundMode(newBackGndMode);
             }
 
-            if (newBackGndMode != DeviceContextBackgroundMode.Transparent && backColor != DeviceContext.BackgroundColor)
+            if (newBackGndMode != Gdi32.BKMODE.TRANSPARENT && backColor != DeviceContext.BackgroundColor)
             {
                 DeviceContext.BackgroundColor = backColor;
             }
@@ -548,16 +548,16 @@ namespace System.Windows.Forms.Internal
             HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             DeviceContextBinaryRasterOperationFlags rasterOp = DeviceContext.BinaryRasterOperation;
-            DeviceContextBackgroundMode bckMode = DeviceContext.BackgroundMode;
+            Gdi32.BKMODE bckMode = DeviceContext.BackgroundMode;
 
             if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
             {
                 rasterOp = DeviceContext.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
             }
 
-            if (bckMode != DeviceContextBackgroundMode.Transparent)
+            if (bckMode != Gdi32.BKMODE.TRANSPARENT)
             {
-                bckMode = DeviceContext.SetBackgroundMode(DeviceContextBackgroundMode.Transparent);
+                bckMode = DeviceContext.SetBackgroundMode(Gdi32.BKMODE.TRANSPARENT);
             }
 
             if (pen != null)
@@ -570,7 +570,7 @@ namespace System.Windows.Forms.Internal
             IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, &oldPoint);
             IntUnsafeNativeMethods.LineTo(hdc, x2, y2);
 
-            if (bckMode != DeviceContextBackgroundMode.Transparent)
+            if (bckMode != Gdi32.BKMODE.TRANSPARENT)
             {
                 DeviceContext.SetBackgroundMode(bckMode);
             }

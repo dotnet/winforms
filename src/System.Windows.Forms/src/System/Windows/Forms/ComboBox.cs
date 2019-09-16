@@ -2281,7 +2281,7 @@ namespace System.Windows.Forms
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
                 Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(ForeColor));
-                SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(BackColor));
+                Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(BackColor));
                 return BackColorBrush;
             }
             else

@@ -33,21 +33,19 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Color BackgroundColor
         {
-            get => ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetBkColor(new HandleRef(this, Hdc)));
-            set => ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor(new HandleRef(this, Hdc), ColorTranslator.ToWin32(value)));
+            get => ColorTranslator.FromWin32(Gdi32.GetBkColor(this));
+            set => ColorTranslator.FromWin32(Gdi32.SetBkColor(this, ColorTranslator.ToWin32(value)));
         }
 
         /// <summary>
         ///  DC background mode.
         /// </summary>
-        public DeviceContextBackgroundMode BackgroundMode
-             => (DeviceContextBackgroundMode)IntUnsafeNativeMethods.GetBkMode(new HandleRef(this, Hdc));
+        public Gdi32.BKMODE BackgroundMode => Gdi32.GetBkMode(this);
 
         /// <summary>
         ///  Sets the DC background mode and returns the old value.
         /// </summary>
-        public DeviceContextBackgroundMode SetBackgroundMode(DeviceContextBackgroundMode newMode)
-            => (DeviceContextBackgroundMode)IntUnsafeNativeMethods.SetBkMode(new HandleRef(this, Hdc), (int)newMode);
+        public Gdi32.BKMODE SetBackgroundMode(Gdi32.BKMODE newMode) => Gdi32.SetBkMode(this, newMode);
 
         /// <summary>
         ///  ROP2 currently on the DC.

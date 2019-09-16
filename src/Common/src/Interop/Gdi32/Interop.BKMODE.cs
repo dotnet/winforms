@@ -9,7 +9,10 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern uint RealizePalette(IntPtr hdc);
+        public enum BKMODE : int
+        {
+            TRANSPARENT = 1,
+            OPAQUE = 2,
+        }
     }
 }

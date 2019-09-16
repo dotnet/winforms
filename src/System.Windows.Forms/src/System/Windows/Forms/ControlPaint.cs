@@ -313,7 +313,7 @@ namespace System.Windows.Forms
             // monochrome to color, Windows sets all 1 bits to the background
             // color, and all 0 bits to the foreground color.
             //
-            SafeNativeMethods.SetBkColor(new HandleRef(null, target), 0x00ffffff); // white
+            Gdi32.SetBkColor(target, 0x00ffffff); // white
             Gdi32.SetTextColor(target, 0x00000000); // black
             SafeNativeMethods.BitBlt(new HandleRef(null, target), 0, 0, size.Width, size.Height, new HandleRef(null, source),
                                      0, 0, 0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
@@ -1993,7 +1993,7 @@ namespace System.Windows.Forms
             int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
-            SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(graphicsColor));
+            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
             SafeNativeMethods.Rectangle(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
 
             SafeNativeMethods.SetROP2(dc, prevRop2);
