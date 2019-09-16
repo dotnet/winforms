@@ -23,27 +23,27 @@ namespace System.Windows.Forms
         StandardOleMarshalObject,
         IReflect,
         IAccessible,
-        UnsafeNativeMethods.IAccessibleEx,
-        UnsafeNativeMethods.IServiceProvider,
+        UiaCore.IAccessibleEx,
+        Ole32.IServiceProvider,
         UiaCore.IRawElementProviderSimple,
         UiaCore.IRawElementProviderFragment,
         UiaCore.IRawElementProviderFragmentRoot,
-        UnsafeNativeMethods.IInvokeProvider,
-        UnsafeNativeMethods.IValueProvider,
-        UnsafeNativeMethods.IRangeValueProvider,
-        UnsafeNativeMethods.IExpandCollapseProvider,
-        UnsafeNativeMethods.IToggleProvider,
-        UnsafeNativeMethods.ITableProvider,
-        UnsafeNativeMethods.ITableItemProvider,
-        UnsafeNativeMethods.IGridProvider,
+        UiaCore.IInvokeProvider,
+        UiaCore.IValueProvider,
+        UiaCore.IRangeValueProvider,
+        UiaCore.IExpandCollapseProvider,
+        UiaCore.IToggleProvider,
+        UiaCore.ITableProvider,
+        UiaCore.ITableItemProvider,
+        UiaCore.IGridProvider,
         UiaCore.IGridItemProvider,
         OleAut32.IEnumVariant,
         Ole32.IOleWindow,
-        UnsafeNativeMethods.ILegacyIAccessibleProvider,
-        UnsafeNativeMethods.ISelectionProvider,
+        UiaCore.ILegacyIAccessibleProvider,
+        UiaCore.ISelectionProvider,
         UiaCore.ISelectionItemProvider,
         UiaCore.IRawElementProviderHwndOverride,
-        UnsafeNativeMethods.IScrollItemProvider
+        UiaCore.IScrollItemProvider
     {
         /// <summary>
         ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
@@ -540,14 +540,9 @@ namespace System.Windows.Forms
         internal virtual int[] RuntimeId => null;
 
         internal virtual int ProviderOptions
-        {
-            get => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);
-        }
+            => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);
 
-        internal virtual UiaCore.IRawElementProviderSimple HostRawElementProvider
-        {
-            get => null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple HostRawElementProvider => null;
 
         internal virtual object GetPropertyValue(int propertyID)
         {
@@ -614,14 +609,9 @@ namespace System.Windows.Forms
         internal virtual int GetChildId() => NativeMethods.CHILDID_SELF;
 
         internal virtual UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-        {
-            return null;
-        }
+            => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetEmbeddedFragmentRoots()
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple[] GetEmbeddedFragmentRoots() => null;
 
         internal virtual void SetFocus()
         {
@@ -629,20 +619,11 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle BoundingRectangle => Bounds;
 
-        internal virtual UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-        {
-            get => null;
-        }
+        internal virtual UiaCore.IRawElementProviderFragmentRoot FragmentRoot => null;
 
-        internal virtual UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-        {
-            return this;
-        }
+        internal virtual UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) => this;
 
-        internal virtual UiaCore.IRawElementProviderFragment GetFocus()
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderFragment GetFocus() => null;
 
         internal virtual void Expand()
         {
@@ -652,49 +633,25 @@ namespace System.Windows.Forms
         {
         }
 
-        internal virtual UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
-        {
-            get => UnsafeNativeMethods.ExpandCollapseState.Collapsed;
-        }
+        internal virtual UiaCore.ExpandCollapseState ExpandCollapseState => UiaCore.ExpandCollapseState.Collapsed;
 
         internal virtual void Toggle()
         {
         }
 
-        internal virtual UnsafeNativeMethods.ToggleState ToggleState
-        {
-            get => UnsafeNativeMethods.ToggleState.ToggleState_Indeterminate;
-        }
+        internal virtual UiaCore.ToggleState ToggleState => UiaCore.ToggleState.Indeterminate;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaders()
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaders() => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaders()
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaders() => null;
 
-        internal virtual UnsafeNativeMethods.RowOrColumnMajor RowOrColumnMajor
-        {
-            get => UnsafeNativeMethods.RowOrColumnMajor.RowOrColumnMajor_RowMajor;
-        }
+        internal virtual UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaderItems()
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaderItems() => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems() => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple GetItem(int row, int column)
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple GetItem(int row, int column) => null;
 
         internal virtual int RowCount => -1;
 
@@ -708,16 +665,9 @@ namespace System.Windows.Forms
 
         internal virtual int ColumnSpan => 1;
 
-        internal virtual UiaCore.IRawElementProviderSimple ContainingGrid
-        {
-            get => null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple ContainingGrid => null;
 
-        internal virtual void Invoke()
-        {
-            // Calling DoDefaultAction here is consistent with MSAA Proxy implementation.
-            DoDefaultAction();
-        }
+        internal virtual void Invoke() => DoDefaultAction();
 
         internal virtual bool IsReadOnly => false;
 
@@ -726,10 +676,7 @@ namespace System.Windows.Forms
             Value = newValue;
         }
 
-        internal virtual UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd) => null;
 
         internal virtual void SetValue(double newValue)
         {
@@ -745,10 +692,7 @@ namespace System.Windows.Forms
 
         internal virtual double RangeValue => double.NaN;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetSelection()
-        {
-            return null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple[] GetSelection() => null;
 
         internal virtual bool CanSelectMultiple => false;
 
@@ -768,10 +712,7 @@ namespace System.Windows.Forms
 
         internal virtual bool IsItemSelected => false;
 
-        internal virtual UiaCore.IRawElementProviderSimple ItemSelectionContainer
-        {
-            get => null;
-        }
+        internal virtual UiaCore.IRawElementProviderSimple ItemSelectionContainer => null;
 
         /// <summary>
         ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
@@ -789,59 +730,63 @@ namespace System.Windows.Forms
         {
         }
 
-        int UnsafeNativeMethods.IServiceProvider.QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObject)
+        unsafe HRESULT Ole32.IServiceProvider.QueryService(Guid* service, Guid* riid, IntPtr* ppvObject)
         {
-            int hr = NativeMethods.E_NOINTERFACE;
-            ppvObject = IntPtr.Zero;
+            if (service == null || riid == null)
+            {
+                return HRESULT.E_NOINTERFACE;
+            }
+            if (ppvObject == null)
+            {
+                return HRESULT.E_POINTER;
+            }
 
             if (IsIAccessibleExSupported())
             {
-                if (service.Equals(UnsafeNativeMethods.guid_IAccessibleEx) &&
-                    riid.Equals(UnsafeNativeMethods.guid_IAccessibleEx))
+                Guid IID_IAccessibleEx = typeof(UiaCore.IAccessibleEx).GUID;
+                if (service->Equals(IID_IAccessibleEx) && riid->Equals(IID_IAccessibleEx))
                 {
                     // We want to return the internal, secure, object, which we don't have access here
                     // Return non-null, which will be interpreted in internal method, to mean returning casted object to IAccessibleEx
-                    ppvObject = Marshal.GetComInterfaceForObject(this, typeof(UnsafeNativeMethods.IAccessibleEx));
-                    hr = NativeMethods.S_OK;
+                    *ppvObject = Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
+                    return HRESULT.S_OK;
                 }
             }
 
-            return hr;
+            return HRESULT.E_NOINTERFACE;
         }
 
-        object UnsafeNativeMethods.IAccessibleEx.GetObjectForChild(int idChild)
-        {
-            // No need to implement this for patterns and properties
-            return null;
-        }
+        UiaCore.IAccessibleEx UiaCore.IAccessibleEx.GetObjectForChild(int idChild) => null;
 
         // This method is never called
-        int UnsafeNativeMethods.IAccessibleEx.GetIAccessiblePair(out object ppAcc, out int pidChild)
+        unsafe HRESULT UiaCore.IAccessibleEx.GetIAccessiblePair(out object ppAcc, int* pidChild)
         {
+            if (pidChild == null)
+            {
+                ppAcc = null;
+                return HRESULT.E_INVALIDARG;
+            }
+
             // No need to implement this for patterns and properties
             ppAcc = null;
-            pidChild = 0;
-            return NativeMethods.E_POINTER;
+            *pidChild = 0;
+            return HRESULT.E_POINTER;
         }
 
-        int[] UnsafeNativeMethods.IAccessibleEx.GetRuntimeId() => RuntimeId;
+        int[] UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
 
-        int UnsafeNativeMethods.IAccessibleEx.ConvertReturnedElement(object pIn, out object ppRetValOut)
+        HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, out UiaCore.IAccessibleEx ppRetValOut)
         {
             // No need to implement this for patterns and properties
             ppRetValOut = null;
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
         UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions
-        {
-            get => (UiaCore.ProviderOptions)ProviderOptions;
-        }
+            => (UiaCore.ProviderOptions)ProviderOptions;
 
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderSimple.HostRawElementProvider
-        {
-            get => HostRawElementProvider;
-        }
+            => HostRawElementProvider;
 
         object UiaCore.IRawElementProviderSimple.GetPatternProvider(int patternId)
         {
@@ -856,79 +801,49 @@ namespace System.Windows.Forms
         }
 
         object UiaCore.IRawElementProviderSimple.GetPropertyValue(int propertyID)
-        {
-            return GetPropertyValue(propertyID);
-        }
+            => GetPropertyValue(propertyID);
 
         object UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction)
-        {
-            return FragmentNavigate(direction);
-        }
+            => FragmentNavigate(direction);
 
-        int[] UiaCore.IRawElementProviderFragment.GetRuntimeId()
-        {
-            return RuntimeId;
-        }
+        int[] UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
 
-        object[] UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots()
-        {
-            return GetEmbeddedFragmentRoots();
-        }
+        object[] UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots() => GetEmbeddedFragmentRoots();
 
-        void UiaCore.IRawElementProviderFragment.SetFocus()
-        {
-            SetFocus();
-        }
+        void UiaCore.IRawElementProviderFragment.SetFocus() => SetFocus();
 
-        UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle
-        {
-            get => new UiaCore.UiaRect(BoundingRectangle);
-        }
+        UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle => new UiaCore.UiaRect(BoundingRectangle);
 
-        UiaCore.IRawElementProviderFragmentRoot UiaCore.IRawElementProviderFragment.FragmentRoot
-        {
-            get => FragmentRoot;
-        }
+        UiaCore.IRawElementProviderFragmentRoot UiaCore.IRawElementProviderFragment.FragmentRoot => FragmentRoot;
 
         object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
-        {
-            return ElementProviderFromPoint(x, y);
-        }
+            => ElementProviderFromPoint(x, y);
 
-        object UiaCore.IRawElementProviderFragmentRoot.GetFocus()
-        {
-            return GetFocus();
-        }
+        object UiaCore.IRawElementProviderFragmentRoot.GetFocus() => GetFocus();
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.DefaultAction => DefaultAction;
+        string UiaCore.ILegacyIAccessibleProvider.DefaultAction => DefaultAction;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Description => Description;
+        string UiaCore.ILegacyIAccessibleProvider.Description => Description;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Help => Help;
+        string UiaCore.ILegacyIAccessibleProvider.Help => Help;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.KeyboardShortcut => KeyboardShortcut;
+        string UiaCore.ILegacyIAccessibleProvider.KeyboardShortcut => KeyboardShortcut;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Name => Name;
+        string UiaCore.ILegacyIAccessibleProvider.Name => Name;
 
-        uint UnsafeNativeMethods.ILegacyIAccessibleProvider.Role => (uint)Role;
+        uint UiaCore.ILegacyIAccessibleProvider.Role => (uint)Role;
 
-        uint UnsafeNativeMethods.ILegacyIAccessibleProvider.State => (uint)State;
+        uint UiaCore.ILegacyIAccessibleProvider.State => (uint)State;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Value => Value;
+        string UiaCore.ILegacyIAccessibleProvider.Value => Value;
 
-        int UnsafeNativeMethods.ILegacyIAccessibleProvider.ChildId => GetChildId();
+        int UiaCore.ILegacyIAccessibleProvider.ChildId => GetChildId();
 
-        void UnsafeNativeMethods.ILegacyIAccessibleProvider.DoDefaultAction()
-        {
-            DoDefaultAction();
-        }
+        void UiaCore.ILegacyIAccessibleProvider.DoDefaultAction() => DoDefaultAction();
 
-        IAccessible UnsafeNativeMethods.ILegacyIAccessibleProvider.GetIAccessible()
-        {
-            return AsIAccessible(this);
-        }
+        IAccessible UiaCore.ILegacyIAccessibleProvider.GetIAccessible() => AsIAccessible(this);
 
-        object[] UnsafeNativeMethods.ILegacyIAccessibleProvider.GetSelection()
+        object[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
         {
             return new UiaCore.IRawElementProviderSimple[]
             {
@@ -936,82 +851,43 @@ namespace System.Windows.Forms
             };
         }
 
-        void UnsafeNativeMethods.ILegacyIAccessibleProvider.Select(int flagsSelect)
-        {
-            Select((AccessibleSelection)flagsSelect);
-        }
+        void UiaCore.ILegacyIAccessibleProvider.Select(int flagsSelect) => Select((AccessibleSelection)flagsSelect);
 
-        void UnsafeNativeMethods.ILegacyIAccessibleProvider.SetValue(string szValue)
-        {
-            SetValue(szValue);
-        }
+        void UiaCore.ILegacyIAccessibleProvider.SetValue(string szValue) => SetValue(szValue);
 
-        void UnsafeNativeMethods.IExpandCollapseProvider.Expand()
-        {
-            Expand();
-        }
+        void UiaCore.IExpandCollapseProvider.Expand() => Expand();
 
-        void UnsafeNativeMethods.IExpandCollapseProvider.Collapse()
-        {
-            Collapse();
-        }
+        void UiaCore.IExpandCollapseProvider.Collapse() => Collapse();
 
-        UnsafeNativeMethods.ExpandCollapseState UnsafeNativeMethods.IExpandCollapseProvider.ExpandCollapseState
-        {
-            get => ExpandCollapseState;
-        }
+        UiaCore.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
 
-        void UnsafeNativeMethods.IInvokeProvider.Invoke() => Invoke();
+        void UiaCore.IInvokeProvider.Invoke() => Invoke();
 
-        bool UnsafeNativeMethods.IValueProvider.IsReadOnly => IsReadOnly;
+        BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
 
-        string UnsafeNativeMethods.IValueProvider.Value => Value;
+        string UiaCore.IValueProvider.Value => Value;
 
-        void UnsafeNativeMethods.IValueProvider.SetValue(string newValue)
-        {
-            SetValue(newValue);
-        }
+        void UiaCore.IValueProvider.SetValue(string newValue) => SetValue(newValue);
 
-        void UnsafeNativeMethods.IToggleProvider.Toggle() => Toggle();
+        void UiaCore.IToggleProvider.Toggle() => Toggle();
 
-        UnsafeNativeMethods.ToggleState UnsafeNativeMethods.IToggleProvider.ToggleState
-        {
-            get => ToggleState;
-        }
+        UiaCore.ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
 
-        object[] UnsafeNativeMethods.ITableProvider.GetRowHeaders()
-        {
-            return GetRowHeaders();
-        }
+        object[] UiaCore.ITableProvider.GetRowHeaders() =>  GetRowHeaders();
 
-        object[] UnsafeNativeMethods.ITableProvider.GetColumnHeaders()
-        {
-            return GetColumnHeaders();
-        }
+        object[] UiaCore.ITableProvider.GetColumnHeaders() =>  GetColumnHeaders();
 
-        UnsafeNativeMethods.RowOrColumnMajor UnsafeNativeMethods.ITableProvider.RowOrColumnMajor
-        {
-            get => RowOrColumnMajor;
-        }
+        UiaCore.RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
 
-        object[] UnsafeNativeMethods.ITableItemProvider.GetRowHeaderItems()
-        {
-            return GetRowHeaderItems();
-        }
+        object[] UiaCore.ITableItemProvider.GetRowHeaderItems() =>  GetRowHeaderItems();
 
-        object[] UnsafeNativeMethods.ITableItemProvider.GetColumnHeaderItems()
-        {
-            return GetColumnHeaderItems();
-        }
+        object[] UiaCore.ITableItemProvider.GetColumnHeaderItems() => GetColumnHeaderItems();
 
-        object UnsafeNativeMethods.IGridProvider.GetItem(int row, int column)
-        {
-            return GetItem(row, column);
-        }
+        object UiaCore.IGridProvider.GetItem(int row, int column) => GetItem(row, column);
 
-        int UnsafeNativeMethods.IGridProvider.RowCount => RowCount;
+        int UiaCore.IGridProvider.RowCount => RowCount;
 
-        int UnsafeNativeMethods.IGridProvider.ColumnCount => ColumnCount;
+        int UiaCore.IGridProvider.ColumnCount => ColumnCount;
 
         int UiaCore.IGridItemProvider.Row => Row;
 
@@ -1021,10 +897,7 @@ namespace System.Windows.Forms
 
         int UiaCore.IGridItemProvider.ColumnSpan => ColumnSpan;
 
-        UiaCore.IRawElementProviderSimple UiaCore.IGridItemProvider.ContainingGrid
-        {
-            get => ContainingGrid;
-        }
+        UiaCore.IRawElementProviderSimple UiaCore.IGridItemProvider.ContainingGrid => ContainingGrid;
 
         /// <summary>
         ///  Perform the default action
@@ -1936,10 +1809,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Clone this accessible object.
         /// </summary>
-        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
-        {
-            return EnumVariant.Clone(ppEnum);
-        }
+        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum) => EnumVariant.Clone(ppEnum);
 
         /// <summary>
         ///  Obtain the next n children of this accessible object.
@@ -2190,9 +2060,7 @@ namespace System.Windows.Forms
         ///  of the method.
         /// </summary>
         MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
-        {
-            return typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
-        }
+            => typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
 
         /// <summary>
         ///  Return the requested method if it is implemented by the Reflection object. The
@@ -2200,14 +2068,10 @@ namespace System.Windows.Forms
         ///  with the same name an AmbiguousMatchException is thrown.
         /// </summary>
         MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetMethod(name, bindingAttr);
-        }
+            => typeof(IAccessible).GetMethod(name, bindingAttr);
 
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetMethods(bindingAttr);
-        }
+            => typeof(IAccessible).GetMethods(bindingAttr);
 
         /// <summary>
         ///  Return the requestion field if it is implemented by the Reflection
@@ -2215,14 +2079,10 @@ namespace System.Windows.Forms
         ///  a single field with a name.
         /// </summary>
         FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetField(name, bindingAttr);
-        }
+            => typeof(IAccessible).GetField(name, bindingAttr);
 
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetFields(bindingAttr);
-        }
+            => typeof(IAccessible).GetFields(bindingAttr);
 
         /// <summary>
         ///  Return the property based upon name. If more than one property has
@@ -2230,43 +2090,33 @@ namespace System.Windows.Forms
         ///  null if no property is found.
         /// </summary>
         PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetProperty(name, bindingAttr);
-        }
+            => typeof(IAccessible).GetProperty(name, bindingAttr);
 
         /// <summary>
         ///  Return the property based upon the name and Descriptor info describing
         ///  the property indexing. Return null if no property is found.
         /// </summary>
         PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
-        {
-            return typeof(IAccessible).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-        }
+            => typeof(IAccessible).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
 
         /// <summary>
         ///  Returns an array of PropertyInfos for all the properties defined on
         ///  the Reflection object.
         /// </summary>
         PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetProperties(bindingAttr);
-        }
+            => typeof(IAccessible).GetProperties(bindingAttr);
 
         /// <summary>
         ///  Return an array of members which match the passed in name.
         /// </summary>
         MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetMember(name, bindingAttr);
-        }
+            => typeof(IAccessible).GetMember(name, bindingAttr);
 
         /// <summary>
         ///  Return an array of all of the members defined for this object.
         /// </summary>
         MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
-        {
-            return typeof(IAccessible).GetMembers(bindingAttr);
-        }
+            => typeof(IAccessible).GetMembers(bindingAttr);
 
         /// <summary>
         ///  Description of the Binding Process.
@@ -2329,54 +2179,37 @@ namespace System.Windows.Forms
         Type IReflect.UnderlyingSystemType => typeof(IAccessible);
 
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
-        {
-            return GetOverrideProviderForHwnd(hwnd);
-        }
+            => GetOverrideProviderForHwnd(hwnd);
 
-        bool UnsafeNativeMethods.IRangeValueProvider.IsReadOnly => IsReadOnly;
+        BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
 
-        double UnsafeNativeMethods.IRangeValueProvider.LargeChange => LargeChange;
+        double UiaCore.IRangeValueProvider.LargeChange => LargeChange;
 
-        double UnsafeNativeMethods.IRangeValueProvider.Maximum => Maximum;
+        double UiaCore.IRangeValueProvider.Maximum => Maximum;
 
-        double UnsafeNativeMethods.IRangeValueProvider.Minimum => Minimum;
+        double UiaCore.IRangeValueProvider.Minimum => Minimum;
 
-        double UnsafeNativeMethods.IRangeValueProvider.SmallChange => SmallChange;
+        double UiaCore.IRangeValueProvider.SmallChange => SmallChange;
 
-        double UnsafeNativeMethods.IRangeValueProvider.Value => RangeValue;
+        double UiaCore.IRangeValueProvider.Value => RangeValue;
 
-        void UnsafeNativeMethods.IRangeValueProvider.SetValue(double value)
-        {
-            SetValue(value);
-        }
+        void UiaCore.IRangeValueProvider.SetValue(double value) => SetValue(value);
 
-        object[] UnsafeNativeMethods.ISelectionProvider.GetSelection()
-        {
-            return GetSelection();
-        }
+        object[] UiaCore.ISelectionProvider.GetSelection() => GetSelection();
 
-        bool UnsafeNativeMethods.ISelectionProvider.CanSelectMultiple => CanSelectMultiple;
+        BOOL UiaCore.ISelectionProvider.CanSelectMultiple => CanSelectMultiple ? BOOL.TRUE : BOOL.FALSE;
 
-        bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired => IsSelectionRequired;
+        BOOL UiaCore.ISelectionProvider.IsSelectionRequired => IsSelectionRequired ? BOOL.TRUE : BOOL.FALSE;
 
         void UiaCore.ISelectionItemProvider.Select() => SelectItem();
 
-        void UiaCore.ISelectionItemProvider.AddToSelection()
-        {
-            AddToSelection();
-        }
+        void UiaCore.ISelectionItemProvider.AddToSelection() => AddToSelection();
 
-        void UiaCore.ISelectionItemProvider.RemoveFromSelection()
-        {
-            RemoveFromSelection();
-        }
+        void UiaCore.ISelectionItemProvider.RemoveFromSelection() => RemoveFromSelection();
 
-        bool UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected;
+        BOOL UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected ? BOOL.TRUE : BOOL.FALSE;
 
-        UiaCore.IRawElementProviderSimple UiaCore.ISelectionItemProvider.SelectionContainer
-        {
-            get => ItemSelectionContainer;
-        }
+        UiaCore.IRawElementProviderSimple UiaCore.ISelectionItemProvider.SelectionContainer => ItemSelectionContainer;
 
         /// <summary>
         ///  Raises the UIA Notification event.
@@ -2459,10 +2292,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        void UnsafeNativeMethods.IScrollItemProvider.ScrollIntoView()
-        {
-            ScrollIntoView();
-        }
+        void UiaCore.IScrollItemProvider.ScrollIntoView() => ScrollIntoView();
 
         internal virtual void ScrollIntoView()
         {
@@ -2688,28 +2518,28 @@ namespace System.Windows.Forms
     /// </Summary>
     internal sealed class InternalAccessibleObject :
         StandardOleMarshalObject,
-        UnsafeNativeMethods.IAccessibleInternal,
+        UiaCore.IAccessibleInternal,
         IReflect,
-        UnsafeNativeMethods.IServiceProvider,
-        UnsafeNativeMethods.IAccessibleEx,
+        Ole32.IServiceProvider,
+        UiaCore.IAccessibleEx,
         UiaCore.IRawElementProviderSimple,
         UiaCore.IRawElementProviderFragment,
         UiaCore.IRawElementProviderFragmentRoot,
-        UnsafeNativeMethods.IInvokeProvider,
-        UnsafeNativeMethods.IValueProvider,
-        UnsafeNativeMethods.IRangeValueProvider,
-        UnsafeNativeMethods.IExpandCollapseProvider,
-        UnsafeNativeMethods.IToggleProvider,
-        UnsafeNativeMethods.ITableProvider,
-        UnsafeNativeMethods.ITableItemProvider,
-        UnsafeNativeMethods.IGridProvider,
+        UiaCore.IInvokeProvider,
+        UiaCore.IValueProvider,
+        UiaCore.IRangeValueProvider,
+        UiaCore.IExpandCollapseProvider,
+        UiaCore.IToggleProvider,
+        UiaCore.ITableProvider,
+        UiaCore.ITableItemProvider,
+        UiaCore.IGridProvider,
         UiaCore.IGridItemProvider,
         OleAut32.IEnumVariant,
         Ole32.IOleWindow,
-        UnsafeNativeMethods.ILegacyIAccessibleProvider,
-        UnsafeNativeMethods.ISelectionProvider,
+        UiaCore.ILegacyIAccessibleProvider,
+        UiaCore.ISelectionProvider,
         UiaCore.ISelectionItemProvider,
-        UnsafeNativeMethods.IScrollItemProvider,
+        UiaCore.IScrollItemProvider,
         UiaCore.IRawElementProviderHwndOverride
     {
         private IAccessible publicIAccessible;                      // AccessibleObject as IAccessible
@@ -2717,26 +2547,26 @@ namespace System.Windows.Forms
         private readonly Ole32.IOleWindow publicIOleWindow;         // AccessibleObject as IOleWindow
         private readonly IReflect publicIReflect;                   // AccessibleObject as IReflect
 
-        private readonly UnsafeNativeMethods.IServiceProvider publicIServiceProvider; // AccessibleObject as IServiceProvider
-        private readonly UnsafeNativeMethods.IAccessibleEx publicIAccessibleEx;       // AccessibleObject as IAccessibleEx
+        private readonly Ole32.IServiceProvider publicIServiceProvider; // AccessibleObject as IServiceProvider
+        private readonly UiaCore.IAccessibleEx publicIAccessibleEx;       // AccessibleObject as IAccessibleEx
 
         // UIAutomation
         private readonly UiaCore.IRawElementProviderSimple publicIRawElementProviderSimple;                // AccessibleObject as IRawElementProviderSimple
         private readonly UiaCore.IRawElementProviderFragment publicIRawElementProviderFragment;            // AccessibleObject as IRawElementProviderFragment
         private readonly UiaCore.IRawElementProviderFragmentRoot publicIRawElementProviderFragmentRoot;    // AccessibleObject as IRawElementProviderFragmentRoot
-        private readonly UnsafeNativeMethods.IInvokeProvider publicIInvokeProvider;                        // AccessibleObject as IInvokeProvider
-        private readonly UnsafeNativeMethods.IValueProvider publicIValueProvider;                          // AccessibleObject as IValueProvider
-        private readonly UnsafeNativeMethods.IRangeValueProvider publicIRangeValueProvider;                // AccessibleObject as IRangeValueProvider
-        private readonly UnsafeNativeMethods.IExpandCollapseProvider publicIExpandCollapseProvider;        // AccessibleObject as IExpandCollapseProvider
-        private readonly UnsafeNativeMethods.IToggleProvider publicIToggleProvider;                        // AccessibleObject as IToggleProvider
-        private readonly UnsafeNativeMethods.ITableProvider publicITableProvider;                          // AccessibleObject as ITableProvider
-        private readonly UnsafeNativeMethods.ITableItemProvider publicITableItemProvider;                  // AccessibleObject as ITableItemProvider
-        private readonly UnsafeNativeMethods.IGridProvider publicIGridProvider;                            // AccessibleObject as IGridProvider
+        private readonly UiaCore.IInvokeProvider publicIInvokeProvider;                                    // AccessibleObject as IInvokeProvider
+        private readonly UiaCore.IValueProvider publicIValueProvider;                                      // AccessibleObject as IValueProvider
+        private readonly UiaCore.IRangeValueProvider publicIRangeValueProvider;                            // AccessibleObject as IRangeValueProvider
+        private readonly UiaCore.IExpandCollapseProvider publicIExpandCollapseProvider;                    // AccessibleObject as IExpandCollapseProvider
+        private readonly UiaCore.IToggleProvider publicIToggleProvider;                                    // AccessibleObject as IToggleProvider
+        private readonly UiaCore.ITableProvider publicITableProvider;                                      // AccessibleObject as ITableProvider
+        private readonly UiaCore.ITableItemProvider publicITableItemProvider;                              // AccessibleObject as ITableItemProvider
+        private readonly UiaCore.IGridProvider publicIGridProvider;                                        // AccessibleObject as IGridProvider
         private readonly UiaCore.IGridItemProvider publicIGridItemProvider;                                // AccessibleObject as IGridItemProvider
-        private readonly UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;  // AccessibleObject as ILegayAccessibleProvider
-        private readonly UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
+        private readonly UiaCore.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;              // AccessibleObject as ILegayAccessibleProvider
+        private readonly UiaCore.ISelectionProvider publicISelectionProvider;                              // AccessibleObject as ISelectionProvider
         private readonly UiaCore.ISelectionItemProvider publicISelectionItemProvider;                      // AccessibleObject as ISelectionItemProvider
-        private readonly UnsafeNativeMethods.IScrollItemProvider publicIScrollItemProvider;                // AccessibleObject as IScrollItemProvider
+        private readonly UiaCore.IScrollItemProvider publicIScrollItemProvider;                            // AccessibleObject as IScrollItemProvider
         private readonly UiaCore.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride;    // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
@@ -2749,24 +2579,24 @@ namespace System.Windows.Forms
             publicIEnumVariant = (OleAut32.IEnumVariant)accessibleImplemention;
             publicIOleWindow = (Ole32.IOleWindow)accessibleImplemention;
             publicIReflect = (IReflect)accessibleImplemention;
-            publicIServiceProvider = (UnsafeNativeMethods.IServiceProvider)accessibleImplemention;
-            publicIAccessibleEx = (UnsafeNativeMethods.IAccessibleEx)accessibleImplemention;
+            publicIServiceProvider = (Ole32.IServiceProvider)accessibleImplemention;
+            publicIAccessibleEx = (UiaCore.IAccessibleEx)accessibleImplemention;
             publicIRawElementProviderSimple = (UiaCore.IRawElementProviderSimple)accessibleImplemention;
             publicIRawElementProviderFragment = (UiaCore.IRawElementProviderFragment)accessibleImplemention;
             publicIRawElementProviderFragmentRoot = (UiaCore.IRawElementProviderFragmentRoot)accessibleImplemention;
-            publicIInvokeProvider = (UnsafeNativeMethods.IInvokeProvider)accessibleImplemention;
-            publicIValueProvider = (UnsafeNativeMethods.IValueProvider)accessibleImplemention;
-            publicIRangeValueProvider = (UnsafeNativeMethods.IRangeValueProvider)accessibleImplemention;
-            publicIExpandCollapseProvider = (UnsafeNativeMethods.IExpandCollapseProvider)accessibleImplemention;
-            publicIToggleProvider = (UnsafeNativeMethods.IToggleProvider)accessibleImplemention;
-            publicITableProvider = (UnsafeNativeMethods.ITableProvider)accessibleImplemention;
-            publicITableItemProvider = (UnsafeNativeMethods.ITableItemProvider)accessibleImplemention;
-            publicIGridProvider = (UnsafeNativeMethods.IGridProvider)accessibleImplemention;
+            publicIInvokeProvider = (UiaCore.IInvokeProvider)accessibleImplemention;
+            publicIValueProvider = (UiaCore.IValueProvider)accessibleImplemention;
+            publicIRangeValueProvider = (UiaCore.IRangeValueProvider)accessibleImplemention;
+            publicIExpandCollapseProvider = (UiaCore.IExpandCollapseProvider)accessibleImplemention;
+            publicIToggleProvider = (UiaCore.IToggleProvider)accessibleImplemention;
+            publicITableProvider = (UiaCore.ITableProvider)accessibleImplemention;
+            publicITableItemProvider = (UiaCore.ITableItemProvider)accessibleImplemention;
+            publicIGridProvider = (UiaCore.IGridProvider)accessibleImplemention;
             publicIGridItemProvider = (UiaCore.IGridItemProvider)accessibleImplemention;
-            publicILegacyIAccessibleProvider = (UnsafeNativeMethods.ILegacyIAccessibleProvider)accessibleImplemention;
-            publicISelectionProvider = (UnsafeNativeMethods.ISelectionProvider)accessibleImplemention;
+            publicILegacyIAccessibleProvider = (UiaCore.ILegacyIAccessibleProvider)accessibleImplemention;
+            publicISelectionProvider = (UiaCore.ISelectionProvider)accessibleImplemention;
             publicISelectionItemProvider = (UiaCore.ISelectionItemProvider)accessibleImplemention;
-            publicIScrollItemProvider = (UnsafeNativeMethods.IScrollItemProvider)accessibleImplemention;
+            publicIScrollItemProvider = (UiaCore.IScrollItemProvider)accessibleImplemention;
             publicIRawElementProviderHwndOverride = (UiaCore.IRawElementProviderHwndOverride)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
@@ -2802,237 +2632,160 @@ namespace System.Windows.Forms
             return accObjectArray;
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.accDoDefaultAction(object childID)
-        {
-            publicIAccessible.accDoDefaultAction(childID);
-        }
+        void UiaCore.IAccessibleInternal.accDoDefaultAction(object childID)
+            => publicIAccessible.accDoDefaultAction(childID);
 
-        object UnsafeNativeMethods.IAccessibleInternal.accHitTest(int xLeft, int yTop)
-        {
-            return AsNativeAccessible(publicIAccessible.accHitTest(xLeft, yTop));
-        }
+        object UiaCore.IAccessibleInternal.accHitTest(int xLeft, int yTop)
+            => AsNativeAccessible(publicIAccessible.accHitTest(xLeft, yTop));
 
-        void UnsafeNativeMethods.IAccessibleInternal.accLocation(out int l, out int t, out int w, out int h, object childID)
-        {
-            publicIAccessible.accLocation(out l, out t, out w, out h, childID);
-        }
+        void UiaCore.IAccessibleInternal.accLocation(out int l, out int t, out int w, out int h, object childID)
+            => publicIAccessible.accLocation(out l, out t, out w, out h, childID);
 
-        object UnsafeNativeMethods.IAccessibleInternal.accNavigate(int navDir, object childID)
-        {
-            return AsNativeAccessible(publicIAccessible.accNavigate(navDir, childID));
-        }
+        object UiaCore.IAccessibleInternal.accNavigate(int navDir, object childID)
+            => AsNativeAccessible(publicIAccessible.accNavigate(navDir, childID));
 
-        void UnsafeNativeMethods.IAccessibleInternal.accSelect(int flagsSelect, object childID)
-        {
-            publicIAccessible.accSelect(flagsSelect, childID);
-        }
+        void UiaCore.IAccessibleInternal.accSelect(int flagsSelect, object childID)
+            => publicIAccessible.accSelect(flagsSelect, childID);
 
-        object UnsafeNativeMethods.IAccessibleInternal.get_accChild(object childID)
-        {
-            return AsNativeAccessible(publicIAccessible.get_accChild(childID));
-        }
+        object UiaCore.IAccessibleInternal.get_accChild(object childID)
+            => AsNativeAccessible(publicIAccessible.get_accChild(childID));
 
-        int UnsafeNativeMethods.IAccessibleInternal.get_accChildCount()
-        {
-            return publicIAccessible.accChildCount;
-        }
+        int UiaCore.IAccessibleInternal.get_accChildCount() => publicIAccessible.accChildCount;
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accDefaultAction(object childID)
-        {
-            return publicIAccessible.get_accDefaultAction(childID);
-        }
+        string UiaCore.IAccessibleInternal.get_accDefaultAction(object childID)
+            => publicIAccessible.get_accDefaultAction(childID);
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accDescription(object childID)
-        {
-            return publicIAccessible.get_accDescription(childID);
-        }
+        string UiaCore.IAccessibleInternal.get_accDescription(object childID)
+            => publicIAccessible.get_accDescription(childID);
 
-        object UnsafeNativeMethods.IAccessibleInternal.get_accFocus()
-        {
-            return AsNativeAccessible(publicIAccessible.accFocus);
-        }
+        object UiaCore.IAccessibleInternal.get_accFocus()
+            => AsNativeAccessible(publicIAccessible.accFocus);
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accHelp(object childID)
-        {
-            return publicIAccessible.get_accHelp(childID);
-        }
+        string UiaCore.IAccessibleInternal.get_accHelp(object childID)
+            => publicIAccessible.get_accHelp(childID);
 
-        int UnsafeNativeMethods.IAccessibleInternal.get_accHelpTopic(out string pszHelpFile, object childID)
-        {
-            return publicIAccessible.get_accHelpTopic(out pszHelpFile, childID);
-        }
+        int UiaCore.IAccessibleInternal.get_accHelpTopic(out string pszHelpFile, object childID)
+            => publicIAccessible.get_accHelpTopic(out pszHelpFile, childID);
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accKeyboardShortcut(object childID)
-        {
-            return publicIAccessible.get_accKeyboardShortcut(childID);
-        }
+        string UiaCore.IAccessibleInternal.get_accKeyboardShortcut(object childID)
+            => publicIAccessible.get_accKeyboardShortcut(childID);
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accName(object childID)
-        {
-            return publicIAccessible.get_accName(childID);
-        }
+        string UiaCore.IAccessibleInternal.get_accName(object childID)
+            => publicIAccessible.get_accName(childID);
 
-        object UnsafeNativeMethods.IAccessibleInternal.get_accParent()
-        {
-            return AsNativeAccessible(publicIAccessible.accParent);
-        }
+        object UiaCore.IAccessibleInternal.get_accParent()
+            => AsNativeAccessible(publicIAccessible.accParent);
 
-        object UnsafeNativeMethods.IAccessibleInternal.get_accRole(object childID)
-        {
-            return publicIAccessible.get_accRole(childID);
-        }
+        object UiaCore.IAccessibleInternal.get_accRole(object childID)
+            => publicIAccessible.get_accRole(childID);
 
-        object UnsafeNativeMethods.IAccessibleInternal.get_accSelection()
-        {
-            return AsNativeAccessible(publicIAccessible.accSelection);
-        }
+        object UiaCore.IAccessibleInternal.get_accSelection()
+            => AsNativeAccessible(publicIAccessible.accSelection);
 
-        object UnsafeNativeMethods.IAccessibleInternal.get_accState(object childID)
-        {
-            return publicIAccessible.get_accState(childID);
-        }
+        object UiaCore.IAccessibleInternal.get_accState(object childID)
+            => publicIAccessible.get_accState(childID);
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accValue(object childID)
-        {
-            return publicIAccessible.get_accValue(childID);
-        }
+        string UiaCore.IAccessibleInternal.get_accValue(object childID)
+            => publicIAccessible.get_accValue(childID);
 
-        void UnsafeNativeMethods.IAccessibleInternal.set_accName(object childID, string newName)
-        {
-            publicIAccessible.set_accName(childID, newName);
-        }
+        void UiaCore.IAccessibleInternal.set_accName(object childID, string newName)
+            => publicIAccessible.set_accName(childID, newName);
 
-        void UnsafeNativeMethods.IAccessibleInternal.set_accValue(object childID, string newValue)
-        {
-            publicIAccessible.set_accValue(childID, newValue);
-        }
+        void UiaCore.IAccessibleInternal.set_accValue(object childID, string newValue)
+            => publicIAccessible.set_accValue(childID, newValue);
 
         HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
-        {
-            return publicIEnumVariant.Clone(ppEnum);
-        }
+            => publicIEnumVariant.Clone(ppEnum);
 
         unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
-        {
-            return publicIEnumVariant.Next(celt, rgVar, pCeltFetched);
-        }
+            => publicIEnumVariant.Next(celt, rgVar, pCeltFetched);
 
         HRESULT OleAut32.IEnumVariant.Reset() => publicIEnumVariant.Reset();
 
         HRESULT OleAut32.IEnumVariant.Skip(uint celt) => publicIEnumVariant.Skip(celt);
 
         unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
-        {
-            return publicIOleWindow.GetWindow(phwnd);
-        }
+            => publicIOleWindow.GetWindow(phwnd);
 
         HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
-        {
-            return publicIOleWindow.ContextSensitiveHelp(fEnterMode);
-        }
+            => publicIOleWindow.ContextSensitiveHelp(fEnterMode);
 
         MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
-        {
-            return publicIReflect.GetMethod(name, bindingAttr, binder, types, modifiers);
-        }
+            => publicIReflect.GetMethod(name, bindingAttr, binder, types, modifiers);
 
         MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetMethod(name, bindingAttr);
-        }
+            => publicIReflect.GetMethod(name, bindingAttr);
 
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetMethods(bindingAttr);
-        }
+            => publicIReflect.GetMethods(bindingAttr);
 
         FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetField(name, bindingAttr);
-        }
+            => publicIReflect.GetField(name, bindingAttr);
 
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetFields(bindingAttr);
-        }
+            => publicIReflect.GetFields(bindingAttr);
 
         PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetProperty(name, bindingAttr);
-        }
+            => publicIReflect.GetProperty(name, bindingAttr);
 
         PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
-        {
-            return publicIReflect.GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-        }
+            => publicIReflect.GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
 
         PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetProperties(bindingAttr);
-        }
+            => publicIReflect.GetProperties(bindingAttr);
 
         MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetMember(name, bindingAttr);
-        }
+            => publicIReflect.GetMember(name, bindingAttr);
 
         MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
-        {
-            return publicIReflect.GetMembers(bindingAttr);
-        }
+            => publicIReflect.GetMembers(bindingAttr);
 
         object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
-        {
-            return publicIReflect.InvokeMember(name, invokeAttr, binder, publicIAccessible, args, modifiers, culture, namedParameters);
-        }
+            => publicIReflect.InvokeMember(name, invokeAttr, binder, publicIAccessible, args, modifiers, culture, namedParameters);
 
         Type IReflect.UnderlyingSystemType => publicIReflect.UnderlyingSystemType;
 
-        int UnsafeNativeMethods.IServiceProvider.QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObject)
+        unsafe HRESULT Ole32.IServiceProvider.QueryService(Guid* service, Guid* riid, IntPtr* ppvObject)
         {
-            ppvObject = IntPtr.Zero;
-            int hr = publicIServiceProvider.QueryService(ref service, ref riid, out ppvObject);
-            if (hr >= NativeMethods.S_OK)
+            HRESULT hr = publicIServiceProvider.QueryService(service, riid, ppvObject);
+            if (hr.Succeeded())
             {
                 // we always want to return the internal accessible object
-                ppvObject = Marshal.GetComInterfaceForObject(this, typeof(UnsafeNativeMethods.IAccessibleEx));
+                *ppvObject = Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
             }
 
             return hr;
         }
 
-        object UnsafeNativeMethods.IAccessibleEx.GetObjectForChild(int idChild)
+        UiaCore.IAccessibleEx UiaCore.IAccessibleEx.GetObjectForChild(int idChild)
         {
             return publicIAccessibleEx.GetObjectForChild(idChild);
         }
 
-        int UnsafeNativeMethods.IAccessibleEx.GetIAccessiblePair(out object ppAcc, out int pidChild)
+        unsafe HRESULT UiaCore.IAccessibleEx.GetIAccessiblePair(out object ppAcc, int* pidChild)
         {
+            if (pidChild == null)
+            {
+                ppAcc = null;
+                return HRESULT.E_INVALIDARG;
+            }
+
             // We always want to return the internal accessible object
             ppAcc = this;
-            pidChild = NativeMethods.CHILDID_SELF;
-            return NativeMethods.S_OK;
+            *pidChild = NativeMethods.CHILDID_SELF;
+            return HRESULT.S_OK;
         }
 
-        int[] UnsafeNativeMethods.IAccessibleEx.GetRuntimeId()
-        {
-            return publicIAccessibleEx.GetRuntimeId();
-        }
+        int[] UiaCore.IAccessibleEx.GetRuntimeId() => publicIAccessibleEx.GetRuntimeId();
 
-        int UnsafeNativeMethods.IAccessibleEx.ConvertReturnedElement(object pIn, out object ppRetValOut)
-        {
-            return publicIAccessibleEx.ConvertReturnedElement(pIn, out ppRetValOut);
-        }
+        HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, out UiaCore.IAccessibleEx ppRetValOut)
+            => publicIAccessibleEx.ConvertReturnedElement(pIn, out ppRetValOut);
 
         UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions
-        {
-            get => publicIRawElementProviderSimple.ProviderOptions;
-        }
+            => publicIRawElementProviderSimple.ProviderOptions;
 
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderSimple.HostRawElementProvider
-        {
-            get => publicIRawElementProviderSimple.HostRawElementProvider;
-        }
+            => publicIRawElementProviderSimple.HostRawElementProvider;
 
         object UiaCore.IRawElementProviderSimple.GetPatternProvider(int patternId)
         {
@@ -3042,31 +2795,31 @@ namespace System.Windows.Forms
                 // we always want to return the internal accessible object
                 if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
                 {
-                    return (UnsafeNativeMethods.IExpandCollapseProvider)this;
+                    return (UiaCore.IExpandCollapseProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_ValuePatternId)
                 {
-                    return (UnsafeNativeMethods.IValueProvider)this;
+                    return (UiaCore.IValueProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_RangeValuePatternId)
                 {
-                    return (UnsafeNativeMethods.IRangeValueProvider)this;
+                    return (UiaCore.IRangeValueProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_TogglePatternId)
                 {
-                    return (UnsafeNativeMethods.IToggleProvider)this;
+                    return (UiaCore.IToggleProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_TablePatternId)
                 {
-                    return (UnsafeNativeMethods.ITableProvider)this;
+                    return (UiaCore.ITableProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_TableItemPatternId)
                 {
-                    return (UnsafeNativeMethods.ITableItemProvider)this;
+                    return (UiaCore.ITableItemProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_GridPatternId)
                 {
-                    return (UnsafeNativeMethods.IGridProvider)this;
+                    return (UiaCore.IGridProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_GridItemPatternId)
                 {
@@ -3074,15 +2827,15 @@ namespace System.Windows.Forms
                 }
                 else if (patternId == NativeMethods.UIA_InvokePatternId)
                 {
-                    return (UnsafeNativeMethods.IInvokeProvider)this;
+                    return (UiaCore.IInvokeProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
                 {
-                    return (UnsafeNativeMethods.ILegacyIAccessibleProvider)this;
+                    return (UiaCore.ILegacyIAccessibleProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_SelectionPatternId)
                 {
-                    return (UnsafeNativeMethods.ISelectionProvider)this;
+                    return (UiaCore.ISelectionProvider)this;
                 }
                 else if (patternId == NativeMethods.UIA_SelectionItemPatternId)
                 {
@@ -3090,7 +2843,7 @@ namespace System.Windows.Forms
                 }
                 else if (patternId == NativeMethods.UIA_ScrollItemPatternId)
                 {
-                    return (UnsafeNativeMethods.IScrollItemProvider)this;
+                    return (UiaCore.IScrollItemProvider)this;
                 }
                 else
                 {
@@ -3104,209 +2857,120 @@ namespace System.Windows.Forms
         }
 
         object UiaCore.IRawElementProviderSimple.GetPropertyValue(int propertyID)
-        {
-            return publicIRawElementProviderSimple.GetPropertyValue(propertyID);
-        }
+            => publicIRawElementProviderSimple.GetPropertyValue(propertyID);
 
         object UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction)
-        {
-            return AsNativeAccessible(publicIRawElementProviderFragment.Navigate(direction));
-        }
+            => AsNativeAccessible(publicIRawElementProviderFragment.Navigate(direction));
 
         int[] UiaCore.IRawElementProviderFragment.GetRuntimeId()
-        {
-            return publicIRawElementProviderFragment.GetRuntimeId();
-        }
+            => publicIRawElementProviderFragment.GetRuntimeId();
 
         object[] UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots()
-        {
-            return AsArrayOfNativeAccessibles(publicIRawElementProviderFragment.GetEmbeddedFragmentRoots());
-        }
+            => AsArrayOfNativeAccessibles(publicIRawElementProviderFragment.GetEmbeddedFragmentRoots());
 
         void UiaCore.IRawElementProviderFragment.SetFocus()
-        {
-            publicIRawElementProviderFragment.SetFocus();
-        }
+            => publicIRawElementProviderFragment.SetFocus();
 
         UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle
-        {
-            get => publicIRawElementProviderFragment.BoundingRectangle;
-        }
+            => publicIRawElementProviderFragment.BoundingRectangle;
 
         UiaCore.IRawElementProviderFragmentRoot UiaCore.IRawElementProviderFragment.FragmentRoot
-        {
-            get => publicIRawElementProviderFragment.FragmentRoot;
-        }
+            => publicIRawElementProviderFragment.FragmentRoot;
 
         object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
-        {
-            return AsNativeAccessible(publicIRawElementProviderFragmentRoot.ElementProviderFromPoint(x, y));
-        }
+            => AsNativeAccessible(publicIRawElementProviderFragmentRoot.ElementProviderFromPoint(x, y));
 
         object UiaCore.IRawElementProviderFragmentRoot.GetFocus()
-        {
-            return AsNativeAccessible(publicIRawElementProviderFragmentRoot.GetFocus());
-        }
+            => AsNativeAccessible(publicIRawElementProviderFragmentRoot.GetFocus());
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.DefaultAction
-        {
-            get => publicILegacyIAccessibleProvider.DefaultAction;
-        }
+        string UiaCore.ILegacyIAccessibleProvider.DefaultAction => publicILegacyIAccessibleProvider.DefaultAction;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Description
-        {
-            get => publicILegacyIAccessibleProvider.Description;
-        }
+        string UiaCore.ILegacyIAccessibleProvider.Description => publicILegacyIAccessibleProvider.Description;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Help
-        {
-            get => publicILegacyIAccessibleProvider.Help;
-        }
+        string UiaCore.ILegacyIAccessibleProvider.Help => publicILegacyIAccessibleProvider.Help;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.KeyboardShortcut
-        {
-            get => publicILegacyIAccessibleProvider.KeyboardShortcut;
-        }
+        string UiaCore.ILegacyIAccessibleProvider.KeyboardShortcut => publicILegacyIAccessibleProvider.KeyboardShortcut;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Name
-        {
-            get => publicILegacyIAccessibleProvider.Name;
-        }
+        string UiaCore.ILegacyIAccessibleProvider.Name => publicILegacyIAccessibleProvider.Name;
 
-        uint UnsafeNativeMethods.ILegacyIAccessibleProvider.Role
-        {
-            get => publicILegacyIAccessibleProvider.Role;
-        }
+        uint UiaCore.ILegacyIAccessibleProvider.Role => publicILegacyIAccessibleProvider.Role;
 
-        uint UnsafeNativeMethods.ILegacyIAccessibleProvider.State
-        {
-            get => publicILegacyIAccessibleProvider.State;
-        }
+        uint UiaCore.ILegacyIAccessibleProvider.State => publicILegacyIAccessibleProvider.State;
 
-        string UnsafeNativeMethods.ILegacyIAccessibleProvider.Value
-        {
-            get => publicILegacyIAccessibleProvider.Value;
-        }
+        string UiaCore.ILegacyIAccessibleProvider.Value => publicILegacyIAccessibleProvider.Value;
 
-        int UnsafeNativeMethods.ILegacyIAccessibleProvider.ChildId
-        {
-            get => publicILegacyIAccessibleProvider.ChildId;
-        }
+        int UiaCore.ILegacyIAccessibleProvider.ChildId => publicILegacyIAccessibleProvider.ChildId;
 
-        void UnsafeNativeMethods.ILegacyIAccessibleProvider.DoDefaultAction()
-        {
-            publicILegacyIAccessibleProvider.DoDefaultAction();
-        }
+        void UiaCore.ILegacyIAccessibleProvider.DoDefaultAction()
+            => publicILegacyIAccessibleProvider.DoDefaultAction();
 
-        IAccessible UnsafeNativeMethods.ILegacyIAccessibleProvider.GetIAccessible()
-        {
-            return publicILegacyIAccessibleProvider.GetIAccessible();
-        }
+        IAccessible UiaCore.ILegacyIAccessibleProvider.GetIAccessible()
+            => publicILegacyIAccessibleProvider.GetIAccessible();
 
-        object[] UnsafeNativeMethods.ILegacyIAccessibleProvider.GetSelection()
-        {
-            return AsArrayOfNativeAccessibles(publicILegacyIAccessibleProvider.GetSelection());
-        }
+        object[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
+            => AsArrayOfNativeAccessibles(publicILegacyIAccessibleProvider.GetSelection());
 
-        void UnsafeNativeMethods.ILegacyIAccessibleProvider.Select(int flagsSelect)
-        {
-            publicILegacyIAccessibleProvider.Select(flagsSelect);
-        }
+        void UiaCore.ILegacyIAccessibleProvider.Select(int flagsSelect)
+            => publicILegacyIAccessibleProvider.Select(flagsSelect);
 
-        void UnsafeNativeMethods.ILegacyIAccessibleProvider.SetValue(string szValue)
-        {
-            publicILegacyIAccessibleProvider.SetValue(szValue);
-        }
+        void UiaCore.ILegacyIAccessibleProvider.SetValue(string szValue)
+            => publicILegacyIAccessibleProvider.SetValue(szValue);
 
-        void UnsafeNativeMethods.IInvokeProvider.Invoke()
-        {
-            publicIInvokeProvider.Invoke();
-        }
+        void UiaCore.IInvokeProvider.Invoke() => publicIInvokeProvider.Invoke();
 
-        bool UnsafeNativeMethods.IValueProvider.IsReadOnly => publicIValueProvider.IsReadOnly;
+        BOOL UiaCore.IValueProvider.IsReadOnly => publicIValueProvider.IsReadOnly;
 
-        string UnsafeNativeMethods.IValueProvider.Value => publicIValueProvider.Value;
+        string UiaCore.IValueProvider.Value => publicIValueProvider.Value;
 
-        void UnsafeNativeMethods.IValueProvider.SetValue(string newValue)
-        {
-            publicIValueProvider.SetValue(newValue);
-        }
+        void UiaCore.IValueProvider.SetValue(string newValue)
+            => publicIValueProvider.SetValue(newValue);
 
-        bool UnsafeNativeMethods.IRangeValueProvider.IsReadOnly => publicIValueProvider.IsReadOnly;
+        BOOL UiaCore.IRangeValueProvider.IsReadOnly => publicIValueProvider.IsReadOnly;
 
-        double UnsafeNativeMethods.IRangeValueProvider.LargeChange => publicIRangeValueProvider.LargeChange;
+        double UiaCore.IRangeValueProvider.LargeChange => publicIRangeValueProvider.LargeChange;
 
-        double UnsafeNativeMethods.IRangeValueProvider.Maximum => publicIRangeValueProvider.Maximum;
+        double UiaCore.IRangeValueProvider.Maximum => publicIRangeValueProvider.Maximum;
 
-        double UnsafeNativeMethods.IRangeValueProvider.Minimum => publicIRangeValueProvider.Minimum;
+        double UiaCore.IRangeValueProvider.Minimum => publicIRangeValueProvider.Minimum;
 
-        double UnsafeNativeMethods.IRangeValueProvider.SmallChange => publicIRangeValueProvider.SmallChange;
+        double UiaCore.IRangeValueProvider.SmallChange => publicIRangeValueProvider.SmallChange;
 
-        double UnsafeNativeMethods.IRangeValueProvider.Value => publicIRangeValueProvider.Value;
+        double UiaCore.IRangeValueProvider.Value => publicIRangeValueProvider.Value;
 
-        void UnsafeNativeMethods.IRangeValueProvider.SetValue(double newValue)
-        {
-            publicIRangeValueProvider.SetValue(newValue);
-        }
+        void UiaCore.IRangeValueProvider.SetValue(double newValue)
+            => publicIRangeValueProvider.SetValue(newValue);
 
-        void UnsafeNativeMethods.IExpandCollapseProvider.Expand()
-        {
-            publicIExpandCollapseProvider.Expand();
-        }
+        void UiaCore.IExpandCollapseProvider.Expand() => publicIExpandCollapseProvider.Expand();
 
-        void UnsafeNativeMethods.IExpandCollapseProvider.Collapse()
-        {
-            publicIExpandCollapseProvider.Collapse();
-        }
+        void UiaCore.IExpandCollapseProvider.Collapse() => publicIExpandCollapseProvider.Collapse();
 
-        UnsafeNativeMethods.ExpandCollapseState UnsafeNativeMethods.IExpandCollapseProvider.ExpandCollapseState
-        {
-            get => publicIExpandCollapseProvider.ExpandCollapseState;
-        }
+        UiaCore.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState
+            => publicIExpandCollapseProvider.ExpandCollapseState;
 
-        void UnsafeNativeMethods.IToggleProvider.Toggle()
-        {
-            publicIToggleProvider.Toggle();
-        }
+        void UiaCore.IToggleProvider.Toggle() => publicIToggleProvider.Toggle();
 
-        UnsafeNativeMethods.ToggleState UnsafeNativeMethods.IToggleProvider.ToggleState
-        {
-            get => publicIToggleProvider.ToggleState;
-        }
+        UiaCore.ToggleState UiaCore.IToggleProvider.ToggleState => publicIToggleProvider.ToggleState;
 
-        object[] UnsafeNativeMethods.ITableProvider.GetRowHeaders()
-        {
-            return AsArrayOfNativeAccessibles(publicITableProvider.GetRowHeaders());
-        }
+        object[] UiaCore.ITableProvider.GetRowHeaders()
+            => AsArrayOfNativeAccessibles(publicITableProvider.GetRowHeaders());
 
-        object[] UnsafeNativeMethods.ITableProvider.GetColumnHeaders()
-        {
-            return AsArrayOfNativeAccessibles(publicITableProvider.GetColumnHeaders());
-        }
+        object[] UiaCore.ITableProvider.GetColumnHeaders()
+            => AsArrayOfNativeAccessibles(publicITableProvider.GetColumnHeaders());
 
-        UnsafeNativeMethods.RowOrColumnMajor UnsafeNativeMethods.ITableProvider.RowOrColumnMajor
-        {
-            get => publicITableProvider.RowOrColumnMajor;
-        }
+        UiaCore.RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => publicITableProvider.RowOrColumnMajor;
 
-        object[] UnsafeNativeMethods.ITableItemProvider.GetRowHeaderItems()
-        {
-            return AsArrayOfNativeAccessibles(publicITableItemProvider.GetRowHeaderItems());
-        }
+        object[] UiaCore.ITableItemProvider.GetRowHeaderItems()
+            => AsArrayOfNativeAccessibles(publicITableItemProvider.GetRowHeaderItems());
 
-        object[] UnsafeNativeMethods.ITableItemProvider.GetColumnHeaderItems()
-        {
-            return AsArrayOfNativeAccessibles(publicITableItemProvider.GetColumnHeaderItems());
-        }
+        object[] UiaCore.ITableItemProvider.GetColumnHeaderItems()
+            => AsArrayOfNativeAccessibles(publicITableItemProvider.GetColumnHeaderItems());
 
-        object UnsafeNativeMethods.IGridProvider.GetItem(int row, int column)
-        {
-            return AsNativeAccessible(publicIGridProvider.GetItem(row, column));
-        }
+        object UiaCore.IGridProvider.GetItem(int row, int column)
+            => AsNativeAccessible(publicIGridProvider.GetItem(row, column));
 
-        int UnsafeNativeMethods.IGridProvider.RowCount => publicIGridProvider.RowCount;
+        int UiaCore.IGridProvider.RowCount => publicIGridProvider.RowCount;
 
-        int UnsafeNativeMethods.IGridProvider.ColumnCount => publicIGridProvider.ColumnCount;
+        int UiaCore.IGridProvider.ColumnCount => publicIGridProvider.ColumnCount;
 
         int UiaCore.IGridItemProvider.Row => publicIGridItemProvider.Row;
 
@@ -3317,86 +2981,58 @@ namespace System.Windows.Forms
         int UiaCore.IGridItemProvider.ColumnSpan => publicIGridItemProvider.ColumnSpan;
 
         UiaCore.IRawElementProviderSimple UiaCore.IGridItemProvider.ContainingGrid
-        {
-            get => publicIGridItemProvider.ContainingGrid;
-        }
+            => publicIGridItemProvider.ContainingGrid;
 
         /// <summary>
         ///  Get the currently selected elements
         /// </summary>
         /// <returns>An AutomationElement array containing the currently selected elements</returns>
-        object[] UnsafeNativeMethods.ISelectionProvider.GetSelection()
-        {
-            return publicISelectionProvider.GetSelection();
-        }
+        object[] UiaCore.ISelectionProvider.GetSelection() => publicISelectionProvider.GetSelection();
 
         /// <summary>
         ///  Indicates whether the control allows more than one element to be selected
         /// </summary>
         /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
         /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
-        bool UnsafeNativeMethods.ISelectionProvider.CanSelectMultiple
-        {
-            get => publicISelectionProvider.CanSelectMultiple;
-        }
+        BOOL UiaCore.ISelectionProvider.CanSelectMultiple => publicISelectionProvider.CanSelectMultiple;
 
         /// <summary>
         ///  Indicates whether the control requires at least one element to be selected
         /// </summary>
         /// <returns>Boolean indicating whether the control requires at least one element to be selected</returns>
         /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
-        bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired
-        {
-            get => publicISelectionProvider.IsSelectionRequired;
-        }
+        BOOL UiaCore.ISelectionProvider.IsSelectionRequired => publicISelectionProvider.IsSelectionRequired;
 
         /// <summary>
         ///  Sets the current element as the selection
         ///  This clears the selection from other elements in the container.
         /// </summary>
-        void UiaCore.ISelectionItemProvider.Select()
-        {
-            publicISelectionItemProvider.Select();
-        }
+        void UiaCore.ISelectionItemProvider.Select() => publicISelectionItemProvider.Select();
 
         /// <summary>
         ///  Adds current element to selection.
         /// </summary>
-        void UiaCore.ISelectionItemProvider.AddToSelection()
-        {
-            publicISelectionItemProvider.AddToSelection();
-        }
+        void UiaCore.ISelectionItemProvider.AddToSelection() => publicISelectionItemProvider.AddToSelection();
 
         /// <summary>
         ///  Removes current element from selection.
         /// </summary>
-        void UiaCore.ISelectionItemProvider.RemoveFromSelection()
-        {
-            publicISelectionItemProvider.RemoveFromSelection();
-        }
+        void UiaCore.ISelectionItemProvider.RemoveFromSelection() => publicISelectionItemProvider.RemoveFromSelection();
 
         /// <summary>
         ///  Check whether an element is selected.
         /// </summary>
         /// <returns>Returns true if the element is selected.</returns>
-        bool UiaCore.ISelectionItemProvider.IsSelected
-        {
-            get => publicISelectionItemProvider.IsSelected;
-        }
+        BOOL UiaCore.ISelectionItemProvider.IsSelected => publicISelectionItemProvider.IsSelected;
 
-        void UnsafeNativeMethods.IScrollItemProvider.ScrollIntoView()
-        {
-            publicIScrollItemProvider.ScrollIntoView();
-        }
+        void UiaCore.IScrollItemProvider.ScrollIntoView() => publicIScrollItemProvider.ScrollIntoView();
 
         /// <summary>
         ///  The logical element that supports the SelectionPattern for this Item.
         /// </summary>
         /// <returns>Returns a IRawElementProviderSimple.</returns>
         UiaCore.IRawElementProviderSimple UiaCore.ISelectionItemProvider.SelectionContainer
-        {
-            get => publicISelectionItemProvider.SelectionContainer;
-        }
+            => publicISelectionItemProvider.SelectionContainer;
 
         /// <summary>
         ///  Request a provider for the specified component. The returned provider can supply additional
@@ -3405,8 +3041,6 @@ namespace System.Windows.Forms
         /// <param name="hwnd">The window handle of the component.</param>
         /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
-        {
-            return publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
-        }
+            => publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
     }
 }

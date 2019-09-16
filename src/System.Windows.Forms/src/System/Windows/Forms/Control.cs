@@ -12156,7 +12156,7 @@ namespace System.Windows.Forms
                     }
 
                     // Check that we have an IAccessibleInternal implementation and return this
-                    UnsafeNativeMethods.IAccessibleInternal iacc = (UnsafeNativeMethods.IAccessibleInternal)intAccessibleObject;
+                    UiaCore.IAccessibleInternal iacc = (UiaCore.IAccessibleInternal)intAccessibleObject;
 
                     if (iacc == null)
                     {

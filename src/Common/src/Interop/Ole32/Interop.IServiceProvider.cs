@@ -19,16 +19,16 @@ internal static partial class Interop
         ///  called IOleServiceProvider, even though the name is actually IServiceProvider.
         ///  <see cref="https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/cc678966(v=vs.85)"/>
         /// </remarks>
-        [ComImport(),
-            Guid(ComponentIds.IID_IServiceProvider),
-            InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IServiceProvider
+        [ComImport]
+        [Guid(ComponentIds.IID_IServiceProvider)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IServiceProvider
         {
             [PreserveSig]
             HRESULT QueryService(
-                ref Guid guidService,
-                ref Guid riid,
-                ref IntPtr ppvObject);
+                Guid* guidService,
+                Guid* riid,
+                IntPtr* ppvObject);
         }
     }
 }

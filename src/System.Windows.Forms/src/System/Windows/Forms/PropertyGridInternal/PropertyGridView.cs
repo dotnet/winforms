@@ -5335,8 +5335,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 gridEntry.InternalExpanded = value;
 
-                var oldExpandedState = value ? UnsafeNativeMethods.ExpandCollapseState.Collapsed : UnsafeNativeMethods.ExpandCollapseState.Expanded;
-                var newExpandedState = value ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
+                var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
                     NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                     oldExpandedState,

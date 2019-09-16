@@ -1857,7 +1857,7 @@ namespace System.Windows.Forms
                 DoDefaultAction();
             }
 
-            internal override UnsafeNativeMethods.ToggleState ToggleState
+            internal override UiaCore.ToggleState ToggleState
             {
                 get
                 {
@@ -1874,10 +1874,10 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return UnsafeNativeMethods.ToggleState.ToggleState_Indeterminate;
+                        return UiaCore.ToggleState.Indeterminate;
                     }
 
-                    return toggledState ? UnsafeNativeMethods.ToggleState.ToggleState_On : UnsafeNativeMethods.ToggleState.ToggleState_Off;
+                    return toggledState ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
                 }
             }
         }

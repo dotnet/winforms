@@ -1891,13 +1891,13 @@ namespace System.Windows.Forms
 
             #region Toggle Pattern
 
-            internal override UnsafeNativeMethods.ToggleState ToggleState
+            internal override UiaCore.ToggleState ToggleState
             {
                 get
                 {
                     return ((DateTimePicker)Owner).Checked ?
-                        UnsafeNativeMethods.ToggleState.ToggleState_On :
-                        UnsafeNativeMethods.ToggleState.ToggleState_Off;
+                        UiaCore.ToggleState.On :
+                        UiaCore.ToggleState.Off;
                 }
             }
 

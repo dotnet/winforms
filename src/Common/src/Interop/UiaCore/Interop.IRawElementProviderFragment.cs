@@ -70,11 +70,7 @@ internal static partial class Interop
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            IRawElementProviderFragmentRoot FragmentRoot
-            {
-                [return: MarshalAs(UnmanagedType.Interface)]
-                get;
-            }
+            IRawElementProviderFragmentRoot FragmentRoot { get; }
         }
     }
 }
