@@ -10,12 +10,6 @@ namespace System.Windows.Forms.Internal
 {
     internal static partial class IntUnsafeNativeMethods
     {
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetROP2(HandleRef hdc);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int SetROP2(HandleRef hDC, int nDrawMode);
-
         // Font.
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr CreateFontIndirectW(ref NativeMethods.LOGFONTW lplf);

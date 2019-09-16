@@ -497,11 +497,11 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
 
-            DeviceContextBinaryRasterOperationFlags rasterOp = DeviceContext.BinaryRasterOperation;
+            Gdi32.R2 rasterOp = DeviceContext.BinaryRasterOperation;
 
-            if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
+            if (rasterOp != Gdi32.R2.COPYPEN)
             {
-                rasterOp = DeviceContext.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
+                rasterOp = DeviceContext.SetRasterOperation(Gdi32.R2.COPYPEN);
             }
 
             Gdi32.SelectObject(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Internal
             // Add 1 to width and height to create the 'bounding box' (convert from point to size).
             IntUnsafeNativeMethods.Rectangle(hdc, x, y, x + width, y + height);
 
-            if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
+            if (rasterOp != Gdi32.R2.COPYPEN)
             {
                 DeviceContext.SetRasterOperation(rasterOp);
             }
@@ -547,12 +547,12 @@ namespace System.Windows.Forms.Internal
         {
             HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
-            DeviceContextBinaryRasterOperationFlags rasterOp = DeviceContext.BinaryRasterOperation;
+            Gdi32.R2 rasterOp = DeviceContext.BinaryRasterOperation;
             Gdi32.BKMODE bckMode = DeviceContext.BackgroundMode;
 
-            if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
+            if (rasterOp != Gdi32.R2.COPYPEN)
             {
-                rasterOp = DeviceContext.SetRasterOperation(DeviceContextBinaryRasterOperationFlags.CopyPen);
+                rasterOp = DeviceContext.SetRasterOperation(Gdi32.R2.COPYPEN);
             }
 
             if (bckMode != Gdi32.BKMODE.TRANSPARENT)
@@ -575,7 +575,7 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.SetBackgroundMode(bckMode);
             }
 
-            if (rasterOp != DeviceContextBinaryRasterOperationFlags.CopyPen)
+            if (rasterOp != Gdi32.R2.COPYPEN)
             {
                 DeviceContext.SetRasterOperation(rasterOp);
             }

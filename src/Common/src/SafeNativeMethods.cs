@@ -369,9 +369,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DrawFrameControl(HandleRef hDC, ref RECT rect, int type, int state);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int SetROP2(IntPtr hDC, int nDrawMode);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool BitBlt(HandleRef hDC, int x, int y, int nWidth, int nHeight,
                                          HandleRef hSrcDC, int xSrc, int ySrc, int dwRop);
