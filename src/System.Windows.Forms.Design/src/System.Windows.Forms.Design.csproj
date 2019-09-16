@@ -99,6 +99,8 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SWP.cs" Link="Interop\User32\Interop.SWP.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.TME.cs" Link="Interop\User32\Interop.TME.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.TrackMouseEvent.cs" Link="Interop\User32\Interop.TrackMouseEvent.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
   </ItemGroup>

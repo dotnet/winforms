@@ -336,17 +336,6 @@ namespace System.Windows.Forms
 
         internal delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
 
-        // this is a wrapper that comctl exposes for the NT function since it doesn't exist natively on 95.
-        [DllImport(ExternDll.Comctl32, ExactSpelling = true)]
-
-        private static extern bool _TrackMouseEvent(NativeMethods.TRACKMOUSEEVENT tme);
-
-        public static bool TrackMouseEvent(NativeMethods.TRACKMOUSEEVENT tme)
-        {
-            // only on NT - not on 95 - comctl32 has a wrapper for 95 and NT.
-            return _TrackMouseEvent(tme);
-        }
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool InvalidateRgn(HandleRef hWnd, HandleRef hrgn, bool erase);
 

@@ -329,7 +329,7 @@ namespace System.Windows.Forms
         private string _text;                       // See ControlStyles.CacheText for usage notes
         private byte _layoutSuspendCount;
         private byte _requiredScaling;              // bits 0-4: BoundsSpecified stored in RequiredScaling property.  Bit 5: RequiredScalingEnabled property.
-        private NativeMethods.TRACKMOUSEEVENT _trackMouseEvent;
+        private User32.TRACKMOUSEEVENT _trackMouseEvent;
         private short _updateCount;
         private LayoutEventArgs _cachedLayoutEventArgs;
         private Queue _threadCallbackList;
@@ -5217,7 +5217,7 @@ namespace System.Windows.Forms
                 _window.DestroyHandle();
             }
 
-            _trackMouseEvent = null;
+            _trackMouseEvent = default;
         }
 
         /// <summary>
@@ -6325,8 +6325,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets up the TrackMouseEvent for listening for the
-        ///  mouse leave event.
+        ///  Sets up the TrackMouseEvent for listening for the mouse leave event.
         /// </summary>
         private void HookMouseEvent()
         {
@@ -6334,16 +6333,18 @@ namespace System.Windows.Forms
             {
                 SetState(States.TrackingMouseEvent, true);
 
-                if (_trackMouseEvent == null)
+                if (_trackMouseEvent.IsDefault())
                 {
-                    _trackMouseEvent = new NativeMethods.TRACKMOUSEEVENT
+                    _trackMouseEvent = new User32.TRACKMOUSEEVENT
                     {
-                        dwFlags = NativeMethods.TME_LEAVE | NativeMethods.TME_HOVER,
-                        hwndTrack = Handle
+                        cbSize = (uint)Marshal.SizeOf<User32.TRACKMOUSEEVENT>(),
+                        dwFlags = User32.TME.LEAVE | User32.TME.HOVER,
+                        hwndTrack = Handle,
+                        dwHoverTime = 100
                     };
                 }
 
-                SafeNativeMethods.TrackMouseEvent(_trackMouseEvent);
+                User32.TrackMouseEvent(ref _trackMouseEvent);
             }
         }
 
@@ -7792,8 +7793,9 @@ namespace System.Windows.Forms
             if (visible)
             {
                 UnhookMouseEvent();
-                _trackMouseEvent = null;
+                _trackMouseEvent = default;
             }
+
             if (_parent != null && visible && !Created)
             {
                 bool isDisposing = GetAnyDisposingInHierarchy();
