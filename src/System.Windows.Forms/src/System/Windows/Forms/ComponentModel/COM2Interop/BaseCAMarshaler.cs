@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -25,14 +26,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Base ctor
         /// </summary>
-        protected BaseCAMarshaler(NativeMethods.CA_STRUCT caStruct) : base()
+        protected BaseCAMarshaler(in Ole32.CA_STRUCT caStruct) : base()
         {
-            if (caStruct == null)
-            {
-                count = 0;
-                Debug.WriteLineIf(CAMarshalSwitch.TraceVerbose, "BaseCAMarshaler: null passed in!");
-            }
-
             // first 4 bytes is the count
             count = caStruct.cElems;
             caArrayAddress = caStruct.pElems;

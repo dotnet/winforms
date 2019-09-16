@@ -2,18 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
+using static Interop;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    using System.Runtime.InteropServices;
-    using System;
-
     /// <summary>
     ///  This class performs marshaling on a CALPOLESTR struct given
     ///  from native code.
     /// </summary>
     internal class OleStrCAMarshaler : BaseCAMarshaler
     {
-        public OleStrCAMarshaler(NativeMethods.CA_STRUCT caAddr) : base(caAddr)
+        public OleStrCAMarshaler(in Ole32.CA_STRUCT caAddr) : base(caAddr)
         {
         }
 

@@ -571,8 +571,10 @@ namespace System.Windows.Forms
             public byte b;
         }
         private static readonly int VariantSize = (int)Marshal.OffsetOf(typeof(FindSizeOfVariant), "b");
-        //
-        // Convert a object[] into an array of VARIANT, allocated with CoTask allocators.
+        
+        /// <summary>
+        ///  Convert a object[] into an array of VARIANT, allocated with CoTask allocators.
+        /// </summary>
         internal unsafe static IntPtr ArrayToVARIANTVector(object[] args)
         {
             int len = args.Length;
@@ -584,16 +586,18 @@ namespace System.Windows.Forms
             }
             return mem;
         }
-
-        //
-        // Free a Variant array created with the above function
+        
+        /// <summary>
+        ///  Free a Variant array created with the above function
+        /// </summary>
         internal unsafe static void FreeVARIANTVector(IntPtr mem, int len)
         {
             byte* a = (byte*)(void*)mem;
             for (int i = 0; i < len; ++i)
             {
-                SafeNativeMethods.VariantClear(new HandleRef(null, (IntPtr)(a + VariantSize * i)));
+                Oleaut32.VariantClear((IntPtr)(a + VariantSize * i));
             }
+
             Marshal.FreeCoTaskMem(mem);
         }
 

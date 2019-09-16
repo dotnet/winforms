@@ -279,7 +279,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (curVariant != IntPtr.Zero)
                         {
                             objects[i] = Marshal.GetObjectForNativeVariant(curVariant);
-                            SafeNativeMethods.VariantClear(new HandleRef(null, curVariant));
+                            Oleaut32.VariantClear(curVariant);
                         }
                         else
                         {

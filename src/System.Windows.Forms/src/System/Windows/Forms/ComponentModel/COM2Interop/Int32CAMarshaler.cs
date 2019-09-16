@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
@@ -10,7 +12,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Int32CAMarshaler : BaseCAMarshaler
     {
-        public Int32CAMarshaler(NativeMethods.CA_STRUCT caStruct) : base(caStruct)
+        public Int32CAMarshaler(in Ole32.CA_STRUCT caStruct) : base(caStruct)
         {
         }
 

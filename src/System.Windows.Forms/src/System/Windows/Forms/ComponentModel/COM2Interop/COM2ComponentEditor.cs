@@ -13,11 +13,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public unsafe static bool NeedsComponentEditor(object obj)
         {
-            if (obj is NativeMethods.IPerPropertyBrowsing)
+            if (obj is Ole32.IPerPropertyBrowsing)
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                HRESULT hr = ((NativeMethods.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = ((Ole32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
                 {
                     return true;
@@ -59,11 +59,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IntPtr handle = (parent == null ? IntPtr.Zero : parent.Handle);
 
             // try to get the page guid
-            if (obj is NativeMethods.IPerPropertyBrowsing)
+            if (obj is Ole32.IPerPropertyBrowsing)
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                HRESULT hr = ((NativeMethods.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = ((Ole32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
                 {
                     object o = obj;
