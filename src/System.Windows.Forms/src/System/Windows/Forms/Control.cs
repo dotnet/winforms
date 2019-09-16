@@ -8021,12 +8021,12 @@ namespace System.Windows.Forms
         {
             if (!(this is ScrollableControl) && !IsMirrored)
             {
-                NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO
+                var si = new User32.SCROLLINFO
                 {
-                    cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
-                    fMask = NativeMethods.SIF_RANGE
+                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                    fMask = User32.SIF.RANGE
                 };
-                if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, si) != false)
+                if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
                     SendMessage(WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);

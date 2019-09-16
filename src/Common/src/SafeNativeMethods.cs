@@ -29,9 +29,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr CreateCompatibleBitmap(HandleRef hDC, int width, int height);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, [In, Out] NativeMethods.SCROLLINFO si);
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseFont([In, Out] NativeMethods.CHOOSEFONT cf);
 

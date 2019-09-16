@@ -116,12 +116,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool EnumChildWindows(HandleRef hwndParent, NativeMethods.EnumChildrenCallback lpEnumFunc, HandleRef lParam);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int SetScrollPos(HandleRef hWnd, int nBar, int nPos, bool bRedraw);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool EnableScrollBar(HandleRef hWnd, int nBar, int value);
-
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
 
@@ -507,12 +501,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Shell32, ExactSpelling = true, CharSet = CharSet.Ansi)]
         public static extern void DragAcceptFiles(HandleRef hWnd, bool fAccept);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, NativeMethods.SCROLLINFO si);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetScrollInfo(HandleRef hWnd, int fnBar, NativeMethods.SCROLLINFO si, bool redraw);
 
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
         //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should

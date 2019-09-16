@@ -897,13 +897,14 @@ namespace System.Windows.Forms
             return new Point(xCalc, yCalc);
         }
 
-        private int ScrollThumbPosition(int fnBar)
+        private int ScrollThumbPosition(User32.SB fnBar)
         {
-            var si = new NativeMethods.SCROLLINFO
+            var si = new User32.SCROLLINFO
             {
-                fMask = NativeMethods.SIF_TRACKPOS
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.TRACKPOS
             };
-            SafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), fnBar, si);
+            User32.GetScrollInfo(this, fnBar, ref si);
             return si.nTrackPos;
         }
 
@@ -1252,7 +1253,7 @@ namespace System.Windows.Forms
             {
                 case NativeMethods.SB_THUMBPOSITION:
                 case NativeMethods.SB_THUMBTRACK:
-                    pos = ScrollThumbPosition(NativeMethods.SB_VERT);
+                    pos = ScrollThumbPosition(User32.SB.VERT);
                     break;
                 case NativeMethods.SB_LINEUP:
                     if (pos > 0)
@@ -1341,7 +1342,7 @@ namespace System.Windows.Forms
             {
                 case NativeMethods.SB_THUMBPOSITION:
                 case NativeMethods.SB_THUMBTRACK:
-                    pos = ScrollThumbPosition(NativeMethods.SB_HORZ);
+                    pos = ScrollThumbPosition(User32.SB.HORZ);
                     break;
                 case NativeMethods.SB_LINEUP:
                     if (pos > HorizontalScroll.SmallChange)

@@ -902,9 +902,6 @@ namespace System.Windows.Forms
 
         public const int stc4 = 0x0443,
         STARTF_USESHOWWINDOW = 0x00000001,
-        SB_HORZ = 0,
-        SB_VERT = 1,
-        SB_CTL = 2,
         SB_LINEUP = 0,
         SB_LINELEFT = 0,
         SB_LINEDOWN = 1,
@@ -922,8 +919,6 @@ namespace System.Windows.Forms
         SB_BOTTOM = 7,
         SIZE_RESTORED = 0,
         SIZE_MAXIMIZED = 2,
-        ESB_ENABLE_BOTH = 0x0000,
-        ESB_DISABLE_BOTH = 0x0003,
         SORT_DEFAULT = 0x0,
         SUBLANG_DEFAULT = 0x01;
 
@@ -952,11 +947,6 @@ namespace System.Windows.Forms
         SS_SUNKEN = 0x00001000,
         SBS_HORZ = 0x0000,
         SBS_VERT = 0x0001,
-        SIF_RANGE = 0x0001,
-        SIF_PAGE = 0x0002,
-        SIF_POS = 0x0004,
-        SIF_TRACKPOS = 0x0010,
-        SIF_ALL = (0x0001 | 0x0002 | 0x0004 | 0x0010),
         SBARS_SIZEGRIP = 0x0100,
         SB_SETTEXT = (0x0400 + 11),
         SB_GETTEXT = (0x0400 + 13),
@@ -1679,22 +1669,6 @@ namespace System.Windows.Forms
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class SCROLLINFO
-        {
-            public int cbSize = Marshal.SizeOf<SCROLLINFO>();
-            public int fMask;
-            public int nMin;
-            public int nMax;
-            public int nPage;
-            public int nPos;
-            public int nTrackPos;
-
-            public SCROLLINFO()
-            {
-            }
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         public class TPMPARAMS
