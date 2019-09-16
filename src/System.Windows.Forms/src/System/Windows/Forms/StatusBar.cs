@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms
                     StatusBar p = (StatusBar)parent;
 
                     ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1785,7 +1785,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ComCtl32.ToolInfoWrapper info = GetMinTOOLINFO(tool);
-                    info.SendMessage(this, WindowMessages.TTM_DELTOOLW);
+                    info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
                 }
             }
 
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
-                    info.SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
+                    info.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1809,13 +1809,13 @@ namespace System.Windows.Forms
                 }
 
                 window.CreateHandle(CreateParams);
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOPMOST,
-                                     0, 0, 0, 0,
-                                     NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                     NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOPMOST,
+                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>

@@ -1630,12 +1630,14 @@ namespace System.Windows.Forms
                     {
                         // "Move" the form to the same size and position to prevent windows from moving it
                         // when the user tries to grab a resizing border.
-                        SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef,
-                                                       Location.X,
-                                                       Location.Y,
-                                                       Size.Width,
-                                                       Size.Height,
-                                                       NativeMethods.SWP_NOZORDER);
+                        User32.SetWindowPos(
+                            new HandleRef(this, Handle),
+                            User32.HWND_TOP,
+                            Location.X,
+                            Location.Y,
+                            Size.Width,
+                            Size.Height,
+                            User32.SWP.NOZORDER);
                     }
 
                     OnMinimumSizeChanged(EventArgs.Empty);
@@ -2443,9 +2445,10 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated && TopLevel)
                 {
-                    HandleRef key = value ? NativeMethods.HWND_TOPMOST : NativeMethods.HWND_NOTOPMOST;
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), key, 0, 0, 0, 0,
-                                         NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+                    User32.SetWindowPos(
+                        new HandleRef(this, Handle),
+                        value ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
+                        flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
                 }
 
                 formState[FormStateTopMost] = value ? 1 : 0;
@@ -4696,7 +4699,14 @@ namespace System.Windows.Forms
                     SuspendAllLayout(this);
                     try
                     {
-                        SafeNativeMethods.SetWindowPos(new HandleRef(this, HandleInternal), NativeMethods.NullHandleRef, e.SuggestedRectangle.X, e.SuggestedRectangle.Y, e.SuggestedRectangle.Width, e.SuggestedRectangle.Height, NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                        User32.SetWindowPos(
+                            new HandleRef(this, HandleInternal),
+                            User32.HWND_TOP,
+                            e.SuggestedRectangle.X,
+                            e.SuggestedRectangle.Y,
+                            e.SuggestedRectangle.Width,
+                            e.SuggestedRectangle.Height,
+                            User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
                         if (AutoScaleMode != AutoScaleMode.Font)
                         {
                             Font = new Font(Font.FontFamily, Font.Size * factor, Font.Style);

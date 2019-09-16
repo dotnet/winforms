@@ -97,7 +97,10 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RedrawWindow.cs" Link="Interop\User32\Interop.RedrawWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SWP.cs" Link="Interop\User32\Interop.SWP.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">

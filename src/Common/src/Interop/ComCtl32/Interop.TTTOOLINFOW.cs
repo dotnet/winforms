@@ -79,7 +79,7 @@ internal static partial class Interop
                 };
 
 
-            public unsafe IntPtr SendMessage(IHandle sender, uint message, BOOL state = BOOL.FALSE)
+            public unsafe IntPtr SendMessage(IHandle sender, User32.WindowMessage message, BOOL state = BOOL.FALSE)
             {
                 Info.cbSize = (uint)sizeof(TTOOLINFOW);
                 fixed (char* c = Text)

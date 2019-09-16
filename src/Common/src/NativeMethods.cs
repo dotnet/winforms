@@ -432,7 +432,6 @@ namespace System.Windows.Forms
         HDM_GETITEMCOUNT = (0x1200 + 0),
         HDM_INSERTITEMW = (0x1200 + 10),
         HDM_GETITEMW = (0x1200 + 11),
-        HDM_LAYOUT = (0x1200 + 5),
         HDM_SETITEMW = (0x1200 + 12),
         HDN_ITEMCHANGING = ((0 - 300) - 20),
         HDN_ITEMCHANGED = ((0 - 300) - 21),
@@ -461,12 +460,6 @@ namespace System.Windows.Forms
         HBMMENU_POPUP_RESTORE = 9,
         HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
-
-        public static HandleRef HWND_TOP = new HandleRef(null, (IntPtr)0);
-        public static HandleRef HWND_BOTTOM = new HandleRef(null, (IntPtr)1);
-        public static HandleRef HWND_TOPMOST = new HandleRef(null, new IntPtr(-1));
-        public static HandleRef HWND_NOTOPMOST = new HandleRef(null, new IntPtr(-2));
-        public static HandleRef HWND_MESSAGE = new HandleRef(null, new IntPtr(-3));
 
         public const int IME_CMODE_NATIVE = 0x0001,
         IME_CMODE_KATAKANA = 0x0002,
@@ -1047,15 +1040,7 @@ namespace System.Windows.Forms
         ESB_ENABLE_BOTH = 0x0000,
         ESB_DISABLE_BOTH = 0x0003,
         SORT_DEFAULT = 0x0,
-        SUBLANG_DEFAULT = 0x01,
-        SWP_NOSIZE = 0x0001,
-        SWP_NOMOVE = 0x0002,
-        SWP_NOZORDER = 0x0004,
-        SWP_NOACTIVATE = 0x0010,
-        SWP_SHOWWINDOW = 0x0040,
-        SWP_HIDEWINDOW = 0x0080,
-        SWP_DRAWFRAME = 0x0020,
-        SWP_NOOWNERZORDER = 0x0200;
+        SUBLANG_DEFAULT = 0x01;
 
         public const int HLP_FILE = 1,
         HLP_KEYWORD = 2,
@@ -1283,8 +1268,6 @@ namespace System.Windows.Forms
         TVGN_DROPHILITE = 0x0008,
         TVGN_CARET = 0x0009,
         TVM_SELECTITEM = (0x1100 + 11),
-        TVM_GETITEM = (0x1100 + 62),
-        TVM_SETITEM = (0x1100 + 63),
         TVM_EDITLABEL = (0x1100 + 65),
         TVM_GETEDITCONTROL = (0x1100 + 15),
         TVM_GETVISIBLECOUNT = (0x1100 + 16),
@@ -3046,25 +3029,6 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U2)]
             public short wVarFlags;
             public    /*NativeMethods.tagVARKIND*/ int varkind;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct WINDOWPOS
-        {
-            public IntPtr hwnd;
-            public IntPtr hwndInsertAfter;
-            public int x;
-            public int y;
-            public int cx;
-            public int cy;
-            public int flags;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct HDLAYOUT
-        {
-            public IntPtr prc;        // pointer to a RECT
-            public IntPtr pwpos;      // pointer to a WINDOWPOS
         }
 
         [ComImport]

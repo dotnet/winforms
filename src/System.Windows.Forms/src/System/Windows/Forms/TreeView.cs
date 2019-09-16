@@ -1775,7 +1775,7 @@ namespace System.Windows.Forms
         {
             if (toolTip != null)
             {
-                User32.SendMessageW(toolTip, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(toolTip, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
                 controlToolTipText = toolTipText;
             }
@@ -2070,14 +2070,28 @@ namespace System.Windows.Forms
 
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = Width;
-                int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, int.MaxValue, Height, flags);
+                User32.SWP flags = User32.SWP.NOZORDER | User32.SWP.NOACTIVATE | User32.SWP.NOMOVE;
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    Left,
+                    Top,
+                    int.MaxValue,
+                    Height,
+                    flags);
 
                 root.Realize(false);
 
                 if (oldSize != 0)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, oldSize, Height, flags);
+                    User32.SetWindowPos(
+                        new HandleRef(this, Handle),
+                        User32.HWND_TOP,
+                        Left,
+                        Top,
+                        oldSize,
+                        Height,
+                        flags);
                 }
             }
             finally
@@ -2983,9 +2997,14 @@ namespace System.Windows.Forms
                     {
                         Rectangle bounds = tn.Bounds;
                         bounds.Location = PointToScreen(bounds.Location);
-                        User32.SendMessageW(tooltipHandle, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), ref bounds);
-                        SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHandle),
-                                NativeMethods.HWND_TOPMOST, bounds.Left, bounds.Top, 0, 0, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER);
+
+                        User32.SendMessageW(tooltipHandle, User32.WindowMessage.TTM_ADJUSTRECT, PARAM.FromBool(true), ref bounds);
+                        User32.SetWindowPos(
+                            new HandleRef(this, tooltipHandle),
+                            User32.HWND_TOPMOST,
+                            bounds.Left,
+                            bounds.Top,
+                            flags: User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOZORDER);
                         return true;
                     }
                 }
@@ -3233,7 +3252,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case NativeMethods.TVM_SETITEM:
+                case (int)User32.WindowMessage.TVM_SETITEMW:
                     base.WndProc(ref m);
                     if (CheckBoxes)
                     {
@@ -3247,7 +3266,7 @@ namespace System.Windows.Forms
                                 hItem = item->hItem,
                                 stateMask = ComCtl32.TVIS.STATEIMAGEMASK
                             };
-                            User32.SendMessageW(this, NativeMethods.TVM_GETITEM, IntPtr.Zero, ref item1);
+                            User32.SendMessageW(this, User32.WindowMessage.TVM_GETITEMW, IntPtr.Zero, ref item1);
 
                             TreeNode node = NodeFromHandle(item->hItem);
                             node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
@@ -3260,7 +3279,7 @@ namespace System.Windows.Forms
                     {
                         case NativeMethods.TTN_GETDISPINFO:
                             // Setting the max width has the added benefit of enabling multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

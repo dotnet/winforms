@@ -44,9 +44,6 @@ namespace System.Windows.Forms.Design
         public static extern bool EnableWindow(IntPtr hWnd, bool enable);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -444,10 +441,6 @@ namespace System.Windows.Forms.Design
         public const int HHT_BELOW = 0x0200;
         public const int HHT_TORIGHT = 0x0400;
         public const int HHT_TOLEFT = 0x0800;
-        public const int HWND_TOP = 0;
-        public const int HWND_BOTTOM = 1;
-        public const int HWND_TOPMOST = -1;
-        public const int HWND_NOTOPMOST = -2;
         public const int CWP_SKIPINVISIBLE = 0x0001;
         public const int TVM_GETITEMRECT = 0x1100 + 4;
         public const int TVM_GETCOUNT = 0x1100 + 5;
@@ -558,21 +551,6 @@ namespace System.Windows.Forms.Design
         public const int PRF_CLIENT = 0x00000004;
         public const int PRF_ERASEBKGND = 0x00000008;
         public const int PRF_CHILDREN = 0x00000010;
-        public const int SWP_NOSIZE = 0x0001;
-        public const int SWP_NOMOVE = 0x0002;
-        public const int SWP_NOZORDER = 0x0004;
-        public const int SWP_NOREDRAW = 0x0008;
-        public const int SWP_NOACTIVATE = 0x0010;
-        public const int SWP_FRAMECHANGED = 0x0020;
-        public const int SWP_SHOWWINDOW = 0x0040;
-        public const int SWP_HIDEWINDOW = 0x0080;
-        public const int SWP_NOCOPYBITS = 0x0100;
-        public const int SWP_NOOWNERZORDER = 0x0200;
-        public const int SWP_NOSENDCHANGING = 0x0400;
-        public const int SWP_DRAWFRAME = 0x0020;
-        public const int SWP_NOREPOSITION = 0x0200;
-        public const int SWP_DEFERERASE = 0x2000;
-        public const int SWP_ASYNCWINDOWPOS = 0x4000;
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
