@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         ///  This class holds all of the state data for an ActiveX control and
         ///  supplies the implementation for many of the non-trivial methods.
         /// </summary>
-        private class ActiveXImpl : MarshalByRefObject, IWindowTarget
+        private unsafe class ActiveXImpl : MarshalByRefObject, IWindowTarget
         {
             private const int HiMetricPerInch = 2540;
             private static readonly int s_viewAdviseOnlyOnce = BitVector32.CreateMask();
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             private readonly AmbientProperty[] _ambientProperties;
             private IntPtr _accelTable;
             private short _accelCount = -1;
-            private NativeMethods.COMRECT _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
+            private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
             /// <summary>
             ///  Creates a new ActiveXImpl.
@@ -338,7 +338,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::DoVerb
             /// </summary>
-            internal unsafe void DoVerb(int iVerb, User32.MSG* lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect)
+            internal unsafe HRESULT DoVerb(
+                int iVerb,
+                User32.MSG* lpmsg,
+                UnsafeNativeMethods.IOleClientSite pActiveSite,
+                int lindex,
+                IntPtr hwndParent,
+                RECT* lprcPosRect)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:ActiveXImpl:DoVerb(" + iVerb + ")");
                 switch (iVerb)
@@ -416,14 +422,24 @@ namespace System.Windows.Forms
                         ThrowHr(NativeMethods.E_NOTIMPL);
                         break;
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal unsafe void Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
-                             IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT prcBounds, NativeMethods.COMRECT lprcWBounds,
-                             IntPtr pfnContinue, int dwContinue)
+            internal void Draw(
+                int dwDrawAspect,
+                int lindex,
+                IntPtr pvAspect,
+                NativeMethods.tagDVTARGETDEVICE ptd,
+                IntPtr hdcTargetDev,
+                IntPtr hdcDraw,
+                NativeMethods.COMRECT prcBounds,
+                NativeMethods.COMRECT lprcWBounds,
+                IntPtr pfnContinue,
+                int dwContinue)
             {
 
                 // support the aspects required for multi-pass drawing
@@ -884,8 +900,8 @@ namespace System.Windows.Forms
                         ThrowHr((int)hr);
                     }
 
-                    NativeMethods.COMRECT posRect = new NativeMethods.COMRECT();
-                    NativeMethods.COMRECT clipRect = new NativeMethods.COMRECT();
+                    var posRect = new RECT();
+                    var clipRect = new RECT();
 
                     if (_inPlaceUiWindow != null && Marshal.IsComObject(_inPlaceUiWindow))
                     {
@@ -899,9 +915,14 @@ namespace System.Windows.Forms
                         _inPlaceFrame = null;
                     }
 
-                    inPlaceSite.GetWindowContext(out UnsafeNativeMethods.IOleInPlaceFrame pFrame, out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow, posRect, clipRect, inPlaceFrameInfo);
+                    inPlaceSite.GetWindowContext(
+                        out UnsafeNativeMethods.IOleInPlaceFrame pFrame,
+                        out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow,
+                        &posRect,
+                        &clipRect,
+                        inPlaceFrameInfo);
 
-                    SetObjectRects(posRect, clipRect);
+                    SetObjectRects(&posRect, &clipRect);
 
                     _inPlaceFrame = pFrame;
                     _inPlaceUiWindow = pWindow;
@@ -2052,7 +2073,8 @@ namespace System.Windows.Forms
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "            Announcing rect = " + bounds);
                                 Debug.Assert(_clientSite != null, "How can we setextent before we are sited??");
 
-                                ioleClientSite.OnPosRectChange(NativeMethods.COMRECT.FromXYWH(bounds.X, bounds.Y, bounds.Width, bounds.Height));
+                                RECT posRect = bounds;
+                                ioleClientSite.OnPosRectChange(&posRect);
                             }
                         }
 
@@ -2104,34 +2126,34 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleInPlaceObject::SetObjectRects.
             /// </summary>
-            internal void SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect)
+            internal unsafe HRESULT SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
             {
+                if (lprcPosRect == null || lprcClipRect == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo)
                 {
                     Debug.WriteLine("SetObjectRects:");
                     Debug.Indent();
 
-                    if (lprcPosRect != null)
-                    {
-                        Debug.WriteLine("PosLeft:    " + lprcPosRect.left.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("PosTop:     " + lprcPosRect.top.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("PosRight:   " + lprcPosRect.right.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("PosBottom:  " + lprcPosRect.bottom.ToString(CultureInfo.InvariantCulture));
-                    }
+                    Debug.WriteLine("PosLeft:    " + lprcPosRect->left.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("PosTop:     " + lprcPosRect->top.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("PosRight:   " + lprcPosRect->right.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("PosBottom:  " + lprcPosRect->bottom.ToString(CultureInfo.InvariantCulture));
 
-                    if (lprcClipRect != null)
-                    {
-                        Debug.WriteLine("ClipLeft:   " + lprcClipRect.left.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("ClipTop:    " + lprcClipRect.top.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("ClipRight:  " + lprcClipRect.right.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("ClipBottom: " + lprcClipRect.bottom.ToString(CultureInfo.InvariantCulture));
-                    }
+                    Debug.WriteLine("ClipLeft:   " + lprcClipRect->left.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("ClipTop:    " + lprcClipRect->top.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("ClipRight:  " + lprcClipRect->right.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("ClipBottom: " + lprcClipRect->bottom.ToString(CultureInfo.InvariantCulture));
+
                     Debug.Unindent();
                 }
 #endif
 
-                Rectangle posRect = Rectangle.FromLTRB(lprcPosRect.left, lprcPosRect.top, lprcPosRect.right, lprcPosRect.bottom);
+                Rectangle posRect = Rectangle.FromLTRB(lprcPosRect->left, lprcPosRect->top, lprcPosRect->right, lprcPosRect->bottom);
 
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Set control bounds: " + posRect.ToString());
 
@@ -2148,10 +2170,10 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Control Bounds: " + _control.Bounds);
                 if (_activeXState[s_adjustingRect])
                 {
-                    _adjustRect.left = posRect.X;
-                    _adjustRect.top = posRect.Y;
-                    _adjustRect.right = posRect.Width + posRect.X;
-                    _adjustRect.bottom = posRect.Height + posRect.Y;
+                    _adjustRect->left = posRect.X;
+                    _adjustRect->top = posRect.Y;
+                    _adjustRect->right = posRect.Right;
+                    _adjustRect->bottom = posRect.Bottom;
                 }
                 else
                 {
@@ -2180,7 +2202,7 @@ namespace System.Windows.Forms
                 {
                     // The container wants us to clip, so figure out if we really
                     // need to.
-                    Rectangle clipRect = Rectangle.FromLTRB(lprcClipRect.left, lprcClipRect.top, lprcClipRect.right, lprcClipRect.bottom);
+                    Rectangle clipRect = Rectangle.FromLTRB(lprcClipRect->left, lprcClipRect->top, lprcClipRect->right, lprcClipRect->bottom);
 
                     Rectangle intersect;
 
@@ -2236,6 +2258,8 @@ namespace System.Windows.Forms
                 // Yuck.  Forms^3 uses transparent overlay windows that appear to cause
                 // painting artifacts.  Flicker like a banshee.
                 _control.Invalidate();
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -2399,14 +2423,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Notifies our site that we have changed our size and location.
             /// </summary>
-            internal void UpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.SWP flags)
+            internal unsafe void UpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.SWP flags)
             {
                 if (!_activeXState[s_adjustingRect] && _activeXState[s_inPlaceVisible])
                 {
                     if (_clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
                     {
-                        NativeMethods.COMRECT rc = new NativeMethods.COMRECT();
-
+                        var rc = new RECT();
                         if ((flags & User32.SWP.NOMOVE) != 0)
                         {
                             rc.left = _control.Left;
@@ -2430,12 +2453,12 @@ namespace System.Windows.Forms
                         }
 
                         // This member variable may be modified by SetObjectRects by the container.
-                        _adjustRect = rc;
+                        _adjustRect = &rc;
                         _activeXState[s_adjustingRect] = true;
 
                         try
                         {
-                            ioleClientSite.OnPosRectChange(rc);
+                            ioleClientSite.OnPosRectChange(&rc);
                         }
                         finally
                         {

@@ -196,12 +196,11 @@ namespace System.Windows.Forms
             }
         }
 
-        //
-        // We have to resize the ActiveX control when our size changes.
-        //
-        internal override void OnBoundsUpdate(int x, int y, int width, int height)
+        /// <remarks>
+        /// We have to resize the ActiveX control when our size changes.
+        /// </remarks>
+        internal unsafe override void OnBoundsUpdate(int x, int y, int width, int height)
         {
-            //
             // If the ActiveX control is already InPlaceActive, make sure
             // it's bounds also change.
             if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
@@ -210,7 +209,9 @@ namespace System.Windows.Forms
                 {
                     webBrowserBaseChangingSize.Width = width;
                     webBrowserBaseChangingSize.Height = height;
-                    AXInPlaceObject.SetObjectRects(new NativeMethods.COMRECT(new Rectangle(0, 0, width, height)), WebBrowserHelper.GetClipRect());
+                    RECT posRect = new Rectangle(0, 0, width, height);
+                    RECT clipRect = WebBrowserHelper.GetClipRect();
+                    AXInPlaceObject.SetObjectRects(&posRect, &clipRect);
                 }
                 finally
                 {
@@ -709,7 +710,8 @@ namespace System.Windows.Forms
 
         internal unsafe bool DoVerb(int verb)
         {
-            HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, new NativeMethods.COMRECT(Bounds));
+            RECT posRect = Bounds;
+            HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, &posRect);
             Debug.Assert(hr == HRESULT.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
             return hr == HRESULT.S_OK;
         }

@@ -932,15 +932,11 @@ namespace System.Windows.Forms
             int OnUIActivate();
 
             [PreserveSig]
-            int GetWindowContext(
-                [Out, MarshalAs(UnmanagedType.Interface)]
+            HRESULT GetWindowContext(
                 out IOleInPlaceFrame ppFrame,
-                [Out, MarshalAs(UnmanagedType.Interface)]
                 out IOleInPlaceUIWindow ppDoc,
-                [Out]
-                NativeMethods.COMRECT lprcPosRect,
-                [Out]
-                NativeMethods.COMRECT lprcClipRect,
+                RECT* lprcPosRect,
+                RECT* lprcClipRect,
                 [In, Out]
                 NativeMethods.tagOIFI lpFrameInfo);
 
@@ -962,9 +958,8 @@ namespace System.Windows.Forms
             int DeactivateAndUndo();
 
             [PreserveSig]
-            int OnPosRectChange(
-                [In]
-                NativeMethods.COMRECT lprcPosRect);
+            HRESULT OnPosRectChange(
+                RECT* lprcPosRect);
         }
 
         [ComImport(), Guid("40A050A0-3C31-101B-A82E-08002B2B2337"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1645,16 +1640,15 @@ namespace System.Windows.Forms
             [PreserveSig]
             int UIDeactivate();
 
-            void SetObjectRects(
-                   [In]
-                      NativeMethods.COMRECT lprcPosRect,
-                   [In]
-                      NativeMethods.COMRECT lprcClipRect);
+            [PreserveSig]
+            HRESULT SetObjectRects(
+                RECT* lprcPosRect,
+                RECT* lprcClipRect);
 
             void ReactivateAndUndo();
         }
 
-        [ComImport()]
+        [ComImport]
         [Guid("00000112-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IOleObject
@@ -1714,7 +1708,7 @@ namespace System.Windows.Forms
                 IOleClientSite pActiveSite,
                 int lindex,
                 IntPtr hwndParent,
-                NativeMethods.COMRECT lprcPosRect);
+                RECT* lprcPosRect);
 
             [PreserveSig]
             int EnumVerbs(out IEnumOLEVERB e);
@@ -1829,7 +1823,7 @@ namespace System.Windows.Forms
                 IOleClientSite pActiveSite,
                 int lindex,
                 IntPtr hwndParent,
-                NativeMethods.COMRECT lprcPosRect);
+                RECT* lprcPosRect);
 
             [PreserveSig]
             int EnumVerbs(out IEnumOLEVERB e);
