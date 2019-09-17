@@ -1017,6 +1017,11 @@
         <target state="translated">コンボ ボックスが現在ドロップダウンしていることを示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">コントロールの表示を決定します。</target>

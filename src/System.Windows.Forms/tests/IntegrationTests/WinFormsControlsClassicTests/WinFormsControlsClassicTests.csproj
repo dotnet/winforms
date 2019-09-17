@@ -145,6 +145,14 @@
       <Link>DesignTimeAligned.Designer.cs</Link>
       <DependentUpon>DesignTimeAligned.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\WinformsControlsTest\FormBorderStyles.cs">
+      <Link>FormBorderStyles.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\FormBorderStyles.Designer.cs">
+      <Link>FormBorderStyles.Designer.cs</Link>
+      <DependentUpon>FormBorderStyles.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\WinformsControlsTest\ListViewTest.cs">
       <Link>ListViewTest.cs</Link>
       <SubType>Form</SubType>
@@ -200,6 +208,14 @@
     <Compile Include="..\WinformsControlsTest\Panels.Designer.cs">
       <Link>Panels.Designer.cs</Link>
       <DependentUpon>Panels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\PictureBoxes.cs">
+      <Link>PictureBoxes.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\PictureBoxes.Designer.cs">
+      <Link>PictureBoxes.Designer.cs</Link>
+      <DependentUpon>PictureBoxes.cs</DependentUpon>
     </Compile>
     <Compile Include="..\WinformsControlsTest\PropertyGrid.cs">
       <Link>PropertyGrid.cs</Link>
@@ -276,6 +292,10 @@
       <Link>DesignTimeAligned.resx</Link>
       <DependentUpon>DesignTimeAligned.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\FormBorderStyles.resx">
+      <Link>FormBorderStyles.resx</Link>
+      <DependentUpon>FormBorderStyles.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\ListViewTest.resx">
       <Link>ListViewTest.resx</Link>
       <DependentUpon>ListViewTest.cs</DependentUpon>
@@ -304,9 +324,17 @@
       <Link>Panels.resx</Link>
       <DependentUpon>Panels.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\PictureBoxes.resx">
+      <Link>PictureBoxes.resx</Link>
+      <DependentUpon>PictureBoxes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\PropertyGrid.resx">
       <Link>PropertyGrid.resx</Link>
       <DependentUpon>PropertyGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\RichTextBoxes.resx">
+      <Link>RichTextBoxes.resx</Link>
+      <DependentUpon>RichTextBoxes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\ScalingBeforeChanges.resx">
       <Link>ScalingBeforeChanges.resx</Link>
