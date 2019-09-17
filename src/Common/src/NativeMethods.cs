@@ -1143,8 +1143,6 @@ namespace System.Windows.Forms
 
         public const int TRANSPARENT = 1,
         OPAQUE = 2,
-        TME_HOVER = 0x00000001,
-        TME_LEAVE = 0x00000002,
         TPM_LEFTBUTTON = 0x0000,
         TPM_RIGHTBUTTON = 0x0002,
         TPM_LEFTALIGN = 0x0000,
@@ -1864,15 +1862,6 @@ namespace System.Windows.Forms
             public int rcImage_top = 0;
             public int rcImage_right = 0;
             public int rcImage_bottom = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class TRACKMOUSEEVENT
-        {
-            public int cbSize = Marshal.SizeOf<TRACKMOUSEEVENT>();
-            public int dwFlags;
-            public IntPtr hwndTrack;
-            public int dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
         }
 
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);

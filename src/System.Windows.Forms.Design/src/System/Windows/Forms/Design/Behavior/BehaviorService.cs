@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design.Behavior
         private BehaviorDragDropEventHandler _beginDragHandler; //fired directly before we call .DoDragDrop()
         private BehaviorDragDropEventHandler _endDragHandler; //fired directly after we call .DoDragDrop()
         private EventHandler _synchronizeEventHandler; //fired when we want to synchronize the selection
-        private NativeMethods.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
+        private User32.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
         private bool _trackingMouseEvent; //state identifying current mouse tracking
         private string[] _testHook_RecentSnapLines; //we keep track of the last snaplines we found - for testing purposes
         private readonly MenuCommandHandler _menuCommandHandler; //private object that handles all menu commands
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design.Behavior
             _hitTestedGlyph = null;
             _validDragArgs = null;
             _actionPointer = null;
-            _trackMouseEvent = null;
+            _trackMouseEvent = default;
             _trackingMouseEvent = false;
 
             //create out object that will handle all menucommands
@@ -1577,15 +1577,18 @@ namespace System.Windows.Forms.Design.Behavior
             if (!_trackingMouseEvent)
             {
                 _trackingMouseEvent = true;
-                if (_trackMouseEvent == null)
+                if (_trackMouseEvent.IsDefault())
                 {
-                    _trackMouseEvent = new NativeMethods.TRACKMOUSEEVENT
+                    _trackMouseEvent = new User32.TRACKMOUSEEVENT
                     {
-                        dwFlags = NativeMethods.TME_HOVER,
-                        hwndTrack = _adornerWindow.Handle
+                        cbSize = (uint)Marshal.SizeOf<User32.TRACKMOUSEEVENT>(),
+                        dwFlags = User32.TME.HOVER,
+                        hwndTrack = _adornerWindow.Handle,
+                        dwHoverTime = 100
                     };
                 }
-                SafeNativeMethods.TrackMouseEvent(_trackMouseEvent);
+
+                User32.TrackMouseEvent(ref _trackMouseEvent);
             }
         }
         private void UnHookMouseEvent()

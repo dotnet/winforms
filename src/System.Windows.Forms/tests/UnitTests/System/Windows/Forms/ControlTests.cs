@@ -7513,6 +7513,24 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childCallCount2);
         }
 
+        [Fact]
+        public void Control_ResetMouseEventArgs_InvokeWithoutHandle_Success()
+        {
+            var control = new SubControl();
+            control.ResetMouseEventArgs();
+            control.ResetMouseEventArgs();
+        }
+
+        [Fact]
+        public void Control_ResetMouseEventArgs_InvokeWithHandle_Success()
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.ResetMouseEventArgs();
+            control.ResetMouseEventArgs();
+        }
+
         [Theory]
         [InlineData(ControlStyles.UserPaint, true)]
         [InlineData(ControlStyles.UserPaint, false)]
@@ -7679,6 +7697,8 @@ namespace System.Windows.Forms.Tests
             public new void OnResize(EventArgs e) => base.OnResize(e);
 
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
+
+            public new void ResetMouseEventArgs() => base.ResetMouseEventArgs();
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }
