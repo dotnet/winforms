@@ -6063,16 +6063,29 @@ namespace System.Windows.Forms
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
         internal override object GetPropertyValue(int propertyID)
         {
-            if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+            switch (propertyID)
             {
-                return NativeMethods.UIA_ToolBarControlTypeId;
-            }
-            else if (propertyID == NativeMethods.UIA_NamePropertyId)
-            {
-                return Name;
+                case NativeMethods.UIA_ControlTypePropertyId:
+                    return NativeMethods.UIA_ToolBarControlTypeId;
+                case NativeMethods.UIA_NamePropertyId:
+                    return Name;
             }
 
             return base.GetPropertyValue(propertyID);
+        }
+
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return _parentPropertyGrid?.Name;
+            }
         }
     }
 }
