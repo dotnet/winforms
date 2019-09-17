@@ -1002,12 +1002,12 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleInPlaceObject::InPlaceDeactivate.
             /// </summary>
-            internal void InPlaceDeactivate()
+            internal HRESULT InPlaceDeactivate()
             {
                 // Only do this if we're already in place active.
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    return;
+                    return HRESULT.S_OK;
                 }
 
                 // Deactivate us if we're UI active
@@ -1042,6 +1042,8 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(_inPlaceFrame);
                     _inPlaceFrame = null;
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -2374,21 +2376,18 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleInPlaceObject::UIDeactivate.
             /// </summary>
-            internal int UIDeactivate()
+            internal HRESULT UIDeactivate()
             {
                 // Only do this if we're UI active
                 if (!_activeXState[s_uiActive])
                 {
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
                 _activeXState[s_uiActive] = false;
 
                 // Notify frame windows, if appropriate, that we're no longer ui-active.
-                if (_inPlaceUiWindow != null)
-                {
-                    _inPlaceUiWindow.SetActiveObject(null, null);
-                }
+                _inPlaceUiWindow?.SetActiveObject(null, null);
 
                 // May need this for SetActiveObject & OnUIDeactivate, so leave until function return
                 Debug.Assert(_inPlaceFrame != null, "No inplace frame -- how dod we go UI active?");
@@ -2399,7 +2398,7 @@ namespace System.Windows.Forms
                     ioleClientSite.OnUIDeactivate(0);
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             /// <summary>

@@ -323,7 +323,7 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo()
+        HRESULT UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo()
         {
             return Host.AXInPlaceObject.UIDeactivate();
         }

@@ -955,7 +955,7 @@ namespace System.Windows.Forms
             int DiscardUndoState();
 
             [PreserveSig]
-            int DeactivateAndUndo();
+            HRESULT DeactivateAndUndo();
 
             [PreserveSig]
             HRESULT OnPosRectChange(
@@ -1620,32 +1620,6 @@ namespace System.Windows.Forms
 
             void EnableModeless(
                     int fEnable);
-        }
-
-        [ComImport]
-        [Guid("00000113-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceObject
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            void InPlaceDeactivate();
-
-            [PreserveSig]
-            int UIDeactivate();
-
-            [PreserveSig]
-            HRESULT SetObjectRects(
-                RECT* lprcPosRect,
-                RECT* lprcClipRect);
-
-            void ReactivateAndUndo();
         }
 
         [ComImport]
