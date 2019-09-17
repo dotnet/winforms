@@ -187,7 +187,7 @@ namespace System.Windows.Forms
         // interface pointers to the ocx
         //
         private object instance;
-        private UnsafeNativeMethods.IOleInPlaceObject iOleInPlaceObject;
+        private Ole32.IOleInPlaceObject iOleInPlaceObject;
         private UnsafeNativeMethods.IOleObject iOleObject;
         private UnsafeNativeMethods.IOleControl iOleControl;
         private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObject;
@@ -1175,12 +1175,8 @@ namespace System.Windows.Forms
                 if (GetOcState() >= OC_UIACTIVE && !iss.GetComponentSelected(this))
                 {
                     // need to deactivate...
-                    int hr = UiDeactivate();
-                    if (NativeMethods.Failed(hr))
-                    {
-                        // not much we can do here...
-                        Debug.Fail("Failed to UiDeactivate: " + hr.ToString(CultureInfo.InvariantCulture));
-                    }
+                    HRESULT hr = UiDeactivate();
+                    Debug.Assert(hr.Succeeded(), "Failed to UiDeactivate: " + hr.ToString(CultureInfo.InvariantCulture));
                 }
                 if (!iss.GetComponentSelected(this))
                 {
@@ -1514,8 +1510,8 @@ namespace System.Windows.Forms
                             SetOcState(OC_UIACTIVE);
                             break;
                         case OC_UIACTIVE:
-                            int hr = UiDeactivate();
-                            Debug.Assert(NativeMethods.Succeeded(hr), "Failed in UiDeactivate: " + hr.ToString(CultureInfo.InvariantCulture));
+                            HRESULT hr = UiDeactivate();
+                            Debug.Assert(hr.Succeeded(), "Failed in UiDeactivate: " + hr.ToString(CultureInfo.InvariantCulture));
                             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose && GetOcState() == OC_INPLACE, "failed transition");
                             SetOcState(OC_INPLACE);
                             break;
@@ -1675,7 +1671,7 @@ namespace System.Windows.Forms
             EnsureWindowPresent();
         }
 
-        private void InPlaceDeactivate()
+        private HRESULT InPlaceDeactivate()
         {
             axState[ownDisposing] = true;
             ContainerControl f = ContainingControl;
@@ -1687,14 +1683,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            try
-            {
-                GetInPlaceObject().InPlaceDeactivate();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Exception calling InPlaceDeactivate: " + e.ToString());
-            }
+            return GetInPlaceObject().InPlaceDeactivate();
         }
 
         private void UiActivate()
@@ -2447,21 +2436,19 @@ namespace System.Windows.Forms
             Debug.Assert(freezeCount >= 0, "invalid freeze count!");
         }
 
-        private int UiDeactivate()
+        private HRESULT UiDeactivate()
         {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "calling uiDeactivate for " + ToString());
             bool ownDispose = axState[ownDisposing];
             axState[ownDisposing] = true;
-            int hr = 0;
             try
             {
-                hr = GetInPlaceObject().UIDeactivate();
+                return GetInPlaceObject().UIDeactivate();
             }
             finally
             {
                 axState[ownDisposing] = ownDispose;
             }
-            return hr;
         }
 
         private int GetOcState()
@@ -3556,7 +3543,7 @@ namespace System.Windows.Forms
                     //
                     if (GetOcState() >= OC_INPLACE)
                     {
-                        UnsafeNativeMethods.IOleInPlaceObject ipo = GetInPlaceObject();
+                        Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
                         IntPtr hwnd = IntPtr.Zero;
                         if (ipo.GetWindow(&hwnd).Succeeded())
                         {
@@ -4485,7 +4472,7 @@ namespace System.Windows.Forms
                 return NativeMethods.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo()
+            HRESULT UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in DeactivateAndUndo for " + host.ToString());
                 return host.GetInPlaceObject().UIDeactivate();
@@ -4918,12 +4905,12 @@ namespace System.Windows.Forms
             return iOleObject;
         }
 
-        private UnsafeNativeMethods.IOleInPlaceObject GetInPlaceObject()
+        private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
             if (iOleInPlaceObject == null)
             {
                 Debug.Assert(instance != null, "must have the ocx");
-                iOleInPlaceObject = (UnsafeNativeMethods.IOleInPlaceObject)instance;
+                iOleInPlaceObject = (Ole32.IOleInPlaceObject)instance;
 
 #if DEBUG
                 if (iOleInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)

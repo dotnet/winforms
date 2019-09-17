@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
         private UnsafeNativeMethods.IOleObject axOleObject;
-        private UnsafeNativeMethods.IOleInPlaceObject axOleInPlaceObject;
+        private Ole32.IOleInPlaceObject axOleInPlaceObject;
         private UnsafeNativeMethods.IOleInPlaceActiveObject axOleInPlaceActiveObject;
         private UnsafeNativeMethods.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
@@ -1086,8 +1086,8 @@ namespace System.Windows.Forms
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.UIActive, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
-                int hr = AXInPlaceObject.UIDeactivate();
-                Debug.Assert(NativeMethods.Succeeded(hr), "Failed to UIDeactivate");
+                HRESULT hr = AXInPlaceObject.UIDeactivate();
+                Debug.Assert(hr.Succeeded(), "Failed to UIDeactivate");
 
                 // We are now InPlaceActive
                 ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(activeXInstance != null, "The native control is null");
             axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
-            axOleInPlaceObject = (UnsafeNativeMethods.IOleInPlaceObject)activeXInstance;
+            axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
             axOleInPlaceActiveObject = (UnsafeNativeMethods.IOleInPlaceActiveObject)activeXInstance;
             axOleControl = (UnsafeNativeMethods.IOleControl)activeXInstance;
             //
@@ -1296,13 +1296,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal UnsafeNativeMethods.IOleInPlaceObject AXInPlaceObject
-        {
-            get
-            {
-                return axOleInPlaceObject;
-            }
-        }
+        internal Ole32.IOleInPlaceObject AXInPlaceObject => axOleInPlaceObject;
 
         // ---------------------------------------------------------------
         // The following properties implemented in the Control class don't make
