@@ -8531,7 +8531,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return name;
                     }
 
-                    return _owningPropertyGridView?.OwnerGrid?.Name;
+                    return string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.Name);
                 }
             }
 

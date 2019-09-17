@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                 toolStrip = new PropertyGridToolStrip(this);
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
-                toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
+
                 toolStrip.AccessibleRole = AccessibleRole.ToolBar;
                 toolStrip.TabStop = true;
                 toolStrip.AllowMerge = false;

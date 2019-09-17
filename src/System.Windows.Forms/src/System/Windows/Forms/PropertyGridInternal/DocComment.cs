@@ -318,7 +318,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return name;
                 }
 
-                return _parentPropertyGrid?.Name;
+                return string.Format(SR.PropertyGridDocCommentAccessibleNameTemplate, _parentPropertyGrid?.Name);
             }
         }
     }
