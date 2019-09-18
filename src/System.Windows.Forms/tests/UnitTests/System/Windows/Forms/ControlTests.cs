@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
@@ -1446,15 +1447,50 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void Control_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
-            var control = new Control
+            var control = new SubControl
             {
                 BackgroundImageLayout = value
             };
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.DoubleBuffered);
 
             // Set same.
             control.BackgroundImageLayout = value;
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.DoubleBuffered);
+        }
+
+        public static IEnumerable<object[]> BackgroundImageLayout_SetWithBackgroundImage_TestData()
+        {
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, false };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, false };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Center, true };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Stretch, true };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Zoom, true };
+
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppRgb), ImageLayout.None, false };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppRgb), ImageLayout.Tile, false };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppRgb), ImageLayout.Center, false };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppRgb), ImageLayout.Stretch, false };
+            yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppRgb), ImageLayout.Zoom, false };
+        }
+
+        [Theory]
+        [MemberData(nameof(BackgroundImageLayout_SetWithBackgroundImage_TestData))]
+        public void Control_BackgroundImageLayout_SetWithBackgroundImage_GetReturnsExpected(Image backgroundImage, ImageLayout value, bool expectedDoubleBuffered)
+        {
+            var control = new SubControl
+            {
+                BackgroundImage = backgroundImage,
+                BackgroundImageLayout = value
+            };
+            Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.Equal(expectedDoubleBuffered, control.DoubleBuffered);
+
+            // Set same.
+            control.BackgroundImageLayout = value;
+            Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.Equal(expectedDoubleBuffered, control.DoubleBuffered);
         }
 
         [Fact]
@@ -2125,6 +2161,129 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.MinimumSize);
         }
 
+        public static IEnumerable<object[]> Region_Set_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new Region() };
+            yield return new object[] { new Region(new Rectangle(1, 2, 3, 4)) };
+        }
+
+        [Theory]
+        [MemberData(nameof(Region_Set_TestData))]
+        public void Control_Region_Set_GetReturnsExpected(Region value)
+        {
+            var control = new Control
+            {
+                Region = value
+            };
+            Assert.Same(value, control.Region);
+
+            // Set same.
+            control.Region = value;
+            Assert.Same(value, control.Region);
+        }
+
+        [Theory]
+        [MemberData(nameof(Region_Set_TestData))]
+        public void Control_Region_SetWithNonNullOldValue_GetReturnsExpected(Region value)
+        {
+            var oldValue = new Region();
+            var control = new Control
+            {
+                Region = oldValue
+            };
+            oldValue.MakeEmpty();
+
+            control.Region = value;
+            Assert.Same(value, control.Region);
+            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+
+            // Set same.
+            control.Region = value;
+            Assert.Same(value, control.Region);
+            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+        }
+
+        [Theory]
+        [MemberData(nameof(Region_Set_TestData))]
+        public void Control_Region_SetWithHandle_GetReturnsExpected(Region value)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.Region = value;
+            Assert.Same(value, control.Region);
+
+            // Set same.
+            control.Region = value;
+            Assert.Same(value, control.Region);
+        }
+
+        [Theory]
+        [MemberData(nameof(Region_Set_TestData))]
+        public void Control_Region_SetWithNonNullOldValueWithHandle_GetReturnsExpected(Region value)
+        {
+            var oldValue = new Region();
+            var control = new Control
+            {
+                Region = oldValue
+            };
+            oldValue.MakeEmpty();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.Region = value;
+            Assert.Same(value, control.Region);
+            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+
+            // Set same.
+            control.Region = value;
+            Assert.Same(value, control.Region);
+            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+        }
+
+        [Fact]
+        public void Control_Region_SetWithHandler_CallsRegionChanged()
+        {
+            var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.RegionChanged += handler;
+
+            // Set different.
+            var context1 = new Region();
+            control.Region = context1;
+            Assert.Same(context1, control.Region);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Region = context1;
+            Assert.Same(context1, control.Region);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            var context2 = new Region();
+            control.Region = context2;
+            Assert.Same(context2, control.Region);
+            Assert.Equal(2, callCount);
+
+            // Set null.
+            control.Region = null;
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.Equal(3, callCount);
+
+            // Remove handler.
+            control.RegionChanged -= handler;
+            control.Region = context1;
+            Assert.Same(context1, control.Region);
+            Assert.Equal(3, callCount);
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
         public void Control_RequiredScaling_Set_GetReturnsExpected(BoundsSpecified value)
@@ -2157,6 +2316,37 @@ namespace System.Windows.Forms.Tests
             // Set different.
             control.RequiredScalingEnabled = !value;
             Assert.Equal(!value, control.RequiredScalingEnabled);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_ResizeRedraw_Get_ReturnsExpected(bool value)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, value);
+            Assert.Equal(value, control.ResizeRedraw);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_ResizeRedraw_Set_GetReturnsExpected(bool value)
+        {
+            var control = new SubControl
+            {
+                ResizeRedraw = value
+            };
+            Assert.Equal(value, control.ResizeRedraw);
+            Assert.Equal(value, control.GetStyle(ControlStyles.ResizeRedraw));
+
+            // Set same.
+            control.ResizeRedraw = value;
+            Assert.Equal(value, control.ResizeRedraw);
+            Assert.Equal(value, control.GetStyle(ControlStyles.ResizeRedraw));
+
+            // Set different.
+            control.ResizeRedraw = !value;
+            Assert.Equal(!value, control.ResizeRedraw);
+            Assert.Equal(!value, control.GetStyle(ControlStyles.ResizeRedraw));
         }
 
         [Theory]
@@ -2515,7 +2705,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             control.Font = null;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(3, callCount);
 
             // Remove handler.
@@ -2590,9 +2780,9 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             control.Font = null;
-            Assert.Same(Control.DefaultFont, control.Font);
-            Assert.Same(Control.DefaultFont, child1.Font);
-            Assert.Same(Control.DefaultFont, child2.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, child1.Font);
+            Assert.Equal(Control.DefaultFont, child2.Font);
             Assert.Equal(3, callCount);
             Assert.Equal(3, childCallCount1);
             Assert.Equal(3, childCallCount2);
@@ -2683,7 +2873,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             control.Font = null;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Same(childFont1, child1.Font);
             Assert.Same(childFont2, child2.Font);
             Assert.Equal(3, callCount);
@@ -3960,7 +4150,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
             Assert.Same(Cursors.Default, control.Cursor);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             mockSite1.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(2));
             mockSite2.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
             mockSite3.Verify(s => s.GetService(typeof(AmbientProperties)), Times.Exactly(1));
@@ -5142,6 +5332,37 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_DoubleBuffered_Get_ReturnsExpected(bool value)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.OptimizedDoubleBuffer, value);
+            Assert.Equal(value, control.DoubleBuffered);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_DoubleBuffered_Set_GetReturnsExpected(bool value)
+        {
+            var control = new SubControl
+            {
+                DoubleBuffered = value
+            };
+            Assert.Equal(value, control.DoubleBuffered);
+            Assert.Equal(value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+
+            // Set same.
+            control.DoubleBuffered = value;
+            Assert.Equal(value, control.DoubleBuffered);
+            Assert.Equal(value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+
+            // Set different.
+            control.DoubleBuffered = !value;
+            Assert.Equal(!value, control.DoubleBuffered);
+            Assert.Equal(!value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+        }
+
+        [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
         public void Control_Dock_Set_GetReturnsExpected(DockStyle value)
         {
@@ -5251,6 +5472,463 @@ namespace System.Windows.Forms.Tests
         }
 
         #endregion
+
+        [Fact]
+        public void Control_CreateControl_Invoke_Success()
+        {
+            var control = new SubControl();
+            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+
+            control.CreateControl();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            IntPtr handle1 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle1);
+
+            // Call again.
+            control.CreateControl();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            IntPtr handle2 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.Equal(handle1, handle2);
+        }
+
+        [Fact]
+        public void Control_CreateControl_InvokeNoUserPaint_Success()
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, false);
+            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+
+            control.CreateControl();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        public static IEnumerable<object[]> CreateControl_Region_TestData()
+        {
+            yield return new object[] { new Region() };
+            yield return new object[] { new Region(new Rectangle(1, 2, 3, 4)) };
+        }
+
+        [Theory]
+        [MemberData(nameof(CreateControl_Region_TestData))]
+        public void Control_CreateControl_InvokeWithRegion_Success(Region region)
+        {
+            var control = new SubControl
+            {
+                Region = region
+            };
+
+            control.CreateControl();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Same(region, control.Region);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_CreateControl_InvokeWithText_Success(string text, string expectedText)
+        {
+            var control = new SubControl
+            {
+                Text = text
+            };
+
+            control.CreateControl();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expectedText, control.Text);
+        }
+
+        [StaFact]
+        public void Control_CreateControl_InvokeAllowDrop_Success()
+        {
+            var control = new SubControl
+            {
+                AllowDrop = true
+            };
+
+            control.CreateControl();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.True(control.AllowDrop);
+        }
+
+        [Fact]
+        public void Control_CreateControl_InvokeWithParent_Success()
+        {
+            var parent = new Control();
+            var control = new SubControl
+            {
+                Parent = parent
+            };
+            control.CreateControl();
+            Assert.False(parent.Created);
+            Assert.False(parent.IsHandleCreated);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [Fact]
+        public void Control_CreateControl_InvokeWithChildren_Success()
+        {
+            var parent = new SubControl();
+            var control = new SubControl
+            {
+                Parent = parent
+            };
+            parent.CreateControl();
+            Assert.True(parent.Created);
+            Assert.True(parent.IsHandleCreated);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [Fact]
+        public void Control_CreateControl_InvokeWithHandler_CallsHandleCreated()
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.HandleCreated += handler;
+
+            control.CreateControl();
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [Fact]
+        public void Control_CreateControl_InvokeDisposed_ThrowsObjectDisposedException()
+        {
+            var control = new SubControl();
+            control.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => control.CreateControl());
+        }
+
+        [Fact]
+        public void Control_CreateHandle_Invoke_Success()
+        {
+            var control = new SubControl();
+            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+
+            control.CreateHandle();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [Fact]
+        public void Control_CreateHandle_InvokeNoUserPaint_Success()
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, false);
+            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+
+            control.CreateHandle();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        public static IEnumerable<object[]> CreateHandle_Region_TestData()
+        {
+            yield return new object[] { new Region() };
+            yield return new object[] { new Region(new Rectangle(1, 2, 3, 4)) };
+        }
+
+        [Theory]
+        [MemberData(nameof(CreateHandle_Region_TestData))]
+        public void Control_CreateHandle_InvokeWithRegion_Success(Region region)
+        {
+            var control = new SubControl
+            {
+                Region = region
+            };
+
+            control.CreateHandle();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Same(region, control.Region);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_CreateHandle_InvokeWithText_Success(string text, string expectedText)
+        {
+            var control = new SubControl
+            {
+                Text = text
+            };
+
+            control.CreateHandle();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expectedText, control.Text);
+        }
+
+        [StaFact]
+        public void Control_CreateHandle_InvokeAllowDrop_Success()
+        {
+            var control = new SubControl
+            {
+                AllowDrop = true
+            };
+
+            control.CreateHandle();
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.True(control.AllowDrop);
+        }
+
+        [Fact]
+        public void Control_CreateHandle_InvokeWithParent_Success()
+        {
+            var parent = new Control();
+            var control = new SubControl
+            {
+                Parent = parent
+            };
+            control.CreateHandle();
+            Assert.False(parent.Created);
+            Assert.False(parent.IsHandleCreated);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [Fact]
+        public void Control_CreateHandle_InvokeWithChildren_Success()
+        {
+            var parent = new SubControl();
+            var control = new SubControl
+            {
+                Parent = parent
+            };
+            parent.CreateHandle();
+            Assert.True(parent.Created);
+            Assert.True(parent.IsHandleCreated);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [Fact]
+        public void Control_CreateHandle_InvokeWithHandler_CallsHandleCreated()
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.HandleCreated += handler;
+
+            control.CreateHandle();
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [Fact]
+        public void Control_CreateHandle_InvokeDisposed_ThrowsObjectDisposedException()
+        {
+            var control = new SubControl();
+            control.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => control.CreateHandle());
+        }
+
+        [Fact]
+        public void Control_CreateHandle_InvokeDisposed_ThrowsInvalidOperationException()
+        {
+            var control = new SubControl();
+            control.CreateHandle();
+            Assert.Throws<InvalidOperationException>(() => control.CreateHandle());
+        }
+
+        [Fact]
+        public void Control_DestroyHandle_InvokeWithHandle_Success()
+        {
+            var control = new SubControl();
+            IntPtr handle1 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle1);
+
+            control.DestroyHandle();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+
+            IntPtr handle2 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.NotEqual(handle2, handle1);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_CreateControl_InvokeWithHandleWithText_Success(string text, string expectedText)
+        {
+            var control = new SubControl
+            {
+                Text = text
+            };
+
+            IntPtr handle1 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle1);
+            Assert.Equal(expectedText, control.Text);
+
+            control.DestroyHandle();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Equal(expectedText, control.Text);
+
+            IntPtr handle2 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.NotEqual(handle2, handle1);
+            Assert.Equal(expectedText, control.Text);
+        }
+
+        public static IEnumerable<object[]> DestroyHandle_Region_TestData()
+        {
+            yield return new object[] { new Region() };
+            yield return new object[] { new Region(new Rectangle(1, 2, 3, 4)) };
+        }
+
+        [Theory]
+        [MemberData(nameof(CreateHandle_Region_TestData))]
+        public void Control_DestroyHandle_InvokeWithRegion_Success(Region region)
+        {
+            var control = new SubControl
+            {
+                Region = region
+            };
+
+            IntPtr handle1 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle1);
+            Assert.Same(region, control.Region);
+
+            control.DestroyHandle();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Same(region, control.Region);
+
+            IntPtr handle2 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.NotEqual(handle2, handle1);
+            Assert.Same(region, control.Region);
+        }
+
+        [StaFact]
+        public void Control_DestroyHandle_InvokeWithHandleAllowDrop_Success()
+        {
+            var control = new SubControl
+            {
+                AllowDrop = true
+            };
+
+            IntPtr handle1 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle1);
+            Assert.True(control.AllowDrop);
+
+            control.DestroyHandle();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.AllowDrop);
+
+            IntPtr handle2 = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.NotEqual(handle2, handle1);
+            Assert.True(control.AllowDrop);
+        }
+
+        [Fact]
+        public void Control_DestroyHandle_InvokeWithoutHandle_Nop()
+        {
+            var control = new SubControl();
+            control.DestroyHandle();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void Control_DestroyHandle_InvokeWithHandler_CallsHandleDestroyed()
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.HandleDestroyed += handler;
+
+            control.DestroyHandle();
+            Assert.Equal(0, callCount);
+
+            IntPtr handle = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle);
+
+            control.DestroyHandle();
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+
+            control.DestroyHandle();
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            handle = control.Handle;
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, handle);
+
+            control.HandleDestroyed -= handler;
+            control.DestroyHandle();
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+        }
 
         [Theory]
         [InlineData(ControlStyles.ContainerControl, false)]
@@ -5506,6 +6184,19 @@ namespace System.Windows.Forms.Tests
             control.ContextMenuStripChanged -= handler;
             control.OnContextMenuStripChanged(eventArgs);
             Assert.Equal(1, callCount);
+        }
+
+        [Fact]
+        public void Control_OnCreateControl_Invoke_Nop()
+        {
+            var control = new SubControl();
+            control.OnCreateControl();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+
+            control.OnCreateControl();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
@@ -6276,11 +6967,202 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleCreated_InvokeWithHandleNoUserPaint_CallsHandleCreated(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, false);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnHandleCreated_Region_TestData()
+        {
+            foreach (object[] testData in CommonTestHelper.GetEventArgsTheoryData())
+            {
+                yield return new object[] { testData[0], new Region() };
+                yield return new object[] { testData[0], new Region(new Rectangle(1, 2, 3, 4)) };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(OnHandleCreated_Region_TestData))]
+        public void Control_OnHandleCreated_InvokeWithRegion_CallsHandleCreated(EventArgs eventArgs, Region region)
+        {
+            var control = new SubControl
+            {
+                Region = region
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Same(region, control.Region);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Same(region, control.Region);
+        }
+
+        public static IEnumerable<object[]> OnHandleCreated_Text_TestData()
+        {
+            foreach (object[] testData in CommonTestHelper.GetEventArgsTheoryData())
+            {
+                yield return new object[] { testData[0], null, string.Empty };
+                yield return new object[] { testData[0], string.Empty, string.Empty };
+                yield return new object[] { testData[0], "text", "text" };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(OnHandleCreated_Text_TestData))]
+        public void Control_OnHandleCreated_InvokeWithText_CallsHandleCreated(EventArgs eventArgs, string text, string expectedText)
+        {
+            var control = new SubControl
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedText, control.Text);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedText, control.Text);
+        }
+
+        [StaTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleCreated_InvokeWithHandleAllowDrop_CallsHandleCreated(EventArgs eventArgs)
+        {
+            var control = new SubControl
+            {
+                AllowDrop = true
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(control.AllowDrop);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(control.AllowDrop);
         }
 
         [Theory]
@@ -6300,11 +7182,268 @@ namespace System.Windows.Forms.Tests
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnHandleDestroyed_Region_TestData()
+        {
+            foreach (object[] testData in CommonTestHelper.GetEventArgsTheoryData())
+            {
+                yield return new object[] { testData[0], new Region() };
+                yield return new object[] { testData[0], new Region(new Rectangle(1, 2, 3, 4)) };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(OnHandleDestroyed_Region_TestData))]
+        public void Control_OnHandleDestroyed_InvokeWithRegion_CallsHandleDestroyed(EventArgs eventArgs, Region region)
+        {
+            var control = new SubControl
+            {
+                Region = region
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Same(region, control.Region);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Same(region, control.Region);
+        }
+
+        public static IEnumerable<object[]> OnHandleDestroyed_Text_TestData()
+        {
+            foreach (object[] testData in CommonTestHelper.GetEventArgsTheoryData())
+            {
+                yield return new object[] { testData[0], null, string.Empty };
+                yield return new object[] { testData[0], string.Empty, string.Empty };
+                yield return new object[] { testData[0], "text", "text" };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(OnHandleDestroyed_Text_TestData))]
+        public void Control_OnHandleDestroyed_InvokeWithText_CallsHandleDestroyed(EventArgs eventArgs, string text, string expectedText)
+        {
+            var control = new SubControl
+            {
+                Text = text
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Equal(expectedText, control.Text);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Equal(expectedText, control.Text);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleDestroyed_InvokeAllowDrop_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            var control = new SubControl
+            {
+                AllowDrop = true
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.AllowDrop);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.AllowDrop);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(OnHandleDestroyed_Region_TestData))]
+        public void Control_OnHandleDestroyed_InvokeWithHandleWithRegion_CallsHandleDestroyed(EventArgs eventArgs, Region region)
+        {
+            var control = new SubControl
+            {
+                Region = region
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Same(region, control.Region);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Same(region, control.Region);
+        }
+
+        [Theory]
+        [MemberData(nameof(OnHandleDestroyed_Text_TestData))]
+        public void Control_OnHandleDestroyed_InvokeWithHandleWithText_CallsHandleDestroyed(EventArgs eventArgs, string text, string expectedText)
+        {
+            var control = new SubControl
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedText, control.Text);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedText, control.Text);
+        }
+
+        [StaTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnHandleDestroyed_InvokeWithHandleAllowDrop_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            var control = new SubControl
+            {
+                AllowDrop = true
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(control.AllowDrop);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(control.AllowDrop);
         }
 
         public static IEnumerable<object[]> HelpEventArgs_TestData()
@@ -7281,6 +8420,35 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnRegionChanged_Invoke_CallsRegionChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            // Call with handler.
+            control.RegionChanged += handler;
+            control.OnRegionChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, invalidatedCallCount);
+
+            // Remove handler.
+            control.RegionChanged -= handler;
+            control.OnRegionChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, invalidatedCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnResize_Invoke_CallsResize(EventArgs eventArgs)
         {
             var control = new SubControl();
@@ -7545,6 +8713,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childCallCount1);
             Assert.Equal(0, childCallCount2);
         }
+        
+        [Fact]
+        public void Control_RecreateHandle_InvokeWithHandle_Success()
+        {
+            var control = new SubControl();
+            IntPtr handle1 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle1);
+            Assert.True(control.IsHandleCreated);
+
+            control.RecreateHandle();
+            IntPtr handle2 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.NotEqual(handle1, handle2);
+            Assert.True(control.IsHandleCreated);
+
+            // Invoke again.
+            control.RecreateHandle();
+            IntPtr handle3 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle3);
+            Assert.NotEqual(handle2, handle3);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void Control_RecreateHandle_InvokeWithoutHandle_Nop()
+        {
+            var control = new SubControl();
+            control.RecreateHandle();
+            Assert.False(control.IsHandleCreated);
+
+            // Invoke again.
+            control.RecreateHandle();
+            Assert.False(control.IsHandleCreated);
+        }
 
         [Fact]
         public void Control_ResetMouseEventArgs_InvokeWithoutHandle_Success()
@@ -7655,6 +8857,14 @@ namespace System.Windows.Forms.Tests
                 set => base.ResizeRedraw = value;
             }
 
+            public new void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID) => base.AccessibilityNotifyClients(accEvent, childID);
+
+            public new void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID) => base.AccessibilityNotifyClients(accEvent, objectID, childID);
+
+            public new void CreateHandle() => base.CreateHandle();
+
+            public new void DestroyHandle() => base.DestroyHandle();
+
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new void OnBindingContextChanged(EventArgs e) => base.OnBindingContextChanged(e);
@@ -7666,6 +8876,8 @@ namespace System.Windows.Forms.Tests
             public new void OnContextMenuChanged(EventArgs e) => base.OnContextMenuChanged(e);
 
             public new void OnContextMenuStripChanged(EventArgs e) => base.OnContextMenuStripChanged(e);
+
+            public new void OnCreateControl() => base.OnCreateControl();
 
             public new void OnCursorChanged(EventArgs e) => base.OnCursorChanged(e);
 
@@ -7739,9 +8951,13 @@ namespace System.Windows.Forms.Tests
 
             public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);
 
+            public new void OnRegionChanged(EventArgs e) => base.OnRegionChanged(e);
+
             public new void OnResize(EventArgs e) => base.OnResize(e);
 
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
+
+            public new void RecreateHandle() => base.RecreateHandle();
 
             public new void ResetMouseEventArgs() => base.ResetMouseEventArgs();
 
