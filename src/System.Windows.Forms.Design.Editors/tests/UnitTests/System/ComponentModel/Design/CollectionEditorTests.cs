@@ -42,6 +42,17 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
+        public void CollectionEditor_EnsureEditor()
+        {
+            TypeDescriptor.AddEditorTable(typeof(UITypeEditor), UITypeEditor.s_intrinsicEditors);
+
+            IList list = new List<int>();
+            var editor = TypeDescriptor.GetEditor(typeof(IList), typeof(UITypeEditor));
+            Assert.NotNull(editor);
+            Assert.Equal(typeof(CollectionEditor).AssemblyQualifiedName, editor.GetType().ToString());
+        }
+
+        [Fact]
         public void CollectionEditor_Ctor_NullType()
         {
             var editor = new SubCollectionEditor(null);

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -44,5 +44,14 @@ namespace System.Drawing.Design.Tests
             var editor = new FontEditor();
             Assert.False(editor.GetPaintValueSupported(context));
         }
+
+        //[Fact]
+        //public void EnsureEditor()
+        //{
+        //    var font = new Font(FontFamily.GenericSansSerif, 3.0f);
+        //    var editor = TypeDescriptor.GetEditor(font, font.GetType());
+        //    Assert.NotNull(editor);
+        //    Assert.Equal("System.Drawing.Design.FontEditor", editor.GetType().ToString());
+        //}
     }
 }

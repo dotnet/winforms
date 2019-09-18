@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 
 namespace System.Drawing.Design
@@ -14,23 +15,30 @@ namespace System.Drawing.Design
     /// </summary>
     public class UITypeEditor
     {
+        // Our set of intrinsic editors.
+        internal static Hashtable s_intrinsicEditors = new Hashtable
+        {
+            // System.ComponentModel.Design editors
+            [typeof(DateTime)] = "System.ComponentModel.Design.DateTimeEditor, " + AssemblyRef.SystemDesign,
+            [typeof(Array)] = "System.ComponentModel.Design.ArrayEditor, " + AssemblyRef.SystemDesign,
+            [typeof(IList)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
+            [typeof(ICollection)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
+            [typeof(byte[])] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
+            [typeof(Stream)] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
+
+            // System.Windows.Forms.Design editors
+            [typeof(string[])] = "System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign,
+            [typeof(Collection<string>)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign,
+
+            // System.Drawing.Design editors
+            [typeof(Image)] = "System.Drawing.Design.ImageEditor, " + AssemblyRef.SystemDesign,
+            [typeof(Font)] = "System.Drawing.Design.FontEditor, " + AssemblyRef.SystemDesign,
+        };
+
         static UITypeEditor()
         {
-            Hashtable intrinsicEditors = new Hashtable
-            {
-                // Our set of intrinsic editors.
-                [typeof(DateTime)] = "System.ComponentModel.Design.DateTimeEditor, " + AssemblyRef.SystemDesign,
-                [typeof(Array)] = "System.ComponentModel.Design.ArrayEditor, " + AssemblyRef.SystemDesign,
-                [typeof(IList)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
-                [typeof(ICollection)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
-                [typeof(byte[])] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
-                [typeof(Stream)] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
-                [typeof(string[])] = "System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign,
-                [typeof(Collection<string>)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign
-            };
-
             // Add our intrinsic editors to TypeDescriptor.
-            TypeDescriptor.AddEditorTable(typeof(UITypeEditor), intrinsicEditors);
+            TypeDescriptor.AddEditorTable(typeof(UITypeEditor), s_intrinsicEditors);
         }
 
         /// <summary>
