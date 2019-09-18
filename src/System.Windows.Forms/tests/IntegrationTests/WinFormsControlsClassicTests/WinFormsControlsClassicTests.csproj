@@ -109,6 +109,14 @@
       <Link>Calendar.Designer.cs</Link>
       <DependentUpon>Calendar.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\WinformsControlsTest\CollectionEditors.cs">
+      <Link>CollectionEditors.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\CollectionEditors.Designer.cs">
+      <DependentUpon>CollectionEditors.cs</DependentUpon>
+      <Link>CollectionEditors.Designer.cs</Link>
+    </Compile>
     <Compile Include="..\WinformsControlsTest\ComboBoxes.cs">
       <Link>ComboBoxes.cs</Link>
       <SubType>Form</SubType>
@@ -257,10 +265,6 @@
       <Link>TreeViewTest.Designer.cs</Link>
       <DependentUpon>TreeViewTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\WinformsControlsTest\UserControls\UserControlWithCollectionEditors.cs">
-      <Link>UserControls\UserControlWithCollectionEditors.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="..\WinformsControlsTest\UserControls\UserControlWithFontNameEditor.cs">
       <Link>UserControls\UserControlWithFontNameEditor.cs</Link>
       <SubType>UserControl</SubType>
@@ -279,6 +283,10 @@
     <EmbeddedResource Include="..\WinformsControlsTest\Calendar.resx">
       <Link>Calendar.resx</Link>
       <DependentUpon>Calendar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WinformsControlsTest\CollectionEditors.resx">
+      <DependentUpon>CollectionEditors.cs</DependentUpon>
+      <Link>CollectionEditors.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\ComboBoxes.resx">
       <Link>ComboBoxes.resx</Link>
