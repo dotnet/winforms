@@ -962,40 +962,6 @@ namespace System.Windows.Forms
                 RECT* lprcPosRect);
         }
 
-        [ComImport(), Guid("40A050A0-3C31-101B-A82E-08002B2B2337"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IVBGetControl
-        {
-            [PreserveSig]
-            int EnumControls(
-                int dwOleContF,
-                int dwWhich,
-                [Out]
-                out IEnumUnknown ppenum);
-        }
-
-        [ComImport(), Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IEnumUnknown
-        {
-            [PreserveSig]
-            int Next(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int celt,
-                [Out]
-                IntPtr rgelt,
-                IntPtr pceltFetched);
-
-            [PreserveSig]
-            int Skip(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int celt);
-
-            void Reset();
-
-            void Clone(
-                [Out]
-                out IEnumUnknown ppenum);
-        }
-
         [ComImport(), Guid("0000011B-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleContainer
         {
@@ -1011,11 +977,9 @@ namespace System.Windows.Forms
                 object[] ppmkOut);
 
             [PreserveSig]
-            int EnumObjects(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int grfFlags,
-                [Out]
-                out IEnumUnknown ppenum);
+            HRESULT EnumObjects(
+                Ole32.OLECONTF grfFlags,
+                out Ole32.IEnumUnknown ppenum);
 
             [PreserveSig]
             int LockContainer(

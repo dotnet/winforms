@@ -41,11 +41,11 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleContainer.EnumObjects(int grfFlags, out UnsafeNativeMethods.IEnumUnknown ppenum)
+        HRESULT UnsafeNativeMethods.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
         {
             ppenum = null;
-            if ((grfFlags & 1) != 0)
-            { // 1 == OLECONTF_EMBEDDINGS
+            if ((grfFlags & Ole32.OLECONTF.EMBEDDINGS) != 0)
+            {
                 Debug.Assert(parent != null, "gotta have it...");
                 ArrayList list = new ArrayList();
                 ListAXControls(list, true);
@@ -54,11 +54,12 @@ namespace System.Windows.Forms
                     object[] temp = new object[list.Count];
                     list.CopyTo(temp, 0);
                     ppenum = new AxHost.EnumUnknown(temp);
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
             }
+
             ppenum = new AxHost.EnumUnknown(null);
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock)

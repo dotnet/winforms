@@ -3955,7 +3955,7 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.IOleClientSite,
             UnsafeNativeMethods.IOleInPlaceSite,
             Ole32.ISimpleFrameSite,
-            UnsafeNativeMethods.IVBGetControl,
+            Ole32.IVBGetControl,
             Ole32.IGetVBAObject,
             Ole32.IPropertyNotifySink,
             IReflect,
@@ -4070,12 +4070,11 @@ namespace System.Windows.Forms
 
             // IVBGetControl methods:
 
-            int UnsafeNativeMethods.IVBGetControl.EnumControls(int dwOleContF, int dwWhich, out UnsafeNativeMethods.IEnumUnknown ppenum)
+            unsafe HRESULT Ole32.IVBGetControl.EnumControls(Ole32.OLECONTF dwOleContF, Ole32.GC_WCH dwWhich, out Ole32.IEnumUnknown ppenum)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumControls");
-                ppenum = null;
                 ppenum = host.GetParentContainer().EnumControls(host, dwOleContF, dwWhich);
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             // ISimpleFrameSite methods:
@@ -5442,7 +5441,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class EnumUnknown : UnsafeNativeMethods.IEnumUnknown
+        internal class EnumUnknown : Ole32.IEnumUnknown
         {
             private readonly object[] arr;
             private int loc;
@@ -5461,19 +5460,19 @@ namespace System.Windows.Forms
                 this.loc = loc;
             }
 
-            unsafe int UnsafeNativeMethods.IEnumUnknown.Next(int celt, IntPtr rgelt, IntPtr pceltFetched)
+            unsafe HRESULT Ole32.IEnumUnknown.Next(uint celt, IntPtr rgelt, uint* pceltFetched)
             {
-                if (pceltFetched != IntPtr.Zero)
+                if (pceltFetched != null)
                 {
-                    Marshal.WriteInt32(pceltFetched, 0, 0);
+                    *pceltFetched = 0;
                 }
 
                 if (celt < 0)
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
-                int fetched = 0;
+                uint fetched = 0;
                 if (loc >= size)
                 {
                     fetched = 0;
@@ -5491,36 +5490,40 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (pceltFetched != IntPtr.Zero)
+                if (pceltFetched != null)
                 {
-                    Marshal.WriteInt32(pceltFetched, 0, fetched);
+                    *pceltFetched = fetched;
                 }
 
                 if (fetched != celt)
                 {
-                    return (NativeMethods.S_FALSE);
+                    return HRESULT.S_FALSE;
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IEnumUnknown.Skip(int celt)
+            HRESULT Ole32.IEnumUnknown.Skip(uint celt)
             {
-                loc += celt;
+                loc += (int)celt;
                 if (loc >= size)
                 {
-                    return (NativeMethods.S_FALSE);
+                    return HRESULT.S_FALSE;
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
 
-            void UnsafeNativeMethods.IEnumUnknown.Reset()
+            HRESULT Ole32.IEnumUnknown.Reset()
             {
                 loc = 0;
+                return HRESULT.S_OK;
             }
 
-            void UnsafeNativeMethods.IEnumUnknown.Clone(out UnsafeNativeMethods.IEnumUnknown ppenum)
+            HRESULT Ole32.IEnumUnknown.Clone(out Ole32.IEnumUnknown ppenum)
             {
                 ppenum = new EnumUnknown(arr, loc);
+                return HRESULT.S_OK;
             }
         }
 
@@ -5744,7 +5747,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal UnsafeNativeMethods.IEnumUnknown EnumControls(Control ctl, int dwOleContF, int dwWhich)
+            internal Ole32.IEnumUnknown EnumControls(Control ctl, Ole32.OLECONTF dwOleContF, Ole32.GC_WCH dwWhich)
             {
                 GetComponents();
 
@@ -5752,19 +5755,19 @@ namespace System.Windows.Forms
                 try
                 {
                     ArrayList l = null;
-                    bool selected = (dwWhich & NativeMethods.ActiveX.GC_WCH_FSELECTED) != 0;
-                    bool reverse = (dwWhich & NativeMethods.ActiveX.GC_WCH_FREVERSEDIR) != 0;
+                    bool selected = (dwWhich & Ole32.GC_WCH.FSELECTED) != 0;
+                    bool reverse = (dwWhich & Ole32.GC_WCH.FREVERSEDIR) != 0;
                     // Note that visual basic actually ignores the next/prev flags... we will not
-                    bool onlyNext = (dwWhich & NativeMethods.ActiveX.GC_WCH_FONLYNEXT) != 0;
-                    bool onlyPrev = (dwWhich & NativeMethods.ActiveX.GC_WCH_FONLYPREV) != 0;
-                    dwWhich &= ~(NativeMethods.ActiveX.GC_WCH_FSELECTED | NativeMethods.ActiveX.GC_WCH_FREVERSEDIR |
-                                          NativeMethods.ActiveX.GC_WCH_FONLYNEXT | NativeMethods.ActiveX.GC_WCH_FONLYPREV);
+                    bool onlyNext = (dwWhich & Ole32.GC_WCH.FONLYNEXT) != 0;
+                    bool onlyPrev = (dwWhich & Ole32.GC_WCH.FONLYPREV) != 0;
+                    dwWhich &= ~(Ole32.GC_WCH.FSELECTED | Ole32.GC_WCH.FREVERSEDIR |
+                                          Ole32.GC_WCH.FONLYNEXT | Ole32.GC_WCH.FONLYPREV);
                     if (onlyNext && onlyPrev)
                     {
                         Debug.Fail("onlyNext && onlyPrev are both set!");
                         throw E_INVALIDARG;
                     }
-                    if (dwWhich == NativeMethods.ActiveX.GC_WCH_CONTAINER || dwWhich == NativeMethods.ActiveX.GC_WCH_CONTAINED)
+                    if (dwWhich == Ole32.GC_WCH.CONTAINER || dwWhich == Ole32.GC_WCH.CONTAINED)
                     {
                         if (onlyNext || onlyPrev)
                         {
@@ -5780,11 +5783,11 @@ namespace System.Windows.Forms
                         default:
                             Debug.Fail("Bad GC_WCH");
                             throw E_INVALIDARG;
-                        case NativeMethods.ActiveX.GC_WCH_CONTAINED:
+                        case Ole32.GC_WCH.CONTAINED:
                             ctls = ctl.GetChildControlsInTabOrder(false);
                             ctl = null;
                             break;
-                        case NativeMethods.ActiveX.GC_WCH_SIBLING:
+                        case Ole32.GC_WCH.SIBLING:
                             Control p = ctl.ParentInternal;
                             if (p != null)
                             {
@@ -5804,7 +5807,7 @@ namespace System.Windows.Forms
                             }
                             ctl = null;
                             break;
-                        case NativeMethods.ActiveX.GC_WCH_CONTAINER:
+                        case Ole32.GC_WCH.CONTAINER:
                             l = new ArrayList();
                             MaybeAdd(l, ctl, selected, dwOleContF, false);
                             while (ctl != null)
@@ -5821,7 +5824,7 @@ namespace System.Windows.Forms
                                 }
                             }
                             break;
-                        case NativeMethods.ActiveX.GC_WCH_ALL:
+                        case Ole32.GC_WCH.ALL:
                             Hashtable htbl = GetComponents();
                             ctls = new Control[htbl.Keys.Count];
                             htbl.Keys.CopyTo(ctls, 0);
@@ -5865,7 +5868,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private void MaybeAdd(ArrayList l, Control ctl, bool selected, int dwOleContF, bool ignoreBelong)
+            private void MaybeAdd(ArrayList l, Control ctl, bool selected, Ole32.OLECONTF dwOleContF, bool ignoreBelong)
             {
                 if (!ignoreBelong && ctl != parent && !GetControlBelongs(ctl))
                 {
@@ -5880,11 +5883,11 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
-                if (ctl is AxHost hostctl && (dwOleContF & NativeMethods.ActiveX.OLECONTF_EMBEDDINGS) != 0)
+                if (ctl is AxHost hostctl && (dwOleContF & Ole32.OLECONTF.EMBEDDINGS) != 0)
                 {
                     l.Add(hostctl.GetOcx());
                 }
-                else if ((dwOleContF & NativeMethods.ActiveX.OLECONTF_OTHERS) != 0)
+                else if ((dwOleContF & Ole32.OLECONTF.OTHERS) != 0)
                 {
                     object item = GetProxyForControl(ctl);
                     if (item != null)
@@ -6218,12 +6221,12 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleContainer.EnumObjects(int grfFlags, out UnsafeNativeMethods.IEnumUnknown ppenum)
+            HRESULT UnsafeNativeMethods.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumObjects");
                 ppenum = null;
-                if ((grfFlags & 1) != 0)
-                { // 1 == OLECONTF_EMBEDDINGS
+                if ((grfFlags & Ole32.OLECONTF.EMBEDDINGS) != 0)
+                {
                     Debug.Assert(parent != null, "gotta have it...");
                     ArrayList list = new ArrayList();
                     ListAxControls(list, true);
@@ -6232,11 +6235,12 @@ namespace System.Windows.Forms
                         object[] temp = new object[list.Count];
                         list.CopyTo(temp, 0);
                         ppenum = new EnumUnknown(temp);
-                        return NativeMethods.S_OK;
+                        return HRESULT.S_OK;
                     }
                 }
+
                 ppenum = new EnumUnknown(null);
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock)
@@ -6397,11 +6401,9 @@ namespace System.Windows.Forms
 
             // EXPOSED
 
-            /// <summary>
-            /// </summary>
             private class ExtenderProxy :
                 UnsafeNativeMethods.IExtender,
-                UnsafeNativeMethods.IVBGetControl,
+                Ole32.IVBGetControl,
                 Ole32.IGetVBAObject,
                 UnsafeNativeMethods.IGetOleObject,
                 IReflect
@@ -6425,11 +6427,11 @@ namespace System.Windows.Forms
                     return (AxContainer)pContainer.Target;
                 }
 
-                int UnsafeNativeMethods.IVBGetControl.EnumControls(int dwOleContF, int dwWhich, out UnsafeNativeMethods.IEnumUnknown ppenum)
+                HRESULT Ole32.IVBGetControl.EnumControls(Ole32.OLECONTF dwOleContF, Ole32.GC_WCH dwWhich, out Ole32.IEnumUnknown ppenum)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumControls for proxy");
                     ppenum = GetC().EnumControls(GetP(), dwOleContF, dwWhich);
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
                 object UnsafeNativeMethods.IGetOleObject.GetOleObject(ref Guid riid)
