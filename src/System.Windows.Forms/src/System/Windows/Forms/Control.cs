@@ -1252,18 +1252,18 @@ namespace System.Windows.Forms
 
         internal bool CaptureInternal
         {
-            get => IsHandleCreated && UnsafeNativeMethods.GetCapture() == Handle;
+            get => IsHandleCreated && User32.GetCapture() == Handle;
             set
             {
                 if (CaptureInternal != value)
                 {
                     if (value)
                     {
-                        UnsafeNativeMethods.SetCapture(new HandleRef(this, Handle));
+                        User32.SetCapture(new HandleRef(this, Handle));
                     }
                     else
                     {
-                        SafeNativeMethods.ReleaseCapture();
+                        User32.ReleaseCapture();
                     }
                 }
             }
@@ -1845,7 +1845,7 @@ namespace System.Windows.Forms
                     User32.GetCursorPos(out Point p);
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
-                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                     {
                         SendMessage(WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                     }

@@ -5703,11 +5703,11 @@ namespace System.Windows.Forms
             // for modal dialogs make sure we reset close reason.
             CloseReason = CloseReason.None;
 
-            IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
+            IntPtr hWndCapture = User32.GetCapture();
             if (hWndCapture != IntPtr.Zero)
             {
                 UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
-                SafeNativeMethods.ReleaseCapture();
+                User32.ReleaseCapture();
             }
             IntPtr hWndActive = UnsafeNativeMethods.GetActiveWindow();
             IntPtr hWndOwner = owner == null ? hWndActive : Control.GetSafeHandle(owner);

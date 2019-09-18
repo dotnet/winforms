@@ -249,12 +249,6 @@ namespace System.Windows.Forms
         public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetCapture();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetCapture(HandleRef hwnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
