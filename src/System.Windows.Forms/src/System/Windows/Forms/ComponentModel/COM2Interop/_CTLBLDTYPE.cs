@@ -8,6 +8,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public const int CTLBLDTYPE_FSTDPROPBUILDER = 0x00000001;
         public const int CTLBLDTYPE_FINTERNALBUILDER = 0x00000002;
-        public const int CTLBLDTYPE_FEDITSOBJDIRECTLY = 0x00000004;
+        public const int CTLBLDTYPE_FEDITSOBJIDRECTLY = 0x00000004;
     }
 }

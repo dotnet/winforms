@@ -27744,7 +27744,7 @@ namespace System.Windows.Forms
             OnSorted(EventArgs.Empty);
 
             // RS4 narrator does not catch this event even though event is indeed raised.
-            AccessibilityNotifyClients(AccessibleEvents.Reorder, NativeMethods.OBJID_CLIENT, 0);
+            AccessibilityNotifyClients(AccessibleEvents.Reorder, User32.OBJID.CLIENT, 0);
         }
 
         internal void SwapSortedRows(int rowIndex1, int rowIndex2)

@@ -99,7 +99,5 @@ namespace System.Windows.Forms.Design
         }
 
         public const int CHILDID_SELF = 0;
-        public const int OBJID_WINDOW = 0x00000000;
-        public const int OBJID_CLIENT = unchecked((int)0xFFFFFFFC);
     }
 }

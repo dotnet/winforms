@@ -1935,19 +1935,19 @@ namespace System.Windows.Forms
         ///  for a *user-defined* accessible object, that has NO inner object, its important that the id is
         ///  left as OBJID_CLIENT, otherwise the object will be short-circuited into a total NOP!
         /// </summary>
-        internal int AccessibleObjectId { get; set; } = NativeMethods.OBJID_CLIENT;
+        internal int AccessibleObjectId { get; set; } = User32.OBJID.CLIENT;
 
         /// <summary>
         ///  Indicates whether this accessible object represents the client area of
         ///  the window.
         /// </summary>
-        internal bool IsClientObject => AccessibleObjectId == NativeMethods.OBJID_CLIENT;
+        internal bool IsClientObject => AccessibleObjectId == User32.OBJID.CLIENT;
 
         /// <summary>
         ///  Indicates whether this accessible object represents the non-client
         ///  area of the window.
         /// </summary>
-        internal bool IsNonClientObject => AccessibleObjectId == NativeMethods.OBJID_WINDOW;
+        internal bool IsNonClientObject => AccessibleObjectId == User32.OBJID.WINDOW;
 
         internal IAccessible GetSystemIAccessibleInternal() => systemIAccessible;
 

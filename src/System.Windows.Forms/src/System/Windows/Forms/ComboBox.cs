@@ -4141,7 +4141,7 @@ namespace System.Windows.Forms
 
                 // See "How to Handle WM_GETOBJECT" in MSDN
                 //
-                if (NativeMethods.OBJID_CLIENT == unchecked((int)(long)m.LParam))
+                if (unchecked((int)(long)m.LParam) == User32.OBJID.CLIENT)
                 {
 
                     // Get the IAccessible GUID

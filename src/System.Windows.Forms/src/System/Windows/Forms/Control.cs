@@ -525,7 +525,7 @@ namespace System.Windows.Forms
                 AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(s_ncAccessibilityProperty);
                 if (ncAccessibleObject == null)
                 {
-                    ncAccessibleObject = new ControlAccessibleObject(this, NativeMethods.OBJID_WINDOW);
+                    ncAccessibleObject = new ControlAccessibleObject(this, User32.OBJID.WINDOW);
                     Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
                 }
 
@@ -544,10 +544,10 @@ namespace System.Windows.Forms
 
             switch (accObjId)
             {
-                case NativeMethods.OBJID_CLIENT:
+                case User32.OBJID.CLIENT:
                     accessibleObject = AccessibilityObject;
                     break;
-                case NativeMethods.OBJID_WINDOW:
+                case User32.OBJID.WINDOW:
                     accessibleObject = NcAccessibilityObject;
                     break;
                 default:
@@ -4602,7 +4602,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID)
         {
-            AccessibilityNotifyClients(accEvent, NativeMethods.OBJID_CLIENT, childID);
+            AccessibilityNotifyClients(accEvent, User32.OBJID.CLIENT, childID);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4610,7 +4610,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
             }
         }
 

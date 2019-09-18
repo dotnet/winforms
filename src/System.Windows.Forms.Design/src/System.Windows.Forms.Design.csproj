@@ -99,6 +99,8 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MSG.cs" Link="Interop\User32\Interop.MSG.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.NMHDR.cs" Link="Interop\User32\Interop.NMHDR.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.NotifyWinEvent.cs" Link="Interop\User32\Interop.NotifyWinEvent.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.OBJID.cs" Link="Interop\User32\Interop.OBJID.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.PAINTSTRUCT.cs" Link="Interop\User32\Interop.PAINTSTRUCT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RedrawWindow.cs" Link="Interop\User32\Interop.RedrawWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />

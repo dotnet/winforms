@@ -313,7 +313,7 @@ namespace System.Drawing.Design
                 Rectangle r = new Rectangle();
                 FillRectWithCellBounds(focus.X, focus.Y, ref r);
                 Invalidate(Rectangle.Inflate(r, 5, 5));
-                UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(this, this.Handle), UnsafeNativeMethods.OBJID_CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
+                User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), User32.OBJID.CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
             }
 
             protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
