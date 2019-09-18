@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+            IntPtr hwndFocus = User32.GetFocus();
             if (hwndFocus == IntPtr.Zero)
             {
                 return false;

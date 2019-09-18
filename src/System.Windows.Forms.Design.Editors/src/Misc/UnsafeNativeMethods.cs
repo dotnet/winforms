@@ -22,12 +22,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern void NotifyWinEvent(int winEvent, HandleRef hwnd, int objType, int objID);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetFocus(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetFocus();
-
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         public const int OBJID_CLIENT = unchecked((int)0xFFFFFFFC);

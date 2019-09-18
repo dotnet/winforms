@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public unsafe override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            IntPtr parentHandle = (IntPtr)UnsafeNativeMethods.GetFocus();
+            IntPtr parentHandle = (IntPtr)User32.GetFocus();
 
             IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
             if (uiSvc != null)

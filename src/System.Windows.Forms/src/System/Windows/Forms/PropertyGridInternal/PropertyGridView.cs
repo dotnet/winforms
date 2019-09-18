@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (IsHandleCreated && Visible && Enabled)
                 {
 
-                    gotfocus = IntPtr.Zero != UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
+                    gotfocus = IntPtr.Zero != User32.SetFocus(new HandleRef(this, Handle));
                 }
             }
 
@@ -4572,14 +4572,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
+                        Control focusedControl = Control.FromHandle(User32.GetFocus());
 
                         if (focusedControl == null || !IsMyChild(focusedControl))
                         {
                             if (forward)
                             {
                                 TabSelection();
-                                focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
+                                focusedControl = Control.FromHandle(User32.GetFocus());
                                 // make sure the value actually took the focus
                                 if (IsMyChild(focusedControl))
                                 {
@@ -5707,7 +5707,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            IntPtr priorFocus = UnsafeNativeMethods.GetFocus();
+            IntPtr priorFocus = User32.GetFocus();
 
             IUIService service = (IUIService)GetService(typeof(IUIService));
             DialogResult result;
@@ -5722,7 +5722,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (priorFocus != IntPtr.Zero)
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, priorFocus));
+                User32.SetFocus(priorFocus);
             }
 
             return result;

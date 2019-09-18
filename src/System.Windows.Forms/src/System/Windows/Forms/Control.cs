@@ -1424,7 +1424,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                IntPtr focusHwnd = UnsafeNativeMethods.GetFocus();
+                IntPtr focusHwnd = User32.GetFocus();
 
                 if (focusHwnd == IntPtr.Zero)
                 {
@@ -2172,7 +2172,7 @@ namespace System.Windows.Forms
             SRDescription(nameof(SR.ControlFocusedDescr))
         ]
         public virtual bool Focused
-            => IsHandleCreated && UnsafeNativeMethods.GetFocus() == Handle;
+            => IsHandleCreated && User32.GetFocus() == Handle;
 
         /// <summary>
         ///  Retrieves the current font for this control. This will be the font used
@@ -5613,7 +5613,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
+                User32.SetFocus(new HandleRef(this, Handle));
             }
             if (Focused && ParentInternal != null)
             {

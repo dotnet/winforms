@@ -2057,7 +2057,7 @@ namespace System.Windows.Forms
                 {
                     if (hwndThatLostFocus == IntPtr.Zero)
                     {
-                        SnapFocus(UnsafeNativeMethods.GetFocus());
+                        SnapFocus(User32.GetFocus());
                     }
                     controlHost.Control.Select();
                     controlHost.Control.Focus();
@@ -4493,7 +4493,7 @@ namespace System.Windows.Forms
             if (!focusSuccess)
             {
                 // clear out the focus, we have focus, we're not supposed to anymore.
-                UnsafeNativeMethods.SetFocus(NativeMethods.NullHandleRef);
+                User32.SetFocus(IntPtr.Zero);
             }
         }
 
@@ -5166,7 +5166,7 @@ namespace System.Windows.Forms
                 {
                     // we're setting focus to a child control - remember who gave it to us
                     // so we can restore it on ESC.
-                    SnapFocus(UnsafeNativeMethods.GetFocus());
+                    SnapFocus(User32.GetFocus());
                     if (!IsDropDown && !TabStop)
                     {
                         Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "Installing restoreFocusFilter");

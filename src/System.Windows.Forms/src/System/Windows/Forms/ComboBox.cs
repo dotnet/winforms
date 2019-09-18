@@ -668,7 +668,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr focus = UnsafeNativeMethods.GetFocus();
+                IntPtr focus = User32.GetFocus();
                 return focus != IntPtr.Zero && ((childEdit != null && focus == childEdit.Handle) || (childListBox != null && focus == childListBox.Handle));
             }
         }

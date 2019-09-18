@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        _focusedHwnd = UnsafeNativeMethods.GetFocus();
+                        _focusedHwnd = User32.GetFocus();
                     }
                 }
 
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
 
                     if (_focusedHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _focusedHwnd)))
                     {
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, _focusedHwnd));
+                        User32.SetFocus(_focusedHwnd);
                     }
                 }
             }

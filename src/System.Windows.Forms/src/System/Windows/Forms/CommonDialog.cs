@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                 // Under some circumstances, the dialog does not initially focus on any
                 // control. We fix that by explicitly setting focus ourselves.
                 _defaultControlHwnd = wparam;
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, wparam));
+                User32.SetFocus(wparam);
             }
             else if (msg == WindowMessages.WM_SETFOCUS)
             {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 // If the dialog box gets focus, bounce it to the default control.
                 // So we post a message back to ourselves to wait for the focus change
                 // then push it to the default control.
-                UnsafeNativeMethods.SetFocus(new HandleRef(this, _defaultControlHwnd));
+                User32.SetFocus(new HandleRef(this, _defaultControlHwnd));
             }
 
             return IntPtr.Zero;

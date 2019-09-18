@@ -153,7 +153,7 @@ namespace System.Windows.Forms
                     return tool;
                 }
 
-                return Control.FromHandle(UnsafeNativeMethods.GetFocus());
+                return Control.FromHandle(User32.GetFocus());
             }
         }
 

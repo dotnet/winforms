@@ -340,7 +340,7 @@ namespace System.Drawing.Design
                 colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
                 CustomColorDialog dialog = new CustomColorDialog();
 
-                IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+                IntPtr hwndFocus = User32.GetFocus();
                 try
                 {
                     DialogResult result = dialog.ShowDialog();
@@ -358,7 +358,7 @@ namespace System.Drawing.Design
                 {
                     if (hwndFocus != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, hwndFocus));
+                        User32.SetFocus(hwndFocus);
                     }
                 }
             }

@@ -799,19 +799,19 @@ namespace System.ComponentModel.Design
         public void CheckFocusIsRight()
         { // fix to get the focus to NOT stay on ContainerControl
             Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "Checking focus...");
-            IntPtr focusedControl = UnsafeNativeMethods.GetFocus();
+            IntPtr focusedControl = User32.GetFocus();
             if (focusedControl == Handle)
             {
                 Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "    putting focus on the panel...");
                 _panel.Focus();
             }
-            focusedControl = UnsafeNativeMethods.GetFocus();
+            focusedControl = User32.GetFocus();
             if (CurrentPanel != null && CurrentPanel.Handle == focusedControl)
             {
                 Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "    selecting next available control on the panel...");
                 CurrentPanel.SelectNextControl(null, true, true, true, true);
             }
-            UnsafeNativeMethods.GetFocus();
+            User32.GetFocus();
         }
 
         protected override void OnLayout(LayoutEventArgs levent)
@@ -1044,7 +1044,7 @@ namespace System.ComponentModel.Design
                 if (WindowOwnsWindow(Handle, hwndActivating))
                 {
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] setting cancel close true because WindowsOwnWindow");
-                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] checking the focus... " + GetControlInformation(UnsafeNativeMethods.GetFocus()));
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] checking the focus... " + GetControlInformation(User32.GetFocus()));
                     _cancelClose = true;
                 }
                 else
@@ -1075,7 +1075,7 @@ namespace System.ComponentModel.Design
             // since we're not hosted in a form we need to do the same logic as Form.cs. If we get an enter key we need to find the current focused control. if it's a button, we click it and return that we handled the message
             if (keyData == Keys.Enter)
             {
-                IntPtr focusedControlPtr = UnsafeNativeMethods.GetFocus();
+                IntPtr focusedControlPtr = User32.GetFocus();
                 Control focusedControl = Control.FromChildHandle(focusedControlPtr);
                 if (focusedControl is IButtonControl button && button is Control)
                 {

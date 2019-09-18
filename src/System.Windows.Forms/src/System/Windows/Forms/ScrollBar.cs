@@ -739,7 +739,7 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_SIZE:
                     // Fixes the scrollbar focus rect
-                    if (UnsafeNativeMethods.GetFocus() == Handle)
+                    if (User32.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);

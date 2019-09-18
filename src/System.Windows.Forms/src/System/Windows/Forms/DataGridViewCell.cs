@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms
                         // We don't want the grid to get the keyboard focus
                         // when the editing control gets parented to the parking window,
                         // because some other window is in the middle of receiving the focus.
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, IntPtr.Zero));
+                        User32.SetFocus(IntPtr.Zero);
                     }
                 }
                 Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);

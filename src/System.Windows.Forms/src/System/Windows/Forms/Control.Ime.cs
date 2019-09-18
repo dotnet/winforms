@@ -289,7 +289,7 @@ namespace System.Windows.Forms
                         }
                         else if (ContainsFocus)
                         {
-                            ctl = FromChildHandle(UnsafeNativeMethods.GetFocus());
+                            ctl = FromChildHandle(User32.GetFocus());
                         }
 
                         if (ctl != null && ctl.CanEnableIme)
@@ -418,7 +418,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "Initializing PropagatingImeMode");
 
                     ImeMode imeMode = ImeMode.Inherit;
-                    IntPtr focusHandle = UnsafeNativeMethods.GetFocus();
+                    IntPtr focusHandle = User32.GetFocus();
 
                     if (focusHandle != IntPtr.Zero)
                     {
