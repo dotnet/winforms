@@ -891,12 +891,12 @@ namespace System.Windows.Forms
 
                 if (ColorTranslator.ToOle(color) < 0)
                 {
-                    backBrush = SafeNativeMethods.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF);
+                    backBrush = User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF);
                     SetState(States.OwnCtlBrush, false);
                 }
                 else
                 {
-                    backBrush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(color));
+                    backBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(color));
                     SetState(States.OwnCtlBrush, true);
                 }
 

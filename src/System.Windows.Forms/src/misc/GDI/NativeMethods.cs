@@ -28,9 +28,6 @@ namespace System.Windows.Forms.Internal
         NONANTIALIASED_QUALITY = 3,
         ANTIALIASED_QUALITY = 4,
         CLEARTYPE_QUALITY = 5,
-        CLEARTYPE_NATURAL_QUALITY = 6,
-
-        // Brush styles
-        BS_SOLID = 0;
+        CLEARTYPE_NATURAL_QUALITY = 6;
     }
 }

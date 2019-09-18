@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Internal
             }
 
             // 2. call the function
-            IntUnsafeNativeMethods.Ellipse(hdc, nLeftRect, nTopRect, nRightRect, nBottomRect);
+            Gdi32.Ellipse(DeviceContext, nLeftRect, nTopRect, nRightRect, nBottomRect);
         }
 
         public void DrawAndFillEllipse(WindowsPen pen, WindowsBrush brush, Rectangle bounds)
@@ -525,12 +525,11 @@ namespace System.Windows.Forms.Internal
         public void FillRectangle(WindowsBrush brush, int x, int y, int width, int height)
         {
             Debug.Assert(brush != null, "brush == null");
-
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
-            IntPtr hBrush = brush.HBrush;  // We don't delete this handle since we didn't create it.
-            RECT rect = new RECT(x, y, x + width, y + height);
-
-            IntUnsafeNativeMethods.FillRect(hdc, ref rect, new HandleRef(brush, hBrush));
+            var rect = new RECT(x, y, x + width, y + height);
+            User32.FillRect(
+                new HandleRef(DeviceContext, DeviceContext.Hdc),
+                ref rect,
+                new HandleRef(brush, brush.HBrush));
         }
 
         // DrawLine overloads

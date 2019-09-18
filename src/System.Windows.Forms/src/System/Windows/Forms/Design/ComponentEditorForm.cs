@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Design
 
                 if (hbitmapTemp != IntPtr.Zero)
                 {
-                    _hbrushDither = SafeNativeMethods.CreatePatternBrush(new HandleRef(null, hbitmapTemp));
+                    _hbrushDither = Gdi32.CreatePatternBrush(hbitmapTemp);
 
                     Debug.Assert(_hbrushDither != IntPtr.Zero,
                                  "Unable to created dithered brush. Page selector UI will not be correct");

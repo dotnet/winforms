@@ -95,13 +95,14 @@ namespace System.Windows.Forms.ButtonInternal
                 // to use it without enough bookkeeping to negate any performance gain of using GDI.
                 if (color.A == 255 && e.HDC != IntPtr.Zero)
                 {
-
                     if (DisplayInformation.BitsPerPixel > 8)
                     {
-                        RECT r = new RECT(bounds.X, bounds.Y, bounds.Right, bounds.Bottom);
+                        var r = new RECT(bounds.X, bounds.Y, bounds.Right, bounds.Bottom);
                         // SysColorBrush does not have to be deleted.
-                        SafeNativeMethods.FillRect(new HandleRef(e, e.HDC), ref r, new HandleRef(this,
-                            isHighContrastHighlighted ? SafeNativeMethods.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF) : Control.BackColorBrush));
+                        User32.FillRect(
+                            new HandleRef(e, e.HDC),
+                            ref r,
+                            new HandleRef(this, isHighContrastHighlighted ? User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF) : Control.BackColorBrush));
                         painted = true;
                     }
                 }

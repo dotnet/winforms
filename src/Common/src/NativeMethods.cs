@@ -64,7 +64,6 @@ namespace System.Windows.Forms
 
         public const int BCM_GETIDEALSIZE = 0x1601,
         BI_RGB = 0,
-        BS_PATTERN = 3,
         BDR_RAISEDOUTER = 0x0001,
         BDR_SUNKENOUTER = 0x0002,
         BDR_RAISEDINNER = 0x0004,
@@ -959,8 +958,6 @@ namespace System.Windows.Forms
         PD_NOCURRENTPAGE = 0x00800000,
         PD_EXCLUSIONFLAGS = 0x01000000,
         PD_USELARGETEMPLATE = 0x10000000,
-        PS_SOLID = 0,
-        PS_DOT = 2,
         PRF_CHECKVISIBLE = 0x00000001,
         PRF_NONCLIENT = 0x00000002,
         PRF_CLIENT = 0x00000004,
@@ -2181,14 +2178,6 @@ namespace System.Windows.Forms
         }
 
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct LOGBRUSH
-        {
-            public int lbStyle;
-            public int lbColor;
-            public IntPtr lbHatch;
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct LOGFONTW
@@ -3889,15 +3878,8 @@ namespace System.Windows.Forms
         public const int STAP_ALLOW_CONTROLS = (1 << 1);
         public const int STAP_ALLOW_WEBCONTENT = (1 << 2);
 
-        public const int PS_NULL = 5;
-        public const int PS_INSIDEFRAME = 6;
-
-        public const int PS_GEOMETRIC = 0x00010000;
-        public const int PS_ENDCAP_SQUARE = 0x00000100;
-
         public const int WS_EX_TRANSPARENT = 0x00000020;
 
-        public const int NULL_BRUSH = 5;
         public const int MM_HIMETRIC = 3;
 
         // Threading stuff
