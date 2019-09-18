@@ -1298,9 +1298,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 dp.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
                 const int SizeOfVariant = 16;
-                Debug.Assert(SizeOfVariant == Marshal.SizeOf<NativeMethods.VARIANT>());
+                Debug.Assert(SizeOfVariant == Marshal.SizeOf<Ole32.VARIANT>());
                 IntPtr mem = Marshal.AllocCoTaskMem(SizeOfVariant);
-                SafeNativeMethods.VariantInit(new HandleRef(null, mem));
+                Oleaut32.VariantInit(mem);
                 Marshal.GetNativeVariantForObject(value, mem);
                 dp.rgvarg = mem;
                 try
@@ -1386,7 +1386,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 finally
                 {
-                    SafeNativeMethods.VariantClear(new HandleRef(null, mem));
+                    Oleaut32.VariantClear(mem);
                     Marshal.FreeCoTaskMem(mem);
                 }
             }

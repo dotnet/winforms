@@ -192,7 +192,7 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IOleControl iOleControl;
         private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObject;
         private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
-        private NativeMethods.IPerPropertyBrowsing iPerPropertyBrowsing;
+        private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
         private NativeMethods.ICategorizeProperties iCategorizeProperties;
         private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
         private Ole32.IPersistStream iPersistStream;
@@ -4935,14 +4935,14 @@ namespace System.Windows.Forms
             return iCategorizeProperties;
         }
 
-        private NativeMethods.IPerPropertyBrowsing GetPerPropertyBrowsing()
+        private Ole32.IPerPropertyBrowsing GetPerPropertyBrowsing()
         {
             if (iPerPropertyBrowsing == null && !axState[checkedIppb] && instance != null)
             {
                 axState[checkedIppb] = true;
-                if (instance is NativeMethods.IPerPropertyBrowsing)
+                if (instance is Ole32.IPerPropertyBrowsing)
                 {
-                    iPerPropertyBrowsing = (NativeMethods.IPerPropertyBrowsing)instance;
+                    iPerPropertyBrowsing = (Ole32.IPerPropertyBrowsing)instance;
                 }
             }
             return iPerPropertyBrowsing;
@@ -7522,7 +7522,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    NativeMethods.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
+                    Ole32.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
                     if (ippb == null)
                     {
                         return Guid.Empty;
@@ -7677,7 +7677,7 @@ namespace System.Windows.Forms
             ///  This simply sets flags so this will happen, it doesn't actually to the update...
             ///  we wait and do that on-demand for perf.
             /// </summary>
-            internal void UpdateTypeConverterAndTypeEditorInternal(bool force, Ole32.DispatchID dispid)
+            internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, Ole32.DispatchID dispid)
             {
 
                 // check to see if we're being forced here or if the work really
@@ -7695,20 +7695,20 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    NativeMethods.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
+                    Ole32.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
 
                     if (ppb != null)
                     {
                         bool hasStrings = false;
 
                         // check for enums
-                        NativeMethods.CA_STRUCT caStrings = new NativeMethods.CA_STRUCT();
-                        NativeMethods.CA_STRUCT caCookies = new NativeMethods.CA_STRUCT();
+                        var caStrings = new Ole32.CA_STRUCT();
+                        var caCookies = new Ole32.CA_STRUCT();
 
                         HRESULT hr = HRESULT.S_OK;
                         try
                         {
-                            hr = ppb.GetPredefinedStrings(dispid, caStrings, caCookies);
+                            hr = ppb.GetPredefinedStrings(dispid, &caStrings, &caCookies);
                         }
                         catch (ExternalException ex)
                         {
@@ -7937,7 +7937,7 @@ namespace System.Windows.Forms
                     // marshal the items.
                     object[] nameItems = nameMarshaller.Items;
                     object[] cookieItems = valueMarshaller.Items;
-                    NativeMethods.IPerPropertyBrowsing ppb = (NativeMethods.IPerPropertyBrowsing)owner.GetPerPropertyBrowsing();
+                    Ole32.IPerPropertyBrowsing ppb = (Ole32.IPerPropertyBrowsing)owner.GetPerPropertyBrowsing();
                     int itemCount = 0;
 
                     Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
@@ -7945,7 +7945,7 @@ namespace System.Windows.Forms
                     if (nameItems.Length > 0)
                     {
                         object[] valueItems = new object[cookieItems.Length];
-                        NativeMethods.VARIANT var = new NativeMethods.VARIANT();
+                        var var = new Ole32.VARIANT();
                         int cookie;
 
                         Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");
@@ -7960,9 +7960,9 @@ namespace System.Windows.Forms
                                 Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems == null ? "(unknown)" : nameItems[i].ToString()));
                                 continue;
                             }
-                            var.vt = (short)NativeMethods.tagVT.VT_EMPTY;
+                            var.vt = (short)Ole32.VARENUM.EMPTY;
                             HRESULT hr = ppb.GetPredefinedValue(target.Dispid, (uint)cookie, var);
-                            if (hr == HRESULT.S_OK && var.vt != (short)NativeMethods.tagVT.VT_EMPTY)
+                            if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
                             {
                                 valueItems[i] = var.ToObject();
                             }

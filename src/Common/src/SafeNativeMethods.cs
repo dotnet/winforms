@@ -65,12 +65,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Hhctrl, CharSet = CharSet.Auto)]
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, [MarshalAs(UnmanagedType.LPStruct)]NativeMethods.HH_AKLINK dwData);
 
-        [DllImport(ExternDll.Oleaut32)]
-        public static extern void VariantInit(HandleRef pObject);
-
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void VariantClear(HandleRef pObject);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool LineTo(HandleRef hdc, int x, int y);
 

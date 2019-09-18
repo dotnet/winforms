@@ -65,7 +65,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static readonly Type[] extendedInterfaces = new Type[]{
                                                         typeof(NativeMethods.ICategorizeProperties),
                                                         typeof(NativeMethods.IProvidePropertyBuilder),
-                                                        typeof(NativeMethods.IPerPropertyBrowsing),
+                                                        typeof(Ole32.IPerPropertyBrowsing),
                                                         typeof(NativeMethods.IVsPerPropertyBrowsing),
                                                         typeof(NativeMethods.IManagedPerPropertyBrowsing)};
 
