@@ -4594,10 +4594,9 @@ namespace System.Windows.Forms
                     && UnsafeNativeMethods.SystemParametersInfoW(NativeMethods.SPI_GETSNAPTODEFBUTTON, ref data)
                     && data)
             {
-
                 Control button = AcceptButton as Control;
                 var ptToSnap = new Point(button.Left + button.Width / 2, button.Top + button.Height / 2);
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref ptToSnap);
+                User32.ClientToScreen(new HandleRef(this, Handle), ref ptToSnap);
                 if (!button.IsWindowObscured)
                 {
                     Cursor.Position = ptToSnap;
@@ -7023,7 +7022,7 @@ namespace System.Windows.Forms
 
                 // Convert to client coordinates
                 var pt = new Point(x, y);
-                UnsafeNativeMethods.ScreenToClient(new HandleRef(this, Handle), ref pt);
+                User32.ScreenToClient(new HandleRef(this, Handle), ref pt);
 
                 Size clientSize = ClientSize;
 

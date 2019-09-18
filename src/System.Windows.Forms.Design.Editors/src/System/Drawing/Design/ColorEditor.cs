@@ -589,7 +589,7 @@ namespace System.Drawing.Design
                 {
                     // Convert from screen to client coordinates
                     var pt = new Point(x, y);
-                    UnsafeNativeMethods.ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
+                    User32.ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
 
                     int cell = ColorPalette.GetCellFromLocationMouse(pt.X, pt.Y);
                     if (cell != -1)
@@ -623,9 +623,8 @@ namespace System.Drawing.Design
                             ColorPalette.FillRectWithCellBounds(cellPt.X, cellPt.Y, ref rect);
 
                             // Translate rect to screen coordinates
-                            //
                             var pt = new Point(rect.X, rect.Y);
-                            UnsafeNativeMethods.ClientToScreen(new HandleRef(parent.ColorPalette, parent.ColorPalette.Handle), ref pt);
+                            User32.ClientToScreen(new HandleRef(parent.ColorPalette, parent.ColorPalette.Handle), ref pt);
 
                             return new Rectangle(pt.X, pt.Y, rect.Width, rect.Height);
                         }

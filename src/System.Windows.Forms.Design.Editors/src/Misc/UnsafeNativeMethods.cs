@@ -11,12 +11,6 @@ namespace System.Windows.Forms.Design
     internal class UnsafeNativeMethods
     {
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ClientToScreen(HandleRef hWnd, ref Point lpPoint);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ScreenToClient(HandleRef hWnd, ref Point lpPoint);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern void NotifyWinEvent(int winEvent, HandleRef hwnd, int objType, int objID);
 
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);

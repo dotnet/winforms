@@ -86,6 +86,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ClientToScreen.cs" Link="Interop\User32\Interop.ClientToScreen.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DefWindowProcW.cs" Link="Interop\User32\Interop.DefWindowProcW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />

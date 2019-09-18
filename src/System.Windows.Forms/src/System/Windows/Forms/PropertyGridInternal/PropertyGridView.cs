@@ -863,16 +863,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal Rectangle AccessibilityGetGridEntryBounds(GridEntry gridEntry)
         {
             int row = GetRowFromGridEntry(gridEntry);
-
             if (row < 0)
             {
                 return Rectangle.Empty;
             }
+
             Rectangle rect = GetRectangle(row, ROWVALUE | ROWLABEL);
 
             // Translate rect to screen coordinates
             var pt = new Point(rect.X, rect.Y);
-            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref pt);
+            User32.ClientToScreen(new HandleRef(this, Handle), ref pt);
 
             Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
 
@@ -8872,7 +8872,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // Convert to client coordinates
                 var pt = new Point(x, y);
-                UnsafeNativeMethods.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref pt);
+                User32.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref pt);
 
                 // Find the grid entry at the given client coordinates
                 //

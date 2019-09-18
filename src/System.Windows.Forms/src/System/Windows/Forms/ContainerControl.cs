@@ -691,7 +691,7 @@ namespace System.Windows.Forms
                 var clientRectangle = new RECT();
                 UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
                 var topLeftPoint = new Point();
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
+                User32.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
                 return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);
             }
             

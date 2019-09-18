@@ -86,6 +86,7 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHBrowseForFolder.cs" Link="Interop\Shell32\Interop.SHBrowseForFolder.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" Link="Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ClientToScreen.cs" Link="Interop\User32\Interop.ClientToScreen.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DT.cs" Link="Interop\User32\Interop.DT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.NMHDR.cs" Link="Interop\User32\Interop.NMHDR.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ScreenToClient.cs" Link="Interop\User32\Interop.ScreenToClient.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetFocus.cs" Link="Interop\User32\Interop.SetFocus.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowText.cs" Link="Interop\User32\Interop.SetWindowText.cs" />
