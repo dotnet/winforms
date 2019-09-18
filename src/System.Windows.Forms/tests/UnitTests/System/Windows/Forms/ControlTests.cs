@@ -5473,6 +5473,100 @@ namespace System.Windows.Forms.Tests
 
         #endregion
 
+        public static IEnumerable<object[]> AccessibilityNotifyClients_AccessibleEvents_Int_TestData()
+        {
+            yield return new object[] { AccessibleEvents.DescriptionChange, int.MinValue };
+            yield return new object[] { AccessibleEvents.DescriptionChange, -1 };
+            yield return new object[] { AccessibleEvents.DescriptionChange, 0 };
+            yield return new object[] { AccessibleEvents.DescriptionChange, 1 };
+            yield return new object[] { AccessibleEvents.DescriptionChange, int.MaxValue };
+            yield return new object[] { (AccessibleEvents)0, int.MinValue };
+            yield return new object[] { (AccessibleEvents)0, -1 };
+            yield return new object[] { (AccessibleEvents)0, 0 };
+            yield return new object[] { (AccessibleEvents)0, 1 };
+            yield return new object[] { (AccessibleEvents)0, int.MaxValue };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, int.MinValue };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, -1 };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, 0 };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, 1 };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, int.MaxValue };
+        }
+
+        [Theory]
+        [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_TestData))]
+        public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntWithoutHandle_Nop(AccessibleEvents accEvent, int childID)
+        {
+            var control = new SubControl();
+            control.AccessibilityNotifyClients(accEvent, childID);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.AccessibilityNotifyClients(accEvent, childID);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_TestData))]
+        public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntWithHandle_Success(AccessibleEvents accEvent, int childID)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.AccessibilityNotifyClients(accEvent, childID);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            control.AccessibilityNotifyClients(accEvent, childID);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> AccessibilityNotifyClients_AccessibleEvents_Int_Int_TestData()
+        {
+            yield return new object[] { AccessibleEvents.DescriptionChange, int.MaxValue, int.MinValue };
+            yield return new object[] { AccessibleEvents.DescriptionChange, 1, -1 };
+            yield return new object[] { AccessibleEvents.DescriptionChange, 0, 0 };
+            yield return new object[] { AccessibleEvents.DescriptionChange, -1, 1 };
+            yield return new object[] { AccessibleEvents.DescriptionChange, int.MinValue, int.MaxValue };
+            yield return new object[] { (AccessibleEvents)0, int.MaxValue, int.MinValue };
+            yield return new object[] { (AccessibleEvents)0, 1, -1 };
+            yield return new object[] { (AccessibleEvents)0, 0, 0 };
+            yield return new object[] { (AccessibleEvents)0, -1, 1 };
+            yield return new object[] { (AccessibleEvents)0, int.MinValue, int.MaxValue };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, int.MaxValue, int.MinValue };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, 1, -1 };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, 0, 0 };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, 1, 1 };
+            yield return new object[] { (AccessibleEvents)int.MaxValue, int.MinValue, int.MaxValue };
+        }
+
+        [Theory]
+        [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_Int_TestData))]
+        public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntIntWithoutHandle_Nop(AccessibleEvents accEvent, int objectID, int childID)
+        {
+            var control = new SubControl();
+            control.AccessibilityNotifyClients(accEvent, objectID, childID);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.AccessibilityNotifyClients(accEvent, objectID, childID);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_Int_TestData))]
+        public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntIntWithHandle_Success(AccessibleEvents accEvent, int objectID, int childID)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.AccessibilityNotifyClients(accEvent, objectID, childID);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            control.AccessibilityNotifyClients(accEvent, objectID, childID);
+            Assert.True(control.IsHandleCreated);
+        }
+
         [Fact]
         public void Control_CreateControl_Invoke_Success()
         {
