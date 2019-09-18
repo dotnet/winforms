@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.Control, dataGrid.GridLineColor);
             Assert.Equal(DataGridLineStyle.Solid, dataGrid.GridLineStyle);
             Assert.Equal(SystemColors.Control, dataGrid.HeaderBackColor);
-            Assert.Same(Control.DefaultFont, dataGrid.HeaderFont);
+            Assert.Equal(Control.DefaultFont, dataGrid.HeaderFont);
             Assert.Equal(SystemColors.ControlText, dataGrid.HeaderForeColor);
             Assert.Equal(SystemColors.ControlText, dataGrid.HeaderForeColor);
             Assert.Equal(80, dataGrid.Height);

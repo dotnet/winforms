@@ -57,10 +57,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.DockPadding.Bottom);
             Assert.Equal(0, control.DockPadding.Left);
             Assert.Equal(0, control.DockPadding.Right);
+            Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(0, control.Height);
@@ -72,6 +74,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Padding);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.Null(control.Site);
@@ -85,6 +90,8 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
             Assert.False(control.VScroll);
             Assert.Equal(0, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         [Fact]
@@ -728,14 +735,36 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
 
             public new bool HScroll
             {
                 get => base.HScroll;
                 set => base.HScroll = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
             }
 
             public new bool VScroll

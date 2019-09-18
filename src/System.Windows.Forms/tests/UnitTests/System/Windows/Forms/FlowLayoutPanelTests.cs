@@ -1,5 +1,4 @@
-﻿
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -60,11 +59,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, panel.DockPadding.Bottom);
             Assert.Equal(0, panel.DockPadding.Left);
             Assert.Equal(0, panel.DockPadding.Right);
+            Assert.False(panel.DoubleBuffered);
             Assert.True(panel.Enabled);
             Assert.NotNull(panel.Events);
             Assert.Same(panel.Events, panel.Events);
             Assert.Equal(FlowDirection.LeftToRight, panel.FlowDirection);
             Assert.Equal(Control.DefaultFont, panel.Font);
+            Assert.Equal(panel.Font.Height, panel.FontHeight);
             Assert.Equal(Control.DefaultForeColor, panel.ForeColor);
             Assert.False(panel.HasChildren);
             Assert.Equal(100, panel.Height);
@@ -79,6 +80,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Point.Empty, panel.Location);
             Assert.Equal(new Padding(3), panel.Margin);
             Assert.Equal(Padding.Empty, panel.Padding);
+            Assert.False(panel.RecreatingHandle);
+            Assert.Null(panel.Region);
+            Assert.False(panel.ResizeRedraw);
             Assert.Equal(200, panel.Right);
             Assert.Equal(RightToLeft.No, panel.RightToLeft);
             Assert.Null(panel.Site);
@@ -93,6 +97,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(panel.VScroll);
             Assert.Equal(200, panel.Width);
             Assert.True(panel.WrapContents);
+
+            Assert.False(panel.IsHandleCreated);
         }
 
         [Fact]
@@ -249,14 +255,36 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
 
             public new bool HScroll
             {
                 get => base.HScroll;
                 set => base.HScroll = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
             }
 
             public new bool VScroll

@@ -49,10 +49,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(0, control.Height);
@@ -64,6 +66,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
@@ -115,10 +120,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(0, control.Height);
@@ -130,6 +137,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
@@ -142,6 +152,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
             Assert.Equal(0, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> Ctor_String_Int_Int_Int_Int_TestData()
@@ -188,10 +200,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(height, control.Height);
@@ -203,6 +217,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(left + width, control.Right);
@@ -215,6 +232,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
             Assert.Equal(width, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_TestData()
@@ -261,10 +280,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(0, control.Height);
@@ -276,6 +297,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Same(parent, control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
@@ -288,6 +312,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
             Assert.Equal(0, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_Int_Int_Int_Int_TestData()
@@ -334,10 +360,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(height, control.Height);
@@ -349,6 +377,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Same(parent, control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
             Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(left + width, control.Right);
@@ -361,6 +392,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
             Assert.Equal(width, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         [Fact]
@@ -7596,6 +7629,12 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
             public new int FontHeight
@@ -7608,6 +7647,12 @@ namespace System.Windows.Forms.Tests
             {
                 get => base.ImeModeBase;
                 set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
             }
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);

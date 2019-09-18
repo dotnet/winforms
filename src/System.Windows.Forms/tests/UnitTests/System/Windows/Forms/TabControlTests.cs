@@ -54,6 +54,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(100, control.Height);
@@ -66,6 +67,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Point.Empty, control.Location);
             Assert.False(control.Multiline);
             Assert.Equal(new Point(6, 3), control.Padding);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(200, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.False(control.RightToLeftLayout);
@@ -86,6 +90,25 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(200, control.Width);
 
             Assert.False(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void TabControl_CreateParams_GetDefault_ReturnsExpected()
+        {
+            var control = new SubTabControl();
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTabControl32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0, createParams.ExStyle);
+            Assert.Equal(100, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010800, createParams.Style);
+            Assert.Equal(200, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
         }
 
         [Theory]
@@ -256,11 +279,31 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
-            public new bool DoubleBuffered => base.DoubleBuffered;
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
 
             public new EventHandlerList Events => base.Events;
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
         }
     }
 }

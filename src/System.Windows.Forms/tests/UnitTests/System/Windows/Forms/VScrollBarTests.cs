@@ -57,10 +57,12 @@ namespace System.Windows.Forms.Tests
             Assert.True(scrollBar.DisplayRectangle.Width > 0);
             Assert.True(scrollBar.DisplayRectangle.Height > 0);
             Assert.Equal(DockStyle.None, scrollBar.Dock);
+            Assert.False(scrollBar.DoubleBuffered);
             Assert.True(scrollBar.Enabled);
             Assert.NotNull(scrollBar.Events);
             Assert.Same(scrollBar.Events, scrollBar.Events);
             Assert.Equal(Control.DefaultFont, scrollBar.Font);
+            Assert.Equal(scrollBar.Font.Height, scrollBar.FontHeight);
             Assert.Equal(Control.DefaultForeColor, scrollBar.ForeColor);
             Assert.False(scrollBar.HasChildren);
             Assert.True(scrollBar.Height > 0);
@@ -73,6 +75,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(100, scrollBar.Maximum);
             Assert.Equal(0, scrollBar.Minimum);
             Assert.Equal(Padding.Empty, scrollBar.Padding);
+            Assert.False(scrollBar.RecreatingHandle);
+            Assert.Null(scrollBar.Region);
+            Assert.False(scrollBar.ResizeRedraw);
             Assert.True(scrollBar.Right > 0);
             Assert.Equal(RightToLeft.No, scrollBar.RightToLeft);
             Assert.True(scrollBar.ScaleScrollBarForDpiChange);
@@ -87,6 +92,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, scrollBar.Value);
             Assert.True(scrollBar.Visible);
             Assert.True(scrollBar.Width > 0);
+
+            Assert.False(scrollBar.IsHandleCreated);
         }
 
         [Fact]
@@ -183,9 +190,31 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
         }
     }
 }

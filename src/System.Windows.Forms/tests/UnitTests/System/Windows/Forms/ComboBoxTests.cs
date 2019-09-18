@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.FormatInfo);
             Assert.Empty(control.FormatString);
             Assert.False(control.FormattingEnabled);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
             Assert.True(control.Height > 0);
             Assert.True(control.IntegralHeight);
@@ -395,7 +395,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             control.Font = null;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(3, callCount);
 
             // Remove handler.
