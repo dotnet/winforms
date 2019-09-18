@@ -295,12 +295,6 @@ namespace System.Windows.Forms
         public static extern int FillRect(HandleRef hdc, ref RECT rect, HandleRef hbrush);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetBkColor(HandleRef hDC);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetBkColor(HandleRef hDC, int clr);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetViewportOrgEx(IntPtr hdc, int x, int y, Point *lppt);
 
         public static unsafe bool SetViewportOrgEx(HandleRef hdc, int x, int y, Point *lppt)
@@ -374,12 +368,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DrawFrameControl(HandleRef hDC, ref RECT rect, int type, int state);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int SetROP2(IntPtr hDC, int nDrawMode);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetBkMode(HandleRef hDC, int nBkMode);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool BitBlt(HandleRef hDC, int x, int y, int nWidth, int nHeight,

@@ -4,12 +4,20 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern uint RealizePalette(IntPtr hdc);
+        public static extern R2 GetROP2(IntPtr hdc);
+
+        public static R2 GetROP2(IHandle hdc)
+        {
+            R2 result = GetROP2(hdc.Handle);
+            GC.KeepAlive(hdc);
+            return result;
+        }
     }
 }

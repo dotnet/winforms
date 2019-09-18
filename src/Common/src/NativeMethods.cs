@@ -1141,8 +1141,7 @@ namespace System.Windows.Forms
             return (hr < 0);
         }
 
-        public const int TRANSPARENT = 1,
-        OPAQUE = 2,
+        public const int
         TPM_LEFTBUTTON = 0x0000,
         TPM_RIGHTBUTTON = 0x0002,
         TPM_LEFTALIGN = 0x0000,

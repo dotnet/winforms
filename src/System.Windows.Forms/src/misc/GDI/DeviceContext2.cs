@@ -33,33 +33,29 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Color BackgroundColor
         {
-            get => ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetBkColor(new HandleRef(this, Hdc)));
-            set => ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor(new HandleRef(this, Hdc), ColorTranslator.ToWin32(value)));
+            get => ColorTranslator.FromWin32(Gdi32.GetBkColor(this));
+            set => ColorTranslator.FromWin32(Gdi32.SetBkColor(this, ColorTranslator.ToWin32(value)));
         }
 
         /// <summary>
         ///  DC background mode.
         /// </summary>
-        public DeviceContextBackgroundMode BackgroundMode
-             => (DeviceContextBackgroundMode)IntUnsafeNativeMethods.GetBkMode(new HandleRef(this, Hdc));
+        public Gdi32.BKMODE BackgroundMode => Gdi32.GetBkMode(this);
 
         /// <summary>
         ///  Sets the DC background mode and returns the old value.
         /// </summary>
-        public DeviceContextBackgroundMode SetBackgroundMode(DeviceContextBackgroundMode newMode)
-            => (DeviceContextBackgroundMode)IntUnsafeNativeMethods.SetBkMode(new HandleRef(this, Hdc), (int)newMode);
+        public Gdi32.BKMODE SetBackgroundMode(Gdi32.BKMODE newMode) => Gdi32.SetBkMode(this, newMode);
 
         /// <summary>
         ///  ROP2 currently on the DC.
         /// </summary>
-        public DeviceContextBinaryRasterOperationFlags BinaryRasterOperation
-            => (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.GetROP2(new HandleRef(this, Hdc));
+        public Gdi32.R2 BinaryRasterOperation => Gdi32.GetROP2(this);
 
         /// <summary>
         ///  Sets the DC ROP2 and returns the old value.
         /// </summary>
-        public DeviceContextBinaryRasterOperationFlags SetRasterOperation(DeviceContextBinaryRasterOperationFlags rasterOperation)
-            => (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.SetROP2(new HandleRef(this, Hdc), (int)rasterOperation);
+        public Gdi32.R2 SetRasterOperation(Gdi32.R2 rasterOperation) => Gdi32.SetROP2(this, rasterOperation);
 
         /// <summary>
         ///  Get the number of pixels per logical inch along the device axes. In a system with multiple display

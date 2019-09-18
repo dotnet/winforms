@@ -10,12 +10,6 @@ namespace System.Windows.Forms.Internal
 {
     internal static partial class IntUnsafeNativeMethods
     {
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetROP2(HandleRef hdc);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int SetROP2(HandleRef hDC, int nDrawMode);
-
         // Font.
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr CreateFontIndirectW(ref NativeMethods.LOGFONTW lplf);
@@ -27,32 +21,6 @@ namespace System.Windows.Forms.Internal
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetNearestColor(HandleRef hDC, int color);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int SetBkColor(HandleRef hDC, int clr);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SetBkMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int IntSetBkMode(HandleRef hDC, int nBkMode);
-
-        public static int SetBkMode(HandleRef hDC, int nBkMode)
-        {
-            int oldMode = IntSetBkMode(hDC, nBkMode);
-            DbgUtil.AssertWin32(oldMode != 0, "SetBkMode(hdc=[0x{0:X8}], Mode=[{1}]) failed.", hDC.Handle, nBkMode);
-            return oldMode;
-        }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "GetBkMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int IntGetBkMode(HandleRef hDC);
-
-        public static int GetBkMode(HandleRef hDC)
-        {
-            int mode = IntGetBkMode(hDC);
-            DbgUtil.AssertWin32(mode != 0, "GetBkMode(hdc=[0x{0:X8}]) failed.", hDC.Handle);
-            return mode;
-        }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int GetBkColor(HandleRef hDC);
 
         /// <remarks>
         ///  This method is currently used just for drawing the text background

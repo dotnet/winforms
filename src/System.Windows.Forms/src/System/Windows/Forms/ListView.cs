@@ -5769,7 +5769,7 @@ namespace System.Windows.Forms
                                 using (Graphics g = Graphics.FromHdcInternal(nmcd->hdc))
                                 {
                                     Color foreColor = ColorTranslator.FromWin32(Gdi32.GetTextColor(nmcd->hdc));
-                                    Color backColor = ColorTranslator.FromWin32(SafeNativeMethods.GetBkColor(new HandleRef(this, nmcd->hdc)));
+                                    Color backColor = ColorTranslator.FromWin32(Gdi32.GetBkColor(nmcd->hdc));
                                     Font font = GetListHeaderFont();
                                     var e = new DrawListViewColumnHeaderEventArgs(
                                         g,

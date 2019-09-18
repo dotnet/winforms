@@ -313,7 +313,7 @@ namespace System.Windows.Forms
             // monochrome to color, Windows sets all 1 bits to the background
             // color, and all 0 bits to the foreground color.
             //
-            SafeNativeMethods.SetBkColor(new HandleRef(null, target), 0x00ffffff); // white
+            Gdi32.SetBkColor(target, 0x00ffffff); // white
             Gdi32.SetTextColor(target, 0x00000000); // black
             SafeNativeMethods.BitBlt(new HandleRef(null, target), 0, 0, size.Width, size.Height, new HandleRef(null, source),
                                      0, 0, 0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
@@ -1961,17 +1961,17 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawReversibleFrame(Rectangle rectangle, Color backColor, FrameStyle style)
         {
-            int rop2;
+            Gdi32.R2 rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = 0xA; // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET);
+                rop2 = Gdi32.R2.NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = 0x7; // RasterOp.PEN.XorWith(RasterOp.TARGET);
+                rop2 = Gdi32.R2.XORPEN;
                 graphicsColor = Color.Black;
             }
 
@@ -1990,13 +1990,13 @@ namespace System.Windows.Forms
                     break;
             }
 
-            int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
+            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
-            SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(graphicsColor));
+            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
             SafeNativeMethods.Rectangle(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
 
-            SafeNativeMethods.SetROP2(dc, prevRop2);
+            Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
             Gdi32.SelectObject(dc, oldPen);
 
@@ -2014,21 +2014,19 @@ namespace System.Windows.Forms
         /// </summary>
         public static unsafe void DrawReversibleLine(Point start, Point end, Color backColor)
         {
-            int rop2 = GetColorRop(backColor,
-                                   0xA, // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET),
-                                   0x7); //RasterOp.PEN.XorWith(RasterOp.TARGET));
+            Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
             IntPtr pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(backColor));
 
-            int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
+            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
 
             SafeNativeMethods.MoveToEx(new HandleRef(null, dc), start.X, start.Y, null);
             SafeNativeMethods.LineTo(new HandleRef(null, dc), end.X, end.Y);
 
-            SafeNativeMethods.SetROP2(dc, prevRop2);
+            Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
             Gdi32.SelectObject(dc, oldPen);
             Gdi32.DeleteObject(pen);
@@ -2207,20 +2205,18 @@ namespace System.Windows.Forms
             int rop3 = GetColorRop(backColor,
                                    0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
-            int rop2 = GetColorRop(backColor,
-                                   0x6, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
-                                   0x6); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
+            Gdi32.R2 rop2 = Gdi32.R2.NOT;
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
             IntPtr brush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
 
-            int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
+            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
             SafeNativeMethods.PatBlt(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
 
-            SafeNativeMethods.SetROP2(dc, prevRop2);
+            Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
             Gdi32.DeleteObject(brush);
             User32.ReleaseDC(IntPtr.Zero, dc);
@@ -2330,6 +2326,7 @@ namespace System.Windows.Forms
             {
                 return darkROP;
             }
+
             return lightROP;
         }
 

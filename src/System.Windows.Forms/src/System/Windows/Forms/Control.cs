@@ -6377,7 +6377,7 @@ namespace System.Windows.Forms
             if (!GetStyle(ControlStyles.UserPaint))
             {
                 Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(ForeColor));
-                SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(BackColor));
+                Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(BackColor));
                 return BackColorBrush;
             }
             
