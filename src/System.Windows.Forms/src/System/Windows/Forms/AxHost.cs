@@ -72,7 +72,6 @@ namespace System.Windows.Forms
         private static readonly COMException E_NOTIMPL = new COMException(SR.AXNotImplemented, unchecked((int)0x80000001));
         private static readonly COMException E_INVALIDARG = new COMException(SR.AXInvalidArgument, unchecked((int)0x80070057));
         private static readonly COMException E_FAIL = new COMException(SR.AXUnknownError, unchecked((int)0x80004005));
-        private static readonly COMException E_NOINTERFACE = new COMException(SR.AxInterfaceNotSupported, unchecked((int)0x80004002));
 
         private const int OC_PASSIVE = 0;
         private const int OC_LOADED = 1;  // handler, but no server   [ocx created]
@@ -6400,7 +6399,7 @@ namespace System.Windows.Forms
                 OleAut32.IExtender,
                 Ole32.IVBGetControl,
                 Ole32.IGetVBAObject,
-                UnsafeNativeMethods.IGetOleObject,
+                Ole32.IGetOleObject,
                 IReflect
             {
                 private readonly WeakReference _pRef;
@@ -6423,21 +6422,22 @@ namespace System.Windows.Forms
                     return HRESULT.S_OK;
                 }
 
-                object UnsafeNativeMethods.IGetOleObject.GetOleObject(ref Guid riid)
+                unsafe HRESULT Ole32.IGetOleObject.GetOleObject(Guid* riid, out object ppvObj)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetOleObject for proxy");
-                    if (!riid.Equals(ioleobject_Guid))
+                    ppvObj = null;
+                    if (riid == null || !riid->Equals(ioleobject_Guid))
                     {
-                        throw E_INVALIDARG;
+                        return HRESULT.E_INVALIDARG;
                     }
 
-                    Control ctl = GetP();
-                    if (ctl != null && ctl is AxHost)
+                    if (GetP() is AxHost ctl)
                     {
-                        return ((AxHost)ctl).GetOcx();
+                        ppvObj = ctl.GetOcx();
+                        return HRESULT.S_OK;
                     }
 
-                    throw E_FAIL;
+                    return HRESULT.E_FAIL;
                 }
 
                 unsafe HRESULT Ole32.IGetVBAObject.GetObject(Guid* riid, Ole32.IVBFormat[] rval, uint dwReserved)

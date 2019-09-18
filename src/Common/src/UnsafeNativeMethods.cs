@@ -1295,16 +1295,6 @@ namespace System.Windows.Forms
             [DispId(272)] void PrivacyImpactedStateChange([In] bool bImpacted);
         }
 
-        [ComImport(),
-         Guid("8A701DA0-4FEB-101B-A82E-08002B2B2337"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        public interface IGetOleObject
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object GetOleObject(ref Guid riid);
-        }
-
         [
             ComImport(),
             Guid("CB2F6722-AB3A-11d2-9C40-00C04FA30A3E"),
