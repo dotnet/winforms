@@ -5635,16 +5635,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal UnsafeNativeMethods.IExtender GetProxyForControl(Control ctl)
+            internal OleAut32.IExtender GetProxyForControl(Control ctl)
             {
-                UnsafeNativeMethods.IExtender rval = null;
+                OleAut32.IExtender rval = null;
                 if (proxyCache == null)
                 {
                     proxyCache = new Hashtable();
                 }
                 else
                 {
-                    rval = (UnsafeNativeMethods.IExtender)proxyCache[ctl];
+                    rval = (OleAut32.IExtender)proxyCache[ctl];
                 }
                 if (rval == null)
                 {
@@ -5676,11 +5676,6 @@ namespace System.Windows.Forms
             {
                 string name = (ctl.Site != null) ? ctl.Site.Name : ctl.Name;
                 return name ?? "";
-            }
-
-            internal object GetProxyForContainer()
-            {
-                return this;
             }
 
             internal void AddControl(Control ctl)
@@ -6402,30 +6397,24 @@ namespace System.Windows.Forms
             // EXPOSED
 
             private class ExtenderProxy :
-                UnsafeNativeMethods.IExtender,
+                OleAut32.IExtender,
                 Ole32.IVBGetControl,
                 Ole32.IGetVBAObject,
                 UnsafeNativeMethods.IGetOleObject,
                 IReflect
             {
-                private readonly WeakReference pRef;
-                private readonly WeakReference pContainer;
+                private readonly WeakReference _pRef;
+                private readonly WeakReference _pContainer;
 
                 internal ExtenderProxy(Control principal, AxContainer container)
                 {
-                    pRef = new WeakReference(principal);
-                    pContainer = new WeakReference(container);
+                    _pRef = new WeakReference(principal);
+                    _pContainer = new WeakReference(container);
                 }
 
-                private Control GetP()
-                {
-                    return (Control)pRef.Target;
-                }
+                private Control GetP() => (Control)_pRef.Target;
 
-                private AxContainer GetC()
-                {
-                    return (AxContainer)pContainer.Target;
-                }
+                private AxContainer GetC() => (AxContainer)_pContainer.Target;
 
                 HRESULT Ole32.IVBGetControl.EnumControls(Ole32.OLECONTF dwOleContF, Ole32.GC_WCH dwWhich, out Ole32.IEnumUnknown ppenum)
                 {
@@ -6481,7 +6470,6 @@ namespace System.Windows.Forms
                         }
                         return rval;
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setAlign for proxy for " + GetP().ToString() + " " +
@@ -6497,7 +6485,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getBackColor for proxy for " + GetP().ToString());
                         return AxHost.GetOleColorFromColor(((Control)GetP()).BackColor);
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setBackColor for proxy for " + GetP().ToString() + " " +
@@ -6506,18 +6493,17 @@ namespace System.Windows.Forms
                     }
                 }
 
-                public bool Enabled
+                public BOOL Enabled
                 {
                     get
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getEnabled for proxy for " + GetP().ToString());
-                        return GetP().Enabled;
+                        return GetP().Enabled.ToBOOL();
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setEnabled for proxy for " + GetP().ToString() + " " + value.ToString());
-                        GetP().Enabled = value;
+                        GetP().Enabled = value.IsTrue();
                     }
                 }
 
@@ -6528,7 +6514,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getForeColor for proxy for " + GetP().ToString());
                         return AxHost.GetOleColorFromColor(((Control)GetP()).ForeColor);
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setForeColor for proxy for " + GetP().ToString() + " " +
@@ -6544,7 +6529,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getHeight for proxy for " + GetP().ToString());
                         return Pixel2Twip(GetP().Height, false);
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setHeight for proxy for " + GetP().ToString() + " " +
@@ -6560,7 +6544,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getLeft for proxy for " + GetP().ToString());
                         return Pixel2Twip(GetP().Left, true);
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setLeft for proxy for " + GetP().ToString() + " " +
@@ -6585,7 +6568,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getTabIndex for proxy for " + GetP().ToString());
                         return (short)GetP().TabIndex;
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setTabIndex for proxy for " + GetP().ToString() + " " +
@@ -6594,18 +6576,17 @@ namespace System.Windows.Forms
                     }
                 }
 
-                public bool TabStop
+                public BOOL TabStop
                 {
                     get
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getTabStop for proxy for " + GetP().ToString());
-                        return GetP().TabStop;
+                        return GetP().TabStop.ToBOOL();
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setTabStop for proxy for " + GetP().ToString() + " " + value.ToString());
-                        GetP().TabStop = value;
+                        GetP().TabStop = value.IsTrue();
                     }
                 }
 
@@ -6616,7 +6597,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getTop for proxy for " + GetP().ToString());
                         return Pixel2Twip(GetP().Top, false);
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setTop for proxy for " + GetP().ToString() + " " +
@@ -6625,18 +6605,17 @@ namespace System.Windows.Forms
                     }
                 }
 
-                public bool Visible
+                public BOOL Visible
                 {
                     get
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getVisible for proxy for " + GetP().ToString());
-                        return GetP().Visible;
+                        return GetP().Visible.ToBOOL();
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setVisible for proxy for " + GetP().ToString() + " " + value.ToString());
-                        GetP().Visible = value;
+                        GetP().Visible = value.IsTrue();
                     }
                 }
 
@@ -6647,7 +6626,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getWidth for proxy for " + GetP().ToString());
                         return Pixel2Twip(GetP().Width, true);
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setWidth for proxy for " + GetP().ToString() + " " +
@@ -6674,14 +6652,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                public object Container
-                {
-                    get
-                    {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getContainer for proxy for " + GetP().ToString());
-                        return GetC().GetProxyForContainer();
-                    }
-                }
+                public object Container => GetC();
 
                 public string Text
                 {
@@ -6690,7 +6661,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getText for proxy for " + GetP().ToString());
                         return GetP().Text;
                     }
-
                     set
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in setText for proxy for " + GetP().ToString());
