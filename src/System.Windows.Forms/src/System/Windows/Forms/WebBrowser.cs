@@ -775,23 +775,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Prints the html document to the default printer w/ no print dialog.
+        ///  Prints the html document to the default printer w/ no print dialog.
         ///  Maps to IWebBrowser2:ExecWB w/ IDM_PRINT flag & LECMDEXECOPT_DONTPROMPTUSER.
-            /// </summary>
+        /// </summary>
         public void Print()
         {
-            object nullObjectArray = null;
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -873,106 +862,47 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Opens the IE page setup dialog for the current page.
+        ///  Opens the IE page setup dialog for the current page.
         ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PAGESETUP flag & LECMDEXECOPT_PROMPTUSER.
-            /// </summary>
+        /// </summary>
         public void ShowPageSetupDialog()
         {
-            object nullObjectArray = null;
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PAGESETUP, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
-            ///  Opens the IE print dialog.
+        ///  Opens the IE print dialog.
         ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINT flag & OLECMDEXECOPT_PROMPTUSER.
-            /// </summary>
+        /// </summary>
         public void ShowPrintDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
-            ///  Opens the IE print preview dialog.  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINTPREVIEW flag.
-            /// </summary>
+        ///  Opens the IE print preview dialog.  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINTPREVIEW flag.
+        /// </summary>
         public void ShowPrintPreviewDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINTPREVIEW, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINTPREVIEW, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
-            ///  Opens the properties dialog for the current html page.
+        ///  Opens the properties dialog for the current html page.
         ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PROPERTIES flag & LECMDEXECOPT_PROMPTUSER.
-            /// </summary>
+        /// </summary>
         public void ShowPropertiesDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PROPERTIES, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PROPERTIES, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
-            ///  Opens the IE File-Save dialog.
+        ///  Opens the IE File-Save dialog.
         ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_SAVEAS flag & LECMDEXECOPT_PROMPTUSER.
-            /// </summary>
+        /// </summary>
         public void ShowSaveAsDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_SAVEAS, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.SAVEAS, Ole32.OLECMDEXECOPT.DODEFAULT, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -1587,11 +1517,14 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject,
-                    NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame,
-                    UnsafeNativeMethods.IOleInPlaceUIWindow doc)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.ShowUI(
+                uint dwID,
+                UnsafeNativeMethods.IOleInPlaceActiveObject activeObject,
+                Ole32.IOleCommandTarget commandTarget,
+                UnsafeNativeMethods.IOleInPlaceFrame frame,
+                UnsafeNativeMethods.IOleInPlaceUIWindow doc)
             {
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             int UnsafeNativeMethods.IDocHostUIHandler.HideUI()

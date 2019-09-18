@@ -78,9 +78,14 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumUnknown.cs" Link="Interop\Ole32\Interop.IEnumUnknown.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleCommandTarget.cs" Link="Interop\Ole32\Interop.IOleCommandTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IPropertyNotifySink.cs" Link="Interop\Ole32\Interop.IPropertyNotifySink.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStream.cs" Link="Interop\Ole32\Interop.IStream.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECMD.cs" Link="Interop\Ole32\Interop.OLECMD.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECMDEXECOPT.cs" Link="Interop\Ole32\Interop.OLECMDEXECOPT.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECMDF.cs" Link="Interop\Ole32\Interop.OLECMDF.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECMDID.cs" Link="Interop\Ole32\Interop.OLECMDID.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECONTF.cs" Link="Interop\Ole32\Interop.OLECONTF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
