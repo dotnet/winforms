@@ -294,7 +294,7 @@ namespace System.Windows.Forms
             if (window is Control windowControl &&
                 (windowControl.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
             {
-                IntPtr hWnd = UnsafeNativeMethods.GetActiveWindow();
+                IntPtr hWnd = User32.GetActiveWindow();
                 IntPtr rootHwnd = UnsafeNativeMethods.GetAncestor(new HandleRef(window, window.Handle), NativeMethods.GA_ROOT);
                 if (hWnd != rootHwnd)
                 {

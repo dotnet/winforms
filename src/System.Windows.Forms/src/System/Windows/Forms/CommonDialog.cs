@@ -182,7 +182,7 @@ namespace System.Windows.Forms
 
                 if (hwndOwner == IntPtr.Zero)
                 {
-                    hwndOwner = UnsafeNativeMethods.GetActiveWindow();
+                    hwndOwner = User32.GetActiveWindow();
                 }
 
                 if (hwndOwner == IntPtr.Zero)

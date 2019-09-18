@@ -5316,11 +5316,11 @@ namespace System.Windows.Forms
 
             if (TopLevel)
             {
-                UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, Handle));
+                User32.SetActiveWindow(new HandleRef(this, Handle));
             }
             else if (IsMdiChild)
             {
-                UnsafeNativeMethods.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
+                User32.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
                 MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
             }
             else
@@ -5620,7 +5620,7 @@ namespace System.Windows.Forms
                     owner = ((Control)owner).TopLevelControlInternal;
                 }
             }
-            IntPtr hWndActive = UnsafeNativeMethods.GetActiveWindow();
+            IntPtr hWndActive = User32.GetActiveWindow();
             IntPtr hWndOwner = owner == null ? hWndActive : Control.GetSafeHandle(owner);
             IntPtr hWndOldOwner = IntPtr.Zero;
             Properties.SetObject(PropDialogOwner, owner);
@@ -5709,7 +5709,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                 User32.ReleaseCapture();
             }
-            IntPtr hWndActive = UnsafeNativeMethods.GetActiveWindow();
+            IntPtr hWndActive = User32.GetActiveWindow();
             IntPtr hWndOwner = owner == null ? hWndActive : Control.GetSafeHandle(owner);
             IntPtr hWndOldOwner = IntPtr.Zero;
             Properties.SetObject(PropDialogOwner, owner);
@@ -5779,11 +5779,11 @@ namespace System.Windows.Forms
 
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndActive)) && SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWndActive)))
                     {
-                        UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, hWndActive));
+                        User32.SetActiveWindow(hWndActive);
                     }
                     else if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndOwner)) && SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWndOwner)))
                     {
-                        UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, hWndOwner));
+                        User32.SetActiveWindow(hWndOwner);
                     }
 
                     SetVisibleCore(false);

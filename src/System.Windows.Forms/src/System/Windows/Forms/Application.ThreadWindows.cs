@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             {
                 if (!_onlyWinForms && !state)
                 {
-                    _activeHwnd = UnsafeNativeMethods.GetActiveWindow();
+                    _activeHwnd = User32.GetActiveWindow();
                     Control activatingControl = ThreadContext.FromCurrent().ActivatingControl;
                     if (activatingControl != null)
                     {
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                 {
                     if (_activeHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _activeHwnd)))
                     {
-                        UnsafeNativeMethods.SetActiveWindow(new HandleRef(null, _activeHwnd));
+                        User32.SetActiveWindow(_activeHwnd);
                     }
 
                     if (_focusedHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _focusedHwnd)))

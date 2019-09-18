@@ -5151,7 +5151,7 @@ namespace System.Windows.Forms
                         {
 
                             // snap the active window and compare to our root window.
-                            IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                            IntPtr hwndActive = User32.GetActiveWindow();
                             if (hwndActive != rootHwnd.Handle)
                             {
                                 // Activate the window, and discard the mouse message.

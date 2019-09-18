@@ -737,7 +737,7 @@ namespace System.ComponentModel.Design
             // force the panel to be the active window - for some reason someone else could have forced VS to become active for real while we were ignoring close. This might be bad cause we'd be in a bad state.
             if (designerActionHost != null && designerActionHost.Handle != IntPtr.Zero && designerActionHost.Visible)
             {
-                UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, designerActionHost.Handle));
+                User32.SetActiveWindow(new HandleRef(this, designerActionHost.Handle));
                 designerActionHost.CheckFocusIsRight();
             }
         }
@@ -836,7 +836,7 @@ namespace System.ComponentModel.Design
             // - if it's a window that's owned by the toolstrip dropdown dont exit
             else if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange || e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
             {
-                IntPtr hwndActivating = UnsafeNativeMethods.GetActiveWindow();
+                IntPtr hwndActivating = User32.GetActiveWindow();
                 if (Handle == hwndActivating && e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
                 {
                     e.Cancel = false;

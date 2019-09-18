@@ -1550,7 +1550,7 @@ namespace System.Windows.Forms
                         case msoloop.FocusWait:
 
                             // For focus wait, check to see if we are now the active application.
-                            User32.GetWindowThreadProcessId(UnsafeNativeMethods.GetActiveWindow(), out uint pid);
+                            User32.GetWindowThreadProcessId(User32.GetActiveWindow(), out uint pid);
                             if (pid == Kernel32.GetCurrentProcessId())
                             {
                                 continueLoop = false;
