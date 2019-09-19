@@ -335,17 +335,20 @@ namespace System.Windows.Forms
             }
 
             IntPtr hBitmap = SafeNativeMethods.CreateBitmap(8, 8, 1, 1, grayPattern);
-
-            NativeMethods.LOGBRUSH lb = new NativeMethods.LOGBRUSH
+            try
             {
-                lbColor = ColorTranslator.ToWin32(Color.Black),
-                lbStyle = NativeMethods.BS_PATTERN,
-                lbHatch = hBitmap
-            };
-            IntPtr brush = SafeNativeMethods.CreateBrushIndirect(ref lb);
-
-            Gdi32.DeleteObject(hBitmap);
-            return brush;
+                var lb = new Gdi32.LOGBRUSH
+                {
+                    lbColor = ColorTranslator.ToWin32(Color.Black),
+                    lbStyle = Gdi32.BS.PATTERN,
+                    lbHatch = hBitmap
+                };
+                return Gdi32.CreateBrushIndirect(ref lb);
+            }
+            finally
+            {
+                Gdi32.DeleteObject(hBitmap);
+            }
         }
 
         // roughly the same code as in Graphics.cs
@@ -1981,12 +1984,12 @@ namespace System.Windows.Forms
             switch (style)
             {
                 case FrameStyle.Dashed:
-                    pen = SafeNativeMethods.CreatePen(NativeMethods.PS_DOT, 1, ColorTranslator.ToWin32(backColor));
+                    pen = Gdi32.CreatePen(Gdi32.PS.DOT, 1, ColorTranslator.ToWin32(backColor));
                     break;
 
                 case FrameStyle.Thick:
                 default:
-                    pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 2, ColorTranslator.ToWin32(backColor));
+                    pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor));
                     break;
             }
 
@@ -2017,7 +2020,7 @@ namespace System.Windows.Forms
             Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
-            IntPtr pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(backColor));
+            IntPtr pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
@@ -2208,7 +2211,7 @@ namespace System.Windows.Forms
             Gdi32.R2 rop2 = Gdi32.R2.NOT;
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
-            IntPtr brush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
+            IntPtr brush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, brush);

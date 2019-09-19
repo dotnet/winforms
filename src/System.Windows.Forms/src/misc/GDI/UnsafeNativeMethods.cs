@@ -55,16 +55,6 @@ namespace System.Windows.Forms.Internal
             return retVal;
         }
 
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, EntryPoint = "FillRect", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern bool IntFillRect(HandleRef hdc, [In] ref RECT rect, HandleRef hbrush);
-
-        public static bool FillRect(HandleRef hDC, [In] ref RECT rect, HandleRef hbrush)
-        {
-            bool retVal = IntFillRect(hDC, ref rect, hbrush);
-            DbgUtil.AssertWin32(retVal, "FillRect(hdc=[0x{0:X8}], rect=[{1}], hbrush=[{2}]", hDC.Handle, rect, hbrush.Handle);
-            return retVal;
-        }
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SetMapMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int IntSetMapMode(HandleRef hDC, int nMapMode);
 
@@ -163,17 +153,6 @@ namespace System.Windows.Forms.Internal
         {
             bool retVal = IntArc(hDC, nLeftRect, nTopRect, nRightRect, nBottomRect, nXStartArc, nYStartArc, nXEndArc, nYEndArc);
             DbgUtil.AssertWin32(retVal, "Arc(hdc=[0x{0:X8}], ...) failed.", hDC.Handle);
-            return retVal;
-        }
-
-        // Misc.
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "Ellipse", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern bool IntEllipse(HandleRef hDc, int x1, int y1, int x2, int y2);
-
-        public static bool Ellipse(HandleRef hDc, int x1, int y1, int x2, int y2)
-        {
-            bool retVal = IntEllipse(hDc, x1, y1, x2, y2);
-            DbgUtil.AssertWin32(retVal, "Ellipse(hdc=[0x{0:X8}], x1=[{1}], y1=[{2}], x2=[{3}], y2=[{4}]) failed.", hDc.Handle, x1, y1, x2, y2);
             return retVal;
         }
     }
