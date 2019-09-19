@@ -339,10 +339,10 @@ namespace System.Windows.Forms
 
         private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch (NativeMethods.Util.LOWORD(m.WParam))
+            switch ((User32.SBH)NativeMethods.Util.LOWORD(m.WParam))
             {
-                case NativeMethods.SB_THUMBPOSITION:
-                case NativeMethods.SB_THUMBTRACK:
+                case User32.SBH.THUMBPOSITION:
+                case User32.SBH.THUMBTRACK:
                     var si = new User32.SCROLLINFO
                     {
                         cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                         pos = NativeMethods.Util.HIWORD(m.WParam);
                     }
                     break;
-                case NativeMethods.SB_LINEUP:
+                case User32.SBH.LINELEFT:
                     if (pos > SCROLL_LINE)
                     {
                         pos -= SCROLL_LINE;
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_LINEDOWN:
+                case User32.SBH.LINERIGHT:
                     if (pos < maxPos - SCROLL_LINE)
                     {
                         pos += SCROLL_LINE;
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
                         pos = maxPos;
                     }
                     break;
-                case NativeMethods.SB_PAGEUP:
+                case User32.SBH.PAGELEFT:
                     if (pos > SCROLL_PAGE)
                     {
                         pos -= SCROLL_PAGE;
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_PAGEDOWN:
+                case User32.SBH.PAGERIGHT:
                     if (pos < maxPos - SCROLL_PAGE)
                     {
                         pos += SCROLL_PAGE;

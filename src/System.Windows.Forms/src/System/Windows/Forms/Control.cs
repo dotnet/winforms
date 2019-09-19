@@ -8029,7 +8029,7 @@ namespace System.Windows.Forms
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    SendMessage(WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
+                    SendMessage(WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM((int)User32.SBH.THUMBPOSITION, si.nPos), 0);
                 }
             }
         }

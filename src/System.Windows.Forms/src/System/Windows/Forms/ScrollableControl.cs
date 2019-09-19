@@ -1211,8 +1211,10 @@ namespace System.Windows.Forms
         {
             if (!IsMirrored)
             {
-                SendMessage(WindowMessages.WM_HSCROLL,
-                            NativeMethods.Util.MAKELPARAM((RightToLeft == RightToLeft.Yes) ? NativeMethods.SB_RIGHT : NativeMethods.SB_LEFT, 0), 0);
+                SendMessage(
+                    WindowMessages.WM_HSCROLL,
+                    NativeMethods.Util.MAKELPARAM((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
+                    0);
             }
         }
 
@@ -1239,7 +1241,8 @@ namespace System.Windows.Forms
             }
 
             Rectangle client = ClientRectangle;
-            bool thumbTrack = NativeMethods.Util.LOWORD(m.WParam) != NativeMethods.SB_THUMBTRACK;
+            User32.SBV loWord = (User32.SBV)NativeMethods.Util.LOWORD(m.WParam);
+            bool thumbTrack = loWord != User32.SBV.THUMBTRACK;
             int pos = -_displayRect.Y;
             int oldValue = pos;
 
@@ -1249,13 +1252,13 @@ namespace System.Windows.Forms
                 maxPos = VerticalScroll.Maximum;
             }
 
-            switch (NativeMethods.Util.LOWORD(m.WParam))
+            switch (loWord)
             {
-                case NativeMethods.SB_THUMBPOSITION:
-                case NativeMethods.SB_THUMBTRACK:
+                case User32.SBV.THUMBPOSITION:
+                case User32.SBV.THUMBTRACK:
                     pos = ScrollThumbPosition(User32.SB.VERT);
                     break;
-                case NativeMethods.SB_LINEUP:
+                case User32.SBV.LINEUP:
                     if (pos > 0)
                     {
                         pos -= VerticalScroll.SmallChange;
@@ -1265,7 +1268,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_LINEDOWN:
+                case User32.SBV.LINEDOWN:
                     if (pos < maxPos - VerticalScroll.SmallChange)
                     {
                         pos += VerticalScroll.SmallChange;
@@ -1275,7 +1278,7 @@ namespace System.Windows.Forms
                         pos = maxPos;
                     }
                     break;
-                case NativeMethods.SB_PAGEUP:
+                case User32.SBV.PAGEUP:
                     if (pos > VerticalScroll.LargeChange)
                     {
                         pos -= VerticalScroll.LargeChange;
@@ -1285,7 +1288,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_PAGEDOWN:
+                case User32.SBV.PAGEDOWN:
                     if (pos < maxPos - VerticalScroll.LargeChange)
                     {
                         pos += VerticalScroll.LargeChange;
@@ -1295,10 +1298,10 @@ namespace System.Windows.Forms
                         pos = maxPos;
                     }
                     break;
-                case NativeMethods.SB_TOP:
+                case User32.SBV.TOP:
                     pos = 0;
                     break;
-                case NativeMethods.SB_BOTTOM:
+                case User32.SBV.BOTTOM:
                     pos = maxPos;
                     break;
             }
@@ -1338,13 +1341,14 @@ namespace System.Windows.Forms
                 maxPos = HorizontalScroll.Maximum;
             }
 
-            switch (NativeMethods.Util.LOWORD(m.WParam))
+            User32.SBH loWord = (User32.SBH)NativeMethods.Util.LOWORD(m.WParam);
+            switch (loWord)
             {
-                case NativeMethods.SB_THUMBPOSITION:
-                case NativeMethods.SB_THUMBTRACK:
+                case User32.SBH.THUMBPOSITION:
+                case User32.SBH.THUMBTRACK:
                     pos = ScrollThumbPosition(User32.SB.HORZ);
                     break;
-                case NativeMethods.SB_LINEUP:
+                case User32.SBH.LINELEFT:
                     if (pos > HorizontalScroll.SmallChange)
                     {
                         pos -= HorizontalScroll.SmallChange;
@@ -1354,7 +1358,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_LINEDOWN:
+                case User32.SBH.LINERIGHT:
                     if (pos < maxPos - HorizontalScroll.SmallChange)
                     {
                         pos += HorizontalScroll.SmallChange;
@@ -1364,7 +1368,7 @@ namespace System.Windows.Forms
                         pos = maxPos;
                     }
                     break;
-                case NativeMethods.SB_PAGEUP:
+                case User32.SBH.PAGELEFT:
                     if (pos > HorizontalScroll.LargeChange)
                     {
                         pos -= HorizontalScroll.LargeChange;
@@ -1374,7 +1378,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_PAGEDOWN:
+                case User32.SBH.PAGERIGHT:
                     if (pos < maxPos - HorizontalScroll.LargeChange)
                     {
                         pos += HorizontalScroll.LargeChange;
@@ -1384,15 +1388,15 @@ namespace System.Windows.Forms
                         pos = maxPos;
                     }
                     break;
-                case NativeMethods.SB_LEFT:
+                case User32.SBH.LEFT:
                     pos = 0;
                     break;
-                case NativeMethods.SB_RIGHT:
+                case User32.SBH.RIGHT:
                     pos = maxPos;
                     break;
             }
 
-            if (GetScrollState(ScrollStateFullDrag) || NativeMethods.Util.LOWORD(m.WParam) != NativeMethods.SB_THUMBTRACK)
+            if (GetScrollState(ScrollStateFullDrag) || loWord != User32.SBH.THUMBTRACK)
             {
                 SetScrollState(ScrollStateUserHasScrolled, true);
                 SetDisplayRectLocation(-pos, _displayRect.Y);
