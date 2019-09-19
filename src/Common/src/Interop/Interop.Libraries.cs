@@ -7,6 +7,7 @@ internal static partial class Interop
     public static partial class Libraries
     {
         public const string Comctl32 = "comctl32.dll";
+        public const string Comdlg32 = "comdlg32.dll";
         public const string Gdi32 = "gdi32.dll";
         public const string Kernel32 = "kernel32.dll";
         public const string NtDll = "ntdll.dll";

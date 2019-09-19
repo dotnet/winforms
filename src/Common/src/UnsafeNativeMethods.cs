@@ -45,9 +45,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetLocaleInfo(uint Locale, int LCType, StringBuilder lpLCData, int cchData);
 
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool PageSetupDlg([In, Out] NativeMethods.PAGESETUPDLG lppsd);
-
         [DllImport(ExternDll.Comdlg32, EntryPoint = "PrintDlg", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool PrintDlg_32([In, Out] NativeMethods.PRINTDLG_32 lppd);
 

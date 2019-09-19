@@ -9,5 +9,7 @@ internal static partial class Interop
     internal static partial class User32
     {
         public delegate IntPtr WNDPROC(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam);
+
+        public delegate IntPtr WNDPROCINT(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
     }
 }

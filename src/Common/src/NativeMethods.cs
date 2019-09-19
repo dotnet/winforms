@@ -959,16 +959,6 @@ namespace System.Windows.Forms
         PD_NOCURRENTPAGE = 0x00800000,
         PD_EXCLUSIONFLAGS = 0x01000000,
         PD_USELARGETEMPLATE = 0x10000000,
-        PSD_MINMARGINS = 0x00000001,
-        PSD_MARGINS = 0x00000002,
-        PSD_INHUNDREDTHSOFMILLIMETERS = 0x00000008,
-        PSD_DISABLEMARGINS = 0x00000010,
-        PSD_DISABLEPRINTER = 0x00000020,
-        PSD_DISABLEORIENTATION = 0x00000100,
-        PSD_DISABLEPAPER = 0x00000200,
-        PSD_SHOWHELP = 0x00000800,
-        PSD_ENABLEPAGESETUPHOOK = 0x00002000,
-        PSD_NONETWORKBUTTON = 0x00200000,
         PS_SOLID = 0,
         PS_DOT = 2,
         PRF_CHECKVISIBLE = 0x00000001,
@@ -1949,36 +1939,6 @@ namespace System.Windows.Forms
             public IntPtr hStdInput = IntPtr.Zero;
             public IntPtr hStdOutput = IntPtr.Zero;
             public IntPtr hStdError = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class PAGESETUPDLG
-        {
-            public int lStructSize;
-            public IntPtr hwndOwner;
-            public IntPtr hDevMode;
-            public IntPtr hDevNames;
-            public int Flags;
-            public Point paperSize;
-
-            // RECT            rtMinMargin;
-            public int minMarginLeft;
-            public int minMarginTop;
-            public int minMarginRight;
-            public int minMarginBottom;
-
-            // RECT            rtMargin;
-            public int marginLeft;
-            public int marginTop;
-            public int marginRight;
-            public int marginBottom;
-
-            public IntPtr hInstance = IntPtr.Zero;
-            public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnPageSetupHook = null;
-            public WndProc lpfnPagePaintHook = null;
-            public string lpPageSetupTemplateName = null;
-            public IntPtr hPageSetupTemplate = IntPtr.Zero;
         }
 
         // Any change in PRINTDLG, should also be in PRINTDLG_32 and PRINTDLG_64
