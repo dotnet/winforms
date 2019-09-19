@@ -149,21 +149,11 @@ namespace System.Windows.Forms
                             {
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj.GetType().FullName);
                                 Debug.Assert(obj != null, "GetAmbientProperty failed");
-                                IntPtr hfont = IntPtr.Zero;
-
-                                UnsafeNativeMethods.IFont ifont = (UnsafeNativeMethods.IFont)obj;
-                                Font font = null;
-                                hfont = ifont.GetHFont();
-                                font = Font.FromHfont(hfont);
-                                prop.Value = font;
+                                Ole32.IFont ifont = (Ole32.IFont)obj;
+                                prop.Value = Font.FromHfont(ifont.hFont);
                             }
-                            catch (Exception e)
+                            catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                             {
-                                if (ClientUtils.IsSecurityOrCriticalException(e))
-                                {
-                                    throw;
-                                }
-
                                 // Do NULL, so we just defer to the default font
                                 prop.Value = null;
                             }
@@ -1443,20 +1433,12 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        IntPtr hfont = IntPtr.Zero;
-                        object objfont = pQaContainer.pFont;
-                        UnsafeNativeMethods.IFont ifont = (UnsafeNativeMethods.IFont)objfont;
-                        hfont = ifont.GetHFont();
-                        Font font = Font.FromHfont(hfont);
-                        prop.Value = font;
+                        Ole32.IFont ifont = (Ole32.IFont)pQaContainer.pFont;
+                        IntPtr hfont = ifont.hFont;
+                        prop.Value = Font.FromHfont(hfont);
                     }
-                    catch (Exception e)
+                    catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                     {
-                        if (ClientUtils.IsSecurityOrCriticalException(e))
-                        {
-                            throw;
-                        }
-
                         // Do NULL, so we just defer to the default font
                         prop.Value = null;
                     }

@@ -86,13 +86,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Oleaut32, ExactSpelling = true)]
         public static extern void OleCreatePropertyFrameIndirect(NativeMethods.OCPFIPARAMS p);
 
-        [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreateFontIndirect", ExactSpelling = true, PreserveSig = false)]
-        public static extern IFont OleCreateIFontIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
-
-
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern IFont OleCreateFontIndirect(NativeMethods.tagFONTDESC fontdesc, [In]ref Guid refiid);
-
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder lpszFile, int cch);
 
@@ -2594,94 +2587,6 @@ namespace System.Windows.Forms
                     IOleInPlaceSite pIPSiteNew,
                  [Out, MarshalAs(UnmanagedType.LPArray)]
                     IOleDocumentView[] ppViewNew);
-        }
-
-        [
-        ComImport(),
-        Guid("BEF6E002-A874-101A-8BBA-00AA00300CAB"),
-        InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IFont
-        {
-            [return: MarshalAs(UnmanagedType.BStr)]
-            string GetName();
-
-            void SetName(
-                   [In, MarshalAs(UnmanagedType.BStr)]
-                      string pname);
-
-            [return: MarshalAs(UnmanagedType.U8)]
-            long GetSize();
-
-            void SetSize(
-                   [In, MarshalAs(UnmanagedType.U8)]
-                     long psize);
-
-            [return: MarshalAs(UnmanagedType.Bool)]
-            bool GetBold();
-
-            void SetBold(
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                     bool pbold);
-
-            [return: MarshalAs(UnmanagedType.Bool)]
-            bool GetItalic();
-
-            void SetItalic(
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                     bool pitalic);
-
-            [return: MarshalAs(UnmanagedType.Bool)]
-            bool GetUnderline();
-
-            void SetUnderline(
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                     bool punderline);
-
-            [return: MarshalAs(UnmanagedType.Bool)]
-            bool GetStrikethrough();
-
-            void SetStrikethrough(
-                   [In, MarshalAs(UnmanagedType.Bool)]
-                     bool pstrikethrough);
-
-            [return: MarshalAs(UnmanagedType.I2)]
-            short GetWeight();
-
-            void SetWeight(
-                   [In, MarshalAs(UnmanagedType.I2)]
-                     short pweight);
-
-            [return: MarshalAs(UnmanagedType.I2)]
-            short GetCharset();
-
-            void SetCharset(
-                   [In, MarshalAs(UnmanagedType.I2)]
-                     short pcharset);
-
-            IntPtr GetHFont();
-
-            void Clone(
-                      out IFont ppfont);
-
-            [PreserveSig]
-            int IsEqual(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                      IFont pfontOther);
-
-            void SetRatio(
-                    int cyLogical,
-                    int cyHimetric);
-
-            void QueryTextMetrics(out IntPtr ptm);
-
-            void AddRefHfont(
-                    IntPtr hFont);
-
-            void ReleaseHfont(
-                    IntPtr hFont);
-
-            void SetHdc(
-                    IntPtr hdc);
         }
 
         /// <summary>

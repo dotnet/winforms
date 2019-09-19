@@ -4,14 +4,14 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     public partial class Control
     {
         /// <summary>
-        ///  This is a marshaler object that knows how to marshal IFont to Font
-        ///  and back.
+        ///  This is a marshaler object that knows how to marshal IFont to Font and back.
         /// </summary>
         private class ActiveXFontMarshaler : ICustomMarshaler
         {
@@ -21,40 +21,32 @@ namespace System.Windows.Forms
             {
             }
 
-            public void CleanUpNativeData(IntPtr pObj)
-            {
-                Marshal.Release(pObj);
-            }
+            public void CleanUpNativeData(IntPtr pObj) => Marshal.Release(pObj);
 
             internal static ICustomMarshaler GetInstance(string cookie)
             {
-                if (s_instance == null)
-                {
-                    s_instance = new ActiveXFontMarshaler();
-                }
-                return s_instance;
+                return s_instance ??= new ActiveXFontMarshaler();
             }
 
-            public int GetNativeDataSize()
-                => -1; // not a value type, so use -1
+            public int GetNativeDataSize() => -1; // not a value type, so use -1
 
             public IntPtr MarshalManagedToNative(object obj)
             {
                 Font font = (Font)obj;
-                NativeMethods.tagFONTDESC fontDesc = new NativeMethods.tagFONTDESC();
                 NativeMethods.LOGFONTW logFont = NativeMethods.LOGFONTW.FromFont(font);
-
-                fontDesc.lpstrName = font.Name;
-                fontDesc.cySize = (long)(font.SizeInPoints * 10000);
-                fontDesc.sWeight = (short)logFont.lfWeight;
-                fontDesc.sCharset = logFont.lfCharSet;
-                fontDesc.fItalic = font.Italic;
-                fontDesc.fUnderline = font.Underline;
-                fontDesc.fStrikethrough = font.Strikeout;
-
-                Guid iid = typeof(UnsafeNativeMethods.IFont).GUID;
-
-                UnsafeNativeMethods.IFont oleFont = UnsafeNativeMethods.OleCreateFontIndirect(fontDesc, ref iid);
+                var fontDesc = new Oleaut32.FONTDESC
+                {
+                    cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
+                    lpstrName = font.Name,
+                    cySize = (long)(font.SizeInPoints * 10000),
+                    sWeight = (short)logFont.lfWeight,
+                    sCharset = logFont.lfCharSet,
+                    fItalic = font.Italic.ToBOOL(),
+                    fUnderline = font.Underline.ToBOOL(),
+                    fStrikethrough = font.Strikeout.ToBOOL(),
+                };
+                Guid iid = typeof(Ole32.IFont).GUID;
+                Ole32.IFont oleFont = Oleaut32.OleCreateFontIndirect(ref fontDesc, ref iid);
                 IntPtr pFont = Marshal.GetIUnknownForObject(oleFont);
 
                 int hr = Marshal.QueryInterface(pFont, ref iid, out IntPtr pIFont);
@@ -71,25 +63,15 @@ namespace System.Windows.Forms
 
             public object MarshalNativeToManaged(IntPtr pObj)
             {
-                UnsafeNativeMethods.IFont nativeFont = (UnsafeNativeMethods.IFont)Marshal.GetObjectForIUnknown(pObj);
-                IntPtr hfont = nativeFont.GetHFont();
-
-                Font font;
+                Ole32.IFont nativeFont = (Ole32.IFont)Marshal.GetObjectForIUnknown(pObj);
                 try
                 {
-                    font = Font.FromHfont(hfont);
+                    return Font.FromHfont(nativeFont.hFont);
                 }
-                catch (Exception e)
+                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(e))
-                    {
-                        throw;
-                    }
-
-                    font = DefaultFont;
+                    return DefaultFont;
                 }
-
-                return font;
             }
         }
     }

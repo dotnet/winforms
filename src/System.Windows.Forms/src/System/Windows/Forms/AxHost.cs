@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -103,8 +104,8 @@ namespace System.Windows.Forms
         private static int logPixelsY = -1;
 
         private static Guid icf2_Guid = typeof(Ole32.IClassFactory2).GUID;
-        private static Guid ifont_Guid = typeof(UnsafeNativeMethods.IFont).GUID;
-        private static Guid ifontDisp_Guid = typeof(SafeNativeMethods.IFontDisp).GUID;
+        private static Guid ifont_Guid = typeof(Ole32.IFont).GUID;
+        private static Guid ifontDisp_Guid = typeof(Ole32.IFontDisp).GUID;
         private static Guid ipicture_Guid = typeof(Ole32.IPicture).GUID;
         private static Guid ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
         private static Guid ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
@@ -116,7 +117,7 @@ namespace System.Windows.Forms
 
         // Static state for perf optimization
         //
-        private static Hashtable fontTable;
+        private static Dictionary<Font, Oleaut32.FONTDESC> fontTable;
 
         // BitVector32 masks for various internal state flags.
         //
@@ -5105,37 +5106,30 @@ namespace System.Windows.Forms
             }
         }
 
-        private static NativeMethods.FONTDESC GetFONTDESCFromFont(Font font)
+        private static Oleaut32.FONTDESC GetFONTDESCFromFont(Font font)
         {
-            NativeMethods.FONTDESC fdesc = null;
-
             if (fontTable == null)
             {
-                fontTable = new Hashtable();
+                fontTable = new Dictionary<Font, Oleaut32.FONTDESC>();
             }
-            else
+            else if (fontTable.TryGetValue(font, out Oleaut32.FONTDESC cachedFDesc))
             {
-                fdesc = (NativeMethods.FONTDESC)fontTable[font];
+                return cachedFDesc;
             }
 
-            if (fdesc == null)
+            NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(font);
+            var fdesc = new Oleaut32.FONTDESC
             {
-                fdesc = new NativeMethods.FONTDESC
-                {
-                    lpstrName = font.Name,
-                    cySize = (long)(font.SizeInPoints * 10000)
-                };
-
-                NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(font);
-                fdesc.sWeight = (short)logfont.lfWeight;
-                fdesc.sCharset = logfont.lfCharSet;
-                fdesc.fItalic = font.Italic;
-                fdesc.fUnderline = font.Underline;
-                fdesc.fStrikethrough = font.Strikeout;
-
-                fontTable[font] = fdesc;
-            }
-
+                cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
+                lpstrName = font.Name,
+                cySize = (long)(font.SizeInPoints * 10000),
+                sWeight = (short)logfont.lfWeight,
+                sCharset = logfont.lfCharSet,
+                fItalic = font.Italic.ToBOOL(),
+                fUnderline = font.Underline.ToBOOL(),
+                fStrikethrough = font.Strikeout.ToBOOL()
+            };
+            fontTable[font] = fdesc;
             return fdesc;
         }
 
@@ -5172,12 +5166,13 @@ namespace System.Windows.Forms
 
             if (font.Unit != GraphicsUnit.Point)
             {
-                throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
+                throw new ArgumentException(SR.AXFontUnitNotPoint, nameof(font));
             }
 
             try
             {
-                return (UnsafeNativeMethods.IFont)UnsafeNativeMethods.OleCreateIFontIndirect(GetFONTDESCFromFont(font), ref ifont_Guid);
+                Oleaut32.FONTDESC fontDesc = GetFONTDESCFromFont(font);
+                return Oleaut32.OleCreateFontIndirect(ref fontDesc, ref ifont_Guid);
             }
             catch
             {
@@ -5197,17 +5192,16 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            UnsafeNativeMethods.IFont oleFont = (UnsafeNativeMethods.IFont)font;
+            Ole32.IFont oleFont = (Ole32.IFont)font;
             try
             {
-                Font f = Font.FromHfont(oleFont.GetHFont());
-
-                if (f.Unit != GraphicsUnit.Point)
+                Font f = Font.FromHfont(oleFont.hFont);
+                if (f.Unit == GraphicsUnit.Point)
                 {
-                    f = new Font(f.Name, f.SizeInPoints, f.Style, GraphicsUnit.Point, f.GdiCharSet, f.GdiVerticalFont);
+                    return f;
                 }
 
-                return f;
+                return new Font(f.Name, f.SizeInPoints, f.Style, GraphicsUnit.Point, f.GdiCharSet, f.GdiVerticalFont);
             }
             catch (Exception e)
             {
@@ -5232,8 +5226,8 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
             }
 
-            SafeNativeMethods.IFontDisp rval = SafeNativeMethods.OleCreateIFontDispIndirect(GetFONTDESCFromFont(font), ref ifontDisp_Guid);
-            return rval;
+            Oleaut32.FONTDESC fontdesc = GetFONTDESCFromFont(font);
+            return Oleaut32.OleCreateIFontDispIndirect(ref fontdesc, ref ifontDisp_Guid);
         }
 
         /// <summary>
@@ -5247,15 +5241,14 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (font is UnsafeNativeMethods.IFont ifont)
+            if (font is Ole32.IFont ifont)
             {
                 return GetFontFromIFont(ifont);
             }
 
-            SafeNativeMethods.IFontDisp oleFont = (SafeNativeMethods.IFontDisp)font;
+            Ole32.IFontDisp oleFont = (Ole32.IFontDisp)font;
             FontStyle style = FontStyle.Regular;
 
-            Font f = null;
             try
             {
                 if (oleFont.Bold)
@@ -5278,13 +5271,12 @@ namespace System.Windows.Forms
                     style |= FontStyle.Strikeout;
                 }
 
-                if ((int)oleFont.Weight >= 700) // bold
+                if (oleFont.Weight >= 700)
                 {
                     style |= FontStyle.Bold;
                 }
 
-                f = new Font(oleFont.Name, (float)oleFont.Size / (float)10000, style, GraphicsUnit.Point, (byte)oleFont.Charset);
-                return f;
+                return new Font(oleFont.Name, (float)oleFont.Size / (float)10000, style, GraphicsUnit.Point, (byte)oleFont.Charset);
             }
             catch (Exception e)
             {
