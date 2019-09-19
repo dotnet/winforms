@@ -1292,57 +1292,6 @@ namespace System.Windows.Forms
             [DispId(272)] void PrivacyImpactedStateChange([In] bool bImpacted);
         }
 
-        [ComImport(),
-         Guid("39088D7E-B71E-11D1-8F39-00C04FD946D0"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        public interface IExtender
-        {
-            int Align { get; set; }
-
-            bool Enabled { get; set; }
-
-            int Height { get; set; }
-
-            int Left { get; set; }
-
-            bool TabStop { get; set; }
-
-            int Top { get; set; }
-
-            bool Visible { get; set; }
-
-            int Width { get; set; }
-
-            string Name { [return: MarshalAs(UnmanagedType.BStr)]get; }
-
-            object Parent { [return: MarshalAs(UnmanagedType.Interface)]get; }
-
-            IntPtr Hwnd { get; }
-
-            object Container { [return: MarshalAs(UnmanagedType.Interface)]get; }
-
-            void Move(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object left,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object top,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object width,
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object height);
-        }
-
-        [ComImport(),
-         Guid("8A701DA0-4FEB-101B-A82E-08002B2B2337"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        public interface IGetOleObject
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object GetOleObject(ref Guid riid);
-        }
-
         [
             ComImport(),
             Guid("CB2F6722-AB3A-11d2-9C40-00C04FA30A3E"),
