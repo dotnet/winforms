@@ -48,10 +48,12 @@ namespace System.Windows.Forms.Tests
             Assert.False(scrollBar.DesignMode);
             Assert.Equal(Rectangle.Empty, scrollBar.DisplayRectangle);
             Assert.Equal(DockStyle.None, scrollBar.Dock);
+            Assert.False(scrollBar.DoubleBuffered);
             Assert.True(scrollBar.Enabled);
             Assert.NotNull(scrollBar.Events);
             Assert.Same(scrollBar.Events, scrollBar.Events);
             Assert.Equal(Control.DefaultFont, scrollBar.Font);
+            Assert.Equal(scrollBar.Font.Height, scrollBar.FontHeight);
             Assert.Equal(Control.DefaultForeColor, scrollBar.ForeColor);
             Assert.False(scrollBar.HasChildren);
             Assert.Equal(0, scrollBar.Height);
@@ -64,6 +66,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, scrollBar.Margin);
             Assert.Equal(0, scrollBar.Minimum);
             Assert.Equal(Padding.Empty, scrollBar.Padding);
+            Assert.False(scrollBar.RecreatingHandle);
+            Assert.Null(scrollBar.Region);
+            Assert.False(scrollBar.ResizeRedraw);
             Assert.Equal(0, scrollBar.Right);
             Assert.Equal(RightToLeft.No, scrollBar.RightToLeft);
             Assert.True(scrollBar.ScaleScrollBarForDpiChange);
@@ -77,6 +82,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, scrollBar.Value);
             Assert.True(scrollBar.Visible);
             Assert.Equal(0, scrollBar.Width);
+
+            Assert.False(scrollBar.IsHandleCreated);
         }
 
         [Fact]
@@ -445,7 +452,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             control.Font = null;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(3, callCount);
 
             // Remove handler.
@@ -1982,6 +1989,12 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
             public new int FontHeight
@@ -1990,7 +2003,17 @@ namespace System.Windows.Forms.Tests
                 set => base.FontHeight = value;
             }
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
 

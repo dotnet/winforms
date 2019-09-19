@@ -51,11 +51,13 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.DesignMode);
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
             Assert.False(control.EditMode);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasAboutBox);
             Assert.False(control.HasChildren);
@@ -69,6 +71,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
@@ -80,6 +85,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
             Assert.Equal(75, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         [StaTheory]
@@ -119,11 +126,13 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.DesignMode);
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
             Assert.False(control.EditMode);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasAboutBox);
             Assert.False(control.HasChildren);
@@ -137,6 +146,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
@@ -148,6 +160,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
             Assert.Equal(75, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         [StaFact]
@@ -980,6 +994,12 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
             public new int FontHeight
@@ -992,6 +1012,12 @@ namespace System.Windows.Forms.Tests
             {
                 get => base.ImeModeBase;
                 set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
             }
 
             public new void AttachInterfaces() => base.AttachInterfaces();
