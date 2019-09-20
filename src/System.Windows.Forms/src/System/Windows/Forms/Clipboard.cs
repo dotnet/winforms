@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,79 +9,60 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-
+using System.Threading;
+using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  Provides methods to place data on and retrieve data from the system clipboard. This class cannot be inherited.
     /// </summary>
-    public sealed class Clipboard
+    public static class Clipboard
     {
-        // not creatable...
-        //
-        private Clipboard()
+        internal static bool IsFormatValid(ReadOnlySpan<string> formats)
         {
-        }
-
-        //
-        // Checks the validity of format while setting data into ClipBoard
-        //
-        private static bool IsFormatValid(DataObject data)
-        {
-            return IsFormatValid(data.GetFormats());
-        }
-
-        internal static bool IsFormatValid(string[] formats)
-        {
-            Debug.Assert(formats != null, "Null returned from GetFormats");
-            if (formats != null)
+            if (formats.Length <= 4)
             {
-                if (formats.Length <= 4)
+                for (int i = 0; i < formats.Length; i++)
                 {
-                    for (int i = 0; i < formats.Length; i++)
+                    switch (formats[i])
                     {
-                        switch (formats[i])
-                        {
-                            case "Text":
-                            case "UnicodeText":
-                            case "System.String":
-                            case "Csv":
-                                break;
-                            default:
-                                return false;
+                        case "Text":
+                        case "UnicodeText":
+                        case "System.String":
+                        case "Csv":
+                            break;
+                        default:
+                            return false;
 
-                        }
                     }
-                    return true;
                 }
+                return true;
             }
+
             return false;
         }
 
         internal static bool IsFormatValid(FORMATETC[] formats)
         {
             Debug.Assert(formats != null, "Null returned from GetFormats");
-            if (formats != null)
+            if (formats.Length <= 4)
             {
-                if (formats.Length <= 4)
+                for (int i = 0; i < formats.Length; i++)
                 {
-                    for (int i = 0; i < formats.Length; i++)
+                    short format = formats[i].cfFormat;
+                    if (format != NativeMethods.CF_TEXT &&
+                        format != NativeMethods.CF_UNICODETEXT &&
+                        format != DataFormats.GetFormat("System.String").Id &&
+                        format != DataFormats.GetFormat("Csv").Id)
                     {
-                        short format = formats[i].cfFormat;
-                        if (format != NativeMethods.CF_TEXT &&
-                            format != NativeMethods.CF_UNICODETEXT &&
-                            format != DataFormats.GetFormat("System.String").Id &&
-                            format != DataFormats.GetFormat("Csv").Id)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
-                    return true;
                 }
+                return true;
             }
+
             return false;
         }
 
@@ -99,17 +79,16 @@ namespace System.Windows.Forms
         /// </summary>
         public static void SetDataObject(object data, bool copy)
         {
-            SetDataObject(data, copy, 10 /*retryTimes*/, 100 /*retryDelay*/);
+            SetDataObject(data, copy, retryTimes: 10, retryDelay: 100);
         }
 
         /// <summary>
         ///  Places data on the system <see cref='Clipboard'/> and uses copy to specify whether the data
-        ///  should remain on the <see cref='Clipboard'/>
-        ///  after the application exits.
+        ///  should remain on the <see cref='Clipboard'/> after the application exits.
         /// </summary>
         public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
         {
-            if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+            if (Application.OleRequired() != ApartmentState.STA)
             {
                 throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
             }
@@ -136,31 +115,33 @@ namespace System.Windows.Forms
             }
 
             // Compute the format of the "data" passed in iff setText == true;
-
             if (dataObject != null)
             {
                 dataObject.RestrictedFormats = false;
             }
-            int hr, retry = retryTimes;
 
+            HRESULT hr;
+            int retry = retryTimes;
             do
             {
-                if (data is IComDataObject)
+                if (data is IComDataObject ido)
                 {
-                    hr = UnsafeNativeMethods.OleSetClipboard((IComDataObject)data);
+                    hr = Ole32.OleSetClipboard(ido);
                 }
                 else
                 {
-                    hr = UnsafeNativeMethods.OleSetClipboard(dataObject);
+                    hr = Ole32.OleSetClipboard(dataObject);
                 }
-                if (hr != 0)
+
+                if (hr != HRESULT.S_OK)
                 {
                     if (retry == 0)
                     {
-                        ThrowIfFailed(hr);
+                        throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
                     }
+
                     retry--;
-                    System.Threading.Thread.Sleep(retryDelay /*ms*/);
+                    Thread.Sleep(millisecondsTimeout: retryDelay);
                 }
             }
             while (hr != 0);
@@ -170,15 +151,16 @@ namespace System.Windows.Forms
                 retry = retryTimes;
                 do
                 {
-                    hr = UnsafeNativeMethods.OleFlushClipboard();
-                    if (hr != 0)
+                    hr = Ole32.OleFlushClipboard();
+                    if (hr != HRESULT.S_OK)
                     {
                         if (retry == 0)
                         {
-                            ThrowIfFailed(hr);
+                            throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
                         }
+
                         retry--;
-                        System.Threading.Thread.Sleep(retryDelay /*ms*/);
+                        Thread.Sleep(millisecondsTimeout: retryDelay);
                     }
                 }
                 while (hr != 0);
@@ -186,70 +168,67 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves the data that is currently on the system
-        ///  <see cref='Clipboard'/>.
+        ///  Retrieves the data that is currently on the system <see cref='Clipboard'/>.
         /// </summary>
         public static IDataObject GetDataObject()
         {
-            if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+            if (Application.OleRequired() != ApartmentState.STA)
             {
-
-                // only throw if a message loop was started. This makes the case of trying
+                // Only throw if a message loop was started. This makes the case of trying
                 // to query the clipboard from your finalizer or non-ui MTA thread
                 // silently fail, instead of making your app die.
                 //
                 // however, if you are trying to write a normal windows forms app and
                 // forget to set the STAThread attribute, we will correctly report
                 // an error to aid in debugging.
-                //
                 if (Application.MessageLoop)
                 {
-                    throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
+                    throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
-                else
-                {
-                    return null;
-                }
+                
+                return null;
             }
+
             // We need to retry the GetDataObject() since the clipBaord is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
-            return GetDataObject(10 /*retryTimes*/, 100 /*retryDelay*/);
+            return GetDataObject(retryTimes: 10, retryDelay: 100);
         }
 
-        // Private method to help accessing clipBoard for know retries before failing.
+        /// <remarks>
+        ///  Private method to help accessing clipBoard for know retries before failing.
+        /// </remarks>
         private static IDataObject GetDataObject(int retryTimes, int retryDelay)
         {
             IComDataObject dataObject = null;
-            int hr, retry = retryTimes;
+            HRESULT hr;
+            int retry = retryTimes;
             do
             {
-                hr = UnsafeNativeMethods.OleGetClipboard(ref dataObject);
-                if (hr != 0)
+                hr = Ole32.OleGetClipboard(ref dataObject);
+                if (hr != HRESULT.S_OK)
                 {
                     if (retry == 0)
                     {
-                        ThrowIfFailed(hr);
+                        throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
                     }
+
                     retry--;
-                    System.Threading.Thread.Sleep(retryDelay /*ms*/);
+                    Thread.Sleep(millisecondsTimeout: retryDelay);
                 }
             }
             while (hr != 0);
 
             if (dataObject != null)
             {
-                if (dataObject is IDataObject && !Marshal.IsComObject(dataObject))
+                if (dataObject is IDataObject ido && !Marshal.IsComObject(dataObject))
                 {
-                    return (IDataObject)dataObject;
+                    return ido;
                 }
-                else
-                {
-                    return new DataObject(dataObject);
-                }
+                
+                return new DataObject(dataObject);
             }
+
             return null;
         }
-
-        // <-- WHIDBEY ADDITIONS
 
         public static void Clear()
         {
@@ -304,7 +283,6 @@ namespace System.Windows.Forms
 
         public static bool ContainsText(TextDataFormat format)
         {
-            // valid values are 0x0-0x4 inclusive
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
@@ -372,7 +350,6 @@ namespace System.Windows.Forms
 
         public static string GetText(TextDataFormat format)
         {
-            // valid values are 0x0 to 0x4 inclusive
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
@@ -396,6 +373,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(audioBytes));
             }
+
             SetAudio(new MemoryStream(audioBytes));
         }
 
@@ -405,6 +383,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(audioStream));
             }
+
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.WaveAudio, false, audioStream);
             Clipboard.SetDataObject(dataObject, true);
@@ -412,7 +391,7 @@ namespace System.Windows.Forms
 
         public static void SetData(string format, object data)
         {
-            //Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
+            // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
             IDataObject dataObject = new DataObject();
             dataObject.SetData(format, data);
             Clipboard.SetDataObject(dataObject, true);
@@ -424,26 +403,20 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
-            // throw Argument exception for zero-length filepath collection.
             if (filePaths.Count == 0)
             {
                 throw new ArgumentException(SR.CollectionEmptyException);
             }
 
-            //Validate the paths to make sure they don't contain invalid characters
+            // Validate the paths to make sure they don't contain invalid characters
             foreach (string path in filePaths)
             {
                 try
                 {
-                    string temp = Path.GetFullPath(path);
+                    Path.GetFullPath(path);
                 }
-                catch (Exception e)
+                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(e))
-                    {
-                        throw;
-                    }
-
                     throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"), e);
                 }
             }
@@ -464,6 +437,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(image));
             }
+
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.Bitmap, true, image);
             Clipboard.SetDataObject(dataObject, true);
@@ -477,8 +451,6 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(text));
             }
-
-            //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
@@ -510,18 +482,6 @@ namespace System.Windows.Forms
             }
 
             return DataFormats.UnicodeText;
-        }
-
-        // END - WHIDBEY ADDITIONS -->
-
-        private static void ThrowIfFailed(int hr)
-        {
-            //
-            if (hr != 0)
-            {
-                ExternalException e = new ExternalException(SR.ClipboardOperationFailed, hr);
-                throw e;
-            }
         }
     }
 }
