@@ -1676,7 +1676,7 @@ namespace System.Windows.Forms
                 try
                 {
                     int size = Kernel32.GlobalSize(handle);
-                    return Encoding.UTF8.GetString((byte*)ptr, size);
+                    return Encoding.UTF8.GetString((byte*)ptr, size - 1);
                 }
                 finally
                 {
