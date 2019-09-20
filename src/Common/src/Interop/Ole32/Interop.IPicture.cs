@@ -31,7 +31,7 @@ internal static partial class Interop
 
 /*
  *  We currently don't use the rest of the methods here. Keeping them undefined to make the RCW smaller.
- * 
+ *  If this changes we need to remove a duplicate definition in AxHostTests
             void Render(
                 IntPtr hDC,
                 int x,
