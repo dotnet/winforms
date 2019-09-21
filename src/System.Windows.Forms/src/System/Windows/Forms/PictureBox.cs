@@ -556,9 +556,8 @@ namespace System.Windows.Forms
             _contentLength = -1;
             _tempDownloadStream = new MemoryStream();
 
-            WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
-
-            HttpClient client = new HttpClient();
+            using HttpClient client = new HttpClient();
+            
             client.GetAsync(CalculateUri(_imageLocation))
                     .ContinueWith(req => GetResponseCallback(req));
         }
