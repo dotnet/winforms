@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -558,11 +559,9 @@ namespace System.Windows.Forms
 
             WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
 
-            Task.Run(() =>
-            {
-                // Invoke BeginGetResponse on a threadpool thread, as it has unpredictable latency
-                req.BeginGetResponse(new AsyncCallback(GetResponseCallback), req);
-            });
+            HttpClient client = new HttpClient();
+            client.GetAsync(CalculateUri(_imageLocation))
+                    .ContinueWith(req => GetResponseCallback(req));
         }
 
         private void PostCompleted(Exception error, bool cancelled)
@@ -609,7 +608,7 @@ namespace System.Windows.Forms
 
         private void LoadProgressDelegate(object arg) => OnLoadProgressChanged((ProgressChangedEventArgs)arg);
 
-        private void GetResponseCallback(IAsyncResult result)
+        private async void GetResponseCallback(IAsyncResult result)
         {
             if (_pictureBoxState[CancellationPendingState])
             {
@@ -619,13 +618,12 @@ namespace System.Windows.Forms
 
             try
             {
-                WebRequest req = (WebRequest)result.AsyncState;
-                WebResponse webResponse = req.EndGetResponse(result);
+                HttpResponseMessage resp = (HttpResponseMessage) result.AsyncState;
 
-                _contentLength = (int)webResponse.ContentLength;
+                _contentLength = (int)resp.Content.Headers.ContentLength;
                 _totalBytesRead = 0;
 
-                Stream responseStream = webResponse.GetResponseStream();
+                Stream responseStream = await resp.Content.ReadAsStreamAsync();
 
                 // Continue on with asynchronous reading.
                 responseStream.BeginRead(
