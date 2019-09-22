@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -606,7 +607,7 @@ namespace System.Windows.Forms
 
         private void LoadProgressDelegate(object arg) => OnLoadProgressChanged((ProgressChangedEventArgs)arg);
 
-        private async void GetResponseCallback(IAsyncResult result)
+        private async Task GetResponseCallback(IAsyncResult result)
         {
             if (_pictureBoxState[CancellationPendingState])
             {
