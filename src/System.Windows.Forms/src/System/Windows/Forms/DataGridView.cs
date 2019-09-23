@@ -2290,6 +2290,7 @@ namespace System.Windows.Forms
                 if (defaultCellStyle == null)
                 {
                     defaultCellStyle = DefaultDefaultCellStyle;
+                    defaultCellStyle.IsStyleTaken = true;
                     return defaultCellStyle;
                 }
                 else if (defaultCellStyle.BackColor == Color.Empty ||
@@ -2304,6 +2305,9 @@ namespace System.Windows.Forms
                     {
                         Scope = DataGridViewCellStyleScopes.None
                     };
+
+                    defaultCellStyleTmp.UseCustomCellStyle = defaultCellStyle.UseCustomCellStyle;
+
                     if (defaultCellStyle.BackColor == Color.Empty)
                     {
                         defaultCellStyleTmp.BackColor = DefaultBackBrush.Color;
@@ -2335,10 +2339,12 @@ namespace System.Windows.Forms
                         defaultCellStyleTmp.WrapModeInternal = DataGridViewTriState.False;
                     }
                     defaultCellStyleTmp.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
+                    defaultCellStyle.IsStyleTaken = true;
                     return defaultCellStyleTmp;
                 }
                 else
                 {
+                    defaultCellStyle.IsStyleTaken = true;
                     return defaultCellStyle;
                 }
             }
@@ -2350,6 +2356,7 @@ namespace System.Windows.Forms
                 if (value != null)
                 {
                     defaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
+                    value.UseCustomCellStyle = true;
                 }
                 DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(DefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
@@ -2367,7 +2374,7 @@ namespace System.Windows.Forms
                 DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = DefaultBackBrush.Color,
-                    ForeColor = base.ForeColor,
+                    ForeColor = DefaultForeBrush.Color,
                     SelectionBackColor = DefaultSelectionBackBrush.Color,
                     SelectionForeColor = DefaultSelectionForeBrush.Color,
                     Font = base.Font,

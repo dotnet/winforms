@@ -983,16 +983,31 @@ namespace System.Windows.Forms
 
                     if (valBounds.Width > 0 && valBounds.Height > 0)
                     {
-                        Color textColor;
+                        Color foreColor;
+                        Color selectionForeColor;
+
                         if (DataGridView.ApplyVisualStylesToInnerCells &&
-                            (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard))
+                           (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard))
                         {
-                            textColor = DataGridViewButtonCellRenderer.DataGridViewButtonRenderer.GetColor(ColorProperty.TextColor);
+                            selectionForeColor = DataGridViewButtonCellRenderer.DataGridViewButtonRenderer.GetColor(ColorProperty.TextColor);
+                            foreColor = DataGridView.ForeColor;
                         }
                         else
                         {
-                            textColor = foreBrush.Color;
+                            selectionForeColor = cellStyle.SelectionForeColor;
+
+                            if (cellStyle.UseCustomCellStyle)
+                            {
+                                foreColor = cellStyle.ForeColor;
+                            }
+                            else
+                            {
+                                foreColor = DataGridView.ForeColor;
+                            }
                         }
+
+                        Color textColor = cellSelected ? selectionForeColor : foreColor;
+
                         TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
                         TextRenderer.DrawText(g,
                                               formattedString,

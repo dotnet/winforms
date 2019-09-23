@@ -541,7 +541,7 @@ namespace System.Windows.Forms
                 {
                     State = State & ~DataGridViewElementStates.ReadOnly;
                 }
-                
+
                 DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
             }
         }
@@ -687,6 +687,8 @@ namespace System.Windows.Forms
                     dgvcs.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
                     Properties.SetObject(PropCellStyle, dgvcs);
                 }
+
+                dgvcs.IsStyleTaken = true;
                 return dgvcs;
             }
             set
@@ -702,6 +704,7 @@ namespace System.Windows.Forms
                     if (value != null)
                     {
                         value.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
+                        value.UseCustomCellStyle = true;
                     }
                     Properties.SetObject(PropCellStyle, value);
                 }
@@ -2037,6 +2040,14 @@ namespace System.Windows.Forms
 
             DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
             Debug.Assert(dataGridViewStyle != null);
+
+            bool dataGridViewDefaultColorChanged = dataGridViewStyle?.UseCustomCellStyle == true;
+            bool rowDefaultColorChanged = rowStyle?.UseCustomCellStyle == true;
+            bool columnDefaultColorChanged = columnStyle?.UseCustomCellStyle == true;
+            bool cellDefaultColorChanged = cellStyle?.UseCustomCellStyle == true;
+
+            inheritedCellStyleTmp.UseCustomCellStyle = dataGridViewDefaultColorChanged || rowDefaultColorChanged
+                                                                  || columnDefaultColorChanged || cellDefaultColorChanged;
 
             if (includeColors)
             {
@@ -4589,7 +4600,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
-                    
+
                     return owner.OwningRow?.AccessibilityObject;
                 }
             }

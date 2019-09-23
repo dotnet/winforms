@@ -90,6 +90,8 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_propDefaultCellStyle, style);
                 }
 
+                style.IsStyleTaken = true;
+
                 return style;
             }
             set
@@ -111,6 +113,11 @@ namespace System.Windows.Forms
                    (style != null && value != null && !style.Equals(DefaultCellStyle))))
                 {
                     DataGridView.OnBandDefaultCellStyleChanged(this);
+
+                    if (value != null)
+                    {
+                        value.UseCustomCellStyle = true;
+                    }
                 }
             }
         }

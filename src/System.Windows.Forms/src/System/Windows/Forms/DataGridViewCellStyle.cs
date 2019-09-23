@@ -187,6 +187,11 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        /// Indicates whether a style has been changed by a customer.
+        /// </summary>
+        internal bool UseCustomCellStyle { get; set; }
+
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -231,6 +236,12 @@ namespace System.Windows.Forms
                 if (!c.Equals(ForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
+
+                    if (IsStyleTaken)
+                    {
+                        UseCustomCellStyle = true;
+                        IsStyleTaken = false;
+                    }
                 }
             }
         }
@@ -774,6 +785,12 @@ namespace System.Windows.Forms
             Properties.GetColor(PropSelectionForeColor, out bool found);
             return found;
         }
+
+        /// <summary>
+        /// Indicates whether a customer used {get} block of DefaultCellStyle or Style properties of a DataGridView or its element.
+        /// Used to determine if a style color has been changed by a customer.
+        /// </summary>
+        internal bool IsStyleTaken { get; set; }
 
         public override string ToString()
         {
