@@ -1,12 +1,12 @@
 # Windows Forms .NET Core Designer
 
-The .NET Core Windows Forms visual designer will be part of a future Visual Studio 2019 update, but it is currently available as a pre-release Visual Studio extension.
+The .NET Core Windows Forms visual designer will be part of a future Visual Studio 2019 update, but it is currently available as a pre-release Visual Studio extension. We have a preview version available with limited functionality in the [designer documentation](designer-releases/readme.md). 
 
 Please see [designer documentation](designer-releases/readme.md) for the download link to the Installer Package (VSIX), for known issues and other release notes.
 
-# Using the .NET Framework WinForms Designer in WinForms Core
+# Using the .NET Framework WinForms Designer with WinForms Core
 
-If you prefer to use the workaround to invoke the .NET Framework Winforms Designer, you can use Visual Studio's option to work with linked files and use its WinForms Designer for the .NET Framework. The instructions are below:
+If you have complex design work to do and prefer to use the workaround to invoke the .NET Framework Winforms Designer, you can use Visual Studio's option to work with linked files and use its WinForms Designer for the .NET Framework. The instructions are below:
 
 :point_up: **TIP:** During the process, you need to re-nest Form files in the .NET Framework project whenever you add a new `Form` or a `UserControl`. Instead of using a text editor for patching the project file, you can use Mad Kristensen's [File Nesting Extension][file-nesting-extension], which is recommended to be installed beforehand.<br/>
 Please close every open instance of Visual Studio before installing this extension.
