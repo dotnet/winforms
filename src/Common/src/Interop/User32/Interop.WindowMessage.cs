@@ -365,6 +365,7 @@ internal static partial class Interop
             WM_DWMSENDICONICTHUMBNAIL           = 0x0323,
             WM_DWMSENDICONICLIVEPREVIEWBITMAP   = 0x0326,
             WM_GETTITLEBARINFOEX                = 0x033F,
+            WM_CHOOSEFONT_GETLOGFONT            = WM_USER + 1,
             CBEM_INSERTITEMA                    = WM_USER + 1,
             CBEM_SETIMAGELIST                   = WM_USER + 2,
             CBEM_GETIMAGELIST                   = WM_USER + 3,

@@ -405,9 +405,6 @@ namespace System.Windows.Forms
         public static extern int GetThemeFilename(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszThemeFilename, int cchMaxBuffChars);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeFont(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int iPropId, ref NativeMethods.LOGFONTW pFont);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemeInt(HandleRef hTheme, int iPartId, int iStateId, int iPropId, ref int piVal);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]

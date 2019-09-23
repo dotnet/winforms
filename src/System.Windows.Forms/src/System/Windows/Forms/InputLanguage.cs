@@ -65,9 +65,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr[] data = new IntPtr[1];
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDEFAULTINPUTLANG, 0, data, 0);
-                return new InputLanguage(data[0]);
+                IntPtr handle = IntPtr.Zero;
+                User32.SystemParametersInfoW(User32.SPI.GETDEFAULTINPUTLANG, ref handle);
+                return new InputLanguage(handle);
             }
         }
 

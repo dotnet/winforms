@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             public IntPtr MarshalManagedToNative(object obj)
             {
                 Font font = (Font)obj;
-                NativeMethods.LOGFONTW logFont = NativeMethods.LOGFONTW.FromFont(font);
+                User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(font);
                 var fontDesc = new Oleaut32.FONTDESC
                 {
                     cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),

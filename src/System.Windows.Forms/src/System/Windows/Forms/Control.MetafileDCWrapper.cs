@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                     // Restore original bitmap
                     Gdi32.SelectObject(hdcSrc, hBitmap);
 
-                    if (!Gdi32.GetObject(hBitmap, out Gdi32.BITMAP bmp))
+                    if (!Gdi32.GetObjectW(hBitmap, out Gdi32.BITMAP bmp))
                     {
                         return false;
                     }

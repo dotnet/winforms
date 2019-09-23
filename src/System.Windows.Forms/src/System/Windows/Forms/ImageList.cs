@@ -347,7 +347,7 @@ namespace System.Windows.Forms
                     NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image?
                     if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo))
                     {
-                        Gdi32.GetObject(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
+                        Gdi32.GetObjectW(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
                         colorDepth = bmp.bmBitsPixel switch
                         {
                             4 => ColorDepth.Depth4Bit,

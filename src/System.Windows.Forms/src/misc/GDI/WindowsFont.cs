@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Internal
         private bool _ownedByCacheManager;
         private bool _everOwnedByCacheManager;
 
-        private readonly NativeMethods.LOGFONTW _logFont;
+        private readonly User32.LOGFONTW _logFont;
 
         // Note: These defaults are according to the ones in GDI+ but those are not necessarily the same as the system
         // default font.  The GetSystemDefaultHFont() method should be used if needed.
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Creates the font handle.
         /// </summary>
-        private unsafe WindowsFont(NativeMethods.LOGFONTW logFont, FontStyle style, bool createHandle)
+        private unsafe WindowsFont(User32.LOGFONTW logFont, FontStyle style, bool createHandle)
         {
             Debug.Assert(Hfont == IntPtr.Zero, "hFont is not null, this will generate a handle leak.");
 
@@ -46,18 +46,18 @@ namespace System.Windows.Forms.Internal
 
             if (createHandle)
             {
-                Hfont = IntUnsafeNativeMethods.CreateFontIndirectW(ref _logFont);
+                Hfont = Gdi32.CreateFontIndirectW(ref _logFont);
 
                 if (Hfont == IntPtr.Zero)
                 {
                     _logFont.FaceName = DefaultFaceName;
                     _logFont.lfOutPrecision = IntNativeMethods.OUT_TT_ONLY_PRECIS; // TrueType only.
 
-                    Hfont = IntUnsafeNativeMethods.CreateFontIndirectW(ref _logFont);
+                    Hfont = Gdi32.CreateFontIndirectW(ref _logFont);
                 }
 
                 // Update logFont height and other adjusted parameters.
-                IntUnsafeNativeMethods.GetObjectW(new HandleRef(this, Hfont), sizeof(NativeMethods.LOGFONTW), ref _logFont);
+                Gdi32.GetObjectW(new HandleRef(this, Hfont), out _logFont);
 
                 // We created the hFont, we will delete it on dispose.
                 _ownHandle = true;
@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Internal
             // leading; we specify a negative size value (in pixels) for the height so the font mapper
             // provides the closest match for the character height rather than the cell height (MSDN).
 
-            NativeMethods.LOGFONTW logFont = new NativeMethods.LOGFONTW()
+            User32.LOGFONTW logFont = new User32.LOGFONTW()
             {
                 lfHeight = -pixelsY,
                 lfCharSet = font.GdiCharSet,
@@ -129,8 +129,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public unsafe static WindowsFont FromHfont(IntPtr hFont, bool takeOwnership = false)
         {
-            NativeMethods.LOGFONTW logFont = new NativeMethods.LOGFONTW();
-            IntUnsafeNativeMethods.GetObjectW(new HandleRef(null, hFont), sizeof(NativeMethods.LOGFONTW), ref logFont);
+            Gdi32.GetObjectW(hFont, out User32.LOGFONTW logFont);
 
             FontStyle style = FontStyle.Regular;
             if (logFont.lfWeight == IntNativeMethods.FW_BOLD)

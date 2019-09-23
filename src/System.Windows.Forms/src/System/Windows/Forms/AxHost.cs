@@ -5117,7 +5117,7 @@ namespace System.Windows.Forms
                 return cachedFDesc;
             }
 
-            NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(font);
+            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(font);
             var fdesc = new Oleaut32.FONTDESC
             {
                 cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
