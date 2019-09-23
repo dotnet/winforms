@@ -1530,7 +1530,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Visible_Set_GetReturnsExpected(bool value)
         {
-            var control = new Control
+            var control = new PictureBox
             {
                 Visible = value
             };
@@ -1549,7 +1549,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Visible_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new Control();
+            var control = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.Visible = value;
@@ -1567,7 +1567,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void PictureBox_Visible_SetWithHandler_CallsVisibleChanged()
         {
-            var control = new Control
+            var control = new PictureBox
             {
                 Visible = true
             };
