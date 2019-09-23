@@ -1,26 +1,30 @@
-# Using the .NET Framework WinForms Designer in WinForms Core
+# Windows Forms Designer
 
-At this point, a dedicated WinForms Designer for WinForms .NET Core is not yet available. As a workaround, you can use Visual Studio's option to work with linked files and use its WinForms Designer for the .NET Framework.
+The .NET Core Windows Forms visual designer will be part of a future Visual Studio 2019 update, but it is currently available as a pre-release Visual Studio extension.
 
-Here is, how it is done:
+Please see [designer documentation](designer-releases/readme.md) for the download link to the Installer Package (VSIX), for known issues and other release notes.
+
+## Using the .NET Framework WinForms Designer in WinForms Core
+
+If you prefer to use the workaround to invoke the .NET Framework Winforms Designer, you can use Visual Studio's option to work with linked files and use its WinForms Designer for the .NET Framework. The instructions are below:
 
 :point_up: **TIP:** During the process, you need to re-nest Form files in the .NET Framework project whenever you add a new `Form` or a `UserControl`. Instead of using a text editor for patching the project file, you can use Mad Kristensen's [File Nesting Extension][file-nesting-extension], which is recommended to be installed beforehand.<br/>
 Please close every open instance of Visual Studio before installing this extension.
 
-## Create WinForms .NET Core app
+### Create WinForms .NET Core app
 
 Create a new WinForms application targeting .NET Core from Visual Studio or your favorite command line interface.
 
-### Create in Visual Studio
+#### Create in Visual Studio
 
-`VS2019`: 
+`VS2019`:
 
 1. _File > Add > New Project... > Windows Forms App (.NET Core)_, choose C# or Visual Basic
 2. Specify project name, e.g. `SimpleWinForms`
 
 
 
-### Create from command line
+#### Create from command line
 
 Open your favorite console, create a new folder for your application:
 
@@ -42,12 +46,12 @@ dotnet run --project SimpleWinForms\SimpleWinForms.csproj
 ```
 
 
-## Prepare WinForms .NET Core app for the Designer
+### Prepare WinForms .NET Core app for the Designer
 
 There are few options available to help you to design UI for your .NET Core project.
 
 
-### Option 1
+#### Option 1
 
 1. Open `SimpleWinForms.sln`
 
@@ -76,7 +80,7 @@ There are few options available to help you to design UI for your .NET Core proj
     ![edit-project-file][edit-project-file]
 
 
-### Option 2
+#### Option 2
 
 1. Open `SimpleWinForms.sln`
 
@@ -111,7 +115,7 @@ In the Solution Explorer click on the form and press <kbd>CTRL</kbd>+<kbd>X</kbd
 Remember: We can only use the Classic Designer, but we want to have only one set of files. So the form files, of course, belong to the .NET Core project but we want to edit them in the context of the .NET Framework project (thus using the .NET Framework Designer).
 
     * To do this open the context menu on the .NET Framework project in the Solution Explorer, and pick _Add > Existing Item_
-    
+
     * In the File Open Dialog, navigate to the .NET Core project, select the *Form.cs*, *Form.Designer.cs* and *Form.resx* files and choose *Add as Link* option.
 
     ![add-as-link][add-as-link]
@@ -124,7 +128,7 @@ If you installed the [File Nesting Visual Studio Extension][file-nesting-extensi
 Now, whenever you need to use the Designer on one of the .NET Core Form or UserControl files, simply open the linked files in the .NET Framework project with the Windows Forms Designer.
 
 
-## More information
+### More information
 
 If you are porting an existing .NET Framework application to .NET Core you may wish to read the following blog posts:
 * [Porting desktop apps to .NET Core](https://devblogs.microsoft.com/dotnet/porting-desktop-apps-to-net-core/)
