@@ -912,10 +912,7 @@ namespace System.Windows.Forms
         HLP_NAVIGATOR = 3,
         HLP_OBJECT = 4;
 
-        public const int SW_SCROLLCHILDREN = 0x0001,
-        SW_INVALIDATE = 0x0002,
-        SW_ERASE = 0x0004,
-        SW_SMOOTHSCROLL = 0x0010,
+        public const int
         SC_SIZE = 0xF000,
         SC_MINIMIZE = 0xF020,
         SC_MAXIMIZE = 0xF030,

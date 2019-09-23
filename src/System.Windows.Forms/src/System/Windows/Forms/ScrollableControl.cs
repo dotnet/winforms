@@ -741,7 +741,7 @@ namespace System.Windows.Forms
         ///  Adjusts the displayRect to be at the offset x, y. The contents of the
         ///  Form is scrolled using Windows.ScrollWindowEx.
         /// </summary>
-        protected void SetDisplayRectLocation(int x, int y)
+        protected unsafe void SetDisplayRectLocation(int x, int y)
         {
             int xDelta = 0;
             int yDelta = 0;
@@ -787,14 +787,15 @@ namespace System.Windows.Forms
             {
                 RECT rcClip = ClientRectangle;
                 RECT rcUpdate = ClientRectangle;
-                SafeNativeMethods.ScrollWindowEx(new HandleRef(this, Handle), xDelta, yDelta,
-                                                 null,
-                                                 ref rcClip,
-                                                 NativeMethods.NullHandleRef,
-                                                 ref rcUpdate,
-                                                 NativeMethods.SW_INVALIDATE
-                                                 | NativeMethods.SW_ERASE
-                                                 | NativeMethods.SW_SCROLLCHILDREN);
+                User32.ScrollWindowEx(
+                    this,
+                    xDelta,
+                    yDelta,
+                    null,
+                    &rcClip,
+                    IntPtr.Zero,
+                    &rcUpdate,
+                    User32.ScrollSW.INVALIDATE | User32.ScrollSW.ERASE | User32.ScrollSW.SCROLLCHILDREN);
             }
 
             // Force child controls to update bounds.
