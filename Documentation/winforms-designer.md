@@ -2,7 +2,7 @@
 
 The .NET Core Windows Forms visual designer will be part of a future Visual Studio 2019 update, but it is currently available as a pre-release Visual Studio extension. We have a preview version available with limited functionality in the [designer documentation](designer-releases/readme.md). 
 
-Please see [designer documentation](designer-releases/readme.md) for the download link to the Installer Package (VSIX), for known issues and other release notes.
+Please see [designer documentation](designer-releases/readme.md) for the download link to the Installer Package (VSIX), known issues and other release notes.
 
 # Using the .NET Framework WinForms Designer with WinForms Core
 
