@@ -3875,14 +3875,7 @@ namespace System.Windows.Forms
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload())
                     {
                         SynchronizationContext context = SynchronizationContext.Current;
-                        if (context == null)
-                        {
-                            Debug.Fail("Attempted to disconnect ConnectionPointCookie from the finalizer with no SynchronizationContext.");
-                        }
-                        else
-                        {
-                            context.Post(new SendOrPostCallback(AttemptDisconnect), null);
-                        }
+                        context?.Post(new SendOrPostCallback(AttemptDisconnect), null);
                     }
                 }
             }
