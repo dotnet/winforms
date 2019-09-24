@@ -340,8 +340,8 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevMode));
-                UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevNames));
+                Kernel32.GlobalFree(data.hDevMode);
+                Kernel32.GlobalFree(data.hDevNames);
             }
         }
     }

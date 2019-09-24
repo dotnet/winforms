@@ -74,15 +74,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int OleGetClipboard(ref IComDataObject data);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int OleSetClipboard(IComDataObject pDataObj);
-
-        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int OleFlushClipboard();
-
         [DllImport(ExternDll.Oleaut32, ExactSpelling = true)]
         public static extern void OleCreatePropertyFrameIndirect(NativeMethods.OCPFIPARAMS p);
 
@@ -265,24 +256,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GlobalAlloc(int uFlags, int dwBytes);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GlobalReAlloc(HandleRef handle, int bytes, int flags);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GlobalLock(HandleRef handle);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GlobalUnlock(HandleRef handle);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GlobalFree(HandleRef handle);
-
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GlobalSize(HandleRef handle);
 
         [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
         public static extern bool ImmSetConversionStatus(HandleRef hIMC, int conversion, int sentence);

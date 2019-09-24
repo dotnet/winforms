@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -336,8 +337,7 @@ namespace System.Windows.Forms
             data.ExclusionFlags = 0;
             data.nPageRanges = 0;
             data.nMaxPageRanges = 1;
-            data.pageRanges = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GPTR,
-                                                              data.nMaxPageRanges * Marshal.SizeOf<NativeMethods.PRINTPAGERANGE>());
+            data.pageRanges = Kernel32.GlobalAlloc(Kernel32.GMEM.GPTR, (uint)(data.nMaxPageRanges * Marshal.SizeOf<NativeMethods.PRINTPAGERANGE>()));
             data.nMinPage = 0;
             data.nMaxPage = 9999;
             data.nCopies = 1;
@@ -451,8 +451,8 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevMode));
-                UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevNames));
+                Kernel32.GlobalFree(data.hDevMode);
+                Kernel32.GlobalFree(data.hDevNames);
             }
         }
 
@@ -562,17 +562,17 @@ namespace System.Windows.Forms
             {
                 if (data.hDevMode != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevMode));
+                    Kernel32.GlobalFree(data.hDevMode);
                 }
 
                 if (data.hDevNames != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevNames));
+                    Kernel32.GlobalFree(data.hDevNames);
                 }
 
                 if (data.pageRanges != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.pageRanges));
+                    Kernel32.GlobalFree(data.pageRanges);
                 }
             }
         }

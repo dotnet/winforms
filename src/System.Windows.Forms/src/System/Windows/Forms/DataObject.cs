@@ -643,10 +643,9 @@ namespace System.Windows.Forms
                 if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
                 {
                     medium.tymed = TYMED.TYMED_HGLOBAL;
-                    medium.unionmember = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE
-                                                             | NativeMethods.GMEM_DDESHARE
-                                                             | NativeMethods.GMEM_ZEROINIT,
-                                                             1);
+                    medium.unionmember = Kernel32.GlobalAlloc(
+                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                        1);
                     if (medium.unionmember == IntPtr.Zero)
                     {
                         throw new OutOfMemoryException();
@@ -658,7 +657,7 @@ namespace System.Windows.Forms
                     }
                     catch
                     {
-                        UnsafeNativeMethods.GlobalFree(new HandleRef(medium, medium.unionmember));
+                        Kernel32.GlobalFree(medium.unionmember);
                         medium.unionmember = IntPtr.Zero;
                         throw;
                     }
@@ -854,15 +853,17 @@ namespace System.Windows.Forms
         {
             if (handle != IntPtr.Zero)
             {
-                UnsafeNativeMethods.GlobalFree(new HandleRef(null, handle));
+                Kernel32.GlobalFree(handle);
             }
+
             int size = (int)stream.Length;
-            handle = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE | NativeMethods.GMEM_DDESHARE, size);
+            handle = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE, (uint)size);
             if (handle == IntPtr.Zero)
             {
-                return (NativeMethods.E_OUTOFMEMORY);
+                return NativeMethods.E_OUTOFMEMORY;
             }
-            IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));
+
+            IntPtr ptr = Kernel32.GlobalLock(handle);
             if (ptr == IntPtr.Zero)
             {
                 return (NativeMethods.E_OUTOFMEMORY);
@@ -875,7 +876,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, handle));
+                Kernel32.GlobalUnlock(handle);
             }
             return NativeMethods.S_OK;
         }
@@ -899,37 +900,36 @@ namespace System.Windows.Forms
             }
 
             IntPtr currentPtr = IntPtr.Zero;
-            int baseStructSize = 4 + 8 + 4 + 4;
-            int sizeInBytes = baseStructSize;
+            uint baseStructSize = 4 + 8 + 4 + 4;
+            uint sizeInBytes = baseStructSize;
 
             // First determine the size of the array
             for (int i = 0; i < files.Length; i++)
             {
-                sizeInBytes += (files[i].Length + 1) * 2;
+                sizeInBytes += ((uint)files[i].Length + 1) * 2;
             }
             sizeInBytes += 2;
 
             // Alloc the Win32 memory
-            //
-            IntPtr newHandle = UnsafeNativeMethods.GlobalReAlloc(new HandleRef(null, handle),
-                                                  sizeInBytes,
-                                                  NativeMethods.GMEM_MOVEABLE | NativeMethods.GMEM_DDESHARE);
+            IntPtr newHandle = Kernel32.GlobalReAlloc(
+                handle,
+                sizeInBytes,
+                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE);
             if (newHandle == IntPtr.Zero)
             {
-                return (NativeMethods.E_OUTOFMEMORY);
+                return NativeMethods.E_OUTOFMEMORY;
             }
-            IntPtr basePtr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, newHandle));
+
+            IntPtr basePtr = Kernel32.GlobalLock(newHandle);
             if (basePtr == IntPtr.Zero)
             {
-                return (NativeMethods.E_OUTOFMEMORY);
+                return NativeMethods.E_OUTOFMEMORY;
             }
+
             currentPtr = basePtr;
 
             // Write out the struct...
-            //
-            int[] structData = new int[] { baseStructSize, 0, 0, 0, 0 };
-
-            structData[4] = unchecked((int)0xFFFFFFFF);
+            int[] structData = new int[] { (int)baseStructSize, 0, 0, 0, unchecked((int)0xFFFFFFFF) };
             Marshal.Copy(structData, 0, currentPtr, structData.Length);
             currentPtr = (IntPtr)((long)currentPtr + baseStructSize);
 
@@ -945,7 +945,7 @@ namespace System.Windows.Forms
             Marshal.Copy(new char[] { '\0' }, 0, currentPtr, 1);
             currentPtr = (IntPtr)((long)currentPtr + 2);
 
-            UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, newHandle));
+            Kernel32.GlobalUnlock(newHandle);
             return NativeMethods.S_OK;
         }
 
@@ -962,20 +962,20 @@ namespace System.Windows.Forms
             IntPtr newHandle = IntPtr.Zero;
             if (unicode)
             {
-                int byteSize = (str.Length * 2 + 2);
-                newHandle = UnsafeNativeMethods.GlobalReAlloc(new HandleRef(null, handle),
-                                                  byteSize,
-                                                  NativeMethods.GMEM_MOVEABLE
-                                                  | NativeMethods.GMEM_DDESHARE
-                                                  | NativeMethods.GMEM_ZEROINIT);
+                uint byteSize = (uint)str.Length * 2 + 2;
+                newHandle = Kernel32.GlobalReAlloc(
+                    handle,
+                    byteSize,
+                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                 if (newHandle == IntPtr.Zero)
                 {
-                    return (NativeMethods.E_OUTOFMEMORY);
+                    return NativeMethods.E_OUTOFMEMORY;
                 }
-                IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, newHandle));
+
+                IntPtr ptr = Kernel32.GlobalLock(newHandle);
                 if (ptr == IntPtr.Zero)
                 {
-                    return (NativeMethods.E_OUTOFMEMORY);
+                    return NativeMethods.E_OUTOFMEMORY;
                 }
 
                 char[] chars = str.ToCharArray(0, str.Length);
@@ -989,27 +989,29 @@ namespace System.Windows.Forms
                 byte[] strBytes = new byte[pinvokeSize];
                 UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, str, str.Length, strBytes, strBytes.Length, IntPtr.Zero, IntPtr.Zero);
 
-                newHandle = UnsafeNativeMethods.GlobalReAlloc(new HandleRef(null, handle),
-                                                  pinvokeSize + 1,
-                                                  NativeMethods.GMEM_MOVEABLE
-                                                  | NativeMethods.GMEM_DDESHARE
-                                                  | NativeMethods.GMEM_ZEROINIT);
+                newHandle = Kernel32.GlobalReAlloc(
+                    handle,
+                    (uint)pinvokeSize + 1,
+                    
+                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                 if (newHandle == IntPtr.Zero)
                 {
-                    return (NativeMethods.E_OUTOFMEMORY);
+                    return NativeMethods.E_OUTOFMEMORY;
                 }
-                IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, newHandle));
+
+                IntPtr ptr = Kernel32.GlobalLock(newHandle);
                 if (ptr == IntPtr.Zero)
                 {
-                    return (NativeMethods.E_OUTOFMEMORY);
+                    return NativeMethods.E_OUTOFMEMORY;
                 }
+
                 UnsafeNativeMethods.CopyMemory(ptr, strBytes, pinvokeSize);
                 Marshal.Copy(new byte[] { 0 }, 0, (IntPtr)((long)ptr + pinvokeSize), 1);
             }
 
             if (newHandle != IntPtr.Zero)
             {
-                UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, newHandle));
+                Kernel32.GlobalUnlock(newHandle);
             }
             return NativeMethods.S_OK;
         }
@@ -1024,21 +1026,21 @@ namespace System.Windows.Forms
 
             UTF8Encoding encoding = new UTF8Encoding();
             byte[] bytes = encoding.GetBytes(str);
-
-            newHandle = UnsafeNativeMethods.GlobalReAlloc(new HandleRef(null, handle),
-                                                    bytes.Length + 1,
-                                                    NativeMethods.GMEM_MOVEABLE
-                                                    | NativeMethods.GMEM_DDESHARE
-                                                    | NativeMethods.GMEM_ZEROINIT);
+            newHandle = Kernel32.GlobalReAlloc(
+                handle,
+                (uint)bytes.Length + 1,
+                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
             if (newHandle == IntPtr.Zero)
             {
-                return (NativeMethods.E_OUTOFMEMORY);
+                return NativeMethods.E_OUTOFMEMORY;
             }
-            IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, newHandle));
+
+            IntPtr ptr = Kernel32.GlobalLock(newHandle);
             if (ptr == IntPtr.Zero)
             {
-                return (NativeMethods.E_OUTOFMEMORY);
+                return NativeMethods.E_OUTOFMEMORY;
             }
+
             try
             {
                 UnsafeNativeMethods.CopyMemory(ptr, bytes, bytes.Length);
@@ -1046,8 +1048,9 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, newHandle));
+                Kernel32.GlobalUnlock(newHandle);
             }
+
             return NativeMethods.S_OK;
         }
 
@@ -1325,13 +1328,12 @@ namespace System.Windows.Forms
                     Marshal.Release(medium.unionmember);
                     pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.STATFLAG_DEFAULT);
 
-                    IntPtr hglobal = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE
-                                                      | NativeMethods.GMEM_DDESHARE
-                                                      | NativeMethods.GMEM_ZEROINIT,
-                                                      (int)sstg.cbSize);
-                    IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(innerData, hglobal));
+                    IntPtr hglobal = Kernel32.GlobalAlloc(
+                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                        (uint)sstg.cbSize);
+                    IntPtr ptr = Kernel32.GlobalLock(hglobal);
                     pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
-                    UnsafeNativeMethods.GlobalUnlock(new HandleRef(innerData, hglobal));
+                    Kernel32.GlobalUnlock(hglobal);
 
                     return GetDataFromHGLOBAL(format, hglobal);
                 }
@@ -1348,11 +1350,7 @@ namespace System.Windows.Forms
 
                 if (hglobal != IntPtr.Zero)
                 {
-                    //=----------------------------------------------------------------=
                     // Convert from OLE to IW objects
-                    //=----------------------------------------------------------------=
-                    // Add any new formats here...
-
                     if (format.Equals(DataFormats.Text)
                         || format.Equals(DataFormats.Rtf)
                         || format.Equals(DataFormats.OemText))
@@ -1385,7 +1383,7 @@ namespace System.Windows.Forms
                         data = ReadObjectFromHandle(hglobal, DataObject.RestrictDeserializationToSafeTypes(format));
                     }
 
-                    UnsafeNativeMethods.GlobalFree(new HandleRef(null, hglobal));
+                    Kernel32.GlobalFree(hglobal);
                 }
 
                 return data;
@@ -1536,14 +1534,14 @@ namespace System.Windows.Forms
             /// </summary>
             private Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject)
             {
-                IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));
+                IntPtr ptr = Kernel32.GlobalLock(handle);
                 if (ptr == IntPtr.Zero)
                 {
                     throw new ExternalException(SR.ExternalException, NativeMethods.E_OUTOFMEMORY);
                 }
                 try
                 {
-                    int size = UnsafeNativeMethods.GlobalSize(new HandleRef(null, handle));
+                    int size = Kernel32.GlobalSize(handle);
                     byte[] bytes = new byte[size];
                     Marshal.Copy(ptr, bytes, 0, size);
                     int index = 0;
@@ -1581,7 +1579,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, handle));
+                    Kernel32.GlobalUnlock(handle);
                 }
             }
 
@@ -1591,20 +1589,13 @@ namespace System.Windows.Forms
             /// </summary>
             private object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
             {
-                object value = null;
-
                 Stream stream = ReadByteStreamFromHandle(handle, out bool isSerializedObject);
-
                 if (isSerializedObject)
                 {
-                    value = ReadObjectFromHandleDeserializer(stream, restrictDeserialization);
+                    return ReadObjectFromHandleDeserializer(stream, restrictDeserialization);
                 }
-                else
-                {
-                    value = stream;
-                }
-
-                return value;
+                
+                return stream;
             }
 
             private static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
@@ -1659,7 +1650,7 @@ namespace System.Windows.Forms
             {
                 string stringData = null;
 
-                IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));
+                IntPtr ptr = Kernel32.GlobalLock(handle);
                 try
                 {
                     if (unicode)
@@ -1673,7 +1664,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, handle));
+                    Kernel32.GlobalUnlock(handle);
                 }
 
                 return stringData;
@@ -1681,19 +1672,16 @@ namespace System.Windows.Forms
 
             private unsafe string ReadHtmlFromHandle(IntPtr handle)
             {
-                string stringData = null;
-                IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));
+                IntPtr ptr = Kernel32.GlobalLock(handle);
                 try
                 {
-                    int size = UnsafeNativeMethods.GlobalSize(new HandleRef(null, handle));
-                    stringData = Encoding.UTF8.GetString((byte*)ptr, size);
+                    int size = Kernel32.GlobalSize(handle);
+                    return Encoding.UTF8.GetString((byte*)ptr, size - 1);
                 }
                 finally
                 {
-                    UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, handle));
+                    Kernel32.GlobalUnlock(handle);
                 }
-
-                return stringData;
             }
 
             //=------------------------------------------------------------------------=

@@ -7036,8 +7036,8 @@ namespace System.Windows.Forms
                 IntPtr hglobal = IntPtr.Zero;
                 if (buffer != null)
                 {
-                    hglobal = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GMEM_MOVEABLE, length);
-                    IntPtr pointer = UnsafeNativeMethods.GlobalLock(new HandleRef(null, hglobal));
+                    hglobal = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE, (uint)length);
+                    IntPtr pointer = Kernel32.GlobalLock(hglobal);
                     try
                     {
                         if (pointer != IntPtr.Zero)
@@ -7047,10 +7047,10 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, hglobal));
+                        Kernel32.GlobalUnlock(hglobal);
                     }
                 }
-                bool failed = false;
+
                 try
                 {
                     iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, true);
@@ -7071,21 +7071,17 @@ namespace System.Windows.Forms
                             0);
                     }
                 }
-                catch (Exception t)
-                {
-                    Debug.Fail(t.ToString());
-                    failed = true;
-                }
-                if (failed)
+                catch (Exception)
                 {
                     if (iLockBytes == null && hglobal != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.GlobalFree(new HandleRef(null, hglobal));
+                        Kernel32.GlobalFree(hglobal);
                     }
                     else
                     {
                         iLockBytes = null;
                     }
+
                     storage = null;
                 }
             }
@@ -7180,7 +7176,7 @@ namespace System.Windows.Forms
                     length = (int)stat.cbSize;
                     buffer = new byte[length];
                     IntPtr hglobal = Ole32.GetHGlobalFromILockBytes(iLockBytes);
-                    IntPtr pointer = UnsafeNativeMethods.GlobalLock(new HandleRef(null, hglobal));
+                    IntPtr pointer = Kernel32.GlobalLock(hglobal);
                     try
                     {
                         if (pointer != IntPtr.Zero)
@@ -7195,7 +7191,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        UnsafeNativeMethods.GlobalUnlock(new HandleRef(null, hglobal));
+                        Kernel32.GlobalUnlock(hglobal);
                     }
                 }
                 finally
