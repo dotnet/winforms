@@ -130,8 +130,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             oleConverters = new SortedList
             {
                 [GUID_COLOR] = typeof(Com2ColorConverter),
-                [typeof(SafeNativeMethods.IFontDisp).GUID] = typeof(Com2FontConverter),
-                [typeof(UnsafeNativeMethods.IFont).GUID] = typeof(Com2FontConverter),
+                [typeof(Ole32.IFontDisp).GUID] = typeof(Com2FontConverter),
+                [typeof(Ole32.IFont).GUID] = typeof(Com2FontConverter),
                 [typeof(Ole32.IPictureDisp).GUID] = typeof(Com2PictureConverter),
                 [typeof(Ole32.IPicture).GUID] = typeof(Com2PictureConverter)
             };

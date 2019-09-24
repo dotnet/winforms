@@ -2237,7 +2237,7 @@ namespace System.Windows.Forms
         }
 
         // Returns whether or not target was changed
-        internal static bool FontToIFont(Font source, UnsafeNativeMethods.IFont target)
+        internal static bool FontToIFont(Font source, Ole32.IFont target)
         {
             bool changed = false;
 
@@ -2245,10 +2245,10 @@ namespace System.Windows.Forms
             // it looks like setting them all has different results based on the
             // order and each individual IFont implementor...
             //
-            string fontName = target.GetName();
+            string fontName = target.Name;
             if (!source.Name.Equals(fontName))
             {
-                target.SetName(source.Name);
+                target.Name = source.Name;
                 changed = true;
             }
 
@@ -2262,57 +2262,61 @@ namespace System.Windows.Forms
             // or, worse case, just create another Font object
             // from the handle, but that's pretty heavy...
             //
-            float fontSize = (float)target.GetSize() / 10000;
+            float fontSize = (float)target.Size / 10000;
 
             // size must be in points
             float winformsSize = source.SizeInPoints;
             if (winformsSize != fontSize)
             {
-                target.SetSize((long)(winformsSize * 10000));
+                target.Size = (long)(winformsSize * 10000);
                 changed = true;
             }
 
             NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(source);
 
-            short fontWeight = target.GetWeight();
+            short fontWeight = target.Weight;
             if (fontWeight != logfont.lfWeight)
             {
-                target.SetWeight((short)logfont.lfWeight);
+                target.Weight = (short)logfont.lfWeight;
                 changed = true;
             }
 
-            bool fontBold = target.GetBold();
-            if (fontBold != (logfont.lfWeight >= 700))
+            bool fontBold = target.Bold.IsTrue();
+            bool isBold = logfont.lfWeight >= 700;
+            if (fontBold != isBold)
             {
-                target.SetBold(logfont.lfWeight >= 700);
+                target.Bold = isBold.ToBOOL();
                 changed = true;
             }
 
-            bool fontItalic = target.GetItalic();
-            if (fontItalic != (0 != logfont.lfItalic))
+            bool fontItalic = target.Italic.IsTrue();
+            bool isItalic = logfont.lfItalic != 0;
+            if (fontItalic != isItalic)
             {
-                target.SetItalic(0 != logfont.lfItalic);
+                target.Italic = isItalic.ToBOOL();
                 changed = true;
             }
 
-            bool fontUnderline = target.GetUnderline();
-            if (fontUnderline != (0 != logfont.lfUnderline))
+            bool fontUnderline = target.Underline.IsTrue();
+            bool isUnderline = logfont.lfUnderline != 0;
+            if (fontUnderline != isUnderline)
             {
-                target.SetUnderline(0 != logfont.lfUnderline);
+                target.Underline = isUnderline.ToBOOL();
                 changed = true;
             }
 
-            bool fontStrike = target.GetStrikethrough();
-            if (fontStrike != (0 != logfont.lfStrikeOut))
+            bool fontStrike = target.Strikethrough.IsTrue();
+            bool isStrike = logfont.lfStrikeOut != 0;
+            if (fontStrike != isStrike)
             {
-                target.SetStrikethrough(0 != logfont.lfStrikeOut);
+                target.Strikethrough = isStrike.ToBOOL();
                 changed = true;
             }
 
-            short fontCharset = target.GetCharset();
+            short fontCharset = target.Charset;
             if (fontCharset != logfont.lfCharSet)
             {
-                target.SetCharset(logfont.lfCharSet);
+                target.Charset = logfont.lfCharSet;
                 changed = true;
             }
 

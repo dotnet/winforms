@@ -90,9 +90,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseColor([In, Out] NativeMethods.CHOOSECOLOR cc);
 
-        [DllImport(ExternDll.Oleaut32, EntryPoint = "OleCreateFontIndirect", ExactSpelling = true, PreserveSig = false)]
-        public static extern IFontDisp OleCreateIFontDispIndirect(NativeMethods.FONTDESC fd, ref Guid iid);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
 
@@ -512,26 +509,6 @@ namespace System.Windows.Forms
         public static int ColorToCOLORREF(Color color)
         {
             return (int)color.R | ((int)color.G << 8) | ((int)color.B << 16);
-        }
-
-        [ComImport(), Guid("BEF6E003-A874-101A-8BBA-00AA00300CAB"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
-        public interface IFontDisp
-        {
-            string Name { get; set; }
-
-            long Size { get; set; }
-
-            bool Bold { get; set; }
-
-            bool Italic { get; set; }
-
-            bool Underline { get; set; }
-
-            bool Strikethrough { get; set; }
-
-            short Weight { get; set; }
-
-            short Charset { get; set; }
         }
     }
 }

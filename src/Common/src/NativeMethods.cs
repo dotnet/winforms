@@ -1515,19 +1515,6 @@ namespace System.Windows.Forms
                 int pvaOut);
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public class FONTDESC
-        {
-            public int cbSizeOfStruct = Marshal.SizeOf<FONTDESC>();
-            public string lpstrName;
-            public long cySize;
-            public short sWeight;
-            public short sCharset;
-            public bool fItalic;
-            public bool fUnderline;
-            public bool fStrikethrough;
-        }
-
         public struct USEROBJECTFLAGS
         {
             public int fInherit;
@@ -2119,33 +2106,6 @@ namespace System.Windows.Forms
         {
             public int nFromPage = 0;
             public int nToPage = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagFONTDESC
-        {
-            public int cbSizeofstruct = Marshal.SizeOf<tagFONTDESC>();
-
-            [MarshalAs(UnmanagedType.LPWStr)]
-            public string lpstrName;
-
-            [MarshalAs(UnmanagedType.U8)]
-            public long cySize;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public short sWeight;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public short sCharset;
-
-            [MarshalAs(UnmanagedType.Bool)]
-            public bool fItalic;
-
-            [MarshalAs(UnmanagedType.Bool)]
-            public bool fUnderline;
-
-            [MarshalAs(UnmanagedType.Bool)]
-            public bool fStrikethrough;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

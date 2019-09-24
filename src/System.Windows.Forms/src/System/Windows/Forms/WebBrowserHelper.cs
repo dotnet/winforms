@@ -66,7 +66,6 @@ namespace System.Windows.Forms
         private const int HMperInch = 2540;
 
         // Special guids
-        private static Guid ifont_Guid = typeof(UnsafeNativeMethods.IFont).GUID;
         internal static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         internal static Guid comctlImageCombo_Clsid = new Guid("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
         internal static Guid maskEdit_Clsid = new Guid("{c932ba85-4374-101b-a56c-00aa003668dc}");
