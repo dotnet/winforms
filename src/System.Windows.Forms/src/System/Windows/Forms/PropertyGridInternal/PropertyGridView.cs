@@ -8494,32 +8494,22 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
             internal override object GetPropertyValue(int propertyID)
-            {
-                switch (propertyID)
+                => propertyID switch
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_TableControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
-                        return Name;
-                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
-                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
-                        return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    NativeMethods.UIA_ControlTypePropertyId => NativeMethods.UIA_TableControlTypeId,
+                    NativeMethods.UIA_NamePropertyId => Name,
+                    NativeMethods.UIA_IsTablePatternAvailablePropertyId => true,
+                    NativeMethods.UIA_IsGridPatternAvailablePropertyId => true,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override bool IsPatternSupported(int patternId)
-            {
-                switch (patternId)
+                => patternId switch
                 {
-                    case NativeMethods.UIA_TablePatternId:
-                    case NativeMethods.UIA_GridPatternId:
-                        return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                    NativeMethods.UIA_TablePatternId => true,
+                    NativeMethods.UIA_GridPatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
             public override string Name
             {
@@ -8530,10 +8520,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return name;
                     }
-                    else
-                    {
-                        return SR.PropertyGridDefaultAccessibleName;
-                    }
+
+                    return string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.Name);
                 }
             }
 

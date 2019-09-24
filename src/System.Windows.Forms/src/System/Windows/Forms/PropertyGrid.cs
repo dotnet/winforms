@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                 toolStrip = new PropertyGridToolStrip(this);
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
-                toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
+
                 toolStrip.AccessibleRole = AccessibleRole.ToolBar;
                 toolStrip.TabStop = true;
                 toolStrip.AllowMerge = false;
@@ -5954,6 +5954,36 @@ namespace System.Windows.Forms
 
             return -1;
         }
+
+        internal override object GetPropertyValue(int propertyID)
+        {
+            switch (propertyID)
+            {
+                case NativeMethods.UIA_NamePropertyId:
+                    return Name;
+            }
+
+            return base.GetPropertyValue(propertyID);
+        }
+
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return Owner.Name;
+            }
+
+            set
+            {
+                Owner.AccessibleName = value;
+            }
+        }
     }
 
     /// <summary>
@@ -6032,17 +6062,25 @@ namespace System.Windows.Forms
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
         internal override object GetPropertyValue(int propertyID)
-        {
-            if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+            => propertyID switch
             {
-                return NativeMethods.UIA_ToolBarControlTypeId;
-            }
-            else if (propertyID == NativeMethods.UIA_NamePropertyId)
-            {
-                return Name;
-            }
+                NativeMethods.UIA_ControlTypePropertyId => NativeMethods.UIA_ToolBarControlTypeId,
+                NativeMethods.UIA_NamePropertyId => Name,
+                _ => base.GetPropertyValue(propertyID)
+            };
 
-            return base.GetPropertyValue(propertyID);
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return _parentPropertyGrid?.Name;
+            }
         }
     }
 }

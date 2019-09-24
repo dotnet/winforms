@@ -296,17 +296,25 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
         internal override object GetPropertyValue(int propertyID)
-        {
-            if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+            => propertyID switch
             {
-                return NativeMethods.UIA_PaneControlTypeId;
-            }
-            else if (propertyID == NativeMethods.UIA_NamePropertyId)
-            {
-                return Name;
-            }
+                NativeMethods.UIA_ControlTypePropertyId => NativeMethods.UIA_PaneControlTypeId,
+                NativeMethods.UIA_NamePropertyId => Name,
+                _ => base.GetPropertyValue(propertyID)
+            };
 
-            return base.GetPropertyValue(propertyID);
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return string.Format(SR.PropertyGridDocCommentAccessibleNameTemplate, _parentPropertyGrid?.Name);
+            }
         }
     }
 }

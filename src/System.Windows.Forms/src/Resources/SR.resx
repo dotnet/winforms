@@ -5159,6 +5159,12 @@ Stack trace where the illegal operation occurred was:
   <data name="PropertyGridDefaultAccessibleName" xml:space="preserve">
     <value>Properties Window</value>
   </data>
+  <data name="PropertyGridDefaultAccessibleNameTemplate" xml:space="preserve">
+    <value>{0} Properties Window</value>
+  </data>
+  <data name="PropertyGridDocCommentAccessibleNameTemplate" xml:space="preserve">
+    <value>{0} Description</value>
+  </data>
   <data name="PropertyGridDisabledItemForeColorDesc" xml:space="preserve">
     <value>The foreground color of disabled text in the grid area.</value>
   </data>

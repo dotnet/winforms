@@ -8651,9 +8651,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">屬性視窗</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
+        <source>{0} Properties Window</source>
+        <target state="new">{0} Properties Window</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
         <source>The foreground color of disabled text in the grid area.</source>
         <target state="translated">方格區域中停用文字的前景色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
