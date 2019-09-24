@@ -26,8 +26,6 @@ internal static partial class Interop
             public LOGFONTW lfMenuFont;
             public LOGFONTW lfStatusFont;
             public LOGFONTW lfMessageFont;
-
-            // This is supported on Windows vista and later
             public int iPaddedBorderWidth;
         }
     }
