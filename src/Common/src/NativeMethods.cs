@@ -488,9 +488,6 @@ namespace System.Windows.Forms
         IDM_PROPERTIES = 28,
         IDM_SAVEAS = 71;
 
-        public const int CSC_NAVIGATEFORWARD = 0x00000001,
-        CSC_NAVIGATEBACK = 0x00000002;
-
         public const int INPUT_KEYBOARD = 1;
 
         public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
