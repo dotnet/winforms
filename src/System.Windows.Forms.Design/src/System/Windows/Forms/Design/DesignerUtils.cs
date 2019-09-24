@@ -944,7 +944,7 @@ namespace System.Windows.Forms.Design
 
         private static void ListView_SetExtendedListViewStyleEx(IntPtr handle, int mask, int extendedStyle)
         {
-            NativeMethods.SendMessage(handle, NativeMethods.LVM_SETEXTENDEDLISTVIEWSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
+            NativeMethods.SendMessage(handle, (int)LVM.SETEXTENDEDLISTVIEWSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
         }
 
         /// <summary>
