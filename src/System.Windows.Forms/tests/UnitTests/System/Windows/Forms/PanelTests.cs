@@ -227,6 +227,35 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
+        [InlineData(BorderStyle.Fixed3D, 1)]
+        [InlineData(BorderStyle.FixedSingle, 1)]
+        [InlineData(BorderStyle.None, 0)]
+        public void Panel_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
+        {
+            var panel = new Panel();
+            Assert.NotEqual(IntPtr.Zero, panel.Handle);
+            int invalidatedCallCount = 0;
+            panel.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            panel.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            panel.HandleCreated += (sender, e) => createdCallCount++;
+
+            panel.BorderStyle = value;
+            Assert.Equal(value, panel.BorderStyle);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            panel.BorderStyle = value;
+            Assert.Equal(value, panel.BorderStyle);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
         public void Panel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {

@@ -313,6 +313,7 @@ namespace WinForms.Common.Tests
             return new TheoryData<Color, Color>
             {
                 { Color.Red, Color.Red },
+                { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) },
                 { Color.Empty, Control.DefaultForeColor }
             };
         }

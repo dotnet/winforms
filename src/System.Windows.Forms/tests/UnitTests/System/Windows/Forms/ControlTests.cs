@@ -1291,10 +1291,144 @@ namespace System.Windows.Forms.Tests
                 BackColor = value
             };
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        public void Control_BackColor_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
+        {
+            var control = new Control
+            {
+                BackColor = Color.YellowGreen
+            };
+
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> BackColor_SetTransparent_TestData()
+        {
+            yield return new object[] { Color.Red, Color.Red };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.Empty, Control.DefaultBackColor };
+        }
+
+        [Theory]
+        [MemberData(nameof(BackColor_SetTransparent_TestData))]
+        public void Control_BackColor_SetTransparent_GetReturnsExpected(Color value, Color expected)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        public void Control_BackColor_SetWithChildren_GetReturnsExpected(Color value, Color expected)
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.Equal(expected, child1.BackColor);
+            Assert.Equal(expected, child2.BackColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.Equal(expected, child1.BackColor);
+            Assert.Equal(expected, child2.BackColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        public void Control_BackColor_SetWithChildrenWithColor_GetReturnsExpected(Color value, Color expected)
+        {
+            var child1 = new Control
+            {
+                BackColor = Color.Yellow
+            };
+            var child2 = new Control
+            {
+                BackColor = Color.YellowGreen
+            };
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.Equal(Color.Yellow, child1.BackColor);
+            Assert.Equal(Color.YellowGreen, child2.BackColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.Equal(Color.Yellow, child1.BackColor);
+            Assert.Equal(Color.YellowGreen, child2.BackColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> BackColor_SetWithHandle_TestData()
+        {
+            yield return new object[] { Color.Red, Color.Red, 1 };
+            yield return new object[] { Color.Empty, Control.DefaultBackColor, 0 };
+        }
+
+        [Theory]
+        [MemberData(nameof(BackColor_SetWithHandle_TestData))]
+        public void Control_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
@@ -1332,6 +1466,198 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
+        [Fact]
+        public void Control_BackColor_SetWithHandlerInDisposing_DoesNotCallBackColorChanged()
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.BackColorChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.BackColor = Color.Red;
+                Assert.Equal(Color.Red, control.BackColor);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [Fact]
+        public void Control_BackColor_SetWithChildrenWithHandler_CallsBackColorChanged()
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount, childCallCount1);
+                Assert.Equal(childCallCount1, childCallCount2);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount - 1, childCallCount1);
+                Assert.Equal(childCallCount1, childCallCount2);
+                childCallCount1++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount, childCallCount1);
+                Assert.Equal(childCallCount1 - 1, childCallCount2);
+                childCallCount2++;
+            };
+            control.BackColorChanged += handler;
+            child1.BackColorChanged += childHandler1;
+            child2.BackColorChanged += childHandler2;
+
+            // Set different.
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Red, child1.BackColor);
+            Assert.Equal(Color.Red, child2.BackColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+
+            // Set same.
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Red, child1.BackColor);
+            Assert.Equal(Color.Red, child2.BackColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+
+            // Set different.
+            control.BackColor = Color.Empty;
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Equal(Control.DefaultBackColor, child1.BackColor);
+            Assert.Equal(Control.DefaultBackColor, child2.BackColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, childCallCount1);
+            Assert.Equal(2, childCallCount2);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            child1.BackColorChanged -= childHandler1;
+            child2.BackColorChanged -= childHandler2;
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Red, child1.BackColor);
+            Assert.Equal(Color.Red, child2.BackColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, childCallCount1);
+            Assert.Equal(2, childCallCount2);
+        }
+
+        [Fact]
+        public void Control_BackColor_SetWithChildrenWithBackColorWithHandler_CallsBackColorChanged()
+        {
+            var child1 = new Control
+            {
+                BackColor = Color.Yellow
+            };
+            var child2 = new Control
+            {
+                BackColor = Color.YellowGreen
+            };
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                childCallCount1++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                childCallCount2++;
+            };
+            control.BackColorChanged += handler;
+            child1.BackColorChanged += childHandler1;
+            child2.BackColorChanged += childHandler2;
+
+            // Set different.
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Yellow, child1.BackColor);
+            Assert.Equal(Color.YellowGreen, child2.BackColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Set same.
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Yellow, child1.BackColor);
+            Assert.Equal(Color.YellowGreen, child2.BackColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Set different.
+            control.BackColor = Color.Empty;
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Equal(Color.Yellow, child1.BackColor);
+            Assert.Equal(Color.YellowGreen, child2.BackColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            child1.BackColorChanged -= childHandler1;
+            child2.BackColorChanged -= childHandler2;
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Yellow, child1.BackColor);
+            Assert.Equal(Color.YellowGreen, child2.BackColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+        }
+
+        [Fact]
+        public void Control_BackColor_SetTransparent_ThrowsArgmentException()
+        {
+            var control = new Control();
+            Assert.Throws<ArgumentException>(null, () => control.BackColor = Color.FromArgb(254, 1, 2, 3));
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void Control_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
@@ -1341,10 +1667,120 @@ namespace System.Windows.Forms.Tests
                 ForeColor = value
             };
             Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ForeColor = value;
             Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        public void Control_ForeColor_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
+        {
+            var control = new Control
+            {
+                ForeColor = Color.YellowGreen
+            };
+
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        public void Control_ForeColor_SetWithChildren_GetReturnsExpected(Color value, Color expected)
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.Equal(expected, child1.ForeColor);
+            Assert.Equal(expected, child2.ForeColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.Equal(expected, child1.ForeColor);
+            Assert.Equal(expected, child2.ForeColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        public void Control_ForeColor_SetWithChildrenWithColor_GetReturnsExpected(Color value, Color expected)
+        {
+            var child1 = new Control
+            {
+                ForeColor = Color.Yellow
+            };
+            var child2 = new Control
+            {
+                ForeColor = Color.YellowGreen
+            };
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.Equal(Color.Yellow, child1.ForeColor);
+            Assert.Equal(Color.YellowGreen, child2.ForeColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.Equal(Color.Yellow, child1.ForeColor);
+            Assert.Equal(Color.YellowGreen, child2.ForeColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ForeColor_SetWithHandle_TestData()
+        {
+            yield return new object[] { Color.Red, Color.Red, 1 };
+            yield return new object[] { Color.Empty, Control.DefaultForeColor, 0 };
+        }
+
+        [Theory]
+        [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
+        public void Control_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
@@ -1382,6 +1818,191 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
+        [Fact]
+        public void Control_ForeColor_SetWithHandlerInDisposing_DoesNotCallForeColorChanged()
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.ForeColorChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.ForeColor = Color.Red;
+                Assert.Equal(Color.Red, control.ForeColor);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [Fact]
+        public void Control_ForeColor_SetWithChildrenWithHandler_CallsForeColorChanged()
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount, childCallCount1);
+                Assert.Equal(childCallCount1, childCallCount2);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount - 1, childCallCount1);
+                Assert.Equal(childCallCount1, childCallCount2);
+                childCallCount1++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount, childCallCount1);
+                Assert.Equal(childCallCount1 - 1, childCallCount2);
+                childCallCount2++;
+            };
+            control.ForeColorChanged += handler;
+            child1.ForeColorChanged += childHandler1;
+            child2.ForeColorChanged += childHandler2;
+
+            // Set different.
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(Color.Red, child1.ForeColor);
+            Assert.Equal(Color.Red, child2.ForeColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+
+            // Set same.
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(Color.Red, child1.ForeColor);
+            Assert.Equal(Color.Red, child2.ForeColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+
+            // Set different.
+            control.ForeColor = Color.Empty;
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Equal(Control.DefaultForeColor, child1.ForeColor);
+            Assert.Equal(Control.DefaultForeColor, child2.ForeColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, childCallCount1);
+            Assert.Equal(2, childCallCount2);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            child1.ForeColorChanged -= childHandler1;
+            child2.ForeColorChanged -= childHandler2;
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(Color.Red, child1.ForeColor);
+            Assert.Equal(Color.Red, child2.ForeColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, childCallCount1);
+            Assert.Equal(2, childCallCount2);
+        }
+
+        [Fact]
+        public void Control_ForeColor_SetWithChildrenWithForeColorWithHandler_CallsForeColorChanged()
+        {
+            var child1 = new Control
+            {
+                ForeColor = Color.Yellow
+            };
+            var child2 = new Control
+            {
+                ForeColor = Color.YellowGreen
+            };
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                childCallCount1++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                childCallCount2++;
+            };
+            control.ForeColorChanged += handler;
+            child1.ForeColorChanged += childHandler1;
+            child2.ForeColorChanged += childHandler2;
+
+            // Set different.
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(Color.Yellow, child1.ForeColor);
+            Assert.Equal(Color.YellowGreen, child2.ForeColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Set same.
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(Color.Yellow, child1.ForeColor);
+            Assert.Equal(Color.YellowGreen, child2.ForeColor);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Set different.
+            control.ForeColor = Color.Empty;
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Equal(Color.Yellow, child1.ForeColor);
+            Assert.Equal(Color.YellowGreen, child2.ForeColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            child1.ForeColorChanged -= childHandler1;
+            child2.ForeColorChanged -= childHandler2;
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(Color.Yellow, child1.ForeColor);
+            Assert.Equal(Color.YellowGreen, child2.ForeColor);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+        }
+
         #endregion
 
         #region ImageLayout
@@ -1394,11 +2015,100 @@ namespace System.Windows.Forms.Tests
             {
                 BackgroundImage = value
             };
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> BackgroundImage_SetWithHandle_TestData()
+        {
+            yield return new object[] { new Bitmap(10, 10), 1 };
+            yield return new object[] { null, 0 };
+        }
+
+        [Theory]
+        [MemberData(nameof(BackgroundImage_SetWithHandle_TestData))]
+        public void Control_BackgroundImage_SetWithHandle_GetReturnsExpected(Image value, int expectedInvalidatedCallCount)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.BackgroundImage = value;
+            Assert.Same(value, control.BackgroundImage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.BackgroundImage = value;
+            Assert.Same(value, control.BackgroundImage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        public void Control_BackgroundImage_SetWithChildren_GetReturnsExpected(Image value)
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.BackgroundImage = value;
+            Assert.Same(value, control.BackgroundImage);
+            Assert.Null(child1.BackgroundImage);
+            Assert.Null(child2.BackgroundImage);
+
+            // Set same.
+            control.BackgroundImage = value;
+            Assert.Same(value, control.BackgroundImage);
+            Assert.Null(child1.BackgroundImage);
+            Assert.Null(child2.BackgroundImage);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        public void Control_BackgroundImage_SetWithChildrenWithBackgroundImage_GetReturnsExpected(Image value)
+        {
+            var image1 = new Bitmap(10, 10);
+            var image2 = new Bitmap(10, 10);
+            var child1 = new Control
+            {
+                BackgroundImage = image1
+            };
+            var child2 = new Control
+            {
+                BackgroundImage = image2
+            };
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.BackgroundImage = value;
+            Assert.Same(value, control.BackgroundImage);
+            Assert.Same(image1, child1.BackgroundImage);
+            Assert.Same(image2, child2.BackgroundImage);
+
+            // Set same.
+            control.BackgroundImage = value;
+            Assert.Same(value, control.BackgroundImage);
+            Assert.Same(image1, child1.BackgroundImage);
+            Assert.Same(image2, child2.BackgroundImage);
         }
 
         [Fact]
@@ -1443,6 +2153,210 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
+        [Fact]
+        public void Control_BackgroundImage_SetWithHandlerInDisposing_DoesNotCallBackgroundImageChanged()
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.BackgroundImageChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                var value = new Bitmap(10, 10);
+                control.BackgroundImage = value;
+                Assert.Same(value, control.BackgroundImage);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [Fact]
+        public void Control_BackgroundImage_SetWithChildrenWithHandler_CallsBackgroundImageChanged()
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child2CallCount++;
+            };
+            control.BackgroundImageChanged += handler;
+            child1.BackgroundImageChanged += childHandler1;
+            child2.BackgroundImageChanged += childHandler2;
+
+            // Set different.
+            var image1 = new Bitmap(10, 10);
+            control.BackgroundImage = image1;
+            Assert.Same(image1, control.BackgroundImage);
+            Assert.Null(child1.BackgroundImage);
+            Assert.Null(child2.BackgroundImage);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Set same.
+            control.BackgroundImage = image1;
+            Assert.Same(image1, control.BackgroundImage);
+            Assert.Null(child1.BackgroundImage);
+            Assert.Null(child2.BackgroundImage);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Set different.
+            var image2 = new Bitmap(10, 10);
+            control.BackgroundImage = image2;
+            Assert.Same(image2, control.BackgroundImage);
+            Assert.Null(child1.BackgroundImage);
+            Assert.Null(child2.BackgroundImage);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
+
+            // Set null.
+            control.BackgroundImage = null;
+            Assert.Null(control.BackgroundImage);
+            Assert.Null(child1.BackgroundImage);
+            Assert.Null(child2.BackgroundImage);
+            Assert.Equal(3, callCount);
+            Assert.Equal(3, child1CallCount);
+            Assert.Equal(3, child2CallCount);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            child1.BackgroundImageChanged -= childHandler1;
+            child2.BackgroundImageChanged -= childHandler2;
+            control.BackgroundImage = image1;
+            Assert.Same(image1, control.BackgroundImage);
+            Assert.Null(child1.BackgroundImage);
+            Assert.Null(child2.BackgroundImage);
+            Assert.Equal(3, callCount);
+            Assert.Equal(3, child1CallCount);
+            Assert.Equal(3, child2CallCount);
+        }
+
+        [Fact]
+        public void Control_BackgroundImage_SetWithChildrenWithBackgroundImageWithHandler_CallsBackgroundImageChanged()
+        {
+            var childBackgroundImage1 = new Bitmap(10, 10);
+            var childBackgroundImage2 = new Bitmap(10, 10);
+            var child1 = new Control
+            {
+                BackgroundImage = childBackgroundImage1
+            };
+            var child2 = new Control
+            {
+                BackgroundImage = childBackgroundImage2
+            };
+            var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child2CallCount++;
+            };
+            control.BackgroundImageChanged += handler;
+            child1.BackgroundImageChanged += childHandler1;
+            child2.BackgroundImageChanged += childHandler2;
+
+            // Set different.
+            var image1 = new Bitmap(10, 10);
+            control.BackgroundImage = image1;
+            Assert.Same(image1, control.BackgroundImage);
+            Assert.Same(childBackgroundImage1, child1.BackgroundImage);
+            Assert.Same(childBackgroundImage2, child2.BackgroundImage);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Set same.
+            control.BackgroundImage = image1;
+            Assert.Same(image1, control.BackgroundImage);
+            Assert.Same(childBackgroundImage1, child1.BackgroundImage);
+            Assert.Same(childBackgroundImage2, child2.BackgroundImage);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Set different.
+            var image2 = new Bitmap(10, 10);
+            control.BackgroundImage = image2;
+            Assert.Same(image2, control.BackgroundImage);
+            Assert.Same(childBackgroundImage1, child1.BackgroundImage);
+            Assert.Same(childBackgroundImage2, child2.BackgroundImage);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
+
+            // Set null.
+            control.BackgroundImage = null;
+            Assert.Null(control.BackgroundImage);
+            Assert.Same(childBackgroundImage1, child1.BackgroundImage);
+            Assert.Same(childBackgroundImage2, child2.BackgroundImage);
+            Assert.Equal(3, callCount);
+            Assert.Equal(3, child1CallCount);
+            Assert.Equal(3, child2CallCount);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            child1.BackgroundImageChanged -= childHandler1;
+            child2.BackgroundImageChanged -= childHandler2;
+            control.BackgroundImage = image1;
+            Assert.Same(image1, control.BackgroundImage);
+            Assert.Same(childBackgroundImage1, child1.BackgroundImage);
+            Assert.Same(childBackgroundImage2, child2.BackgroundImage);
+            Assert.Equal(3, callCount);
+            Assert.Equal(3, child1CallCount);
+            Assert.Equal(3, child2CallCount);
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void Control_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
@@ -1453,11 +2367,48 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.BackgroundImageLayout);
             Assert.False(control.DoubleBuffered);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImageLayout = value;
             Assert.Equal(value, control.BackgroundImageLayout);
             Assert.False(control.DoubleBuffered);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [InlineData(ImageLayout.Center, 1)]
+        [InlineData(ImageLayout.None, 1)]
+        [InlineData(ImageLayout.Stretch, 1)]
+        [InlineData(ImageLayout.Tile, 0)]
+        [InlineData(ImageLayout.Zoom, 1)]
+        public void Control_BackgroundImageLayout_SetWithHandle_GetReturnsExpected(ImageLayout value, int expectedInvalidatedCallCount)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.BackgroundImageLayout = value;
+            Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.DoubleBuffered);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.BackgroundImageLayout = value;
+            Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.DoubleBuffered);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> BackgroundImageLayout_SetWithBackgroundImage_TestData()
@@ -1526,6 +2477,31 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageLayout = ImageLayout.Center;
             Assert.Equal(ImageLayout.Center, control.BackgroundImageLayout);
             Assert.Equal(2, callCount);
+        }
+
+        [Fact]
+        public void Control_BackgroundImageLayout_SetWithHandlerInDisposing_DoesNotCallBackgroundImageLayoutChanged()
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.BackgroundImageLayoutChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.BackgroundImageLayout = ImageLayout.Center;
+                Assert.Equal(ImageLayout.Center, control.BackgroundImageLayout);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
         }
 
         [Theory]
@@ -5028,7 +6004,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.IsTopMdiWindowClosing);
         }
 
-
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
         public void Control_Cursor_Set_GetReturnsExpected(Cursor value)
@@ -5350,16 +6325,59 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.DoubleBuffered);
             Assert.Equal(value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.DoubleBuffered = value;
             Assert.Equal(value, control.DoubleBuffered);
             Assert.Equal(value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.DoubleBuffered = !value;
             Assert.Equal(!value, control.DoubleBuffered);
             Assert.Equal(!value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.DoubleBuffered = value;
+            Assert.Equal(value, control.DoubleBuffered);
+            Assert.Equal(value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.DoubleBuffered = value;
+            Assert.Equal(value, control.DoubleBuffered);
+            Assert.Equal(value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.DoubleBuffered = !value;
+            Assert.Equal(!value, control.DoubleBuffered);
+            Assert.Equal(!value, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Theory]
@@ -6048,6 +7066,616 @@ namespace System.Windows.Forms.Tests
         {
             var control = new SubControl();
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BackColorChanged += handler;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler =(sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.BackColorChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void Control_OnBackColorChanged_InvokeInDisposing_DoesNotCallBackColorChanged()
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.BackColorChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnBackColorChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackColorChanged_InvokeWithChildren_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.BackColorChanged += handler;
+            child1.BackColorChanged += childHandler1;
+            child2.BackColorChanged += childHandler2;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            child1.BackColorChanged -= childHandler1;
+            child2.BackColorChanged -= childHandler2;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackColorChanged_InvokeWithChildrenWithBackColor_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control
+            {
+                BackColor = Color.Yellow
+            };
+            var child2 = new Control
+            {
+                BackColor = Color.YellowGreen
+            };
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.BackColorChanged += handler;
+            child1.BackColorChanged += childHandler1;
+            child2.BackColorChanged += childHandler2;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            child1.BackColorChanged -= childHandler1;
+            child2.BackColorChanged -= childHandler2;
+            control.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageChanged_Invoke_CallsBackgroundImageChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageChanged += handler;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageChanged_InvokeWithHandle_CallsBackgroundImageChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.BackgroundImageChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void Control_OnBackgroundImageChanged_InvokeInDisposing_DoesNotCallBackgroundImageChanged()
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.BackgroundImageChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnBackgroundImageChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageChanged_InvokeWithChildren_CallsBackgroundImageChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageChanged += handler;
+            child1.BackgroundImageChanged += childHandler1;
+            child2.BackgroundImageChanged += childHandler2;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            child1.BackgroundImageChanged -= childHandler1;
+            child2.BackgroundImageChanged -= childHandler2;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageChanged_InvokeWithChildrenWithBackgroundImage_CallsBackgroundImageChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control
+            {
+                BackgroundImage = new Bitmap(10, 10)
+            };
+            var child2 = new Control
+            {
+                BackgroundImage = new Bitmap(10, 10)
+            };
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageChanged += handler;
+            child1.BackgroundImageChanged += childHandler1;
+            child2.BackgroundImageChanged += childHandler2;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            child1.BackgroundImageChanged -= childHandler1;
+            child2.BackgroundImageChanged -= childHandler2;
+            control.OnBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+        }
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageLayoutChanged_Invoke_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageLayoutChanged += handler;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.BackgroundImageLayoutChanged -= handler;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageLayoutChanged_InvokeWithHandle_CallsBackgroundImageLayoutChangedAndInvalidated(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.BackgroundImageLayoutChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.BackgroundImageLayoutChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildren_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageLayoutChanged += handler;
+            child1.BackgroundImageLayoutChanged += childHandler1;
+            child2.BackgroundImageLayoutChanged += childHandler2;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+
+            // Remove handler.
+            control.BackgroundImageLayoutChanged -= handler;
+            child1.BackgroundImageLayoutChanged -= childHandler1;
+            child2.BackgroundImageLayoutChanged -= childHandler2;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildrenWithBackgroundImageLayout_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control
+            {
+                BackgroundImageLayout = ImageLayout.Center
+            };
+            var child2 = new Control
+            {
+                BackgroundImageLayout = ImageLayout.Center
+            };
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageLayoutChanged += handler;
+            child1.BackgroundImageLayoutChanged += childHandler1;
+            child2.BackgroundImageLayoutChanged += childHandler2;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+
+            // Remove handler.
+            control.BackgroundImageLayoutChanged -= handler;
+            child1.BackgroundImageLayoutChanged -= childHandler1;
+            child2.BackgroundImageLayoutChanged -= childHandler2;
+            control.OnBackgroundImageLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+        }
+
+        [Fact]
+        public void Control_OnBackgroundImageLayoutChanged_InvokeInDisposing_DoesNotCallBackgroundImageLayoutChanged()
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.BackgroundImageLayoutChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnBackgroundImageLayoutChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
         }
 
         [Theory]
@@ -6800,12 +8428,14 @@ namespace System.Windows.Forms.Tests
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.FontChanged -= handler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
@@ -6829,12 +8459,14 @@ namespace System.Windows.Forms.Tests
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.FontChanged -= handler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
@@ -6853,21 +8485,35 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            InvalidateEventHandler invalidatedHandler =(sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.FontChanged += handler;
             control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.FontChanged -= handler;
             control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
         }
 
         [Theory]
@@ -6888,6 +8534,10 @@ namespace System.Windows.Forms.Tests
             };
             int invalidatedCallCount = 0;
             InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.FontChanged += handler;
@@ -6895,6 +8545,9 @@ namespace System.Windows.Forms.Tests
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.FontChanged -= handler;
@@ -6902,6 +8555,9 @@ namespace System.Windows.Forms.Tests
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
         }
 
         [Theory]
@@ -7009,6 +8665,209 @@ namespace System.Windows.Forms.Tests
             child1.FontChanged -= childHandler1;
             child2.FontChanged -= childHandler2;
             control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.ForeColorChanged += handler;
+            control.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            control.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnForeColorChanged_InvokeWithHandle_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.ForeColorChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void Control_OnForeColorChanged_InvokeInDisposing_DoesNotCallForeColorChanged()
+        {
+            var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.ForeColorChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnForeColorChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnForeColorChanged_InvokeWithChildren_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control();
+            var child2 = new Control();
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.ForeColorChanged += handler;
+            child1.ForeColorChanged += childHandler1;
+            child2.ForeColorChanged += childHandler2;
+            control.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            child1.ForeColorChanged -= childHandler1;
+            child2.ForeColorChanged -= childHandler2;
+            control.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnForeColorChanged_InvokeWithChildrenWithForeColor_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            var child1 = new Control
+            {
+                ForeColor = Color.Yellow
+            };
+            var child2 = new Control
+            {
+                ForeColor = Color.YellowGreen
+            };
+            var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.ForeColorChanged += handler;
+            child1.ForeColorChanged += childHandler1;
+            child2.ForeColorChanged += childHandler2;
+            control.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            child1.ForeColorChanged -= childHandler1;
+            child2.ForeColorChanged -= childHandler2;
+            control.OnForeColorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
             Assert.Equal(0, child2CallCount);
@@ -8273,6 +10132,111 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BackColorChanged += handler;
+            control.OnParentBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            control.OnParentBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentBackColorChanged_InvokeWithBackColor_DoesNotCallBackColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl
+            {
+                BackColor = Color.Red
+            };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BackColorChanged += handler;
+            control.OnParentBackColorChanged(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            control.BackColorChanged -= handler;
+            control.OnParentBackColorChanged(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentBackgroundImageChanged_Invoke_CallsBackgroundImageChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageChanged += handler;
+            control.OnParentBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            control.OnParentBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentBackgroundImageChanged_InvokeWithBackgroundImage_CallsBackgroundImageChanged(EventArgs eventArgs)
+        {
+            var image = new Bitmap(10, 10);
+            var control = new SubControl
+            {
+                BackgroundImage = image
+            };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BackgroundImageChanged += handler;
+            control.OnParentBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.BackgroundImageChanged -= handler;
+            control.OnParentBackgroundImageChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentBindingContextChanged_Invoke_CallsBindingContextChanged(EventArgs eventArgs)
         {
             var control = new SubControl();
@@ -8426,6 +10390,111 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.EnabledChanged -= handler;
             control.OnParentEnabledChanged(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.FontChanged += handler;
+            control.OnParentFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.OnParentFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentFontChanged_InvokeWithFont_DoesNotCallFontChanged(EventArgs eventArgs)
+        {
+            var font = new Font("Arial", 8.25f);
+            var control = new SubControl
+            {
+                Font = font
+            };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.FontChanged += handler;
+            control.OnParentFontChanged(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.OnParentFontChanged(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.ForeColorChanged += handler;
+            control.OnParentForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            control.OnParentForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnParentForeColorChanged_InvokeWithForeColor_DoesNotCallForeColorChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl
+            {
+                ForeColor = Color.Red
+            };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.ForeColorChanged += handler;
+            control.OnParentForeColorChanged(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            control.OnParentForeColorChanged(eventArgs);
             Assert.Equal(0, callCount);
         }
 
@@ -8602,6 +10671,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
         }
 
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnStyleChanged_Invoke_CallsStyleChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.StyleChanged += handler;
+            control.OnStyleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           control.StyleChanged -= handler;
+           control.OnStyleChanged(eventArgs);
+           Assert.Equal(1, callCount);
+        }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
@@ -8881,6 +10973,60 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("System.Windows.Forms.Control", control.ToString());
         }
 
+        [Fact]
+        public void Control_UpdateStyles_InvokeWithoutHandle_Success()
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.StyleChanged += handler;
+            control.UpdateStyles();
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.StyleChanged -= handler;
+            control.UpdateStyles();
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void Control_UpdateStyles_InvokeWithHandle_Success()
+        {
+            var control = new SubControl();
+            IntPtr handle = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.StyleChanged += handler;
+            control.UpdateStyles();
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(handle, control.Handle);
+
+            // Remove handler.
+            control.StyleChanged -= handler;
+            control.UpdateStyles();
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(handle, control.Handle);
+        }
+
         private class SubControl : Control
         {
             public SubControl() : base()
@@ -8961,6 +11107,12 @@ namespace System.Windows.Forms.Tests
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
+            public new void OnBackColorChanged(EventArgs e) => base.OnBackColorChanged(e);
+
+            public new void OnBackgroundImageChanged(EventArgs e) => base.OnBackgroundImageChanged(e);
+
+            public new void OnBackgroundImageLayoutChanged(EventArgs e) => base.OnBackgroundImageLayoutChanged(e);
+
             public new void OnBindingContextChanged(EventArgs e) => base.OnBindingContextChanged(e);
 
             public new void OnCausesValidationChanged(EventArgs e) => base.OnCausesValidationChanged(e);
@@ -8990,6 +11142,8 @@ namespace System.Windows.Forms.Tests
             public new void OnEnter(EventArgs e) => base.OnEnter(e);
 
             public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
+
+            public new void OnForeColorChanged(EventArgs e) => base.OnForeColorChanged(e);
 
             public new void OnGiveFeedback(GiveFeedbackEventArgs e) => base.OnGiveFeedback(e);
 
@@ -9035,11 +11189,19 @@ namespace System.Windows.Forms.Tests
 
             public new void OnParentChanged(EventArgs e) => base.OnParentChanged(e);
 
+            public new void OnParentBackColorChanged(EventArgs e) => base.OnParentBackColorChanged(e);
+
+            public new void OnParentBackgroundImageChanged(EventArgs e) => base.OnParentBackgroundImageChanged(e);
+
             public new void OnParentBindingContextChanged(EventArgs e) => base.OnParentBindingContextChanged(e);
 
             public new void OnParentCursorChanged(EventArgs e) => base.OnParentCursorChanged(e);
 
             public new void OnParentEnabledChanged(EventArgs e) => base.OnParentEnabledChanged(e);
+
+            public new void OnParentFontChanged(EventArgs e) => base.OnParentFontChanged(e);
+
+            public new void OnParentForeColorChanged(EventArgs e) => base.OnParentForeColorChanged(e);
 
             public new void OnParentVisibleChanged(EventArgs e) => base.OnParentVisibleChanged(e);
 
@@ -9049,6 +11211,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnResize(EventArgs e) => base.OnResize(e);
 
+            public new void OnStyleChanged(EventArgs e) => base.OnStyleChanged(e);
+
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
 
             public new void RecreateHandle() => base.RecreateHandle();
@@ -9056,6 +11220,8 @@ namespace System.Windows.Forms.Tests
             public new void ResetMouseEventArgs() => base.ResetMouseEventArgs();
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+
+            public new void UpdateStyles() => base.UpdateStyles();
         }
     }
 }

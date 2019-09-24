@@ -95,21 +95,58 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(BackColor_Set_TestData))]
-        public void BackColor_Set_GetReturnsExpected(Color value, Color expected)
+        public void ComboBox_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             var control = new ComboBox
             {
                 BackColor = value
             };
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> BackColor_SetWithHandle_TestData()
+        {
+            yield return new object[] { Color.Empty, SystemColors.Window, 0 };
+            yield return new object[] { Color.Red, Color.Red, 1 };
+        }
+
+        [Theory]
+        [MemberData(nameof(BackColor_SetWithHandle_TestData))]
+        public void ComboBox_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            var control = new ComboBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
-        public void BackColor_SetWithHandler_CallsBackColorChanged()
+        public void ComboBox_BackColor_SetWithHandler_CallsBackColorChanged()
         {
             var control = new ComboBox();
             int callCount = 0;
@@ -408,26 +445,65 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ForeColor_Set_TestData()
         {
             yield return new object[] { Color.Empty, SystemColors.WindowText };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
             yield return new object[] { Color.Red, Color.Red };
         }
 
         [Theory]
         [MemberData(nameof(ForeColor_Set_TestData))]
-        public void ForeColor_Set_GetReturnsExpected(Color value, Color expected)
+        public void ComboBox_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             var control = new ComboBox
             {
                 ForeColor = value
             };
             Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ForeColor = value;
             Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ForeColor_SetWithHandle_TestData()
+        {
+            yield return new object[] { Color.Empty, SystemColors.WindowText, 0 };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3), 1 };
+            yield return new object[] { Color.Red, Color.Red, 1 };
+        }
+
+        [Theory]
+        [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
+        public void ComboBox_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            var control = new ComboBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
-        public void ForeColor_SetWithHandler_CallsForeColorChanged()
+        public void ComboBox_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
             var control = new ComboBox();
             int callCount = 0;
