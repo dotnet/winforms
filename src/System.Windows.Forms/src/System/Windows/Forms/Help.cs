@@ -202,7 +202,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                handle = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
+                handle = new HandleRef(null, User32.GetActiveWindow());
             }
 
             object htmlParam;
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                handle = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
+                handle = new HandleRef(null, User32.GetActiveWindow());
             }
 
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "\tExecuting '" + file.ToString() + "'");

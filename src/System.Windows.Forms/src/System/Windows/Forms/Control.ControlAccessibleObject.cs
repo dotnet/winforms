@@ -403,7 +403,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = self");
 
-                UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, 0);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), User32.OBJID.CLIENT, 0);
             }
 
             public void NotifyClients(AccessibleEvents accEvent, int childID)
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
-                UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, childID + 1);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), User32.OBJID.CLIENT, childID + 1);
             }
 
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID)
@@ -419,7 +419,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
-                UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
             }
 
             /// <summary>

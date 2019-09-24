@@ -1087,7 +1087,7 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+                IntPtr hwndFocus = User32.GetFocus();
                 return hwndFocus != IntPtr.Zero
                     && SafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(null, hwndFocus));
             }

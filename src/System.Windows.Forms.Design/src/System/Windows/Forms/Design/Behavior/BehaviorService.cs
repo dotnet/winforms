@@ -543,9 +543,9 @@ namespace System.Windows.Forms.Design.Behavior
             if (uiService != null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != UnsafeNativeMethods.GetActiveWindow())
+                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
                 {
-                    UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, hwnd.Handle));
+                    User32.SetActiveWindow(hwnd.Handle);
                 }
             }
         }

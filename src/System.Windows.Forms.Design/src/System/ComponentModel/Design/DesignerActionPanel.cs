@@ -2451,11 +2451,11 @@ namespace System.ComponentModel.Design
                     {
                         UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
                         // Lifted directly from Form.ShowDialog()...
-                        IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
+                        IntPtr hWndCapture = User32.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
                         {
                             UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, 0, 0);
-                            SafeNativeMethods.ReleaseCapture();
+                            User32.ReleaseCapture();
                         }
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
                         FocusComponent();
@@ -2537,9 +2537,6 @@ namespace System.ComponentModel.Design
 
             private static class SafeNativeMethods
             {
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern bool ReleaseCapture();
-
                 [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
             }
@@ -2557,9 +2554,6 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
-
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern IntPtr GetCapture();
             }
             #endregion
 

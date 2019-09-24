@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Design
             {
                 if (selSvc.PrimarySelection is Control ctrl && !ctrl.IsDisposed)
                 {
-                    UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), NativeMethods.OBJID_CLIENT, 0);
+                    User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
                 }
             }
         }

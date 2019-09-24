@@ -391,7 +391,7 @@ namespace System.Windows.Forms
             {
                 if (owner == null)
                 {
-                    handle = UnsafeNativeMethods.GetActiveWindow();
+                    handle = User32.GetActiveWindow();
                 }
                 else
                 {

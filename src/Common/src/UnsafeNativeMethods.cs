@@ -182,9 +182,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr CallNextHookEx(HandleRef hhook, int code, IntPtr wparam, IntPtr lparam);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ScreenToClient(HandleRef hWnd, ref Point pt);
-
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
 
@@ -230,15 +227,6 @@ namespace System.Windows.Forms
         public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetCapture();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetCapture(HandleRef hwnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetFocus();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
@@ -276,9 +264,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
         public static extern bool ImmNotifyIME(HandleRef hIMC, int dwAction, int dwIndex, int dwValue);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetFocus(HandleRef hWnd);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetParent(HandleRef hWnd);
@@ -593,9 +578,6 @@ namespace System.Windows.Forms
         public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int ClientToScreen(HandleRef hWnd, ref Point lpPoint);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetForegroundWindow();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -618,9 +600,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern void NotifyWinEvent(int winEvent, HandleRef hwnd, int objType, int objID);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetMenuItemID(HandleRef hMenu, int nPos);
@@ -651,9 +630,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int SetScrollInfo(HandleRef hWnd, int fnBar, NativeMethods.SCROLLINFO si, bool redraw);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetActiveWindow();
 
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
         //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should

@@ -467,7 +467,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (_lastMouseAbs != null)
             {
                 var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
+                User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
                 if (mouseLocAbs.X == _lastMouseAbs.X && mouseLocAbs.Y == _lastMouseAbs.Y)
                 {
                     return true;
@@ -530,7 +530,7 @@ namespace System.Windows.Forms.Design.Behavior
             Control targetControl = _resizeComponents[0].resizeControl as Control;
             _lastMouseLoc = mouseLoc;
             _lastMouseAbs = new Point(mouseLoc.X, mouseLoc.Y);
-            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref _lastMouseAbs);
+            User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref _lastMouseAbs);
             int minHeight = Math.Max(targetControl.MinimumSize.Height, MINSIZE);
             int minWidth = Math.Max(targetControl.MinimumSize.Width, MINSIZE);
             if (_dragManager != null)

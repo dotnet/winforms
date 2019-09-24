@@ -4000,7 +4000,7 @@ namespace System.Windows.Forms
                                 IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
                                 if (hWndParent != IntPtr.Zero)
                                 {
-                                    UnsafeNativeMethods.SetFocus(new HandleRef(null, hWndParent));
+                                    User32.SetFocus(hWndParent);
                                 }
                             }
                             return result;

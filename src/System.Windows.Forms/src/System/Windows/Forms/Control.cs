@@ -525,7 +525,7 @@ namespace System.Windows.Forms
                 AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(s_ncAccessibilityProperty);
                 if (ncAccessibleObject == null)
                 {
-                    ncAccessibleObject = new ControlAccessibleObject(this, NativeMethods.OBJID_WINDOW);
+                    ncAccessibleObject = new ControlAccessibleObject(this, User32.OBJID.WINDOW);
                     Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
                 }
 
@@ -544,10 +544,10 @@ namespace System.Windows.Forms
 
             switch (accObjId)
             {
-                case NativeMethods.OBJID_CLIENT:
+                case User32.OBJID.CLIENT:
                     accessibleObject = AccessibilityObject;
                     break;
-                case NativeMethods.OBJID_WINDOW:
+                case User32.OBJID.WINDOW:
                     accessibleObject = NcAccessibilityObject;
                     break;
                 default:
@@ -1252,18 +1252,18 @@ namespace System.Windows.Forms
 
         internal bool CaptureInternal
         {
-            get => IsHandleCreated && UnsafeNativeMethods.GetCapture() == Handle;
+            get => IsHandleCreated && User32.GetCapture() == Handle;
             set
             {
                 if (CaptureInternal != value)
                 {
                     if (value)
                     {
-                        UnsafeNativeMethods.SetCapture(new HandleRef(this, Handle));
+                        User32.SetCapture(new HandleRef(this, Handle));
                     }
                     else
                     {
-                        SafeNativeMethods.ReleaseCapture();
+                        User32.ReleaseCapture();
                     }
                 }
             }
@@ -1424,7 +1424,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                IntPtr focusHwnd = UnsafeNativeMethods.GetFocus();
+                IntPtr focusHwnd = User32.GetFocus();
 
                 if (focusHwnd == IntPtr.Zero)
                 {
@@ -1845,7 +1845,7 @@ namespace System.Windows.Forms
                     User32.GetCursorPos(out Point p);
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
-                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                     {
                         SendMessage(WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                     }
@@ -2172,7 +2172,7 @@ namespace System.Windows.Forms
             SRDescription(nameof(SR.ControlFocusedDescr))
         ]
         public virtual bool Focused
-            => IsHandleCreated && UnsafeNativeMethods.GetFocus() == Handle;
+            => IsHandleCreated && User32.GetFocus() == Handle;
 
         /// <summary>
         ///  Retrieves the current font for this control. This will be the font used
@@ -4602,7 +4602,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID)
         {
-            AccessibilityNotifyClients(accEvent, NativeMethods.OBJID_CLIENT, childID);
+            AccessibilityNotifyClients(accEvent, User32.OBJID.CLIENT, childID);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4610,7 +4610,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
             }
         }
 
@@ -5613,7 +5613,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::FocusInternal - " + Name);
             if (CanFocus)
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
+                User32.SetFocus(new HandleRef(this, Handle));
             }
             if (Focused && ParentInternal != null)
             {

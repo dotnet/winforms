@@ -1174,7 +1174,7 @@ namespace System.Windows.Forms
                     {
                         if (TextBox.CanFocus)
                         {
-                            UnsafeNativeMethods.SetFocus(new HandleRef(TextBox, TextBox.Handle));
+                            User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
                         }
                         base.WndProc(ref m);
                     }

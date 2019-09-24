@@ -2675,7 +2675,7 @@ namespace System.Windows.Forms
             AddSelectionHandler();
             editMode = EDITM_HOST;
             SetSelectionStyle(2);
-            IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+            IntPtr hwndFocus = User32.GetFocus();
             try
             {
                 UiActivate();

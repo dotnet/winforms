@@ -254,7 +254,7 @@ namespace System.Windows.Forms.Design
                     if (c != null)
                     {
                         Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, traycontrol = " + c.ToString());
-                        UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), NativeMethods.OBJID_CLIENT, 0);
+                        User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
                     }
                 }
             }
@@ -265,7 +265,7 @@ namespace System.Windows.Forms.Design
                 if (c != null && IsHandleCreated)
                 {
                     ScrollControlIntoView(c);
-                    UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(c, c.Handle), NativeMethods.OBJID_CLIENT, 0);
+                    User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
                 }
                 if (glyphManager != null)
                 {

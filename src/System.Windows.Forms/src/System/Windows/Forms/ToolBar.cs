@@ -1757,7 +1757,7 @@ namespace System.Windows.Forms
                                 int x = Location.X + buttonRight + 1;
                                 int y = Location.Y + (ButtonSize.Height / 2);
                                 var leftTop = new Point(x, y);
-                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
+                                User32.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
 
                                 // Will the tooltip bleed off the top?
                                 if (leftTop.Y < SystemInformation.WorkingArea.Y)

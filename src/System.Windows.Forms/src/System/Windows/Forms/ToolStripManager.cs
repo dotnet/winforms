@@ -947,7 +947,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     _justEnteredMenuMode = true;
 #endif
-                    IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                    IntPtr hwndActive = User32.GetActiveWindow();
                     if (hwndActive != IntPtr.Zero)
                     {
                         ActiveHwndInternal = new HandleRef(this, hwndActive);
@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms
                     if (dropDown.AutoClose == false)
                     {
                         // store off the current active hwnd
-                        IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                        IntPtr hwndActive = User32.GetActiveWindow();
                         if (hwndActive != IntPtr.Zero)
                         {
                             ActiveHwndInternal = new HandleRef(this, hwndActive);
@@ -1403,7 +1403,7 @@ namespace System.Windows.Forms
                     return false;
                 }
                 HandleRef hwndActiveToolStrip = new HandleRef(activeToolStrip, activeToolStrip.Handle);
-                HandleRef hwndCurrentActiveWindow = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
+                HandleRef hwndCurrentActiveWindow = new HandleRef(null, User32.GetActiveWindow());
 
                 // if the active window has changed...
                 if (hwndCurrentActiveWindow.Handle != _lastActiveWindow.Handle)

@@ -313,7 +313,7 @@ namespace System.Drawing.Design
                 Rectangle r = new Rectangle();
                 FillRectWithCellBounds(focus.X, focus.Y, ref r);
                 Invalidate(Rectangle.Inflate(r, 5, 5));
-                UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(this, this.Handle), UnsafeNativeMethods.OBJID_CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
+                User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), User32.OBJID.CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
             }
 
             protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
@@ -340,7 +340,7 @@ namespace System.Drawing.Design
                 colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
                 CustomColorDialog dialog = new CustomColorDialog();
 
-                IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+                IntPtr hwndFocus = User32.GetFocus();
                 try
                 {
                     DialogResult result = dialog.ShowDialog();
@@ -358,7 +358,7 @@ namespace System.Drawing.Design
                 {
                     if (hwndFocus != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, hwndFocus));
+                        User32.SetFocus(hwndFocus);
                     }
                 }
             }
@@ -589,7 +589,7 @@ namespace System.Drawing.Design
                 {
                     // Convert from screen to client coordinates
                     var pt = new Point(x, y);
-                    UnsafeNativeMethods.ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
+                    User32.ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
 
                     int cell = ColorPalette.GetCellFromLocationMouse(pt.X, pt.Y);
                     if (cell != -1)
@@ -623,9 +623,8 @@ namespace System.Drawing.Design
                             ColorPalette.FillRectWithCellBounds(cellPt.X, cellPt.Y, ref rect);
 
                             // Translate rect to screen coordinates
-                            //
                             var pt = new Point(rect.X, rect.Y);
-                            UnsafeNativeMethods.ClientToScreen(new HandleRef(parent.ColorPalette, parent.ColorPalette.Handle), ref pt);
+                            User32.ClientToScreen(new HandleRef(parent.ColorPalette, parent.ColorPalette.Handle), ref pt);
 
                             return new Rectangle(pt.X, pt.Y, rect.Width, rect.Height);
                         }

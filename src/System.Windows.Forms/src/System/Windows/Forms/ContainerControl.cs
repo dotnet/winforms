@@ -644,10 +644,10 @@ namespace System.Windows.Forms
             if (_activeControl != null && _activeControl.Visible)
             {
                 // Avoid focus loops, especially with ComboBoxes.
-                IntPtr focusHandle = UnsafeNativeMethods.GetFocus();
+                IntPtr focusHandle = User32.GetFocus();
                 if (focusHandle == IntPtr.Zero || Control.FromChildHandle(focusHandle) != _activeControl)
                 {
-                    UnsafeNativeMethods.SetFocus(new HandleRef(_activeControl, _activeControl.Handle));
+                    User32.SetFocus(new HandleRef(_activeControl, _activeControl.Handle));
                 }
             }
             else
@@ -669,7 +669,7 @@ namespace System.Windows.Forms
 
                 if (cc != null && cc.Visible)
                 {
-                    UnsafeNativeMethods.SetFocus(new HandleRef(cc, cc.Handle));
+                    User32.SetFocus(new HandleRef(cc, cc.Handle));
                 }
             }
         }
@@ -691,7 +691,7 @@ namespace System.Windows.Forms
                 var clientRectangle = new RECT();
                 UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
                 var topLeftPoint = new Point();
-                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
+                User32.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
                 return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);
             }
             

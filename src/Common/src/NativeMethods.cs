@@ -1394,10 +1394,6 @@ namespace System.Windows.Forms
 
         public const int CHILDID_SELF = 0;
 
-        public const int OBJID_QUERYCLASSNAMEIDX = unchecked(unchecked((int)0xFFFFFFF4));
-        public const int OBJID_CLIENT = unchecked(unchecked((int)0xFFFFFFFC));
-        public const int OBJID_WINDOW = unchecked(unchecked((int)0x00000000));
-
         public const int UiaRootObjectId = -25;
         public const int UiaAppendRuntimeId = 3;
 

@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms.Design
 
                 case WindowMessages.WM_GETOBJECT:
                     // See "How to Handle WM_GETOBJECT" in MSDN
-                    if (NativeMethods.OBJID_CLIENT == unchecked((int)(long)m.LParam))
+                    if (unchecked((int)(long)m.LParam) == User32.OBJID.CLIENT)
                     {
                         Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
                         // Get an Lresult for the accessibility Object for this control
