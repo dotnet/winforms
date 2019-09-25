@@ -56,7 +56,7 @@ namespace System.Windows.Forms
 
                                 lock (internalSyncObject)
                                 {
-                                    SafeNativeMethods.InitCommonControls();
+                                    ComCtl32.InitCommonControls();
                                     nativeImageList = new ImageList.NativeImageList(
                                         SafeNativeMethods.ImageList_Read(new Ole32.GPStream(ms)));
                                 }

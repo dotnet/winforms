@@ -93,12 +93,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
 
-        [DllImport(ExternDll.Comctl32)]
-        public static extern void InitCommonControls();
-
-        [DllImport(ExternDll.Comctl32)]
-        public static extern bool InitCommonControlsEx(NativeMethods.INITCOMMONCONTROLSEX icc);
-
 #if DEBUG
         private static readonly ArrayList validImageListHandles = ArrayList.Synchronized(new ArrayList());
 

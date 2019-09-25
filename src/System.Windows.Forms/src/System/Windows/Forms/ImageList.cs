@@ -580,7 +580,7 @@ namespace System.Windows.Forms
 
             try
             {
-                SafeNativeMethods.InitCommonControls();
+                ComCtl32.InitCommonControls();
                 nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Create(imageSize.Width, imageSize.Height, flags, INITIAL_CAPACITY, GROWBY));
             }
             finally
