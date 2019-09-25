@@ -6,7 +6,7 @@ Releases happen once per month and are available for download below. We strongly
 
 ## Latest Stable Release
 
-- Download link to the [Installation Package (VSIX)](https://aka.ms/winforms-designer)
-- Release notes: [releasenotes.md](0.1/releasenotes.md)
-- Known issues: [knownissues.md](0.1/knownissues.md)
-- Getting started: [gettingstarted.md](0.1/gettingstarted.md)
+- [Download the VSIX](https://aka.ms/winforms-designer)
+- [Getting started](0.1/gettingstarted.md)
+- [Release notes](0.1/releasenotes.md)
+- [Known issues](0.1/knownissues.md)
