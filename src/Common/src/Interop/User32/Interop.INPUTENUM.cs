@@ -2,15 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
-namespace System.Windows.Forms
+internal static partial class Interop
 {
-    public enum SearchDirectionHint
+    internal static partial class User32
     {
-        Up = User32.VK.UP,
-        Down = User32.VK.DOWN,
-        Left = User32.VK.LEFT,
-        Right = User32.VK.RIGHT
+        public enum INPUTENUM : uint
+        {
+            MOUSE = 0,
+            KEYBOARD = 1,
+            HARDWARE = 2
+        }
     }
 }

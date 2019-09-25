@@ -488,12 +488,6 @@ namespace System.Windows.Forms
         IDM_PROPERTIES = 28,
         IDM_SAVEAS = 71;
 
-        public const int INPUT_KEYBOARD = 1;
-
-        public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
-        public const int KEYEVENTF_KEYUP = 0x0002;
-        public const int KEYEVENTF_UNICODE = 0x0004;
-
         public const int LB_ERR = (-1),
         LB_ERRSPACE = (-2),
         LBN_SELCHANGE = 1,
@@ -1251,26 +1245,7 @@ namespace System.Windows.Forms
         USERCLASSTYPE_APPNAME = 3,
         UOI_FLAGS = 1;
 
-        public const int VIEW_E_DRAW = unchecked((int)0x80040140),
-        VK_PRIOR = 0x21,
-        VK_NEXT = 0x22,
-        VK_LEFT = 0x25,
-        VK_UP = 0x26,
-        VK_RIGHT = 0x27,
-        VK_DOWN = 0x28,
-        VK_TAB = 0x09,
-        VK_SHIFT = 0x10,
-        VK_CONTROL = 0x11,
-        VK_MENU = 0x12,
-        VK_CAPITAL = 0x14,
-        VK_KANA = 0x15,
-        VK_ESCAPE = 0x1B,
-        VK_END = 0x23,
-        VK_HOME = 0x24,
-        VK_NUMLOCK = 0x90,
-        VK_SCROLL = 0x91,
-        VK_INSERT = 0x002D,
-        VK_DELETE = 0x002E;
+        public const int VIEW_E_DRAW = unchecked((int)0x80040140);
 
         public const int WH_JOURNALPLAYBACK = 1;
         public const int WH_GETMESSAGE = 3;
@@ -3030,59 +3005,6 @@ namespace System.Windows.Forms
             public int dwExtraInfo = 0;
         }
 
-        #region SendKeys SendInput functionality
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MOUSEINPUT
-        {
-            public int dx;
-            public int dy;
-            public int mouseData;
-            public int dwFlags;
-            public int time;
-            public IntPtr dwExtraInfo;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct KEYBDINPUT
-        {
-            public short wVk;
-            public short wScan;
-            public int dwFlags;
-            public int time;
-            public IntPtr dwExtraInfo;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct HARDWAREINPUT
-        {
-            public int uMsg;
-            public short wParamL;
-            public short wParamH;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct INPUT
-        {
-            public int type;
-            public INPUTUNION inputUnion;
-        }
-
-        // We need to split the field offset out into a union struct to avoid
-        // silent problems in 64 bit
-        [StructLayout(LayoutKind.Explicit)]
-        public struct INPUTUNION
-        {
-            [FieldOffset(0)]
-            public MOUSEINPUT mi;
-            [FieldOffset(0)]
-            public KEYBDINPUT ki;
-            [FieldOffset(0)]
-            public HARDWAREINPUT hi;
-        }
-
-        #endregion
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct CHARFORMATW
         {
@@ -4064,9 +3986,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);

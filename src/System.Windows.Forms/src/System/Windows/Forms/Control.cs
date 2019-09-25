@@ -3001,17 +3001,17 @@ namespace System.Windows.Forms
             {
                 Keys modifiers = 0;
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.ShiftKey) < 0)
+                if (User32.GetKeyState((int)Keys.ShiftKey) < 0)
                 {
                     modifiers |= Keys.Shift;
                 }
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.ControlKey) < 0)
+                if (User32.GetKeyState((int)Keys.ControlKey) < 0)
                 {
                     modifiers |= Keys.Control;
                 }
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.Menu) < 0)
+                if (User32.GetKeyState((int)Keys.Menu) < 0)
                 {
                     modifiers |= Keys.Alt;
                 }
@@ -3030,27 +3030,27 @@ namespace System.Windows.Forms
             {
                 MouseButtons buttons = (MouseButtons)0;
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.LButton) < 0)
+                if (User32.GetKeyState((int)Keys.LButton) < 0)
                 {
                     buttons |= MouseButtons.Left;
                 }
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.RButton) < 0)
+                if (User32.GetKeyState((int)Keys.RButton) < 0)
                 {
                     buttons |= MouseButtons.Right;
                 }
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.MButton) < 0)
+                if (User32.GetKeyState((int)Keys.MButton) < 0)
                 {
                     buttons |= MouseButtons.Middle;
                 }
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.XButton1) < 0)
+                if (User32.GetKeyState((int)Keys.XButton1) < 0)
                 {
                     buttons |= MouseButtons.XButton1;
                 }
 
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.XButton2) < 0)
+                if (User32.GetKeyState((int)Keys.XButton2) < 0)
                 {
                     buttons |= MouseButtons.XButton2;
                 }
@@ -6803,7 +6803,7 @@ namespace System.Windows.Forms
         {
             if (keyVal == Keys.Insert || keyVal == Keys.NumLock || keyVal == Keys.CapsLock || keyVal == Keys.Scroll)
             {
-                int result = UnsafeNativeMethods.GetKeyState((int)keyVal);
+                int result = User32.GetKeyState((int)keyVal);
 
                 // If the high-order bit is 1, the key is down; otherwise, it is up.
                 // If the low-order bit is 1, the key is toggled. A key, such as the CAPS LOCK key,

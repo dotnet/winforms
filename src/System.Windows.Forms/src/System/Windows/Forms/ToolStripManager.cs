@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms
             else
             {
                 // this is the same as Control.ModifierKeys - but we save two p/invokes.
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.ShiftKey) < 0 && (keyData == Keys.None))
+                if (User32.GetKeyState((int)Keys.ShiftKey) < 0 && (keyData == Keys.None))
                 {
                     // If it's Shift+F10 and we're already InMenuMode, then we
                     // need to cancel this message, otherwise we'll enter the native modal menu loop.
