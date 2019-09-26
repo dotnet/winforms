@@ -151,7 +151,7 @@ namespace System.Windows.Forms
 
             // Set up color table --
             IntPtr palette = SafeNativeMethods.CreateHalftonePalette(new HandleRef(null, hdcS));
-            Gdi32.GetObject(palette, out uint entryCount);
+            Gdi32.GetObjectW(palette, out uint entryCount);
             var entries = new Gdi32.PALETTEENTRY[entryCount];
             Gdi32.GetPaletteEntries(palette, entries);
             int[] colors = new int[entryCount];
@@ -2272,7 +2272,7 @@ namespace System.Windows.Forms
                 changed = true;
             }
 
-            NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(source);
+            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(source);
 
             short fontWeight = target.Weight;
             if (fontWeight != logfont.lfWeight)

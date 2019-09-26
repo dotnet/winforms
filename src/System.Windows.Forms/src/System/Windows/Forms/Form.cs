@@ -4591,7 +4591,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated
                     && Visible
                     && (AcceptButton != null)
-                    && UnsafeNativeMethods.SystemParametersInfoW(NativeMethods.SPI_GETSNAPTODEFBUTTON, ref data)
+                    && User32.SystemParametersInfoW(User32.SPI.GETSNAPTODEFBUTTON, ref data)
                     && data)
             {
                 Control button = AcceptButton as Control;

@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether the user has enabled full window drag.
         /// </summary>
         public static bool DragFullWindows
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETDRAGFULLWINDOWS);
+            => User32.SystemParametersInfoBool(User32.SPI.GETDRAGFULLWINDOWS);
 
         /// <summary>
         ///  Gets a value indicating whether the user has selected to run in high contrast.
@@ -46,9 +46,9 @@ namespace System.Windows.Forms
                 EnsureSystemEvents();
                 if (s_systemEventsDirty)
                 {
-                    NativeMethods.HIGHCONTRASTW data = default;
+                    User32.HIGHCONTRASTW data = default;
 
-                    s_highContrast = UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                    s_highContrast = User32.SystemParametersInfoW(ref data)
                         && (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
 
                     s_systemEventsDirty = false;
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         ///  Gets the number of lines to scroll when the mouse wheel is rotated.
         /// </summary>
         public static int MouseWheelScrollLines
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETWHEELSCROLLLINES);
+            => User32.SystemParametersInfoInt(User32.SPI.GETWHEELSCROLLLINES);
 
         /// <summary>
         ///  Gets the dimensions of the primary display monitor in pixels.
@@ -195,11 +195,11 @@ namespace System.Windows.Forms
         {
             // We can get the system's menu font through the NONCLIENTMETRICS structure
             // via SystemParametersInfo
-            NativeMethods.NONCLIENTMETRICSW data = default;
+            User32.NONCLIENTMETRICSW data = default;
 
             bool result = useDpi
-                ? UnsafeNativeMethods.TrySystemParametersInfoForDpi(ref data, dpi)
-                : UnsafeNativeMethods.SystemParametersInfoW(ref data);
+                ? User32.TrySystemParametersInfoForDpi(ref data, dpi)
+                : User32.SystemParametersInfoW(ref data);
 
             if (result)
             {
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
             get
             {
                 var rect = new RECT();
-                UnsafeNativeMethods.SystemParametersInfoW(NativeMethods.SPI_GETWORKAREA, ref rect);
+                User32.SystemParametersInfoW(User32.SPI.GETWORKAREA, ref rect);
                 return rect;
             }
         }
@@ -697,55 +697,55 @@ namespace System.Windows.Forms
         ///  Gets whether the drop shadow effect in enabled.
         /// </summary>
         public static bool IsDropShadowEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETDROPSHADOW);
+            => User32.SystemParametersInfoBool(User32.SPI.GETDROPSHADOW);
 
         /// <summary>
         ///  Gets whether the native user menus have a flat menu appearance.
         /// </summary>
         public static bool IsFlatMenuEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETFLATMENU);
+            => User32.SystemParametersInfoBool(User32.SPI.GETFLATMENU);
 
         /// <summary>
         ///  Gets whether font smoothing is enabled.
         /// </summary>
         public static bool IsFontSmoothingEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETFONTSMOOTHING);
+            => User32.SystemParametersInfoBool(User32.SPI.GETFONTSMOOTHING);
 
         /// <summary>
         ///  Returns the ClearType smoothing contrast value.
         /// </summary>
         public static int FontSmoothingContrast
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETFONTSMOOTHINGCONTRAST);
+            => User32.SystemParametersInfoInt(User32.SPI.GETFONTSMOOTHINGCONTRAST);
 
         /// <summary>
         ///  Returns a type of Font smoothing.
         /// </summary>
         public static int FontSmoothingType
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETFONTSMOOTHINGTYPE);
+            => User32.SystemParametersInfoInt(User32.SPI.GETFONTSMOOTHINGTYPE);
 
         /// <summary>
         ///  Retrieves the width in pixels of an icon cell.
         /// </summary>
         public static int IconHorizontalSpacing
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_ICONHORIZONTALSPACING);
+            => User32.SystemParametersInfoInt(User32.SPI.ICONHORIZONTALSPACING);
 
         /// <summary>
         ///  Retrieves the height in pixels of an icon cell.
         /// </summary>
         public static int IconVerticalSpacing
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_ICONVERTICALSPACING);
+            => User32.SystemParametersInfoInt(User32.SPI.ICONVERTICALSPACING);
 
         /// <summary>
         ///  Gets whether icon title wrapping is enabled.
         /// </summary>
         public static bool IsIconTitleWrappingEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETICONTITLEWRAP);
+            => User32.SystemParametersInfoBool(User32.SPI.GETICONTITLEWRAP);
 
         /// <summary>
         ///  Gets whether menu access keys are underlined.
         /// </summary>
         public static bool MenuAccessKeysUnderlined
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETKEYBOARDCUES);
+            => User32.SystemParametersInfoBool(User32.SPI.GETKEYBOARDCUES);
 
         /// <summary>
         ///  Retrieves the Keyboard repeat delay setting, which is a value in the range
@@ -753,21 +753,21 @@ namespace System.Windows.Forms
         ///  depending on the hardware.
         /// </summary>
         public static int KeyboardDelay
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETKEYBOARDDELAY);
+            => User32.SystemParametersInfoInt(User32.SPI.GETKEYBOARDDELAY);
 
         /// <summary>
         ///  Gets whether the user relies on keyboard instead of mouse and wants
         ///  applications to display keyboard interfaces that would be otherwise hidden.
         /// </summary>
         public static bool IsKeyboardPreferred
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETKEYBOARDPREF);
+            => User32.SystemParametersInfoBool(User32.SPI.GETKEYBOARDPREF);
 
         /// <summary>
         ///  Retrieves the Keyboard repeat speed setting, which is a value in the range
         ///  from 0 through 31. The actual rate may vary depending on the hardware.
         /// </summary>
         public static int KeyboardSpeed
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETKEYBOARDSPEED);
+            => User32.SystemParametersInfoInt(User32.SPI.GETKEYBOARDSPEED);
 
         /// <summary>
         ///  Gets the <see cref="Size"/> in pixels of the rectangle within which the mouse
@@ -775,119 +775,119 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MouseHoverSize
             => new Size(
-                UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSEHOVERWIDTH),
-                UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSEHOVERHEIGHT));
+                User32.SystemParametersInfoInt(User32.SPI.GETMOUSEHOVERWIDTH),
+                User32.SystemParametersInfoInt(User32.SPI.GETMOUSEHOVERHEIGHT));
 
         /// <summary>
         ///  Gets the time, in milliseconds, that the mouse pointer has to stay in the hover
         ///  rectangle to be considered hovering.
         /// </summary>
         public static int MouseHoverTime
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSEHOVERTIME);
+            => User32.SystemParametersInfoInt(User32.SPI.GETMOUSEHOVERTIME);
 
         /// <summary>
         ///  Gets the current mouse speed.
         /// </summary>
         public static int MouseSpeed
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMOUSESPEED);
+            => User32.SystemParametersInfoInt(User32.SPI.GETMOUSESPEED);
 
         /// <summary>
         ///  Determines whether the snap-to-default-button feature is enabled.
         /// </summary>
         public static bool IsSnapToDefaultEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETSNAPTODEFBUTTON);
+            => User32.SystemParametersInfoBool(User32.SPI.GETSNAPTODEFBUTTON);
 
         /// <summary>
         ///  Determines whether the popup menus are left aligned or right aligned.
         /// </summary>
         public static LeftRightAlignment PopupMenuAlignment
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETMENUDROPALIGNMENT)
+            => User32.SystemParametersInfoBool(User32.SPI.GETMENUDROPALIGNMENT)
                 ? LeftRightAlignment.Left : LeftRightAlignment.Right;
 
         /// <summary>
         ///  Determines whether the menu fade animation feature is enabled.
         /// </summary>
         public static bool IsMenuFadeEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETMENUFADE);
+            => User32.SystemParametersInfoBool(User32.SPI.GETMENUFADE);
 
         /// <summary>
         ///  Indicates the time, in milliseconds, that the system waits before displaying
         ///  a shortcut menu.
         /// </summary>
         public static int MenuShowDelay
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETMENUSHOWDELAY);
+            => User32.SystemParametersInfoInt(User32.SPI.GETMENUSHOWDELAY);
 
         /// <summary>
         ///  Indicates whether the slide open effect for combo boxes is enabled.
         /// </summary>
         public static bool IsComboBoxAnimationEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETCOMBOBOXANIMATION);
+            => User32.SystemParametersInfoBool(User32.SPI.GETCOMBOBOXANIMATION);
 
         /// <summary>
         ///  Indicates whether the gradient effect for windows title bars is enabled.
         /// </summary>
         public static bool IsTitleBarGradientEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETGRADIENTCAPTIONS);
+            => User32.SystemParametersInfoBool(User32.SPI.GETGRADIENTCAPTIONS);
 
         /// <summary>
         ///  Indicates whether the hot tracking of user interface elements is enabled.
         /// </summary>
         public static bool IsHotTrackingEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETHOTTRACKING);
+            => User32.SystemParametersInfoBool(User32.SPI.GETHOTTRACKING);
 
         /// <summary>
         ///  Indicates whether the smooth scrolling effect for listbox is enabled.
         /// </summary>
         public static bool IsListBoxSmoothScrollingEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETLISTBOXSMOOTHSCROLLING);
+            => User32.SystemParametersInfoBool(User32.SPI.GETLISTBOXSMOOTHSCROLLING);
 
         /// <summary>
         ///  Indicates whether the menu animation feature is enabled.
         /// </summary>
         public static bool IsMenuAnimationEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETMENUANIMATION);
+            => User32.SystemParametersInfoBool(User32.SPI.GETMENUANIMATION);
 
         /// <summary>
         ///  Indicates whether the selection fade effect is enabled.
         /// </summary>
         public static bool IsSelectionFadeEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETSELECTIONFADE);
+            => User32.SystemParametersInfoBool(User32.SPI.GETSELECTIONFADE);
 
         /// <summary>
         ///  Indicates whether tool tip animation is enabled.
         /// </summary>
         public static bool IsToolTipAnimationEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETTOOLTIPANIMATION);
+            => User32.SystemParametersInfoBool(User32.SPI.GETTOOLTIPANIMATION);
 
         /// <summary>
         ///  Indicates whether UI effects are enabled.
         /// </summary>
         public static bool UIEffectsEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETUIEFFECTS);
+            => User32.SystemParametersInfoBool(User32.SPI.GETUIEFFECTS);
 
         /// <summary>
         ///  Indicates whether the windows tracking (activating the window the mouse in on) is ON or OFF.
         /// </summary>
         public static bool IsActiveWindowTrackingEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETACTIVEWINDOWTRACKING);
+            => User32.SystemParametersInfoBool(User32.SPI.GETACTIVEWINDOWTRACKING);
 
         /// <summary>
         ///  Retrieves the active window tracking delay in milliseconds.
         /// </summary>
         public static int ActiveWindowTrackingDelay
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETACTIVEWNDTRKTIMEOUT);
+            => User32.SystemParametersInfoInt(User32.SPI.GETACTIVEWNDTRKTIMEOUT);
 
         /// <summary>
         ///  Indicates whether windows minimize/restore animation is enabled.
         /// </summary>
         public static bool IsMinimizeRestoreAnimationEnabled
-            => UnsafeNativeMethods.SystemParametersInfoBool(NativeMethods.SPI_GETANIMATION);
+            => User32.SystemParametersInfoBool(User32.SPI.GETANIMATION);
 
         /// <summary>
         ///  Retrieves the border multiplier factor that determines the width of a window's sizing border.
         /// </summary>
         public static int BorderMultiplierFactor
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETBORDER);
+            => User32.SystemParametersInfoInt(User32.SPI.GETBORDER);
 
         /// <summary>
         ///  Indicates the caret blink time.
@@ -901,7 +901,7 @@ namespace System.Windows.Forms
         ///  Indicates the caret width in edit controls.
         /// </summary>
         public static int CaretWidth
-            => UnsafeNativeMethods.SystemParametersInfoInt(NativeMethods.SPI_GETCARETWIDTH);
+            => User32.SystemParametersInfoInt(User32.SPI.GETCARETWIDTH);
 
         public static int MouseWheelScrollDelta => NativeMethods.WHEEL_DELTA;
 
@@ -962,8 +962,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.NONCLIENTMETRICSW data = default;
-                return UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                User32.NONCLIENTMETRICSW data = default;
+                return User32.SystemParametersInfoW(ref data)
                     && data.iBorderWidth > 0 ? data.iBorderWidth : 0;
             }
         }
@@ -975,8 +975,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.NONCLIENTMETRICSW data = default;
-                return UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                User32.NONCLIENTMETRICSW data = default;
+                return User32.SystemParametersInfoW(ref data)
                     && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0
                         ? new Size(data.iSmCaptionWidth, data.iSmCaptionHeight)
                         : Size.Empty;
@@ -990,8 +990,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.NONCLIENTMETRICSW data = default;
-                return UnsafeNativeMethods.SystemParametersInfoW(ref data)
+                User32.NONCLIENTMETRICSW data = default;
+                return User32.SystemParametersInfoW(ref data)
                     && data.iMenuHeight > 0 && data.iMenuWidth > 0
                         ? new Size(data.iMenuWidth, data.iMenuHeight)
                         : Size.Empty;

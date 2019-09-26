@@ -453,8 +453,8 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_COMMAND:
                     if ((int)wparam == 0x402)
                     {
-                        NativeMethods.LOGFONTW logFont = new NativeMethods.LOGFONTW();
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), WindowMessages.WM_CHOOSEFONT_GETLOGFONT, 0, ref logFont);
+                        var logFont = new User32.LOGFONTW();
+                        User32.SendMessageW(hWnd, User32.WindowMessage.WM_CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
                         UpdateFont(ref logFont);
                         int index = (int)UnsafeNativeMethods.SendDlgItemMessage(new HandleRef(null, hWnd), 0x473, NativeMethods.CB_GETCURSEL, IntPtr.Zero, IntPtr.Zero);
                         if (index != NativeMethods.CB_ERR)
@@ -529,11 +529,11 @@ namespace System.Windows.Forms
         protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
-            NativeMethods.LOGFONTW logFont;
+            User32.LOGFONTW logFont;
 
             using ScreenDC dc = ScreenDC.Create();
             using Graphics graphics = Graphics.FromHdcInternal(dc);
-            logFont = NativeMethods.LOGFONTW.FromFont(Font, graphics);
+            logFont = User32.LOGFONTW.FromFont(Font, graphics);
 
             NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT
             {
@@ -618,7 +618,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateFont(ref NativeMethods.LOGFONTW lf)
+        private void UpdateFont(ref User32.LOGFONTW lf)
         {
             using ScreenDC dc = ScreenDC.Create();
             using Font fontInWorldUnits = Font.FromLogFont(lf, dc);

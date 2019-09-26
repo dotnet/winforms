@@ -10,15 +10,22 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        private unsafe static extern int GetObjectW(IntPtr hObject, int c, void* pv);
+        private unsafe static extern int GetObjectW(IntPtr h, int c, void* pv);
 
-        public unsafe static bool GetObject<T>(IntPtr hObject, out T @object) where T : unmanaged
+        public unsafe static bool GetObjectW<T>(IntPtr h, out T @object) where T : unmanaged
         {
             @object = default;
             fixed (void* pv = &@object)
             {
-                return GetObjectW(hObject, sizeof(T), pv) != 0;
+                return GetObjectW(h, sizeof(T), pv) != 0;
             }
+        }
+
+        public static bool GetObjectW<T>(HandleRef h, out T @object) where T : unmanaged
+        {
+            bool result = GetObjectW(h.Handle, out @object);
+            GC.KeepAlive(h.Wrapper);
+            return result;
         }
     }
 }

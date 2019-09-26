@@ -3023,7 +3023,7 @@ namespace System.Windows.Forms
                 dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
             }
 
-            NativeMethods.LOGFONTW logFont = NativeMethods.LOGFONTW.FromFont(value);
+            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(value);
             NativeMethods.CHARFORMATW charFormat = new NativeMethods.CHARFORMATW
             {
                 cbSize = sizeof(NativeMethods.CHARFORMATW),

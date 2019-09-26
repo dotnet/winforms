@@ -973,46 +973,6 @@ namespace System.Windows.Forms
         SIF_POS = 0x0004,
         SIF_TRACKPOS = 0x0010,
         SIF_ALL = (0x0001 | 0x0002 | 0x0004 | 0x0010),
-        SPI_GETFONTSMOOTHING = 0x004A,
-        SPI_GETDROPSHADOW = 0x1024,
-        SPI_GETFLATMENU = 0x1022,
-        SPI_GETFONTSMOOTHINGTYPE = 0x200A,
-        SPI_GETFONTSMOOTHINGCONTRAST = 0x200C,
-        SPI_ICONHORIZONTALSPACING = 0x000D,
-        SPI_ICONVERTICALSPACING = 0x0018,
-        // SPI_GETICONMETRICS =        0x002D,
-        SPI_GETICONTITLEWRAP = 0x0019,
-        SPI_GETKEYBOARDCUES = 0x100A,
-        SPI_GETKEYBOARDDELAY = 0x0016,
-        SPI_GETKEYBOARDPREF = 0x0044,
-        SPI_GETKEYBOARDSPEED = 0x000A,
-        SPI_GETMOUSEHOVERWIDTH = 0x0062,
-        SPI_GETMOUSEHOVERHEIGHT = 0x0064,
-        SPI_GETMOUSEHOVERTIME = 0x0066,
-        SPI_GETMOUSESPEED = 0x0070,
-        SPI_GETMENUDROPALIGNMENT = 0x001B,
-        SPI_GETMENUFADE = 0x1012,
-        SPI_GETMENUSHOWDELAY = 0x006A,
-        SPI_GETCOMBOBOXANIMATION = 0x1004,
-        SPI_GETGRADIENTCAPTIONS = 0x1008,
-        SPI_GETHOTTRACKING = 0x100E,
-        SPI_GETLISTBOXSMOOTHSCROLLING = 0x1006,
-        SPI_GETMENUANIMATION = 0x1002,
-        SPI_GETSELECTIONFADE = 0x1014,
-        SPI_GETTOOLTIPANIMATION = 0x1016,
-        SPI_GETUIEFFECTS = 0x103E,
-        SPI_GETACTIVEWINDOWTRACKING = 0x1000,
-        SPI_GETACTIVEWNDTRKTIMEOUT = 0x2002,
-        SPI_GETANIMATION = 0x0048,
-        SPI_GETBORDER = 0x0005,
-        SPI_GETCARETWIDTH = 0x2006,
-        SPI_GETDRAGFULLWINDOWS = 38,
-        SPI_GETNONCLIENTMETRICS = 41,
-        SPI_GETWORKAREA = 48,
-        SPI_GETHIGHCONTRAST = 66,
-        SPI_GETDEFAULTINPUTLANG = 89,
-        SPI_GETSNAPTODEFBUTTON = 95,
-        SPI_GETWHEELSCROLLLINES = 104,
         SBARS_SIZEGRIP = 0x0100,
         SB_SETTEXT = (0x0400 + 11),
         SB_GETTEXT = (0x0400 + 13),
@@ -1762,29 +1722,6 @@ namespace System.Windows.Forms
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct NONCLIENTMETRICSW
-        {
-            public uint cbSize;
-            public int iBorderWidth;
-            public int iScrollWidth;
-            public int iScrollHeight;
-            public int iCaptionWidth;
-            public int iCaptionHeight;
-            public LOGFONTW lfCaptionFont;
-            public int iSmCaptionWidth;
-            public int iSmCaptionHeight;
-            public LOGFONTW lfSmCaptionFont;
-            public int iMenuWidth;
-            public int iMenuHeight;
-            public LOGFONTW lfMenuFont;
-            public LOGFONTW lfStatusFont;
-            public LOGFONTW lfMessageFont;
-
-            // This is supported on Windows vista and later
-            public int iPaddedBorderWidth;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class SCROLLINFO
         {
@@ -2048,54 +1985,6 @@ namespace System.Windows.Forms
         }
 
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public unsafe struct LOGFONTW
-        {
-            private const int LF_FACESIZE = 32;
-
-            public int lfHeight;
-            public int lfWidth;
-            public int lfEscapement;
-            public int lfOrientation;
-            public int lfWeight;
-            public byte lfItalic;
-            public byte lfUnderline;
-            public byte lfStrikeOut;
-            public byte lfCharSet;
-            public byte lfOutPrecision;
-            public byte lfClipPrecision;
-            public byte lfQuality;
-            public byte lfPitchAndFamily;
-            private fixed char _lfFaceName[LF_FACESIZE];
-            private Span<char> lfFaceName
-            {
-                get { fixed (char* c = _lfFaceName) { return new Span<char>(c, LF_FACESIZE); } }
-            }
-
-            public ReadOnlySpan<char> FaceName
-            {
-                get => lfFaceName.SliceAtFirstNull();
-                set => SpanHelpers.CopyAndTerminate(value, lfFaceName);
-            }
-
-            // Font.ToLogFont will copy LOGFONT into a blittable struct,
-            // but we need to box it upfront so we can unbox.
-
-            public static LOGFONTW FromFont(Font font)
-            {
-                object logFont = new LOGFONTW();
-                font.ToLogFont(logFont);
-                return (LOGFONTW)logFont;
-            }
-
-            public static LOGFONTW FromFont(Font font, Graphics graphics)
-            {
-                object logFont = new LOGFONTW();
-                font.ToLogFont(logFont, graphics);
-                return (LOGFONTW)logFont;
-            }
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NOTIFYICONDATA
@@ -2454,14 +2343,6 @@ namespace System.Windows.Forms
         {
             public User32.NMHDR hdr;
             public ComCtl32.TVITEMW item;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct HIGHCONTRASTW
-        {
-            public uint cbSize;
-            public uint dwFlags;
-            public IntPtr lpszDefaultScheme;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

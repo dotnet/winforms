@@ -686,12 +686,12 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
             }
 
-            NativeMethods.LOGFONTW logfont = new NativeMethods.LOGFONTW();
+            User32.LOGFONTW logfont = new User32.LOGFONTW();
 
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.GetThemeFont(new HandleRef(this, Handle), hdc, part, state, (int)prop, ref logfont);
+                lastHResult = (int)UxTheme.GetThemeFont(new HandleRef(this, Handle), hdc, part, state, (int)prop, ref logfont);
             }
 
             Font font = null;
