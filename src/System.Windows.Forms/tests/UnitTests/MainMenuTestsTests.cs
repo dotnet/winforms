@@ -194,6 +194,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void MainMenu_CreateMenuHandle_Invoke_ReturnsExpected()
+        {
+            var menu = new SubMainMenu();
+            Assert.NotEqual(IntPtr.Zero, menu.CreateMenuHandle());
+        }
+
+        [Fact]
         public void MainMenu_Dispose_HasForm_Success()
         {
             var form = new Form
@@ -223,8 +230,10 @@ namespace System.Windows.Forms.Tests
             Assert.Null(form.Menu);
         }
 
-        private class SubContextMenu : MainMenu
+        private class SubMainMenu : MainMenu
         {
+            public new IntPtr CreateMenuHandle() => base.CreateMenuHandle();
+
             public new void OnCollapse(EventArgs e) => base.OnCollapse(e);
         }
     }

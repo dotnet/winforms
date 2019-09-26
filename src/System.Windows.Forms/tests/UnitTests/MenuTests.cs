@@ -688,6 +688,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void Menu_CreateMenuHandle_Invoke_ReturnsExpected()
+        {
+            var menu = new SubMenu(Array.Empty<MenuItem>());
+            Assert.NotEqual(IntPtr.Zero, menu.CreateMenuHandle());
+        }
+
+        [Fact]
         public void Menu_ToString_Invoke_ReturnsExpected()
         {
             var menu = new SubMenu(new MenuItem[] { new MenuItem() });
@@ -727,6 +734,8 @@ namespace System.Windows.Forms.Tests
             public SubMenu(MenuItem[] items) : base(items)
             {
             }
+
+            public new IntPtr CreateMenuHandle() => base.CreateMenuHandle();
 
             public new int FindMergePosition(int mergeOrder) => base.FindMergePosition(mergeOrder);
 
