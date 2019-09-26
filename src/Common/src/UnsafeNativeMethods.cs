@@ -74,9 +74,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
-        [DllImport(ExternDll.Oleaut32, ExactSpelling = true)]
-        public static extern void OleCreatePropertyFrameIndirect(NativeMethods.OCPFIPARAMS p);
-
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder lpszFile, int cch);
 
