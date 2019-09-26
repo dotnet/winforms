@@ -1338,7 +1338,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
                             {
                                 g = typeof(UnsafeNativeMethods.IDispatch).GUID;
-                                if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g).Succeeded())
+                                if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                                 {
                                     Oleaut32.IErrorInfo pErrorInfo = null;
                                     Oleaut32.GetErrorInfo(0, ref pErrorInfo);
