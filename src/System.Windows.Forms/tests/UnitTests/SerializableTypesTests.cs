@@ -20,41 +20,59 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void AxHostState_RoundTripAndExchangeWithNet()
         {
-            string coreBlob;
+            string payload = "abc";
+            string licenseKey = "licenseKey";
+            string netBlob;
+            AxHost.State state;
 
             using (var stream = new MemoryStream(256))
             {
-                var bytes = Encoding.UTF8.GetBytes("abc");
+                var bytes = Encoding.UTF8.GetBytes(payload);
                 using (var writer = new BinaryWriter(stream))
                 {
                     writer.Write(bytes.Length);
                     writer.Write(bytes);
                     stream.Seek(0, SeekOrigin.Begin);
 
-                    var state = new AxHost.State(stream, 1, true, "licenseKey");
-                    coreBlob = BinarySerialization.ToBase64String(state);
+                    state = new AxHost.State(stream, 1, true, licenseKey);
+                    netBlob = BinarySerialization.ToBase64String(state);
                 }
             }
 
-            Assert.Equal(ClassicAxHostState, coreBlob);
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicAxHostState);
 
-            var result = BinarySerialization.EnsureDeserialize<AxHost.State>(coreBlob);
-            Assert.Null(result.GetPropBag());
-            Assert.Equal(1, result.Type);
-            Assert.True(result._GetManualUpdate());
-            Assert.Equal("licenseKey", result._GetLicenseKey());
-            var streamOut = result.GetStream() as Ole32.GPStream;
-            Assert.NotNull(streamOut);
-            Stream bufferStream = streamOut.GetDataStream();
-            byte[] buffer = new byte[3];
-            bufferStream.Read(buffer, 0, buffer.Length);
-            Assert.Equal("abc", Encoding.UTF8.GetString(buffer));
+            void ValidateResult(string blob)
+            {
+                AxHost.State result = BinarySerialization.EnsureDeserialize<AxHost.State>(blob);
+
+                Assert.Null(result.GetPropBag());
+                Assert.Null(state.GetPropBag());
+
+                Assert.Equal(1, result.Type);
+                Assert.Equal(1, state.Type);
+
+                Assert.True(result._GetManualUpdate());
+                Assert.True(state._GetManualUpdate());
+
+                Assert.Equal(licenseKey, result._GetLicenseKey());
+                Assert.Equal(licenseKey, state._GetLicenseKey());
+
+                var streamOut = result.GetStream() as Ole32.GPStream;
+                Assert.NotNull(streamOut);
+                Stream bufferStream = streamOut.GetDataStream();
+                byte[] buffer = new byte[3];
+                bufferStream.Read(buffer, 0, buffer.Length);
+                Assert.Equal(payload, Encoding.UTF8.GetString(buffer));
+            }
         }
 
         [Fact]
         public void ImageListStreamer_RoundTripAndExchangeWithNet()
         {
-            string coreBlob;
+            string netBlob;
 
             using (var imageList = new ImageList()
             {
@@ -63,25 +81,27 @@ namespace System.Windows.Forms.Tests.Serialization
             })
             {
                 imageList.Images.Add(new Bitmap(16, 16));
-                coreBlob = BinarySerialization.ToBase64String(imageList.ImageStream);
+                netBlob = BinarySerialization.ToBase64String(imageList.ImageStream);
             }
 
-            // Binary formats are not identical, but the content de-serializes to the same values.
-            ValidateImageListStreamer(ClassicImageListStreamer);
-            ValidateImageListStreamer(coreBlob);
-        }
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicImageListStreamer);
 
-        private void ValidateImageListStreamer(string blob)
-        {
-            var result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(blob);
-            using (NativeImageList nativeImageList = result.GetNativeImageList())
+            void ValidateResult(string blob)
             {
-                Assert.True(SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y));
-                Assert.Equal(16, x);
-                Assert.Equal(16, y);
-                NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO();
-                Assert.True(SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo));
-                Assert.True(IntPtr.Zero != imageInfo.hbmImage);
+                ImageListStreamer result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(blob);
+
+                using (NativeImageList nativeImageList = result.GetNativeImageList())
+                {
+                    Assert.True(SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y));
+                    Assert.Equal(16, x);
+                    Assert.Equal(16, y);
+                    NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO();
+                    Assert.True(SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo));
+                    Assert.True(IntPtr.Zero != imageInfo.hbmImage);
+                }
             }
         }
 
@@ -89,12 +109,19 @@ namespace System.Windows.Forms.Tests.Serialization
         public void LinkArea_RoundTripAndExchangeWithNet()
         {
             var linkArea = new LinkArea(5, 7);
-            var coreBlob = BinarySerialization.ToBase64String(linkArea);
+            var netBlob = BinarySerialization.ToBase64String(linkArea);
 
-            Assert.Equal(ClassicLinkArea, coreBlob);
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicLinkArea);
 
-            var result = BinarySerialization.EnsureDeserialize<LinkArea>(coreBlob);
-            Assert.Equal(linkArea, result);
+            void ValidateResult(string blob)
+            {
+                LinkArea result = BinarySerialization.EnsureDeserialize<LinkArea>(blob);
+
+                Assert.Equal(linkArea, result);
+            }
         }
 
         [Fact]
@@ -107,30 +134,31 @@ namespace System.Windows.Forms.Tests.Serialization
             };
             listViewGroup.Items.Add(new ListViewItem("Item"));
 
-            var coreBlob = BinarySerialization.ToBase64String(listViewGroup);
+            var netBlob = BinarySerialization.ToBase64String(listViewGroup);
 
-            // Binary formats are not identical, but the content de-serializes to the same values.
-            ValidateListViewGroup(ClassicListViewGroup);
-            ValidateListViewGroup(coreBlob);
-        }
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicListViewGroup);
 
-        private void ValidateListViewGroup(string blob)
-        {
-            var result = BinarySerialization.EnsureDeserialize<ListViewGroup>(blob);
+            void ValidateResult(string blob)
+            {
+                ListViewGroup result = BinarySerialization.EnsureDeserialize<ListViewGroup>(blob);
 
-            Assert.Equal("Header", result.Header);
-            Assert.Equal(HorizontalAlignment.Center, result.HeaderAlignment);
-            Assert.Equal("Tag", result.Tag);
-            Assert.Equal("GroupName", result.Name);
-            var item = Assert.Single(result.Items) as ListViewItem;
-            Assert.NotNull(item);
-            Assert.Equal("Item", item.Text);
+                Assert.Equal("Header", result.Header);
+                Assert.Equal(HorizontalAlignment.Center, result.HeaderAlignment);
+                Assert.Equal("Tag", result.Tag);
+                Assert.Equal("GroupName", result.Name);
+                var item = Assert.Single(result.Items) as ListViewItem;
+                Assert.NotNull(item);
+                Assert.Equal("Item", item.Text);
+            }
         }
 
         [Fact]
         public void ListViewItem_RoundTripAndExchangeWithNet()
         {
-            string coreBlob;
+            string netBlob;
 
             using (var font = new Font(FontFamily.GenericSansSerif, 9f))
             {
@@ -142,35 +170,41 @@ namespace System.Windows.Forms.Tests.Serialization
                     Checked = true
                 };
 
-                coreBlob = BinarySerialization.ToBase64String(listViewItem);
+                netBlob = BinarySerialization.ToBase64String(listViewItem);
             }
 
-            Assert.Equal(ClassicListViewItem, coreBlob);
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicListViewItem);
 
-            var result = BinarySerialization.EnsureDeserialize<ListViewItem>(coreBlob);
+            void ValidateResult(string blob)
+            {
+                ListViewItem result = BinarySerialization.EnsureDeserialize<ListViewItem>(blob);
 
-            Assert.Equal("Item1", result.Text);
-            Assert.Equal(0, result.ImageIndex);
-            Assert.Empty(result.ImageKey);
-            var item = Assert.Single(result.SubItems) as ListViewSubItem;
-            Assert.Equal("Item1", item.Text);
-            Assert.Equal(Color.Black, result.BackColor);
-            Assert.Equal(Color.White, result.ForeColor);
-            Assert.True(result.Checked);
-            Assert.Equal(FontFamily.GenericSansSerif.Name, result.Font.FontFamily.Name);
-            Assert.True(result.UseItemStyleForSubItems);
-            Assert.Null(result.Group);
+                Assert.Equal("Item1", result.Text);
+                Assert.Equal(0, result.ImageIndex);
+                Assert.Empty(result.ImageKey);
+                var item = Assert.Single(result.SubItems) as ListViewSubItem;
+                Assert.Equal("Item1", item.Text);
+                Assert.Equal(Color.Black, result.BackColor);
+                Assert.Equal(Color.White, result.ForeColor);
+                Assert.True(result.Checked);
+                Assert.Equal(FontFamily.GenericSansSerif.Name, result.Font.FontFamily.Name);
+                Assert.True(result.UseItemStyleForSubItems);
+                Assert.Null(result.Group);
 
-            Assert.Null(result.Tag);
-            Assert.Null(result.ImageList);
-            Assert.Equal(-1, result.Index);
-            Assert.Equal(0, result.IndentCount);
+                Assert.Null(result.Tag);
+                Assert.Null(result.ImageList);
+                Assert.Equal(-1, result.Index);
+                Assert.Equal(0, result.IndentCount);
+            }
         }
 
         [Fact]
         public void ListViewSubItemAndSubItemStyle_RoundTripAndExchangeWithNet()
         {
-            string coreBlob;
+            string netBlob;
 
             using (var font = new Font(FontFamily.GenericSansSerif, 9f))
             {
@@ -183,40 +217,55 @@ namespace System.Windows.Forms.Tests.Serialization
                 {
                     Tag = "UserData"
                 };
-                coreBlob = BinarySerialization.ToBase64String(listViewSubItem);
+
+                netBlob = BinarySerialization.ToBase64String(listViewSubItem);
             }
 
-            Assert.Equal(ClassicListViewSubItem, coreBlob);
 
-            var result = BinarySerialization.EnsureDeserialize<ListViewSubItem>(coreBlob);
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicListViewSubItem);
 
-            Assert.Equal("SubItem1", result.Text);
-            Assert.True(result.CustomStyle);
-            Assert.True(result.CustomForeColor);
-            Assert.True(result.CustomBackColor);
-            Assert.True(result.CustomFont);
-            Assert.Equal(Color.White, result.ForeColor);
-            Assert.Equal(Color.Black, result.BackColor);
-            Assert.Equal(FontFamily.GenericSansSerif.Name, result.Font.FontFamily.Name);
-            Assert.Null(result.Tag); // UserData is wiped on deserialization
+            void ValidateResult(string blob)
+            {
+                ListViewSubItem result = BinarySerialization.EnsureDeserialize<ListViewSubItem>(blob);
+
+                Assert.Equal("SubItem1", result.Text);
+                Assert.True(result.CustomStyle);
+                Assert.True(result.CustomForeColor);
+                Assert.True(result.CustomBackColor);
+                Assert.True(result.CustomFont);
+                Assert.Equal(Color.White, result.ForeColor);
+                Assert.Equal(Color.Black, result.BackColor);
+                Assert.Equal(FontFamily.GenericSansSerif.Name, result.Font.FontFamily.Name);
+                Assert.Null(result.Tag); // UserData is wiped on deserialization
+            }
         }
 
         [Fact]
         public void Padding_RoundTripAndExchangeWithNet()
         {
             var padding = new Padding(1, 2, 3, 4);
-            var coreBlob = BinarySerialization.ToBase64String(padding);
+            var netBlob = BinarySerialization.ToBase64String(padding);
 
-            Assert.Equal(ClassicPadding, coreBlob);
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicPadding);
 
-            var result = BinarySerialization.EnsureDeserialize<Padding>(coreBlob);
-            Assert.Equal(padding, result);
+            void ValidateResult(string blob)
+            {
+                Padding result = BinarySerialization.EnsureDeserialize<Padding>(blob);
+
+                Assert.Equal(padding, result);
+            }
         }
 
         [Fact]
         public void TableLayoutSettings_RoundTripAndExchangeWithNet()
         {
-            string coreBlob;
+            string netBlob;
 
             using (var tableLayoutPanel = new TableLayoutPanel
             {
@@ -241,45 +290,51 @@ namespace System.Windows.Forms.Tests.Serialization
                 tableLayoutPanel.Controls.Add(new RadioButton() { Name = "radioButton01" }, 0, 1);
                 tableLayoutPanel.Controls.Add(new CheckBox() { Name = "checkBox11" }, 1, 1);
 
-                coreBlob = BinarySerialization.ToBase64String(tableLayoutPanel.LayoutSettings as TableLayoutSettings);
+                netBlob = BinarySerialization.ToBase64String(tableLayoutPanel.LayoutSettings as TableLayoutSettings);
             }
 
-            Assert.Equal(ClassicTableLayoutSettings, coreBlob);
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicTableLayoutSettings);
 
-            var result = BinarySerialization.EnsureDeserialize<TableLayoutSettings>(coreBlob);
+            void ValidateResult(string blob)
+            {
+                TableLayoutSettings result = BinarySerialization.EnsureDeserialize<TableLayoutSettings>(blob);
 
-            Assert.NotNull(result);
-            Assert.True(result.IsStub); // This class is not associated with an owner control.
-            Assert.Equal(TableLayoutPanelCellBorderStyle.None, result.CellBorderStyle); // This property is not serialized.
-            Assert.NotNull(result.LayoutEngine);
-            // These values will be accessible when the owner is set.
-            Assert.Throws<NullReferenceException>(() => result.CellBorderWidth);
-            Assert.Throws<NullReferenceException>(() => result.ColumnCount);
-            Assert.Throws<NullReferenceException>(() => result.GrowStyle);
-            Assert.Throws<NullReferenceException>(() => result.RowCount);
-            Assert.Equal(3, result.ColumnStyles.Count);
-            Assert.Equal(2, result.RowStyles.Count);
-            Assert.Equal(SizeType.Percent, result.ColumnStyles[0].SizeType);
-            Assert.Equal(SizeType.Percent, result.ColumnStyles[1].SizeType);
-            Assert.Equal(SizeType.Percent, result.ColumnStyles[2].SizeType);
-            Assert.Equal(SizeType.Absolute, result.RowStyles[0].SizeType);
-            Assert.Equal(20, result.RowStyles[0].Height);
-            Assert.Equal(30, result.RowStyles[1].Height);
+                Assert.NotNull(result);
+                Assert.True(result.IsStub); // This class is not associated with an owner control.
+                Assert.Equal(TableLayoutPanelCellBorderStyle.None, result.CellBorderStyle); // This property is not serialized.
+                Assert.NotNull(result.LayoutEngine);
+                // These values will be accessible when the owner is set.
+                Assert.Throws<NullReferenceException>(() => result.CellBorderWidth);
+                Assert.Throws<NullReferenceException>(() => result.ColumnCount);
+                Assert.Throws<NullReferenceException>(() => result.GrowStyle);
+                Assert.Throws<NullReferenceException>(() => result.RowCount);
+                Assert.Equal(3, result.ColumnStyles.Count);
+                Assert.Equal(2, result.RowStyles.Count);
+                Assert.Equal(SizeType.Percent, result.ColumnStyles[0].SizeType);
+                Assert.Equal(SizeType.Percent, result.ColumnStyles[1].SizeType);
+                Assert.Equal(SizeType.Percent, result.ColumnStyles[2].SizeType);
+                Assert.Equal(SizeType.Absolute, result.RowStyles[0].SizeType);
+                Assert.Equal(20, result.RowStyles[0].Height);
+                Assert.Equal(30, result.RowStyles[1].Height);
 
-            List<ControlInformation> controls = result.GetControlsInformation();
-            ValidateControlInformation("button00_10", 0, 0, 2, 1, controls[0]);
-            ValidateControlInformation("label20_21", 2, 0, 1, 2, controls[1]);
-            ValidateControlInformation("radioButton01", 0, 1, 1, 1, controls[2]);
-            ValidateControlInformation("checkBox11", 1, 1, 1, 1, controls[3]);
-        }
+                List<ControlInformation> controls = result.GetControlsInformation();
+                ValidateControlInformation("button00_10", 0, 0, 2, 1, controls[0]);
+                ValidateControlInformation("label20_21", 2, 0, 1, 2, controls[1]);
+                ValidateControlInformation("radioButton01", 0, 1, 1, 1, controls[2]);
+                ValidateControlInformation("checkBox11", 1, 1, 1, 1, controls[3]);
 
-        private void ValidateControlInformation(string name, int column, int row, int columnSpan, int rowSpan, ControlInformation control)
-        {
-            Assert.Equal(name, control.Name);
-            Assert.Equal(column, control.Column);
-            Assert.Equal(row, control.Row);
-            Assert.Equal(columnSpan, control.ColumnSpan);
-            Assert.Equal(rowSpan, control.RowSpan);
+                void ValidateControlInformation(string name, int column, int row, int columnSpan, int rowSpan, ControlInformation control)
+                {
+                    Assert.Equal(name, control.Name);
+                    Assert.Equal(column, control.Column);
+                    Assert.Equal(row, control.Row);
+                    Assert.Equal(columnSpan, control.ColumnSpan);
+                    Assert.Equal(rowSpan, control.RowSpan);
+                }
+            }
         }
 
         [Fact]
@@ -297,24 +352,31 @@ namespace System.Windows.Forms.Tests.Serialization
                 NodeFont = new Font(FontFamily.GenericSansSerif, 9f)
             };
 
-            var coreBlob = BinarySerialization.ToBase64String(treeNodeIn);
-            Assert.Equal(ClassicTreeNode, coreBlob);
+            var netBlob = BinarySerialization.ToBase64String(treeNodeIn);
 
-            var result = BinarySerialization.EnsureDeserialize<TreeNode>(coreBlob);
+            // ensure we can deserialise NET serialised data and continue to match the payload
+            ValidateResult(netBlob);
+            // ensure we can deserialise NET Fx serialised data and continue to match the payload
+            ValidateResult(ClassicTreeNode);
 
-            Assert.Equal("node1", result.Text);
-            Assert.Equal(-1, result.ImageIndex); // No image list
-            Assert.Equal("key", result.SelectedImageKey);
-            Assert.Equal(2, result.childCount);
-            Assert.Equal("node2", result.FirstNode.Text);
-            Assert.Equal("node3", result.LastNode.Text);
-            Assert.Equal("tool tip text", result.ToolTipText);
-            Assert.Equal("node1", result.Name);
-            Assert.True(result.Checked);
+            void ValidateResult(string blob)
+            {
+                TreeNode result = BinarySerialization.EnsureDeserialize<TreeNode>(blob);
 
-            Assert.Equal(Color.Yellow, result.BackColor);
-            Assert.Equal(Color.Green, result.ForeColor);
-            Assert.Equal(FontFamily.GenericSansSerif.Name, result.NodeFont.FontFamily.Name);
+                Assert.Equal("node1", result.Text);
+                Assert.Equal(-1, result.ImageIndex); // No image list
+                Assert.Equal("key", result.SelectedImageKey);
+                Assert.Equal(2, result.childCount);
+                Assert.Equal("node2", result.FirstNode.Text);
+                Assert.Equal("node3", result.LastNode.Text);
+                Assert.Equal("tool tip text", result.ToolTipText);
+                Assert.Equal("node1", result.Name);
+                Assert.True(result.Checked);
+
+                Assert.Equal(Color.Yellow, result.BackColor);
+                Assert.Equal(Color.Green, result.ForeColor);
+                Assert.Equal(FontFamily.GenericSansSerif.Name, result.NodeFont.FontFamily.Name);
+            }
         }
 
         private const string ClassicAxHostState =

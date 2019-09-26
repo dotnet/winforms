@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.IntegrationTests
 {
-    public class WinformsControlsTest
+    public partial class WinformsControlsTest
     {
         private const string ProjectName = "WinformsControlsTest";
         private readonly string _exePath;
@@ -314,6 +314,28 @@ namespace System.Windows.Forms.IntegrationTests
             process.WaitForExit();
 
             Assert.True(process.HasExited);
+        }
+
+        [Fact]
+        public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
+        {
+            var mainObject = new Mocks.MainObject();
+            mainObject.Text = "Test text";
+            Form form = new Form();
+            TextBox textBox = new TextBox();
+            Binding binding = new Binding("Text", mainObject, "Text");
+            textBox.DataBindings.Add(binding);
+            textBox.Parent = form;
+            form.Show();
+
+            // bindings set
+            Assert.True( mainObject.IsPropertyChangedAssigned);
+
+            // remove bindings
+            textBox.DataBindings.Clear();
+
+            // bindings unset
+            Assert.False(mainObject.IsPropertyChangedAssigned);
         }
     }
 }

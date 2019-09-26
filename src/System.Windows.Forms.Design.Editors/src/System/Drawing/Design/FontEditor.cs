@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Drawing.Design
 {
@@ -43,7 +44,7 @@ namespace System.Drawing.Design
                         _fontDialog.Font = fontValue;
                     }
 
-                    IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+                    IntPtr hwndFocus = User32.GetFocus();
                     try
                     {
                         if (_fontDialog.ShowDialog() == DialogResult.OK)
@@ -55,7 +56,7 @@ namespace System.Drawing.Design
                     {
                         if (hwndFocus != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.SetFocus(new HandleRef(null, hwndFocus));
+                            User32.SetFocus(hwndFocus);
                         }
                     }
                 }

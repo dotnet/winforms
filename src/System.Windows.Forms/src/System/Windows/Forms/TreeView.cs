@@ -254,26 +254,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The border style of the window.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.Fixed3D),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.borderStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.Fixed3D)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [SRDescription(nameof(SR.borderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
                 if (borderStyle != value)
                 {
-                    //verify that 'value' is a valid enum type...
-
-                    //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
@@ -1784,7 +1775,7 @@ namespace System.Windows.Forms
         {
             if (toolTip != null)
             {
-                User32.SendMessageW(toolTip, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(toolTip, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
                 controlToolTipText = toolTipText;
             }
@@ -2079,14 +2070,28 @@ namespace System.Windows.Forms
 
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = Width;
-                int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, int.MaxValue, Height, flags);
+                User32.SWP flags = User32.SWP.NOZORDER | User32.SWP.NOACTIVATE | User32.SWP.NOMOVE;
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    Left,
+                    Top,
+                    int.MaxValue,
+                    Height,
+                    flags);
 
                 root.Realize(false);
 
                 if (oldSize != 0)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef, Left, Top, oldSize, Height, flags);
+                    User32.SetWindowPos(
+                        new HandleRef(this, Handle),
+                        User32.HWND_TOP,
+                        Left,
+                        Top,
+                        oldSize,
+                        Height,
+                        flags);
                 }
             }
             finally
@@ -2500,9 +2505,9 @@ namespace System.Windows.Forms
             return s;
         }
 
-        private unsafe void TvnBeginDrag(MouseButtons buttons, NativeMethods.NMTREEVIEW* nmtv)
+        private unsafe void TvnBeginDrag(MouseButtons buttons, ComCtl32.NMTREEVIEW* nmtv)
         {
-            NativeMethods.TV_ITEM item = nmtv->itemNew;
+            ComCtl32.TVITEMW item = nmtv->itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero)
@@ -2515,9 +2520,9 @@ namespace System.Windows.Forms
             OnItemDrag(new ItemDragEventArgs(buttons, node));
         }
 
-        private unsafe IntPtr TvnExpanding(NativeMethods.NMTREEVIEW* nmtv)
+        private unsafe IntPtr TvnExpanding(ComCtl32.NMTREEVIEW* nmtv)
         {
-            NativeMethods.TV_ITEM item = nmtv->itemNew;
+            ComCtl32.TVITEMW item = nmtv->itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero)
@@ -2526,7 +2531,7 @@ namespace System.Windows.Forms
             }
 
             TreeViewCancelEventArgs e = null;
-            if ((item.state & NativeMethods.TVIS_EXPANDED) == 0)
+            if ((item.state & ComCtl32.TVIS.EXPANDED) == 0)
             {
                 e = new TreeViewCancelEventArgs(NodeFromHandle(item.hItem), false, TreeViewAction.Expand);
                 OnBeforeExpand(e);
@@ -2539,9 +2544,9 @@ namespace System.Windows.Forms
             return (IntPtr)(e.Cancel ? 1 : 0);
         }
 
-        private unsafe void TvnExpanded(NativeMethods.NMTREEVIEW* nmtv)
+        private unsafe void TvnExpanded(ComCtl32.NMTREEVIEW* nmtv)
         {
-            NativeMethods.TV_ITEM item = nmtv->itemNew;
+            ComCtl32.TVITEMW item = nmtv->itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero)
@@ -2553,7 +2558,7 @@ namespace System.Windows.Forms
             TreeNode node = NodeFromHandle(item.hItem);
 
             // Note that IsExpanded is invalid for the moment, so we use item item.state to branch.
-            if ((item.state & NativeMethods.TVIS_EXPANDED) == 0)
+            if ((item.state & ComCtl32.TVIS.EXPANDED) == 0)
             {
                 e = new TreeViewEventArgs(node, TreeViewAction.Collapse);
                 OnAfterCollapse(e);
@@ -2565,7 +2570,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe IntPtr TvnSelecting(NativeMethods.NMTREEVIEW* nmtv)
+        private unsafe IntPtr TvnSelecting(ComCtl32.NMTREEVIEW* nmtv)
         {
             if (treeViewState[TREEVIEWSTATE_ignoreSelects])
             {
@@ -2582,10 +2587,10 @@ namespace System.Windows.Forms
             TreeViewAction action = TreeViewAction.Unknown;
             switch (nmtv->action)
             {
-                case NativeMethods.TVC_BYKEYBOARD:
+                case ComCtl32.TVC.BYKEYBOARD:
                     action = TreeViewAction.ByKeyboard;
                     break;
-                case NativeMethods.TVC_BYMOUSE:
+                case ComCtl32.TVC.BYMOUSE:
                     action = TreeViewAction.ByMouse;
                     break;
             }
@@ -2596,37 +2601,39 @@ namespace System.Windows.Forms
             return (IntPtr)(e.Cancel ? 1 : 0);
         }
 
-        private unsafe void TvnSelected(NativeMethods.NMTREEVIEW* nmtv)
+        private unsafe void TvnSelected(ComCtl32.NMTREEVIEW* nmtv)
         {
-            if (nodesCollectionClear) //if called thru the Clear( ) of treeNodeCollection then just return...
+            // If called from the TreeNodeCollection.Clear() then return.
+            if (nodesCollectionClear)
             {
                 return;
             }
+
             if (nmtv->itemNew.hItem != IntPtr.Zero)
             {
                 TreeViewAction action = TreeViewAction.Unknown;
                 switch (nmtv->action)
                 {
-                    case NativeMethods.TVC_BYKEYBOARD:
+                    case ComCtl32.TVC.BYKEYBOARD:
                         action = TreeViewAction.ByKeyboard;
                         break;
-                    case NativeMethods.TVC_BYMOUSE:
+                    case ComCtl32.TVC.BYMOUSE:
                         action = TreeViewAction.ByMouse;
                         break;
                 }
+
                 OnAfterSelect(new TreeViewEventArgs(NodeFromHandle(nmtv->itemNew.hItem), action));
             }
 
             // TreeView doesn't properly revert back to the unselected image
             // if the unselected image is blank.
-            //
-            RECT rc = new RECT();
+            var rc = new RECT();
             *((IntPtr*)&rc.left) = nmtv->itemOld.hItem;
             if (nmtv->itemOld.hItem != IntPtr.Zero)
             {
                 if (unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_GETITEMRECT, 1, ref rc)) != 0)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rc, true);
+                    User32.InvalidateRect(new HandleRef(this, Handle), &rc, BOOL.TRUE);
                 }
             }
         }
@@ -2971,7 +2978,7 @@ namespace System.Windows.Forms
 
         private unsafe bool WmShowToolTip(ref Message m)
         {
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
             IntPtr tooltipHandle = nmhdr->hwndFrom;
 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
@@ -2983,7 +2990,6 @@ namespace System.Windows.Forms
 
             if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0))
             {
-
                 TreeNode tn = NodeFromHandle(hnode);
                 if (tn != null)
                 {
@@ -2992,9 +2998,13 @@ namespace System.Windows.Forms
                         Rectangle bounds = tn.Bounds;
                         bounds.Location = PointToScreen(bounds.Location);
 
-                        User32.SendMessageW(tooltipHandle, WindowMessages.TTM_ADJUSTRECT, PARAM.FromBool(true), bounds);
-                        SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHandle),
-                                NativeMethods.HWND_TOPMOST, bounds.Left, bounds.Top, 0, 0, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER);
+                        User32.SendMessageW(tooltipHandle, User32.WindowMessage.TTM_ADJUSTRECT, PARAM.FromBool(true), ref bounds);
+                        User32.SetWindowPos(
+                            new HandleRef(this, tooltipHandle),
+                            User32.HWND_TOPMOST,
+                            bounds.Left,
+                            bounds.Top,
+                            flags: User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOZORDER);
                         return true;
                     }
                 }
@@ -3042,18 +3052,16 @@ namespace System.Windows.Forms
 
         private unsafe void WmNotify(ref Message m)
         {
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
             // Custom draw code is handled separately.
-            //
             if ((nmhdr->code == NativeMethods.NM_CUSTOMDRAW))
             {
                 CustomDraw(ref m);
             }
             else
             {
-
-                NativeMethods.NMTREEVIEW* nmtv = (NativeMethods.NMTREEVIEW*)m.LParam;
+                ComCtl32.NMTREEVIEW* nmtv = (ComCtl32.NMTREEVIEW*)m.LParam;
 
                 switch (nmtv->nmhdr.code)
                 {
@@ -3159,7 +3167,7 @@ namespace System.Windows.Forms
 
                 if (contextMenu != null)
                 {
-                    UnsafeNativeMethods.GetCursorPos(out Point pt);
+                    User32.GetCursorPos(out Point pt);
 
                     // Summary: the current window must be made the foreground window
                     // before calling TrackPopupMenuEx, and a task switch must be
@@ -3214,7 +3222,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -3244,34 +3252,34 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case NativeMethods.TVM_SETITEM:
+                case (int)User32.WindowMessage.TVM_SETITEMW:
                     base.WndProc(ref m);
                     if (CheckBoxes)
                     {
-                        NativeMethods.TV_ITEM item = (NativeMethods.TV_ITEM)m.GetLParam(typeof(NativeMethods.TV_ITEM));
+                        ComCtl32.TVITEMW* item = (ComCtl32.TVITEMW*)m.LParam;
                         // Check for invalid node handle
-                        if (item.hItem != IntPtr.Zero)
+                        if (item->hItem != IntPtr.Zero)
                         {
-                            NativeMethods.TV_ITEM item1 = new NativeMethods.TV_ITEM
+                            var item1 = new ComCtl32.TVITEMW
                             {
-                                mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE,
-                                hItem = item.hItem,
-                                stateMask = NativeMethods.TVIS_STATEIMAGEMASK
+                                mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
+                                hItem = item->hItem,
+                                stateMask = ComCtl32.TVIS.STATEIMAGEMASK
                             };
-                            UnsafeNativeMethods.SendMessage(new HandleRef(null, Handle), NativeMethods.TVM_GETITEM, 0, ref item1);
+                            User32.SendMessageW(this, User32.WindowMessage.TVM_GETITEMW, IntPtr.Zero, ref item1);
 
-                            TreeNode node = NodeFromHandle(item.hItem);
-                            node.CheckedStateInternal = ((item1.state >> 12) > 1);
+                            TreeNode node = NodeFromHandle(item->hItem);
+                            node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
                         }
                     }
                     break;
                 case WindowMessages.WM_NOTIFY:
-                    NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                    switch (nmhdr.code)
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    switch (nmhdr->code)
                     {
                         case NativeMethods.TTN_GETDISPINFO:
                             // Setting the max width has the added benefit of enabling multiline tool tips
-                            User32.SendMessageW(nmhdr.hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

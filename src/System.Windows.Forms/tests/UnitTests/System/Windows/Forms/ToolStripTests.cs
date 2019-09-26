@@ -31,15 +31,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(toolStrip.BindingContext);
             Assert.Equal(25, toolStrip.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 25), toolStrip.Bounds);
+            Assert.True(toolStrip.CanEnableIme);
             Assert.True(toolStrip.CanOverflow);
             Assert.True(toolStrip.CanRaiseEvents);
             Assert.False(toolStrip.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 100, 25), toolStrip.ClientRectangle);
             Assert.Equal(new Size(100, 25), toolStrip.ClientSize);
-            Assert.False(toolStrip.Created);
             Assert.Null(toolStrip.Container);
+            Assert.Null(toolStrip.ContextMenu);
+            Assert.Null(toolStrip.ContextMenu);
             Assert.Empty(toolStrip.Controls);
             Assert.Same(toolStrip.Controls, toolStrip.Controls);
+            Assert.False(toolStrip.Created);
             Assert.Same(Cursors.Default, toolStrip.Cursor);
             Assert.Same(Cursors.Default, toolStrip.DefaultCursor);
             Assert.Equal(DockStyle.Top, toolStrip.DefaultDock);
@@ -64,10 +67,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, toolStrip.DockPadding.Bottom);
             Assert.Equal(0, toolStrip.DockPadding.Left);
             Assert.Equal(1, toolStrip.DockPadding.Right);
+            Assert.True(toolStrip.DoubleBuffered);
             Assert.True(toolStrip.Enabled);
             Assert.NotNull(toolStrip.Events);
             Assert.Same(toolStrip.Events, toolStrip.Events);
             Assert.Equal(Control.DefaultFont, toolStrip.Font);
+            Assert.Equal(toolStrip.Font.Height, toolStrip.FontHeight);
             Assert.Equal(Control.DefaultForeColor, toolStrip.ForeColor);
             Assert.Equal(ToolStripGripStyle.Visible, toolStrip.GripStyle);
             Assert.Equal(ToolStripGripDisplayStyle.Vertical, toolStrip.GripDisplayStyle);
@@ -103,9 +108,12 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(toolStrip.OverflowButton);
             Assert.Same(toolStrip.OverflowButton, toolStrip.OverflowButton);
             Assert.Equal(new Padding(0, 0, 1, 0), toolStrip.Padding);
+            Assert.False(toolStrip.RecreatingHandle);
+            Assert.Null(toolStrip.Region);
             Assert.NotNull(toolStrip.Renderer);
             Assert.Same(toolStrip.Renderer, toolStrip.Renderer);
             Assert.Equal(ToolStripRenderMode.ManagerRenderMode, toolStrip.RenderMode);
+            Assert.False(toolStrip.ResizeRedraw);
             Assert.Equal(100, toolStrip.Right);
             Assert.Equal(RightToLeft.No, toolStrip.RightToLeft);
             Assert.True(toolStrip.ShowItemToolTips);
@@ -123,6 +131,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(toolStrip.VScroll);
             Assert.Equal(100, toolStrip.Width);
             Assert.True(ToolStripManager.ToolStrips.Contains(toolStrip));
+
+            Assert.False(toolStrip.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> Ctor_ToolStripItemArray_TestData()
@@ -183,10 +193,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, toolStrip.DockPadding.Bottom);
             Assert.Equal(0, toolStrip.DockPadding.Left);
             Assert.Equal(1, toolStrip.DockPadding.Right);
+            Assert.True(toolStrip.DoubleBuffered);
             Assert.True(toolStrip.Enabled);
             Assert.NotNull(toolStrip.Events);
             Assert.Same(toolStrip.Events, toolStrip.Events);
             Assert.Equal(Control.DefaultFont, toolStrip.Font);
+            Assert.Equal(toolStrip.Font.Height, toolStrip.FontHeight);
             Assert.Equal(Control.DefaultForeColor, toolStrip.ForeColor);
             Assert.Equal(ToolStripGripStyle.Visible, toolStrip.GripStyle);
             Assert.Equal(ToolStripGripDisplayStyle.Vertical, toolStrip.GripDisplayStyle);
@@ -223,9 +235,12 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(toolStrip.OverflowButton);
             Assert.Same(toolStrip.OverflowButton, toolStrip.OverflowButton);
             Assert.Equal(new Padding(0, 0, 1, 0), toolStrip.Padding);
+            Assert.False(toolStrip.RecreatingHandle);
+            Assert.Null(toolStrip.Region);
             Assert.NotNull(toolStrip.Renderer);
             Assert.Same(toolStrip.Renderer, toolStrip.Renderer);
             Assert.Equal(ToolStripRenderMode.ManagerRenderMode, toolStrip.RenderMode);
+            Assert.False(toolStrip.ResizeRedraw);
             Assert.Equal(100, toolStrip.Right);
             Assert.Equal(RightToLeft.No, toolStrip.RightToLeft);
             Assert.True(toolStrip.ShowItemToolTips);
@@ -243,6 +258,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(toolStrip.VScroll);
             Assert.Equal(100, toolStrip.Width);
             Assert.True(ToolStripManager.ToolStrips.Contains(toolStrip));
+
+            Assert.False(toolStrip.IsHandleCreated);
         }
 
         [Fact]
@@ -255,6 +272,25 @@ namespace System.Windows.Forms.Tests
         public void ToolStrip_Ctor_NullValueInItems_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("value", () => new ToolStrip(new ToolStripItem[] { null }));
+        }
+
+        [Fact]
+        public void ToolStrip_CreateParams_GetDefault_ReturnsExpected()
+        {
+            var control = new SubToolStrip();
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x10000, createParams.ExStyle);
+            Assert.Equal(25, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56000000, createParams.Style);
+            Assert.Equal(100, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
         }
 
         [Theory]
@@ -323,6 +359,8 @@ namespace System.Windows.Forms.Tests
             {
             }
 
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;
@@ -351,9 +389,25 @@ namespace System.Windows.Forms.Tests
 
             public new ToolStripItemCollection DisplayedItems => base.DisplayedItems;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
 
             public new bool HScroll
             {
@@ -362,6 +416,12 @@ namespace System.Windows.Forms.Tests
             }
 
             public new Size MaxItemSize => base.MaxItemSize;
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
 
             public new bool VScroll
             {

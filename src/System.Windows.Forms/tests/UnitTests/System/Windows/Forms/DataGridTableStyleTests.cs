@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.Control, style.GridLineColor);
             Assert.Equal(DataGridLineStyle.Solid, style.GridLineStyle);
             Assert.Equal(SystemColors.Control, style.HeaderBackColor);
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
             Assert.Equal(SystemColors.ControlText, style.HeaderForeColor);
             Assert.Equal(SystemColors.HotTrack, style.LinkColor);
             Assert.Equal(SystemColors.HotTrack, style.LinkHoverColor);
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.Control, style.GridLineColor);
             Assert.Equal(DataGridLineStyle.Solid, style.GridLineStyle);
             Assert.Equal(SystemColors.Control, style.HeaderBackColor);
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
             Assert.Equal(SystemColors.ControlText, style.HeaderForeColor);
             Assert.Equal(SystemColors.HotTrack, style.LinkColor);
             Assert.Equal(SystemColors.HotTrack, style.LinkHoverColor);
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.Control, style.GridLineColor);
             Assert.Equal(DataGridLineStyle.Solid, style.GridLineStyle);
             Assert.Equal(SystemColors.Control, style.HeaderBackColor);
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
             Assert.Equal(SystemColors.ControlText, style.HeaderForeColor);
             Assert.Equal(SystemColors.HotTrack, style.LinkColor);
             Assert.Equal(SystemColors.HotTrack, style.LinkHoverColor);
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> InvalidColor_TestData()
         {
             yield return new object[] { Color.Empty };
-            yield return new object[] { Color.FromArgb(244, 1, 2, 3) };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3) };
         }
 
         [Theory]
@@ -952,11 +952,11 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             style.HeaderFont = null;
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
 
             // Set null again.
             style.HeaderFont = null;
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
 
             // Set different.
             style.HeaderFont = font1;
@@ -1041,12 +1041,12 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             style.HeaderFont = null;
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
             Assert.Equal(2, callCount);
 
             // Set null again.
             style.HeaderFont = null;
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
             Assert.Equal(2, callCount);
 
             // Set different.
@@ -4134,13 +4134,13 @@ namespace System.Windows.Forms.Tests
 
             // Reset default.
             style.ResetHeaderFont();
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
 
             // Reset custom.
             style.HeaderFont = font;
             Assert.Same(font, style.HeaderFont);
             style.ResetHeaderFont();
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
         }
 
         [Fact]
@@ -4190,7 +4190,7 @@ namespace System.Windows.Forms.Tests
 
             // Reset default.
             style.ResetHeaderFont();
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
             Assert.Equal(0, callCount);
 
             // Reset custom.
@@ -4198,7 +4198,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(font, style.HeaderFont);
             Assert.Equal(1, callCount);
             style.ResetHeaderFont();
-            Assert.Same(Control.DefaultFont, style.HeaderFont);
+            Assert.Equal(Control.DefaultFont, style.HeaderFont);
             Assert.Equal(2, callCount);
         }
 

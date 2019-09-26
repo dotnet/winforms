@@ -849,7 +849,7 @@ namespace System.Windows.Forms
                 }
 
                 var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
-                toolInfo.SendMessage(_tipWindow, WindowMessages.TTM_ADDTOOLW);
+                toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_ADDTOOLW);
 
                 Update(timerCaused: false);
             }
@@ -899,9 +899,12 @@ namespace System.Windows.Forms
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                    SafeNativeMethods.SetWindowPos(new HandleRef(_tipWindow, _tipWindow.Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, WindowMessages.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
+                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SetWindowPos(
+                        new HandleRef(_tipWindow, _tipWindow.Handle),
+                        User32.HWND_TOP,
+                        flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
+                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
                 }
 
                 return true;
@@ -926,16 +929,14 @@ namespace System.Windows.Forms
                 // Hide the window and invalidate the parent to ensure
                 // that we leave no visual artifacts. given that we
                 // have a bizare region window, this is needed.
-                //
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle),
-                                               NativeMethods.HWND_TOP,
-                                               _windowBounds.X,
-                                               _windowBounds.Y,
-                                               _windowBounds.Width,
-                                               _windowBounds.Height,
-                                               NativeMethods.SWP_HIDEWINDOW
-                                               | NativeMethods.SWP_NOSIZE
-                                               | NativeMethods.SWP_NOMOVE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    _windowBounds.X,
+                    _windowBounds.Y,
+                    _windowBounds.Width,
+                    _windowBounds.Height,
+                    User32.SWP.HIDEWINDOW | User32.SWP.NOSIZE | User32.SWP.NOMOVE);
                 _parent?.Invalidate(true);
                 DestroyHandle();
 
@@ -991,8 +992,8 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnPaint(ref Message m)
             {
-                NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                IntPtr hdc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                var ps = new User32.PAINTSTRUCT();
+                IntPtr hdc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
                 try
                 {
                     CreateMirrorDC(hdc, _windowBounds.Width - 1);
@@ -1003,7 +1004,12 @@ namespace System.Windows.Forms
                         {
                             ControlItem item = (ControlItem)items[i];
                             Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                            SafeNativeMethods.DrawIconEx(new HandleRef(this, _mirrordc.Hdc), bounds.X - _windowBounds.X, bounds.Y - _windowBounds.Y, new HandleRef(_provider.Region, _provider.Region.IconHandle), bounds.Width, bounds.Height, 0, NativeMethods.NullHandleRef, NativeMethods.DI_NORMAL);
+                            User32.DrawIconEx(
+                                _mirrordc,
+                                bounds.X - _windowBounds.X,
+                                bounds.Y - _windowBounds.Y,
+                                _provider.Region,
+                                bounds.Width, bounds.Height);
                         }
                     }
                     finally
@@ -1013,7 +1019,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+                    User32.EndPaint(new HandleRef(this, Handle), ref ps);
                 }
             }
 
@@ -1072,7 +1078,7 @@ namespace System.Windows.Forms
                 if (_tipWindow != null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
-                    info .SendMessage(_tipWindow, WindowMessages.TTM_DELTOOLW);
+                    info .SendMessage(_tipWindow, User32.WindowMessage.TTM_DELTOOLW);
                 }
 
                 if (items.Count == 0)
@@ -1113,7 +1119,7 @@ namespace System.Windows.Forms
             ///  rectangles and descriptions. This basically brings the error window up to date with
             ///  the internal data structures.
             /// </summary>
-            public void Update(bool timerCaused)
+            public unsafe void Update(bool timerCaused)
             {
                 IconRegion iconRegion = _provider.Region;
                 Size size = iconRegion.Size;
@@ -1178,7 +1184,7 @@ namespace System.Windows.Forms
                             }
 
                             var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, flags, item.Error, iconBounds);
-                            toolInfo.SendMessage(_tipWindow, WindowMessages.TTM_SETTOOLINFOW);
+                            toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_SETTOOLINFOW);
                         }
 
                         if (timerCaused && item.BlinkPhase > 0)
@@ -1233,23 +1239,29 @@ namespace System.Windows.Forms
                     }
                 }
 
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, _windowBounds.X, _windowBounds.Y,
-                                     _windowBounds.Width, _windowBounds.Height, NativeMethods.SWP_NOACTIVATE);
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), null, false);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOP,
+                    _windowBounds.X,
+                    _windowBounds.Y,
+                    _windowBounds.Width,
+                    _windowBounds.Height,
+                    User32.SWP.NOACTIVATE);
+                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
             }
 
             /// <summary>
             ///  Called when the error window gets a windows message.
             /// </summary>
-            protected override void WndProc(ref Message m)
+            protected unsafe override void WndProc(ref Message m)
             {
                 switch (m.Msg)
                 {
                     case WindowMessages.WM_NOTIFY:
-                        NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                        if (nmhdr.code == NativeMethods.TTN_SHOW || nmhdr.code == NativeMethods.TTN_POP)
+                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                        if (nmhdr->code == NativeMethods.TTN_SHOW || nmhdr->code == NativeMethods.TTN_POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr.idFrom, nmhdr.code == NativeMethods.TTN_SHOW);
+                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == NativeMethods.TTN_SHOW);
                         }
                         break;
                     case WindowMessages.WM_ERASEBKGND:
@@ -1569,7 +1581,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This represents the HRGN of icon. The region is calculate from the icon's mask.
         /// </summary>
-        internal class IconRegion
+        internal class IconRegion : IHandle
         {
             private Region region;
             private readonly Icon icon;
@@ -1585,7 +1597,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns the handle of the icon.
             /// </summary>
-            public IntPtr IconHandle => icon.Handle;
+            public IntPtr Handle => icon.Handle;
 
             /// <summary>
             ///  Returns the handle of the region.

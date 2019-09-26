@@ -1017,6 +1017,11 @@
         <target state="translated">Indique si la zone de liste déroulante est déroulée.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">Détermine l'affichage du contrôle.</target>

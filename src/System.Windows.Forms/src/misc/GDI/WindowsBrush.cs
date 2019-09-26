@@ -12,18 +12,13 @@ namespace System.Windows.Forms.Internal
     /// </summary>
     internal abstract class WindowsBrush : MarshalByRefObject, ICloneable, IDisposable
     {
-        // Handle to the native Windows brush object.
-        //
-        private readonly DeviceContext dc;
-        private IntPtr nativeHandle;        // Cannot be protected because the class is internal (C# doesn't allow it).
-        private readonly Color color = Color.White;  // GDI brushes have just one color as opposed to GDI+ that can have background color.
-        // Note: We may need to implement background color too.
+        private IntPtr _nativeHandle;
 
 #if WINGRAPHICS_FINALIZATION_WATCH
         private string AllocationSite = DbgUtil.StackTrace;
 #endif
 
-        public abstract object Clone();     // Declaration required by C# even though this is an abstract class.
+        public abstract object Clone();
 
         protected abstract void CreateBrush();
 
@@ -33,42 +28,30 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public WindowsBrush(DeviceContext dc)
         {
-            this.dc = dc;
+            DC = dc;
         }
 
         public WindowsBrush(DeviceContext dc, Color color)
         {
-            this.dc = dc;
-            this.color = color;
+            DC = dc;
+            Color = color;
         }
 
-        ~WindowsBrush()
-        {
-            Dispose(false);
-        }
+        ~WindowsBrush() => Dispose(false);
 
-        protected DeviceContext DC
-        {
-            get
-            {
-                return dc;
-            }
-        }
+        protected DeviceContext DC { get; }
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         protected virtual void Dispose(bool disposing)
         {
-            if (dc != null && nativeHandle != IntPtr.Zero)
+            if (DC != null && _nativeHandle != IntPtr.Zero)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
-                dc.DeleteObject(nativeHandle, GdiObjectType.Brush);
+                DC.DeleteObject(_nativeHandle, GdiObjectType.Brush);
 
-                nativeHandle = IntPtr.Zero;
+                _nativeHandle = IntPtr.Zero;
             }
 
             if (disposing)
@@ -77,48 +60,29 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        public Color Color
-        {
-            get
-            {
-                return color;
-            }
-        }
+        public Color Color { get; } = Color.White;
 
         /// <summary>
         ///  Gets the native Win32 brush handle. It creates it on demand.
-        /// </summary>
-        protected IntPtr NativeHandle
-        {
-            get
-            {
-                if (nativeHandle == IntPtr.Zero)
-                {
-                    CreateBrush();
-                }
-
-                return nativeHandle;
-            }
-
-            set
-            {
-                Debug.Assert(nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
-                Debug.Assert(value != IntPtr.Zero, "WARNING: assigning IntPtr.Zero to the nativeHandle object.");
-
-                nativeHandle = value;
-            }
-        }
-
-        /// <summary>
-        ///  Returns the native Win32 brush handle.
         /// </summary>
         public IntPtr HBrush
         {
             get
             {
-                return NativeHandle;
+                if (_nativeHandle == IntPtr.Zero)
+                {
+                    CreateBrush();
+                }
+
+                return _nativeHandle;
+            }
+            protected set
+            {
+                Debug.Assert(_nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
+                Debug.Assert(value != IntPtr.Zero, "WARNING: assigning IntPtr.Zero to the nativeHandle object.");
+
+                _nativeHandle = value;
             }
         }
     }
-
 }

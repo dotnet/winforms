@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
         private const int WM_TRAYMOUSEMESSAGE = WindowMessages.WM_USER + 1024;
-        private static readonly int WM_TASKBARCREATED = SafeNativeMethods.RegisterWindowMessage("TaskbarCreated");
+        private static readonly User32.WindowMessage WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
 
         private readonly object syncObj = new object();
 
@@ -419,9 +419,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the
-        ///  <see cref='NotifyIcon'/>.
+        ///  Releases the unmanaged resources used by the <see cref="NotifyIcon" />
+        ///  and optionally releases the managed resources.
         /// </summary>
+        /// <param name="disposing">
+        ///  <see langword="true" /> to release both managed and unmanaged resources;
+        ///  <see langword="false" /> to release only unmanaged resources.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -645,7 +649,7 @@ namespace System.Windows.Forms
         {
             if (contextMenu != null || contextMenuStrip != null)
             {
-                UnsafeNativeMethods.GetCursorPos(out Point pt);
+                User32.GetCursorPos(out Point pt);
 
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
@@ -873,7 +877,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (msg.Msg == WM_TASKBARCREATED)
+                    if (msg.Msg == (int)WM_TASKBARCREATED)
                     {
                         WmTaskbarCreated(ref msg);
                     }
@@ -895,41 +899,34 @@ namespace System.Windows.Forms
             window.DefWndProc(ref m);
         }
 
-        private void WmMeasureMenuItem(ref Message m)
+        private unsafe void WmMeasureMenuItem(ref Message m)
         {
             // Obtain the menu item object
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
-
             Debug.Assert(m.LParam != IntPtr.Zero, "m.lparam is null");
+            User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
             // A pointer to the correct MenuItem is stored in the measure item
             // information sent with the message.
             // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(mis.itemData);
+            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(mis->itemData);
             Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
 
             // Delegate this message to the menu item
-            if (menuItem != null)
-            {
-                menuItem.WmMeasureItem(ref m);
-            }
+            menuItem?.WmMeasureItem(ref m);
         }
 
-        private void WmDrawItemMenuItem(ref Message m)
+        private unsafe void WmDrawItemMenuItem(ref Message m)
         {
             // Obtain the menu item object
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
 
             // A pointer to the correct MenuItem is stored in the draw item
             // information sent with the message.
             // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(dis.itemData);
+            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(dis->itemData);
 
             // Delegate this message to the menu item
-            if (menuItem != null)
-            {
-                menuItem.WmDrawItem(ref m);
-            }
+            menuItem?.WmDrawItem(ref m);
         }
 
         /// <summary>

@@ -37,6 +37,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(100, 50), pictureBox.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 100, 50), pictureBox.ClientRectangle);
             Assert.Null(pictureBox.Container);
+            Assert.Null(pictureBox.ContextMenu);
+            Assert.Null(pictureBox.ContextMenuStrip);
+            Assert.Empty(pictureBox.Controls);
+            Assert.Same(pictureBox.Controls, pictureBox.Controls);
             Assert.False(pictureBox.Created);
             Assert.Same(Cursors.Default, pictureBox.Cursor);
             Assert.Same(Cursors.Default, pictureBox.DefaultCursor);
@@ -49,12 +53,14 @@ namespace System.Windows.Forms.Tests
             Assert.False(pictureBox.DesignMode);
             Assert.Equal(new Rectangle(0, 0, 100, 50), pictureBox.DisplayRectangle);
             Assert.Equal(DockStyle.None, pictureBox.Dock);
+            Assert.True(pictureBox.DoubleBuffered);
             Assert.True(pictureBox.Enabled);
             Assert.NotNull(pictureBox.ErrorImage);
             Assert.Same(pictureBox.ErrorImage, pictureBox.ErrorImage);
             Assert.NotNull(pictureBox.Events);
             Assert.Same(pictureBox.Events, pictureBox.Events);
             Assert.Equal(Control.DefaultFont, pictureBox.Font);
+            Assert.Equal(pictureBox.FontHeight, pictureBox.FontHeight);
             Assert.Equal(Control.DefaultForeColor, pictureBox.ForeColor);
             Assert.False(pictureBox.HasChildren);
             Assert.Null(pictureBox.Image);
@@ -69,8 +75,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, pictureBox.Padding);
             Assert.Null(pictureBox.Parent);
             Assert.Equal("Microsoft\u00AE .NET", pictureBox.ProductName);
-            Assert.Equal(BoundsSpecified.All, pictureBox.RequiredScaling);
-            Assert.True(pictureBox.RequiredScalingEnabled);
+            Assert.False(pictureBox.RecreatingHandle);
+            Assert.Null(pictureBox.Region);
+            Assert.False(pictureBox.ResizeRedraw);
             Assert.Equal(100, pictureBox.Right);
             Assert.Equal(RightToLeft.No, pictureBox.RightToLeft);
             Assert.Null(pictureBox.Site);
@@ -83,6 +90,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(pictureBox.Visible);
             Assert.False(pictureBox.WaitOnLoad);
             Assert.Equal(100, pictureBox.Width);
+
+            Assert.False(pictureBox.IsHandleCreated);
         }
 
         [Theory]
@@ -442,15 +451,17 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void PictureBox_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new PictureBox
+            var control = new SubPictureBox
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
         }
 
         [Fact]
@@ -485,7 +496,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             control.Font = null;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(3, callCount);
 
             // Remove handler.
@@ -1519,7 +1530,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Visible_Set_GetReturnsExpected(bool value)
         {
-            var control = new Control
+            var control = new PictureBox
             {
                 Visible = value
             };
@@ -1530,15 +1541,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Visible);
 
             // Set different.
-            control.Visible = value;
-            Assert.Equal(value, control.Visible);
+            control.Visible = !value;
+            Assert.Equal(!value, control.Visible);
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Visible_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new Control();
+            var control = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.Visible = value;
@@ -1556,7 +1567,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void PictureBox_Visible_SetWithHandler_CallsVisibleChanged()
         {
-            var control = new Control
+            var control = new PictureBox
             {
                 Visible = true
             };
@@ -2564,12 +2575,30 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
+
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
 
             public new ImeMode ImeModeBase
             {
                 get => base.ImeModeBase;
                 set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
             }
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);

@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -722,13 +723,13 @@ namespace System.Windows.Forms
                     childAccessibleObject = new ChildAccessibleObject(toolStripComboBoxControl, toolStripComboBoxControl.Handle);
                 }
 
-                internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
                     switch (direction)
                     {
-                        case UnsafeNativeMethods.NavigateDirection.Parent:
-                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        case UiaCore.NavigateDirection.Parent:
+                        case UiaCore.NavigateDirection.PreviousSibling:
+                        case UiaCore.NavigateDirection.NextSibling:
                             if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                             {
                                 return toolStripComboBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
@@ -739,7 +740,7 @@ namespace System.Windows.Forms
                     return base.FragmentNavigate(direction);
                 }
 
-                internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 {
                     get
                     {

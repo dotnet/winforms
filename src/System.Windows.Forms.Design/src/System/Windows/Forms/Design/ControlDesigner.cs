@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design
     public class ControlDesigner : ComponentDesigner
     {
         protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
-        private static int s_currentProcessId;
+        private static uint s_currentProcessId;
         private IDesignerHost _host; // the host for our designer
         private IDesignerTarget _designerTarget; // the target window proc for the control.
 
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
         private int _lastMoveScreenX;
         private int _lastMoveScreenY;
         // Values used to simulate double clicks for controls that don't support them.
-        private int _lastClickMessageTime;
+        private uint _lastClickMessageTime;
         private int _lastClickMessagePositionX;
         private int _lastClickMessagePositionY;
 
@@ -394,7 +394,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the control.  This is useful if you want to block this message from getting to the control, but you do not want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
-        protected void BaseWndProc(ref Message m) => m.Result = UnsafeNativeMethods.DefWindowProc(m.HWnd, m.Msg, m.WParam, m.LParam);
+        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the control for this designer can be parented into the given ParentControlDesigner's designer.
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms.Design
 
                 case WindowMessages.WM_GETOBJECT:
                     // See "How to Handle WM_GETOBJECT" in MSDN
-                    if (NativeMethods.OBJID_CLIENT == unchecked((int)(long)m.LParam))
+                    if (unchecked((int)(long)m.LParam) == User32.OBJID.CLIENT)
                     {
                         Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
                         // Get an Lresult for the accessibility Object for this control
@@ -1938,11 +1938,11 @@ namespace System.Windows.Forms.Design
 
                 case WindowMessages.WM_NCMOUSEMOVE:
                 case WindowMessages.WM_MOUSEMOVE:
-                    if ((unchecked((int)(long)m.WParam) & NativeMethods.MK_LBUTTON) != 0)
+                    if ((unchecked((User32.MK)(long)m.WParam) & User32.MK.LBUTTON) != 0)
                     {
                         button = MouseButtons.Left;
                     }
-                    else if ((unchecked((int)(long)m.WParam) & NativeMethods.MK_RBUTTON) != 0)
+                    else if ((unchecked((User32.MK)(long)m.WParam) & User32.MK.RBUTTON) != 0)
                     {
                         button = MouseButtons.Right;
                         _toolPassThrough = false;
@@ -2076,10 +2076,10 @@ namespace System.Windows.Forms.Design
                                 }
                                 else
                                 {
-                                    NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                                    UnsafeNativeMethods.BeginPaint(m.HWnd, ref ps);
+                                    var ps = new User32.PAINTSTRUCT();
+                                    User32.BeginPaint(m.HWnd, ref ps);
                                     PaintException(pevent, _thrownException);
-                                    UnsafeNativeMethods.EndPaint(m.HWnd, ref ps);
+                                    User32.EndPaint(m.HWnd, ref ps);
                                 }
                             }
                             finally
@@ -2218,7 +2218,7 @@ namespace System.Windows.Forms.Design
                     }
                     break;
                 default:
-                    if (m.Msg == NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
                     {
                         OnMouseEnter();
                         BaseWndProc(ref m);
@@ -2353,7 +2353,7 @@ namespace System.Windows.Forms.Design
         {
             bool doubleClick = false;
             int wait = SystemInformation.DoubleClickTime;
-            int elapsed = SafeNativeMethods.GetTickCount() - _lastClickMessageTime;
+            uint elapsed = Kernel32.GetTickCount() - _lastClickMessageTime;
             if (elapsed <= wait)
             {
                 Size dblClick = SystemInformation.DoubleClickSize;
@@ -2370,7 +2370,7 @@ namespace System.Windows.Forms.Design
             {
                 _lastClickMessagePositionX = x;
                 _lastClickMessagePositionY = y;
-                _lastClickMessageTime = SafeNativeMethods.GetTickCount();
+                _lastClickMessageTime = Kernel32.GetTickCount();
             }
             else
             {
@@ -2664,18 +2664,19 @@ namespace System.Windows.Forms.Design
 
         private bool IsWindowInCurrentProcess(IntPtr hwnd)
         {
-            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hwnd), out int pid);
+            User32.GetWindowThreadProcessId(hwnd, out uint pid);
             return pid == CurrentProcessId;
         }
 
-        private int CurrentProcessId
+        private uint CurrentProcessId
         {
             get
             {
                 if (s_currentProcessId == 0)
                 {
-                    s_currentProcessId = SafeNativeMethods.GetCurrentProcessId();
+                    s_currentProcessId = Kernel32.GetCurrentProcessId();
                 }
+
                 return s_currentProcessId;
             }
         }

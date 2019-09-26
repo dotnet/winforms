@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     {
         private static readonly object s_helpRequestEvent = new object();
         private const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
-        private static int s_helpMsg;
+        private static User32.WindowMessage s_helpMsg;
 
         private IntPtr _defOwnerWndProc;
 
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                 // Under some circumstances, the dialog does not initially focus on any
                 // control. We fix that by explicitly setting focus ourselves.
                 _defaultControlHwnd = wparam;
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, wparam));
+                User32.SetFocus(wparam);
             }
             else if (msg == WindowMessages.WM_SETFOCUS)
             {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 // If the dialog box gets focus, bounce it to the default control.
                 // So we post a message back to ourselves to wait for the focus change
                 // then push it to the default control.
-                UnsafeNativeMethods.SetFocus(new HandleRef(this, _defaultControlHwnd));
+                User32.SetFocus(new HandleRef(this, _defaultControlHwnd));
             }
 
             return IntPtr.Zero;
@@ -94,8 +94,12 @@ namespace System.Windows.Forms
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
-            SafeNativeMethods.SetWindowPos(new HandleRef(null, hWnd), NativeMethods.NullHandleRef, x, y, 0, 0, NativeMethods.SWP_NOSIZE |
-                                 NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+            User32.SetWindowPos(
+                hWnd,
+                User32.HWND_TOP,
+                x,
+                y,
+                flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
         }
 
         /// <summary>
@@ -113,7 +117,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == s_helpMsg)
+            if (msg == (int)s_helpMsg)
             {
                 if (NativeWindow.WndProcShouldBeDebuggable)
                 {
@@ -134,8 +138,7 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
-            return UnsafeNativeMethods.CallWindowProc(_defOwnerWndProc, hWnd, msg, wparam, lparam);
-
+            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WindowMessage)msg, wparam, lparam);
         }
 
         /// <summary>
@@ -179,7 +182,7 @@ namespace System.Windows.Forms
 
                 if (hwndOwner == IntPtr.Zero)
                 {
-                    hwndOwner = UnsafeNativeMethods.GetActiveWindow();
+                    hwndOwner = User32.GetActiveWindow();
                 }
 
                 if (hwndOwner == IntPtr.Zero)
@@ -190,9 +193,9 @@ namespace System.Windows.Forms
                     hwndOwner = native.Handle;
                 }
 
-                if (s_helpMsg == 0)
+                if (s_helpMsg == (User32.WindowMessage)0)
                 {
-                    s_helpMsg = SafeNativeMethods.RegisterWindowMessage("commdlg_help");
+                    s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
                 }
 
                 NativeMethods.WndProc ownerProc = new NativeMethods.WndProc(OwnerWndProc);

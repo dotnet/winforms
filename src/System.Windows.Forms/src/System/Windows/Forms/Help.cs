@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -201,7 +202,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                handle = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
+                handle = new HandleRef(null, User32.GetActiveWindow());
             }
 
             object htmlParam;
@@ -286,11 +287,11 @@ namespace System.Windows.Forms
             }
             else
             {
-                handle = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
+                handle = new HandleRef(null, User32.GetActiveWindow());
             }
 
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "\tExecuting '" + file.ToString() + "'");
-            UnsafeNativeMethods.ShellExecute_NoBFM(handle, null, file.ToString(), null, null, NativeMethods.SW_NORMAL);
+            Shell32.ShellExecuteW(handle, null, file.ToString(), null, null, User32.SW.NORMAL);
         }
 
         private static Uri Resolve(string partialUri)

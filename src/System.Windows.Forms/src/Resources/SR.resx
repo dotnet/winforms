@@ -670,6 +670,9 @@
   <data name="ComboBoxDroppedDownDescr" xml:space="preserve">
     <value>Indicates if the combo box is currently dropped down.</value>
   </data>
+  <data name="ComboBoxEditDefaultAccessibleName" xml:space="preserve">
+    <value>ComboBox</value>
+  </data>
   <data name="ComboBoxFlatStyleDescr" xml:space="preserve">
     <value>Determines the display of the control.</value>
   </data>

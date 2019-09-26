@@ -198,15 +198,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private static User32.TextFormatFlags GetTextFormatFlags(TextFormatFlags flags)
+        private static User32.DT GetTextFormatFlags(TextFormatFlags flags)
         {
             if (((uint)flags & WindowsGraphics.GdiUnsupportedFlagMask) == 0)
             {
-                return (User32.TextFormatFlags)flags;
+                return (User32.DT)flags;
             }
 
             // Clear TextRenderer custom flags.
-            User32.TextFormatFlags windowsGraphicsSupportedFlags = (User32.TextFormatFlags)(((uint)flags) & ~WindowsGraphics.GdiUnsupportedFlagMask);
+            User32.DT windowsGraphicsSupportedFlags = (User32.DT)(((uint)flags) & ~WindowsGraphics.GdiUnsupportedFlagMask);
 
             return windowsGraphicsSupportedFlags;
         }

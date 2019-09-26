@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (oldParent != value._parent && (Owner._state & STATE_CREATED) != 0)
+                        if (oldParent != value._parent && (Owner._state & States.Created) != 0)
                         {
                             value.SetParentHandle(Owner.InternalHandle);
                             if (value.Visible)

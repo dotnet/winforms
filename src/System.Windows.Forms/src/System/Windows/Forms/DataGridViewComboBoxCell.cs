@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -3115,12 +3116,39 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                switch (propertyID)
                 {
-                    return NativeMethods.UIA_ComboBoxControlTypeId;
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_ComboBoxControlTypeId;
+                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
                 }
 
                 return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
+                    DataGridViewComboBoxEditingControl comboBox = Owner.Properties.GetObject(PropComboBoxCellEditingComboBox) as DataGridViewComboBoxEditingControl;
+                    if (comboBox != null)
+                    {
+                        return comboBox.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                    }
+
+                    return UiaCore.ExpandCollapseState.Collapsed;
+                }
             }
         }
     }

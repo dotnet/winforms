@@ -940,13 +940,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override int ShowParams
-        {
-            get
-            {
-                return NativeMethods.SW_SHOWNOACTIVATE;
-            }
-        }
+        internal override User32.SW ShowParams => User32.SW.SHOWNOACTIVATE;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged
@@ -1104,9 +1098,10 @@ namespace System.Windows.Forms
         {
             if (TopMost)
             {
-                HandleRef topMostFlag = (topMost) ? NativeMethods.HWND_TOPMOST : NativeMethods.HWND_NOTOPMOST;
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), topMostFlag, 0, 0, 0, 0,
-                                             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    topMost ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
+                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
             }
         }
 
@@ -1332,13 +1327,13 @@ namespace System.Windows.Forms
         /// </summary>	
         internal virtual void Initialize()
         {
-            SetState(STATE_VISIBLE, false);
+            SetState(States.Visible, false);
             SetTopLevelInternal(true);
 
             // Marking this as a modal form prevents it from being activated
             // by the IMsoComponentManager, which will break keyboard routing in VS.
             //
-            SetState(STATE_MODAL, true);
+            SetState(States.Modal, true);
 
             SetStyle(ControlStyles.ResizeRedraw, true);
             UpdateStyles();
@@ -1910,8 +1905,10 @@ namespace System.Windows.Forms
                             }
                             else if (IsHandleCreated && SafeNativeMethods.IsWindowEnabled(new HandleRef(this, Handle)))
                             {
-                                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                                             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+                                User32.SetWindowPos(
+                                    new HandleRef(this, Handle),
+                                    User32.HWND_TOP,
+                                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
                             }
                         }
                     }
@@ -2272,12 +2269,13 @@ namespace System.Windows.Forms
         #region WMNCACTIVATE
         private bool sendingActivateMessage = false;
 
-        // WmNcActivate
-        // if someone clicks on a child control of the toolstrip dropdown, we want
-        // the title bar to continue appearing active.  Normally we just show without
-        // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
-        // child controls from taking focus.
-        private void WmNCActivate(ref Message m)
+        /// <summary>
+        ///  If someone clicks on a child control of the toolstrip dropdown, we want
+        ///  the title bar to continue appearing active.  Normally we just show without
+        ///  taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
+        ///  child controls from taking focus.
+        /// </summary>
+        private unsafe void WmNCActivate(ref Message m)
         {
             if (m.WParam != IntPtr.Zero /*activating*/)
             {
@@ -2292,7 +2290,11 @@ namespace System.Windows.Forms
                         HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
                         UnsafeNativeMethods.SendMessage(activeHwndHandleRef, WindowMessages.WM_NCACTIVATE, (IntPtr)1, NativeMethods.InvalidIntPtr);
-                        SafeNativeMethods.RedrawWindow(activeHwndHandleRef, null, NativeMethods.NullHandleRef, NativeMethods.RDW_FRAME | NativeMethods.RDW_INVALIDATE);
+                        User32.RedrawWindow(
+                            activeHwndHandleRef,
+                            null,
+                            IntPtr.Zero,
+                            User32.RDW.FRAME | User32.RDW.INVALIDATE);
                         m.WParam = (IntPtr)1;
                     }
                     finally

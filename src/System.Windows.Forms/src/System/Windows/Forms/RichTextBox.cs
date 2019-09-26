@@ -3023,7 +3023,7 @@ namespace System.Windows.Forms
                 dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
             }
 
-            NativeMethods.LOGFONTW logFont = NativeMethods.LOGFONTW.FromFont(value);
+            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(value);
             NativeMethods.CHARFORMATW charFormat = new NativeMethods.CHARFORMATW
             {
                 cbSize = sizeof(NativeMethods.CHARFORMATW),
@@ -3481,21 +3481,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Converts a CHARRANGE to a string. Note: The behavior of this is dependent on the current window
-        ///  class name being used. We have to create a CharBuffer of the type of RichTextBox DLL we're using,
-        ///  not based on the SystemCharWidth.
+        ///  Converts a CHARRANGE to a string.
         /// </summary>
+        /// <remarks>
+        ///  The behavior of this is dependent on the current window class name being used. 
+        ///  We have to create a CharBuffer of the type of RichTextBox DLL we're using,
+        ///  not based on the SystemCharWidth.
+        /// </remarks>
         private string CharRangeToString(Richedit.CHARRANGE c)
         {
             NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
             {
                 chrg = c
             };
+
             Debug.Assert((c.cpMax - c.cpMin) > 0, "CHARRANGE was null or negative - can't do it!");
-
-            //Windows
-
-            if (c.cpMax > Text.Length || c.cpMax - c.cpMin <= 0)
+            if (c.cpMax - c.cpMin <= 0)
             {
                 return string.Empty;
             }
@@ -3534,7 +3535,7 @@ namespace System.Windows.Forms
             // We check if we're in the middle of handle creation because
             // the rich edit control fires spurious events during this time.
             //
-            if (m.LParam == Handle && !GetState(STATE_CREATINGHANDLE))
+            if (m.LParam == Handle && !GetState(States.CreatingHandle))
             {
                 switch (Util.HIWORD(m.WParam))
                 {
@@ -3558,12 +3559,12 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void WmReflectNotify(ref Message m)
+        internal unsafe void WmReflectNotify(ref Message m)
         {
             if (m.HWnd == Handle)
             {
-                NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                switch (nmhdr.code)
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                switch (nmhdr->code)
                 {
                     case RichTextBoxConstants.EN_LINK:
                         EnLinkMsgHandler(ref m);
@@ -3695,7 +3696,7 @@ namespace System.Windows.Forms
 
             fixed (byte* es64p = &es64.contents[0])
             {
-                es.nmhdr = new NativeMethods.NMHDR();
+                es.nmhdr = new User32.NMHDR();
                 es.chrg = new Richedit.CHARRANGE();
 
                 es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
@@ -3717,7 +3718,7 @@ namespace System.Windows.Forms
 
             fixed (byte* es64p = &es64.contents[0])
             {
-                es.nmhdr = new NativeMethods.NMHDR();
+                es.nmhdr = new User32.NMHDR();
                 es.charrange = new Richedit.CHARRANGE();
 
                 es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
@@ -3830,7 +3831,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     if (LinkCursor && !Cursor.Equals(Cursors.WaitCursor))
                     {
-                        UnsafeNativeMethods.SetCursor(new HandleRef(Cursors.Hand, Cursors.Hand.Handle));
+                        Cursor.Current = Cursors.Hand;
                         m.Result = (IntPtr)1;
                     }
                     else
@@ -3860,7 +3861,7 @@ namespace System.Windows.Forms
                     // classes. Usually this doesn't matter, because system controls always identify their window class explicitly through
                     // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                     // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.
-                    if (unchecked((int)(long)m.LParam) == NativeMethods.OBJID_QUERYCLASSNAMEIDX)
+                    if (unchecked((int)(long)m.LParam) == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
                         m.Result = (IntPtr)(65536 + 30);
                     }
@@ -3984,7 +3985,7 @@ namespace System.Windows.Forms
                         MouseButtons b = Control.MouseButtons;
                         Keys k = Control.ModifierKeys;
 
-                        int keyState = 0;
+                        User32.MK keyState = 0;
 
                         // Due to the order in which we get called, we have to set up the keystate here.
                         // First GetDragDropEffect is called with grfKeyState == 0, and then
@@ -3993,27 +3994,27 @@ namespace System.Windows.Forms
 
                         if ((b & MouseButtons.Left) == MouseButtons.Left)
                         {
-                            keyState |= NativeMethods.MK_LBUTTON;
+                            keyState |= User32.MK.LBUTTON;
                         }
 
                         if ((b & MouseButtons.Right) == MouseButtons.Right)
                         {
-                            keyState |= NativeMethods.MK_RBUTTON;
+                            keyState |= User32.MK.RBUTTON;
                         }
 
                         if ((b & MouseButtons.Middle) == MouseButtons.Middle)
                         {
-                            keyState |= NativeMethods.MK_MBUTTON;
+                            keyState |= User32.MK.MBUTTON;
                         }
 
                         if ((k & Keys.Control) == Keys.Control)
                         {
-                            keyState |= NativeMethods.MK_CONTROL;
+                            keyState |= User32.MK.CONTROL;
                         }
 
                         if ((k & Keys.Shift) == Keys.Shift)
                         {
-                            keyState |= NativeMethods.MK_SHIFT;
+                            keyState |= User32.MK.SHIFT;
                         }
 
                         lastDataObject = new DataObject(lpdataobj);
@@ -4023,12 +4024,12 @@ namespace System.Windows.Forms
                             lastEffect = DragDropEffects.None;
                         }
 
-                        DragEventArgs e = new DragEventArgs(lastDataObject,
-                                                        keyState,
-                                                        Control.MousePosition.X,
-                                                        Control.MousePosition.Y,
-                                                        DragDropEffects.All,
-                                                        lastEffect);
+                        var e = new DragEventArgs(lastDataObject,
+                                                  (int)keyState,
+                                                  Control.MousePosition.X,
+                                                  Control.MousePosition.Y,
+                                                  DragDropEffects.All,
+                                                  lastEffect);
                         if (fReally == 0)
                         {
                             // we are just querying
@@ -4039,7 +4040,7 @@ namespace System.Windows.Forms
                             // like in the local drag case. Then you drag into rtb2. rtb2 will first be called in this method,
                             // and not GetDragDropEffects. Now lastEffect is initialized to None for rtb2, so we would not allow
                             // the drag. Thus we need to set the effect here as well.
-                            e.Effect = ((keyState & NativeMethods.MK_CONTROL) == NativeMethods.MK_CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
+                            e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
                         }
                         else
@@ -4085,14 +4086,18 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            public HRESULT GetDragDropEffect(BOOL fDrag, int grfKeyState, ref int pdwEffect)
+            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
+                if (pdwEffect == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
 
                 if (owner.AllowDrop || owner.EnableAutoDragDrop)
                 {
-
-                    if (fDrag != BOOL.FALSE && grfKeyState == 0)
+                    if (fDrag.IsTrue() && grfKeyState == (User32.MK)0)
                     {
                         // This is the very first call we receive in a Drag-Drop operation,
                         // so we will let the control know what we support.
@@ -4122,11 +4127,10 @@ namespace System.Windows.Forms
                         // We only care about the drag.
                         //
                         // When we drop, lastEffect will have the right state
-                        if (fDrag == BOOL.FALSE && lastDataObject != null && grfKeyState != 0)
+                        if (fDrag.IsFalse() && lastDataObject != null && grfKeyState != (User32.MK)0)
                         {
-
                             DragEventArgs e = new DragEventArgs(lastDataObject,
-                                                                grfKeyState,
+                                                                (int)grfKeyState,
                                                                 Control.MousePosition.X,
                                                                 Control.MousePosition.Y,
                                                                 DragDropEffects.All,
@@ -4135,7 +4139,7 @@ namespace System.Windows.Forms
                             // Now tell which of the allowable effects we want to use, but only if we are not already none
                             if (lastEffect != DragDropEffects.None)
                             {
-                                e.Effect = ((grfKeyState & NativeMethods.MK_CONTROL) == NativeMethods.MK_CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
+                                e.Effect = ((grfKeyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             }
 
                             owner.OnDragOver(e);
@@ -4143,13 +4147,13 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    pdwEffect = (int)lastEffect;
-
+                    *pdwEffect = (Ole32.DROPEFFECT)lastEffect;
                 }
                 else
                 {
-                    pdwEffect = (int)DragDropEffects.None;
+                    *pdwEffect = Ole32.DROPEFFECT.NONE;
                 }
+
                 return HRESULT.S_OK;
             }
 

@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms
@@ -430,7 +431,7 @@ namespace System.Windows.Forms
             return InvokeMember(methodName, null);
         }
 
-        public object InvokeMember(string methodName, params object[] parameter)
+        public unsafe object InvokeMember(string methodName, params object[] parameter)
         {
             object retVal = null;
             NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS
@@ -443,10 +444,9 @@ namespace System.Windows.Forms
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { methodName };
-                    int[] dispids = new int[] { NativeMethods.ActiveX.DISPID_UNKNOWN };
-                    int hr = scriptObject.GetIDsOfNames(ref g, names, 1,
-                                                   SafeNativeMethods.GetThreadLCID(), dispids);
-                    if (NativeMethods.Succeeded(hr) && (dispids[0] != NativeMethods.ActiveX.DISPID_UNKNOWN))
+                    Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
+                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
+                    if (hr.Succeeded() && dispid != Ole32.DispatchID.UNKNOWN)
                     {
                         // Reverse the arg order below so that parms are read properly thru IDispatch. (
                         if (parameter != null)
@@ -460,23 +460,24 @@ namespace System.Windows.Forms
                         dp.cNamedArgs = 0;
 
                         object[] retVals = new object[1];
-
-                        hr = scriptObject.Invoke(dispids[0], ref g, SafeNativeMethods.GetThreadLCID(),
-                                NativeMethods.DISPATCH_METHOD, dp,
-                                retVals, new NativeMethods.tagEXCEPINFO(), null);
-                        if (hr == NativeMethods.S_OK)
+                        hr = scriptObject.Invoke(
+                            dispid,
+                            ref g,
+                            Kernel32.GetThreadLocale(),
+                            NativeMethods.DISPATCH_METHOD,
+                            dp,
+                            retVals,
+                            new NativeMethods.tagEXCEPINFO(),
+                            null);
+                        if (hr == HRESULT.S_OK)
                         {
                             retVal = retVals[0];
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
             }
             finally
             {
@@ -485,6 +486,7 @@ namespace System.Windows.Forms
                     HtmlDocument.FreeVARIANTVector(dp.rgvarg, parameter.Length);
                 }
             }
+
             return retVal;
         }
 

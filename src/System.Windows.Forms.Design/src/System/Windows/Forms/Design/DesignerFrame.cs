@@ -97,12 +97,12 @@ namespace System.Windows.Forms.Design
             base.Dispose(disposing);
         }
 
-        private void ForceDesignerRedraw(bool focus)
+        private unsafe void ForceDesignerRedraw(bool focus)
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
                 NativeMethods.SendMessage(_designer.Handle, WindowMessages.WM_NCACTIVATE, focus ? 1 : 0, 0);
-                SafeNativeMethods.RedrawWindow(_designer.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
 
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Design
             {
                 if (selSvc.PrimarySelection is Control ctrl && !ctrl.IsDisposed)
                 {
-                    UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), NativeMethods.OBJID_CLIENT, 0);
+                    User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
                 }
             }
         }
@@ -452,7 +452,10 @@ namespace System.Windows.Forms.Design
             private void ParentOverlay(Control control)
             {
                 NativeMethods.SetParent(control.Handle, Handle);
-                SafeNativeMethods.SetWindowPos(control.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                User32.SetWindowPos(
+                    control.Handle,
+                    User32.HWND_TOP,
+                    flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
             }
 
             /// <summary>
@@ -561,7 +564,10 @@ namespace System.Windows.Forms.Design
                         {
                             foreach (Control c in _overlayList)
                             {
-                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                                User32.SetWindowPos(
+                                    c.Handle,
+                                    User32.HWND_TOP,
+                                    flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
                             }
                         }
                     }

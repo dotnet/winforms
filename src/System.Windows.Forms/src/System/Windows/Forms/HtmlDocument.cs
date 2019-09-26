@@ -415,7 +415,7 @@ namespace System.Windows.Forms
             return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
-        public object InvokeScript(string scriptName, object[] args)
+        public unsafe object InvokeScript(string scriptName, object[] args)
         {
             object retVal = null;
             NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS
@@ -428,10 +428,9 @@ namespace System.Windows.Forms
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { scriptName };
-                    int[] dispids = new int[] { NativeMethods.ActiveX.DISPID_UNKNOWN };
-                    int hr = scriptObject.GetIDsOfNames(ref g, names, 1,
-                                                   SafeNativeMethods.GetThreadLCID(), dispids);
-                    if (NativeMethods.Succeeded(hr) && (dispids[0] != NativeMethods.ActiveX.DISPID_UNKNOWN))
+                    Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
+                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
+                    if (hr.Succeeded() && dispid != Ole32.DispatchID.UNKNOWN)
                     {
                         if (args != null)
                         {
@@ -445,22 +444,23 @@ namespace System.Windows.Forms
 
                         object[] retVals = new object[1];
 
-                        hr = scriptObject.Invoke(dispids[0], ref g, SafeNativeMethods.GetThreadLCID(),
-                                NativeMethods.DISPATCH_METHOD, dp,
-                                retVals, new NativeMethods.tagEXCEPINFO(), null);
-                        if (hr == NativeMethods.S_OK)
+                        hr = scriptObject.Invoke(
+                            dispid,
+                            ref g,
+                            Kernel32.GetThreadLocale(),
+                            NativeMethods.DISPATCH_METHOD, dp,
+                            retVals,
+                            new NativeMethods.tagEXCEPINFO(),
+                            null);
+                        if (hr == HRESULT.S_OK)
                         {
                             retVal = retVals[0];
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
             }
             finally
             {
@@ -469,6 +469,7 @@ namespace System.Windows.Forms
                     HtmlDocument.FreeVARIANTVector(dp.rgvarg, args.Length);
                 }
             }
+
             return retVal;
         }
 
@@ -570,8 +571,10 @@ namespace System.Windows.Forms
             public byte b;
         }
         private static readonly int VariantSize = (int)Marshal.OffsetOf(typeof(FindSizeOfVariant), "b");
-        //
-        // Convert a object[] into an array of VARIANT, allocated with CoTask allocators.
+        
+        /// <summary>
+        ///  Convert a object[] into an array of VARIANT, allocated with CoTask allocators.
+        /// </summary>
         internal unsafe static IntPtr ArrayToVARIANTVector(object[] args)
         {
             int len = args.Length;
@@ -583,16 +586,18 @@ namespace System.Windows.Forms
             }
             return mem;
         }
-
-        //
-        // Free a Variant array created with the above function
+        
+        /// <summary>
+        ///  Free a Variant array created with the above function
+        /// </summary>
         internal unsafe static void FreeVARIANTVector(IntPtr mem, int len)
         {
             byte* a = (byte*)(void*)mem;
             for (int i = 0; i < len; ++i)
             {
-                SafeNativeMethods.VariantClear(new HandleRef(null, (IntPtr)(a + VariantSize * i)));
+                Oleaut32.VariantClear((IntPtr)(a + VariantSize * i));
             }
+
             Marshal.FreeCoTaskMem(mem);
         }
 

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1185,7 +1186,7 @@ namespace System.Windows.Forms
                         // We don't want the grid to get the keyboard focus
                         // when the editing control gets parented to the parking window,
                         // because some other window is in the middle of receiving the focus.
-                        UnsafeNativeMethods.SetFocus(new HandleRef(null, IntPtr.Zero));
+                        User32.SetFocus(IntPtr.Zero);
                     }
                 }
                 Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
@@ -1206,7 +1207,7 @@ namespace System.Windows.Forms
                 dgv.EditingControlAccessibleObject.SetParent(null);
                 AccessibilityObject.SetDetachableChild(null);
 
-                AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
+                AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
             }
             if (dgv.EditingPanel.ParentInternal != null)
             {
@@ -5148,7 +5149,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5156,7 +5157,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (owner == null)
                 {
@@ -5170,14 +5171,14 @@ namespace System.Windows.Forms
 
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return owner.OwningRow.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         return NavigateForward(false);
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         return NavigateBackward(false);
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         if (owner.DataGridView.CurrentCell == owner &&
                             owner.DataGridView.IsCurrentCellInEditMode &&
                             owner.DataGridView.EditingControl != null)
@@ -5251,21 +5252,21 @@ namespace System.Windows.Forms
 
             #endregion
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetRowHeaderItems()
+            internal override UiaCore.IRawElementProviderSimple[] GetRowHeaderItems()
             {
                 if (owner.DataGridView.RowHeadersVisible && owner.OwningRow.HasHeaderCell)
                 {
-                    return new UnsafeNativeMethods.IRawElementProviderSimple[1] { owner.OwningRow.HeaderCell.AccessibilityObject };
+                    return new UiaCore.IRawElementProviderSimple[1] { owner.OwningRow.HeaderCell.AccessibilityObject };
                 }
 
                 return null;
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetColumnHeaderItems()
+            internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
             {
                 if (owner.DataGridView.ColumnHeadersVisible && owner.OwningColumn.HasHeaderCell)
                 {
-                    return new UnsafeNativeMethods.IRawElementProviderSimple[1] { owner.OwningColumn.HeaderCell.AccessibilityObject };
+                    return new UiaCore.IRawElementProviderSimple[1] { owner.OwningColumn.HeaderCell.AccessibilityObject };
                 }
 
                 return null;
@@ -5287,7 +5288,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple ContainingGrid
+            internal override UiaCore.IRawElementProviderSimple ContainingGrid
             {
                 get
                 {

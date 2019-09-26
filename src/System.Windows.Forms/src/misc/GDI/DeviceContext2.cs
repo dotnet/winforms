@@ -20,78 +20,42 @@ namespace System.Windows.Forms.Internal
     ///  of that; if you need to put back the old value after changing a property you need to get it
     ///  first and cache it.
     /// </summary>
-    internal sealed partial class DeviceContext : MarshalByRefObject, IDeviceContext, IDisposable
+    internal sealed partial class DeviceContext : MarshalByRefObject, IDeviceContext, IDisposable, IHandle
     {
-        WindowsFont selectedFont;
-
         /// <summary>
         ///  See DeviceContext.cs for information about this class.  The class has been split to be able
         ///  to compile the right set of functionalities into different assemblies.
         /// </summary>
-        public WindowsFont ActiveFont
-        {
-            get
-            {
-                return selectedFont;
-            }
-        }
+        public WindowsFont ActiveFont { get; private set; }
 
         /// <summary>
         ///  DC background color.
         /// </summary>
         public Color BackgroundColor
         {
-            get
-            {
-                return ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetBkColor(new HandleRef(this, Hdc)));
-            }
-        }
-
-        /// <summary>
-        ///  Sets the DC background color and returns the old value.
-        /// </summary>
-        public Color SetBackgroundColor(Color newColor)
-        {
-            return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor(new HandleRef(this, Hdc), ColorTranslator.ToWin32(newColor)));
+            get => ColorTranslator.FromWin32(Gdi32.GetBkColor(this));
+            set => ColorTranslator.FromWin32(Gdi32.SetBkColor(this, ColorTranslator.ToWin32(value)));
         }
 
         /// <summary>
         ///  DC background mode.
         /// </summary>
-        public DeviceContextBackgroundMode BackgroundMode
-        {
-            get
-            {
-                return (DeviceContextBackgroundMode)IntUnsafeNativeMethods.GetBkMode(new HandleRef(this, Hdc));
-            }
-        }
+        public Gdi32.BKMODE BackgroundMode => Gdi32.GetBkMode(this);
 
         /// <summary>
         ///  Sets the DC background mode and returns the old value.
         /// </summary>
-        public DeviceContextBackgroundMode SetBackgroundMode(DeviceContextBackgroundMode newMode)
-        {
-            return (DeviceContextBackgroundMode)IntUnsafeNativeMethods.SetBkMode(new HandleRef(this, Hdc), (int)newMode);
-        }
+        public Gdi32.BKMODE SetBackgroundMode(Gdi32.BKMODE newMode) => Gdi32.SetBkMode(this, newMode);
 
         /// <summary>
         ///  ROP2 currently on the DC.
         /// </summary>
-        public DeviceContextBinaryRasterOperationFlags BinaryRasterOperation
-        {
-            get
-            {
-                return (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.GetROP2(new HandleRef(this, Hdc));
-            }
-        }
+        public Gdi32.R2 BinaryRasterOperation => Gdi32.GetROP2(this);
 
         /// <summary>
         ///  Sets the DC ROP2 and returns the old value.
         /// </summary>
-        public DeviceContextBinaryRasterOperationFlags SetRasterOperation(DeviceContextBinaryRasterOperationFlags rasterOperation)
-        {
-            return (DeviceContextBinaryRasterOperationFlags)IntUnsafeNativeMethods.SetROP2(new HandleRef(this, Hdc), (int)rasterOperation);
-        }
+        public Gdi32.R2 SetRasterOperation(Gdi32.R2 rasterOperation) => Gdi32.SetROP2(this, rasterOperation);
 
         /// <summary>
         ///  Get the number of pixels per logical inch along the device axes. In a system with multiple display
@@ -133,7 +97,7 @@ namespace System.Windows.Forms.Internal
                             // just use the face name, as ToString will call here re-entrantly.
                             string lastUsedFontInfo = (font != null) ? font.Name : "null";
                             string currentFontInfo = (currentDCFont != null) ? currentDCFont.Name : "null";
-                            Debug.Fail("Font does not match... Current: " + currentFontInfo + " Last known: " + lastUsedFontInfo);
+                            Debug.Fail($"Font does not match... Current: {currentFontInfo} Last known: {lastUsedFontInfo}");
                         }
 
 #endif
@@ -153,13 +117,7 @@ namespace System.Windows.Forms.Internal
         ///  Gets a DeviceContext object initialized to refer to the primary screen device.
         ///  Consider using WindowsGraphicsCacheManager.MeasurementGraphics instead.
         /// </summary>
-        public static DeviceContext ScreenDC
-        {
-            get
-            {
-                return DeviceContext.FromHwnd(IntPtr.Zero);
-            }
-        }
+        public static DeviceContext ScreenDC => FromHwnd(IntPtr.Zero);
 
         internal void DisposeFont(bool disposing)
         {
@@ -168,18 +126,17 @@ namespace System.Windows.Forms.Internal
                 DeviceContexts.RemoveDeviceContext(this);
             }
 
-            if (selectedFont != null && selectedFont.Hfont != IntPtr.Zero)
+            if (ActiveFont != null && ActiveFont.Hfont != IntPtr.Zero)
             {
-                IntPtr hCurrentFont = Gdi32.GetCurrentObject(new HandleRef(this, hDC), Gdi32.ObjectType.OBJ_FONT);
-                if (hCurrentFont == selectedFont.Hfont)
+                IntPtr hCurrentFont = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_FONT);
+                if (hCurrentFont == ActiveFont.Hfont)
                 {
                     // select initial font back in
-                    Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
-                    hCurrentFont = hInitialFont;
+                    Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialFont);
                 }
 
-                selectedFont.Dispose(disposing);
-                selectedFont = null;
+                ActiveFont.Dispose(disposing);
+                ActiveFont = null;
             }
         }
 
@@ -200,9 +157,9 @@ namespace System.Windows.Forms.Internal
             }
             IntPtr result = SelectObject(font.Hfont, GdiObjectType.Font);
 
-            WindowsFont previousFont = selectedFont;
-            selectedFont = font;
-            hCurrentFont = font.Hfont;
+            WindowsFont previousFont = ActiveFont;
+            ActiveFont = font;
+            _hCurrentFont = font.Hfont;
 
             // the measurement DC always leaves fonts selected for pref reasons.
             // in this case, we need to diposse the font since the original
@@ -241,30 +198,24 @@ namespace System.Windows.Forms.Internal
             // we need to clear it off.
             MeasurementDCInfo.ResetIfIsMeasurementDC(Hdc);
 #endif
-            Gdi32.SelectObject(new HandleRef(this, Hdc), hInitialFont);
-            selectedFont = null;
-            hCurrentFont = hInitialFont;
+            Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialFont);
+            ActiveFont = null;
+            _hCurrentFont = _hInitialFont;
         }
 
         /// <summary>
         ///  DC map mode.
         /// </summary>
-        public DeviceContextMapMode MapMode
-        {
-            get
-            {
-                return (DeviceContextMapMode)IntUnsafeNativeMethods.GetMapMode(new HandleRef(this, Hdc));
-            }
-        }
+        public DeviceContextMapMode MapMode => (DeviceContextMapMode)IntUnsafeNativeMethods.GetMapMode(new HandleRef(this, Hdc));
 
         public bool IsFontOnContextStack(WindowsFont wf)
         {
-            if (contextStack == null)
+            if (_contextStack == null)
             {
                 return false;
             }
 
-            foreach (GraphicsState g in contextStack)
+            foreach (GraphicsState g in _contextStack)
             {
                 if (g.hFont == wf.Hfont)
                 {
@@ -279,9 +230,7 @@ namespace System.Windows.Forms.Internal
         ///  Sets the DC map mode and returns the old value.
         /// </summary>
         public DeviceContextMapMode SetMapMode(DeviceContextMapMode newMode)
-        {
-            return (DeviceContextMapMode)IntUnsafeNativeMethods.SetMapMode(new HandleRef(this, Hdc), (int)newMode);
-        }
+            => (DeviceContextMapMode)IntUnsafeNativeMethods.SetMapMode(new HandleRef(this, Hdc), (int)newMode);
 
         /// <summary>
         ///  Selects the specified object into the dc and returns the old object.
@@ -291,36 +240,26 @@ namespace System.Windows.Forms.Internal
             switch (type)
             {
                 case GdiObjectType.Pen:
-                    hCurrentPen = hObj;
+                    _hCurrentPen = hObj;
                     break;
                 case GdiObjectType.Brush:
-                    hCurrentBrush = hObj;
+                    _hCurrentBrush = hObj;
                     break;
-
                 case GdiObjectType.Bitmap:
-                    hCurrentBmp = hObj;
+                    _hCurrentBmp = hObj;
                     break;
             }
+
             return Gdi32.SelectObject(new HandleRef(this, Hdc), hObj);
         }
 
         /// <summary>
         ///  DC text alignment.
         /// </summary>
-        public DeviceContextTextAlignment TextAlignment
+        public Gdi32.TA TextAlignment
         {
-            get
-            {
-                return (DeviceContextTextAlignment)IntUnsafeNativeMethods.GetTextAlign(new HandleRef(this, Hdc));
-            }
-        }
-
-        /// <summary>
-        ///  Sets the DC text alignment and returns the old value.
-        /// </summary>
-        public DeviceContextTextAlignment SetTextAlignment(DeviceContextTextAlignment newAligment)
-        {
-            return (DeviceContextTextAlignment)IntUnsafeNativeMethods.SetTextAlign(new HandleRef(this, Hdc), (int)newAligment);
+            get => Gdi32.GetTextAlign(this);
+            set => Gdi32.SetTextAlign(this, value);
         }
 
         /// <summary>
@@ -328,18 +267,8 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Color TextColor
         {
-            get
-            {
-                return ColorTranslator.FromWin32(IntUnsafeNativeMethods.GetTextColor(new HandleRef(this, Hdc)));
-            }
-        }
-
-        /// <summary>
-        ///  Sets the DC text color and returns the old value.
-        /// </summary>
-        public Color SetTextColor(Color newColor)
-        {
-            return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetTextColor(new HandleRef(this, Hdc), ColorTranslator.ToWin32(newColor)));
+            get => ColorTranslator.FromWin32(Gdi32.GetTextColor(this));
+            set => ColorTranslator.FromWin32(Gdi32.SetTextColor(this, ColorTranslator.ToWin32(value)));
         }
 
         /// <summary>
@@ -355,25 +284,15 @@ namespace System.Windows.Forms.Internal
             }
             set
             {
-                SetViewportExtent(value);
+                Size oldExtent = new Size();
+                IntUnsafeNativeMethods.SetViewportExtEx(new HandleRef(this, Hdc), value.Width, value.Height, ref oldExtent);
             }
-        }
-
-        /// <summary>
-        ///  Sets the DC Viewport extent to the specified value and returns its previous value;
-        ///  extent values are in device units.
-        /// </summary>
-        public Size SetViewportExtent(Size newExtent)
-        {
-            Size oldExtent = new Size();
-            IntUnsafeNativeMethods.SetViewportExtEx(new HandleRef(this, Hdc), newExtent.Width, newExtent.Height, ref oldExtent);
-            return oldExtent;
         }
 
         /// <summary>
         ///  DC Viewport Origin in device units.
         /// </summary>
-        public Point ViewportOrigin
+        public unsafe Point ViewportOrigin
         {
             get
             {
@@ -382,19 +301,8 @@ namespace System.Windows.Forms.Internal
             }
             set
             {
-                SetViewportOrigin(value);
+                IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), value.X, value.Y, null);
             }
-        }
-
-        /// <summary>
-        ///  Sets the DC Viewport origin to the specified value and returns its previous value;
-        ///  origin values are in device units.
-        /// </summary>
-        public unsafe Point SetViewportOrigin(Point newOrigin)
-        {
-            var oldOrigin = new Point();
-            IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), newOrigin.X, newOrigin.Y, &oldOrigin);
-            return oldOrigin;
         }
     }
 }

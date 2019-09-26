@@ -4,6 +4,7 @@ Param(
   [Parameter(ValueFromRemainingArguments=$true)][String[]]$properties
 )
 
+$LASTEXITCODE=0;
 
 function Check-SdkExists {
 <#
@@ -146,6 +147,32 @@ function Invoke-FullCleanup {
     Write-Host "√ Local folder cleaned" -ForegroundColor Green;
 }
 
+function Remove-Artifacts {
+    param (
+      [Parameter(Mandatory=$true, Position=0)]
+      [string] $Path
+    )
+
+    $errorCount = 0;
+    Get-ChildItem -Path $Path -Include @( 'bin', 'obj' ) -Recurse | ForEach-Object {
+        $fullPath = $_.FullName;
+        Write-Host "Removing $fullPath" -NoNewline;
+
+        Remove-Item -Path $fullPath -Recurse -Force
+
+        $LastCode = $LASTEXITCODE;
+        if ($LastCode -ne 0) {
+            $errorCount++;
+            Write-Host " failed" -ForegroundColor Red;
+        } 
+        else {
+            Write-Host " success" -ForegroundColor Green;
+        }
+    }
+
+    return $errorCount;
+}
+
 function Start-ElevatedModeIfRequired {
 <#
 .SYNOPSIS
@@ -252,6 +279,14 @@ try {
 
     if ($FullClean -eq $true) {
         Invoke-FullCleanup -SdkVersion $sdkVersion -NETCoreAppVersion $netCoreAppVersion
+    }
+
+    # remove any rouge bin/obj folders that intermitently get created
+    $errorCount = Remove-Artifacts -Path ./artifacts;
+    $errorCount += Remove-Artifacts -Path ./src;
+    $errorCount += Remove-Artifacts -Path ./pkg;
+    if ($errorCount -gt 0) {
+        throw "Failed to remove bin/obj folders";
     }
 
     Write-Host "Building the solution...";

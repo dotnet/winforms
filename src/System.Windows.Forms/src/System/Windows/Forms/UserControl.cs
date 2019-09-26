@@ -39,8 +39,8 @@ namespace System.Windows.Forms
         public UserControl()
         {
             SetScrollState(ScrollStateAutoScrolling, false);
-            SetState(STATE_VISIBLE, true);
-            SetState(STATE_TOPLEVEL, false);
+            SetState(States.Visible, true);
+            SetState(States.TopLevel, false);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
 
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
+            IntPtr hwndFocus = User32.GetFocus();
             if (hwndFocus == IntPtr.Zero)
             {
                 return false;

@@ -6,7 +6,6 @@ using System.Windows.Forms.Internal;
 using Xunit;
 using static Interop;
 
-
 namespace System.Windows.Forms.Tests.InteropTests
 {
     public class TextTests
@@ -39,13 +38,13 @@ namespace System.Windows.Forms.Tests.InteropTests
         [Fact]
         public unsafe void LogFont_Size()
         {
-            Assert.Equal(92, sizeof(NativeMethods.LOGFONTW));
+            Assert.Equal(92, sizeof(User32.LOGFONTW));
         }
 
         [Fact]
         public unsafe void LogFont_FaceName()
         {
-            NativeMethods.LOGFONTW logFont = default;
+            User32.LOGFONTW logFont = default;
             logFont.FaceName = "TwoFace";
             Assert.Equal("TwoFace", logFont.FaceName.ToString());
 
@@ -64,10 +63,10 @@ namespace System.Windows.Forms.Tests.InteropTests
         [Fact]
         public unsafe void CreateFontIndirect()
         {
-            NativeMethods.LOGFONTW logFont = default;
-            IntPtr handle = IntUnsafeNativeMethods.CreateFontIndirectW(ref logFont);
+            User32.LOGFONTW logFont = default;
+            IntPtr handle = Gdi32.CreateFontIndirectW(ref logFont);
             Assert.NotEqual(IntPtr.Zero, handle);
-            Assert.True(Gdi32.DeleteObject(handle) != BOOL.FALSE);
+            Assert.True(Gdi32.DeleteObject(handle).IsTrue());
         }
     }
 }

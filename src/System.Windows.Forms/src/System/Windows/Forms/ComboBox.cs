@@ -149,7 +149,7 @@ namespace System.Windows.Forms
             requestedHeight = DefaultSimpleStyleHeight;
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
         }
 
         /// <summary>
@@ -668,7 +668,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr focus = UnsafeNativeMethods.GetFocus();
+                IntPtr focus = User32.GetFocus();
                 return focus != IntPtr.Zero && ((childEdit != null && focus == childEdit.Handle) || (childListBox != null && focus == childListBox.Handle));
             }
         }
@@ -2131,7 +2131,7 @@ namespace System.Windows.Forms
         ///  beginUpdate(), any redrawing caused by operations performed on the
         ///  combo box is deferred until the call to endUpdate().
         /// </summary>
-        public void EndUpdate()
+        public unsafe void EndUpdate()
         {
             updateCount--;
             if (updateCount == 0 && AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -2142,11 +2142,11 @@ namespace System.Windows.Forms
             {
                 if (childEdit != null && childEdit.Handle != IntPtr.Zero)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(this, childEdit.Handle), null, false);
+                    User32.InvalidateRect(new HandleRef(this, childEdit.Handle), null, BOOL.FALSE);
                 }
                 if (childListBox != null && childListBox.Handle != IntPtr.Zero)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(this, childListBox.Handle), null, false);
+                    User32.InvalidateRect(new HandleRef(this, childListBox.Handle), null, BOOL.FALSE);
                 }
             }
         }
@@ -2280,8 +2280,8 @@ namespace System.Windows.Forms
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
-                SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(ForeColor));
-                SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(BackColor));
+                Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(ForeColor));
+                Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(BackColor));
                 return BackColorBrush;
             }
             else
@@ -2378,14 +2378,14 @@ namespace System.Windows.Forms
         }
 
         // Invalidate the entire control, including child HWNDs and non-client areas
-        private void InvalidateEverything()
+        private unsafe void InvalidateEverything()
         {
-            SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle),
-                                           null, NativeMethods.NullHandleRef,
-                                           NativeMethods.RDW_INVALIDATE |
-                                           NativeMethods.RDW_FRAME |  // Control.Invalidate(true) doesn't invalidate the non-client region
-                                           NativeMethods.RDW_ERASE |
-                                           NativeMethods.RDW_ALLCHILDREN);
+            // Control.Invalidate(true) doesn't invalidate the non-client region
+            User32.RedrawWindow(
+                new HandleRef(this, Handle),
+                null,
+                IntPtr.Zero,
+                User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
         }
 
         /// <summary>
@@ -2661,8 +2661,8 @@ namespace System.Windows.Forms
             // Notify collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UnsafeNativeMethods.ExpandCollapseState.Collapsed,
-                UnsafeNativeMethods.ExpandCollapseState.Expanded);
+                UiaCore.ExpandCollapseState.Collapsed,
+                UiaCore.ExpandCollapseState.Expanded);
 
             if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
             {
@@ -3093,8 +3093,8 @@ namespace System.Windows.Forms
             // Notify Collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UnsafeNativeMethods.ExpandCollapseState.Expanded,
-                UnsafeNativeMethods.ExpandCollapseState.Collapsed);
+                UiaCore.ExpandCollapseState.Expanded,
+                UiaCore.ExpandCollapseState.Collapsed);
 
             // Collapsing the DropDown, so reset the flag.
             dropDownWillBeClosed = false;
@@ -3316,8 +3316,7 @@ namespace System.Windows.Forms
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
-                            int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                            SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                            Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                         }
                         else
                         {
@@ -3346,8 +3345,7 @@ namespace System.Windows.Forms
                         {
                             if (itemsCollection.Count == 0)
                             {
-                                int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                                SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                                Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                             }
                             else
                             {
@@ -3372,34 +3370,32 @@ namespace System.Windows.Forms
                     {
                         // Drop Down List special handling
                         Debug.Assert(DropDownStyle == ComboBoxStyle.DropDownList);
-                        int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                        SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                        Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                     }
                 }
                 else
                 {
-                    int mode = 0;
-
+                    Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
                     if (AutoCompleteMode == AutoCompleteMode.Suggest)
                     {
-                        mode |= NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
+                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
                     }
                     if (AutoCompleteMode == AutoCompleteMode.Append)
                     {
-                        mode |= NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
+                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
                     }
                     if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                     {
-                        mode |= NativeMethods.AUTOSUGGEST;
-                        mode |= NativeMethods.AUTOAPPEND;
+                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
+                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
                     }
-                    int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), (int)AutoCompleteSource | mode);
+
+                    Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), (Shlwapi.SHACF)AutoCompleteSource | mode);
                 }
             }
             else if (reset)
             {
-                int mode = NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), mode);
+                Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
             }
         }
 
@@ -3538,8 +3534,14 @@ namespace System.Windows.Forms
                     int count = Math.Min(Math.Max(itemCount, 1), maxDropDownItems);
                     height = (ItemHeight * count + 2);
                 }
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, dropDownHandle), NativeMethods.NullHandleRef, 0, 0, DropDownWidth, height,
-                                     NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOZORDER);
+                User32.SetWindowPos(
+                    new HandleRef(this, dropDownHandle),
+                    User32.HWND_TOP,
+                    0,
+                    0,
+                    DropDownWidth,
+                    height,
+                    User32.SWP.NOMOVE | User32.SWP.NOZORDER);
             }
         }
 
@@ -3771,53 +3773,44 @@ namespace System.Windows.Forms
             }
         }
 
-        private void WmReflectDrawItem(ref Message m)
+        private unsafe void WmReflectDrawItem(ref Message m)
         {
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-            IntPtr oldPal = SetUpPalette(dis.hDC, false /*force*/, false /*realize*/);
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
             try
             {
-                Graphics g = Graphics.FromHdcInternal(dis.hDC);
-
-                try
-                {
-                    OnDrawItem(new DrawItemEventArgs(g, Font, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom),
-                                                     dis.itemID, (DrawItemState)dis.itemState, ForeColor, BackColor));
-                }
-                finally
-                {
-                    g.Dispose();
-                }
+                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
             }
             finally
             {
                 if (oldPal != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectPalette(new HandleRef(this, dis.hDC), new HandleRef(null, oldPal), 0);
+                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
                 }
             }
+
             m.Result = (IntPtr)1;
         }
 
-        private void WmReflectMeasureItem(ref Message m)
+        private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
+            User32.MEASUREITEMSTRUCT* mis = (User32.MEASUREITEMSTRUCT*)m.LParam;
 
             // Determine if message was sent by a combo item or the combo edit field
-            if (DrawMode == DrawMode.OwnerDrawVariable && mis.itemID >= 0)
+            if (DrawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
-                Graphics graphics = CreateGraphicsInternal();
-                MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, mis.itemID, ItemHeight);
+                using Graphics graphics = CreateGraphicsInternal();
+                var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
                 OnMeasureItem(mie);
-                mis.itemHeight = mie.ItemHeight;
-                graphics.Dispose();
+                mis->itemHeight = unchecked((uint)mie.ItemHeight);
             }
             else
             {
                 // Message was sent by the combo edit field
-                mis.itemHeight = ItemHeight;
+                mis->itemHeight = (uint)ItemHeight;
             }
-            Marshal.StructureToPtr(mis, m.LParam, false);
+
             m.Result = (IntPtr)1;
         }
 
@@ -3947,14 +3940,14 @@ namespace System.Windows.Forms
 
                                 Rectangle updateRegionBoundingRect = wr.ToRectangle();
                                 FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
-                                // Call the base class to do its painting (with a clipped DC).
 
-                                NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
+                                // Call the base class to do its painting (with a clipped DC).
+                                var ps = new User32.PAINTSTRUCT();
                                 IntPtr dc;
                                 bool disposeDc = false;
                                 if (m.WParam == IntPtr.Zero)
                                 {
-                                    dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                                    dc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
                                     disposeDc = true;
                                 }
                                 else
@@ -3985,7 +3978,7 @@ namespace System.Windows.Forms
 
                                 if (disposeDc)
                                 {
-                                    UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+                                    User32.EndPaint(new HandleRef(this, Handle), ref ps);
                                 }
 
                             }
@@ -4042,7 +4035,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m.Msg == NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
                     {
                         DefWndProc(ref m);
                         OnMouseEnterInternal(EventArgs.Empty);
@@ -4137,7 +4130,7 @@ namespace System.Windows.Forms
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                     InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
-                    m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
+                    m.Result = UiaCore.UiaReturnRawElementProvider(
                         new HandleRef(this, Handle),
                         m.WParam,
                         m.LParam,
@@ -4148,7 +4141,7 @@ namespace System.Windows.Forms
 
                 // See "How to Handle WM_GETOBJECT" in MSDN
                 //
-                if (NativeMethods.OBJID_CLIENT == unchecked((int)(long)m.LParam))
+                if (unchecked((int)(long)m.LParam) == User32.OBJID.CLIENT)
                 {
 
                     // Get the IAccessible GUID
@@ -4161,14 +4154,14 @@ namespace System.Windows.Forms
                     try
                     {
                         AccessibleObject wfAccessibleObject = null;
-                        UnsafeNativeMethods.IAccessibleInternal iacc = null;
+                        UiaCore.IAccessibleInternal iacc = null;
 
                         if (_accessibilityObject == null)
                         {
                             wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
                             _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
-                        iacc = (UnsafeNativeMethods.IAccessibleInternal)_accessibilityObject;
+                        iacc = (UiaCore.IAccessibleInternal)_accessibilityObject;
 
                         // Obtain the Lresult
                         //
@@ -4729,13 +4722,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return _owningComboBox.ChildListAccessibleObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         int currentIndex = GetCurrentIndex();
                         if (_owningComboBox.ChildListAccessibleObject is ComboBoxChildListUiaProvider comboBoxChildListUiaProvider)
                         {
@@ -4747,7 +4740,7 @@ namespace System.Windows.Forms
                             }
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         currentIndex = GetCurrentIndex();
                         comboBoxChildListUiaProvider = _owningComboBox.ChildListAccessibleObject as ComboBoxChildListUiaProvider;
                         if (comboBoxChildListUiaProvider != null)
@@ -4766,7 +4759,7 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -4923,11 +4916,10 @@ namespace System.Windows.Forms
                 base.SetFocus();
             }
 
-            internal override void SelectItem()
+            internal unsafe override void SelectItem()
             {
                 _owningComboBox.SelectedIndex = GetCurrentIndex();
-
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, false);
+                User32.InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, BOOL.FALSE);
             }
 
             internal override void AddToSelection()
@@ -4948,7 +4940,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple ItemSelectionContainer
+            internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
             {
                 get
                 {
@@ -5088,11 +5080,11 @@ namespace System.Windows.Forms
                 ComboBoxDefaultAction(false);
             }
 
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
                 get
                 {
-                    return _owningComboBox.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                    return _owningComboBox.DroppedDown == true ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
 
@@ -5155,13 +5147,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild)
+                if (direction == UiaCore.NavigateDirection.FirstChild)
                 {
                     return GetChildFragment(0);
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                else if (direction == UiaCore.NavigateDirection.LastChild)
                 {
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
@@ -5173,7 +5165,7 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5181,7 +5173,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
+            internal override UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
             {
                 if (hwnd == _owningComboBox.childEdit.Handle)
                 {
@@ -5343,14 +5335,14 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         Debug.WriteLine("Edit parent " + _owner.AccessibilityObject.GetPropertyValue(NativeMethods.UIA_ControlTypePropertyId));
                         return _owner.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (_owner.DropDownStyle == ComboBoxStyle.Simple)
                         {
                             return null;
@@ -5366,7 +5358,7 @@ namespace System.Windows.Forms
                         }
 
                         return null;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
                         if (comboBoxAccessibleObject != null)
                         {
@@ -5386,7 +5378,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5410,7 +5402,7 @@ namespace System.Windows.Forms
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_EditControlTypeId;
                     case NativeMethods.UIA_NamePropertyId:
-                        return Name;
+                        return Name ?? SR.ComboBoxEditDefaultAccessibleName;
                     case NativeMethods.UIA_AccessKeyPropertyId:
                         return string.Empty;
                     case NativeMethods.UIA_HasKeyboardFocusPropertyId:
@@ -5435,11 +5427,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider
+            internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
             {
                 get
                 {
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
+                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out UiaCore.IRawElementProviderSimple provider);
                     return provider;
                 }
             }
@@ -5490,7 +5482,7 @@ namespace System.Windows.Forms
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 var systemIAccessible = GetSystemIAccessibleInternal();
                 if (systemIAccessible != null)
@@ -5514,13 +5506,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         return GetChildFragment(0);
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         var childFragmentCount = GetChildFragmentCount();
                         if (childFragmentCount > 0)
                         {
@@ -5536,7 +5528,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5608,7 +5600,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment GetFocus()
             {
                 return GetFocused();
             }
@@ -5619,19 +5611,19 @@ namespace System.Windows.Forms
                 return GetChildFragment(selectedIndex);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetSelection()
+            internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
                 int selectedIndex = _owningComboBox.SelectedIndex;
 
                 AccessibleObject itemAccessibleObject = GetChildFragment(selectedIndex);
                 if (itemAccessibleObject != null)
                 {
-                    return new UnsafeNativeMethods.IRawElementProviderSimple[] {
+                    return new UiaCore.IRawElementProviderSimple[] {
                         itemAccessibleObject
                     };
                 }
 
-                return new UnsafeNativeMethods.IRawElementProviderSimple[0];
+                return new UiaCore.IRawElementProviderSimple[0];
             }
 
             internal override bool CanSelectMultiple
@@ -5666,11 +5658,11 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider
+            internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
             {
                 get
                 {
-                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out UnsafeNativeMethods.IRawElementProviderSimple provider);
+                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out UiaCore.IRawElementProviderSimple provider);
                     return provider;
                 }
             }
@@ -5768,13 +5760,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return _owner.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                         {
                             int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
@@ -5785,7 +5777,7 @@ namespace System.Windows.Forms
                         }
 
                         return null;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
                         if (comboBoxAccessibleObject != null)
                         {
@@ -5805,7 +5797,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5950,13 +5942,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                if (direction == UiaCore.NavigateDirection.Parent)
                 {
                     return _owner.AccessibilityObject;
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling)
+                else if (direction == UiaCore.NavigateDirection.PreviousSibling)
                 {
                     if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                     {
@@ -5976,7 +5968,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -6254,9 +6246,15 @@ namespace System.Windows.Forms
                     //generating a before snapshot -- lets lose the null handles
                     ACNativeWindow.ClearNullACWindows();
                 }
+
                 // Look for a popped up dropdown
                 shouldSubClass = subclass;
-                UnsafeNativeMethods.EnumThreadWindows(SafeNativeMethods.GetCurrentThreadId(), new NativeMethods.EnumThreadWindowsCallback(Callback), new HandleRef(null, IntPtr.Zero));
+                var callback = new User32.EnumThreadWindowsCallback(Callback);
+                User32.EnumThreadWindows(
+                    Kernel32.GetCurrentThreadId(),
+                    callback,
+                    IntPtr.Zero);
+                GC.KeepAlive(callback);
             }
 
             private bool Callback(IntPtr hWnd, IntPtr lParam)

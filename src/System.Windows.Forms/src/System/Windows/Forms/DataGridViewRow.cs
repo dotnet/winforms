@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -2202,7 +2203,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 {
                     if (Owner == null)
@@ -2214,15 +2215,15 @@ namespace System.Windows.Forms
 
                     switch (direction)
                     {
-                        case UnsafeNativeMethods.NavigateDirection.Parent:
+                        case UiaCore.NavigateDirection.Parent:
                             return Parent;
-                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        case UiaCore.NavigateDirection.NextSibling:
                             return Navigate(AccessibleNavigation.Next);
-                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                        case UiaCore.NavigateDirection.PreviousSibling:
                             return Navigate(AccessibleNavigation.Previous);
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        case UiaCore.NavigateDirection.FirstChild:
                             return Navigate(AccessibleNavigation.FirstChild);
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        case UiaCore.NavigateDirection.LastChild:
                             return Navigate(AccessibleNavigation.LastChild);
                         default:
                             return null;
@@ -2230,7 +2231,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {

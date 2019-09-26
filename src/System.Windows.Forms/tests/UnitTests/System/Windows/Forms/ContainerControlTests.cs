@@ -36,11 +36,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Rectangle.Empty, control.Bounds);
             Assert.False(control.CanEnableIme);
             Assert.True(control.CanRaiseEvents);
-            Assert.True(control.CanProcessMnemonic());
             Assert.True(control.CausesValidation);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
+            Assert.Null(control.ContextMenu);
+            Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
             Assert.False(control.Created);
@@ -62,10 +63,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.DockPadding.Bottom);
             Assert.Equal(0, control.DockPadding.Left);
             Assert.Equal(0, control.DockPadding.Right);
+            Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(0, control.Height);
@@ -77,6 +80,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Padding);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.Null(control.Site);
@@ -90,6 +96,27 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
             Assert.False(control.VScroll);
             Assert.Equal(0, control.Width);
+
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Fact]
+        public void ContainerControl_CreateParams_GetDefault_ReturnsExpected()
+        {
+            var control = new SubContainerControl();
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x10000, createParams.ExStyle);
+            Assert.Equal(0, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010000, createParams.Style);
+            Assert.Equal(0, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
         }
 
         [Fact]
@@ -337,15 +364,17 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new ContainerControl
+            var control = new SubContainerControl
             {
                 Font = value
             };
             Assert.Same(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
 
             // Set same.
             control.Font = value;
             Assert.Same(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
         }
 
         [Theory]
@@ -399,7 +428,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null.
             control.Font = null;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(3, callCount);
 
             // Remove handler.
@@ -642,9 +671,31 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
 
             public new bool HScroll
             {

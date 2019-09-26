@@ -40,7 +40,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 throw new ArgumentNullException(nameof(projectName));
 
             var repoRoot = GetRepoRoot();
-            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\netcoreapp3.0\\{projectName}.exe");
+            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\netcoreapp5.0\\{projectName}.exe");
 
             if (!File.Exists(exePath))
                 throw new FileNotFoundException("File does not exist", exePath);

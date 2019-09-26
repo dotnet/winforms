@@ -5,18 +5,17 @@
 using System.Drawing;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        [
-            ComVisible(true)
-        ]
+        [ComVisible(true)]
         protected class DataGridViewTopRowAccessibleObject : AccessibleObject
         {
             private int[] runtimeId;
-            DataGridView owner;
+            private DataGridView owner;
 
             public DataGridViewTopRowAccessibleObject() : base()
             {
@@ -204,7 +203,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -213,25 +212,25 @@ namespace System.Windows.Forms
             }
 
             [return: MarshalAs(UnmanagedType.IUnknown)]
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return Parent;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (Parent.GetChildCount() > 1)
                         {
                             return Parent.GetChild(1);
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         if (GetChildCount() > 0)
                         {
                             return GetChild(0);
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         if (GetChildCount() > 0)
                         {
                             return GetChild(GetChildCount() - 1);

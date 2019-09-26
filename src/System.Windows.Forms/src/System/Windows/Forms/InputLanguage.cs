@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -64,9 +65,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr[] data = new IntPtr[1];
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDEFAULTINPUTLANG, 0, data, 0);
-                return new InputLanguage(data[0]);
+                IntPtr handle = IntPtr.Zero;
+                User32.SystemParametersInfoW(User32.SPI.GETDEFAULTINPUTLANG, ref handle);
+                return new InputLanguage(handle);
             }
         }
 
@@ -156,8 +157,7 @@ namespace System.Windows.Forms
                     keyName = PadWithZeroes(keyName, 8);
                     RegistryKey key = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\" + keyName);
 
-                    // Attempt to extract the localized keyboard layout name
-                    // using the SHLoadIndirectString API...
+                    // Attempt to extract the localized keyboard layout name using the SHLoadIndirectString API.
                     layoutName = GetLocalizedKeyboardLayoutName(key.GetValue("Layout Display Name") as string);
 
                     // Default back to our legacy codepath and obtain the name
@@ -208,8 +208,7 @@ namespace System.Windows.Forms
                             {
                                 RegistryKey key = layouts.OpenSubKey(encoding);
 
-                                // Attempt to extract the localized keyboard layout name
-                                // using the SHLoadIndirectString API...
+                                // Attempt to extract the localized keyboard layout name using the SHLoadIndirectString API.
                                 layoutName = GetLocalizedKeyboardLayoutName(key.GetValue("Layout Display Name") as string);
 
                                 // Default back to our legacy codepath and obtain the name
@@ -240,8 +239,7 @@ namespace System.Windows.Forms
                                     int value = Convert.ToInt32(codeValue, 16);
                                     if (value == device)
                                     {
-                                        // Attempt to extract the localized keyboard layout name
-                                        // using the SHLoadIndirectString API...
+                                        // Attempt to extract the localized keyboard layout name using the SHLoadIndirectString API.
                                         layoutName = GetLocalizedKeyboardLayoutName(key.GetValue("Layout Display Name") as string);
 
                                         // Default back to our legacy codepath and obtain the name
@@ -269,18 +267,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Attempts to extract the localized keyboard layout name using the
-        ///  SHLoadIndirectString API (only on OSVersions >= 5).  Returning
-        ///  null from this method will force us to use the legacy codepath
-        ///  (pulling the text directly from the registry).
+        ///  Attempts to extract the localized keyboard layout name using the SHLoadIndirectString API.
+        ///  Returning null from this method will force us to use the legacy codepath (pulling the text
+        ///  directly from the registry).
         /// </summary>
         private static string GetLocalizedKeyboardLayoutName(string layoutDisplayName)
         {
             if (layoutDisplayName != null)
             {
-                StringBuilder sb = new StringBuilder(512);
-                uint res = UnsafeNativeMethods.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
-                if (res == NativeMethods.S_OK)
+                var sb = new StringBuilder(512);
+                HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
+                if (res == HRESULT.S_OK)
                 {
                     return sb.ToString();
                 }

@@ -150,25 +150,21 @@ namespace System.Windows.Forms
             // leave everything else 0
 
             // Set up color table --
-            int entryCount = 0;
             IntPtr palette = SafeNativeMethods.CreateHalftonePalette(new HandleRef(null, hdcS));
-            UnsafeNativeMethods.GetObject(new HandleRef(null, palette), 2, ref entryCount);
-            int[] entries = new int[entryCount];
-            SafeNativeMethods.GetPaletteEntries(new HandleRef(null, palette), 0, entryCount, entries);
+            Gdi32.GetObjectW(palette, out uint entryCount);
+            var entries = new Gdi32.PALETTEENTRY[entryCount];
+            Gdi32.GetPaletteEntries(palette, entries);
             int[] colors = new int[entryCount];
             for (int i = 0; i < entryCount; i++)
             {
-                int entry = entries[i];
-                colors[i]
-                = (entry & unchecked((int)0xff000000)) >> 6 // red
-                  + (entry & 0x00ff0000) >> 4 // blue
-                  + (entry & 0x0000ff00) >> 2; // green
+                Gdi32.PALETTEENTRY entry = entries[i];
+                colors[i] = entry.peRed >> 6 + entry.peBlue >> 4 + entry.peGreen >> 2;
             }
             Gdi32.DeleteObject(palette);
 
-            IntPtr address = Marshal.AllocCoTaskMem(Marshal.SizeOf(header) + entryCount * 4);
+            IntPtr address = Marshal.AllocCoTaskMem(Marshal.SizeOf(header) + (int)entryCount * 4);
             Marshal.StructureToPtr(header, address, false);
-            Marshal.Copy(colors, 0, (IntPtr)((long)address + Marshal.SizeOf(header)), entryCount);
+            Marshal.Copy(colors, 0, (IntPtr)((long)address + Marshal.SizeOf(header)), (int)entryCount);
             return address;
         }
 
@@ -317,8 +313,8 @@ namespace System.Windows.Forms
             // monochrome to color, Windows sets all 1 bits to the background
             // color, and all 0 bits to the foreground color.
             //
-            SafeNativeMethods.SetBkColor(new HandleRef(null, target), 0x00ffffff); // white
-            SafeNativeMethods.SetTextColor(new HandleRef(null, target), 0); // black
+            Gdi32.SetBkColor(target, 0x00ffffff); // white
+            Gdi32.SetTextColor(target, 0x00000000); // black
             SafeNativeMethods.BitBlt(new HandleRef(null, target), 0, 0, size.Width, size.Height, new HandleRef(null, source),
                                      0, 0, 0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
@@ -339,17 +335,20 @@ namespace System.Windows.Forms
             }
 
             IntPtr hBitmap = SafeNativeMethods.CreateBitmap(8, 8, 1, 1, grayPattern);
-
-            NativeMethods.LOGBRUSH lb = new NativeMethods.LOGBRUSH
+            try
             {
-                lbColor = ColorTranslator.ToWin32(Color.Black),
-                lbStyle = NativeMethods.BS_PATTERN,
-                lbHatch = hBitmap
-            };
-            IntPtr brush = SafeNativeMethods.CreateBrushIndirect(ref lb);
-
-            Gdi32.DeleteObject(hBitmap);
-            return brush;
+                var lb = new Gdi32.LOGBRUSH
+                {
+                    lbColor = ColorTranslator.ToWin32(Color.Black),
+                    lbStyle = Gdi32.BS.PATTERN,
+                    lbHatch = hBitmap
+                };
+                return Gdi32.CreateBrushIndirect(ref lb);
+            }
+            finally
+            {
+                Gdi32.DeleteObject(hBitmap);
+            }
         }
 
         // roughly the same code as in Graphics.cs
@@ -1965,17 +1964,17 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawReversibleFrame(Rectangle rectangle, Color backColor, FrameStyle style)
         {
-            int rop2;
+            Gdi32.R2 rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = 0xA; // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET);
+                rop2 = Gdi32.R2.NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = 0x7; // RasterOp.PEN.XorWith(RasterOp.TARGET);
+                rop2 = Gdi32.R2.XORPEN;
                 graphicsColor = Color.Black;
             }
 
@@ -1985,22 +1984,22 @@ namespace System.Windows.Forms
             switch (style)
             {
                 case FrameStyle.Dashed:
-                    pen = SafeNativeMethods.CreatePen(NativeMethods.PS_DOT, 1, ColorTranslator.ToWin32(backColor));
+                    pen = Gdi32.CreatePen(Gdi32.PS.DOT, 1, ColorTranslator.ToWin32(backColor));
                     break;
 
                 case FrameStyle.Thick:
                 default:
-                    pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 2, ColorTranslator.ToWin32(backColor));
+                    pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor));
                     break;
             }
 
-            int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
+            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
-            SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(graphicsColor));
+            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
             SafeNativeMethods.Rectangle(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
 
-            SafeNativeMethods.SetROP2(dc, prevRop2);
+            Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
             Gdi32.SelectObject(dc, oldPen);
 
@@ -2018,21 +2017,19 @@ namespace System.Windows.Forms
         /// </summary>
         public static unsafe void DrawReversibleLine(Point start, Point end, Color backColor)
         {
-            int rop2 = GetColorRop(backColor,
-                                   0xA, // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET),
-                                   0x7); //RasterOp.PEN.XorWith(RasterOp.TARGET));
+            Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
-            IntPtr pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(backColor));
+            IntPtr pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor));
 
-            int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
+            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
 
             SafeNativeMethods.MoveToEx(new HandleRef(null, dc), start.X, start.Y, null);
             SafeNativeMethods.LineTo(new HandleRef(null, dc), end.X, end.Y);
 
-            SafeNativeMethods.SetROP2(dc, prevRop2);
+            Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
             Gdi32.SelectObject(dc, oldPen);
             Gdi32.DeleteObject(pen);
@@ -2211,20 +2208,18 @@ namespace System.Windows.Forms
             int rop3 = GetColorRop(backColor,
                                    0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
-            int rop2 = GetColorRop(backColor,
-                                   0x6, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
-                                   0x6); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
+            Gdi32.R2 rop2 = Gdi32.R2.NOT;
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
-            IntPtr brush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
+            IntPtr brush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
 
-            int prevRop2 = SafeNativeMethods.SetROP2(dc, rop2);
+            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
             SafeNativeMethods.PatBlt(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
 
-            SafeNativeMethods.SetROP2(dc, prevRop2);
+            Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
             Gdi32.DeleteObject(brush);
             User32.ReleaseDC(IntPtr.Zero, dc);
@@ -2242,7 +2237,7 @@ namespace System.Windows.Forms
         }
 
         // Returns whether or not target was changed
-        internal static bool FontToIFont(Font source, UnsafeNativeMethods.IFont target)
+        internal static bool FontToIFont(Font source, Ole32.IFont target)
         {
             bool changed = false;
 
@@ -2250,10 +2245,10 @@ namespace System.Windows.Forms
             // it looks like setting them all has different results based on the
             // order and each individual IFont implementor...
             //
-            string fontName = target.GetName();
+            string fontName = target.Name;
             if (!source.Name.Equals(fontName))
             {
-                target.SetName(source.Name);
+                target.Name = source.Name;
                 changed = true;
             }
 
@@ -2267,57 +2262,61 @@ namespace System.Windows.Forms
             // or, worse case, just create another Font object
             // from the handle, but that's pretty heavy...
             //
-            float fontSize = (float)target.GetSize() / 10000;
+            float fontSize = (float)target.Size / 10000;
 
             // size must be in points
             float winformsSize = source.SizeInPoints;
             if (winformsSize != fontSize)
             {
-                target.SetSize((long)(winformsSize * 10000));
+                target.Size = (long)(winformsSize * 10000);
                 changed = true;
             }
 
-            NativeMethods.LOGFONTW logfont = NativeMethods.LOGFONTW.FromFont(source);
+            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(source);
 
-            short fontWeight = target.GetWeight();
+            short fontWeight = target.Weight;
             if (fontWeight != logfont.lfWeight)
             {
-                target.SetWeight((short)logfont.lfWeight);
+                target.Weight = (short)logfont.lfWeight;
                 changed = true;
             }
 
-            bool fontBold = target.GetBold();
-            if (fontBold != (logfont.lfWeight >= 700))
+            bool fontBold = target.Bold.IsTrue();
+            bool isBold = logfont.lfWeight >= 700;
+            if (fontBold != isBold)
             {
-                target.SetBold(logfont.lfWeight >= 700);
+                target.Bold = isBold.ToBOOL();
                 changed = true;
             }
 
-            bool fontItalic = target.GetItalic();
-            if (fontItalic != (0 != logfont.lfItalic))
+            bool fontItalic = target.Italic.IsTrue();
+            bool isItalic = logfont.lfItalic != 0;
+            if (fontItalic != isItalic)
             {
-                target.SetItalic(0 != logfont.lfItalic);
+                target.Italic = isItalic.ToBOOL();
                 changed = true;
             }
 
-            bool fontUnderline = target.GetUnderline();
-            if (fontUnderline != (0 != logfont.lfUnderline))
+            bool fontUnderline = target.Underline.IsTrue();
+            bool isUnderline = logfont.lfUnderline != 0;
+            if (fontUnderline != isUnderline)
             {
-                target.SetUnderline(0 != logfont.lfUnderline);
+                target.Underline = isUnderline.ToBOOL();
                 changed = true;
             }
 
-            bool fontStrike = target.GetStrikethrough();
-            if (fontStrike != (0 != logfont.lfStrikeOut))
+            bool fontStrike = target.Strikethrough.IsTrue();
+            bool isStrike = logfont.lfStrikeOut != 0;
+            if (fontStrike != isStrike)
             {
-                target.SetStrikethrough(0 != logfont.lfStrikeOut);
+                target.Strikethrough = isStrike.ToBOOL();
                 changed = true;
             }
 
-            short fontCharset = target.GetCharset();
+            short fontCharset = target.Charset;
             if (fontCharset != logfont.lfCharSet)
             {
-                target.SetCharset(logfont.lfCharSet);
+                target.Charset = logfont.lfCharSet;
                 changed = true;
             }
 
@@ -2334,6 +2333,7 @@ namespace System.Windows.Forms
             {
                 return darkROP;
             }
+
             return lightROP;
         }
 

@@ -324,62 +324,47 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null)
-                {
-
-                    NativeImageList himl = value.GetNativeImageList();
-                    if (himl != null && himl != nativeImageList)
-                    {
-                        bool recreatingHandle = HandleCreated;//We only need to fire RecreateHandle if there was a previous handle
-                        DestroyHandle();
-                        originals = null;
-                        nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Duplicate(new HandleRef(himl, himl.Handle)));
-                        if (SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y))
-                        {
-                            imageSize = new Size(x, y);
-                        }
-                        // need to get the image bpp
-                        NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image?
-                        if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo))
-                        {
-                            NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
-                            UnsafeNativeMethods.GetObject(new HandleRef(null, imageInfo.hbmImage), Marshal.SizeOf(bmp), bmp);
-                            switch (bmp.bmBitsPixel)
-                            {
-                                case 4:
-                                    colorDepth = ColorDepth.Depth4Bit;
-                                    break;
-                                case 8:
-                                    colorDepth = ColorDepth.Depth8Bit;
-                                    break;
-                                case 16:
-                                    colorDepth = ColorDepth.Depth16Bit;
-                                    break;
-                                case 24:
-                                    colorDepth = ColorDepth.Depth24Bit;
-                                    break;
-                                case 32:
-                                    colorDepth = ColorDepth.Depth32Bit;
-                                    break;
-                                default:
-                                    Debug.Fail("Unknown color depth");
-                                    break;
-                            }
-                        }
-
-                        Images.ResetKeys();
-                        if (recreatingHandle)
-                        {
-                            OnRecreateHandle(EventArgs.Empty);
-                        }
-                    }
-                }
-                else
+                if (value == null)
                 {
                     DestroyHandle();
                     Images.Clear();
+                    return;
                 }
 
+                NativeImageList himl = value.GetNativeImageList();
+                if (himl != null && himl != nativeImageList)
+                {
+                    bool recreatingHandle = HandleCreated; // We only need to fire RecreateHandle if there was a previous handle
+                    DestroyHandle();
+                    originals = null;
+                    nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Duplicate(new HandleRef(himl, himl.Handle)));
+                    if (SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y))
+                    {
+                        imageSize = new Size(x, y);
+                    }
+
+                    // need to get the image bpp
+                    NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image?
+                    if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo))
+                    {
+                        Gdi32.GetObjectW(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
+                        colorDepth = bmp.bmBitsPixel switch
+                        {
+                            4 => ColorDepth.Depth4Bit,
+                            8 => ColorDepth.Depth8Bit,
+                            16 => ColorDepth.Depth16Bit,
+                            24 => ColorDepth.Depth24Bit,
+                            32 => ColorDepth.Depth32Bit,
+                            _ => colorDepth
+                        };
+                    }
+
+                    Images.ResetKeys();
+                    if (recreatingHandle)
+                    {
+                        OnRecreateHandle(EventArgs.Empty);
+                    }
+                }
             }
         }
 
@@ -645,14 +630,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Frees all resources assocaited with this component.
+        ///  Releases the unmanaged resources used by the <see cref="ImageList" />
+        ///  and optionally releases the managed resources.
         /// </summary>
+        /// <param name="disposing">
+        ///  <see langword="true" /> to release both managed and unmanaged resources;
+        ///  <see langword="false" /> to release only unmanaged resources.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 if (originals != null)
-                { // we might own some of the stuff that's not been created yet
+                {
+                    // we might own some of the stuff that's not been created yet
                     foreach (Original original in originals)
                     {
                         if ((original.options & OriginalOptions.OwnsImage) != 0)

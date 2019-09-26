@@ -10,6 +10,14 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
+    /// <summary>
+    /// Represents the container for multiple-document interface (MDI) child forms. 
+    /// This class cannot be inherited.
+    /// </summary>
+    /// <remarks>
+    ///  Don't create an <see cref="MdiClient"/> control.
+    ///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.  
+    /// </remarks>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -34,8 +42,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Use parent's BackgroundImage if our BackgroundImage isn't set.
+        ///  Gets or sets the background image displayed in the <see cref="MdiClient" /> control.
         /// </summary>
+        /// <value>The image to display in the background of the control.</value>
         [
         Localizable(true)
         ]
@@ -81,6 +90,10 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets the required creation parameters when the control handle is created.
+        /// </summary>
+        /// <value>The required creation parameters when the control handle is created.</value>
         protected override CreateParams CreateParams
         {
             get
@@ -103,7 +116,7 @@ namespace System.Windows.Forms
                 if (site != null && site.DesignMode)
                 {
                     cp.Style |= NativeMethods.WS_DISABLED;
-                    SetState(STATE_ENABLED, false);
+                    SetState(States.Enabled, false);
                 }
 
                 if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)
@@ -139,9 +152,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Arranges the MDI child forms according to value, which should be a
-        ///  member of the MdiLayout enum.
+        ///  Arranges the multiple-document interface (MDI) child forms within the MDI parent form.
         /// </summary>
+        /// <param name="value">One of the enumeration values that defines the layout of MDI child forms.</param>
         public void LayoutMdi(MdiLayout value)
         {
             if (Handle == IntPtr.Zero)
@@ -166,6 +179,10 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Raises the <see cref="Control.Resize" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>
         protected override void OnResize(EventArgs e)
         {
             ISite site = ParentInternal?.Site;
@@ -177,8 +194,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Performs the work of scaling the entire control and any child controls.
+        ///  Scales the entire control and any child controls.
         /// </summary>
+        /// <param name="dx">The scaling factor for the x-axis</param>
+        /// <param name="dy">The scaling factor for the y-axis.</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {
@@ -202,8 +221,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Scale this form.  Form overrides this to enforce a maximum / minimum size.
+        ///  Scales this form's location, size, padding, and margin. The <see cref="MdiClient" /> overrides 
+        ///  <see cref="ScaleControl(SizeF,BoundsSpecified)" /> to enforce a minimum and maximum size.
         /// </summary>
+        /// <param name="factor">The factor by which the height and width of the control will be scaled.</param>
+        /// <param name="specified">The bounds of the control to use when defining its size and position.</param>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             // never scale X and Y of an MDI client form
@@ -211,6 +233,14 @@ namespace System.Windows.Forms
             base.ScaleControl(factor, specified);
         }
 
+        /// <summary>
+        ///  Sets the specified bounds of the control.
+        /// </summary>
+        /// <param name="x">The new <see cref="Control.Left" /> property value of the control.</param>
+        /// <param name="y">The new <see cref="Control.Top" /> property value of the control.</param>
+        /// <param name="width">The new <see cref="Control.Width" /> property value of the control.</param>
+        /// <param name="height">The new <see cref="Control.Height" /> property value of the control.</param>
+        /// <param name="specified">A bitwise combination of the enumeration values that specifies the bounds of the control to use.</param>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             ISite site = ParentInternal?.Site;
@@ -226,12 +256,6 @@ namespace System.Windows.Forms
                     // NOTE: This logic is to keep minimized MDI children anchored to
                     // the bottom left of the client area, normally they are anchored
                     // to the top right which just looks wierd!
-                    //
-                    NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT
-                    {
-                        length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>()
-                    };
-
                     for (int i = 0; i < Controls.Count; i++)
                     {
                         Control ctl = Controls[i];
@@ -242,7 +266,7 @@ namespace System.Windows.Forms
                             // them from being re-displayed.
                             if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
                             {
-                                UnsafeNativeMethods.GetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
+                                User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
                                 wp.ptMinPosition.Y -= yDelta;
                                 if (wp.ptMinPosition.Y == -1)
                                 {
@@ -255,9 +279,8 @@ namespace System.Windows.Forms
                                         wp.ptMinPosition.Y = -2;
                                     }
                                 }
-                                wp.flags = NativeMethods.WPF_SETMINPOSITION;
-                                UnsafeNativeMethods.SetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
-                                wp.flags = 0;
+                                wp.flags = User32.WPF.SETMINPOSITION;
+                                User32.SetWindowPlacement(child, ref wp);
                             }
                         }
                     }
@@ -347,6 +370,10 @@ namespace System.Windows.Forms
             return false;
         }
 
+        /// <summary>
+        ///  Processes Windows messages.
+        /// </summary>
+        /// <param name="m">The Windows <see cref="Message" /> to process.</param>
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)

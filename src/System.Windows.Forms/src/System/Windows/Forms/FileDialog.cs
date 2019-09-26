@@ -664,7 +664,7 @@ namespace System.Windows.Forms
         private protected bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            IntPtr focusHandle = UnsafeNativeMethods.GetFocus();
+            IntPtr focusHandle = User32.GetFocus();
             try
             {
                 return RTLAwareMessageBox.Show(null, message, caption, buttons, icon,
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, focusHandle));
+                User32.SetFocus(focusHandle);
             }
         }
 

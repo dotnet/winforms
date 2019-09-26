@@ -3356,7 +3356,7 @@ namespace System.Windows.Forms
         private void CaptureMouse(Rectangle cursorClip)
         {
             CaptureInternal = true;
-            Cursor.ClipInternal = RectangleToScreen(cursorClip);
+            Cursor.Clip = RectangleToScreen(cursorClip);
         }
 
         private void ClearRegionCache()
@@ -16908,7 +16908,7 @@ namespace System.Windows.Forms
         internal override void OnParentBecameInvisible()
         {
             base.OnParentBecameInvisible();
-            if (GetState(STATE_VISIBLE))
+            if (GetState(States.Visible))
             {
                 // This control became invisible too - Update the Displayed properties of the bands.
                 OnVisibleChangedPrivate();
@@ -25169,7 +25169,7 @@ namespace System.Windows.Forms
 
         private void RealeaseMouse()
         {
-            Cursor.ClipInternal = Rectangle.Empty;
+            Cursor.Clip = Rectangle.Empty;
             CaptureInternal = false;
         }
 
@@ -26814,7 +26814,7 @@ namespace System.Windows.Forms
             editingControlAccessibleObject.SetParent(CurrentCell.AccessibilityObject);
 
             CurrentCell.AccessibilityObject.SetDetachableChild(editingControlAccessibleObject);
-            CurrentCell.AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, editingControlAccessibleObject.RuntimeId);
+            CurrentCell.AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildAdded, editingControlAccessibleObject.RuntimeId);
         }
 
         private bool SetAndSelectCurrentCellAddress(int columnIndex,
@@ -27744,7 +27744,7 @@ namespace System.Windows.Forms
             OnSorted(EventArgs.Empty);
 
             // RS4 narrator does not catch this event even though event is indeed raised.
-            AccessibilityNotifyClients(AccessibleEvents.Reorder, NativeMethods.OBJID_CLIENT, 0);
+            AccessibilityNotifyClients(AccessibleEvents.Reorder, User32.OBJID.CLIENT, 0);
         }
 
         internal void SwapSortedRows(int rowIndex1, int rowIndex2)
@@ -29266,7 +29266,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
             if (nmhdr->code == NativeMethods.TTN_GETDISPINFO && !DesignMode)
             {
                 string toolTip = ToolTipPrivate;
@@ -29274,7 +29274,7 @@ namespace System.Windows.Forms
                 if (!string.IsNullOrEmpty(toolTip))
                 {
                     // Setting the max width has the added benefit of enabling multiline tool tips
-                    User32.SendMessageW(nmhdr->hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
 
                     ttt.lpszText = toolTip;

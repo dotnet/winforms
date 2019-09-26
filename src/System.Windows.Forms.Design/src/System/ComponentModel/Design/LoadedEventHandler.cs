@@ -5,7 +5,7 @@
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  Represents the method that will handle a Loaded event.
+    ///  Represents a method that will handle a <see cref="DesignSurface.Loaded"/> event.
     /// </summary>
     public delegate void LoadedEventHandler(object sender, LoadedEventArgs e);
 }

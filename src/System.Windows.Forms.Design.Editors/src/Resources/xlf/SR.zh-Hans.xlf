@@ -84,7 +84,7 @@
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="translated">停靠选择器</target>
+        <target state="translated">停靠选取器</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">

@@ -34,13 +34,16 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(BorderStyle.None, page.BorderStyle);
             Assert.Equal(100, page.Bottom);
             Assert.Equal(new Rectangle(0, 0, 200, 100), page.Bounds);
+            Assert.True(page.CanEnableIme);
             Assert.True(page.CanRaiseEvents);
+            Assert.True(page.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), page.ClientRectangle);
             Assert.Equal(new Size(200, 100), page.ClientSize);
-            Assert.Null(page.Container);
-            Assert.True(page.CausesValidation);
             Assert.False(page.CommitOnDeactivate);
             Assert.Null(page.Component);
+            Assert.Null(page.Container);
+            Assert.Null(page.ContextMenu);
+            Assert.Null(page.ContextMenuStrip);
             Assert.Empty(page.Controls);
             Assert.Same(page.Controls, page.Controls);
             Assert.False(page.Created);
@@ -61,11 +64,13 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(0, page.DockPadding.Bottom);
             Assert.Equal(0, page.DockPadding.Left);
             Assert.Equal(0, page.DockPadding.Right);
+            Assert.False(page.DoubleBuffered);
             Assert.True(page.Enabled);
             Assert.NotNull(page.Events);
             Assert.Same(page.Events, page.Events);
             Assert.True(page.FirstActivate);
             Assert.Equal(Control.DefaultFont, page.Font);
+            Assert.Equal(page.Font.Height, page.FontHeight);
             Assert.Equal(Control.DefaultForeColor, page.ForeColor);
             Assert.False(page.HasChildren);
             Assert.Equal(100, page.Height);
@@ -82,6 +87,9 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(Point.Empty, page.Location);
             Assert.Equal(Padding.Empty, page.Padding);
             Assert.Null(page.PageSite);
+            Assert.False(page.RecreatingHandle);
+            Assert.Null(page.Region);
+            Assert.False(page.ResizeRedraw);
             Assert.Equal(200, page.Right);
             Assert.Equal(RightToLeft.No, page.RightToLeft);
             Assert.Equal(new Size(200, 100), page.Size);
@@ -95,6 +103,8 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Same(page.VerticalScroll, page.VerticalScroll);
             Assert.False(page.VScroll);
             Assert.Equal(200, page.Width);
+
+            Assert.False(page.IsHandleCreated);
         }
 
         [Fact]
@@ -131,8 +141,8 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(value, control.AutoSize);
 
             // Set different.
-            control.AutoSize = value;
-            Assert.Equal(value, control.AutoSize);
+            control.AutoSize = !value;
+            Assert.Equal(!value, control.AutoSize);
         }
 
         [Fact]
@@ -723,6 +733,8 @@ namespace System.Windows.Forms.Design.Tests
 
         private class SubComponentEditorPage : ComponentEditorPage
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new IComponent Component
@@ -749,6 +761,12 @@ namespace System.Windows.Forms.Design.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
             public new bool FirstActivate
@@ -757,7 +775,23 @@ namespace System.Windows.Forms.Design.Tests
                 set => base.FirstActivate = value;
             }
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
 
             public new bool HScroll
             {

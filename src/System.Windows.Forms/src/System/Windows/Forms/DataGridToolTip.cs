@@ -46,9 +46,12 @@ namespace System.Windows.Forms
                 tipWindow = new NativeWindow();
                 tipWindow.CreateHandle(cparams);
 
-                User32.SendMessageW(tipWindow, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                SafeNativeMethods.SetWindowPos(new HandleRef(tipWindow, tipWindow.Handle), NativeMethods.HWND_NOTOPMOST, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
-                User32.SendMessageW(tipWindow, WindowMessages.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
+                User32.SendMessageW(tipWindow, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SetWindowPos(
+                    new HandleRef(tipWindow, tipWindow.Handle),
+                    User32.HWND_NOTOPMOST,
+                    flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
+                User32.SendMessageW(tipWindow, User32.WindowMessage.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
             }
         }
 
@@ -62,13 +65,13 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(toolTipString));
 
             var info = new ComCtl32.ToolInfoWrapper(dataGrid, toolTipId, ComCtl32.TTF.SUBCLASS, toolTipString, iconBounds);
-            info.SendMessage(tipWindow, WindowMessages.TTM_ADDTOOLW);
+            info.SendMessage(tipWindow, User32.WindowMessage.TTM_ADDTOOLW);
         }
 
         public void RemoveToolTip(IntPtr toolTipId)
         {
             var info = new ComCtl32.ToolInfoWrapper(dataGrid, toolTipId);
-            info.SendMessage(tipWindow, WindowMessages.TTM_DELTOOLW);
+            info.SendMessage(tipWindow, User32.WindowMessage.TTM_DELTOOLW);
         }
 
         // will destroy the tipWindow

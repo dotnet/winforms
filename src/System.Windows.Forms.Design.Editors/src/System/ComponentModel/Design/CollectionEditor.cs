@@ -1891,7 +1891,8 @@ namespace System.ComponentModel.Design
                 public override Type PropertyType { get; }
 
                 /// <summary>
-                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component "/>will change the value of the <paramref name="component"/>.
+                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component"/> 
+                ///  will change the value of the <paramref name="component"/>.
                 /// </summary>
                 public override bool CanResetValue(object component) => false;
 
@@ -2135,7 +2136,7 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid != null)
                             {
                                 PropertyGrid.Focus();
-                                UnsafeNativeMethods.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
+                                User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
                                 Application.DoEvents();
                             }
                             else
@@ -2146,7 +2147,7 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // recreate the keystroke to the newly activated window
-                                NativeMethods.SendMessage(UnsafeNativeMethods.GetFocus(), WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                                NativeMethods.SendMessage(User32.GetFocus(), WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
                         break;
@@ -2161,7 +2162,7 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid != null)
                         {
                             PropertyGrid.Focus();
-                            UnsafeNativeMethods.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
+                            User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
                             Application.DoEvents();
                         }
                         else
@@ -2172,7 +2173,7 @@ namespace System.ComponentModel.Design
                         // Make sure we changed focus properly recreate the keystroke to the newly activated window
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
-                            IntPtr hWnd = UnsafeNativeMethods.GetFocus();
+                            IntPtr hWnd = User32.GetFocus();
                             NativeMethods.SendMessage(hWnd, WindowMessages.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             NativeMethods.SendMessage(hWnd, WindowMessages.WM_CHAR, m.WParam, m.LParam);
                             return;

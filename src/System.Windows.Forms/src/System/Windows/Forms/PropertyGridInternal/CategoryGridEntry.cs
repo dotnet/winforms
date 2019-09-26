@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -290,25 +291,49 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 PropertyGridView.PropertyGridViewAccessibleObject parent = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
 
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return Parent;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         return parent.GetNextCategory(_owningCategoryGridEntry);
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         return parent.GetPreviousCategory(_owningCategoryGridEntry);
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         return parent.GetFirstChildProperty(_owningCategoryGridEntry);
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         return parent.GetLastChildProperty(_owningCategoryGridEntry);
                 }
 
                 return base.FragmentNavigate(direction);
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_GridItemPatternId ||
+                    patternId == NativeMethods.UIA_TableItemPatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
+            internal override object GetPropertyValue(int propertyID)
+            {
+                switch (propertyID)
+                {
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        // To announce expanded collapsed state control type should be appropriate:
+                        // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
+                        return NativeMethods.UIA_TreeItemControlTypeId;
+                }
+
+                return base.GetPropertyValue(propertyID);
             }
 
             public override AccessibleRole Role
@@ -318,6 +343,48 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return AccessibleRole.ButtonDropDownGrid;
                 }
             }
+
+            internal override int Row
+            {
+                get
+                {
+                    var parent = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
+                    if (parent == null)
+                    {
+                        return -1;
+                    }
+
+                    var gridView = parent.Owner as PropertyGridView;
+                    if (gridView == null || gridView.OwnerGrid == null || !gridView.OwnerGrid.SortedByCategories)
+                    {
+                        return -1;
+                    }
+
+                    var topLevelGridEntries = gridView.TopLevelGridEntries;
+                    if (topLevelGridEntries == null)
+                    {
+                        return -1;
+                    }
+
+                    int categoryIndex = 0;
+                    foreach (var topLevelGridEntry in topLevelGridEntries)
+                    {
+                        if (_owningCategoryGridEntry == topLevelGridEntry)
+                        {
+                            return categoryIndex;
+                        }
+
+                        if (topLevelGridEntry is CategoryGridEntry)
+                        {
+                            categoryIndex++;
+                        }
+                    }
+
+                    return -1;
+                }
+            }
+
+            internal override int Column => 0; // Category is in the first column.
         }
     }
 

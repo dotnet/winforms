@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -40,11 +41,11 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleContainer.EnumObjects(int grfFlags, out UnsafeNativeMethods.IEnumUnknown ppenum)
+        HRESULT UnsafeNativeMethods.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
         {
             ppenum = null;
-            if ((grfFlags & 1) != 0)
-            { // 1 == OLECONTF_EMBEDDINGS
+            if ((grfFlags & Ole32.OLECONTF.EMBEDDINGS) != 0)
+            {
                 Debug.Assert(parent != null, "gotta have it...");
                 ArrayList list = new ArrayList();
                 ListAXControls(list, true);
@@ -53,11 +54,12 @@ namespace System.Windows.Forms
                     object[] temp = new object[list.Count];
                     list.CopyTo(temp, 0);
                     ppenum = new AxHost.EnumUnknown(temp);
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
             }
+
             ppenum = new AxHost.EnumUnknown(null);
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock)
@@ -65,17 +67,21 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        //
         // IOleInPlaceFrame methods:
-        //
-        IntPtr UnsafeNativeMethods.IOleInPlaceFrame.GetWindow()
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
         {
-            return parent.Handle;
+            if (phwnd == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *phwnd = parent.Handle;
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceFrame.ContextSensitiveHelp(int fEnterMode)
+        HRESULT UnsafeNativeMethods.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleInPlaceFrame.GetBorder(NativeMethods.COMRECT lprectBorder)
@@ -171,9 +177,9 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(ref NativeMethods.MSG lpmsg, short wID)
+        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
         {
-            return NativeMethods.S_FALSE;
+            return HRESULT.S_FALSE;
         }
 
         //

@@ -1,4 +1,4 @@
-    
+﻿    
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
@@ -12,7 +12,7 @@ internal partial class Interop
     {
         private const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
         private static extern IntPtr LoadLibraryExW(string lpModuleName, IntPtr hFile, uint dwFlags);
 
         public static IntPtr LoadLibraryFromSystemPathIfAvailable(string libraryName)

@@ -10,58 +10,10 @@ namespace System.Windows.Forms.Internal
 {
     internal static partial class IntUnsafeNativeMethods
     {
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetROP2(HandleRef hdc);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int SetROP2(HandleRef hDC, int nDrawMode);
-
-        // Font.
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateFontIndirectW(ref NativeMethods.LOGFONTW lplf);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int GetObjectW(HandleRef hFont, int nSize, ref NativeMethods.LOGFONTW pv);
-
         // Drawing.
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetNearestColor(HandleRef hDC, int color);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int /*COLORREF*/ SetTextColor(HandleRef hDC, int crColor);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int GetTextAlign(HandleRef hdc);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int /*COLORREF*/ GetTextColor(HandleRef hDC);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int SetBkColor(HandleRef hDC, int clr);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SetBkMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int IntSetBkMode(HandleRef hDC, int nBkMode);
-
-        public static int SetBkMode(HandleRef hDC, int nBkMode)
-        {
-            int oldMode = IntSetBkMode(hDC, nBkMode);
-            DbgUtil.AssertWin32(oldMode != 0, "SetBkMode(hdc=[0x{0:X8}], Mode=[{1}]) failed.", hDC.Handle, nBkMode);
-            return oldMode;
-        }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "GetBkMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int IntGetBkMode(HandleRef hDC);
-
-        public static int GetBkMode(HandleRef hDC)
-        {
-            int mode = IntGetBkMode(hDC);
-            DbgUtil.AssertWin32(mode != 0, "GetBkMode(hdc=[0x{0:X8}]) failed.", hDC.Handle);
-            return mode;
-        }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int GetBkColor(HandleRef hDC);
 
         /// <remarks>
         ///  This method is currently used just for drawing the text background
@@ -96,16 +48,6 @@ namespace System.Windows.Forms.Internal
             return retVal;
         }
 
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, EntryPoint = "FillRect", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern bool IntFillRect(HandleRef hdc, [In] ref RECT rect, HandleRef hbrush);
-
-        public static bool FillRect(HandleRef hDC, [In] ref RECT rect, HandleRef hbrush)
-        {
-            bool retVal = IntFillRect(hDC, ref rect, hbrush);
-            DbgUtil.AssertWin32(retVal, "FillRect(hdc=[0x{0:X8}], rect=[{1}], hbrush=[{2}]", hDC.Handle, rect, hbrush.Handle);
-            return retVal;
-        }
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SetMapMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int IntSetMapMode(HandleRef hDC, int nMapMode);
 
@@ -137,17 +79,6 @@ namespace System.Windows.Forms.Internal
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static unsafe extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, Point *point);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int GetTextMetricsW(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm);
-
-        public static int GetTextMetrics(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm)
-        {
-            int retVal = IntUnsafeNativeMethods.GetTextMetricsW(hDC, ref lptm);
-
-            DbgUtil.AssertWin32(retVal != 0, "GetTextMetrics(hdc=[0x{0:X8}], [out TEXTMETRIC] failed.", hDC.Handle);
-            return retVal;
-        }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "BeginPath", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern bool IntBeginPath(HandleRef hDC);
@@ -215,20 +146,6 @@ namespace System.Windows.Forms.Internal
         {
             bool retVal = IntArc(hDC, nLeftRect, nTopRect, nRightRect, nBottomRect, nXStartArc, nYStartArc, nXEndArc, nYEndArc);
             DbgUtil.AssertWin32(retVal, "Arc(hdc=[0x{0:X8}], ...) failed.", hDC.Handle);
-            return retVal;
-        }
-
-        // Misc.
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int SetTextAlign(HandleRef hDC, int nMode);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "Ellipse", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern bool IntEllipse(HandleRef hDc, int x1, int y1, int x2, int y2);
-
-        public static bool Ellipse(HandleRef hDc, int x1, int y1, int x2, int y2)
-        {
-            bool retVal = IntEllipse(hDc, x1, y1, x2, y2);
-            DbgUtil.AssertWin32(retVal, "Ellipse(hdc=[0x{0:X8}], x1=[{1}], y1=[{2}], x2=[{3}], y2=[{4}]) failed.", hDc.Handle, x1, y1, x2, y2);
             return retVal;
         }
     }

@@ -11,6 +11,7 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -862,16 +863,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal Rectangle AccessibilityGetGridEntryBounds(GridEntry gridEntry)
         {
             int row = GetRowFromGridEntry(gridEntry);
-
             if (row < 0)
             {
                 return Rectangle.Empty;
             }
+
             Rectangle rect = GetRectangle(row, ROWVALUE | ROWLABEL);
 
             // Translate rect to screen coordinates
             var pt = new Point(rect.X, rect.Y);
-            UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref pt);
+            User32.ClientToScreen(new HandleRef(this, Handle), ref pt);
 
             Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
 
@@ -1117,7 +1118,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (IsHandleCreated && Visible && Enabled)
                 {
 
-                    gotfocus = IntPtr.Zero != UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
+                    gotfocus = IntPtr.Zero != User32.SetFocus(new HandleRef(this, Handle));
                 }
             }
 
@@ -1937,7 +1938,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // We are not touching this for this relase. We may revisit it in next release.
             UnsafeNativeMethods.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(this, Handle));
             dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
-            SafeNativeMethods.ShowWindow(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.SW_SHOWNA);
+            User32.ShowWindow(dropDownHolder, User32.SW.SHOWNA);
             Edit.Filter = true;
             dropDownHolder.Visible = true;
             dropDownHolder.FocusComponent();
@@ -2439,7 +2440,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return rect;
         }
 
-        private /*protected virtual*/ int GetRowFromGridEntry(GridEntry gridEntry)
+        internal /*protected virtual*/ int GetRowFromGridEntry(GridEntry gridEntry)
         {
             GridEntryCollection rgipesAll = GetAllGridEntries();
             if (gridEntry == null || rgipesAll == null)
@@ -4427,7 +4428,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // This creates a copy of the given Font, and as such we need to 
                     IntPtr hFont = Font.ToHfont();
 
-                    NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
+                    var tm = new Gdi32.TEXTMETRICW();
                     int iSel = -1;
                     try
                     {
@@ -4447,7 +4448,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 maxWidth = Math.Max(textSize.Width, maxWidth);
                             }
                         }
-                        SafeNativeMethods.GetTextMetricsW(new HandleRef(DropDownListBox, hdc), ref tm);
+
+                        Gdi32.GetTextMetricsW(new HandleRef(DropDownListBox, hdc), ref tm);
 
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
@@ -4527,7 +4529,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            ToolTip.SendMessage((int)WindowMessages.TTM_ADJUSTRECT, 1, ref rect);
+            ToolTip.SendMessage((int)User32.WindowMessage.TTM_ADJUSTRECT, 1, ref rect);
 
             // now offset it back to screen coords
             Point locPoint = parent.PointToScreen(new Point(rect.left, rect.top));
@@ -4570,14 +4572,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
+                        Control focusedControl = Control.FromHandle(User32.GetFocus());
 
                         if (focusedControl == null || !IsMyChild(focusedControl))
                         {
                             if (forward)
                             {
                                 TabSelection();
-                                focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
+                                focusedControl = Control.FromHandle(User32.GetFocus());
                                 // make sure the value actually took the focus
                                 if (IsMyChild(focusedControl))
                                 {
@@ -5332,6 +5334,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int items = totalProps;
 
                 gridEntry.InternalExpanded = value;
+
+                var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
+                var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
+                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                    oldExpandedState,
+                    newExpandedState);
+
                 RecalculateProps();
                 GridEntry ipeSelect = selectedGridEntry;
                 if (!value)
@@ -5697,7 +5707,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            IntPtr priorFocus = UnsafeNativeMethods.GetFocus();
+            IntPtr priorFocus = User32.GetFocus();
 
             IUIService service = (IUIService)GetService(typeof(IUIService));
             DialogResult result;
@@ -5712,7 +5722,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (priorFocus != IntPtr.Zero)
             {
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, priorFocus));
+                User32.SetFocus(priorFocus);
             }
 
             return result;
@@ -5742,14 +5752,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
-            while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
-                                                   NativeMethods.NullHandleRef,
-                                                   WindowMessages.WM_MOUSEFIRST,
-                                                   WindowMessages.WM_MOUSELAST,
-                                                   NativeMethods.PM_REMOVE))
+            var mouseMsg = new User32.MSG();
+            while (User32.PeekMessageW(ref mouseMsg,
+                IntPtr.Zero,
+                (User32.WindowMessage)WindowMessages.WM_MOUSEFIRST,
+                (User32.WindowMessage)WindowMessages.WM_MOUSELAST).IsTrue())
             {
-                ;
+                // No-op.
             }
 
             // These things are just plain useless.
@@ -5828,14 +5837,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
-            while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
-                                                   NativeMethods.NullHandleRef,
-                                                   WindowMessages.WM_MOUSEFIRST,
-                                                   WindowMessages.WM_MOUSELAST,
-                                                   NativeMethods.PM_REMOVE))
+            var mouseMsg = new User32.MSG();
+            while (User32.PeekMessageW(ref mouseMsg, msgMin: User32.WM_MOUSEFIRST, msgMax: User32.WM_MOUSELAST).IsTrue())
             {
-                ;
+                // No-op.
             }
 
             // These things are just plain useless.
@@ -6092,7 +6097,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (m.LParam != IntPtr.Zero)
             {
-                NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
                 if (nmhdr->hwndFrom == ToolTip.Handle)
                 {
@@ -6989,7 +6994,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (m.Msg == WindowMessages.WM_ACTIVATE)
                 {
-                    SetState(STATE_MODAL, true);
+                    SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
                     IntPtr activatedWindow = (IntPtr)m.LParam;
                     if (Visible && NativeMethods.Util.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !OwnsWindow(activatedWindow))
@@ -7131,13 +7136,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return _owningGridViewListBox.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         int currentIndex = GetCurrentIndex();
                         if (_owningGridViewListBox.AccessibilityObject is GridViewListBoxAccessibleObject gridViewListBoxAccessibleObject)
                         {
@@ -7149,7 +7154,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             }
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         currentIndex = GetCurrentIndex();
                         gridViewListBoxAccessibleObject = _owningGridViewListBox.AccessibilityObject as GridViewListBoxAccessibleObject;
                         if (gridViewListBoxAccessibleObject != null)
@@ -7168,7 +7173,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -7381,17 +7386,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                if (direction == UiaCore.NavigateDirection.Parent)
                 {
                     return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild)
+                else if (direction == UiaCore.NavigateDirection.FirstChild)
                 {
                     return GetChildFragment(0);
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                else if (direction == UiaCore.NavigateDirection.LastChild)
                 {
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
@@ -7399,7 +7404,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return GetChildFragment(childFragmentCount - 1);
                     }
                 }
-                else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling)
+                else if (direction == UiaCore.NavigateDirection.NextSibling)
                 {
                     return _owningPropertyGridView.Edit.AccessibilityObject;
                 }
@@ -7410,7 +7415,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -7638,6 +7643,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.IsInputChar(keyChar);
             }
 
+            protected override void OnGotFocus(EventArgs e)
+            {
+                base.OnGotFocus(e);
+
+                this.AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            }
+
             protected override void OnKeyDown(KeyEventArgs ke)
             {
 
@@ -7820,7 +7832,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (m.LParam != IntPtr.Zero)
                 {
-                    NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
                     if (nmhdr->hwndFrom == psheet.ToolTip.Handle)
                     {
@@ -7954,13 +7966,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// </summary>
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
-                internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
-                    if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                    if (direction == UiaCore.NavigateDirection.Parent)
                     {
                         return propertyGridView.SelectedGridEntry.AccessibilityObject;
                     }
-                    else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling)
+                    else if (direction == UiaCore.NavigateDirection.NextSibling)
                     {
                         if (propertyGridView.DropDownButton.Visible)
                         {
@@ -7978,7 +7990,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// <summary>
                 ///  Gets the top level element.
                 /// </summary>
-                internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 {
                     get
                     {
@@ -7988,21 +8000,24 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 internal override object GetPropertyValue(int propertyID)
                 {
-                    if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
+                    switch (propertyID)
                     {
-                        return !IsReadOnly;
-                    }
-                    else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId)
-                    {
-                        return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
-                    }
-                    else if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
-                    {
-                        return NativeMethods.UIA_EditControlTypeId;
-                    }
-                    else if (propertyID == NativeMethods.UIA_NamePropertyId)
-                    {
-                        return Name;
+                        case NativeMethods.UIA_RuntimeIdPropertyId:
+                            return RuntimeId;
+                        case NativeMethods.UIA_ControlTypePropertyId:
+                            return NativeMethods.UIA_EditControlTypeId;
+                        case NativeMethods.UIA_NamePropertyId:
+                            return Name;
+                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                            return Owner.Focused;
+                        case NativeMethods.UIA_IsEnabledPropertyId:
+                            return !IsReadOnly;
+                        case NativeMethods.UIA_ClassNamePropertyId:
+                            return Owner.GetType().ToString();
+                        case NativeMethods.UIA_FrameworkIdPropertyId:
+                            return NativeMethods.WinFormFrameworkId;
+                        case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
+                            return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
                     }
 
                     return base.GetPropertyValue(propertyID);
@@ -8016,6 +8031,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     return base.IsPatternSupported(patternId);
+                }
+
+                internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+                {
+                    get
+                    {
+                        // Prevent sending same runtime ID for all edit boxes. Individual edit in 
+                        // each row should have unique runtime ID to prevent incorrect announcement.
+                        // For instance screen reader may announce row 2 for the third row edit 
+                        // as the sme TextBox control is used both in row 2 and row 3.
+                        return null;
+                    }
                 }
 
                 public override string Name
@@ -8042,6 +8069,30 @@ namespace System.Windows.Forms.PropertyGridInternal
                     set
                     {
                         base.Name = value;
+                    }
+                }
+
+                internal override int[] RuntimeId
+                {
+                    get
+                    {
+                        var selectedGridEntryAccessibleRuntimeId =
+                            propertyGridView?.SelectedGridEntry?.AccessibilityObject?.RuntimeId;
+
+                        if (selectedGridEntryAccessibleRuntimeId == null)
+                        {
+                            return null;
+                        }
+
+                        int[] runtimeId = new int[selectedGridEntryAccessibleRuntimeId.Length + 1];
+                        for (int i = 0; i < selectedGridEntryAccessibleRuntimeId.Length; i++)
+                        {
+                            runtimeId[i] = selectedGridEntryAccessibleRuntimeId[i];
+                        }
+
+                        runtimeId[runtimeId.Length - 1] = 1;
+
+                        return runtimeId;
                     }
                 }
 
@@ -8079,7 +8130,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly Control control;
             private readonly IMouseHookClient client;
 
-            internal int thisProcessID = 0;
+            internal uint _thisProcessID = 0;
             private GCHandle mouseHookRoot;
             private IntPtr mouseHookHandle = IntPtr.Zero;
             private bool hookDisable = false;
@@ -8156,18 +8207,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return;
                     }
 
-                    if (thisProcessID == 0)
+                    if (_thisProcessID == 0)
                     {
-                        SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(control, control.Handle), out thisProcessID);
+                        User32.GetWindowThreadProcessId(control, out _thisProcessID);
                     }
 
                     NativeMethods.HookProc hook = new NativeMethods.HookProc(new MouseHookObject(this).Callback);
                     mouseHookRoot = GCHandle.Alloc(hook);
 
-                    mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE,
-                                                               hook,
-                                                               NativeMethods.NullHandleRef,
-                                                               SafeNativeMethods.GetCurrentThreadId());
+                    mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
+                        NativeMethods.WH_MOUSE,
+                        hook,
+                        IntPtr.Zero,
+                        Kernel32.GetCurrentThreadId());
                     Debug.Assert(mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }
@@ -8230,11 +8282,9 @@ namespace System.Windows.Forms.PropertyGridInternal
            */
             private bool ProcessMouseDown(IntPtr hWnd, int x, int y)
             {
-
-                // if we put up the "invalid" message box, it appears this
+                // If we put up the "invalid" message box, it appears this
                 // method is getting called re-entrantly when it shouldn't be.
                 // this prevents us from recursing.
-                //
                 if (processing)
                 {
                     return false;
@@ -8242,19 +8292,18 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 IntPtr hWndAtPoint = hWnd;
                 IntPtr handle = control.Handle;
-                Control ctrlAtPoint = Control.FromHandle(hWndAtPoint);
+                Control ctrlAtPoint = FromHandle(hWndAtPoint);
 
                 // if it's us or one of our children, just process as normal
-                //
                 if (hWndAtPoint != handle && !control.Contains(ctrlAtPoint))
                 {
-                    Debug.Assert(thisProcessID != 0, "Didn't get our process id!");
+                    Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
-                    // make sure the window is in our process
-                    SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWndAtPoint), out int pid);
+                    // Make sure the window is in our process
+                    User32.GetWindowThreadProcessId(hWndAtPoint, out uint pid);
 
                     // if this isn't our process, unhook the mouse.
-                    if (pid != thisProcessID)
+                    if (pid != _thisProcessID)
                     {
                         HookMouseDown = false;
                         return false;
@@ -8362,7 +8411,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  otherwise return this element if the point is on this element,
             ///  otherwise return null.
             /// </returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 return HitTest((int)x, (int)y);
             }
@@ -8372,11 +8421,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
-                    UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                    UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                     if (navigationTarget != null)
                     {
                         return navigationTarget;
@@ -8387,9 +8436,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     switch (direction)
                     {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        case UiaCore.NavigateDirection.FirstChild:
                             return GetFirstCategory();
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        case UiaCore.NavigateDirection.LastChild:
                             return GetLastCategory();
                     }
                 }
@@ -8397,9 +8446,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     switch (direction)
                     {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        case UiaCore.NavigateDirection.FirstChild:
                             return GetChild(0);
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        case UiaCore.NavigateDirection.LastChild:
                             int childCount = GetChildCount();
                             if (childCount > 0)
                             {
@@ -8416,7 +8465,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -8428,7 +8477,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Gets the accessible object for the currently focused grid entry.
             /// </summary>
             /// <returns>The accessible object for the currently focused grid entry.</returns>
-            internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment GetFocus()
             {
                 return GetFocused();
             }
@@ -8440,16 +8489,30 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
             internal override object GetPropertyValue(int propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                switch (propertyID)
                 {
-                    return NativeMethods.UIA_TableControlTypeId;
-                }
-                else if (propertyID == NativeMethods.UIA_NamePropertyId)
-                {
-                    return Name;
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_TableControlTypeId;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
+                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
+                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
+                        return true;
                 }
 
                 return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                switch (patternId)
+                {
+                    case NativeMethods.UIA_TablePatternId:
+                    case NativeMethods.UIA_GridPatternId:
+                        return true;
+                }
+
+                return base.IsPatternSupported(patternId);
             }
 
             public override string Name
@@ -8809,7 +8872,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // Convert to client coordinates
                 var pt = new Point(x, y);
-                UnsafeNativeMethods.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref pt);
+                User32.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref pt);
 
                 // Find the grid entry at the given client coordinates
                 //
@@ -8850,6 +8913,41 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 return null;    // Perform default behavior
             }
+
+            internal override UiaCore.IRawElementProviderSimple GetItem(int row, int column)
+            {
+                return GetChild(row);
+            }
+
+            internal override int RowCount
+            {
+                get
+                {
+                    var topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
+                    if (topLevelGridEntries == null)
+                    {
+                        return 0;
+                    }
+
+                    if (!_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                    {
+                        return topLevelGridEntries.Count;
+                    }
+
+                    int categoriesCount = 0;
+                    foreach (var topLevelGridEntry in topLevelGridEntries)
+                    {
+                        if (topLevelGridEntry is CategoryGridEntry)
+                        {
+                            categoriesCount++;
+                        }
+                    }
+
+                    return categoriesCount;
+                }
+            }
+
+            internal override int ColumnCount => 1; // There is one column: grid item represents both label and input.
         }
 
         internal class GridPositionData

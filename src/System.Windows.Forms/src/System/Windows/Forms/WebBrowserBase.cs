@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
         private UnsafeNativeMethods.IOleObject axOleObject;
-        private UnsafeNativeMethods.IOleInPlaceObject axOleInPlaceObject;
+        private Ole32.IOleInPlaceObject axOleInPlaceObject;
         private UnsafeNativeMethods.IOleInPlaceActiveObject axOleInPlaceActiveObject;
         private UnsafeNativeMethods.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
@@ -196,12 +196,11 @@ namespace System.Windows.Forms
             }
         }
 
-        //
-        // We have to resize the ActiveX control when our size changes.
-        //
-        internal override void OnBoundsUpdate(int x, int y, int width, int height)
+        /// <remarks>
+        /// We have to resize the ActiveX control when our size changes.
+        /// </remarks>
+        internal unsafe override void OnBoundsUpdate(int x, int y, int width, int height)
         {
-            //
             // If the ActiveX control is already InPlaceActive, make sure
             // it's bounds also change.
             if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
@@ -210,7 +209,9 @@ namespace System.Windows.Forms
                 {
                     webBrowserBaseChangingSize.Width = width;
                     webBrowserBaseChangingSize.Height = height;
-                    AXInPlaceObject.SetObjectRects(new NativeMethods.COMRECT(new Rectangle(0, 0, width, height)), WebBrowserHelper.GetClipRect());
+                    RECT posRect = new Rectangle(0, 0, width, height);
+                    RECT clipRect = WebBrowserHelper.GetClipRect();
+                    AXInPlaceObject.SetObjectRects(&posRect, &clipRect);
                 }
                 finally
                 {
@@ -225,22 +226,20 @@ namespace System.Windows.Forms
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
         }
-
-        //
-        // Let us assume that TAB key was pressed. In this case, we should first
-        // give a chance to the ActiveX control to see if it wants to change focus
-        // to other subitems within it. If we did not give the ActiveX control the
-        // first chance to handle the key stroke, and called base.PreProcessMessage,
-        // the focus would be changed to the next control on the form! We don't want
-        // that!!
-        //
-        // If the ActiveX control doesn't want to handle the key, it calls back into
-        // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
-        // set a flag and call back into this method. In this method, we first check
-        // if this flag is set. If so, we call base.PreProcessMessage.
-        //
-        public override bool PreProcessMessage(ref Message msg)
+        public unsafe override bool PreProcessMessage(ref Message msg)
         {
+            // Let us assume that TAB key was pressed. In this case, we should first
+            // give a chance to the ActiveX control to see if it wants to change focus
+            // to other subitems within it. If we did not give the ActiveX control the
+            // first chance to handle the key stroke, and called base.PreProcessMessage,
+            // the focus would be changed to the next control on the form! We don't want
+            // that
+
+
+            // If the ActiveX control doesn't want to handle the key, it calls back into
+            // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
+            // set a flag and call back into this method. In this method, we first check
+            // if this flag is set. If so, we call base.PreProcessMessage.
             if (IsUserMode)
             {
                 if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
@@ -250,15 +249,8 @@ namespace System.Windows.Forms
                     return base.PreProcessMessage(ref msg);
                 }
 
-                // Convert Message to NativeMethods.MSG
-                NativeMethods.MSG win32Message = new NativeMethods.MSG
-                {
-                    message = msg.Msg,
-                    wParam = msg.WParam,
-                    lParam = msg.LParam,
-                    hwnd = msg.HWnd
-                };
-
+                // Convert Message to MSG
+                User32.MSG win32Message = msg;
                 SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
                 try
                 {
@@ -266,23 +258,21 @@ namespace System.Windows.Forms
                     {
                         // Give the ActiveX control a chance to process this key by calling
                         // IOleInPlaceActiveObject::TranslateAccelerator.
-                        int hr = axOleInPlaceActiveObject.TranslateAccelerator(ref win32Message);
-
-                        if (hr == NativeMethods.S_OK)
+                        HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
+                        if (hr == HRESULT.S_OK)
                         {
                             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
                             return true;
                         }
                         else
                         {
-                            //
                             // win32Message may have been modified. Lets copy it back.
-                            msg.Msg = win32Message.message;
+                            msg.Msg = (int)win32Message.message;
                             msg.WParam = win32Message.wParam;
                             msg.LParam = win32Message.lParam;
                             msg.HWnd = win32Message.hwnd;
 
-                            if (hr == NativeMethods.S_FALSE)
+                            if (hr == HRESULT.S_FALSE)
                             {
                                 // Same code as in AxHost (ignore dialog keys here).
                                 // We have the same problem here
@@ -328,7 +318,7 @@ namespace System.Windows.Forms
         // We can't decide just by ourselves whether we can process the
         // mnemonic. We have to ask the ActiveX control for it.
         //
-        protected internal override bool ProcessMnemonic(char charCode)
+        protected internal unsafe override bool ProcessMnemonic(char charCode)
         {
             bool processed = false;
 
@@ -336,26 +326,26 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    NativeMethods.tagCONTROLINFO ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    int hr = axOleControl.GetControlInfo(ctlInfo);
-                    if (NativeMethods.Succeeded(hr))
+                    var ctlInfo = new NativeMethods.tagCONTROLINFO();
+                    HRESULT hr = axOleControl.GetControlInfo(ctlInfo);
+                    if (hr.Succeeded())
                     {
                         //
                         // Sadly, we don't have a message so we must fake one ourselves.
                         // The message we are faking is a WM_SYSKEYDOWN with the right
                         // alt key setting.
-                        NativeMethods.MSG msg = new NativeMethods.MSG
+                        var msg = new User32.MSG
                         {
                             hwnd = IntPtr.Zero,
-                            message = WindowMessages.WM_SYSKEYDOWN,
+                            message = User32.WindowMessage.WM_SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
-                            time = SafeNativeMethods.GetTickCount()
+                            time = Kernel32.GetTickCount()
                         };
 
-                        UnsafeNativeMethods.GetCursorPos(out Point p);
+                        User32.GetCursorPos(out Point p);
                         msg.pt = p;
-                        if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
+                        if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsFalse())
                         {
                             axOleControl.OnMnemonic(ref msg);
                             Focus();
@@ -375,11 +365,11 @@ namespace System.Windows.Forms
             return processed;
         }
 
-        //
-        // Certain messages are forwarder directly to the ActiveX control,
-        // others are first processed by the wndproc of Control
-        //
-        protected override void WndProc(ref Message m)
+        /// <remarks>
+        /// Certain messages are forwarder directly to the ActiveX control,
+        /// others are first processed by the wndproc of Control
+        /// </remarks>
+        protected unsafe override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -454,7 +444,8 @@ namespace System.Windows.Forms
                     //
                     if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
-                        if (NativeMethods.Succeeded(AXInPlaceObject.GetWindow(out IntPtr hwndInPlaceObject)))
+                        IntPtr hwndInPlaceObject = IntPtr.Zero;
+                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
                         {
                             Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject));
                         }
@@ -481,7 +472,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m.Msg == WebBrowserHelper.REGMSG_MSG)
+                    if (m.Msg == (int)WebBrowserHelper.REGMSG_MSG)
                     {
                         m.Result = (IntPtr)WebBrowserHelper.REGMSG_RETVAL;
                     }
@@ -559,7 +550,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_FONT);
         }
 
         //
@@ -569,7 +560,7 @@ namespace System.Windows.Forms
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_FORECOLOR);
         }
 
         //
@@ -579,7 +570,7 @@ namespace System.Windows.Forms
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
+            AmbientChanged(Ole32.DispatchID.AMBIENT_BACKCOLOR);
         }
 
         internal override void RecreateHandleCore()
@@ -717,13 +708,12 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool DoVerb(int verb)
+        internal unsafe bool DoVerb(int verb)
         {
-            int hr = axOleObject.DoVerb(verb, IntPtr.Zero, ActiveXSite, 0, Handle,
-                    new NativeMethods.COMRECT(Bounds));
-
-            Debug.Assert(hr == NativeMethods.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
-            return hr == NativeMethods.S_OK;
+            RECT posRect = Bounds;
+            HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, &posRect);
+            Debug.Assert(hr == HRESULT.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
+            return hr == HRESULT.S_OK;
         }
 
         //
@@ -913,19 +903,25 @@ namespace System.Windows.Forms
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Passive, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.Passive)
             {
-                //
                 // First, create the ActiveX control
                 Debug.Assert(activeXInstance == null, "activeXInstance must be null");
-                activeXInstance = UnsafeNativeMethods.CoCreateInstance(ref clsid, null, NativeMethods.CLSCTX_INPROC_SERVER, ref NativeMethods.ActiveX.IID_IUnknown);
+                HRESULT hr = Ole32.CoCreateInstance(
+                    ref clsid,
+                    IntPtr.Zero,
+                    Ole32.CLSCTX.INPROC_SERVER,
+                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    out activeXInstance);
+                if (!hr.Succeeded())
+                {
+                    throw Marshal.GetExceptionForHR((int)hr);
+                }
+
                 Debug.Assert(activeXInstance != null, "w/o an exception being thrown we must have an object...");
 
-                //
-                // We are now Loaded!
+                // We are now loaded.
                 ActiveXState = WebBrowserHelper.AXState.Loaded;
 
-                //
-                // Lets give them a chance to cast the ActiveX object
-                // to the appropriate interfaces.
+                // Lets give them a chance to cast the ActiveX object to the appropriate interfaces.
                 AttachInterfacesInternal();
             }
         }
@@ -1090,8 +1086,8 @@ namespace System.Windows.Forms
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.UIActive, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
-                int hr = AXInPlaceObject.UIDeactivate();
-                Debug.Assert(NativeMethods.Succeeded(hr), "Failed to UIDeactivate");
+                HRESULT hr = AXInPlaceObject.UIDeactivate();
+                Debug.Assert(hr.Succeeded(), "Failed to UIDeactivate");
 
                 // We are now InPlaceActive
                 ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
@@ -1114,7 +1110,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(activeXInstance != null, "The native control is null");
             axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
-            axOleInPlaceObject = (UnsafeNativeMethods.IOleInPlaceObject)activeXInstance;
+            axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
             axOleInPlaceActiveObject = (UnsafeNativeMethods.IOleInPlaceActiveObject)activeXInstance;
             axOleControl = (UnsafeNativeMethods.IOleControl)activeXInstance;
             //
@@ -1221,7 +1217,7 @@ namespace System.Windows.Forms
         {
             var phm = new Point(sz.Width, sz.Height);
             var pcont = new PointF();
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_HIMETRICTOCONTAINER);
+            ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.HIMETRICTOCONTAINER);
             sz.Width = (int)pcont.X;
             sz.Height = (int)pcont.Y;
         }
@@ -1230,7 +1226,7 @@ namespace System.Windows.Forms
         {
             var phm = new Point();
             var pcont = new PointF(sz.Width, sz.Height);
-            ((UnsafeNativeMethods.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, NativeMethods.ActiveX.XFORMCOORDS_SIZE | NativeMethods.ActiveX.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC);
             sz.Width = phm.X;
             sz.Height = phm.Y;
         }
@@ -1284,7 +1280,7 @@ namespace System.Windows.Forms
             return cc;
         }
 
-        private void AmbientChanged(int dispid)
+        private void AmbientChanged(Ole32.DispatchID dispid)
         {
             if (activeXInstance != null)
             {
@@ -1293,24 +1289,14 @@ namespace System.Windows.Forms
                     Invalidate();
                     axOleControl.OnAmbientPropertyChange(dispid);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
                     Debug.Fail(ex.ToString());
                 }
             }
         }
 
-        internal UnsafeNativeMethods.IOleInPlaceObject AXInPlaceObject
-        {
-            get
-            {
-                return axOleInPlaceObject;
-            }
-        }
+        internal Ole32.IOleInPlaceObject AXInPlaceObject => axOleInPlaceObject;
 
         // ---------------------------------------------------------------
         // The following properties implemented in the Control class don't make
@@ -1868,7 +1854,7 @@ namespace System.Windows.Forms
 
             private unsafe void WmWindowPosChanging(ref Message m)
             {
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
+                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
                 wp->x = 0;
                 wp->y = 0;
                 Size s = WebBrowserBase.webBrowserBaseChangingSize;

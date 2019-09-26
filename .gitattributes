@@ -1,1 +1,4 @@
 * text=auto
+
+# Collapse XLF files in PRs by default
+*.xlf linguist-generated=true

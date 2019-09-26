@@ -655,12 +655,12 @@ namespace System.Windows.Forms
                     // Delete the new clipping region, as the clipping region for the HDC is now set
                     // to this rectangle. Hold on to hOriginalClippingRegion, as we'll need to restore
                     // it when this object is disposed.
-                    success = Gdi32.DeleteObject(hClippingRegion) != BOOL.FALSE;
+                    success = Gdi32.DeleteObject(hClippingRegion).IsTrue();
                     Debug.Assert(success, "DeleteObject(hClippingRegion) failed.");
 
                     if (hOriginalClippingRegion != IntPtr.Zero)
                     {
-                        success = Gdi32.DeleteObject(hOriginalClippingRegion) != BOOL.FALSE;
+                        success = Gdi32.DeleteObject(hOriginalClippingRegion).IsTrue();
                         Debug.Assert(success, "DeleteObject(hOriginalClippingRegion) failed.");
                     }
                 }

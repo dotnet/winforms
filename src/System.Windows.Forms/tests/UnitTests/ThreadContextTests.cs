@@ -5,6 +5,7 @@
 using System.Windows.Forms;
 using Xunit;
 using Moq;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -13,18 +14,17 @@ namespace System.Windows.Forms.Tests
         private delegate bool MessageCallback(ref Message m);
 
         // WM_USER is 0x400, just need to be above that
-        const int TestMessageId1 = 0x441;
-        const int TestMessageId2 = 0x442;
-        const int TestMessageId3 = 0x443;
+        const User32.WindowMessage TestMessageId1 = (User32.WindowMessage)0x441;
+        const User32.WindowMessage TestMessageId2 = (User32.WindowMessage)0x442;
+        const User32.WindowMessage TestMessageId3 = (User32.WindowMessage)0x443;
 
         [Fact]
         public void ThreadContext_EmptyProcessFiltersWorks()
         {
             // Test that no filters at all does not throw, and that returns false from translation
             Application.ThreadContext threadContext = new Application.ThreadContext();
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            bool result = threadContext.PreTranslateMessage(ref msg);
-            Assert.False(result);
+            var msg = new User32.MSG();
+            Assert.False(threadContext.PreTranslateMessage(ref msg));
         }
 
         [Fact]
@@ -33,18 +33,17 @@ namespace System.Windows.Forms.Tests
             // Test that a filter for the wrong ID returns false, but does get called
             Application.ThreadContext threadContext = new Application.ThreadContext();
 
-            int filterId = TestMessageId2;
+            User32.WindowMessage filterId = TestMessageId2;
             var mockContext = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
-                       .Returns((MessageCallback)((ref Message m) => m.Msg == filterId));
+                       .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId));
 
             threadContext.AddMessageFilter(mockContext.Object);
-            NativeMethods.MSG msg = new NativeMethods.MSG
+            var msg = new User32.MSG
             {
                 message = TestMessageId1
             };
-            bool result = threadContext.PreTranslateMessage(ref msg);
-            Assert.False(result);
+            Assert.False(threadContext.PreTranslateMessage(ref msg));
             mockContext.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
         }
 
@@ -54,18 +53,17 @@ namespace System.Windows.Forms.Tests
             // Test that a filter with the correct ID returns true
             Application.ThreadContext threadContext = new Application.ThreadContext();
 
-            int filterId = TestMessageId2;
+            User32.WindowMessage filterId = TestMessageId2;
             var mockContext = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
-                       .Returns((MessageCallback)((ref Message m) => m.Msg == filterId));
+                       .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId));
 
             threadContext.AddMessageFilter(mockContext.Object);
-            NativeMethods.MSG msg = new NativeMethods.MSG
+            var msg = new User32.MSG
             {
                 message = filterId
             };
-            bool result = threadContext.PreTranslateMessage(ref msg);
-            Assert.True(result);
+            Assert.True(threadContext.PreTranslateMessage(ref msg));
             mockContext.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
         }
 
@@ -75,44 +73,41 @@ namespace System.Windows.Forms.Tests
             // Test that multiple filters work
             Application.ThreadContext threadContext = new Application.ThreadContext();
 
-            int filterId2 = TestMessageId2;
+            User32.WindowMessage filterId2 = TestMessageId2;
             var mockContext2 = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext2.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
-                       .Returns((MessageCallback)((ref Message m) => m.Msg == filterId2));
+                       .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId2));
             threadContext.AddMessageFilter(mockContext2.Object);
 
-            int filterId3 = TestMessageId3;
+            User32.WindowMessage filterId3 = TestMessageId3;
             var mockContext3 = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext3.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
-                       .Returns((MessageCallback)((ref Message m) => m.Msg == filterId3));
+                       .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId3));
             threadContext.AddMessageFilter(mockContext3.Object);
 
-            NativeMethods.MSG msg = new NativeMethods.MSG
+            var msg = new User32.MSG
             {
                 message = TestMessageId1
             };
-            bool result = threadContext.PreTranslateMessage(ref msg);
-            Assert.False(result);
+            Assert.False(threadContext.PreTranslateMessage(ref msg));
 
             mockContext2.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
             mockContext3.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
 
-            msg = new NativeMethods.MSG
+            msg = new User32.MSG
             {
                 message = TestMessageId2
             };
-            result = threadContext.PreTranslateMessage(ref msg);
-            Assert.True(result);
+            Assert.True(threadContext.PreTranslateMessage(ref msg));
 
             mockContext2.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(2));
             mockContext3.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
 
-            msg = new NativeMethods.MSG
+            msg = new User32.MSG
             {
                 message = TestMessageId3
             };
-            result = threadContext.PreTranslateMessage(ref msg);
-            Assert.True(result);
+            Assert.True(threadContext.PreTranslateMessage(ref msg));
 
             mockContext2.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(3));
             mockContext3.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(2));

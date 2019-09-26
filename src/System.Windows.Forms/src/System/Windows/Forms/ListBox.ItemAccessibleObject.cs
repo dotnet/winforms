@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Accessibility;
-
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Accessibility;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
             private int CurrentIndex => Array.IndexOf(_owningListBox.Items.InnerArray.Entries as Array, _itemEntry);
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
 
             internal override bool IsItemSelected
             {
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderSimple ItemSelectionContainer => _owningAccessibleObject;
+            internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer => _owningAccessibleObject;
 
             /// <summary>
             ///  Gets the runtime ID.
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                 SetFocus();
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 int firstItemIndex = 0;
                 int lastItemIndex = _owningListBox.Items.Count - 1;
@@ -158,15 +158,15 @@ namespace System.Windows.Forms
 
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.Parent:
                         return _owningListBox.AccessibilityObject;
-                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
                         if (currentIndex > firstItemIndex && currentIndex <= lastItemIndex)
                         {
                             return _owningAccessibleObject.GetChild(currentIndex - 1);
                         }
                         return null;
-                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (currentIndex >= firstItemIndex && currentIndex < lastItemIndex)
                         {
                             return _owningAccessibleObject.GetChild(currentIndex + 1);
@@ -285,11 +285,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override void SelectItem()
+            internal unsafe override void SelectItem()
             {
                 _owningListBox.SelectedIndex = CurrentIndex;
 
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, false);
+                User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, BOOL.FALSE);
                 RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
                 RaiseAutomationEvent(NativeMethods.UIA_SelectionItem_ElementSelectedEventId);
             }

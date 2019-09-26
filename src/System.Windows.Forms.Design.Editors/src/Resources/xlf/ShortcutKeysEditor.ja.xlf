@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="chkAlt.Text">
         <source>&amp;Alt</source>
-        <target state="new">&amp;Alt</target>
+        <target state="translated">Alt(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="chkCtrl.AccessibleName">
@@ -34,7 +34,7 @@
       </trans-unit>
       <trans-unit id="chkCtrl.Text">
         <source>&amp;Ctrl</source>
-        <target state="new">&amp;Ctrl</target>
+        <target state="translated">Ctrl(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="chkShift.AccessibleName">
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="chkShift.Text">
         <source>&amp;Shift</source>
-        <target state="new">&amp;Shift</target>
+        <target state="translated">Shift(&amp;S)</target>
         <note />
       </trans-unit>
       <trans-unit id="cmbKey.AccessibleName">

@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Tests
         //     Assert.Null(control.FormatInfo);
         //     Assert.Empty(control.FormatString);
         //     Assert.False(control.FormattingEnabled);
-        //     Assert.Same(Control.DefaultFont, control.Font);
+        //     Assert.Equal(Control.DefaultFont, control.Font);
         //     Assert.Equal(SystemColors.ControlText, control.ForeColor);
         //     Assert.Equal(0, control.Height);
         //     Assert.Equal(Point.Empty, control.Location);

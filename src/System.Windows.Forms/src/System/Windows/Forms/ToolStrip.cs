@@ -191,8 +191,8 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.Selectable, false);
             SetToolStripState(STATE_USEDEFAULTRENDERER | STATE_ALLOWMERGE, true);
 
-            SetState2(STATE2_MAINTAINSOWNCAPTUREMODE // A toolstrip does not take capture on MouseDown.
-                      | STATE2_USEPREFERREDSIZECACHE, // this class overrides GetPreferredSizeCore, let Control automatically cache the result
+            SetExtendedState(ExtendedStates.MaintainsOwnCaptureMode // A toolstrip does not take capture on MouseDown.
+                      | ExtendedStates.UserPreferredSizeCache, // this class overrides GetPreferredSizeCore, let Control automatically cache the result
                        true);
 
             //add a weak ref link in ToolstripManager
@@ -1942,22 +1942,14 @@ namespace System.Windows.Forms
         ///  Indicates whether the user can give the focus to this control using the TAB
         ///  key. This property is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
-        SRDescription(nameof(SR.ControlTabStopDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         /// <summary> this is the ToolTip used for the individual items
@@ -2065,7 +2057,7 @@ namespace System.Windows.Forms
                 {
                     if (hwndThatLostFocus == IntPtr.Zero)
                     {
-                        SnapFocus(UnsafeNativeMethods.GetFocus());
+                        SnapFocus(User32.GetFocus());
                     }
                     controlHost.Control.Select();
                     controlHost.Control.Focus();
@@ -4501,7 +4493,7 @@ namespace System.Windows.Forms
             if (!focusSuccess)
             {
                 // clear out the focus, we have focus, we're not supposed to anymore.
-                UnsafeNativeMethods.SetFocus(NativeMethods.NullHandleRef);
+                User32.SetFocus(IntPtr.Zero);
             }
         }
 
@@ -5159,7 +5151,7 @@ namespace System.Windows.Forms
                         {
 
                             // snap the active window and compare to our root window.
-                            IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                            IntPtr hwndActive = User32.GetActiveWindow();
                             if (hwndActive != rootHwnd.Handle)
                             {
                                 // Activate the window, and discard the mouse message.
@@ -5174,7 +5166,7 @@ namespace System.Windows.Forms
                 {
                     // we're setting focus to a child control - remember who gave it to us
                     // so we can restore it on ESC.
-                    SnapFocus(UnsafeNativeMethods.GetFocus());
+                    SnapFocus(User32.GetFocus());
                     if (!IsDropDown && !TabStop)
                     {
                         Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "Installing restoreFocusFilter");
@@ -5214,7 +5206,7 @@ namespace System.Windows.Forms
 
         bool IArrangedElement.ParticipatesInLayout
         {
-            get { return GetState(STATE_VISIBLE); }
+            get { return GetState(States.Visible); }
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -5255,7 +5247,7 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 return HitTest((int)x, (int)y);
             }
@@ -5560,7 +5552,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
@@ -5568,18 +5560,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.FirstChild:
                         int childCount = GetChildFragmentCount();
                         if (childCount > 0)
                         {
                             return GetChildFragment(0);
                         }
                         break;
-                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.LastChild:
                         childCount = GetChildFragmentCount();
                         if (childCount > 0)
                         {

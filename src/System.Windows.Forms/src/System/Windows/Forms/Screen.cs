@@ -301,7 +301,7 @@ namespace System.Windows.Forms
         {
             if (multiMonitorSupport)
             {
-                return new Screen(SafeNativeMethods.MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST));
+                return new Screen(User32.MonitorFromPoint(point, User32.MONITOR.DEFAULTTONEAREST));
             }
             else
             {
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
             if (multiMonitorSupport)
             {
                 RECT rc = rect;
-                return new Screen(SafeNativeMethods.MonitorFromRect(ref rc, MONITOR_DEFAULTTONEAREST));
+                return new Screen(User32.MonitorFromRect(ref rc, User32.MONITOR.DEFAULTTONEAREST));
             }
             else
             {
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
         {
             if (multiMonitorSupport)
             {
-                return new Screen(SafeNativeMethods.MonitorFromWindow(new HandleRef(null, hwnd), MONITOR_DEFAULTTONEAREST));
+                return new Screen(User32.MonitorFromWindow(hwnd, User32.MONITOR.DEFAULTTONEAREST));
             }
             else
             {

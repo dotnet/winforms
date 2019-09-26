@@ -412,7 +412,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.SupportsTransparentBackColor, false);
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             dataGridViewState1 = new Collections.Specialized.BitVector32(0x00000000);
             dataGridViewState2 = new Collections.Specialized.BitVector32(0x00000000);

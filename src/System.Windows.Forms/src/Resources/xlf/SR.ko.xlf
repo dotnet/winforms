@@ -1017,6 +1017,11 @@
         <target state="translated">콤보 상자가 현재 드롭다운되었는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">컨트롤 표시 방법을 결정합니다.</target>
@@ -4616,7 +4621,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DateTimePickerLocalizedControlType">
         <source>date and time picker</source>
-        <target state="translated">날짜 및 시간 선택</target>
+        <target state="translated">날짜 및 시간 선택기</target>
         <note />
       </trans-unit>
       <trans-unit id="DateTimePickerMaxDate">

@@ -267,25 +267,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets
-        ///  the border style of the toolbar control.
+        ///  Gets or sets the border style of the toolbar control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.None),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.ToolBarBorderStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.None)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [SRDescription(nameof(SR.ToolBarBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
-                //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
@@ -294,8 +286,6 @@ namespace System.Windows.Forms
                 if (borderStyle != value)
                 {
                     borderStyle = value;
-
-                    //UpdateStyles();
                     RecreateHandle();   // Looks like we need to recreate the handle to avoid painting glitches
                 }
             }
@@ -1088,11 +1078,11 @@ namespace System.Windows.Forms
                 {
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
                     // the buttons.
-                    bool currentDisposing = GetState(STATE_DISPOSING);
+                    bool currentDisposing = GetState(States.Disposing);
 
                     try
                     {
-                        SetState(STATE_DISPOSING, true);
+                        SetState(States.Disposing, true);
 
                         if (imageList != null)
                         {
@@ -1114,7 +1104,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        SetState(STATE_DISPOSING, currentDisposing);
+                        SetState(States.Disposing, currentDisposing);
                     }
                 }
             }
@@ -1729,7 +1719,7 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
-                    NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    User32.NMHDR note = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
                     switch (note.code)
                     {
                         case NativeMethods.TTN_NEEDTEXT:
@@ -1739,13 +1729,12 @@ namespace System.Windows.Forms
                         case NativeMethods.TTN_SHOW:
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
-                            NativeMethods.WINDOWPLACEMENT wndPlacement = new NativeMethods.WINDOWPLACEMENT();
-                            int nRet = UnsafeNativeMethods.GetWindowPlacement(new HandleRef(null, note.hwndFrom), ref wndPlacement);
+                            User32.GetWindowPlacement(note.hwndFrom, out User32.WINDOWPLACEMENT wndPlacement);
 
                             // Is this tooltip going to be positioned in the upper left corner of the display,
                             // but nowhere near the toolbar button?
-                            if (wndPlacement.rcNormalPosition_left == 0 &&
-                                wndPlacement.rcNormalPosition_top == 0 &&
+                            if (wndPlacement.rcNormalPosition.left == 0 &&
+                                wndPlacement.rcNormalPosition.top == 0 &&
                                 hotItem != -1)
                             {
 
@@ -1761,14 +1750,14 @@ namespace System.Windows.Forms
                                 }
 
                                 // Where can we place this tooltip so that it will be completely visible on the current display?
-                                int tooltipWidth = wndPlacement.rcNormalPosition_right - wndPlacement.rcNormalPosition_left;
-                                int tooltipHeight = wndPlacement.rcNormalPosition_bottom - wndPlacement.rcNormalPosition_top;
+                                int tooltipWidth = wndPlacement.rcNormalPosition.right - wndPlacement.rcNormalPosition.left;
+                                int tooltipHeight = wndPlacement.rcNormalPosition.bottom - wndPlacement.rcNormalPosition.top;
 
                                 // We'll need screen coordinates of this position for setting the tooltip's position
                                 int x = Location.X + buttonRight + 1;
                                 int y = Location.Y + (ButtonSize.Height / 2);
                                 var leftTop = new Point(x, y);
-                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
+                                User32.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
 
                                 // Will the tooltip bleed off the top?
                                 if (leftTop.Y < SystemInformation.WorkingArea.Y)
@@ -1791,7 +1780,12 @@ namespace System.Windows.Forms
                                     leftTop.X -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
-                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.X, leftTop.Y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                                User32.SetWindowPos(
+                                    note.hwndFrom,
+                                    User32.HWND_TOP,
+                                    leftTop.X,
+                                    leftTop.Y,
+                                    flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
                                 m.Result = (IntPtr)1;
                                 return;
                             }

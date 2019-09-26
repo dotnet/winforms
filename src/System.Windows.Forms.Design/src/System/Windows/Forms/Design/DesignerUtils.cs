@@ -28,10 +28,10 @@ namespace System.Windows.Forms.Design
         //brush used to draw the resizeable selection borders around controls/components
         private static HatchBrush s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
         //Pens and Brushes used via GDI to render our grabhandles
-        private static IntPtr s_grabHandleFillBrushPrimary = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
-        private static IntPtr s_grabHandleFillBrush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static IntPtr s_grabHandlePenPrimary = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static IntPtr s_grabHandlePen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
+        private static IntPtr s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
+        private static IntPtr s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static IntPtr s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static IntPtr s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage = null;
@@ -203,16 +203,16 @@ namespace System.Windows.Forms.Design
             s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
 
             Gdi32.DeleteObject(s_grabHandleFillBrushPrimary);
-            s_grabHandleFillBrushPrimary = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
+            s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
 
             Gdi32.DeleteObject(s_grabHandleFillBrush);
-            s_grabHandleFillBrush = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
+            s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePenPrimary);
-            s_grabHandlePenPrimary = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
+            s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePen);
-            s_grabHandlePen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
+            s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
         }
 
         /// <summary>
@@ -606,8 +606,8 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     hFontOld = Gdi32.SelectObject(dc, hFont);
-                    NativeMethods.TEXTMETRIC metrics = new NativeMethods.TEXTMETRIC();
-                    UnsafeNativeMethods.GetTextMetrics(new HandleRef(ctrl, dc), metrics);
+                    var metrics = new Gdi32.TEXTMETRICW();
+                    Gdi32.GetTextMetricsW(new HandleRef(ctrl, dc), ref metrics);
                     //add the font ascent to the baseline
                     fontAscent = metrics.tmAscent + 1;
                     fontHeight = metrics.tmHeight;
@@ -944,7 +944,7 @@ namespace System.Windows.Forms.Design
 
         private static void ListView_SetExtendedListViewStyleEx(IntPtr handle, int mask, int extendedStyle)
         {
-            NativeMethods.SendMessage(handle, NativeMethods.LVM_SETEXTENDEDLISTVIEWSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
+            NativeMethods.SendMessage(handle, (int)LVM.SETEXTENDEDLISTVIEWSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
         }
 
         /// <summary>

@@ -225,7 +225,7 @@ namespace System.Windows.Forms
 
                         // Message only windows are cheaper and have fewer issues than
                         // full blown invisible windows.
-                        Parent = (IntPtr)NativeMethods.HWND_MESSAGE
+                        Parent = User32.HWND_MESSAGE
                     };
 
                     CreateHandle(cp);
@@ -242,8 +242,7 @@ namespace System.Windows.Forms
             {
                 if (hWnd != IntPtr.Zero)
                 {
-                    int hwndThread = SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(this, hWnd), out int pid);
-                    return hwndThread != SafeNativeMethods.GetCurrentThreadId();
+                    return User32.GetWindowThreadProcessId(hWnd, out _) != Kernel32.GetCurrentThreadId();
                 }
 
                 return false;

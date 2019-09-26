@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design.Behavior
         private BehaviorDragDropEventHandler _beginDragHandler; //fired directly before we call .DoDragDrop()
         private BehaviorDragDropEventHandler _endDragHandler; //fired directly after we call .DoDragDrop()
         private EventHandler _synchronizeEventHandler; //fired when we want to synchronize the selection
-        private NativeMethods.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
+        private User32.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
         private bool _trackingMouseEvent; //state identifying current mouse tracking
         private string[] _testHook_RecentSnapLines; //we keep track of the last snaplines we found - for testing purposes
         private readonly MenuCommandHandler _menuCommandHandler; //private object that handles all menu commands
@@ -58,8 +58,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly int _adornerWindowIndex = -1;
 
         //test hooks for SnapLines
-        private static int WM_GETALLSNAPLINES;
-        private static int WM_GETRECENTSNAPLINES;
+        private static User32.WindowMessage WM_GETALLSNAPLINES;
+        private static User32.WindowMessage WM_GETRECENTSNAPLINES;
 
         private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
 
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design.Behavior
             _hitTestedGlyph = null;
             _validDragArgs = null;
             _actionPointer = null;
-            _trackMouseEvent = null;
+            _trackMouseEvent = default;
             _trackingMouseEvent = false;
 
             //create out object that will handle all menucommands
@@ -102,8 +102,8 @@ namespace System.Windows.Forms.Design.Behavior
             _queriedSnapLines = false;
 
             //test hooks
-            WM_GETALLSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETALLSNAPLINES");
-            WM_GETRECENTSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
+            WM_GETALLSNAPLINES = User32.RegisterWindowMessageW("WM_GETALLSNAPLINES");
+            WM_GETRECENTSNAPLINES = User32.RegisterWindowMessageW("WM_GETRECENTSNAPLINES");
 
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
@@ -543,9 +543,9 @@ namespace System.Windows.Forms.Design.Behavior
             if (uiService != null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != UnsafeNativeMethods.GetActiveWindow())
+                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
                 {
-                    UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, hwnd.Handle));
+                    User32.SetActiveWindow(hwnd.Handle);
                 }
             }
         }
@@ -888,11 +888,11 @@ namespace System.Windows.Forms.Design.Behavior
             protected override void WndProc(ref Message m)
             {
                 //special test hooks
-                if (m.Msg == BehaviorService.WM_GETALLSNAPLINES)
+                if (m.Msg == (int)BehaviorService.WM_GETALLSNAPLINES)
                 {
                     _behaviorService.TestHook_GetAllSnapLines(ref m);
                 }
-                else if (m.Msg == BehaviorService.WM_GETRECENTSNAPLINES)
+                else if (m.Msg == (int)BehaviorService.WM_GETRECENTSNAPLINES)
                 {
                     _behaviorService.TestHook_GetRecentSnapLines(ref m);
                 }
@@ -1034,7 +1034,7 @@ namespace System.Windows.Forms.Design.Behavior
             private class MouseHook
             {
                 private AdornerWindow _currentAdornerWindow;
-                private int _thisProcessID = 0;
+                private uint _thisProcessID = 0;
                 private GCHandle _mouseHookRoot;
                 private IntPtr _mouseHookHandle = IntPtr.Zero;
                 private bool _processingMessage;
@@ -1064,28 +1064,29 @@ namespace System.Windows.Forms.Design.Behavior
 
                 private void HookMouse()
                 {
-                    Debug.Assert(AdornerWindow.s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
+                    Debug.Assert(s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
                     lock (this)
                     {
-                        if (_mouseHookHandle != IntPtr.Zero || AdornerWindow.s_adornerWindowList.Count == 0)
+                        if (_mouseHookHandle != IntPtr.Zero || s_adornerWindowList.Count == 0)
                         {
                             return;
                         }
 
                         if (_thisProcessID == 0)
                         {
-                            AdornerWindow adornerWindow = AdornerWindow.s_adornerWindowList[0];
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(adornerWindow, adornerWindow.Handle), out _thisProcessID);
+                            AdornerWindow adornerWindow = s_adornerWindowList[0];
+                            User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                         }
 
                         NativeMethods.HookProc hook = new NativeMethods.HookProc(MouseHookProc);
                         _mouseHookRoot = GCHandle.Alloc(hook);
 
 #pragma warning disable 618
-                        _mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE,
-                                                                   hook,
-                                                                   new HandleRef(null, IntPtr.Zero),
-                                                                   AppDomain.GetCurrentThreadId());
+                        _mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
+                            NativeMethods.WH_MOUSE,
+                            hook,
+                            IntPtr.Zero,
+                            (uint)AppDomain.GetCurrentThreadId());
 #pragma warning restore 618
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
@@ -1167,9 +1168,11 @@ namespace System.Windows.Forms.Design.Behavior
                         if (adornerWindow.ProcessingDrag || (hWnd != handle && SafeNativeMethods.IsChild(new HandleRef(this, handle), new HandleRef(this, hWnd))))
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
-                            // make sure the window is in our process
-                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWnd), out int pid);
-                            // if this isn't our process, bail
+
+                            // Make sure the window is in our process
+                            User32.GetWindowThreadProcessId(hWnd, out uint pid);
+
+                            // If this isn't our process, bail
                             if (pid != _thisProcessID)
                             {
                                 return false;
@@ -1574,15 +1577,18 @@ namespace System.Windows.Forms.Design.Behavior
             if (!_trackingMouseEvent)
             {
                 _trackingMouseEvent = true;
-                if (_trackMouseEvent == null)
+                if (_trackMouseEvent.IsDefault())
                 {
-                    _trackMouseEvent = new NativeMethods.TRACKMOUSEEVENT
+                    _trackMouseEvent = new User32.TRACKMOUSEEVENT
                     {
-                        dwFlags = NativeMethods.TME_HOVER,
-                        hwndTrack = _adornerWindow.Handle
+                        cbSize = (uint)Marshal.SizeOf<User32.TRACKMOUSEEVENT>(),
+                        dwFlags = User32.TME.HOVER,
+                        hwndTrack = _adornerWindow.Handle,
+                        dwHoverTime = 100
                     };
                 }
-                SafeNativeMethods.TrackMouseEvent(_trackMouseEvent);
+
+                User32.TrackMouseEvent(ref _trackMouseEvent);
             }
         }
         private void UnHookMouseEvent()

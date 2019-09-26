@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Design
 
                 if (hbitmapTemp != IntPtr.Zero)
                 {
-                    _hbrushDither = SafeNativeMethods.CreatePatternBrush(new HandleRef(null, hbitmapTemp));
+                    _hbrushDither = Gdi32.CreatePatternBrush(hbitmapTemp);
 
                     Debug.Assert(_hbrushDither != IntPtr.Zero,
                                  "Unable to created dithered brush. Page selector UI will not be correct");
@@ -723,11 +723,11 @@ namespace System.Windows.Forms.Design
                 if (((state & STATE_SELECTED) != 0) && (_hbrushDither != IntPtr.Zero))
                 {
                     FillRectDither(dc, rcIn);
-                    SafeNativeMethods.SetBkMode(new HandleRef(null, dc), NativeMethods.TRANSPARENT);
+                    Gdi32.SetBkMode(dc, Gdi32.BKMODE.TRANSPARENT);
                 }
                 else
                 {
-                    SafeNativeMethods.SetBkColor(new HandleRef(null, dc), backColor);
+                    Gdi32.SetBkColor(dc, backColor);
                     IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_CLIPPED | NativeMethods.ETO_OPAQUE, ref rc, null, 0, null);
                 }
 
@@ -739,13 +739,13 @@ namespace System.Windows.Forms.Design
                 rc2.top = rc.top + (((rc.bottom - rc.top) - size.Height) >> 1);
                 rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
-                SafeNativeMethods.SetTextColor(new HandleRef(null, dc), textColor);
+                Gdi32.SetTextColor(dc, textColor);
                 User32.DrawTextW(
                     dc,
                     itemText,
                     itemText.Length,
                     ref rc2,
-                    User32.TextFormatFlags.DT_LEFT | User32.TextFormatFlags.DT_VCENTER | User32.TextFormatFlags.DT_END_ELLIPSIS | User32.TextFormatFlags.DT_NOPREFIX);
+                    User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
 
                 SafeNativeMethods.ImageList_Draw(new HandleRef(imagelist, imagelist.Handle), imageIndex, new HandleRef(null, dc),
                                        PADDING_HORZ, rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
@@ -757,7 +757,7 @@ namespace System.Windows.Forms.Design
                     int savedColor;
 
                     // top left
-                    savedColor = SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                    savedColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     rc2.left = rc.left;
                     rc2.top = rc.top;
                     rc2.bottom = rc.top + 1;
@@ -768,7 +768,7 @@ namespace System.Windows.Forms.Design
                     IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_OPAQUE, ref rc2, null, 0, null);
 
                     // bottom right
-                    SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.ControlDark));
+                    Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.ControlDark));
                     rc2.left = rc.left;
                     rc2.right = rc.right;
                     rc2.top = rc.bottom - 1;
@@ -778,7 +778,7 @@ namespace System.Windows.Forms.Design
                     rc2.top = rc.top;
                     IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_OPAQUE, ref rc2, null, 0, null);
 
-                    SafeNativeMethods.SetBkColor(new HandleRef(null, dc), savedColor);
+                    Gdi32.SetBkColor(dc, savedColor);
                 }
 
                 if (hfontOld != IntPtr.Zero)
@@ -865,14 +865,12 @@ namespace System.Windows.Forms.Design
 
                 if (hbrushOld != IntPtr.Zero)
                 {
-                    int oldTextColor, oldBackColor;
-
-                    oldTextColor = SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.ControlLightLight));
-                    oldBackColor = SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.Control));
+                    int oldTextColor = Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                    int oldBackColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.Control));
 
                     SafeNativeMethods.PatBlt(new HandleRef(null, dc), rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, NativeMethods.PATCOPY);
-                    SafeNativeMethods.SetTextColor(new HandleRef(null, dc), oldTextColor);
-                    SafeNativeMethods.SetBkColor(new HandleRef(null, dc), oldBackColor);
+                    Gdi32.SetTextColor(dc, oldTextColor);
+                    Gdi32.SetBkColor(dc, oldBackColor);
                 }
             }
 
@@ -880,7 +878,7 @@ namespace System.Windows.Forms.Design
             {
                 if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
                 {
-                    NativeMethods.NMHDR nmh = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    User32.NMHDR nmh = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
                     if (nmh.code == NativeMethods.NM_CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);

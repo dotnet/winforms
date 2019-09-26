@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using Hashtable = System.Collections.Hashtable;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -59,48 +59,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             UnsafeNativeMethods.ITypeInfo pTypeInfo = null;
 
-            // this is kind of odd.  What's going on here is that
-            // if we want the CoClass (e.g. for the interface name),
-            // we need to look for IProvideClassInfo first, then
-            // look for the typeinfo from the IDispatch.
-            // In the case of many OleAut32 operations, the CoClass
-            // doesn't have the interface members on it, although
-            // in the shell it usually does, so
-            // we need to re-order the lookup if we _actually_ want
-            // the CoClass if it's available.
-            //
+            // This is kind of odd.  What's going on here is that if we want the CoClass (e.g. for
+            // the interface name), we need to look for IProvideClassInfo first, then look for the
+            // typeinfo from the IDispatch. In the case of many OleAut32 operations, the CoClass
+            // doesn't have the interface members on it, although in the shell it usually does, so
+            // we need to re-order the lookup if we *actually* want the CoClass if it's available.
 
             for (int i = 0; pTypeInfo == null && i < 2; i++)
             {
-
                 if (wantCoClass == (i == 0))
                 {
                     if (obj is NativeMethods.IProvideClassInfo pProvideClassInfo)
                     {
-                        try
-                        {
-                            pTypeInfo = pProvideClassInfo.GetClassInfo();
-                        }
-                        catch
-                        {
-                        }
+                        pProvideClassInfo.GetClassInfo(out pTypeInfo);
                     }
                 }
                 else
                 {
                     if (obj is UnsafeNativeMethods.IDispatch iDispatch)
                     {
-                        try
-                        {
-                            pTypeInfo = iDispatch.GetTypeInfo(0, SafeNativeMethods.GetThreadLCID());
-                        }
-                        catch
-                        {
-                        }
+                        iDispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out pTypeInfo);
                     }
                 }
-
             }
+
             return pTypeInfo;
         }
 
@@ -153,9 +135,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Retrieve the dispid of the property that we are to use as the name
         ///  member.  In this case, the grid will put parens around the name.
         /// </summary>
-        public static int GetNameDispId(UnsafeNativeMethods.IDispatch obj)
+        public unsafe static Ole32.DispatchID GetNameDispId(UnsafeNativeMethods.IDispatch obj)
         {
-            int dispid = NativeMethods.DISPID_UNKNOWN;
+            Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
             string[] names = null;
 
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
@@ -170,10 +152,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                cnd.GetPropertyValue(obj, NativeMethods.ActiveX.DISPID_Name, ref succeeded);
+                cnd.GetPropertyValue(obj, Ole32.DispatchID.Name, ref succeeded);
                 if (succeeded)
                 {
-                    dispid = NativeMethods.ActiveX.DISPID_Name;
+                    dispid = Ole32.DispatchID.Name;
                 }
                 else
                 {
@@ -188,13 +170,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // now get the dispid of the one that worked...
             if (names != null)
             {
-                int[] pDispid = new int[] { NativeMethods.DISPID_UNKNOWN };
+                Ole32.DispatchID pDispid = Ole32.DispatchID.UNKNOWN;
                 Guid g = Guid.Empty;
-                int hr = obj.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), pDispid);
-                if (NativeMethods.Succeeded(hr))
+                HRESULT hr = obj.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &pDispid);
+                if (hr.Succeeded())
                 {
-
-                    dispid = pDispid[0];
+                    dispid = pDispid;
                 }
             }
 
@@ -264,7 +245,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!dontProcess)
                 {
-                    props = InternalGetProperties(obj, ti, NativeMethods.MEMBERID_NIL, ref temp);
+                    props = InternalGetProperties(obj, ti, Ole32.DispatchID.MEMBERID_NIL, ref temp);
 
                     // only save the default property from the first type Info
                     if (i == 0 && temp != -1)
@@ -301,10 +282,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static Guid GetGuidForTypeInfo(UnsafeNativeMethods.ITypeInfo typeInfo, int[] versions)
         {
             IntPtr pTypeAttr = IntPtr.Zero;
-            int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
-            if (!NativeMethods.Succeeded(hr))
+            HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
+            if (!hr.Succeeded())
             {
-                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
 
             try
@@ -332,7 +313,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData)
         {
             IntPtr hreftype;
-            int hr = 0;
+            HRESULT hr = HRESULT.S_OK;
 
             switch ((NativeMethods.tagVT)typeDesc.vt)
             {
@@ -371,9 +352,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             UnsafeNativeMethods.ITypeInfo refTypeInfo = null;
 
             hr = typeInfo.GetRefTypeInfo(hreftype, ref refTypeInfo);
-            if (!NativeMethods.Succeeded(hr))
+            if (!hr.Succeeded())
             {
-                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetRefTypeInfoFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetRefTypeInfoFailed, hr), (int)hr);
             }
 
             try
@@ -386,11 +367,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     IntPtr pRefTypeAttr = IntPtr.Zero;
                     hr = refTypeInfo.GetTypeAttr(ref pRefTypeAttr);
-
-                    if (!NativeMethods.Succeeded(hr))
+                    if (!hr.Succeeded())
                     {
-
-                        throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                        throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
                     }
 
                     try
@@ -435,7 +414,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        private static PropertyDescriptor[] InternalGetProperties(object obj, UnsafeNativeMethods.ITypeInfo typeInfo, int dispidToGet, ref int defaultIndex)
+        private static PropertyDescriptor[] InternalGetProperties(object obj, UnsafeNativeMethods.ITypeInfo typeInfo, Ole32.DispatchID dispidToGet, ref int defaultIndex)
         {
             if (typeInfo == null)
             {
@@ -444,7 +423,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Hashtable propInfos = new Hashtable();
 
-            int nameDispID = GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
+            Ole32.DispatchID nameDispID = GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
             bool addAboutBox = false;
 
             // properties can live as functions with get_ and put_ or
@@ -483,7 +462,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             PropertyDescriptor[] props = new PropertyDescriptor[cProps];
             int defaultProp = -1;
 
-            int hr = NativeMethods.S_OK;
+            HRESULT hr = HRESULT.S_OK;
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
@@ -502,10 +481,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     catch (ExternalException ex)
                     {
-                        hr = ex.ErrorCode;
+                        hr = (HRESULT)ex.ErrorCode;
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "IDispatch::Invoke(PROPGET, " + pi.Name + ") threw an exception :" + ex.ToString());
                     }
-                    if (!NativeMethods.Succeeded(hr))
+                    if (!hr.Succeeded())
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Adding Browsable(false) to property '" + pi.Name + "' because Invoke(dispid=0x{0:X} ,DISPATCH_PROPERTYGET) returned hr=0x{1:X}.  Properties that do not return S_OK are hidden by default.", pi.DispId, hr));
                         pi.Attributes.Add(new BrowsableAttribute(false));
@@ -514,13 +493,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    hr = NativeMethods.S_OK;
+                    hr = HRESULT.S_OK;
                 }
 
                 Attribute[] temp = new Attribute[pi.Attributes.Count];
                 pi.Attributes.CopyTo(temp, 0);
                 //Debug.Assert(pi.nonbrowsable || pi.valueType != null, "Browsable property '" + pi.name + "' has a null type");
-                props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !NativeMethods.Succeeded(hr));
+                props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !hr.Succeeded());
                 if (pi.IsDefault)
                 {
                     defaultProp = pi.Index;
@@ -534,19 +513,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags)
+        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags)
         {
             string pPropName = null;
             string pPropDesc = null;
 
             // get the name and the helpstring
-            int hr = typeInfo.GetDocumentation(dispid, ref pPropName, ref pPropDesc, null, null);
-
+            HRESULT hr = typeInfo.GetDocumentation(dispid, ref pPropName, ref pPropDesc, null, null);
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
-
-            if (!NativeMethods.Succeeded(hr))
+            if (!hr.Succeeded())
             {
-                throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), hr);
+                throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), (int)hr);
             }
 
             if (pPropName == null)
@@ -567,7 +544,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 propInfoList[pPropName] = pi;
                 pi.Name = pPropName;
                 pi.DispId = dispid;
-                pi.Attributes.Add(new DispIdAttribute(pi.DispId));
+                pi.Attributes.Add(new DispIdAttribute((int)pi.DispId));
             }
 
             if (pPropDesc != null)
@@ -616,7 +593,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FHIDDEN) != 0 ||
                 (flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FNONBROWSABLE) != 0 ||
                 pi.Name[0] == '_' ||
-                dispid == NativeMethods.ActiveX.DISPID_HWND)
+                dispid == Ole32.DispatchID.HWND)
             {
                 pi.Attributes.Add(new BrowsableAttribute(false));
                 pi.NonBrowsable = true;
@@ -645,14 +622,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return pi;
         }
 
-        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID, ref bool addAboutBox)
+        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
         {
             IntPtr pTypeAttr = IntPtr.Zero;
-            int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
-
-            if (!NativeMethods.Succeeded(hr) || pTypeAttr == IntPtr.Zero)
+            HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
+            if (!hr.Succeeded() || pTypeAttr == IntPtr.Zero)
             {
-                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
 
             try
@@ -666,8 +642,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     IntPtr pFuncDesc = IntPtr.Zero;
                     hr = typeInfo.GetFuncDesc(i, ref pFuncDesc);
-
-                    if (!NativeMethods.Succeeded(hr) || pFuncDesc == IntPtr.Zero)
+                    if (!hr.Succeeded() || pFuncDesc == IntPtr.Zero)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring function item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
@@ -677,10 +652,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         ref readonly NativeMethods.tagFUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagFUNCDESC>(pFuncDesc);
                         if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
-                            (dispidToGet != NativeMethods.MEMBERID_NIL && funcDesc.memid != dispidToGet))
+                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && funcDesc.memid != dispidToGet))
                         {
 
-                            if (funcDesc.memid == NativeMethods.ActiveX.DISPID_ABOUTBOX)
+                            if (funcDesc.memid == Ole32.DispatchID.ABOUTBOX)
                             {
                                 addAboutBox = true;
                             }
@@ -758,11 +733,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 IntPtr pTypeAttr = IntPtr.Zero;
-                int hr = enumTypeInfo.GetTypeAttr(ref pTypeAttr);
-
-                if (!NativeMethods.Succeeded(hr) || pTypeAttr == IntPtr.Zero)
+                HRESULT hr = enumTypeInfo.GetTypeAttr(ref pTypeAttr);
+                if (!hr.Succeeded() || pTypeAttr == IntPtr.Zero)
                 {
-                    throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                    throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
                 }
 
                 try
@@ -781,7 +755,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     string name = null;
                     string helpstr = null;
 
-                    enumTypeInfo.GetDocumentation(NativeMethods.MEMBERID_NIL, ref enumName, ref helpstr, null, null);
+                    enumTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, ref enumName, ref helpstr, null, null);
 
                     // For each item in the enum type info,
                     // we just need it's name and value, and helpstring if it's there.
@@ -790,8 +764,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         IntPtr pVarDesc = IntPtr.Zero;
                         hr = enumTypeInfo.GetVarDesc(i, ref pVarDesc);
-
-                        if (!NativeMethods.Succeeded(hr) || pVarDesc == IntPtr.Zero)
+                        if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
                         {
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", hr));
                             continue;
@@ -811,10 +784,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             varValue = null;
 
                             // get the name and the helpstring
-
                             hr = enumTypeInfo.GetDocumentation(varDesc.memid, ref name, ref helpstr, null, null);
-
-                            if (!NativeMethods.Succeeded(hr))
+                            if (!hr.Succeeded())
                             {
                                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", hr));
                                 continue;
@@ -917,26 +888,23 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID)
+        private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID)
         {
             IntPtr pTypeAttr = IntPtr.Zero;
-            int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
-
-            if (!NativeMethods.Succeeded(hr) || pTypeAttr == IntPtr.Zero)
+            HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
+            if (!hr.Succeeded() || pTypeAttr == IntPtr.Zero)
             {
-                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
+                throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
 
             try
             {
                 ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
-
                 for (int i = 0; i < typeAttr.cVars; i++)
                 {
                     IntPtr pVarDesc = IntPtr.Zero;
-
                     hr = typeInfo.GetVarDesc(i, ref pVarDesc);
-                    if (!NativeMethods.Succeeded(hr) || pVarDesc == IntPtr.Zero)
+                    if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", hr));
                         continue;
@@ -947,7 +915,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
 
                         if (varDesc.varkind == (int)NativeMethods.tagVARKIND.VAR_CONST ||
-                            (dispidToGet != NativeMethods.MEMBERID_NIL && varDesc.memid != dispidToGet))
+                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && varDesc.memid != dispidToGet))
                         {
                             continue;
                         }
@@ -1131,7 +1099,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             public string Name { get; set; }
 
-            public int DispId { get; set; } = -1;
+            public Ole32.DispatchID DispId { get; set; } = Ole32.DispatchID.UNKNOWN;
 
             public Type ValueType { get; set; }
 

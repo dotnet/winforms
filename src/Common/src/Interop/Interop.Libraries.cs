@@ -7,12 +7,16 @@ internal static partial class Interop
     public static partial class Libraries
     {
         public const string Comctl32 = "comctl32.dll";
+        public const string Comdlg32 = "comdlg32.dll";
         public const string Gdi32 = "gdi32.dll";
         public const string Kernel32 = "kernel32.dll";
-        public const string Ole32 = "ole32.dll";
         public const string NtDll = "ntdll.dll";
+        public const string Ole32 = "ole32.dll";
+        public const string Oleaut32 = "oleaut32.dll";
         public const string RichEdit41 = "MsftEdit.DLL";
         public const string Shell32 = "shell32.dll";
+        public const string Shlwapi = "shlwapi.dll";
+        public const string UiaCore = "UIAutomationCore.dll";
         public const string User32 = "user32.dll";
         public const string UxTheme = "uxtheme.dll";
     }

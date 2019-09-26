@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         public GroupBox() : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             SetStyle(ControlStyles.ContainerControl, true);
             SetStyle(ControlStyles.SupportsTransparentBackColor |
@@ -546,17 +546,17 @@ namespace System.Windows.Forms
                 {
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
                     {
-                        User32.TextFormatFlags flags = User32.TextFormatFlags.DT_WORDBREAK | User32.TextFormatFlags.DT_EDITCONTROL;
+                        User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
 
                         if (!ShowKeyboardCues)
                         {
-                            flags |= User32.TextFormatFlags.DT_HIDEPREFIX;
+                            flags |= User32.DT.HIDEPREFIX;
                         }
 
                         if (RightToLeft == RightToLeft.Yes)
                         {
-                            flags |= User32.TextFormatFlags.DT_RTLREADING;
-                            flags |= User32.TextFormatFlags.DT_RIGHT;
+                            flags |= User32.DT.RTLREADING;
+                            flags |= User32.DT.RIGHT;
                         }
 
                         using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font))
@@ -757,7 +757,7 @@ namespace System.Windows.Forms
                     // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                     // "Button" window class to get OS group box rendering; but the OS does not expose the children
                     // of buttons to MSAA (beacuse it assumes buttons won't have children).
-                    if (unchecked((int)(long)m.LParam) == NativeMethods.OBJID_QUERYCLASSNAMEIDX)
+                    if (unchecked((int)(long)m.LParam) == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
                         m.Result = IntPtr.Zero;
                     }

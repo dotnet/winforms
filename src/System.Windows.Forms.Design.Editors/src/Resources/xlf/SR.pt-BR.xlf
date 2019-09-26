@@ -64,7 +64,7 @@
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="translated">Selecionador de Cores</target>
+        <target state="translated">Seletor de Cor</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">
@@ -84,7 +84,7 @@
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="translated">Encaixar Selecionador</target>
+        <target state="translated">Encaixar Seletor</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">

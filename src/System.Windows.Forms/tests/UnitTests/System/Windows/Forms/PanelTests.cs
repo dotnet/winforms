@@ -33,10 +33,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.Bounds);
             Assert.True(panel.CanEnableIme);
             Assert.True(panel.CanRaiseEvents);
+            Assert.True(panel.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), panel.ClientRectangle);
             Assert.Equal(new Size(200, 100), panel.ClientSize);
             Assert.Null(panel.Container);
-            Assert.True(panel.CausesValidation);
+            Assert.Null(panel.ContextMenu);
+            Assert.Null(panel.ContextMenuStrip);
             Assert.Empty(panel.Controls);
             Assert.Same(panel.Controls, panel.Controls);
             Assert.False(panel.Created);
@@ -57,10 +59,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, panel.DockPadding.Bottom);
             Assert.Equal(0, panel.DockPadding.Left);
             Assert.Equal(0, panel.DockPadding.Right);
+            Assert.False(panel.DoubleBuffered);
             Assert.True(panel.Enabled);
             Assert.NotNull(panel.Events);
             Assert.Same(panel.Events, panel.Events);
             Assert.Equal(Control.DefaultFont, panel.Font);
+            Assert.Equal(panel.Font.Height, panel.FontHeight);
             Assert.Equal(Control.DefaultForeColor, panel.ForeColor);
             Assert.False(panel.HasChildren);
             Assert.Equal(100, panel.Height);
@@ -72,6 +76,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, panel.Left);
             Assert.Equal(Point.Empty, panel.Location);
             Assert.Equal(Padding.Empty, panel.Padding);
+            Assert.False(panel.RecreatingHandle);
+            Assert.Null(panel.Region);
+            Assert.False(panel.ResizeRedraw);
             Assert.Equal(200, panel.Right);
             Assert.Equal(RightToLeft.No, panel.RightToLeft);
             Assert.Equal(new Size(200, 100), panel.Size);
@@ -84,6 +91,27 @@ namespace System.Windows.Forms.Tests
             Assert.Same(panel.VerticalScroll, panel.VerticalScroll);
             Assert.False(panel.VScroll);
             Assert.Equal(200, panel.Width);
+
+            Assert.False(panel.IsHandleCreated);
+        }
+
+        [Fact]
+        public void Panel_CreateParams_GetDefault_ReturnsExpected()
+        {
+            var control = new SubPanel();
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x10000, createParams.ExStyle);
+            Assert.Equal(100, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56000000, createParams.Style);
+            Assert.Equal(200, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
         }
 
         [Theory]
@@ -101,8 +129,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.AutoSize);
 
             // Set different.
-            control.AutoSize = value;
-            Assert.Equal(value, control.AutoSize);
+            control.AutoSize = !value;
+            Assert.Equal(!value, control.AutoSize);
         }
 
         [Fact]
@@ -196,6 +224,35 @@ namespace System.Windows.Forms.Tests
             // Set same.
             panel.BorderStyle = value;
             Assert.Equal(value, panel.BorderStyle);
+        }
+
+        [Theory]
+        [InlineData(BorderStyle.Fixed3D, 1)]
+        [InlineData(BorderStyle.FixedSingle, 1)]
+        [InlineData(BorderStyle.None, 0)]
+        public void Panel_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
+        {
+            var panel = new Panel();
+            Assert.NotEqual(IntPtr.Zero, panel.Handle);
+            int invalidatedCallCount = 0;
+            panel.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            panel.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            panel.HandleCreated += (sender, e) => createdCallCount++;
+
+            panel.BorderStyle = value;
+            Assert.Equal(value, panel.BorderStyle);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            panel.BorderStyle = value;
+            Assert.Equal(value, panel.BorderStyle);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Theory]
@@ -598,14 +655,36 @@ namespace System.Windows.Forms.Tests
 
             public new bool DesignMode => base.DesignMode;
 
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
             public new EventHandlerList Events => base.Events;
 
-            public new ImeMode ImeModeBase => base.ImeModeBase;
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
 
             public new bool HScroll
             {
                 get => base.HScroll;
                 set => base.HScroll = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
             }
 
             public new bool VScroll

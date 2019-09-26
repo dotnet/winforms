@@ -112,7 +112,7 @@ namespace System.Windows.Forms
         : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             SetStyle(ControlStyles.FixedHeight, true);
 
@@ -1592,10 +1592,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Forces a repaint of the updown control if it is displayed.
         /// </summary>
-        private void UpdateUpDown()
+        private unsafe void UpdateUpDown()
         {
             // The upDown control doesn't repaint correctly.
-            //
             if (ShowUpDown)
             {
                 EnumChildren c = new EnumChildren();
@@ -1603,7 +1602,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.EnumChildWindows(new HandleRef(this, Handle), cb, NativeMethods.NullHandleRef);
                 if (c.hwndFound != IntPtr.Zero)
                 {
-                    SafeNativeMethods.InvalidateRect(new HandleRef(c, c.hwndFound), null, true);
+                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
                     SafeNativeMethods.UpdateWindow(new HandleRef(c, c.hwndFound));
                 }
             }
@@ -1694,13 +1693,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_COMMAND messages reflected from the parent control.
         /// </summary>
-        private void WmReflectCommand(ref Message m)
+        private unsafe void WmReflectCommand(ref Message m)
         {
             if (m.HWnd == Handle)
             {
-
-                NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                switch (nmhdr.code)
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                switch (nmhdr->code)
                 {
                     case NativeMethods.DTN_CLOSEUP:
                         WmCloseUp(ref m);
@@ -1893,13 +1891,13 @@ namespace System.Windows.Forms
 
             #region Toggle Pattern
 
-            internal override UnsafeNativeMethods.ToggleState ToggleState
+            internal override UiaCore.ToggleState ToggleState
             {
                 get
                 {
                     return ((DateTimePicker)Owner).Checked ?
-                        UnsafeNativeMethods.ToggleState.ToggleState_On :
-                        UnsafeNativeMethods.ToggleState.ToggleState_Off;
+                        UiaCore.ToggleState.On :
+                        UiaCore.ToggleState.Off;
                 }
             }
 

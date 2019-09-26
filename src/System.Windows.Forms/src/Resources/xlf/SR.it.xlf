@@ -1017,6 +1017,11 @@
         <target state="translated">Indica se l'elenco a discesa della casella combinata è correntemente visualizzato.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">Determina la visualizzazione del controllo.</target>

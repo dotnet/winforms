@@ -1017,6 +1017,11 @@
         <target state="translated">Indica se a caixa de combinação está suspensa no momento.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">Determina a exibição do controle.</target>
@@ -4616,7 +4621,7 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
       </trans-unit>
       <trans-unit id="DateTimePickerLocalizedControlType">
         <source>date and time picker</source>
-        <target state="translated">selecionador de data e hora</target>
+        <target state="translated">seletor de data e hora</target>
         <note />
       </trans-unit>
       <trans-unit id="DateTimePickerMaxDate">

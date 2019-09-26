@@ -234,25 +234,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the border style for
-        ///  the up-down control.
+        ///  Gets or sets the border style for the up-down control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.Fixed3D),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.Fixed3D)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
-                //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
@@ -1182,7 +1174,7 @@ namespace System.Windows.Forms
                     {
                         if (TextBox.CanFocus)
                         {
-                            UnsafeNativeMethods.SetFocus(new HandleRef(TextBox, TextBox.Handle));
+                            User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
                         }
                         base.WndProc(ref m);
                     }

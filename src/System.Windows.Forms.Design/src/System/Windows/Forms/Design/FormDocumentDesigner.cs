@@ -560,27 +560,27 @@ namespace System.Windows.Forms.Design
         }
 
         // Called when our document becomes active.  We paint our form's border the appropriate color here.
-        private void OnDesignerActivate(object source, EventArgs evevent)
+        private unsafe void OnDesignerActivate(object source, EventArgs evevent)
         {
             // Paint the form's title bar UI-active
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
                 NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 1, 0);
-                SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
 
         /// <summary>
         ///  Called by the host when we become inactive.  Here we update the title bar of our form so it's the inactive color.
         /// </summary>
-        private void OnDesignerDeactivate(object sender, EventArgs e)
+        private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
                 NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 0, 0);
-                SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
 
@@ -673,7 +673,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private unsafe void WmWindowPosChanging(ref Message m)
         {
-            NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
+            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
             bool updateSize = _inAutoscale;
             if (!updateSize)
             {
@@ -686,7 +686,7 @@ namespace System.Windows.Forms.Design
             // we want to update the size if we have a menu and...
             // 1) we're doing an autoscale
             // 2) we're loading a form without an inherited menu (inherited forms will already have the right size)
-            if (updateSize && Menu != null && (wp->flags & NativeMethods.SWP_NOSIZE) == 0 && (IsMenuInherited || _inAutoscale))
+            if (updateSize && Menu != null && (wp->flags & User32.SWP.NOSIZE) == 0 && (IsMenuInherited || _inAutoscale))
             {
                 _heightDelta = GetMenuHeight();
             }

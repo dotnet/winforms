@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         ///  This class holds all of the state data for an ActiveX control and
         ///  supplies the implementation for many of the non-trivial methods.
         /// </summary>
-        private class ActiveXImpl : MarshalByRefObject, IWindowTarget
+        private unsafe class ActiveXImpl : MarshalByRefObject, IWindowTarget
         {
             private const int HiMetricPerInch = 2540;
             private static readonly int s_viewAdviseOnlyOnce = BitVector32.CreateMask();
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             private readonly AmbientProperty[] _ambientProperties;
             private IntPtr _accelTable;
             private short _accelCount = -1;
-            private NativeMethods.COMRECT _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
+            private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
             /// <summary>
             ///  Creates a new ActiveXImpl.
@@ -78,9 +78,9 @@ namespace System.Windows.Forms
                 _adviseList = new ArrayList();
                 _activeXState = new BitVector32();
                 _ambientProperties = new AmbientProperty[] {
-                    new AmbientProperty("Font", NativeMethods.ActiveX.DISPID_AMBIENT_FONT),
-                    new AmbientProperty("BackColor", NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR),
-                    new AmbientProperty("ForeColor", NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR)
+                    new AmbientProperty("Font", Ole32.DispatchID.AMBIENT_FONT),
+                    new AmbientProperty("BackColor", Ole32.DispatchID.AMBIENT_BACKCOLOR),
+                    new AmbientProperty("ForeColor", Ole32.DispatchID.AMBIENT_FORECOLOR)
                 };
             }
 
@@ -92,12 +92,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
+                    AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
 
                     if (prop.Empty)
                     {
                         object obj = null;
-                        if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR, ref obj))
+                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_BACKCOLOR, ref obj))
                         {
                             if (obj != null)
                             {
@@ -138,32 +138,22 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
+                    AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FONT);
 
                     if (prop.Empty)
                     {
                         object obj = null;
-                        if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_FONT, ref obj))
+                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_FONT, ref obj))
                         {
                             try
                             {
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj.GetType().FullName);
                                 Debug.Assert(obj != null, "GetAmbientProperty failed");
-                                IntPtr hfont = IntPtr.Zero;
-
-                                UnsafeNativeMethods.IFont ifont = (UnsafeNativeMethods.IFont)obj;
-                                Font font = null;
-                                hfont = ifont.GetHFont();
-                                font = Font.FromHfont(hfont);
-                                prop.Value = font;
+                                Ole32.IFont ifont = (Ole32.IFont)obj;
+                                prop.Value = Font.FromHfont(ifont.hFont);
                             }
-                            catch (Exception e)
+                            catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                             {
-                                if (ClientUtils.IsSecurityOrCriticalException(e))
-                                {
-                                    throw;
-                                }
-
                                 // Do NULL, so we just defer to the default font
                                 prop.Value = null;
                             }
@@ -182,12 +172,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
+                    AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FORECOLOR);
 
                     if (prop.Empty)
                     {
                         object obj = null;
-                        if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR, ref obj))
+                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_FORECOLOR, ref obj))
                         {
                             if (obj != null)
                             {
@@ -338,7 +328,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::DoVerb
             /// </summary>
-            internal void DoVerb(int iVerb, IntPtr lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect)
+            internal unsafe HRESULT DoVerb(
+                int iVerb,
+                User32.MSG* lpmsg,
+                UnsafeNativeMethods.IOleClientSite pActiveSite,
+                int lindex,
+                IntPtr hwndParent,
+                RECT* lprcPosRect)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:ActiveXImpl:DoVerb(" + iVerb + ")");
                 switch (iVerb)
@@ -352,19 +348,18 @@ namespace System.Windows.Forms
 
                         // Now that we're active, send the lpmsg to the control if it
                         // is valid.
-                        if (lpmsg != IntPtr.Zero)
+                        if (lpmsg != null)
                         {
-                            NativeMethods.MSG msg = Marshal.PtrToStructure<NativeMethods.MSG>(lpmsg);
                             Control target = _control;
 
-                            if (msg.hwnd != _control.Handle && msg.message >= WindowMessages.WM_MOUSEFIRST && msg.message <= WindowMessages.WM_MOUSELAST)
+                            if (lpmsg->hwnd != _control.Handle && lpmsg->IsMouseMessage())
                             {
                                 // Must translate message coordniates over to our HWND.  We first try
-                                IntPtr hwndMap = msg.hwnd == IntPtr.Zero ? hwndParent : msg.hwnd;
+                                IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
-                                    X = NativeMethods.Util.LOWORD(msg.lParam),
-                                    Y = NativeMethods.Util.HIWORD(msg.lParam)
+                                    X = NativeMethods.Util.LOWORD(lpmsg->lParam),
+                                    Y = NativeMethods.Util.HIWORD(lpmsg->lParam)
                                 };
                                 UnsafeNativeMethods.MapWindowPoints(new HandleRef(null, hwndMap), new HandleRef(_control, _control.Handle), ref pt, 1);
 
@@ -378,24 +373,24 @@ namespace System.Windows.Forms
                                     target = realTarget;
                                 }
 
-                                msg.lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
+                                lpmsg->lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
                             }
 
 #if DEBUG
                             if (CompModSwitches.ActiveX.TraceVerbose)
                             {
-                                Message m = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+                                Message m = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                                 Debug.WriteLine("Valid message pointer passed, sending to control: " + m.ToString());
                             }
 #endif
 
-                            if (msg.message == WindowMessages.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB)
+                            if (lpmsg->message == User32.WindowMessage.WM_KEYDOWN && lpmsg->wParam == (IntPtr)NativeMethods.VK_TAB)
                             {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
                             else
                             {
-                                target.SendMessage(msg.message, msg.wParam, msg.lParam);
+                                target.SendMessage((int)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                             }
                         }
                         break;
@@ -417,14 +412,24 @@ namespace System.Windows.Forms
                         ThrowHr(NativeMethods.E_NOTIMPL);
                         break;
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal unsafe void Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
-                             IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT prcBounds, NativeMethods.COMRECT lprcWBounds,
-                             IntPtr pfnContinue, int dwContinue)
+            internal void Draw(
+                int dwDrawAspect,
+                int lindex,
+                IntPtr pvAspect,
+                NativeMethods.tagDVTARGETDEVICE ptd,
+                IntPtr hdcTargetDev,
+                IntPtr hdcDraw,
+                NativeMethods.COMRECT prcBounds,
+                NativeMethods.COMRECT lprcWBounds,
+                IntPtr pfnContinue,
+                int dwContinue)
             {
 
                 // support the aspects required for multi-pass drawing
@@ -614,7 +619,7 @@ namespace System.Windows.Forms
             ///  Helper function to retrieve an ambient property.  Returns false if the
             ///  property wasn't found.
             /// </summary>
-            private bool GetAmbientProperty(int dispid, ref object obj)
+            private bool GetAmbientProperty(Ole32.DispatchID dispid, ref object obj)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
@@ -626,20 +631,24 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.IDispatch disp = (UnsafeNativeMethods.IDispatch)_clientSite;
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
-                    int hr = disp.Invoke(dispid, ref g, NativeMethods.LOCALE_USER_DEFAULT,
-                                        NativeMethods.DISPATCH_PROPERTYGET, new NativeMethods.tagDISPPARAMS(),
-                                        pvt, null, null);
-                    if (NativeMethods.Succeeded(hr))
+                    HRESULT hr = disp.Invoke(
+                        dispid,
+                        ref g,
+                        NativeMethods.LOCALE_USER_DEFAULT,
+                        NativeMethods.DISPATCH_PROPERTYGET,
+                        new NativeMethods.tagDISPPARAMS(),
+                        pvt,
+                        null,
+                        null);
+                    if (hr.Succeeded())
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke succeeded. VT=" + pvt[0].GetType().FullName);
                         obj = pvt[0];
                         Debug.Unindent();
                         return true;
                     }
-                    else
-                    {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
-                    }
+                    
+                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
                 }
 
                 Debug.Unindent();
@@ -654,7 +663,7 @@ namespace System.Windows.Forms
                 return _clientSite;
             }
 
-            internal int GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
+            internal unsafe HRESULT GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
             {
                 if (_accelCount == -1)
                 {
@@ -665,85 +674,77 @@ namespace System.Windows.Forms
 
                     if (_accelCount > 0)
                     {
-                        int accelSize = Marshal.SizeOf<NativeMethods.ACCEL>();
-
                         // In the worst case we may have two accelerators per mnemonic:  one lower case and
                         // one upper case, hence the * 2 below.
-                        //
-                        IntPtr accelBlob = Marshal.AllocHGlobal(accelSize * _accelCount * 2);
+                        var accelerators = new User32.ACCEL[_accelCount * 2];
+                        Debug.Indent();
 
-                        try
+                        ushort cmd = 0;
+                        _accelCount = 0;
+
+                        foreach (char ch in mnemonicList)
                         {
-                            NativeMethods.ACCEL accel = new NativeMethods.ACCEL
+                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
+
+                            short scan = User32.VkKeyScanW(ch);
+                            ushort key = (ushort)(scan & 0x00FF);
+                            if (ch >= 'A' && ch <= 'Z')
                             {
-                                cmd = 0
-                            };
+                                // Lower case letter
+                                accelerators[_accelCount++] = new User32.ACCEL
+                                {
+                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY,
+                                    key = key,
+                                    cmd = cmd
+                                };
 
-                            Debug.Indent();
-
-                            _accelCount = 0;
-
-                            foreach (char ch in mnemonicList)
+                                // Upper case letter
+                                accelerators[_accelCount++] = new User32.ACCEL
+                                {
+                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY | User32.AcceleratorFlags.FSHIFT,
+                                    key = key,
+                                    cmd = cmd
+                                };
+                            }
+                            else
                             {
-                                IntPtr structAddr = (IntPtr)((long)accelBlob + _accelCount * accelSize);
-
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
-
-                                if (ch >= 'A' && ch <= 'Z')
+                                // Some non-printable character.
+                                User32.AcceleratorFlags virt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY;
+                                if ((scan & 0x0100) != 0)
                                 {
-                                    // Lower case letter
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY;
-                                    accel.key = (short)(UnsafeNativeMethods.VkKeyScan(ch) & 0x00FF);
-                                    Marshal.StructureToPtr(accel, structAddr, false);
-
-                                    // Upper case letter
-                                    _accelCount++;
-                                    structAddr = (IntPtr)((long)structAddr + accelSize);
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY | NativeMethods.FSHIFT;
-                                    Marshal.StructureToPtr(accel, structAddr, false);
+                                    virt |= User32.AcceleratorFlags.FSHIFT;
                                 }
-                                else
+                                accelerators[_accelCount++] = new User32.ACCEL
                                 {
-                                    // Some non-printable character.
-                                    accel.fVirt = NativeMethods.FALT | NativeMethods.FVIRTKEY;
-                                    short scan = (short)(UnsafeNativeMethods.VkKeyScan(ch));
-                                    if ((scan & 0x0100) != 0)
-                                    {
-                                        accel.fVirt |= NativeMethods.FSHIFT;
-                                    }
-                                    accel.key = (short)(scan & 0x00FF);
-                                    Marshal.StructureToPtr(accel, structAddr, false);
-                                }
-
-                                accel.cmd++;
-                                _accelCount++;
+                                    fVirt = virt,
+                                    key = key,
+                                    cmd = cmd
+                                };
                             }
 
-                            Debug.Unindent();
-
-                            // Now create an accelerator table and then free our memory.
-
-                            if (_accelTable != IntPtr.Zero)
-                            {
-                                UnsafeNativeMethods.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
-                                _accelTable = IntPtr.Zero;
-                            }
-
-                            _accelTable = UnsafeNativeMethods.CreateAcceleratorTable(new HandleRef(null, accelBlob), _accelCount);
+                            cmd++;
                         }
-                        finally
+
+                        Debug.Unindent();
+
+                        // Now create an accelerator table and then free our memory.
+
+                        if (_accelTable != IntPtr.Zero)
                         {
-                            if (accelBlob != IntPtr.Zero)
-                            {
-                                Marshal.FreeHGlobal(accelBlob);
-                            }
+                            User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                            _accelTable = IntPtr.Zero;
+                        }
+
+                        fixed (User32.ACCEL* pAccelerators = accelerators)
+                        {
+                            _accelTable = User32.CreateAcceleratorTableW(pAccelerators, _accelCount);
                         }
                     }
                 }
 
                 pCI.cAccel = _accelCount;
                 pCI.hAccel = _accelTable;
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -808,15 +809,21 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleWindow::GetWindow
             /// </summary>
-            internal int GetWindow(out IntPtr hwnd)
+            internal unsafe HRESULT GetWindow(IntPtr* phwnd)
             {
+                if (phwnd == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    hwnd = IntPtr.Zero;
-                    return NativeMethods.E_FAIL;
+                    *phwnd = IntPtr.Zero;
+                    return HRESULT.E_FAIL;
                 }
-                hwnd = _control.Handle;
-                return NativeMethods.S_OK;
+
+                *phwnd = _control.Handle;
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -835,7 +842,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  In place activates this Object.
             /// </summary>
-            internal void InPlaceActivate(int verb)
+            internal unsafe void InPlaceActivate(int verb)
             {
                 // If we don't have a client site, then there's not much to do.
                 // We also punt if this isn't an in-place site, since we can't
@@ -874,13 +881,17 @@ namespace System.Windows.Forms
                     {
                         cb = Marshal.SizeOf<NativeMethods.tagOIFI>()
                     };
-                    IntPtr hwndParent = IntPtr.Zero;
 
                     // We are entering a secure context here.
-                    hwndParent = inPlaceSite.GetWindow();
+                    IntPtr hwndParent = IntPtr.Zero;
+                    HRESULT hr = _inPlaceUiWindow.GetWindow(&hwndParent);
+                    if (!hr.Succeeded())
+                    {
+                        ThrowHr((int)hr);
+                    }
 
-                    NativeMethods.COMRECT posRect = new NativeMethods.COMRECT();
-                    NativeMethods.COMRECT clipRect = new NativeMethods.COMRECT();
+                    var posRect = new RECT();
+                    var clipRect = new RECT();
 
                     if (_inPlaceUiWindow != null && Marshal.IsComObject(_inPlaceUiWindow))
                     {
@@ -894,9 +905,14 @@ namespace System.Windows.Forms
                         _inPlaceFrame = null;
                     }
 
-                    inPlaceSite.GetWindowContext(out UnsafeNativeMethods.IOleInPlaceFrame pFrame, out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow, posRect, clipRect, inPlaceFrameInfo);
+                    inPlaceSite.GetWindowContext(
+                        out UnsafeNativeMethods.IOleInPlaceFrame pFrame,
+                        out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow,
+                        &posRect,
+                        &clipRect,
+                        inPlaceFrameInfo);
 
-                    SetObjectRects(posRect, clipRect);
+                    SetObjectRects(&posRect, &clipRect);
 
                     _inPlaceFrame = pFrame;
                     _inPlaceUiWindow = pWindow;
@@ -976,12 +992,12 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleInPlaceObject::InPlaceDeactivate.
             /// </summary>
-            internal void InPlaceDeactivate()
+            internal HRESULT InPlaceDeactivate()
             {
                 // Only do this if we're already in place active.
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    return;
+                    return HRESULT.S_OK;
                 }
 
                 // Deactivate us if we're UI active
@@ -1016,6 +1032,8 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(_inPlaceFrame);
                     _inPlaceFrame = null;
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -1227,7 +1245,7 @@ namespace System.Windows.Forms
             ///  Simple lookup to find the AmbientProperty corresponding to the given
             ///  dispid.
             /// </summary>
-            private AmbientProperty LookupAmbient(int dispid)
+            private AmbientProperty LookupAmbient(Ole32.DispatchID dispid)
             {
                 for (int i = 0; i < _ambientProperties.Length; i++)
                 {
@@ -1236,6 +1254,7 @@ namespace System.Windows.Forms
                         return _ambientProperties[i];
                     }
                 }
+
                 Debug.Fail("No ambient property for dispid " + dispid.ToString(CultureInfo.InvariantCulture));
                 return _ambientProperties[0];
             }
@@ -1301,9 +1320,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleControl::OnAmbientPropertyChanged
             /// </summary>
-            internal void OnAmbientPropertyChange(int dispID)
+            internal void OnAmbientPropertyChange(Ole32.DispatchID dispID)
             {
-                if (dispID != NativeMethods.ActiveX.DISPID_UNKNOWN)
+                if (dispID != Ole32.DispatchID.UNKNOWN)
                 {
                     // Look for a specific property that has changed.
                     for (int i = 0; i < _ambientProperties.Length; i++)
@@ -1321,15 +1340,15 @@ namespace System.Windows.Forms
 
                     switch (dispID)
                     {
-                        case NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD:
-                            if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD, ref obj))
+                        case Ole32.DispatchID.AMBIENT_UIDEAD:
+                            if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                             {
                                 _activeXState[s_uiDead] = (bool)obj;
                             }
                             break;
 
-                        case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT:
-                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYASDEFAULT, ref obj))
+                        case Ole32.DispatchID.AMBIENT_DISPLAYASDEFAULT:
+                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_DISPLAYASDEFAULT, ref obj))
                             {
                                 ibuttonControl.NotifyDefault((bool)obj);
                             }
@@ -1371,9 +1390,9 @@ namespace System.Windows.Forms
             internal void OnFocus(bool focus)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AXSource: SetFocus:  " + focus.ToString());
-                if (_activeXState[s_inPlaceActive] && _clientSite is UnsafeNativeMethods.IOleControlSite)
+                if (_activeXState[s_inPlaceActive] && _clientSite is Ole32.IOleControlSite)
                 {
-                    ((UnsafeNativeMethods.IOleControlSite)_clientSite).OnFocus(focus ? 1 : 0);
+                    ((Ole32.IOleControlSite)_clientSite).OnFocus(focus ? BOOL.TRUE : BOOL.FALSE);
                 }
 
                 if (focus && _activeXState[s_inPlaceActive] && !_activeXState[s_uiActive])
@@ -1401,33 +1420,25 @@ namespace System.Windows.Forms
             internal void QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
             {
                 // Hookup our ambient colors
-                AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
+                AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
                 prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorBack));
 
-                prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
+                prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FORECOLOR);
                 prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorFore));
 
                 // And our ambient font
                 if (pQaContainer.pFont != null)
                 {
-                    prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
+                    prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FONT);
 
                     try
                     {
-                        IntPtr hfont = IntPtr.Zero;
-                        object objfont = pQaContainer.pFont;
-                        UnsafeNativeMethods.IFont ifont = (UnsafeNativeMethods.IFont)objfont;
-                        hfont = ifont.GetHFont();
-                        Font font = Font.FromHfont(hfont);
-                        prop.Value = font;
+                        Ole32.IFont ifont = (Ole32.IFont)pQaContainer.pFont;
+                        IntPtr hfont = ifont.hFont;
+                        prop.Value = Font.FromHfont(hfont);
                     }
-                    catch (Exception e)
+                    catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                     {
-                        if (ClientUtils.IsSecurityOrCriticalException(e))
-                        {
-                            throw;
-                        }
-
                         // Do NULL, so we just defer to the default font
                         prop.Value = null;
                     }
@@ -1822,7 +1833,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < props.Count; i++)
                 {
-                    if (fSaveAllProperties != BOOL.FALSE || props[i].ShouldSerializeValue(_control))
+                    if (fSaveAllProperties.IsTrue() || props[i].ShouldSerializeValue(_control))
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Saving property " + props[i].Name);
 
@@ -1866,7 +1877,7 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(pPropBag);
                 }
 
-                if (fClearDirty != BOOL.FALSE)
+                if (fClearDirty.IsTrue())
                 {
                     _activeXState[s_isDirty] = false;
                 }
@@ -1964,12 +1975,12 @@ namespace System.Windows.Forms
 
                 // Get the ambient properties that effect us...
                 object obj = new object();
-                if (GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD, ref obj))
+                if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                 {
                     _activeXState[s_uiDead] = (bool)obj;
                 }
 
-                if (_control is IButtonControl && GetAmbientProperty(NativeMethods.ActiveX.DISPID_AMBIENT_UIDEAD, ref obj))
+                if (_control is IButtonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                 {
                     ((IButtonControl)_control).NotifyDefault((bool)obj);
                 }
@@ -1978,7 +1989,7 @@ namespace System.Windows.Forms
                 {
                     if (_accelTable != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                        User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
                         _accelTable = IntPtr.Zero;
                         _accelCount = -1;
                     }
@@ -2046,7 +2057,8 @@ namespace System.Windows.Forms
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "            Announcing rect = " + bounds);
                                 Debug.Assert(_clientSite != null, "How can we setextent before we are sited??");
 
-                                ioleClientSite.OnPosRectChange(NativeMethods.COMRECT.FromXYWH(bounds.X, bounds.Y, bounds.Width, bounds.Height));
+                                RECT posRect = bounds;
+                                ioleClientSite.OnPosRectChange(&posRect);
                             }
                         }
 
@@ -2098,34 +2110,34 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleInPlaceObject::SetObjectRects.
             /// </summary>
-            internal void SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect)
+            internal unsafe HRESULT SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
             {
+                if (lprcPosRect == null || lprcClipRect == null)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo)
                 {
                     Debug.WriteLine("SetObjectRects:");
                     Debug.Indent();
 
-                    if (lprcPosRect != null)
-                    {
-                        Debug.WriteLine("PosLeft:    " + lprcPosRect.left.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("PosTop:     " + lprcPosRect.top.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("PosRight:   " + lprcPosRect.right.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("PosBottom:  " + lprcPosRect.bottom.ToString(CultureInfo.InvariantCulture));
-                    }
+                    Debug.WriteLine("PosLeft:    " + lprcPosRect->left.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("PosTop:     " + lprcPosRect->top.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("PosRight:   " + lprcPosRect->right.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("PosBottom:  " + lprcPosRect->bottom.ToString(CultureInfo.InvariantCulture));
 
-                    if (lprcClipRect != null)
-                    {
-                        Debug.WriteLine("ClipLeft:   " + lprcClipRect.left.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("ClipTop:    " + lprcClipRect.top.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("ClipRight:  " + lprcClipRect.right.ToString(CultureInfo.InvariantCulture));
-                        Debug.WriteLine("ClipBottom: " + lprcClipRect.bottom.ToString(CultureInfo.InvariantCulture));
-                    }
+                    Debug.WriteLine("ClipLeft:   " + lprcClipRect->left.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("ClipTop:    " + lprcClipRect->top.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("ClipRight:  " + lprcClipRect->right.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine("ClipBottom: " + lprcClipRect->bottom.ToString(CultureInfo.InvariantCulture));
+
                     Debug.Unindent();
                 }
 #endif
 
-                Rectangle posRect = Rectangle.FromLTRB(lprcPosRect.left, lprcPosRect.top, lprcPosRect.right, lprcPosRect.bottom);
+                Rectangle posRect = Rectangle.FromLTRB(lprcPosRect->left, lprcPosRect->top, lprcPosRect->right, lprcPosRect->bottom);
 
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Set control bounds: " + posRect.ToString());
 
@@ -2142,10 +2154,10 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Control Bounds: " + _control.Bounds);
                 if (_activeXState[s_adjustingRect])
                 {
-                    _adjustRect.left = posRect.X;
-                    _adjustRect.top = posRect.Y;
-                    _adjustRect.right = posRect.Width + posRect.X;
-                    _adjustRect.bottom = posRect.Height + posRect.Y;
+                    _adjustRect->left = posRect.X;
+                    _adjustRect->top = posRect.Y;
+                    _adjustRect->right = posRect.Right;
+                    _adjustRect->bottom = posRect.Bottom;
                 }
                 else
                 {
@@ -2174,7 +2186,7 @@ namespace System.Windows.Forms
                 {
                     // The container wants us to clip, so figure out if we really
                     // need to.
-                    Rectangle clipRect = Rectangle.FromLTRB(lprcClipRect.left, lprcClipRect.top, lprcClipRect.right, lprcClipRect.bottom);
+                    Rectangle clipRect = Rectangle.FromLTRB(lprcClipRect->left, lprcClipRect->top, lprcClipRect->right, lprcClipRect->bottom);
 
                     Rectangle intersect;
 
@@ -2230,6 +2242,8 @@ namespace System.Windows.Forms
                 // Yuck.  Forms^3 uses transparent overlay windows that appear to cause
                 // painting artifacts.  Flicker like a banshee.
                 _control.Invalidate();
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -2244,8 +2258,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Handles IOleControl::TranslateAccelerator
             /// </summary>
-            internal int TranslateAccelerator(ref NativeMethods.MSG lpmsg)
+            internal unsafe HRESULT TranslateAccelerator(User32.MSG* lpmsg)
             {
+                if (lpmsg == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo)
                 {
@@ -2255,29 +2274,27 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Message m = Message.Create(lpmsg.hwnd, lpmsg.message, lpmsg.wParam, lpmsg.lParam);
+                        Message m = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                         Debug.WriteLine("AxSource: TranslateAccelerator : " + m.ToString());
                     }
                 }
 #endif // DEBUG
 
                 bool needPreProcess = false;
-
-                switch (lpmsg.message)
+                switch (lpmsg->message)
                 {
-                    case WindowMessages.WM_KEYDOWN:
-                    case WindowMessages.WM_SYSKEYDOWN:
-                    case WindowMessages.WM_CHAR:
-                    case WindowMessages.WM_SYSCHAR:
+                    case User32.WindowMessage.WM_KEYDOWN:
+                    case User32.WindowMessage.WM_SYSKEYDOWN:
+                    case User32.WindowMessage.WM_CHAR:
+                    case User32.WindowMessage.WM_SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
 
-                Message msg = Message.Create(lpmsg.hwnd, lpmsg.message, lpmsg.wParam, lpmsg.lParam);
-
+                Message msg = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                 if (needPreProcess)
                 {
-                    Control target = FromChildHandle(lpmsg.hwnd);
+                    Control target = FromChildHandle(lpmsg->hwnd);
                     if (target != null && (_control == target || _control.Contains(target)))
                     {
                         PreProcessControlState messageState = PreProcessControlMessageInternal(target, ref msg);
@@ -2286,25 +2303,25 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg.message = msg.Msg;
-                                lpmsg.wParam = msg.WParam;
-                                lpmsg.lParam = msg.LParam;
+                                lpmsg->message = (User32.WindowMessage)msg.Msg;
+                                lpmsg->wParam = msg.WParam;
+                                lpmsg->lParam = msg.LParam;
                                 return NativeMethods.S_OK;
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves
                                 // otherwise the host may never send the key to our wndproc.
 
                                 // Someone returned true from IsInputKey or IsInputChar
-                                UnsafeNativeMethods.TranslateMessage(ref lpmsg);
-                                if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg.hwnd)))
+                                User32.TranslateMessage(ref *lpmsg);
+                                if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg->hwnd)))
                                 {
-                                    UnsafeNativeMethods.DispatchMessageW(ref lpmsg);
+                                    User32.DispatchMessageW(ref *lpmsg);
                                 }
                                 else
                                 {
-                                    UnsafeNativeMethods.DispatchMessageA(ref lpmsg);
+                                    User32.DispatchMessageA(ref *lpmsg);
                                 }
-                                return NativeMethods.S_OK;
+                                return HRESULT.S_OK;
                             case PreProcessControlState.MessageNotNeeded:
                                 // in this case we'll check the site to see if it wants the message.
                                 break;
@@ -2313,54 +2330,46 @@ namespace System.Windows.Forms
                 }
 
                 // SITE processing.  We're not interested in the message, but the site may be.
-
-                int hr = NativeMethods.S_FALSE;
-
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource: Control did not process accelerator, handing to site");
-
-                if (_clientSite is UnsafeNativeMethods.IOleControlSite ioleClientSite)
+                if (_clientSite is Ole32.IOleControlSite ioleClientSite)
                 {
-                    int keyState = 0;
-
+                    Ole32.KEYMODIFIERS keyState = 0;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)
                     {
-                        keyState |= 1;
+                        keyState |= Ole32.KEYMODIFIERS.SHIFT;
                     }
 
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_CONTROL) < 0)
                     {
-                        keyState |= 2;
+                        keyState |= Ole32.KEYMODIFIERS.CONTROL;
                     }
 
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_MENU) < 0)
                     {
-                        keyState |= 4;
+                        keyState |= Ole32.KEYMODIFIERS.ALT;
                     }
 
-                    hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
+                    return ioleClientSite.TranslateAccelerator(lpmsg, keyState);
                 }
 
-                return hr;
+                return HRESULT.S_FALSE;
             }
 
             /// <summary>
             ///  Implements IOleInPlaceObject::UIDeactivate.
             /// </summary>
-            internal int UIDeactivate()
+            internal HRESULT UIDeactivate()
             {
                 // Only do this if we're UI active
                 if (!_activeXState[s_uiActive])
                 {
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
                 _activeXState[s_uiActive] = false;
 
                 // Notify frame windows, if appropriate, that we're no longer ui-active.
-                if (_inPlaceUiWindow != null)
-                {
-                    _inPlaceUiWindow.SetActiveObject(null, null);
-                }
+                _inPlaceUiWindow?.SetActiveObject(null, null);
 
                 // May need this for SetActiveObject & OnUIDeactivate, so leave until function return
                 Debug.Assert(_inPlaceFrame != null, "No inplace frame -- how dod we go UI active?");
@@ -2371,7 +2380,7 @@ namespace System.Windows.Forms
                     ioleClientSite.OnUIDeactivate(0);
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -2395,15 +2404,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Notifies our site that we have changed our size and location.
             /// </summary>
-            internal void UpdateBounds(ref int x, ref int y, ref int width, ref int height, int flags)
+            internal unsafe void UpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.SWP flags)
             {
                 if (!_activeXState[s_adjustingRect] && _activeXState[s_inPlaceVisible])
                 {
                     if (_clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
                     {
-                        NativeMethods.COMRECT rc = new NativeMethods.COMRECT();
-
-                        if ((flags & NativeMethods.SWP_NOMOVE) != 0)
+                        var rc = new RECT();
+                        if ((flags & User32.SWP.NOMOVE) != 0)
                         {
                             rc.left = _control.Left;
                             rc.top = _control.Top;
@@ -2414,7 +2422,7 @@ namespace System.Windows.Forms
                             rc.top = y;
                         }
 
-                        if ((flags & NativeMethods.SWP_NOSIZE) != 0)
+                        if ((flags & User32.SWP.NOSIZE) != 0)
                         {
                             rc.right = rc.left + _control.Width;
                             rc.bottom = rc.top + _control.Height;
@@ -2426,12 +2434,12 @@ namespace System.Windows.Forms
                         }
 
                         // This member variable may be modified by SetObjectRects by the container.
-                        _adjustRect = rc;
+                        _adjustRect = &rc;
                         _activeXState[s_adjustingRect] = true;
 
                         try
                         {
-                            ioleClientSite.OnPosRectChange(rc);
+                            ioleClientSite.OnPosRectChange(&rc);
                         }
                         finally
                         {
@@ -2440,12 +2448,12 @@ namespace System.Windows.Forms
                         }
 
                         // On output, the new bounds will be reflected in  rc
-                        if ((flags & NativeMethods.SWP_NOMOVE) == 0)
+                        if ((flags & User32.SWP.NOMOVE) == 0)
                         {
                             x = rc.left;
                             y = rc.top;
                         }
-                        if ((flags & NativeMethods.SWP_NOSIZE) == 0)
+                        if ((flags & User32.SWP.NOSIZE) == 0)
                         {
                             width = rc.right - rc.left;
                             height = rc.bottom - rc.top;
@@ -2462,7 +2470,7 @@ namespace System.Windows.Forms
                 // Setting the count to -1 will recreate the table on demand (when GetControlInfo is called).
                 _accelCount = -1;
 
-                if (_clientSite is UnsafeNativeMethods.IOleControlSite ioleClientSite)
+                if (_clientSite is Ole32.IOleControlSite ioleClientSite)
                 {
                     ioleClientSite.OnControlInfoChanged();
                 }
@@ -2515,7 +2523,7 @@ namespace System.Windows.Forms
             {
                 if (_activeXState[s_uiDead])
                 {
-                    if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
+                    if (m.IsMouseMessage())
                     {
                         return;
                     }
@@ -2523,7 +2531,7 @@ namespace System.Windows.Forms
                     {
                         return;
                     }
-                    if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                    if (m.IsKeyMessage())
                     {
                         return;
                     }

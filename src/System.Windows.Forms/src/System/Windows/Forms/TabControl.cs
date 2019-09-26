@@ -78,12 +78,13 @@ namespace System.Windows.Forms
         ///  display rectangle.  When the message is received, the control calls
         ///  updateTabSelection() to layout the TabPages correctly.
         /// </summary>
-        private readonly int tabBaseReLayoutMessage = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_TabBaseReLayout");
+        private readonly User32.WindowMessage tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_TabBaseReLayout");
 
         //state
         private TabPage[] tabPages;
         private int tabPageCount;
         private int lastSelection;
+        private short _windowId;
 
         private bool rightToLeftLayout = false;
         private bool skipUpdateSize;
@@ -1059,7 +1060,7 @@ namespace System.Windows.Forms
         internal int AddNativeTabPage(NativeMethods.TCITEM_T tcitem)
         {
             int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_INSERTITEM, tabPageCount + 1, tcitem);
-            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), tabBaseReLayoutMessage, IntPtr.Zero, IntPtr.Zero);
+            User32.PostMessageW(this, tabBaseReLayoutMessage);
             return index;
         }
 
@@ -1358,7 +1359,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             //Add the handle to hashtable for Ids ..
-            NativeWindow.AddWindowToIDTable(this, Handle);
+            _windowId = NativeWindow.CreateWindowId(this);
             handleInTable = true;
 
             // Set the padding BEFORE setting the control's font (as done
@@ -1383,11 +1384,10 @@ namespace System.Windows.Forms
                 tooltipHwnd = SendMessage(NativeMethods.TCM_GETTOOLTIPS, 0, 0);
                 if (tooltipHwnd != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SetWindowPos(new HandleRef(this, tooltipHwnd),
-                                         NativeMethods.HWND_TOPMOST,
-                                         0, 0, 0, 0,
-                                         NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                         NativeMethods.SWP_NOACTIVATE);
+                    User32.SetWindowPos(
+                        new HandleRef(this, tooltipHwnd),
+                        User32.HWND_TOPMOST,
+                        flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
                 }
             }
 
@@ -1430,7 +1430,7 @@ namespace System.Windows.Forms
             if (handleInTable)
             {
                 handleInTable = false;
-                NativeWindow.RemoveWindowFromIDTable(Handle);
+                NativeWindow.RemoveWindowFromIDTable(_windowId);
             }
 
             base.OnHandleDestroyed(e);
@@ -2061,18 +2061,23 @@ namespace System.Windows.Forms
 
         }
 
-        private void WmReflectDrawItem(ref Message m)
+        private unsafe void WmReflectDrawItem(ref Message m)
         {
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-            IntPtr oldPal = SetUpPalette(dis.hDC, false /*force*/, false /*realize*/);
-            using (Graphics g = Graphics.FromHdcInternal(dis.hDC))
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
+            try
             {
-                OnDrawItem(new DrawItemEventArgs(g, Font, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom), dis.itemID, (DrawItemState)dis.itemState));
+                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState));
             }
-            if (oldPal != IntPtr.Zero)
+            finally
             {
-                SafeNativeMethods.SelectPalette(new HandleRef(null, dis.hDC), new HandleRef(null, oldPal), 0);
+                if (oldPal != IntPtr.Zero)
+                {
+                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
+                }
             }
+
             m.Result = (IntPtr)1;
         }
 
@@ -2132,14 +2137,10 @@ namespace System.Windows.Forms
             Invalidate(true);
 
             // Remove other TabBaseReLayout messages from the message queue
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            IntPtr hwnd = Handle;
-            while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, hwnd),
-                                       tabBaseReLayoutMessage,
-                                       tabBaseReLayoutMessage,
-                                       NativeMethods.PM_REMOVE))
+            var msg = new User32.MSG();
+            while (User32.PeekMessageW(ref msg, this, tabBaseReLayoutMessage, tabBaseReLayoutMessage).IsTrue())
             {
-                ; // NULL loop
+                // No-op.
             }
         }
 
@@ -2148,7 +2149,7 @@ namespace System.Windows.Forms
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the tab continues to function properly.
         /// </summary>
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -2162,8 +2163,8 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
-                    NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                    switch (nmhdr.code)
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    switch (nmhdr->code)
                     {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
                         //in case of validation cancelled...
@@ -2204,14 +2205,14 @@ namespace System.Windows.Forms
                             break;
                         case NativeMethods.TTN_GETDISPINFO:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
-                            User32.SendMessageW(nmhdr.hwndFrom, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
                     }
                     break;
             }
-            if (m.Msg == tabBaseReLayoutMessage)
+            if (m.Msg == (int)tabBaseReLayoutMessage)
             {
                 WmTabBaseReLayout(ref m);
                 return;

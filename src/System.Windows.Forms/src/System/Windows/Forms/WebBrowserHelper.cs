@@ -66,13 +66,12 @@ namespace System.Windows.Forms
         private const int HMperInch = 2540;
 
         // Special guids
-        private static Guid ifont_Guid = typeof(UnsafeNativeMethods.IFont).GUID;
         internal static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         internal static Guid comctlImageCombo_Clsid = new Guid("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
         internal static Guid maskEdit_Clsid = new Guid("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
         // Window message to check if we have already sub-classed
-        internal static readonly int REGMSG_MSG = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_subclassCheck");
+        internal static readonly User32.WindowMessage REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
         internal const int REGMSG_RETVAL = 123;
 
         //
@@ -134,10 +133,9 @@ namespace System.Windows.Forms
         }
 
         // Returns a big COMRECT
-        internal static NativeMethods.COMRECT GetClipRect()
+        internal static RECT GetClipRect()
         {
-            return new NativeMethods.COMRECT(new Rectangle(0, 0, 32000, 32000));
+            return new Rectangle(0, 0, 32000, 32000);
         }
     }
 }
-

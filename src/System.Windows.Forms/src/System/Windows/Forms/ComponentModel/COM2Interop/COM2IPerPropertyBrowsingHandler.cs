@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -16,7 +17,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return typeof(NativeMethods.IPerPropertyBrowsing);
+                return typeof(Ole32.IPerPropertyBrowsing);
             }
         }
 
@@ -35,32 +36,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private Guid GetPropertyPageGuid(NativeMethods.IPerPropertyBrowsing target, int dispid)
+        private unsafe Guid GetPropertyPageGuid(Ole32.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
             // check for a property page
-            int hr = target.MapPropertyToPage(dispid, out Guid guid);
-            if (hr == NativeMethods.S_OK)
+            Guid guid = Guid.Empty;
+            HRESULT hr = target.MapPropertyToPage(dispid, &guid);
+            if (hr == HRESULT.S_OK)
             {
                 return guid;
             }
+
             return Guid.Empty;
         }
 
-        internal static string GetDisplayString(NativeMethods.IPerPropertyBrowsing ppb, int dispid, ref bool success)
+        internal static string GetDisplayString(Ole32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
         {
-            string[] strVal = new string[1];
-            int hr = ppb.GetDisplayString(dispid, strVal);
-            if (hr == NativeMethods.S_OK)
-            {
-                success = (strVal[0] != null);
-                //Debug.Assert(success, "IPerPropertyBrowsing::GetDisplayString returned NULL and S_OK -- this is not a valid state. This component does not property implement IPerPropertyBrowsing. (component class=" + TypeDescriptor.GetClassName(ppb) + ")");
-                return strVal[0];
-            }
-            else
+            HRESULT hr = ppb.GetDisplayString(dispid, out string strVal);
+            if (hr != HRESULT.S_OK)
             {
                 success = false;
+                return null;
             }
-            return null;
+
+            success = strVal != null;
+            return strVal;
         }
 
         /// <summary>
@@ -69,7 +68,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            if (sender.TargetObject is NativeMethods.IPerPropertyBrowsing target)
+            if (sender.TargetObject is Ole32.IPerPropertyBrowsing target)
             {
                 // we hide IDispatch props by default, we we need to force showing them here
 
@@ -89,7 +88,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                if (sender.TargetObject is NativeMethods.IPerPropertyBrowsing)
+                if (sender.TargetObject is Ole32.IPerPropertyBrowsing)
                 {
 
                     // if we are using the dropdown, don't convert the value
@@ -102,7 +101,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     bool success = true;
 
-                    string displayString = GetDisplayString((NativeMethods.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
+                    string displayString = GetDisplayString((Ole32.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
 
                     if (success)
                     {
@@ -115,25 +114,24 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
+        private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {
-            if (sender.TargetObject is NativeMethods.IPerPropertyBrowsing ppb)
+            if (sender.TargetObject is Ole32.IPerPropertyBrowsing ppb)
             {
                 bool hasStrings = false;
 
                 // check for enums
-                NativeMethods.CA_STRUCT caStrings = new NativeMethods.CA_STRUCT();
-                NativeMethods.CA_STRUCT caCookies = new NativeMethods.CA_STRUCT();
+                var caStrings = new Ole32.CA_STRUCT();
+                var caCookies = new Ole32.CA_STRUCT();
 
-                int hr = NativeMethods.S_OK;
-
+                HRESULT hr = HRESULT.S_OK;
                 try
                 {
-                    hr = ppb.GetPredefinedStrings(sender.DISPID, caStrings, caCookies);
+                    hr = ppb.GetPredefinedStrings(sender.DISPID, &caStrings, &caCookies);
                 }
                 catch (ExternalException ex)
                 {
-                    hr = ex.ErrorCode;
+                    hr = (HRESULT)ex.ErrorCode;
                     Debug.Fail("An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid=" + sender.DISPID + "), object type=" + new ComNativeDescriptor().GetClassName(ppb) + ".  This is caused by an exception (usually an AV) inside the object being browsed, and is not a problem in the properties window.");
                 }
 
@@ -145,7 +143,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     gveevent.TypeConverter = null;
                 }
 
-                if (hr != NativeMethods.S_OK)
+                if (hr != HRESULT.S_OK)
                 {
                     hasStrings = false;
                 }
@@ -156,7 +154,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (hasStrings)
                 {
-
                     OleStrCAMarshaler stringMarshaler = new OleStrCAMarshaler(caStrings);
                     Int32CAMarshaler intMarshaler = new Int32CAMarshaler(caCookies);
 
@@ -214,7 +211,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     if (curValue == value || (curValue != null && curValue.Equals(value)))
                     {
                         bool success = false;
-                        string val = GetDisplayString((NativeMethods.IPerPropertyBrowsing)itemsEnum.target.TargetObject, itemsEnum.target.DISPID, ref success);
+                        string val = GetDisplayString((Ole32.IPerPropertyBrowsing)itemsEnum.target.TargetObject, itemsEnum.target.DISPID, ref success);
                         if (success)
                         {
                             return val;
@@ -294,7 +291,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     object[] nameItems = nameMarshaller.Items;
                     object[] cookieItems = valueMarshaller.Items;
 
-                    NativeMethods.IPerPropertyBrowsing ppb = (NativeMethods.IPerPropertyBrowsing)target.TargetObject;
+                    Ole32.IPerPropertyBrowsing ppb = (Ole32.IPerPropertyBrowsing)target.TargetObject;
                     int itemCount = 0;
 
                     Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
@@ -303,7 +300,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
 
                         object[] valueItems = new object[cookieItems.Length];
-                        NativeMethods.VARIANT var = new NativeMethods.VARIANT();
+                        var var = new Ole32.VARIANT();
                         int cookie;
 
                         Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");
@@ -319,9 +316,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems == null ? "(unknown)" : nameItems[i].ToString()));
                                 continue;
                             }
-                            var.vt = (short)NativeMethods.tagVT.VT_EMPTY;
-                            int hr = ppb.GetPredefinedValue(target.DISPID, cookie, var);
-                            if (hr == NativeMethods.S_OK && var.vt != (short)NativeMethods.tagVT.VT_EMPTY)
+                            var.vt = Ole32.VARENUM.EMPTY;
+                            HRESULT hr = ppb.GetPredefinedValue(target.DISPID, (uint)cookie, var);
+                            if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
                             {
                                 valueItems[i] = var.ToObject();
                                 if (valueItems[i].GetType() != targetType)
@@ -399,7 +396,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     bool success = false;
 
-                    string displayString = Com2IPerPropertyBrowsingHandler.GetDisplayString((NativeMethods.IPerPropertyBrowsing)target.TargetObject, target.DISPID, ref success);
+                    string displayString = Com2IPerPropertyBrowsingHandler.GetDisplayString((Ole32.IPerPropertyBrowsing)target.TargetObject, target.DISPID, ref success);
 
                     if (success)
                     {

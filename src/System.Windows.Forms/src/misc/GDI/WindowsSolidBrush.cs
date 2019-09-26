@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
@@ -11,33 +12,27 @@ namespace System.Windows.Forms.Internal
     {
         protected override void CreateBrush()
         {
-            IntPtr nativeHandle = SafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32(Color));
-            if (nativeHandle == IntPtr.Zero) // Don't use Debug.Assert, DbgUtil.GetLastErrorStr would always be evaluated.
+            IntPtr nativeHandle = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(Color));
+            
+            // Don't use Debug.Assert, DbgUtil.GetLastErrorStr would always be evaluated.
+            if (nativeHandle == IntPtr.Zero)
             {
                 Debug.Fail("CreateSolidBrush failed : " + DbgUtil.GetLastErrorStr());
             }
 
-            NativeHandle = nativeHandle;  // sets the handle value in the base class.
+            HBrush = nativeHandle;
         }
 
         public WindowsSolidBrush(DeviceContext dc) : base(dc)
         {
-            // CreateBrush() on demand.
         }
 
         public WindowsSolidBrush(DeviceContext dc, Color color) : base(dc, color)
         {
-            // CreateBrush() on demand.
         }
 
-        public override object Clone()
-        {
-            return new WindowsSolidBrush(DC, Color);
-        }
+        public override object Clone() => new WindowsSolidBrush(DC, Color);
 
-        public override string ToString()
-        {
-            return $"{nameof(WindowsSolidBrush)}: Color = {Color}";
-        }
+        public override string ToString() => $"{nameof(WindowsSolidBrush)}: Color = {Color}";
     }
 }

@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
-    public class PropertyGrid : ContainerControl, IComPropertyBrowser, UnsafeNativeMethods.IPropertyNotifySink
+    public class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
     {
         private readonly DocComment doccomment;
         private int dcSizeRatio = -1;
@@ -2907,24 +2907,20 @@ namespace System.Windows.Forms
         ///  Called when a property on an Ole32 Object changes.
         ///  See IPropertyNotifySink::OnChanged
         /// </summary>
-        void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispID)
+        HRESULT Ole32.IPropertyNotifySink.OnChanged(Ole32.DispatchID dispID)
         {
             // we don't want the grid's own property sets doing this, but if we're getting
             // an OnChanged that isn't the DispID of the property we're currently changing,
             // we need to cause a refresh.
-            //
-            //
             bool fullRefresh = false;
             if (gridView.SelectedGridEntry is PropertyDescriptorGridEntry selectedEntry && selectedEntry.PropertyDescriptor != null && selectedEntry.PropertyDescriptor.Attributes != null)
             {
-
                 // fish out the DispIdAttribute which will tell us the DispId of the
                 // property that we're changing.
-                //
                 DispIdAttribute dispIdAttr = (DispIdAttribute)selectedEntry.PropertyDescriptor.Attributes[(typeof(DispIdAttribute))];
                 if (dispIdAttr != null && !dispIdAttr.IsDefaultAttribute())
                 {
-                    fullRefresh = (dispID != dispIdAttr.Value);
+                    fullRefresh = (dispID != (Ole32.DispatchID)dispIdAttr.Value);
                 }
             }
 
@@ -2938,11 +2934,13 @@ namespace System.Windows.Forms
                 // this is so changes to names of native
                 // objects will be reflected in the combo box
                 object obj = GetUnwrappedObject(0);
-                if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == NativeMethods.ActiveX.DISPID_Name)
+                if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == Ole32.DispatchID.Name)
                 {
                     OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
                 }
             }
+
+            return HRESULT.S_OK;
         }
 
         /// <summary>
@@ -3412,17 +3410,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Called when a property on an Ole32 Object that is tagged
-        ///  with "requestedit" is about to be edited.
-        ///  See IPropertyNotifySink::OnRequestEdit
+        ///  Called when a property on an Ole32 Object that is tagged with "requestedit" is
+        ///  about to be edited. See IPropertyNotifySink::OnRequestEdit
         /// </summary>
-        int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispID)
+        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispID)
         {
-            // we don't do anything here...
-            return NativeMethods.S_OK;
+            // Don't do anything here.
+            return HRESULT.S_OK;
         }
 
-        //
         protected override void OnResize(EventArgs e)
         {
             if (IsHandleCreated && Visible)
@@ -4004,7 +4000,7 @@ namespace System.Windows.Forms
                                 IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
                                 if (hWndParent != IntPtr.Zero)
                                 {
-                                    UnsafeNativeMethods.SetFocus(new HandleRef(null, hWndParent));
+                                    User32.SetFocus(hWndParent);
                                 }
                             }
                             return result;
@@ -4917,7 +4913,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
-                    connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(UnsafeNativeMethods.IPropertyNotifySink), /*throwException*/ false);
+                    connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(Ole32.IPropertyNotifySink), /*throwException*/ false);
                 }
                 catch
                 {
@@ -5756,7 +5752,7 @@ namespace System.Windows.Forms
         ///  otherwise return this element if the point is on this element,
         ///  otherwise return null.
         /// </returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+        internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
         {
             Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
 
@@ -5774,15 +5770,15 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.Parent:
+                case UiaCore.NavigateDirection.Parent:
                     return null;
-                case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                case UiaCore.NavigateDirection.FirstChild:
                     return GetChildFragment(0);
-                case UnsafeNativeMethods.NavigateDirection.LastChild:
+                case UiaCore.NavigateDirection.LastChild:
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
                     {
@@ -5800,13 +5796,13 @@ namespace System.Windows.Forms
         /// <param name="childFragment">The child element regarding which the target element is searched.</param>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal UnsafeNativeMethods.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UnsafeNativeMethods.NavigateDirection direction)
+        internal UiaCore.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.Parent:
+                case UiaCore.NavigateDirection.Parent:
                     return this;
-                case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                case UiaCore.NavigateDirection.NextSibling:
                     int fragmentCount = GetChildFragmentCount();
                     int childFragmentIndex = GetChildFragmentIndex(childFragment);
                     int nextChildFragmentIndex = childFragmentIndex + 1;
@@ -5816,7 +5812,7 @@ namespace System.Windows.Forms
                     }
 
                     return null;
-                case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                case UiaCore.NavigateDirection.PreviousSibling:
                     fragmentCount = GetChildFragmentCount();
                     childFragmentIndex = GetChildFragmentIndex(childFragment);
                     if (childFragmentIndex > 0)
@@ -5833,7 +5829,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the element that is the root node of this fragment of UI.
         /// </summary>
-        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
         {
             get
             {
@@ -5930,7 +5926,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <returns>Return the element in this fragment which has the keyboard focus,
         ///  if any; otherwise return null.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus()
+        internal override UiaCore.IRawElementProviderFragment GetFocus()
         {
             return GetFocused();
         }
@@ -6012,11 +6008,11 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
-                UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget != null)
                 {
                     return navigationTarget;

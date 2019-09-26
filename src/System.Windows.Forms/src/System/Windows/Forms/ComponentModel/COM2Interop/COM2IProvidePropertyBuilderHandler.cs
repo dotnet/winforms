@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -18,34 +19,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private bool GetBuilderGuidString(NativeMethods.IProvidePropertyBuilder target, int dispid, ref string strGuidBldr, int[] bldrType)
+        private unsafe bool GetBuilderGuidString(NativeMethods.IProvidePropertyBuilder target, Ole32.DispatchID dispid, ref string strGuidBldr, int[] bldrType)
         {
-            bool valid = false;
-            string[] pGuidBldr = new string[1];
-            if (NativeMethods.Failed(target.MapPropertyToBuilder(dispid, bldrType, pGuidBldr, ref valid)))
-            {
-                valid = false;
-            }
-
-            if (valid && (bldrType[0] & _CTLBLDTYPE.CTLBLDTYPE_FINTERNALBUILDER) == 0)
-            {
-                valid = false;
-                Debug.Fail("Property Browser doesn't support standard builders -- NYI");
-            }
-
-            if (!valid)
+            BOOL valid = BOOL.FALSE;
+            var pGuidBldr = new string[1];
+            if (!target.MapPropertyToBuilder(dispid, bldrType, pGuidBldr, &valid).Succeeded())
             {
                 return false;
             }
 
-            if (pGuidBldr[0] == null)
+            if (valid.IsTrue() && (bldrType[0] & _CTLBLDTYPE.CTLBLDTYPE_FINTERNALBUILDER) == 0)
             {
-                strGuidBldr = Guid.Empty.ToString();
+                Debug.Fail("Property Browser doesn't support standard builders -- NYI");
+                return false;
             }
-            else
-            {
-                strGuidBldr = pGuidBldr[0];
-            }
+
+            strGuidBldr = pGuidBldr[0] ?? Guid.Empty.ToString();
             return true;
         }
 

@@ -93,16 +93,16 @@ namespace System.Windows.Forms
                         break;
 
                     case WindowMessages.WM_MOUSEMOVE:
-                        if (!_control.GetState(STATE_TRACKINGMOUSEEVENT))
+                        if (!_control.GetState(States.TrackingMouseEvent))
                         {
                             _control.HookMouseEvent();
-                            if (!_control.GetState(STATE_MOUSEENTERPENDING))
+                            if (!_control.GetState(States.MouseEnterPending))
                             {
-                                _control.SendMessage(NativeMethods.WM_MOUSEENTER, 0, 0);
+                                _control.SendMessage((int)NativeMethods.WM_MOUSEENTER, 0, 0);
                             }
                             else
                             {
-                                _control.SetState(STATE_MOUSEENTERPENDING, false);
+                                _control.SetState(States.MouseEnterPending, false);
                             }
                         }
                         break;

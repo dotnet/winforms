@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -11,75 +12,56 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter
     {
-        private IntPtr lastHandle = IntPtr.Zero;
-        private Font lastFont = null;
+        private IntPtr _lastHandle = IntPtr.Zero;
+        private Font _lastFont = null;
 
-        public override bool AllowExpand
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool AllowExpand => true;
 
         /// <summary>
         ///  Returns the managed type that this editor maps the property type to.
         /// </summary>
-        public override Type ManagedType
-        {
-            get
-            {
-                return typeof(Font);
-            }
-        }
+        public override Type ManagedType => typeof(Font);
 
         /// <summary>
         ///  Converts the native value into a managed value
         /// </summary>
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
         {
-            // we're getting an IFont thing here
-
-            if (!(nativeValue is UnsafeNativeMethods.IFont nativeFont))
+            // we're getting an IFont here
+            if (!(nativeValue is Ole32.IFont nativeFont))
             {
-                lastHandle = IntPtr.Zero;
-                lastFont = Control.DefaultFont;
-                return lastFont;
+                _lastHandle = IntPtr.Zero;
+                _lastFont = Control.DefaultFont;
+                return _lastFont;
             }
 
-            IntPtr fontHandle = nativeFont.GetHFont();
+            IntPtr fontHandle = nativeFont.hFont;
 
             // see if we have this guy cached
-            if (fontHandle == lastHandle && lastFont != null)
+            if (fontHandle == _lastHandle && _lastFont != null)
             {
-                return lastFont;
+                return _lastFont;
             }
 
-            lastHandle = fontHandle;
+            _lastHandle = fontHandle;
 
             try
             {
                 // this wasn't working because it was converting everything to
                 // world units.
-                //
-                Font font = Font.FromHfont(lastHandle);
-                try
+                using (Font font = Font.FromHfont(_lastHandle))
                 {
-                    lastFont = ControlPaint.FontInPoints(font);
-                }
-                finally
-                {
-                    font.Dispose();
+                    _lastFont = ControlPaint.FontInPoints(font);
                 }
             }
             catch (ArgumentException)
             {
                 // we will fail on non-truetype fonts, so
                 // just use the default font.
-                lastFont = Control.DefaultFont;
+                _lastFont = Control.DefaultFont;
             }
 
-            return lastFont;
+            return _lastFont;
         }
 
         /// <summary>
@@ -88,7 +70,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
             // we default to black.
-            //
             if (managedValue == null)
             {
                 managedValue = Control.DefaultFont;
@@ -96,31 +77,29 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             cancelSet = true;
 
-            if (lastFont != null && lastFont.Equals(managedValue))
+            if (_lastFont != null && _lastFont.Equals(managedValue))
             {
                 // don't do anything here.
                 return null;
             }
 
-            lastFont = (Font)managedValue;
-            UnsafeNativeMethods.IFont nativeFont = (UnsafeNativeMethods.IFont)pd.GetNativeValue(pd.TargetObject);
+            _lastFont = (Font)managedValue;
+            Ole32.IFont nativeFont = (Ole32.IFont)pd.GetNativeValue(pd.TargetObject);
 
             // now, push all the values into the native side
             if (nativeFont != null)
             {
-                bool changed = ControlPaint.FontToIFont(lastFont, nativeFont);
+                bool changed = ControlPaint.FontToIFont(_lastFont, nativeFont);
 
                 if (changed)
                 {
                     // here, we want to pick up a new font from the handle
-                    lastFont = null;
+                    _lastFont = null;
                     ConvertNativeToManaged(nativeFont, pd);
-
                 }
             }
+
             return null;
         }
-
     }
 }
-

@@ -89,6 +89,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.BackColor);
         }
 
+        [Theory]
+        [MemberData(nameof(BackColor_TestData))]
+        public void BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
+        {
+            var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.BackColor = value;
+            Assert.Equal(expected, control.BackColor);
+
+            // Set same.
+            control.BackColor  = value;
+            Assert.Equal(expected, control.BackColor);
+        }
+
         [Fact]
         public void BackColor_SetWithHandler_CallsBackColorChanged()
         {
@@ -792,6 +807,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { Color.Empty, SystemColors.WindowText };
             yield return new object[] { Color.Red, Color.Red };
+            yield return new object[] { Color.FromArgb(0x01, 0x02, 0x03, 0x4), Color.FromArgb(0x01, 0x02, 0x03, 0x4) };
         }
 
         [Theory]
@@ -802,6 +818,21 @@ namespace System.Windows.Forms.Tests
             {
                 ForeColor = value
             };
+            Assert.Equal(expected, control.ForeColor);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+        }
+
+        [Theory]
+        [MemberData(nameof(ForeColor_Set_TestData))]
+        public void ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
+        {
+            var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.ForeColor = value;
             Assert.Equal(expected, control.ForeColor);
 
             // Set same.

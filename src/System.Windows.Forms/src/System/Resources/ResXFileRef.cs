@@ -23,7 +23,6 @@ namespace System.Resources
     {
         private string fileName;
         private readonly string typeName;
-        [OptionalField(VersionAdded = 2)]
         private Encoding textFileEncoding;
 
         /// <summary>
@@ -35,17 +34,6 @@ namespace System.Resources
         {
             this.fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
             this.typeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
-        }
-
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext ctx)
-        {
-            textFileEncoding = null;
-        }
-
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext ctx)
-        {
         }
 
         /// <summary>

@@ -986,28 +986,23 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Processes messages for ownerdraw panels.
         /// </summary>
-        private void WmDrawItem(ref Message m)
+        private unsafe void WmDrawItem(ref Message m)
         {
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
 
             int length = panels.Count;
-            if (dis.itemID < 0 || dis.itemID >= length)
+            if (dis->itemID < 0 || dis->itemID >= length)
             {
                 Debug.Fail("OwnerDraw item out of range");
             }
 
-            StatusBarPanel panel = (StatusBarPanel)
-                                   panels[dis.itemID];
-
-            Graphics g = Graphics.FromHdcInternal(dis.hDC);
-            Rectangle r = Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom);
-
-            //The itemstate is not defined for a statusbar control
-            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, r, dis.itemID, DrawItemState.None, panel, ForeColor, BackColor));
-            g.Dispose();
+            // The itemState is not defined for a statusbar control
+            StatusBarPanel panel = (StatusBarPanel)panels[(int)dis->itemID];
+            Graphics g = Graphics.FromHdcInternal(dis->hDC);
+            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
         }
 
-        private void WmNotifyNMClick(NativeMethods.NMHDR note)
+        private void WmNotifyNMClick(User32.NMHDR note)
         {
             if (!showPanels)
             {
@@ -1143,7 +1138,7 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
-                    NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    User32.NMHDR note = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
                     switch (note.code)
                     {
                         case NativeMethods.NM_CLICK:
@@ -1778,7 +1773,7 @@ namespace System.Windows.Forms
                     StatusBar p = (StatusBar)parent;
 
                     ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, WindowMessages.TTM_ADDTOOLW) == IntPtr.Zero)
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1790,7 +1785,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ComCtl32.ToolInfoWrapper info = GetMinTOOLINFO(tool);
-                    info.SendMessage(this, WindowMessages.TTM_DELTOOLW);
+                    info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
                 }
             }
 
@@ -1799,7 +1794,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
-                    info.SendMessage(this, WindowMessages.TTM_SETTOOLINFOW);
+                    info.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1814,13 +1809,13 @@ namespace System.Windows.Forms
                 }
 
                 window.CreateHandle(CreateParams);
-                SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.HWND_TOPMOST,
-                                     0, 0, 0, 0,
-                                     NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                     NativeMethods.SWP_NOACTIVATE);
+                User32.SetWindowPos(
+                    new HandleRef(this, Handle),
+                    User32.HWND_TOPMOST,
+                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, WindowMessages.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>

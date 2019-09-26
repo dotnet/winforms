@@ -791,17 +791,23 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ObjectDisposedException>(() => menuItem.Text = string.Empty);
         }
 
-        [Fact]
-        public void MenuItem_Visible_Set_GetReturnsExpected()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void MenuItem_Visible_Set_GetReturnsExpected(bool value)
         {
             var menuItem = new MenuItem
             {
-                Visible = false
+                Visible = value
             };
-            Assert.False(menuItem.Visible);
+            Assert.Equal(value, menuItem.Visible);
 
-            menuItem.Visible = true;
-            Assert.True(menuItem.Visible);
+            // Set same.
+            menuItem.Visible = value;
+            Assert.Equal(value, menuItem.Visible);
+
+            // Set different.
+            menuItem.Visible = !value;
+            Assert.Equal(!value, menuItem.Visible);
         }
 
         [Fact]

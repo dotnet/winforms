@@ -1017,6 +1017,11 @@
         <target state="translated">表示下拉式方塊目前是否為下拉狀態。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">決定控制項的顯示方式。</target>

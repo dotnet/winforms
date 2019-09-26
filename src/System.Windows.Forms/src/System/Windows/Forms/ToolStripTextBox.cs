@@ -290,16 +290,14 @@ namespace System.Windows.Forms
             set { TextBox.AutoCompleteSource = value; }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.Fixed3D),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.TextBoxBorderDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.Fixed3D)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [SRDescription(nameof(SR.TextBoxBorderDescr))]
         public BorderStyle BorderStyle
         {
-            get { return TextBox.BorderStyle; }
-            set { TextBox.BorderStyle = value; }
+            get => TextBox.BorderStyle;
+            set => TextBox.BorderStyle = value;
         }
 
         [
@@ -644,7 +642,7 @@ namespace System.Windows.Forms
 
             internal override bool SupportsUiaProviders => true;
 
-            private void InvalidateNonClient()
+            private unsafe void InvalidateNonClient()
             {
                 if (!IsPopupTextBox)
                 {
@@ -661,13 +659,12 @@ namespace System.Windows.Forms
                 Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.CombineMode.RGN_XOR);
 
                 // Call RedrawWindow with the region.
-                RECT ignored = default;
-                SafeNativeMethods.RedrawWindow(
+                User32.RedrawWindow(
                     new HandleRef(this, Handle),
-                    ref ignored,
+                    null,
                     hNonClientRegion,
-                    NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_ERASE | NativeMethods.RDW_UPDATENOW
-                        | NativeMethods.RDW_ERASENOW | NativeMethods.RDW_FRAME);
+                    User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.UPDATENOW
+                        | User32.RDW.ERASENOW | User32.RDW.FRAME);
 
                 if (hNonClientRegion != IntPtr.Zero)
                 {

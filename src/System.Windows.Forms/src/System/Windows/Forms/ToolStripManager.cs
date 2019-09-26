@@ -947,7 +947,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     _justEnteredMenuMode = true;
 #endif
-                    IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                    IntPtr hwndActive = User32.GetActiveWindow();
                     if (hwndActive != IntPtr.Zero)
                     {
                         ActiveHwndInternal = new HandleRef(this, hwndActive);
@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms
                     if (dropDown.AutoClose == false)
                     {
                         // store off the current active hwnd
-                        IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
+                        IntPtr hwndActive = User32.GetActiveWindow();
                         if (hwndActive != IntPtr.Zero)
                         {
                             ActiveHwndInternal = new HandleRef(this, hwndActive);
@@ -1366,7 +1366,7 @@ namespace System.Windows.Forms
             {
                 bool filterMessage = false;
 
-                if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
+                if (m.IsMouseMessage())
                 {
                     filterMessage = true;
                 }
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                else if (m.IsKeyMessage())
                 {
                     filterMessage = true;
                 }
@@ -1403,7 +1403,7 @@ namespace System.Windows.Forms
                     return false;
                 }
                 HandleRef hwndActiveToolStrip = new HandleRef(activeToolStrip, activeToolStrip.Handle);
-                HandleRef hwndCurrentActiveWindow = new HandleRef(null, UnsafeNativeMethods.GetActiveWindow());
+                HandleRef hwndCurrentActiveWindow = new HandleRef(null, User32.GetActiveWindow());
 
                 // if the active window has changed...
                 if (hwndCurrentActiveWindow.Handle != _lastActiveWindow.Handle)
@@ -1590,10 +1590,11 @@ namespace System.Windows.Forms
 
                         hookProc = new NativeMethods.HookProc(MessageHookProc);
 
-                        messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_GETMESSAGE,
-                                                                   hookProc,
-                                                                   new HandleRef(null, IntPtr.Zero),
-                                                                   SafeNativeMethods.GetCurrentThreadId());
+                        messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
+                            NativeMethods.WH_GETMESSAGE,
+                            hookProc,
+                            IntPtr.Zero,
+                            Kernel32.GetCurrentThreadId());
 
                         if (messageHookHandle != IntPtr.Zero)
                         {
@@ -1607,13 +1608,12 @@ namespace System.Windows.Forms
                 {
                     if (nCode == NativeMethods.HC_ACTION)
                     {
-                        if (isHooked && (int)wparam == NativeMethods.PM_REMOVE /*only process GetMessage, not PeekMessage*/)
+                        if (isHooked && (User32.PM)wparam == User32.PM.REMOVE)
                         {
                             // only process messages we've pulled off the queue
-                            NativeMethods.MSG* msg = (NativeMethods.MSG*)lparam;
+                            User32.MSG* msg = (User32.MSG*)lparam;
                             if (msg != null)
                             {
-                                //Debug.WriteLine("Got " + Message.Create(msg->hwnd, msg->message, wparam, lparam).ToString());
                                 // call pretranslate on the message - this should execute
                                 // the message filters and preprocess message.
                                 if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))

@@ -531,24 +531,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or
-        ///  sets the border style.
+        ///  Gets or sets the border style.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(defaultBorderStyle),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.DataGridBorderStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(defaultBorderStyle)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [SRDescription(nameof(SR.DataGridBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
+            get => borderStyle;
             set
             {
-                //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
@@ -3663,24 +3656,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /*
-        /// <summary>
-        ///  Raises the <see cref='System.Windows.Forms.DataGrid.ColumnHeaderClick'/> event.
-        /// </summary>
-        /// <param name='e'>
-        ///  An <see cref='System.EventArgs'/> that contains the event data.
-        /// </param>
-        /// <remarks>
-        ///  Raising an event invokes the event-handling method through a delegate. For an
-        ///  overview, see <see topic='cpconProvidingEventFunctionality'/>.
-        /// <see langword='Notes to Inheritors '/>When overriding <see cref='System.Windows.Forms.DataGrid.OnColumnHeaderClick'/> in an
-        ///  derived class, be sure to call the base class's <see cref='System.Windows.Forms.DataGrid.OnColumnHeaderClick'/> method.
-        /// </remarks>
-        protected void OnColumnHeaderClick(EventArgs e) {
-            RaiseEvent(EVENT_COLUMNHEADERCLICK, e);
-        }
-        */
-
         protected virtual void OnFlatModeChanged(EventArgs e)
         {
             if (Events[EVENT_FLATMODECHANGED] is EventHandler eh)
@@ -5317,7 +5292,7 @@ namespace System.Windows.Forms
             }
 
             CaptureInternal = true;
-            Cursor.ClipInternal = RectangleToScreen(clip);
+            Cursor.Clip = RectangleToScreen(clip);
             gridState[GRIDSTATE_trackColResize] = true;
             trackColAnchor = x;
             trackColumn = col;
@@ -5438,7 +5413,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Cursor.ClipInternal = Rectangle.Empty;
+                Cursor.Clip = Rectangle.Empty;
                 CaptureInternal = false;
                 gridState[GRIDSTATE_layoutSuspended] = false;
             }
@@ -5555,7 +5530,7 @@ namespace System.Windows.Forms
             clip.Height = layout.Data.Y + layout.Data.Height - topEdge - 2;
 
             CaptureInternal = true;
-            Cursor.ClipInternal = RectangleToScreen(clip);
+            Cursor.Clip = RectangleToScreen(clip);
             gridState[GRIDSTATE_trackRowResize] = true;
             trackRowAnchor = y;
             trackRow = row;
@@ -5608,7 +5583,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Cursor.ClipInternal = Rectangle.Empty;
+                Cursor.Clip = Rectangle.Empty;
                 CaptureInternal = false;
             }
             // OnRowResize(EventArgs.Empty);

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms.Design</AssemblyName>    
     <CLSCompliant>true</CLSCompliant>
     <Deterministic>true</Deterministic>
@@ -35,6 +34,7 @@
     <Compile Include="..\..\Common\src\DpiHelper.cs" Link="misc\DpiHelper.cs" />
     <Compile Include="..\..\Common\src\ExternDll.cs" Link="misc\ExternDll.cs" />
     <Compile Include="..\..\Common\src\FileDialog_Vista_Interop.cs" Link="System\Windows\Forms\FileDialog_Vista_Interop.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.ListViewMessages.cs" Link="Interop.ListViewMessages.cs" />
     <Compile Include="..\..\Common\src\NativeMethods.cs" Link="System\Windows\Forms\NativeMethods.cs" />
     <Compile Include="..\..\Common\src\OsVersion.cs" Link="Common\OsVersion.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
@@ -48,20 +48,40 @@
     <Compile Include="..\..\Common\src\Interop\Interop.RegionType.cs" Link="Interop\Interop.RegionType.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.NMTREEVIEW.cs" Link="Interop\ComCtl32\Interop.NMTREEVIEW.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVITEMW.cs" Link="Interop\ComCtl32\Interop.TVITEMW.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIF.cs" Link="Interop\ComCtl32\Interop.TVIF.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVC.cs" Link="Interop\ComCtl32\Interop.TVC.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIS.cs" Link="Interop\ComCtl32\Interop.TVIS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreatePen.cs" Link="Interop\Gdi32\Interop.CreatePen.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateRectRgn.cs" Link="Interop\Gdi32\Interop.CreateRectRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateSolidBrush.cs" Link="Interop\Gdi32\Interop.CreateSolidBrush.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetDeviceCaps.cs" Link="Interop\Gdi32\Interop.GetDeviceCaps.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextExtentPoint32.cs" Link="Interop\Gdi32\Interop.GetTextExtentPoint32.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextMetricsW.cs" Link="Interop\Gdi32\Interop.GetTextMetricsW.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.PS.cs" Link="Interop\Gdi32\Interop.PS.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.TEXTMETRICW.cs" Link="Interop\Gdi32\Interop.TEXTMETRICW.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.TMPF.cs" Link="Interop\Gdi32\Interop.TMPF.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetCurrentProcessId.cs" Link="Interop\Kernel32\Interop.GetCurrentProcessId.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetCurrentThreadId.cs" Link="Interop\Kernel32\Interop.GetCurrentThreadId.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetModuleHandle.cs" Link="Interop\Kernel32\Interop.GetModuleHandle.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetTickCount.cs" Link="Interop\Kernel32\Interop.GetTickCount.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
-    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetModuleHandle.cs" Link="Interop\Kernel32\Interop.GetModuleHandle.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.OpenProcess.cs" Link="Interop\Kernel32\Interop.OpenProcess.cs" />
+    <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.ProcessAccessOptions.cs" Link="Interop\Kernel32\Interop.ProcessAccessOptions.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumUnknown.cs" Link="Interop\Ole32\Interop.IEnumUnknown.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IPropertyNotifySink.cs" Link="Interop\Ole32\Interop.IPropertyNotifySink.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStream.cs" Link="Interop\Ole32\Interop.IStream.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECONTF.cs" Link="Interop\Ole32\Interop.OLECONTF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATSTG.cs" Link="Interop\Ole32\Interop.STATSTG.cs" />
@@ -69,10 +89,34 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGM.cs" Link="Interop\Ole32\Interop.STGM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ClientToScreen.cs" Link="Interop\User32\Interop.ClientToScreen.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DefWindowProcW.cs" Link="Interop\User32\Interop.DefWindowProcW.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCapture.cs" Link="Interop\User32\Interop.GetCapture.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowThreadProcessId.cs" Link="Interop\User32\Interop.GetWindowThreadProcessId.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.MSG.cs" Link="Interop\User32\Interop.MSG.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.NMHDR.cs" Link="Interop\User32\Interop.NMHDR.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.NotifyWinEvent.cs" Link="Interop\User32\Interop.NotifyWinEvent.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.OBJID.cs" Link="Interop\User32\Interop.OBJID.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.PAINTSTRUCT.cs" Link="Interop\User32\Interop.PAINTSTRUCT.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.RedrawWindow.cs" Link="Interop\User32\Interop.RedrawWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseCapture.cs" Link="Interop\User32\Interop.ReleaseCapture.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetActiveWindow.cs" Link="Interop\User32\Interop.SetActiveWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SWP.cs" Link="Interop\User32\Interop.SWP.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.TME.cs" Link="Interop\User32\Interop.TME.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.TrackMouseEvent.cs" Link="Interop\User32\Interop.TrackMouseEvent.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">

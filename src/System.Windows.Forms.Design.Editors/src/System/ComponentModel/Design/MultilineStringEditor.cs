@@ -236,7 +236,7 @@ namespace System.ComponentModel.Design
 
                     try
                     {
-                        User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.TextFormatFlags.DT_CALCRECT);
+                        User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);
                     }
                     finally
                     {
@@ -512,11 +512,10 @@ namespace System.ComponentModel.Design
                 }
                 else
                 {
-                    Guid realClsid = new Guid();
-                    int hr = UnsafeNativeMethods.ReadClassStg(new HandleRef(null, lpstg), ref realClsid);
-                    Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X", CultureInfo.InvariantCulture) + ")");
+                    HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
+                    Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X") + ")");
 
-                    if (!NativeMethods.Succeeded(hr))
+                    if (!hr.Succeeded())
                     {
                         return HRESULT.S_FALSE;
                     }
@@ -576,9 +575,14 @@ namespace System.ComponentModel.Design
                 return HRESULT.E_NOTIMPL;
             }
 
-            public HRESULT GetDragDropEffect(BOOL fDrag, int grfKeyState, ref int pdwEffect)
+            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
-                pdwEffect = (int)DragDropEffects.None;
+                if (pdwEffect == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pdwEffect = Ole32.DROPEFFECT.NONE;
                 return HRESULT.S_OK;
             }
 

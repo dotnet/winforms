@@ -592,13 +592,17 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void OnBackColorChanged(EventArgs e)
+        protected unsafe override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);
+                User32.RedrawWindow(
+                    new HandleRef(this, Handle),
+                    null,
+                    IntPtr.Zero,
+                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
             }
         }
 
@@ -788,21 +792,22 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        int mode = 0;
+                        Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
                         if (AutoCompleteMode == AutoCompleteMode.Suggest)
                         {
-                            mode |= NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
+                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
                         }
                         if (AutoCompleteMode == AutoCompleteMode.Append)
                         {
-                            mode |= NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
+                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
                         }
                         if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                         {
-                            mode |= NativeMethods.AUTOSUGGEST;
-                            mode |= NativeMethods.AUTOAPPEND;
+                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
+                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
                         }
-                        int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle), (int)AutoCompleteSource | mode);
+
+                        Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource | mode);
                     }
                 }
             }
@@ -819,8 +824,7 @@ namespace System.Windows.Forms
         {
             if ((AutoCompleteMode != AutoCompleteMode.None || force) && IsHandleCreated)
             {
-                int mode = (int)AutoCompleteSource.AllSystemSources | NativeMethods.AUTOSUGGEST_OFF | NativeMethods.AUTOAPPEND_OFF;
-                SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle), mode);
+                Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource.AllSystemSources | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
             }
         }
 
@@ -848,8 +852,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the text that is displayed when the control has no Text and is not on focus.
+        ///  Gets or sets the text that is displayed when the control has no text and does not have the focus.
         /// </summary>
+        /// <value>The text that is displayed when the control has no text and does not have the focus.</value>
         [
         Localizable(true),
         DefaultValue(""),
@@ -882,7 +887,7 @@ namespace System.Windows.Forms
         //-------------------------------------------------------------------------------------------------
 
         /// <summary>
-        ///  Draws the PlaceholderText in the client area of the TextBox using the default font and color.
+        ///  Draws the <see cref="PlaceholderText"/> in the client area of the <see cref="TextBox"/> using the default font and color.
         /// </summary>
         private void DrawPlaceholderText(Graphics graphics)
         {

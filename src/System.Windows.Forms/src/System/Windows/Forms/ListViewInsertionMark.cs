@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             get
             {
                 RECT rect = new RECT();
-                listView.SendMessage(NativeMethods.LVM_GETINSERTMARKRECT, 0, ref rect);
+                listView.SendMessage((int)LVM.GETINSERTMARKRECT, 0, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }
         }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
             {
                 if (color.IsEmpty)
                 {
-                    color = SafeNativeMethods.ColorFromCOLORREF((int)listView.SendMessage(NativeMethods.LVM_GETINSERTMARKCOLOR, 0, 0));
+                    color = SafeNativeMethods.ColorFromCOLORREF((int)listView.SendMessage((int)LVM.GETINSERTMARKCOLOR, 0, 0));
                 }
                 return color;
             }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                     color = value;
                     if (listView.IsHandleCreated)
                     {
-                        listView.SendMessage(NativeMethods.LVM_SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
+                        listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
                     }
                 }
             }
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         public int NearestIndex(Point pt)
         {
             NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_INSERTMARKHITTEST, ref pt, lvInsertMark);
+            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.INSERTMARKHITTEST, ref pt, lvInsertMark);
             return lvInsertMark.iItem;
         }
 
@@ -135,11 +135,11 @@ namespace System.Windows.Forms
                 dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0,
                 iItem = index
             };
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_SETINSERTMARK, 0, lvInsertMark);
+            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.SETINSERTMARK, 0, lvInsertMark);
 
             if (!color.IsEmpty)
             {
-                listView.SendMessage(NativeMethods.LVM_SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
+                listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
             }
         }
     }

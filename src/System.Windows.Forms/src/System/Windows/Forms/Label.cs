@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             SetStyle(ControlStyles.UserPaint |
                      ControlStyles.SupportsTransparentBackColor |
@@ -239,21 +239,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the border style for the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.None),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.LabelBorderDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.None)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [SRDescription(nameof(SR.LabelBorderDescr))]
         public virtual BorderStyle BorderStyle
         {
-            get
-            {
-                return (BorderStyle)labelState[StateBorderStyle];
-            }
+            get => (BorderStyle)labelState[StateBorderStyle];
             set
             {
-                //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));

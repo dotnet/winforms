@@ -1017,6 +1017,11 @@
         <target state="translated">Určuje, zda je pole se seznamem nyní otevřeno.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="new">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">Určuje zobrazení ovládacího prvku.</target>

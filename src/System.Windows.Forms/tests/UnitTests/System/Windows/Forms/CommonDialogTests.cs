@@ -175,7 +175,7 @@ namespace System.Windows.Forms.Tests
             };
 
             dialog.HelpRequest += handler;
-            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)field.GetValue(null), IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WindowMessage)field.GetValue(null), IntPtr.Zero, IntPtr.Zero));
             Assert.Equal(1, callCount);
         }
 
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Tests
             };
 
             dialog.HelpRequest += handler;
-            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)field.GetValue(null) + 1, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WindowMessage)field.GetValue(null) + 1, IntPtr.Zero, IntPtr.Zero));
             Assert.Equal(0, callCount);
         }
 

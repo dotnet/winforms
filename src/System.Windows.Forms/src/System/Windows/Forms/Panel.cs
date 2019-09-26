@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -29,7 +30,7 @@ namespace System.Windows.Forms
         public Panel() : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+            SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
             TabStop = false;
             SetStyle(ControlStyles.Selectable | ControlStyles.AllPaintingInWmPaint, false);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
@@ -98,7 +99,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.None)]
-        [DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE)]
+        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
         [SRDescription(nameof(SR.PanelBorderStyleDescr))]
         public BorderStyle BorderStyle
         {

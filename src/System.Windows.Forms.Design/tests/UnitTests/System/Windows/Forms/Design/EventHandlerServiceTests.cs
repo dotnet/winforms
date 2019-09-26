@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Design.Tests
         {
             // we expect to hit Debug.Assert and unless we clear listeners we will crash to xUnit runner:
             //  "The active test run was aborted. Reason: Test host process crashed : Assertion Failed"
-            using (new TraceListenerlessContext())
+            using (new NoAssertContext())
             {
                 var service = new EventHandlerService(null);
                 service.GetTestAccessor().LastHandlerType = typeof(Button);

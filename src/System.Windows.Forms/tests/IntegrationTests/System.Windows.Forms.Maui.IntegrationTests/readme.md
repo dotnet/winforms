@@ -81,7 +81,7 @@ See the pull request at https://github.com/dotnet/winforms/pull/1240 for an exam
 
         .\build-local.ps1
 	
-1. Browse to `.\artifacts\bin\<your-test-name>\Debug\netcoreapp3.0`
+1. Browse to `.\artifacts\bin\<your-test-name>\Debug\netcoreapp5.0`
 1. Double click on `<your-test-name>.exe`
 1. Check the results.log in the same directory to make sure everything passed
 1. If anything shows as a failure in the log, **STOP**. 
@@ -105,9 +105,9 @@ See the pull request at https://github.com/dotnet/winforms/pull/1240 for an exam
         .\build -integrationTest /m:1
 	
 1. Verify all the integration tests pass. If there is a failure, the following files may help:
-    - xUnit test results summary can be found at `.\artifacts\TestResults\Debug\System.Windows.Forms.Maui.IntegrationTests_netcoreapp3.0_x64.html`
-    - xUnit test outputs can be found at `.\artifacts\log\Debug\System.Windows.Forms.Maui.IntegrationTests_netcoreapp3.0_x64.log`
-    - The results.log for your individual Maui test can be found at `.\artifacts\bin\<your-test-name>\Debug\netcoreapp3.0\results.log`
+    - xUnit test results summary can be found at `.\artifacts\TestResults\Debug\System.Windows.Forms.Maui.IntegrationTests_netcoreapp5.0_x64.html`
+    - xUnit test outputs can be found at `.\artifacts\log\Debug\System.Windows.Forms.Maui.IntegrationTests_netcoreapp5.0_x64.log`
+    - The results.log for your individual Maui test can be found at `.\artifacts\bin\<your-test-name>\Debug\netcoreapp5.0\results.log`
 
 ## Run the maui test through the CI build
 
