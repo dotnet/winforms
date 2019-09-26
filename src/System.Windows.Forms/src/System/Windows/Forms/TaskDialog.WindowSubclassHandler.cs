@@ -4,6 +4,8 @@
 
 #nullable enable
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     public partial class TaskDialog
@@ -21,14 +23,14 @@ namespace System.Windows.Forms
 
             protected override unsafe void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WindowMessage)m.Msg)
                 {
-                    case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                    case User32.WindowMessage.WM_WINDOWPOSCHANGED:
                         base.WndProc(ref m);
 
-                        ref NativeMethods.WINDOWPOS windowPos = ref *(NativeMethods.WINDOWPOS*)m.LParam;
+                        ref User32.WINDOWPOS windowPos = ref *(User32.WINDOWPOS*)m.LParam;
 
-                        if ((windowPos.flags & NativeMethods.SWP_SHOWWINDOW) == NativeMethods.SWP_SHOWWINDOW &&
+                        if ((windowPos.flags & User32.SWP.SHOWWINDOW) == User32.SWP.SHOWWINDOW &&
                             !_processedShowWindowMessage)
                         {
                             _processedShowWindowMessage = true;

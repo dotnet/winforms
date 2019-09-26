@@ -95,82 +95,82 @@ internal static partial class Interop
             TDF_SIZE_TO_CONTENT = 0x01000000
         }
 
-        public enum TASKDIALOG_MESSAGES : int
+        public enum TASKDIALOG_MESSAGES : uint
         {
-            TDM_NAVIGATE_PAGE = WindowMessages.WM_USER + 101,
+            TDM_NAVIGATE_PAGE = User32.WM_USER + 101,
 
             /// <summary>
             /// "wParam = Button ID"
             /// </summary>
-            TDM_CLICK_BUTTON = WindowMessages.WM_USER + 102,
+            TDM_CLICK_BUTTON = User32.WM_USER + 102,
 
             /// <summary>
             /// "wParam = 0 (nonMarque) wParam != 0 (Marquee)"
             /// </summary>
-            TDM_SET_MARQUEE_PROGRESS_BAR = WindowMessages.WM_USER + 103,
+            TDM_SET_MARQUEE_PROGRESS_BAR = User32.WM_USER + 103,
 
             /// <summary>
             /// "wParam = new progress state"
             /// </summary>
-            TDM_SET_PROGRESS_BAR_STATE = WindowMessages.WM_USER + 104,
+            TDM_SET_PROGRESS_BAR_STATE = User32.WM_USER + 104,
 
             /// <summary>
             /// "lParam = MAKELPARAM(nMinRange, nMaxRange)"
             /// </summary>
-            TDM_SET_PROGRESS_BAR_RANGE = WindowMessages.WM_USER + 105,
+            TDM_SET_PROGRESS_BAR_RANGE = User32.WM_USER + 105,
 
             /// <summary>
             /// "wParam = new position"
             /// </summary>
-            TDM_SET_PROGRESS_BAR_POS = WindowMessages.WM_USER + 106,
+            TDM_SET_PROGRESS_BAR_POS = User32.WM_USER + 106,
 
             /// <summary>
             /// "wParam = 0 (stop marquee), wParam != 0 (start marquee),
             /// lparam = speed (milliseconds between repaints)"
             /// </summary>
-            TDM_SET_PROGRESS_BAR_MARQUEE = WindowMessages.WM_USER + 107,
+            TDM_SET_PROGRESS_BAR_MARQUEE = User32.WM_USER + 107,
 
             /// <summary>
             /// "wParam = element (TASKDIALOG_ELEMENTS), lParam = new element text (LPCWSTR)"
             /// </summary>
-            TDM_SET_ELEMENT_TEXT = WindowMessages.WM_USER + 108,
+            TDM_SET_ELEMENT_TEXT = User32.WM_USER + 108,
 
             /// <summary>
             /// "wParam = Radio Button ID"
             /// </summary>
-            TDM_CLICK_RADIO_BUTTON = WindowMessages.WM_USER + 110,
+            TDM_CLICK_RADIO_BUTTON = User32.WM_USER + 110,
 
             /// <summary>
             /// "lParam = 0 (disable), lParam != 0 (enable), wParam = Button ID"
             /// </summary>
-            TDM_ENABLE_BUTTON = WindowMessages.WM_USER + 111,
+            TDM_ENABLE_BUTTON = User32.WM_USER + 111,
 
             /// <summary>
             /// "lParam = 0 (disable), lParam != 0 (enable), wParam = Radio Button ID"
             /// </summary>
-            TDM_ENABLE_RADIO_BUTTON = WindowMessages.WM_USER + 112,
+            TDM_ENABLE_RADIO_BUTTON = User32.WM_USER + 112,
 
             /// <summary>
             /// "wParam = 0 (unchecked), 1 (checked), lParam = 1 (set key focus)"
             /// </summary>
-            TDM_CLICK_VERIFICATION = WindowMessages.WM_USER + 113,
+            TDM_CLICK_VERIFICATION = User32.WM_USER + 113,
 
             /// <summary>
             /// "wParam = element (TASKDIALOG_ELEMENTS), lParam = new element text (LPCWSTR)"
             /// </summary>
-            TDM_UPDATE_ELEMENT_TEXT = WindowMessages.WM_USER + 114,
+            TDM_UPDATE_ELEMENT_TEXT = User32.WM_USER + 114,
 
             /// <summary>
             /// "wParam = Button ID, lParam = 0 (elevation not required),
             /// lParam != 0 (elevation required)"
             /// </summary>
-            TDM_SET_BUTTON_ELEVATION_REQUIRED_STATE = WindowMessages.WM_USER + 115,
+            TDM_SET_BUTTON_ELEVATION_REQUIRED_STATE = User32.WM_USER + 115,
 
             /// <summary>
             /// "wParam = icon element (TASKDIALOG_ICON_ELEMENTS), lParam = new icon
             /// (hIcon if TDF_USE_HICON_* was set, PCWSTR otherwise)"
             /// </summary>
-            TDM_UPDATE_ICON = WindowMessages.WM_USER + 116
+            TDM_UPDATE_ICON = User32.WM_USER + 116
         }
 
         public enum TASKDIALOG_NOTIFICATIONS : int

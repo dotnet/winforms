@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 using TaskDialogButtonStruct = Interop.TaskDialog.TASKDIALOG_BUTTON;
 using TaskDialogCallbackDelegate = Interop.TaskDialog.PFTASKDIALOGCALLBACK;
@@ -66,7 +67,8 @@ namespace System.Windows.Forms
         /// might want to send when they also subclassed the dialog window, although
         /// that should be unlikely.
         /// </remarks>
-        private const int ContinueButtonClickHandlingMessage = Interop.WindowMessages.WM_APP + 0x3FFF;
+        private const User32.WindowMessage ContinueButtonClickHandlingMessage =
+            (User32.WindowMessage)(User32.WM_APP + 0x3FFF);
 
         /// <summary>
         /// The delegate for the callback handler (that calls
@@ -1023,7 +1025,7 @@ namespace System.Windows.Forms
             // (or null) with this method causes the window title to be empty.
             // We could replicate the Task Dialog behavior by also using the
             // executable's name as title if the string is null or empty.
-            if (Interop.User32.SetWindowTextW(new HandleRef(this, Handle), caption) == 0)
+            if (User32.SetWindowTextW(new HandleRef(this, Handle), caption) == 0)
             {
                 Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
             }
@@ -1199,16 +1201,16 @@ namespace System.Windows.Forms
                         // "ContinueButtonClickHandlingMessage" for more information.
                         if (_ignoreButtonClickedNotifications)
                         {
-                            return Interop.HRESULT.S_FALSE;
+                            return HRESULT.S_FALSE;
                         }
 
                         // Post the message, and then set the flag to ignore further
                         // notifications until we receive the posted message.
-                        if (!UnsafeNativeMethods.PostMessage(
-                            new HandleRef(this, hWnd),
+                        if (User32.PostMessageW(
+                            hWnd,
                             ContinueButtonClickHandlingMessage,
                             IntPtr.Zero,
-                            IntPtr.Zero))
+                            IntPtr.Zero) == IntPtr.Zero)
                         {
                             // Ignore. This should not happen in normal circumstances, and even then
                             // we don't need to fail.
@@ -1310,7 +1312,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        return applyButtonResult ? Interop.HRESULT.S_OK : Interop.HRESULT.S_FALSE;
+                        return applyButtonResult ? HRESULT.S_OK : HRESULT.S_FALSE;
 
                     case TaskDialogNotification.TDN_RADIO_BUTTON_CLICKED:
                         int radioButtonID = (int)wParam;
@@ -1356,7 +1358,7 @@ namespace System.Windows.Forms
                 HandleCallbackException(ex);
             }
 
-            return Interop.HRESULT.S_OK;
+            return HRESULT.S_OK;
         }
 
         /// <summary>
@@ -1850,9 +1852,9 @@ namespace System.Windows.Forms
         {
             DenyIfDialogNotUpdatable(checkWaitingForNavigation);
 
-            UnsafeNativeMethods.SendMessage(
-                new HandleRef(this, Handle),
-                (int)message,
+            User32.SendMessageW(
+                Handle,
+                (User32.WindowMessage)message,
                 // Note: When a negative 32-bit integer is converted to a
                 // 64-bit pointer, the high dword will be set to 0xFFFFFFFF.
                 // This is consistent with the conversion from int to

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -46,7 +47,7 @@ namespace System.Windows.Forms
         /// to store reference data. However, this is also the way that the
         /// NativeWindow class of WinForms does it.
         /// </remarks>
-        private readonly NativeMethods.WndProc _windowProcDelegate;
+        private readonly User32.WNDPROC _windowProcDelegate;
 
         /// <summary>
         /// The function pointer created from <see cref="_windowProcDelegate"/>.
@@ -104,10 +105,10 @@ namespace System.Windows.Forms
             // it, to check if the call succeeded, because if the function returns null
             // but it succeeded, it doesn't necessarily set the last Win32 error to 0.
             NativeMethods.SetLastError(0);
-            _originalWindowProc = UnsafeNativeMethods.SetWindowLong(
-                    new HandleRef(this, _handle),
-                    NativeMethods.GWL_WNDPROC,
-                    new HandleRef(null, _windowProcDelegatePtr));
+            _originalWindowProc = User32.SetWindowLong(
+                    _handle,
+                    User32.GWL.WNDPROC,
+                    _windowProcDelegatePtr);
             if (_originalWindowProc == IntPtr.Zero && Marshal.GetLastWin32Error() != 0)
                 throw new Win32Exception();
 
@@ -140,9 +141,9 @@ namespace System.Windows.Forms
             {
                 // Check if the current window procedure is the correct one.
                 NativeMethods.SetLastError(0);
-                IntPtr currentWindowProcedure = UnsafeNativeMethods.GetWindowLong(
-                        new HandleRef(this, _handle),
-                        NativeMethods.GWL_WNDPROC);
+                IntPtr currentWindowProcedure = User32.GetWindowLong(
+                        _handle,
+                        User32.GWL.WNDPROC);
                 if (currentWindowProcedure == IntPtr.Zero && Marshal.GetLastWin32Error() != 0)
                     throw new Win32Exception();
 
@@ -153,10 +154,10 @@ namespace System.Windows.Forms
                 // Undo the subclassing by restoring the original window
                 // procedure.
                 NativeMethods.SetLastError(0);
-                if (UnsafeNativeMethods.SetWindowLong(
-                        new HandleRef(this, _handle),
-                        NativeMethods.GWL_WNDPROC,
-                        new HandleRef(null, _originalWindowProc)) == IntPtr.Zero &&
+                if (User32.SetWindowLong(
+                        _handle,
+                        User32.GWL.WNDPROC,
+                        _originalWindowProc) == IntPtr.Zero &&
                         Marshal.GetLastWin32Error() != 0)
                     throw new Win32Exception();
 
@@ -173,12 +174,12 @@ namespace System.Windows.Forms
             // Call the original window procedure to process the message.
             if (_originalWindowProc != IntPtr.Zero)
             {
-                m.Result = UnsafeNativeMethods.CallWindowProc(
-                        _originalWindowProc,
-                        m.HWnd,
-                        m.Msg,
-                        m.WParam,
-                        m.LParam);
+                m.Result = User32.CallWindowProcW(
+                    _originalWindowProc,
+                    m.HWnd,
+                    (User32.WindowMessage)m.Msg,
+                    m.WParam,
+                    m.LParam);
             }
         }
 
