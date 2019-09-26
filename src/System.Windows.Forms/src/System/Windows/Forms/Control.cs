@@ -5919,12 +5919,12 @@ namespace System.Windows.Forms
         private MenuItem GetMenuItemFromHandleId(IntPtr hmenu, int item)
         {
             MenuItem mi = null;
-            int id = UnsafeNativeMethods.GetMenuItemID(new HandleRef(null, hmenu), item);
+            int id = User32.GetMenuItemID(hmenu, item);
             if (id == unchecked((int)0xFFFFFFFF))
             {
                 IntPtr childMenu = IntPtr.Zero;
-                childMenu = UnsafeNativeMethods.GetSubMenu(new HandleRef(null, hmenu), item);
-                int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(null, childMenu));
+                childMenu = User32.GetSubMenu(hmenu, item);
+                int count = User32.GetMenuItemCount(childMenu);
                 MenuItem found = null;
                 for (int i = 0; i < count; i++)
                 {
@@ -12297,15 +12297,15 @@ namespace System.Windows.Forms
         private void WmMenuSelect(ref Message m)
         {
             int item = NativeMethods.Util.LOWORD(m.WParam);
-            int flags = NativeMethods.Util.HIWORD(m.WParam);
+            User32.MF flags = (User32.MF)NativeMethods.Util.HIWORD(m.WParam);
             IntPtr hmenu = m.LParam;
             MenuItem mi = null;
 
-            if ((flags & NativeMethods.MF_SYSMENU) != 0)
+            if ((flags & User32.MF.SYSMENU) != 0)
             {
                 // nothing
             }
-            else if ((flags & NativeMethods.MF_POPUP) == 0)
+            else if ((flags & User32.MF.POPUP) == 0)
             {
                 Command cmd = Command.GetCommandFromID(item);
                 if (cmd != null)
@@ -13322,7 +13322,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WindowMessages.WM_SYSCOMMAND:
-                    if ((unchecked((int)(long)m.WParam) & 0xFFF0) == NativeMethods.SC_KEYMENU)
+                    if ((User32.SC)(unchecked((int)(long)m.WParam) & 0xFFF0) == User32.SC.KEYMENU)
                     {
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
 

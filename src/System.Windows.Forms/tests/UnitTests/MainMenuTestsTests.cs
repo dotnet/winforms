@@ -91,7 +91,6 @@ namespace System.Windows.Forms.Tests
 
             MainMenu menu = form.Menu;
             Assert.Equal(form, menu.GetForm());
-            Assert.Equal(form, menu.GetFormUnsafe());
         }
 
         [Theory]

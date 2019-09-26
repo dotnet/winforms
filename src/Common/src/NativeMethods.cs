@@ -663,12 +663,6 @@ namespace System.Windows.Forms
         MIIM_BITMAP = 0x00000080,
         MIIM_FTYPE = 0x00000100,
         MB_OK = 0x00000000,
-        MF_BYCOMMAND = 0x00000000,
-        MF_BYPOSITION = 0x00000400,
-        MF_ENABLED = 0x00000000,
-        MF_GRAYED = 0x00000001,
-        MF_POPUP = 0x00000010,
-        MF_SYSMENU = 0x00002000,
         MFS_DISABLED = 0x00000003,
         MFT_MENUBREAK = 0x00000040,
         MFT_SEPARATOR = 0x00000800,
@@ -858,14 +852,6 @@ namespace System.Windows.Forms
         HLP_OBJECT = 4;
 
         public const int
-        SC_SIZE = 0xF000,
-        SC_MINIMIZE = 0xF020,
-        SC_MAXIMIZE = 0xF030,
-        SC_CLOSE = 0xF060,
-        SC_KEYMENU = 0xF100,
-        SC_RESTORE = 0xF120,
-        SC_MOVE = 0xF010,
-        SC_CONTEXTHELP = 0xF180,
         SS_LEFT = 0x00000000,
         SS_CENTER = 0x00000001,
         SS_RIGHT = 0x00000002,

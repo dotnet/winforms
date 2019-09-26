@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -12,16 +13,15 @@ namespace System.Windows.Forms
     [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
     public class MainMenu : Menu
     {
-        internal Form form;
+        internal Form _form;
         internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
-        private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
-        private EventHandler onCollapse;
+        private RightToLeft _rightToLeft = RightToLeft.Inherit;
+        private EventHandler _onCollapse;
 
         /// <summary>
         ///  Creates a new MainMenu control.
         /// </summary>
-        public MainMenu()
-            : base(null)
+        public MainMenu() : base(null)
         {
         }
 
@@ -39,91 +39,70 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a new MainMenu control with the given items to start
-        ///  with.
+        ///  Creates a new MainMenu control with the given items to start with.
         /// </summary>
-        public MainMenu(MenuItem[] items)
-            : base(items)
+        public MainMenu(MenuItem[] items) : base(items)
         {
         }
 
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse
         {
-            add => onCollapse += value;
-            remove => onCollapse -= value;
+            add => _onCollapse += value;
+            remove => _onCollapse -= value;
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        ///  text alignment and reading order will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, text alignment and reading order will be from right to left.
         /// </summary>
-        // Add an AmbientValue attribute so that the Reset context menu becomes available in the Property Grid.
-        [
-        Localizable(true),
-        AmbientValue(RightToLeft.Inherit),
-        SRDescription(nameof(SR.MenuRightToLeftDescr))
-        ]
+        [Localizable(true)]
+        [AmbientValue(RightToLeft.Inherit)]
+        [SRDescription(nameof(SR.MenuRightToLeftDescr))]
         public virtual RightToLeft RightToLeft
         {
             get
             {
-                if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
+                if (_rightToLeft == RightToLeft.Inherit)
                 {
-                    if (form != null)
+                    if (_form != null)
                     {
-                        return form.RightToLeft;
+                        return _form.RightToLeft;
                     }
-                    else
-                    {
-                        return RightToLeft.Inherit;
-                    }
+                    
+                    return RightToLeft.Inherit;
                 }
-                else
-                {
-                    return rightToLeft;
-                }
+                
+                return _rightToLeft;
             }
             set
             {
-
-                //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
                 {
                     throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
-                if (rightToLeft != value)
+
+                if (_rightToLeft != value)
                 {
-                    rightToLeft = value;
-                    UpdateRtl((value == System.Windows.Forms.RightToLeft.Yes));
+                    _rightToLeft = value;
+                    UpdateRtl((value == RightToLeft.Yes));
                 }
-
             }
         }
 
-        internal override bool RenderIsRightToLeft
-        {
-            get
-            {
-                return (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form == null || !form.IsMirrored));
-            }
-        }
+        internal override bool RenderIsRightToLeft => (RightToLeft == RightToLeft.Yes && (_form == null || !_form.IsMirrored));
 
         /// <summary>
         ///  Creates a new MainMenu object which is a dupliate of this one.
         /// </summary>
         public virtual MainMenu CloneMenu()
         {
-            MainMenu newMenu = new MainMenu();
+            var newMenu = new MainMenu();
             newMenu.CloneMenu(this);
             return newMenu;
         }
 
-        protected override IntPtr CreateMenuHandle()
-        {
-            return UnsafeNativeMethods.CreateMenu();
-        }
+        protected override IntPtr CreateMenuHandle() => User32.CreateMenu();
 
         /// <summary>
         ///  Clears out this MainMenu object and discards all of it's resources.
@@ -134,71 +113,41 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (form != null && (ownerForm == null || form == ownerForm))
+                if (_form != null && (ownerForm == null || _form == ownerForm))
                 {
-                    form.Menu = null;
+                    _form.Menu = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
         /// <summary>
         ///  Indicates which form in which we are currently residing [if any]
         /// </summary>
-        public Form GetForm()
-        {
-            return form;
-        }
-
-        internal Form GetFormUnsafe()
-        {
-            return form;
-        }
+        public Form GetForm() => _form;
 
         internal override void ItemsChanged(int change)
         {
             base.ItemsChanged(change);
-            if (form != null)
-            {
-                form.MenuChanged(change, this);
-            }
+            _form?.MenuChanged(change, this);
         }
 
-        internal virtual void ItemsChanged(int change, Menu menu)
-        {
-            if (form != null)
-            {
-                form.MenuChanged(change, menu);
-            }
-        }
+        internal virtual void ItemsChanged(int change, Menu menu) => _form?.MenuChanged(change, menu);
 
         /// <summary>
         ///  Fires the collapse event
         /// </summary>
-        protected internal virtual void OnCollapse(EventArgs e)
-        {
-            onCollapse?.Invoke(this, e);
-        }
+        protected internal virtual void OnCollapse(EventArgs e) => _onCollapse?.Invoke(this, e);
 
         /// <summary>
         ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
-        internal virtual bool ShouldSerializeRightToLeft()
-        {
-            if (System.Windows.Forms.RightToLeft.Inherit == RightToLeft)
-            {
-                return false;
-            }
-            return true;
-        }
+        internal virtual bool ShouldSerializeRightToLeft() => _rightToLeft == RightToLeft.Inherit;
 
         /// <summary>
         ///  Returns a string representation for this control.
         /// </summary>
-        public override string ToString()
-        {
-            // Removing GetForm information
-            return base.ToString();
-        }
+        public override string ToString() => base.ToString();
     }
 }

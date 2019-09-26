@@ -1547,18 +1547,18 @@ namespace System.Windows.Forms
                 {
                     if (mainMenu != null)
                     {
-                        mainMenu.form = null;
+                        mainMenu._form = null;
                     }
 
                     Properties.SetObject(PropMainMenu, value);
 
                     if (value != null)
                     {
-                        if (value.form != null)
+                        if (value._form != null)
                         {
-                            value.form.Menu = null;
+                            value._form.Menu = null;
                         }
-                        value.form = this;
+                        value._form = this;
                     }
 
                     if (formState[FormStateSetClientSize] == 1 && !IsHandleCreated)
@@ -3027,53 +3027,43 @@ namespace System.Windows.Forms
 
             if (!showMin)
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_MINIMIZE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_GRAYED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MINIMIZE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
             }
             else
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_MINIMIZE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_ENABLED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MINIMIZE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
             }
             if (!showMax)
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_MAXIMIZE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_GRAYED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MAXIMIZE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
             }
             else
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_MAXIMIZE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_ENABLED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MAXIMIZE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
             }
             if (!showClose)
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_CLOSE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_GRAYED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.CLOSE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
             }
             else
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_CLOSE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_ENABLED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.CLOSE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
             }
             if (!showRestore)
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_RESTORE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_GRAYED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.RESTORE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
             }
             else
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_RESTORE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_ENABLED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.RESTORE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
             }
             if (!showSize)
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_SIZE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_GRAYED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.SIZE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
             }
             else
             {
-                UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_SIZE,
-                                       NativeMethods.MF_BYCOMMAND | NativeMethods.MF_ENABLED);
+                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.SIZE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
             }
         }
 
@@ -3084,9 +3074,8 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                IntPtr hmenu = UnsafeNativeMethods.GetSystemMenu(new HandleRef(this, Handle), false);
+                IntPtr hmenu = User32.GetSystemMenu(new HandleRef(this, Handle), bRevert: BOOL.FALSE);
                 AdjustSystemMenu(hmenu);
-                hmenu = IntPtr.Zero;
             }
         }
 
@@ -3673,7 +3662,7 @@ namespace System.Windows.Forms
 
                 if (mergedMenu != null)
                 {
-                    if (mergedMenu.ownerForm == this || mergedMenu.form == null)
+                    if (mergedMenu.ownerForm == this || mergedMenu._form == null)
                     {
                         mergedMenu.Dispose();
                     }
@@ -6086,7 +6075,7 @@ namespace System.Windows.Forms
             MainMenu curMenu = menu;
             if (curMenu != null)
             {
-                curMenu.form = this;
+                curMenu._form = this;
             }
 
             if (curMenu != null || Properties.ContainsObject(PropCurMenu))
@@ -6098,11 +6087,11 @@ namespace System.Windows.Forms
             {
                 if (menu != null)
                 {
-                    UnsafeNativeMethods.SetMenu(new HandleRef(this, Handle), new HandleRef(menu, menu.Handle));
+                    User32.SetMenu(this, new HandleRef(menu, menu.Handle));
                 }
                 else
                 {
-                    UnsafeNativeMethods.SetMenu(new HandleRef(this, Handle), NativeMethods.NullHandleRef);
+                    User32.SetMenu(this, NativeMethods.NullHandleRef);
                 }
             }
             else
@@ -6145,14 +6134,14 @@ namespace System.Windows.Forms
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
                 if (menu == null && mainMenuStrip != null)
                 { // If MainMenuStrip, we need to remove any Win32 Menu to make room for it.
-                    IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, Handle));
+                    IntPtr hMenu = User32.GetMenu(this);
                     if (hMenu != IntPtr.Zero)
                     {
 
                         // We had a MainMenu and now we're switching over to MainMenuStrip
 
                         // Remove the current menu.
-                        UnsafeNativeMethods.SetMenu(new HandleRef(this, Handle), NativeMethods.NullHandleRef);
+                        User32.SetMenu(this, NativeMethods.NullHandleRef);
 
                         // because we have messed with the child's system menu by shoving in our own dummy menu,
                         // once we clear the main menu we're in trouble - this eats the close, minimize, maximize gadgets
@@ -6308,7 +6297,7 @@ namespace System.Windows.Forms
                         if (Menu == null)
                         {
                             // double check GetMenu incase someone is using interop
-                            IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, Handle));
+                            IntPtr hMenu = User32.GetMenu(this);
                             if (hMenu == IntPtr.Zero)
                             {
                                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
@@ -6904,7 +6893,7 @@ namespace System.Windows.Forms
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                 if (formMdiParent != null && formMdiParent.Menu != null)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), WindowMessages.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), WindowMessages.WM_SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, m.WParam);
                     m.Result = (IntPtr)NativeMethods.Util.MAKELONG(0, 1);
                     return;
                 }
@@ -7071,29 +7060,28 @@ namespace System.Windows.Forms
         {
             bool callDefault = true;
 
-            int sc = (NativeMethods.Util.LOWORD(m.WParam) & 0xFFF0);
-
+            User32.SC sc = (User32.SC)(NativeMethods.Util.LOWORD(m.WParam) & 0xFFF0);
             switch (sc)
             {
-                case NativeMethods.SC_CLOSE:
+                case User32.SC.CLOSE:
                     CloseReason = CloseReason.UserClosing;
                     if (IsMdiChild && !ControlBox)
                     {
                         callDefault = false;
                     }
                     break;
-                case NativeMethods.SC_KEYMENU:
+                case User32.SC.KEYMENU:
                     if (IsMdiChild && !ControlBox)
                     {
                         callDefault = false;
                     }
                     break;
-                case NativeMethods.SC_SIZE:
-                case NativeMethods.SC_MOVE:
+                case User32.SC.SIZE:
+                case User32.SC.MOVE:
                     // Set this before WM_ENTERSIZELOOP because WM_GETMINMAXINFO can be called before WM_ENTERSIZELOOP.
                     formStateEx[FormStateExInModalSizingLoop] = 1;
                     break;
-                case NativeMethods.SC_CONTEXTHELP:
+                case User32.SC.CONTEXTHELP:
                     CancelEventArgs e = new CancelEventArgs(false);
                     OnHelpButtonClicked(e);
                     if (e.Cancel == true)
