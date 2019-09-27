@@ -337,15 +337,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool BitBlt(IntPtr hDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, int dwRop);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ShowCaret(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool HideCaret(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern uint GetCaretBlinkTime();
-
         // Theming/Visual Styles
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern bool IsAppThemed();
