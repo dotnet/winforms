@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -4686,27 +4686,27 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
         <source>Button</source>
-        <target state="needs-review-translation">Button</target>
+        <target state="translated">Pulsante</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
         <source>Image</source>
-        <target state="needs-review-translation">Image</target>
+        <target state="translated">Immagine</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">Collegamento</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Modifica</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -7838,7 +7838,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="OnlyOneControl">
         <source>Cannot add or insert the item '{0}' in more than one place. You must first remove it from its current location or clone it.</source>
-        <target state="translated">Impossibile aggiungere o inserire l'elemento '{0}' in più di una posizione. Rimuoverlo prima dalla posizione corrente oppure duplicarlo.</target>
+        <target state="translated">Non è possibile aggiungere o inserire l'elemento '{0}' in più di una posizione. Rimuoverlo prima dalla posizione corrente oppure clonarlo.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">

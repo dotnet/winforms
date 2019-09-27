@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -4621,7 +4621,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DateTimePickerLocalizedControlType">
         <source>date and time picker</source>
-        <target state="translated">日付と時刻の選択</target>
+        <target state="translated">日付と時刻のピッカー</target>
         <note />
       </trans-unit>
       <trans-unit id="DateTimePickerMaxDate">
@@ -4686,27 +4686,27 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
         <source>Button</source>
-        <target state="needs-review-translation">Button</target>
+        <target state="translated">ボタン</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">コンボ ボックス</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
         <source>Image</source>
-        <target state="needs-review-translation">Image</target>
+        <target state="translated">イメージ</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">リンク</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">編集</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -7838,7 +7838,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="OnlyOneControl">
         <source>Cannot add or insert the item '{0}' in more than one place. You must first remove it from its current location or clone it.</source>
-        <target state="translated">複数の場所にアイテム '{0}' を追加または挿入することはできません。最初に現在の場所から削除するか、複製を作成しなければなりません。</target>
+        <target state="translated">複数の場所にアイテム '{0}' を追加または挿入することはできません。最初に現在の場所から削除するか、クローンを作成しなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">

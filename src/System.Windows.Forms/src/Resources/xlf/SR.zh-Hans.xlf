@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -4686,27 +4686,27 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
         <source>Button</source>
-        <target state="needs-review-translation">Button</target>
+        <target state="translated">按钮</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">组合框</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
         <source>Image</source>
-        <target state="needs-review-translation">Image</target>
+        <target state="translated">图像</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">链接</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">编辑</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">

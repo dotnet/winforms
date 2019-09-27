@@ -64,7 +64,7 @@
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="translated">Палитра цветов</target>
+        <target state="translated">Палитра</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">
@@ -84,7 +84,7 @@
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="translated">Выбор дока</target>
+        <target state="translated">Средство выбора дока</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">

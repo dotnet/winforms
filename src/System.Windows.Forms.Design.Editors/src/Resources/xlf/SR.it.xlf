@@ -84,7 +84,7 @@
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="translated">Selettore ancoraggio</target>
+        <target state="translated">Selezione ancoraggio</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
