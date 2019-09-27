@@ -22,9 +22,9 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Accessibility;
 using Microsoft.Win32;
+using static Interop;
 using Encoding = System.Text.Encoding;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -9123,10 +9123,10 @@ namespace System.Windows.Forms
                 }
 
                 // Next, use input flags to decide whether to validate the control itself
-                if ((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable) ||
-                    (validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled ||
-                    (validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible ||
-                    (validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop)
+                if (((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable)) ||
+                    ((validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled) ||
+                    ((validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible) ||
+                    ((validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop))
                 {
                     continue;
                 }
@@ -11147,7 +11147,7 @@ namespace System.Windows.Forms
                         User32.ShowWindow(Handle, value ? ShowParams : User32.SW.HIDE);
                     }
                 }
-                else if (IsHandleCreated || value && _parent != null && _parent.Created)
+                else if (IsHandleCreated || (value && _parent?.Created == true))
                 {
                     // We want to mark the control as visible so that CreateControl
                     // knows that we are going to be displayed... however in case

@@ -3617,7 +3617,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < currentObjects.Length; i++)
                 {
                     Type typeChanged = e.TypeChanged;
-                    if (currentObjects[i] == e.ComponentChanged || typeChanged != null && typeChanged.IsAssignableFrom(currentObjects[i].GetType()))
+                    if (currentObjects[i] == e.ComponentChanged || typeChanged?.IsAssignableFrom(currentObjects[i].GetType()) == true)
                     {
                         // clear our property hashes
                         ClearCachedProps();

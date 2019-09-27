@@ -972,10 +972,10 @@ namespace System.Windows.Forms
         {
             bool needLayout = false;
 
-            if (!horiz && HScroll
-                || horiz && !HScroll
-                || !vert && VScroll
-                || vert && !VScroll)
+            if ((!horiz && HScroll)
+                || (horiz && !HScroll)
+                || (!vert && VScroll)
+                || (vert && !VScroll))
             {
 
                 needLayout = true;
