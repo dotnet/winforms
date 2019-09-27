@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -4686,27 +4686,27 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
         <source>Button</source>
-        <target state="needs-review-translation">Button</target>
+        <target state="translated">Schaltfläche</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
         <source>Image</source>
-        <target state="needs-review-translation">Image</target>
+        <target state="translated">Bild</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">Link</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Bearbeiten</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">

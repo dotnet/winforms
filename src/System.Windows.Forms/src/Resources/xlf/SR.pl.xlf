@@ -904,7 +904,7 @@
       </trans-unit>
       <trans-unit id="Clipboard_InvalidPath">
         <source>Path "{0}" in the argument "{1}" is not valid.</source>
-        <target state="translated">Ścieżka "{0}" w argumencie "{1}" jest nieprawidłowa.</target>
+        <target state="translated">Ścieżka „{0}” w argumencie „{1}” jest nieprawidłowa.</target>
         <note />
       </trans-unit>
       <trans-unit id="CloseCaption">
@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -4686,27 +4686,27 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
         <source>Button</source>
-        <target state="needs-review-translation">Button</target>
+        <target state="translated">Przycisk</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
         <source>Image</source>
-        <target state="needs-review-translation">Image</target>
+        <target state="translated">Obraz</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">Łącze</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Edytuj</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
