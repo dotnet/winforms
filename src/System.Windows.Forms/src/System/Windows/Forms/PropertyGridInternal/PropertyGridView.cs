@@ -1086,6 +1086,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                             SelectRow(selectedRow);
                         }
                     }
+
+                    if (selectedRow != -1)
+                    {
+                        var gridEntry = GetGridEntryFromRow(selectedRow);
+                        if (gridEntry != null)
+                        {
+                            gridEntry.AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                            gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                                NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                                UnsafeNativeMethods.ExpandCollapseState.Expanded,
+                                UnsafeNativeMethods.ExpandCollapseState.Collapsed);
+                        }
+                    }
                 }
             }
             finally
@@ -1944,6 +1957,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             dropDownHolder.FocusComponent();
             SelectEdit(false);
 
+            var gridEntry = GetGridEntryFromRow(selectedRow);
+            if (gridEntry != null)
+            {
+                gridEntry.AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                    UnsafeNativeMethods.ExpandCollapseState.Collapsed,
+                    UnsafeNativeMethods.ExpandCollapseState.Expanded);
+            }
+
             try
             {
                 DropDownButton.IgnoreMouse = true;
@@ -2440,7 +2463,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return rect;
         }
 
-        internal /*protected virtual*/ int GetRowFromGridEntry(GridEntry gridEntry)
+        internal int GetRowFromGridEntry(GridEntry gridEntry)
         {
             GridEntryCollection rgipesAll = GetAllGridEntries();
             if (gridEntry == null || rgipesAll == null)
