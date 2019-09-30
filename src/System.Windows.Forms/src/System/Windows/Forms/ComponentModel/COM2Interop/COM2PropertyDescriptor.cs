@@ -1371,14 +1371,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 }
                                 else
                                 {
-                                    errorInfo = strMessage.ToString();
-                                    // strip of any trailing cr/lf
-                                    while (errorInfo.Length > 0 &&
-                                            errorInfo[errorInfo.Length - 1] == '\n' ||
-                                            errorInfo[errorInfo.Length - 1] == '\r')
-                                    {
-                                        errorInfo = errorInfo.Substring(0, errorInfo.Length - 1);
-                                    }
+                                    errorInfo = TrimNewline(strMessage);
                                 }
                             }
                             throw new ExternalException(errorInfo, (int)hr);
@@ -1394,6 +1387,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 gcHandle.Free();
             }
+        }
+
+        private static string TrimNewline(StringBuilder errorInfo)
+        {
+            int index = errorInfo.Length - 1;
+            while (index >= 0 && (errorInfo[index] == '\n' || errorInfo[index] == '\r'))
+            {
+                index--;
+            }
+
+            return errorInfo.ToString(0, index + 1);
         }
 
         /// <summary>
