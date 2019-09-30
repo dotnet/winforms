@@ -22,67 +22,77 @@ using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// A task dialog allows to display information and get simple input from the user. It is similar
-    /// to a <see cref="MessageBox"/> (in that it is formatted by the operating system) but provides
-    /// a lot more features.
+    ///   A task dialog allows to display information and get simple input from the user. It is similar
+    ///   to a <see cref="MessageBox"/> (in that it is formatted by the operating system) but provides
+    ///   a lot more features.
     /// </summary>
     /// <remarks>
-    /// For more information, see:
-    /// https://docs.microsoft.com/en-us/windows/desktop/Controls/task-dialogs-overview
-    /// 
-    /// Note: In order to use the dialog, you need ensure <see cref="Application.EnableVisualStyles"/>
-    /// has been called before showing the dialog, or the application needs to be compiled with a
-    /// manifest that contains a dependency to Microsoft.Windows.Common-Controls (6.0.0.0).
-    /// Additionally, the current thread should use the single-threaded apartment (STA) model.
+    /// <para>
+    ///   For more information, see:
+    ///   https://docs.microsoft.com/en-us/windows/desktop/Controls/task-dialogs-overview
+    /// </para>
+    /// <para>
+    ///   Note: In order to use the dialog, you need ensure <see cref="Application.EnableVisualStyles"/>
+    ///   has been called before showing the dialog, or the application needs to be compiled with a
+    ///   manifest that contains a dependency to Microsoft.Windows.Common-Controls (6.0.0.0).
+    ///   Additionally, the current thread should use the single-threaded apartment (STA) model.
+    /// </para>
     /// </remarks>
     public partial class TaskDialog : IWin32Window
     {
         /// <summary>
-        /// A self-defined window message that we post to the task dialog when
-        /// handling a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
-        /// notification, so that we will ignore further
-        /// <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> notifications
-        /// until we process the posted message.
+        ///   A self-defined window message that we post to the task dialog when
+        ///   handling a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   notification, so that we will ignore further
+        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> notifications
+        ///   until we process the posted message.
         /// </summary>
         /// <remarks>
-        /// This is used to work-around a bug in the native task dialog, where
-        /// a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> notification
-        /// seems to be sent twice to the callback when you "click" a button by
-        /// pressing its access key (mnemonic) and the dialog is still open when
-        /// continuing the message loop.
-        /// 
-        /// This work-around should not have negative effects, such as erroneously
-        /// ignoring a valid button clicked notification when the user presses the
-        /// button multiple times while the GUI thread is hangs - this seems
-        /// to work correctly, as our posted message will be processed before
-        /// further (valid) <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
-        /// notifications are processed.
-        /// 
-        /// See documentation/repro in
-        /// /Documentation/src/System/Windows/Forms/TaskDialog/Issue_ButtonClickHandlerCalledTwice.md
-        /// 
-        /// Note: We use a WM_APP message with a high value (WM_USER is not
-        /// appropriate as it is private to the control class), in order to avoid
-        /// conflicts with WM_APP messages which other parts of the application
-        /// might want to send when they also subclassed the dialog window, although
-        /// that should be unlikely.
+        /// <para>
+        ///   This is used to work-around a bug in the native task dialog, where
+        ///   a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> notification
+        ///   seems to be sent twice to the callback when you "click" a button by
+        ///   pressing its access key (mnemonic) and the dialog is still open when
+        ///   continuing the message loop.
+        /// </para>
+        /// <para>
+        ///   This work-around should not have negative effects, such as erroneously
+        ///   ignoring a valid button clicked notification when the user presses the
+        ///   button multiple times while the GUI thread is hangs - this seems
+        ///   to work correctly, as our posted message will be processed before
+        ///   further (valid) <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   notifications are processed.
+        /// </para>
+        /// <para>
+        ///   See documentation/repro in
+        ///   /Documentation/src/System/Windows/Forms/TaskDialog/Issue_ButtonClickHandlerCalledTwice.md
+        /// </para>
+        /// <para>
+        ///   Note: We use a WM_APP message with a high value (WM_USER is not
+        ///   appropriate as it is private to the control class), in order to avoid
+        ///   conflicts with WM_APP messages which other parts of the application
+        ///   might want to send when they also subclassed the dialog window, although
+        ///   that should be unlikely.
+        /// </para>
         /// </remarks>
         private const User32.WindowMessage ContinueButtonClickHandlingMessage =
             (User32.WindowMessage)(User32.WM_APP + 0x3FFF);
 
         /// <summary>
-        /// The delegate for the callback handler (that calls
-        /// <see cref="HandleTaskDialogCallback"/>) from which the native function
-        /// pointer <see cref="s_callbackProcDelegatePtr"/> is created. 
+        ///   The delegate for the callback handler (that calls
+        ///   <see cref="HandleTaskDialogCallback"/>) from which the native function
+        ///   pointer <see cref="s_callbackProcDelegatePtr"/> is created. 
         /// </summary>
         /// <remarks>
-        /// We must store this delegate (and prevent it from being garbage-collected)
-        /// to ensure the function pointer doesn't become invalid.
+        /// <para>
+        ///   We must store this delegate (and prevent it from being garbage-collected)
+        ///   to ensure the function pointer doesn't become invalid.
+        /// </para>
         /// </remarks>
         private static readonly TaskDialogCallbackDelegate s_callbackProcDelegate;
 
         /// <summary>
-        /// The function pointer created from <see cref="s_callbackProcDelegate"/>.
+        ///   The function pointer created from <see cref="s_callbackProcDelegate"/>.
         /// </summary>
         private static readonly IntPtr s_callbackProcDelegatePtr;
 
@@ -92,162 +102,186 @@ namespace System.Windows.Forms
         private TaskDialogPage? _boundPage;
 
         /// <summary>
-        /// A qeueue of <see cref="TaskDialogPage"/>s that have been bound by
-        /// navigating the dialog, but don't yet reflect the state of the
-        /// native dialog because the corresponding
-        /// <see cref="TaskDialogNotification.TDN_NAVIGATED"/> notification was
-        /// not yet received.
+        ///   A qeueue of <see cref="TaskDialogPage"/>s that have been bound by
+        ///   navigating the dialog, but don't yet reflect the state of the
+        ///   native dialog because the corresponding
+        ///   <see cref="TaskDialogNotification.TDN_NAVIGATED"/> notification was
+        ///   not yet received.
         /// </summary>
         private readonly Queue<TaskDialogPage> _waitingNavigationPages = new Queue<TaskDialogPage>();
 
         /// <summary>
-        /// The <see cref="IntPtr"/> of a <see cref="GCHandle"/> that represents this
-        /// <see cref="TaskDialog"/> instance.
+        ///   The <see cref="IntPtr"/> of a <see cref="GCHandle"/> that represents this
+        ///   <see cref="TaskDialog"/> instance.
         /// </summary>
         private IntPtr _instanceHandlePtr;
 
         private WindowSubclassHandler? _windowSubclassHandler;
 
         /// <summary>
-        /// Stores a value that indicates if the
-        /// <see cref="Opened"/> event has been called and so the
-        /// <see cref="Closed"/> event can be called later.
+        ///   Stores a value that indicates if the
+        ///   <see cref="Opened"/> event has been called and so the
+        ///   <see cref="Closed"/> event can be called later.
         /// </summary>
         /// <remarks>
-        /// This is used to prevent raising the 
-        /// <see cref="Closed"/> event without raising the
-        /// <see cref="Opened"/> event first (e.g. if the dialog cannot be shown
-        /// due to an invalid icon).
+        /// <para>
+        ///   This is used to prevent raising the 
+        ///   <see cref="Closed"/> event without raising the
+        ///   <see cref="Opened"/> event first (e.g. if the dialog cannot be shown
+        ///   due to an invalid icon).
+        /// </para>
         /// </remarks>
         private bool _raisedOpened;
 
         /// <summary>
-        /// Stores a value that indicates if the
-        /// <see cref="TaskDialogPage.Created"/> event has been called for the
-        /// current <see cref="TaskDialogPage"/> and so the corresponding
-        /// <see cref="TaskDialogPage.Destroyed"/> can be called later.
+        ///   Stores a value that indicates if the
+        ///   <see cref="TaskDialogPage.Created"/> event has been called for the
+        ///   current <see cref="TaskDialogPage"/> and so the corresponding
+        ///   <see cref="TaskDialogPage.Destroyed"/> can be called later.
         /// </summary>
         /// <remarks>
-        /// This is used to prevent raising the 
-        /// <see cref="TaskDialogPage.Destroyed"/> event without raising the
-        /// <see cref="TaskDialogPage.Created"/> event first (e.g. if navigation
-        /// fails).
+        /// <para>
+        ///   This is used to prevent raising the 
+        ///   <see cref="TaskDialogPage.Destroyed"/> event without raising the
+        ///   <see cref="TaskDialogPage.Created"/> event first (e.g. if navigation
+        ///   fails).
+        /// </para>
         /// </remarks>
         private bool _raisedPageCreated;
 
         /// <summary>
-        /// A counter which is used to determine whether the dialog has been navigated
-        /// while being in a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler.
+        ///   A counter which is used to determine whether the dialog has been navigated
+        ///   while being in a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler.
         /// </summary>
         /// <remarks>
-        /// When the dialog navigates within a ButtonClicked handler, the handler should
-        /// always return S_FALSE to prevent the dialog from applying the button that
-        /// raised the handler as dialog result. Otherwise, this can lead to memory access
-        /// problems like <see cref="AccessViolationException"/>s, especially if the
-        /// previous dialog page had radio buttons (but the new ones do not).
-        /// 
-        /// See the comment in <see cref="HandleTaskDialogCallback"/> for more
-        /// information.
-        /// 
-        /// When the dialog navigates, it sets the <c>navigationIndex</c> to the current
-        /// <c>stackCount</c> value, so that the ButtonClicked handler can determine
-        /// if the dialog has been navigated after it was called.
-        /// Tracking the stack count and navigation index is necessary as there
-        /// can be multiple ButtonClicked handlers on the call stack, for example
-        /// if a ButtonClicked handler runs the message loop so that new click events
-        /// can be processed.
+        /// <para>
+        ///   When the dialog navigates within a ButtonClicked handler, the handler should
+        ///   always return S_FALSE to prevent the dialog from applying the button that
+        ///   raised the handler as dialog result. Otherwise, this can lead to memory access
+        ///   problems like <see cref="AccessViolationException"/>s, especially if the
+        ///   previous dialog page had radio buttons (but the new ones do not).
+        /// </para>
+        /// <para>
+        ///   See the comment in <see cref="HandleTaskDialogCallback"/> for more
+        ///   information.
+        /// </para>
+        /// <para>
+        ///   When the dialog navigates, it sets the <c>navigationIndex</c> to the current
+        ///   <c>stackCount</c> value, so that the ButtonClicked handler can determine
+        ///   if the dialog has been navigated after it was called.
+        ///   Tracking the stack count and navigation index is necessary as there
+        ///   can be multiple ButtonClicked handlers on the call stack, for example
+        ///   if a ButtonClicked handler runs the message loop so that new click events
+        ///   can be processed.
+        /// </para>
         /// </remarks>
         private (int stackCount, int navigationIndex) _buttonClickNavigationCounter;
 
         /// <summary>
-        /// The button designated as the dialog result by the handler for the
-        /// <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
-        /// notification.
+        ///   The button designated as the dialog result by the handler for the
+        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   notification.
         /// </summary>
         /// <remarks>
-        /// This will be set the first time the
-        /// <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler returns
-        /// <see cref="TaskDialogNativeMethods.S_OK"/> to cache the button instance,
-        /// so that <see cref="ShowDialog(IntPtr)"/> can then return it.
-        /// 
-        /// Additionally, this is used to check if there was already a 
-        /// <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler that
-        /// returned <see cref="TaskDialogNativeMethods.S_OK"/>, so that further
-        /// handles will return <see cref="TaskDialogNativeMethods.S_FALSE"/> to
-        /// not override the previously set result.
+        /// <para>
+        ///   This will be set the first time the
+        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler returns
+        ///   <see cref="TaskDialogNativeMethods.S_OK"/> to cache the button instance,
+        ///   so that <see cref="ShowDialog(IntPtr)"/> can then return it.
+        /// </para>
+        /// <para>
+        ///   Additionally, this is used to check if there was already a 
+        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler that
+        ///   returned <see cref="TaskDialogNativeMethods.S_OK"/>, so that further
+        ///   handles will return <see cref="TaskDialogNativeMethods.S_FALSE"/> to
+        ///   not override the previously set result.
+        /// </para>
         /// </remarks>
         private (TaskDialogButton button, int buttonID)? _resultButton;
 
         private bool _suppressButtonClickedEvent;
 
         /// <summary>
-        /// Specifies if the current code is called from within
-        /// <see cref="Navigate(TaskDialogPage)"/>.
+        ///   Specifies if the current code is called from within
+        ///   <see cref="Navigate(TaskDialogPage)"/>.
         /// </summary>
         /// <remarks>
-        /// This is used to detect if you call <see cref="Navigate(TaskDialogPage)"/>
-        /// from within an event raised by <see cref="Navigate(TaskDialogPage)"/>,
-        /// which is not supported.
+        /// <para>
+        ///   This is used to detect if you call <see cref="Navigate(TaskDialogPage)"/>
+        ///   from within an event raised by <see cref="Navigate(TaskDialogPage)"/>,
+        ///   which is not supported.
+        /// </para>
         /// </remarks>
         private bool _isInNavigate;
 
         /// <summary>
-        /// Specifies if the <see cref="HandleTaskDialogCallback"/> method should
-        /// currently ignore <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
-        /// notifications.
+        ///   Specifies if the <see cref="HandleTaskDialogCallback"/> method should
+        ///   currently ignore <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   notifications.
         /// </summary>
         /// <remarks>
-        /// See <see cref="ContinueButtonClickHandlingMessage"/> for more information.
+        /// <para>
+        ///   See <see cref="ContinueButtonClickHandlingMessage"/> for more information.
+        /// </para>
         /// </remarks>
         private bool _ignoreButtonClickedNotifications;
 
         /// <summary>
-        /// Occurs after the task dialog has been created but before it is displayed.
+        ///   Occurs after the task dialog has been created but before it is displayed.
         /// </summary>
         /// <remarks>
-        /// You can use this event to allocate resources associated with the
-        /// task dialog window handle, as it is the first event where
+        /// <para>
+        ///   You can use this event to allocate resources associated with the
+        ///   task dialog window handle, as it is the first event where
         /// <see cref="Handle"/> is available.
-        /// 
-        /// Note: The dialog will not show until this handler returns (even if the
-        /// handler would run the message loop).
+        /// </para>
+        /// <para>
+        ///   Note: The dialog will not show until this handler returns (even if the
+        ///   handler would run the message loop).
+        /// </para>
         /// </remarks>
         public event EventHandler? Opened;
 
         /// <summary>
-        /// Occurs when the task dialog is first displayed.
+        ///   Occurs when the task dialog is first displayed.
         /// </summary>
         public event EventHandler? Shown;
 
         /// <summary>
-        /// Occurs when the task dialog closing.
+        ///   Occurs when the task dialog closing.
         /// </summary>
         /// <remarks>
-        /// You can cancel the close by setting
-        /// <see cref="CancelEventArgs.Cancel"/> to <see langword="true"/>. Otherwise, the
-        /// dialog window will close, and the <see cref="Closed"/> event will be
-        /// raised afterwards.
-        /// 
-        /// Note: The <see cref="Closed"/> event might not be called immediately
-        /// after the <see cref="Closing"/> event (even though the dialog window
-        /// has already closed). This can happen for example when showing multiple 
-        /// (modeless) dialogs at the same time and then closing the one that
-        /// was shown first – in that case, the <see cref="Closed"/> event for
-        /// that dialog will be called only after the second dialog is also closed.
-        /// 
-        /// Note: This event might not always be called, e.g. if navigation of the
-        /// dialog fails; however, the <see cref="Closed"/> event will always be
-        /// called.
+        /// <para>
+        ///   You can cancel the close by setting
+        ///   <see cref="CancelEventArgs.Cancel"/> to <see langword="true"/>. Otherwise, the
+        ///   dialog window will close, and the <see cref="Closed"/> event will be
+        ///   raised afterwards.
+        /// </para>
+        /// <para>
+        ///   Note: The <see cref="Closed"/> event might not be called immediately
+        ///   after the <see cref="Closing"/> event (even though the dialog window
+        ///   has already closed). This can happen for example when showing multiple 
+        ///   (modeless) dialogs at the same time and then closing the one that
+        ///   was shown first – in that case, the <see cref="Closed"/> event for
+        ///   that dialog will be called only after the second dialog is also closed.
+        /// </para>
+        /// <para>
+        ///   Note: This event might not always be called, e.g. if navigation of the
+        ///   dialog fails; however, the <see cref="Closed"/> event will always be
+        ///   called.
+        /// </para>
         /// </remarks>
         public event EventHandler<TaskDialogClosingEventArgs>? Closing;
 
         /// <summary>
-        /// Occurs when the task dialog is closed.
+        ///   Occurs when the task dialog is closed.
         /// </summary>
         /// <remarks>
-        /// You can use this event to free resources associated with the
-        /// task dialog window handle, as it is the last event where
-        /// <see cref="Handle"/> is available.
+        /// <para>
+        ///   You can use this event to free resources associated with the
+        ///   task dialog window handle, as it is the last event where
+        ///   <see cref="Handle"/> is available.
+        /// </para>
         /// </remarks>
         public event EventHandler? Closed;
 
@@ -265,7 +299,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='TaskDialog'/> class.
+        ///   Initializes a new instance of the <see cref='TaskDialog'/> class.
         /// </summary>
         public TaskDialog()
             : this(new TaskDialogPage())
@@ -273,7 +307,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='TaskDialog'/> class using the specified task dialog page.
+        ///   Initializes a new instance of the <see cref='TaskDialog'/> class using the
+        ///   specified task dialog page.
         /// </summary>
         public TaskDialog(TaskDialogPage page)
         {
@@ -284,13 +319,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets the window handle of the task dialog window, or <see cref="IntPtr.Zero"/>
-        /// if the dialog is currently not being shown.
+        ///   Gets the window handle of the task dialog window, or <see cref="IntPtr.Zero"/>
+        ///   if the dialog is currently not being shown.
         /// </summary>
         /// <remarks>
-        /// When showing the dialog, the handle will be available first when the
-        /// <see cref="Opened"/> event occurs, and last when the
-        /// <see cref="Closed"/> event occurs after which you shouldn't use it any more.
+        /// <para>
+        ///   When showing the dialog, the handle will be available first when the
+        ///   <see cref="Opened"/> event occurs, and last when the
+        ///   <see cref="Closed"/> event occurs after which you shouldn't use it any more.
+        /// </para>
         /// </remarks>
         public IntPtr Handle { get; private set; }
 
@@ -353,11 +390,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the position of the task dialog when it is shown.
+        ///   Gets or sets the position of the task dialog when it is shown.
         /// </summary>
         /// <value>
-        /// The <see cref="TaskDialogStartupLocation"/> that specifies the position of the task dialog
-        /// when it is shown. The default value is <see cref="TaskDialogStartupLocation.CenterParent"/>.
+        ///   The <see cref="TaskDialogStartupLocation"/> that specifies the position of the task dialog
+        ///   when it is shown. The default value is <see cref="TaskDialogStartupLocation.CenterParent"/>.
         /// </value>
         public TaskDialogStartupLocation StartupLocation
         {
@@ -372,25 +409,28 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the task dialog should set itself as
-        /// foreground window when showing it.
+        ///   Gets or sets a value that indicates whether the task dialog should set itself as
+        ///   foreground window when showing it.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> to indicate that the task dialog should set itself as foreground window
-        /// when showing it; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+        ///   <see langword="true"/> to indicate that the task dialog should set itself as foreground window
+        ///   when showing it; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// When setting this property to <see langword="true"/> and then showing the dialog, it
-        /// causes the dialog to set itself as foreground window. This means that
-        /// if currently none of the application's windows has focus, the task dialog
-        /// tries to "steal" focus (which can result in the task dialog window being
-        /// activated, or the taskbar button for the window flashing orange). However,
-        /// if the application already has focus, the task dialog window will be
-        /// activated in either case.
-        /// 
-        /// Note: A value of <see langword="false"/> only has an effect on Windows 8/Windows Server 2012
-        /// and higher. On previous versions of Windows, the task dialog will always behave as
-        /// if this property was set to <see langword="true"/>.
+        /// <para>
+        ///   When setting this property to <see langword="true"/> and then showing the dialog, it
+        ///   causes the dialog to set itself as foreground window. This means that
+        ///   if currently none of the application's windows has focus, the task dialog
+        ///   tries to "steal" focus (which can result in the task dialog window being
+        ///   activated, or the taskbar button for the window flashing orange). However,
+        ///   if the application already has focus, the task dialog window will be
+        ///   activated in either case.
+        /// </para>
+        /// <para>
+        ///   Note: A value of <see langword="false"/> only has an effect on Windows 8/Windows Server 2012
+        ///   and higher. On previous versions of Windows, the task dialog will always behave as
+        ///   if this property was set to <see langword="true"/>.
+        /// </para>
         /// </remarks>
         public bool SetToForeground
         {
@@ -408,8 +448,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value that indicates whether <see cref="ShowDialog(IntPtr)"/> is
-        /// currently being called.
+        ///   Gets a value that indicates whether <see cref="ShowDialog(IntPtr)"/> is
+        ///   currently being called.
         /// </summary>
         internal bool IsShown
         {
@@ -417,15 +457,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value that indicates whether the native task dialog window has
-        /// been created and its handle is available using the <see cref="Handle"/>
-        /// property.
+        ///   Gets a value that indicates whether the native task dialog window has
+        ///   been created and its handle is available using the <see cref="Handle"/>
+        ///   property.
         /// </summary>
         /// <remarks>
-        /// This property can only be <see langword="true"/> if <see cref="IsShown"/> is
-        /// also <see langword="true"/>. However, normally this property should be equivalent
-        /// to <see cref="IsShown"/>, because when showing the dialog, the
-        /// callback should have been called setting the handle.
+        /// <para>
+        ///   This property can only be <see langword="true"/> if <see cref="IsShown"/> is
+        ///   also <see langword="true"/>. However, normally this property should be equivalent
+        ///   to <see cref="IsShown"/>, because when showing the dialog, the
+        ///   callback should have been called setting the handle.
+        /// </para>
         /// </remarks>
         internal bool IsHandleCreated
         {
@@ -433,15 +475,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the current count of stack frames that are in the
-        /// <see cref="TaskDialogRadioButton.CheckedChanged"/> event for the
-        /// current task dialog.
+        ///   Gets or sets the current count of stack frames that are in the
+        ///   <see cref="TaskDialogRadioButton.CheckedChanged"/> event for the
+        ///   current task dialog.
         /// </summary>
         /// <remarks>
-        /// This is used by the <see cref="TaskDialogRadioButton.Checked"/> setter
-        /// so that it can disallow the change when the count is greater than zero.
-        /// Additionally, it is used to deny navigation of the task dialog in that
-        /// case.
+        /// <para>
+        ///   This is used by the <see cref="TaskDialogRadioButton.Checked"/> setter
+        ///   so that it can disallow the change when the count is greater than zero.
+        ///   Additionally, it is used to deny navigation of the task dialog in that
+        ///   case.
+        /// </para>
         /// </remarks>
         internal int RadioButtonClickedStackCount
         {
@@ -450,8 +494,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Displays a task dialog with the specified text, instruction,
-        /// caption, buttons and icon.
+        ///   Displays a task dialog with the specified text, instruction,
+        ///   caption, buttons and icon.
         /// </summary>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
@@ -472,8 +516,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Displays a task dialog in front of the specified window and with the specified
-        /// text, main instruction, caption, buttons and icon.
+        ///   Displays a task dialog in front of the specified window and with the specified
+        ///   text, main instruction, caption, buttons and icon.
         /// </summary>
         /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
@@ -498,8 +542,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Displays a task dialog in front of the specified window and with the specified
-        /// text, instruction, caption, buttons and icon.
+        ///   Displays a task dialog in front of the specified window and with the specified
+        ///   text, instruction, caption, buttons and icon.
         /// </summary>
         /// <param name="hwndOwner">
         /// The handle of the owner window, or <see cref="IntPtr.Zero"/> to show a
@@ -563,11 +607,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Shows the task dialog.
+        ///   Shows the task dialog.
         /// </summary>
         /// <remarks>
-        /// Showing the dialog will bind the <see cref="Page"/> and its
-        /// controls until this method returns.
+        /// <para>
+        ///   Showing the dialog will bind the <see cref="Page"/> and its
+        ///   controls until this method returns.
+        /// </para>
         /// </remarks>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
@@ -577,11 +623,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Shows the task dialog.
+        ///   Shows the task dialog.
         /// </summary>
         /// <remarks>
-        /// Showing the dialog will bind the <see cref="Page"/> and its
-        /// controls until this method returns.
+        /// <para>
+        ///   Showing the dialog will bind the <see cref="Page"/> and its
+        ///   controls until this method returns.
+        /// </para>
         /// </remarks>
         /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
@@ -592,11 +640,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Shows the task dialog.
+        ///   Shows the task dialog.
         /// </summary>
         /// <remarks>
-        /// Showing the dialog will bind the <see cref="Page"/> and its
-        /// controls until this method returns.
+        /// <para>
+        ///   Showing the dialog will bind the <see cref="Page"/> and its
+        ///   controls until this method returns.
+        /// </para>
         /// </remarks>
         /// <param name="hwndOwner">
         /// The handle of the owner window, or <see cref="IntPtr.Zero"/> to show a
@@ -776,18 +826,21 @@ namespace System.Windows.Forms
         // Messages that can be sent to the dialog while it is being shown.
 
         /// <summary>
-        /// Closes the shown task dialog with a 
-        /// <see cref="TaskDialogResult.Cancel"/> result.
+        ///   Closes the shown task dialog with a 
+        ///   <see cref="TaskDialogResult.Cancel"/> result.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// To close the dialog with a different result, call the
         /// <see cref="TaskDialogButton.PerformClick"/> method of the
         /// <see cref="TaskDialogButton"/> which you want to set as result.
-        /// 
-        /// Note: This method can be called while the dialog is waiting for
-        /// navigation to complete (whereas <see cref="TaskDialogButton.PerformClick"/>
-        /// would throw in that case), and that when calling this method, the
-        /// <see cref="TaskDialogButton.Click"/> event will not be raised.
+        /// </para>
+        /// <para>
+        ///   Note: This method can be called while the dialog is waiting for
+        ///   navigation to complete (whereas <see cref="TaskDialogButton.PerformClick"/>
+        ///   would throw in that case), and that when calling this method, the
+        ///   <see cref="TaskDialogButton.Click"/> event will not be raised.
+        /// </para>
         /// </remarks>
         public void Close()
         {
@@ -804,10 +857,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// While the dialog is being shown, switches the progress bar mode to either a
-        /// marquee progress bar or to a regular progress bar.
-        /// For a marquee progress bar, you can enable or disable the marquee using
-        /// <see cref="SetProgressBarMarquee(bool, int)"/>.
+        ///   While the dialog is being shown, switches the progress bar mode to either a
+        ///   marquee progress bar or to a regular progress bar.
+        ///   For a marquee progress bar, you can enable or disable the marquee using
+        ///   <see cref="SetProgressBarMarquee(bool, int)"/>.
         /// </summary>
         /// <param name="marqueeProgressBar"></param>
         internal void SwitchProgressBarMode(bool marqueeProgressBar)
@@ -819,8 +872,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// While the dialog is being shown, enables or disables progress bar marquee when
-        /// an marquee progress bar is displayed.
+        ///   While the dialog is being shown, enables or disables progress bar marquee when
+        ///   an marquee progress bar is displayed.
         /// </summary>
         /// <param name="enableMarquee"></param>
         /// <param name="animationSpeed">
@@ -841,12 +894,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// While the dialog is being shown, sets the progress bar range.
+        ///   While the dialog is being shown, sets the progress bar range.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <remarks>
-        /// The default range is 0 to 100.
+        /// <para>
+        ///   The default range is 0 to 100.
+        /// </para>
         /// </remarks>
         internal unsafe void SetProgressBarRange(int min, int max)
         {
@@ -874,7 +929,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// While the dialog is being shown, sets the progress bar position.
+        ///   While the dialog is being shown, sets the progress bar position.
         /// </summary>
         /// <param name="pos"></param>
         internal void SetProgressBarPosition(int pos)
@@ -891,7 +946,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// While the dialog is being shown, sets the progress bar state.
+        ///   While the dialog is being shown, sets the progress bar state.
         /// </summary>
         /// <param name="state"></param>
         internal void SetProgressBarState(int state)
@@ -903,8 +958,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// While the dialog is being shown, sets the checkbox to the specified
-        /// state.
+        ///   While the dialog is being shown, sets the checkbox to the specified
+        ///   state.
         /// </summary>
         /// <param name="isChecked"></param>
         /// <param name="focus"></param>
@@ -1032,7 +1087,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref="Opened"/> event.
+        ///   Raises the <see cref="Opened"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         protected void OnOpened(EventArgs e)
@@ -1041,7 +1096,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref="Shown"/> event.
+        ///   Raises the <see cref="Shown"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         protected void OnShown(EventArgs e)
@@ -1050,7 +1105,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref="Closing"/> event.
+        ///   Raises the <see cref="Closing"/> event.
         /// </summary>
         /// <param name="e">An <see cref="TaskDialogClosingEventArgs"/> that contains the event data.</param>
         protected void OnClosing(TaskDialogClosingEventArgs e)
@@ -1059,7 +1114,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref="Closed"/> event.
+        ///   Raises the <see cref="Closed"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         protected void OnClosed(EventArgs e)
@@ -1208,9 +1263,7 @@ namespace System.Windows.Forms
                         // notifications until we receive the posted message.
                         if (User32.PostMessageW(
                             hWnd,
-                            ContinueButtonClickHandlingMessage,
-                            IntPtr.Zero,
-                            IntPtr.Zero) == IntPtr.Zero)
+                            ContinueButtonClickHandlingMessage) == IntPtr.Zero)
                         {
                             // Ignore. This should not happen in normal circumstances, and even then
                             // we don't need to fail.
@@ -1317,7 +1370,7 @@ namespace System.Windows.Forms
                     case TaskDialogNotification.TDN_RADIO_BUTTON_CLICKED:
                         int radioButtonID = (int)wParam;
                         TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID)!;
-                        
+
                         checked
                         {
                             RadioButtonClickedStackCount++;
@@ -1362,12 +1415,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// While the dialog is being shown, recreates the dialog from the specified
+        ///   While the dialog is being shown, recreates the dialog from the specified
         /// <paramref name="page"/>.
         /// </summary>
         /// <remarks>
-        /// Note that you should not call this method in the <see cref="Opened"/>
-        /// event because the task dialog is not yet displayed in that state.
+        /// <para>
+        ///   Note that you should not call this method in the <see cref="Opened"/>
+        ///   event because the task dialog is not yet displayed in that state.
+        /// </para>
         /// </remarks>
         private void Navigate(TaskDialogPage page)
         {
@@ -1836,8 +1891,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Called when an exception occurs in dispatching messages through
-        /// the task dialog callback or its window procedure.
+        ///   Called when an exception occurs in dispatching messages through
+        ///   the task dialog callback or its window procedure.
         /// </summary>
         private void HandleCallbackException(Exception e)
         {
@@ -1864,7 +1919,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Forces the task dialog to update its window size according to its contents.
+        ///   Forces the task dialog to update its window size according to its contents.
         /// </summary>
         private void UpdateWindowSize()
         {

@@ -13,12 +13,14 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Allows to subclass individual windows.
+    ///   Allows to subclass individual windows.
     /// </summary>
     /// <remarks>
-    /// See
-    /// https://docs.microsoft.com/en-us/windows/desktop/winmsg/about-window-procedures#instance-subclassing
-    /// for more information.
+    /// <para>
+    ///   See
+    ///   https://docs.microsoft.com/en-us/windows/desktop/winmsg/about-window-procedures#instance-subclassing
+    ///   for more information.
+    /// </para>
     /// </remarks>
     internal class WindowSubclassHandler : IDisposable
     {
@@ -31,26 +33,29 @@ namespace System.Windows.Forms
         private IntPtr _originalWindowProc;
 
         /// <summary>
-        /// The delegate for the callback handler (that calls
-        /// <see cref="WndProc(int, IntPtr, IntPtr)"/> from which the native function
-        /// pointer <see cref="_windowProcDelegatePtr"/> is created. 
+        ///   The delegate for the callback handler (that calls
+        ///   <see cref="WndProc(int, IntPtr, IntPtr)"/> from which the native function
+        ///   pointer <see cref="_windowProcDelegatePtr"/> is created. 
         /// </summary>
         /// <remarks>
-        /// We must store this delegate (and prevent it from being garbage-collected)
-        /// to ensure the function pointer doesn't become invalid.
-        /// 
-        /// Note: We create a new delegate (and native function pointer) for each
-        /// instance because even though creation will be slower (and requires a
-        /// bit of memory to store the native code) it will be faster when the window
-        /// procedure is invoked, because otherwise we would need to use a dictionary
-        /// to map the hWnd to the instance, as the window procedure doesn't allow
-        /// to store reference data. However, this is also the way that the
-        /// NativeWindow class of WinForms does it.
+        /// <para>
+        ///   We must store this delegate (and prevent it from being garbage-collected)
+        ///   to ensure the function pointer doesn't become invalid.
+        /// </para>
+        /// <para>
+        ///   Note: We create a new delegate (and native function pointer) for each
+        ///   instance because even though creation will be slower (and requires a
+        ///   bit of memory to store the native code) it will be faster when the window
+        ///   procedure is invoked, because otherwise we would need to use a dictionary
+        ///   to map the hWnd to the instance, as the window procedure doesn't allow
+        ///   to store reference data. However, this is also the way that the
+        ///   <see cref="NativeWindow"/> class does it.
+        /// </para>
         /// </remarks>
         private readonly User32.WNDPROC _windowProcDelegate;
 
         /// <summary>
-        /// The function pointer created from <see cref="_windowProcDelegate"/>.
+        ///   The function pointer created from <see cref="_windowProcDelegate"/>.
         /// </summary>
         private readonly IntPtr _windowProcDelegatePtr;
 
@@ -85,11 +90,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Subclasses the window.
+        ///   Subclasses the window.
         /// </summary>
         /// <remarks>
-        /// You must call <see cref="Dispose()"/> to undo the subclassing before
-        /// the window is destroyed.
+        /// <para>
+        ///   You must call <see cref="Dispose()"/> to undo the subclassing before
+        ///   the window is destroyed.
+        /// </para>
         /// </remarks>
         /// <returns></returns>
         public void Open()
