@@ -1180,16 +1180,26 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private UnsafeNativeMethods.IRawElementProviderFragment GetFirstChild()
             {
+                if (_owningPropertyDescriptorGridEntry == null)
+                {
+                    return null;
+                }
+
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {
                     return _owningPropertyDescriptorGridEntry.Children.GetEntry(0).AccessibilityObject;
                 }
 
-                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry)
+                var propertyGridView = GetPropertyGridView();
+                if (propertyGridView == null)
                 {
-                    if (propertyGridView.SelectedGridEntry.Enumerable)
+                    return null;
+                }
+
+                var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
+                {
+                    if (selectedGridEntry.Enumerable)
                     {
                         return propertyGridView.DropDownListBoxAccessibleObject;
                     }
@@ -1202,17 +1212,27 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private UnsafeNativeMethods.IRawElementProviderFragment GetLastChild()
             {
+                if (_owningPropertyDescriptorGridEntry == null)
+                {
+                    return null;
+                }
+
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {
                     return _owningPropertyDescriptorGridEntry.Children
                         .GetEntry(_owningPropertyDescriptorGridEntry.ChildCount - 1).AccessibilityObject;
                 }
 
-                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry)
+                var propertyGridView = GetPropertyGridView();
+                if (propertyGridView == null)
                 {
-                    if (propertyGridView.SelectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible)
+                    return null;
+                }
+
+                var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
+                {
+                    if (selectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible)
                     {
                         return propertyGridView.DropDownButton.AccessibilityObject;
                     }
@@ -1221,6 +1241,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 return null;
+            }
+
+            private PropertyGridView GetPropertyGridView()
+            {
+                var propertyGridViewAccessibleObject = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
+                if (propertyGridViewAccessibleObject == null)
+                {
+                    return null;
+                }
+
+                return propertyGridViewAccessibleObject.Owner as PropertyGridView;
             }
 
             internal override bool IsPatternSupported(int patternId)
