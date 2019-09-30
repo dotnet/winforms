@@ -1131,9 +1131,8 @@ namespace System.Windows.Forms
                     return;
                 }
                 //valid Keys that move the splitter...
-                if (e.KeyData == Keys.Right || e.KeyData == Keys.Down ||
-                    e.KeyData == Keys.Left || e.KeyData == Keys.Up
-                    && splitterFocused)
+                if (splitterFocused &&
+                    (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
                 {
                     if (splitBegin)
                     {
@@ -1141,13 +1140,13 @@ namespace System.Windows.Forms
                     }
 
                     //left OR up
-                    if (e.KeyData == Keys.Left || e.KeyData == Keys.Up && splitterFocused)
+                    if (splitterFocused && (e.KeyData == Keys.Left || e.KeyData == Keys.Up))
                     {
                         splitterDistance -= SplitterIncrement;
                         splitterDistance = (splitterDistance < Panel1MinSize) ? splitterDistance + SplitterIncrement : Math.Max(splitterDistance, BORDERSIZE);
                     }
                     //right OR down
-                    if (e.KeyData == Keys.Right || e.KeyData == Keys.Down && splitterFocused)
+                    if (splitterFocused && (e.KeyData == Keys.Right || e.KeyData == Keys.Down))
                     {
                         splitterDistance += SplitterIncrement;
                         if (Orientation == Orientation.Vertical)
@@ -1198,9 +1197,8 @@ namespace System.Windows.Forms
             base.OnKeyUp(e);
             if (splitBegin && IsSplitterMovable)
             {
-                if (e.KeyData == Keys.Right || e.KeyData == Keys.Down ||
-                    e.KeyData == Keys.Left || e.KeyData == Keys.Up
-                    && splitterFocused)
+                if (splitterFocused &&
+                    (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
                 {
                     DrawSplitBar(DRAW_END);
                     ApplySplitterDistance();
