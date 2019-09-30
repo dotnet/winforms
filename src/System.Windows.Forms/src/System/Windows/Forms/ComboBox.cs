@@ -3988,15 +3988,16 @@ namespace System.Windows.Forms
 
                     base.WndProc(ref m);
                     break;
+
                 case WindowMessages.WM_PRINTCLIENT:
                     // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
-                    if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
+                    if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
                         DefWndProc(ref m);
 
                         if ((unchecked((int)(long)m.LParam) & NativeMethods.PRF_CLIENT) == NativeMethods.PRF_CLIENT)
                         {
-                            if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
+                            if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                             {
                                 using (Graphics g = Graphics.FromHdcInternal(m.WParam))
                                 {
@@ -4008,12 +4009,12 @@ namespace System.Windows.Forms
                     }
                     base.WndProc(ref m);
                     return;
+
                 case WindowMessages.WM_SETCURSOR:
                     base.WndProc(ref m);
                     break;
 
                 case WindowMessages.WM_SETFONT:
-                    //(
                     if (Width == 0)
                     {
                         suppressNextWindosPos = true;
