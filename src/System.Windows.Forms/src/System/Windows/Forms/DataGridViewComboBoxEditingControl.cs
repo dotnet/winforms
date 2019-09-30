@@ -121,7 +121,9 @@ namespace System.Windows.Forms
         {
             if ((keyData & Keys.KeyCode) == Keys.Down ||
                 (keyData & Keys.KeyCode) == Keys.Up ||
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                 (DroppedDown && ((keyData & Keys.KeyCode) == Keys.Escape) || (keyData & Keys.KeyCode) == Keys.Enter))
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 return true;
             }

@@ -10634,7 +10634,9 @@ namespace System.Windows.Forms
 
         private Control GetNextSelectableControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
             if (!Contains(ctl) || !nested && ctl._parent != this)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 ctl = null;
             }
@@ -12858,7 +12860,9 @@ namespace System.Windows.Forms
                         {
                             try
                             {
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                                 if ((m.WParam == IntPtr.Zero) && GetStyle(ControlStyles.AllPaintingInWmPaint) || doubleBuffered)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
                                 {
                                     PaintWithErrorHandling(pevent, PaintLayerBackground);
                                     // Consider: This condition could be elimiated,

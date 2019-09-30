@@ -4,9 +4,9 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Globalization;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop;
@@ -1127,8 +1127,10 @@ namespace System.Windows.Forms
                         if (forms[i].Visible)
                         {
                             visibleChildren++;
-                            if ((activeFormAdded && (formsAddedToMenu < MaxMenuForms)) ||  // don't exceed max
-                                (!activeFormAdded && (formsAddedToMenu < (MaxMenuForms - 1)) ||  // save room for active if it's not in yet
+                            if ((activeFormAdded && (formsAddedToMenu < MaxMenuForms)) ||   // don't exceed max
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
+                                (!activeFormAdded && (formsAddedToMenu < (MaxMenuForms - 1)) ||   // save room for active if it's not in yet
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
                                 (forms[i].Equals(activeMdiChild))))
                             {
                                 // there's always room for activeMdiChild

@@ -8959,7 +8959,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an array
             ///  of all the controls that match.
-                    /// </summary>
+            /// </summary>
             public ListViewItem[] Find(string key, bool searchAllSubItems)
             {
                 ArrayList foundItems = FindInternal(key, searchAllSubItems, this, new ArrayList());
@@ -8973,7 +8973,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an arraylist
             ///  of all the controls that match.
-                    /// </summary>
+            /// </summary>
             private ArrayList FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, ArrayList foundItems)
             {
                 if ((listViewItems == null) || (foundItems == null))
@@ -9378,7 +9378,9 @@ namespace System.Windows.Forms
                     owner.ItemCollectionChangedInMouseDown = true;
                 }
 
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                 if (comparer != null || (owner.Sorting != SortOrder.None) && !owner.VirtualMode)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
                 {
                     owner.Sort();
                 }

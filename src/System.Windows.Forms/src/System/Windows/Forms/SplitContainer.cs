@@ -2013,7 +2013,9 @@ namespace System.Windows.Forms
         private bool SelectNextControlInContainer(Control ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
         {
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
             if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 ctl = null;
             }
@@ -2109,7 +2111,9 @@ namespace System.Windows.Forms
         private bool SelectNextControlInPanel(Control ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
         {
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
             if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 ctl = null;
             }
