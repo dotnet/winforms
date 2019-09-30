@@ -15,8 +15,8 @@
     "version": "5.0.100-alpha1-013788"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "5.0.0-beta.19469.4",
-    "Microsoft.DotNet.Helix.Sdk": "5.0.0-beta.19469.4",
+    "Microsoft.DotNet.Arcade.Sdk": "5.0.0-beta.19477.2",
+    "Microsoft.DotNet.Helix.Sdk": "5.0.0-beta.19477.2",
     "Microsoft.NET.Sdk.IL": "5.0.0-alpha1.19462.1"
   },
   "native-tools": {
