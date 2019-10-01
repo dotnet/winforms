@@ -3257,7 +3257,7 @@ namespace System.Windows.Forms
             return FindItem(false, string.Empty, false, new Point(x, y), searchDirection, -1, false);
         }
 
-        private ListViewItem FindItem(bool isTextSearch, string text, bool isPrefixSearch, Point pt, SearchDirectionHint dir, int startIndex, bool includeSubItemsInSearch)
+        private unsafe ListViewItem FindItem(bool isTextSearch, string text, bool isPrefixSearch, Point pt, SearchDirectionHint dir, int startIndex, bool includeSubItemsInSearch)
         {
             if (Items.Count == 0)
             {
@@ -3286,58 +3286,63 @@ namespace System.Windows.Forms
             }
             else
             {
-                NativeMethods.LVFINDINFO lvFindInfo = new NativeMethods.LVFINDINFO();
-                if (isTextSearch)
+                fixed (char *pText = text)
                 {
-                    lvFindInfo.flags = NativeMethods.LVFI_STRING;
-                    lvFindInfo.flags |= (isPrefixSearch ? NativeMethods.LVFI_PARTIAL : 0);
-                    lvFindInfo.psz = text;
-                }
-                else
-                {
-                    lvFindInfo.flags = NativeMethods.LVFI_NEARESTXY;
-                    lvFindInfo.pt = pt;
-                    // we can do this because SearchDirectionHint is set to the VK_*
-                    lvFindInfo.vkDirection = (int)dir;
-                }
-                lvFindInfo.lParam = IntPtr.Zero;
-                int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle),
-                                                                 (int)LVM.FINDITEM,
-                                                                 startIndex - 1,                      // decrement startIndex so that the search is 0-based
-                                                                 ref lvFindInfo);
-                if (index >= 0)
-                {
-                    return Items[index];
-                }
-                else if (isTextSearch && includeSubItemsInSearch)
-                {
-                    // win32 listView control can't search inside sub items
-                    for (int i = startIndex; i < Items.Count; i++)
+                    var lvFindInfo = new ComCtl32.LVFINDINFOW();
+                    if (isTextSearch)
                     {
-                        ListViewItem lvi = Items[i];
-                        for (int j = 0; j < lvi.SubItems.Count; j++)
+                        lvFindInfo.flags = ComCtl32.LVFI.STRING;
+                        lvFindInfo.flags |= (isPrefixSearch ? ComCtl32.LVFI.PARTIAL : 0);
+                        lvFindInfo.psz = pText;
+                    }
+                    else
+                    {
+                        lvFindInfo.flags = ComCtl32.LVFI.NEARESTXY;
+                        lvFindInfo.pt = pt;
+                        // we can do this because SearchDirectionHint is set to the VK_*
+                        lvFindInfo.vkDirection = (uint)dir;
+                    }
+                    lvFindInfo.lParam = IntPtr.Zero;
+                    int index = (int)User32.SendMessageW(
+                        this,
+                        User32.WindowMessage.LVM_FINDITEMW,
+                        (IntPtr)(startIndex - 1), // decrement startIndex so that the search is 0-based
+                        ref lvFindInfo);
+                    if (index >= 0)
+                    {
+                        return Items[index];
+                    }
+                    
+                    if (isTextSearch && includeSubItemsInSearch)
+                    {
+                        // win32 listView control can't search inside sub items
+                        for (int i = startIndex; i < Items.Count; i++)
                         {
-                            ListViewItem.ListViewSubItem lvsi = lvi.SubItems[j];
-                            // the win32 list view search for items w/ text is case insensitive
-                            // do the same for sub items
-                            // because we are comparing user defined strings we have to do the slower String search
-                            // ie, use String.Compare(string, string, case sensitive, CultureInfo)
-                            // instead of new Whidbey String.Equals overload
-                            // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
-                            if (string.Equals(text, lvsi.Text, StringComparison.OrdinalIgnoreCase))
+                            ListViewItem lvi = Items[i];
+                            for (int j = 0; j < lvi.SubItems.Count; j++)
                             {
-                                return lvi;
-                            }
-                            else if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(lvsi.Text, text, CompareOptions.IgnoreCase))
-                            {
-                                return lvi;
+                                ListViewItem.ListViewSubItem lvsi = lvi.SubItems[j];
+                                // the win32 list view search for items w/ text is case insensitive
+                                // do the same for sub items
+                                // because we are comparing user defined strings we have to do the slower String search
+                                // ie, use String.Compare(string, string, case sensitive, CultureInfo)
+                                // instead of new Whidbey String.Equals overload
+                                // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
+                                if (string.Equals(text, lvsi.Text, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    return lvi;
+                                }
+                                
+                                if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(lvsi.Text, text, CompareOptions.IgnoreCase))
+                                {
+                                    return lvi;
+                                }
                             }
                         }
+
+                        return null;
                     }
-                    return null;
-                }
-                else
-                {
+                    
                     return null;
                 }
             }
@@ -3417,22 +3422,22 @@ namespace System.Windows.Forms
             ApplyUpdateCachedItems();
             if (IsHandleCreated && !ListViewHandleDestroyed)
             {
-                NativeMethods.LVFINDINFO info = new NativeMethods.LVFINDINFO
+                var info = new ComCtl32.LVFINDINFOW
                 {
                     lParam = (IntPtr)item.ID,
-                    flags = NativeMethods.LVFI_PARAM
+                    flags = ComCtl32.LVFI.PARAM
                 };
 
                 int displayIndex = -1;
 
                 if (lastIndex != -1)
                 {
-                    displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.FINDITEM, lastIndex - 1, ref info);
+                    displayIndex = (int)User32.SendMessageW(this, User32.WindowMessage.LVM_FINDITEMW, (IntPtr)(lastIndex - 1), ref info);
                 }
 
                 if (displayIndex == -1)
                 {
-                    displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.FINDITEM, -1 /* beginning */, ref info);
+                    displayIndex = (int)User32.SendMessageW(this, User32.WindowMessage.LVM_FINDITEMW, (IntPtr)(-1) /* beginning */, ref info);
                 }
                 Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
                 return displayIndex;
@@ -6478,53 +6483,53 @@ namespace System.Windows.Forms
                     {
                         if (VirtualMode)
                         {
-                            NativeMethods.NMLVFINDITEM nmlvif = (NativeMethods.NMLVFINDITEM)m.GetLParam(typeof(NativeMethods.NMLVFINDITEM));
+                            ComCtl32.NMLVFINDITEMW* nmlvif = (ComCtl32.NMLVFINDITEMW*)m.LParam;
 
-                            if ((nmlvif.lvfi.flags & NativeMethods.LVFI_PARAM) != 0)
+                            if ((nmlvif->lvfi.flags & ComCtl32.LVFI.PARAM) != 0)
                             {
                                 m.Result = (IntPtr)(-1);
                                 return;
                             }
 
-                            bool isTextSearch = ((nmlvif.lvfi.flags & NativeMethods.LVFI_STRING) != 0) ||
-                                                ((nmlvif.lvfi.flags & NativeMethods.LVFI_PARTIAL) != 0);
+                            bool isTextSearch = ((nmlvif->lvfi.flags & ComCtl32.LVFI.STRING) != 0) ||
+                                                ((nmlvif->lvfi.flags & ComCtl32.LVFI.PARTIAL) != 0);
 
-                            bool isPrefixSearch = (nmlvif.lvfi.flags & NativeMethods.LVFI_PARTIAL) != 0;
+                            bool isPrefixSearch = (nmlvif->lvfi.flags & ComCtl32.LVFI.PARTIAL) != 0;
 
                             string text = string.Empty;
-                            if (isTextSearch)
+                            if (isTextSearch && nmlvif->lvfi.psz != null)
                             {
-                                text = nmlvif.lvfi.psz;
+                                text = new string(nmlvif->lvfi.psz);
                             }
 
                             Point startingPoint = Point.Empty;
-                            if ((nmlvif.lvfi.flags & NativeMethods.LVFI_NEARESTXY) != 0)
+                            if ((nmlvif->lvfi.flags & ComCtl32.LVFI.NEARESTXY) != 0)
                             {
-                                startingPoint = nmlvif.lvfi.pt;
+                                startingPoint = nmlvif->lvfi.pt;
                             }
 
                             SearchDirectionHint dir = SearchDirectionHint.Down;
-                            if ((nmlvif.lvfi.flags & NativeMethods.LVFI_NEARESTXY) != 0)
+                            if ((nmlvif->lvfi.flags & ComCtl32.LVFI.NEARESTXY) != 0)
                             {
                                 // We can do this because SearchDirectionHint is set to the VK_*
-                                dir = (SearchDirectionHint)nmlvif.lvfi.vkDirection;
+                                dir = (SearchDirectionHint)nmlvif->lvfi.vkDirection;
                             }
 
-                            int startIndex = nmlvif.iStart;
+                            int startIndex = nmlvif->iStart;
                             if (startIndex >= VirtualListSize)
                             {
                                 // we want to search starting from the last item. Wrap around the first item.
                                 startIndex = 0;
                             }
 
-                            SearchForVirtualItemEventArgs sviEvent = new SearchForVirtualItemEventArgs(
-                                                                         isTextSearch,
-                                                                         isPrefixSearch,
-                                                                         false, /* includeSubItemsInSearch */
-                                                                         text,
-                                                                         startingPoint,
-                                                                         dir,
-                                                                         nmlvif.iStart);
+                            var sviEvent = new SearchForVirtualItemEventArgs(
+                                isTextSearch,
+                                isPrefixSearch,
+                                false, /* includeSubItemsInSearch */
+                                text,
+                                startingPoint,
+                                dir,
+                                nmlvif->iStart);
 
                             OnSearchForVirtualItem(sviEvent);
                             if (sviEvent.Index != -1)

@@ -586,10 +586,6 @@ namespace System.Windows.Forms
         LVIS_STATEIMAGEMASK = 0xF000,
         LVNI_FOCUSED = 0x0001,
         LVNI_SELECTED = 0x0002,
-        LVFI_PARAM = 0x0001,
-        LVFI_NEARESTXY = 0x0040,
-        LVFI_PARTIAL = 0x0008,
-        LVFI_STRING = 0x0002,
         LVIR_BOUNDS = 0,
         LVIR_ICON = 1,
         LVIR_LABEL = 2,
@@ -2204,14 +2200,6 @@ namespace System.Windows.Forms
 
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMLVFINDITEM
-        {
-            public User32.NMHDR hdr;
-            public int iStart;
-            public LVFINDINFO lvfi;
-        }
-
         [ComImport]
         [Guid("4D07FC10-F931-11CE-B001-00AA006884E5")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -2707,16 +2695,6 @@ namespace System.Windows.Forms
             public int iSubItem = 0;
             public int iImage = 0;
             public int iOrder = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct LVFINDINFO
-        {
-            public int flags;
-            public string psz;
-            public IntPtr lParam;
-            public Point pt;
-            public int vkDirection;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
