@@ -2180,7 +2180,7 @@ namespace System.Windows.Forms.Design
                         Capture = true;
                         _mouseDragLast = PointToScreen(new Point(me.X, me.Y));
                         // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-                        _ctrlSelect = NativeMethods.GetKeyState((int)Keys.ControlKey) != 0;
+                        _ctrlSelect = User32.GetKeyState((int)Keys.ControlKey) != 0;
                         if (!_ctrlSelect)
                         {
                             ISelectionService sel = (ISelectionService)_tray.GetService(typeof(ISelectionService));

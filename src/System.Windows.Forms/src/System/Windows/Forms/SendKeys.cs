@@ -649,15 +649,15 @@ namespace System.Windows.Forms
             // SKEvents are sent as sent as 1 or 2 inputs
             // currentInput[0] represents the SKEvent
             // currentInput[1] is a KeyUp to prevent all identical WM_CHARs to be sent as one message
-            NativeMethods.INPUT[] currentInput = new NativeMethods.INPUT[2];
+            Span<User32.INPUT> currentInput = stackalloc User32.INPUT[2];
 
             // all events are Keyboard events
-            currentInput[0].type = NativeMethods.INPUT_KEYBOARD;
-            currentInput[1].type = NativeMethods.INPUT_KEYBOARD;
+            currentInput[0].type = User32.INPUTENUM.KEYBOARD;
+            currentInput[1].type = User32.INPUTENUM.KEYBOARD;
 
             // set KeyUp values for currentInput[1]
-            currentInput[1].inputUnion.ki.wVk = (short)0;
-            currentInput[1].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_UNICODE | NativeMethods.KEYEVENTF_KEYUP;
+            currentInput[1].inputUnion.ki.wVk = 0;
+            currentInput[1].inputUnion.ki.dwFlags = User32.KEYEVENTF.UNICODE | User32.KEYEVENTF.KEYUP;
 
             // initialize unused members
             currentInput[0].inputUnion.ki.dwExtraInfo = IntPtr.Zero;
@@ -666,7 +666,7 @@ namespace System.Windows.Forms
             currentInput[1].inputUnion.ki.time = 0;
 
             // send each of our SKEvents using SendInput
-            int INPUTSize = Marshal.SizeOf<NativeMethods.INPUT>();
+            int INPUTSize = Marshal.SizeOf<User32.INPUT>();
 
             // need these outside the lock below
             uint eventsSent = 0;
@@ -699,13 +699,13 @@ namespace System.Windows.Forms
                             // for WM_CHAR, send a KEYEVENTF_UNICODE instead of a Keyboard event
                             // to support extended ascii characters with no keyboard equivalent.
                             // send currentInput[1] in this case
-                            currentInput[0].inputUnion.ki.wVk = (short)0;
-                            currentInput[0].inputUnion.ki.wScan = (short)skEvent.paramL;
-                            currentInput[0].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_UNICODE;
-                            currentInput[1].inputUnion.ki.wScan = (short)skEvent.paramL;
+                            currentInput[0].inputUnion.ki.wVk = 0;
+                            currentInput[0].inputUnion.ki.wScan = (ushort)skEvent.paramL;
+                            currentInput[0].inputUnion.ki.dwFlags = User32.KEYEVENTF.UNICODE;
+                            currentInput[1].inputUnion.ki.wScan = (ushort)skEvent.paramL;
 
                             // call SendInput, increment the eventsSent but subtract 1 for the extra one sent
-                            eventsSent += UnsafeNativeMethods.SendInput(2, currentInput, INPUTSize) - 1;
+                            eventsSent += User32.SendInput(2, currentInput, INPUTSize) - 1;
                         }
                         else
                         {
@@ -715,19 +715,19 @@ namespace System.Windows.Forms
                             // add KeyUp flag if we have a KeyUp
                             if (skEvent.wm == WindowMessages.WM_KEYUP || skEvent.wm == WindowMessages.WM_SYSKEYUP)
                             {
-                                currentInput[0].inputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_KEYUP;
+                                currentInput[0].inputUnion.ki.dwFlags |= User32.KEYEVENTF.KEYUP;
                             }
 
                             // Sets KEYEVENTF_EXTENDEDKEY flag if necessary
                             if (IsExtendedKey(skEvent))
                             {
-                                currentInput[0].inputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_EXTENDEDKEY;
+                                currentInput[0].inputUnion.ki.dwFlags |= User32.KEYEVENTF.EXTENDEDKEY;
                             }
 
-                            currentInput[0].inputUnion.ki.wVk = (short)skEvent.paramL;
+                            currentInput[0].inputUnion.ki.wVk = (ushort)skEvent.paramL;
 
                             // send only currentInput[0]
-                            eventsSent += UnsafeNativeMethods.SendInput(1, currentInput, INPUTSize);
+                            eventsSent += User32.SendInput(1, currentInput, INPUTSize);
 
                             CheckGlobalKeys(skEvent);
                         }
@@ -828,16 +828,16 @@ namespace System.Windows.Forms
 
         private static bool IsExtendedKey(SKEvent skEvent)
         {
-            return (skEvent.paramL == NativeMethods.VK_UP) ||
-                   (skEvent.paramL == NativeMethods.VK_DOWN) ||
-                   (skEvent.paramL == NativeMethods.VK_LEFT) ||
-                   (skEvent.paramL == NativeMethods.VK_RIGHT) ||
-                   (skEvent.paramL == NativeMethods.VK_PRIOR) ||
-                   (skEvent.paramL == NativeMethods.VK_NEXT) ||
-                   (skEvent.paramL == NativeMethods.VK_HOME) ||
-                   (skEvent.paramL == NativeMethods.VK_END) ||
-                   (skEvent.paramL == NativeMethods.VK_INSERT) ||
-                   (skEvent.paramL == NativeMethods.VK_DELETE);
+            return (skEvent.paramL == User32.VK.UP) ||
+                   (skEvent.paramL == User32.VK.DOWN) ||
+                   (skEvent.paramL == User32.VK.LEFT) ||
+                   (skEvent.paramL == User32.VK.RIGHT) ||
+                   (skEvent.paramL == User32.VK.PRIOR) ||
+                   (skEvent.paramL == User32.VK.NEXT) ||
+                   (skEvent.paramL == User32.VK.HOME) ||
+                   (skEvent.paramL == User32.VK.END) ||
+                   (skEvent.paramL == User32.VK.INSERT) ||
+                   (skEvent.paramL == User32.VK.DELETE);
         }
 
         private static void ClearGlobalKeys()
@@ -879,41 +879,41 @@ namespace System.Windows.Forms
             }
 
             // INPUT struct for resetting the keyboard
-            NativeMethods.INPUT[] keyboardInput = new NativeMethods.INPUT[2];
+            Span<User32.INPUT> keyboardInput = stackalloc User32.INPUT[2];
 
-            keyboardInput[0].type = NativeMethods.INPUT_KEYBOARD;
+            keyboardInput[0].type = User32.INPUTENUM.KEYBOARD;
             keyboardInput[0].inputUnion.ki.dwFlags = 0;
 
-            keyboardInput[1].type = NativeMethods.INPUT_KEYBOARD;
-            keyboardInput[1].inputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_KEYUP;
+            keyboardInput[1].type = User32.INPUTENUM.KEYBOARD;
+            keyboardInput[1].inputUnion.ki.dwFlags = User32.KEYEVENTF.KEYUP;
 
             // SendInputs to turn on or off these keys.  Inputs are pairs because KeyUp is sent for each one
             if (capslockChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = NativeMethods.VK_CAPITAL;
-                keyboardInput[1].inputUnion.ki.wVk = NativeMethods.VK_CAPITAL;
-                UnsafeNativeMethods.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].inputUnion.ki.wVk = User32.VK.CAPITAL;
+                keyboardInput[1].inputUnion.ki.wVk = User32.VK.CAPITAL;
+                User32.SendInput(2, keyboardInput, INPUTSize);
             }
 
             if (numlockChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = NativeMethods.VK_NUMLOCK;
-                keyboardInput[1].inputUnion.ki.wVk = NativeMethods.VK_NUMLOCK;
-                UnsafeNativeMethods.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].inputUnion.ki.wVk = User32.VK.NUMLOCK;
+                keyboardInput[1].inputUnion.ki.wVk = User32.VK.NUMLOCK;
+                User32.SendInput(2, keyboardInput, INPUTSize);
             }
 
             if (scrollLockChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = NativeMethods.VK_SCROLL;
-                keyboardInput[1].inputUnion.ki.wVk = NativeMethods.VK_SCROLL;
-                UnsafeNativeMethods.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].inputUnion.ki.wVk = User32.VK.SCROLL;
+                keyboardInput[1].inputUnion.ki.wVk = User32.VK.SCROLL;
+                User32.SendInput(2, keyboardInput, INPUTSize);
             }
 
             if (kanaChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = NativeMethods.VK_KANA;
-                keyboardInput[1].inputUnion.ki.wVk = NativeMethods.VK_KANA;
-                UnsafeNativeMethods.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].inputUnion.ki.wVk = User32.VK.KANA;
+                keyboardInput[1].inputUnion.ki.wVk = User32.VK.KANA;
+                User32.SendInput(2, keyboardInput, INPUTSize);
             }
         }
 

@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -446,7 +447,7 @@ namespace System.Windows.Forms
             //
             if (MouseButtons == MouseButtons.None)
             {
-                if (UnsafeNativeMethods.GetKeyState((int)Keys.Tab) >= 0)
+                if (User32.GetKeyState((int)Keys.Tab) >= 0)
                 {
                     //We enter the radioButton by using arrow keys
                     //Paint in raised state...

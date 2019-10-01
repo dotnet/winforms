@@ -384,7 +384,7 @@ namespace System.Windows.Forms
                             }
 #endif
 
-                            if (lpmsg->message == User32.WindowMessage.WM_KEYDOWN && lpmsg->wParam == (IntPtr)NativeMethods.VK_TAB)
+                            if (lpmsg->message == User32.WindowMessage.WM_KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
                             {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
@@ -2334,17 +2334,17 @@ namespace System.Windows.Forms
                 if (_clientSite is Ole32.IOleControlSite ioleClientSite)
                 {
                     Ole32.KEYMODIFIERS keyState = 0;
-                    if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)
+                    if (User32.GetKeyState(User32.VK.SHIFT) < 0)
                     {
                         keyState |= Ole32.KEYMODIFIERS.SHIFT;
                     }
 
-                    if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_CONTROL) < 0)
+                    if (User32.GetKeyState(User32.VK.CONTROL) < 0)
                     {
                         keyState |= Ole32.KEYMODIFIERS.CONTROL;
                     }
 
-                    if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_MENU) < 0)
+                    if (User32.GetKeyState(User32.VK.MENU) < 0)
                     {
                         keyState |= Ole32.KEYMODIFIERS.ALT;
                     }
