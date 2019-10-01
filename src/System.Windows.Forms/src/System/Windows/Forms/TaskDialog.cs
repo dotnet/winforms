@@ -10,15 +10,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
 
-using TaskDialogButtonStruct = Interop.TaskDialog.TASKDIALOG_BUTTON;
-using TaskDialogCallbackDelegate = Interop.TaskDialog.PFTASKDIALOGCALLBACK;
-using TaskDialogConfig = Interop.TaskDialog.TASKDIALOGCONFIG;
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
-using TaskDialogIconElement = Interop.TaskDialog.TASKDIALOG_ICON_ELEMENTS;
-using TaskDialogMessage = Interop.TaskDialog.TASKDIALOG_MESSAGES;
-using TaskDialogNotification = Interop.TaskDialog.TASKDIALOG_NOTIFICATIONS;
-using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -89,7 +80,7 @@ namespace System.Windows.Forms
         ///   to ensure the function pointer doesn't become invalid.
         /// </para>
         /// </remarks>
-        private static readonly TaskDialogCallbackDelegate s_callbackProcDelegate;
+        private static readonly ComCtl32.PFTASKDIALOGCALLBACK s_callbackProcDelegate;
 
         /// <summary>
         ///   The function pointer created from <see cref="s_callbackProcDelegate"/>.
@@ -712,7 +703,7 @@ namespace System.Windows.Forms
                     int returnValue, resultButtonID;
                     try
                     {
-                        returnValue = Interop.TaskDialog.TaskDialogIndirect(
+                        returnValue = ComCtl32.TaskDialogIndirect(
                             ptrTaskDialogConfig,
                             out resultButtonID,
                             out _,
@@ -866,7 +857,7 @@ namespace System.Windows.Forms
         internal void SwitchProgressBarMode(bool marqueeProgressBar)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_SET_MARQUEE_PROGRESS_BAR,
+                ComCtl32.TDM.SET_MARQUEE_PROGRESS_BAR,
                 marqueeProgressBar ? 1 : 0,
                 IntPtr.Zero);
         }
@@ -888,7 +879,7 @@ namespace System.Windows.Forms
             }
 
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_SET_PROGRESS_BAR_MARQUEE,
+                ComCtl32.TDM.SET_PROGRESS_BAR_MARQUEE,
                 enableMarquee ? 1 : 0,
                 (IntPtr)animationSpeed);
         }
@@ -923,7 +914,7 @@ namespace System.Windows.Forms
             var param = (IntPtr)(void*)unchecked((uint)(min | (max << 0x10)));
 
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_SET_PROGRESS_BAR_RANGE,
+                ComCtl32.TDM.SET_PROGRESS_BAR_RANGE,
                 0,
                 param);
         }
@@ -940,7 +931,7 @@ namespace System.Windows.Forms
             }
 
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_SET_PROGRESS_BAR_POS,
+                ComCtl32.TDM.SET_PROGRESS_BAR_POS,
                 pos,
                 IntPtr.Zero);
         }
@@ -949,11 +940,11 @@ namespace System.Windows.Forms
         ///   While the dialog is being shown, sets the progress bar state.
         /// </summary>
         /// <param name="state"></param>
-        internal void SetProgressBarState(int state)
+        internal void SetProgressBarState(ComCtl32.PBST state)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_SET_PROGRESS_BAR_STATE,
-                state,
+                ComCtl32.TDM.SET_PROGRESS_BAR_STATE,
+                (int)state,
                 IntPtr.Zero);
         }
 
@@ -966,7 +957,7 @@ namespace System.Windows.Forms
         internal void ClickCheckBox(bool isChecked, bool focus = false)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_CLICK_VERIFICATION,
+                ComCtl32.TDM.CLICK_VERIFICATION,
                 isChecked ? 1 : 0,
                 (IntPtr)(focus ? 1 : 0));
         }
@@ -974,7 +965,7 @@ namespace System.Windows.Forms
         internal void SetButtonElevationRequiredState(int buttonID, bool requiresElevation)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_SET_BUTTON_ELEVATION_REQUIRED_STATE,
+                ComCtl32.TDM.SET_BUTTON_ELEVATION_REQUIRED_STATE,
                 buttonID,
                 (IntPtr)(requiresElevation ? 1 : 0));
         }
@@ -982,7 +973,7 @@ namespace System.Windows.Forms
         internal void SetButtonEnabled(int buttonID, bool enable)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_ENABLE_BUTTON,
+                ComCtl32.TDM.ENABLE_BUTTON,
                 buttonID,
                 (IntPtr)(enable ? 1 : 0));
         }
@@ -990,7 +981,7 @@ namespace System.Windows.Forms
         internal void SetRadioButtonEnabled(int radioButtonID, bool enable)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_ENABLE_RADIO_BUTTON,
+                ComCtl32.TDM.ENABLE_RADIO_BUTTON,
                 radioButtonID,
                 (IntPtr)(enable ? 1 : 0));
         }
@@ -998,7 +989,7 @@ namespace System.Windows.Forms
         internal void ClickButton(int buttonID)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_CLICK_BUTTON,
+                ComCtl32.TDM.CLICK_BUTTON,
                 buttonID,
                 IntPtr.Zero);
         }
@@ -1013,7 +1004,7 @@ namespace System.Windows.Forms
             // handles for controls of both the previous and new page exist during
             // that time).
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_CLICK_BUTTON,
+                ComCtl32.TDM.CLICK_BUTTON,
                 (int)TaskDialogResult.Cancel,
                 IntPtr.Zero,
                 false);
@@ -1022,12 +1013,12 @@ namespace System.Windows.Forms
         internal void ClickRadioButton(int radioButtonID)
         {
             SendTaskDialogMessage(
-                TaskDialogMessage.TDM_CLICK_RADIO_BUTTON,
+                ComCtl32.TDM.CLICK_RADIO_BUTTON,
                 radioButtonID,
                 IntPtr.Zero);
         }
 
-        internal void UpdateTextElement(TaskDialogTextElement element, string? text)
+        internal void UpdateTextElement(ComCtl32.TDE element, string? text)
         {
             DenyIfDialogNotUpdatable();
 
@@ -1039,7 +1030,7 @@ namespace System.Windows.Forms
                 // Note: SetElementText will resize the dialog while UpdateElementText
                 // will not (which would lead to clipped controls), so we use the
                 // former.
-                SendTaskDialogMessage(TaskDialogMessage.TDM_SET_ELEMENT_TEXT, (int)element, textPtr);
+                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (int)element, textPtr);
             }
             finally
             {
@@ -1049,7 +1040,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void UpdateIconElement(TaskDialogIconElement element, IntPtr icon)
+        internal void UpdateIconElement(ComCtl32.TDIE element, IntPtr icon)
         {
             // Note: Updating the icon doesn't cause the task dialog to update
             // its size; in contrast to the text updates where we use a
@@ -1060,7 +1051,7 @@ namespace System.Windows.Forms
             // 
             // To fix this, we call UpdateWindowSize() after updating the icon, to
             // force the task dialog to update its size.
-            SendTaskDialogMessage(TaskDialogMessage.TDM_UPDATE_ICON, (int)element, icon);
+            SendTaskDialogMessage(ComCtl32.TDM.UPDATE_ICON, (int)element, icon);
             UpdateWindowSize();
         }
 
@@ -1122,9 +1113,9 @@ namespace System.Windows.Forms
             Closed?.Invoke(this, e);
         }
 
-        private Interop.HRESULT HandleTaskDialogCallback(
+        private HRESULT HandleTaskDialogCallback(
             IntPtr hWnd,
-            TaskDialogNotification notification,
+            ComCtl32.TDN notification,
             IntPtr wParam,
             IntPtr lParam)
         {
@@ -1145,7 +1136,7 @@ namespace System.Windows.Forms
 
                 switch (notification)
                 {
-                    case TaskDialogNotification.TDN_CREATED:
+                    case ComCtl32.TDN.CREATED:
                         _boundPage.ApplyInitialization();
 
                         // Note: If the user navigates the dialog within the Opened event
@@ -1173,7 +1164,7 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case TaskDialogNotification.TDN_NAVIGATED:
+                    case ComCtl32.TDN.NAVIGATED:
                         // Indicate to the ButtonClicked handlers currently on the stack
                         // that we received the TDN_NAVIGATED notification.
                         _buttonClickNavigationCounter.navigationIndex = _buttonClickNavigationCounter.stackCount;
@@ -1196,7 +1187,7 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case TaskDialogNotification.TDN_DESTROYED:
+                    case ComCtl32.TDN.DESTROYED:
                         // Note: When multiple dialogs are shown (so Show() will occur
                         // multiple times in the call stack) and a previously opened
                         // dialog is closed, the Destroyed notification for the closed
@@ -1236,7 +1227,7 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case TaskDialogNotification.TDN_HYPERLINK_CLICKED:
+                    case ComCtl32.TDN.HYPERLINK_CLICKED:
                         string? link = Marshal.PtrToStringUni(lParam);
 
                         // The link parameter should never be null.
@@ -1246,7 +1237,7 @@ namespace System.Windows.Forms
                         _boundPage.OnHyperlinkClicked(eventArgs);
                         break;
 
-                    case TaskDialogNotification.TDN_BUTTON_CLICKED:
+                    case ComCtl32.TDN.BUTTON_CLICKED:
                         // Check if we should ignore this notification. If we process
                         // it, we set a flag to ignore further TDN_BUTTON_CLICKED
                         // notifications, and we post a message to the task dialog
@@ -1367,7 +1358,7 @@ namespace System.Windows.Forms
 
                         return applyButtonResult ? HRESULT.S_OK : HRESULT.S_FALSE;
 
-                    case TaskDialogNotification.TDN_RADIO_BUTTON_CLICKED:
+                    case ComCtl32.TDN.RADIO_BUTTON_CLICKED:
                         int radioButtonID = (int)wParam;
                         TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID)!;
 
@@ -1386,15 +1377,15 @@ namespace System.Windows.Forms
 
                         break;
 
-                    case TaskDialogNotification.TDN_EXPANDO_BUTTON_CLICKED:
+                    case ComCtl32.TDN.EXPANDO_BUTTON_CLICKED:
                         _boundPage.Expander!.HandleExpandoButtonClicked(wParam != IntPtr.Zero);
                         break;
 
-                    case TaskDialogNotification.TDN_VERIFICATION_CLICKED:
+                    case ComCtl32.TDN.VERIFICATION_CLICKED:
                         _boundPage.CheckBox!.HandleCheckBoxClicked(wParam != IntPtr.Zero);
                         break;
 
-                    case TaskDialogNotification.TDN_HELP:
+                    case ComCtl32.TDN.HELP:
                         _boundPage.OnHelpRequest(EventArgs.Empty);
                         break;
                 }
@@ -1545,7 +1536,7 @@ namespace System.Windows.Forms
                         // returns with an error code; but this will not be
                         // noticeable in the SendMessage() return value.
                         SendTaskDialogMessage(
-                            TaskDialogMessage.TDM_NAVIGATE_PAGE,
+                            ComCtl32.TDM.NAVIGATE_PAGE,
                             0,
                             ptrTaskDialogConfig,
                             checkWaitingForNavigation: false);
@@ -1597,7 +1588,7 @@ namespace System.Windows.Forms
         {
             page.Bind(
                 this,
-                out TaskDialogFlags flags,
+                out ComCtl32.TDF flags,
                 out TaskDialogButtons standardButtonFlags,
                 out IntPtr iconValue,
                 out IntPtr footerIconValue,
@@ -1608,11 +1599,11 @@ namespace System.Windows.Forms
             {
                 if (startupLocation == TaskDialogStartupLocation.CenterParent)
                 {
-                    flags |= TaskDialogFlags.TDF_POSITION_RELATIVE_TO_WINDOW;
+                    flags |= ComCtl32.TDF.POSITION_RELATIVE_TO_WINDOW;
                 }
                 if (!setToForeground)
                 {
-                    flags |= TaskDialogFlags.TDF_NO_SET_FOREGROUND;
+                    flags |= ComCtl32.TDF.NO_SET_FOREGROUND;
                 }
 
                 checked
@@ -1623,7 +1614,7 @@ namespace System.Windows.Forms
                     // with a Align() call when incrementing the pointer.
                     // Use a byte pointer so we can use byte-wise pointer arithmetics.
                     var sizeToAllocate = (byte*)0;
-                    sizeToAllocate += sizeof(TaskDialogConfig);
+                    sizeToAllocate += sizeof(ComCtl32.TASKDIALOGCONFIG);
 
                     // Strings in TasDialogConfig
                     Align(ref sizeToAllocate, sizeof(char));
@@ -1644,7 +1635,7 @@ namespace System.Windows.Forms
                         // can cause an unaligned write when assigning the structure (the
                         // same happens with TaskDialogConfig).
                         Align(ref sizeToAllocate);
-                        sizeToAllocate += sizeof(TaskDialogButtonStruct) * page.CustomButtons.Count;
+                        sizeToAllocate += sizeof(ComCtl32.TASKDIALOG_BUTTON) * page.CustomButtons.Count;
 
                         // Strings in buttons array
                         Align(ref sizeToAllocate, sizeof(char));
@@ -1659,7 +1650,7 @@ namespace System.Windows.Forms
                     {
                         // See comment above regarding alignment.
                         Align(ref sizeToAllocate);
-                        sizeToAllocate += sizeof(TaskDialogButtonStruct) * page.RadioButtons.Count;
+                        sizeToAllocate += sizeof(ComCtl32.TASKDIALOG_BUTTON) * page.RadioButtons.Count;
 
                         // Strings in radio buttons array
                         Align(ref sizeToAllocate, sizeof(char));
@@ -1683,19 +1674,19 @@ namespace System.Windows.Forms
                         Align(ref currentPtr);
                         ptrTaskDialogConfig = (IntPtr)currentPtr;
 
-                        ref TaskDialogConfig taskDialogConfig = ref *(TaskDialogConfig*)currentPtr;
-                        currentPtr += sizeof(TaskDialogConfig);
+                        ref ComCtl32.TASKDIALOGCONFIG taskDialogConfig = ref *(ComCtl32.TASKDIALOGCONFIG*)currentPtr;
+                        currentPtr += sizeof(ComCtl32.TASKDIALOGCONFIG);
 
                         // Assign the structure with the constructor syntax, which will
                         // automatically initialize its other members with their default
                         // value.
                         Align(ref currentPtr, sizeof(char));
-                        taskDialogConfig = new TaskDialogConfig()
+                        taskDialogConfig = new ComCtl32.TASKDIALOGCONFIG()
                         {
-                            cbSize = (uint)sizeof(TaskDialogConfig),
+                            cbSize = (uint)sizeof(ComCtl32.TASKDIALOGCONFIG),
                             hwndParent = hwndOwner,
                             dwFlags = flags,
-                            dwCommonButtons = (Interop.TaskDialog.TASKDIALOG_COMMON_BUTTON_FLAGS)standardButtonFlags,
+                            dwCommonButtons = (ComCtl32.TDCBF)standardButtonFlags,
                             mainIconUnion = iconValue,
                             footerIconUnion = footerIconValue,
                             pszWindowTitle = MarshalString(page.Caption),
@@ -1717,16 +1708,16 @@ namespace System.Windows.Forms
                         if (page.CustomButtons.Count > 0)
                         {
                             Align(ref currentPtr);
-                            var customButtonStructs = (TaskDialogButtonStruct*)currentPtr;
+                            var customButtonStructs = (ComCtl32.TASKDIALOG_BUTTON*)currentPtr;
                             taskDialogConfig.pButtons = (IntPtr)customButtonStructs;
                             taskDialogConfig.cButtons = (uint)page.CustomButtons.Count;
-                            currentPtr += sizeof(TaskDialogButtonStruct) * page.CustomButtons.Count;
+                            currentPtr += sizeof(ComCtl32.TASKDIALOG_BUTTON) * page.CustomButtons.Count;
 
                             Align(ref currentPtr, sizeof(char));
                             for (int i = 0; i < page.CustomButtons.Count; i++)
                             {
                                 TaskDialogCustomButton currentCustomButton = page.CustomButtons[i];
-                                customButtonStructs[i] = new TaskDialogButtonStruct()
+                                customButtonStructs[i] = new ComCtl32.TASKDIALOG_BUTTON()
                                 {
                                     nButtonID = currentCustomButton.ButtonID,
                                     pszButtonText = MarshalString(currentCustomButton.GetResultingText())
@@ -1738,16 +1729,16 @@ namespace System.Windows.Forms
                         if (page.RadioButtons.Count > 0)
                         {
                             Align(ref currentPtr);
-                            var customRadioButtonStructs = (TaskDialogButtonStruct*)currentPtr;
+                            var customRadioButtonStructs = (ComCtl32.TASKDIALOG_BUTTON*)currentPtr;
                             taskDialogConfig.pRadioButtons = (IntPtr)customRadioButtonStructs;
                             taskDialogConfig.cRadioButtons = (uint)page.RadioButtons.Count;
-                            currentPtr += sizeof(TaskDialogButtonStruct) * page.RadioButtons.Count;
+                            currentPtr += sizeof(ComCtl32.TASKDIALOG_BUTTON) * page.RadioButtons.Count;
 
                             Align(ref currentPtr, sizeof(char));
                             for (int i = 0; i < page.RadioButtons.Count; i++)
                             {
                                 TaskDialogRadioButton currentCustomButton = page.RadioButtons[i];
-                                customRadioButtonStructs[i] = new TaskDialogButtonStruct()
+                                customRadioButtonStructs[i] = new ComCtl32.TASKDIALOG_BUTTON()
                                 {
                                     nButtonID = currentCustomButton.RadioButtonID,
                                     pszButtonText = MarshalString(currentCustomButton.Text)
@@ -1900,7 +1891,7 @@ namespace System.Windows.Forms
         }
 
         private void SendTaskDialogMessage(
-            TaskDialogMessage message,
+            ComCtl32.TDM message,
             int wParam,
             IntPtr lParam,
             bool checkWaitingForNavigation = true)
@@ -1930,7 +1921,7 @@ namespace System.Windows.Forms
             // causes the size/layout to be updated).
             // We use the MainInstruction because it cannot contain hyperlinks
             // (and therefore there is no risk that one of the links loses focus).
-            UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, _boundPage!.MainInstruction);
+            UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, _boundPage!.MainInstruction);
         }
     }
 }

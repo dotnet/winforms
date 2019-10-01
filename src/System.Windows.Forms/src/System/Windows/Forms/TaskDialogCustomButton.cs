@@ -5,8 +5,7 @@
 #nullable enable
 
 using System.Diagnostics;
-
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -113,9 +112,9 @@ namespace System.Windows.Forms
             return _text ?? base.ToString() ?? string.Empty;
         }
 
-        internal TaskDialogFlags Bind(TaskDialogPage page, int buttonID)
+        internal ComCtl32.TDF Bind(TaskDialogPage page, int buttonID)
         {
-            TaskDialogFlags result = Bind(page);
+            ComCtl32.TDF result = Bind(page);
             _buttonID = buttonID;
 
             return result;

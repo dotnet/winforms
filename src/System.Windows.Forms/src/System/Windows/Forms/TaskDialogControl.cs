@@ -4,7 +4,7 @@
 
 #nullable enable
 
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
             private set;
         }
 
-        internal TaskDialogFlags Bind(TaskDialogPage page)
+        internal ComCtl32.TDF Bind(TaskDialogPage page)
         {
             BoundPage = page ?? throw new ArgumentNullException(nameof(page));
 
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
         /// This method will only be called if <see cref="IsCreatable"/> returns <see langword="true"/>.
         /// </remarks>
         /// <returns></returns>
-        private protected virtual TaskDialogFlags BindCore()
+        private protected virtual ComCtl32.TDF BindCore()
         {
             return default;
         }

@@ -4,7 +4,7 @@
 
 #nullable enable
 
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -133,13 +133,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected override TaskDialogFlags BindCore()
+        private protected override ComCtl32.TDF BindCore()
         {
-            TaskDialogFlags flags = base.BindCore();
+            ComCtl32.TDF flags = base.BindCore();
 
             if (_checked)
             {
-                flags |= TaskDialogFlags.TDF_VERIFICATION_FLAG_CHECKED;
+                flags |= ComCtl32.TDF.VERIFICATION_FLAG_CHECKED;
             }
 
             return flags;

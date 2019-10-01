@@ -5,8 +5,7 @@
 #nullable enable
 
 using System.ComponentModel;
-
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -111,7 +110,7 @@ namespace System.Windows.Forms
                         // the marquee will not show.
                         if (newStateIsMarquee && previousState != TaskDialogProgressBarState.Normal)
                         {
-                            taskDialog.SetProgressBarState(Interop.TaskDialog.PBST_NORMAL);
+                            taskDialog.SetProgressBarState(ComCtl32.PBST.NORMAL);
                         }
 
                         taskDialog.SwitchProgressBarMode(newStateIsMarquee);
@@ -324,33 +323,29 @@ namespace System.Windows.Forms
                 state == TaskDialogProgressBarState.MarqueePaused;
         }
 
-        private static int GetNativeProgressBarState(
+        private static ComCtl32.PBST GetNativeProgressBarState(
                 TaskDialogProgressBarState state)
         {
-            switch (state)
+            return state switch
             {
-                case TaskDialogProgressBarState.Normal:
-                    return Interop.TaskDialog.PBST_NORMAL;
-                case TaskDialogProgressBarState.Paused:
-                    return Interop.TaskDialog.PBST_PAUSED;
-                case TaskDialogProgressBarState.Error:
-                    return Interop.TaskDialog.PBST_ERROR;
-                default:
-                    throw new ArgumentException();
-            }
+                TaskDialogProgressBarState.Normal => ComCtl32.PBST.NORMAL,
+                TaskDialogProgressBarState.Paused => ComCtl32.PBST.PAUSED,
+                TaskDialogProgressBarState.Error => ComCtl32.PBST.ERROR,
+                _ => throw new ArgumentException()
+            };
         }
 
-        private protected override TaskDialogFlags BindCore()
+        private protected override ComCtl32.TDF BindCore()
         {
-            TaskDialogFlags flags = base.BindCore();
+            ComCtl32.TDF flags = base.BindCore();
 
             if (ProgressBarStateIsMarquee(_state))
             {
-                flags |= TaskDialogFlags.TDF_SHOW_MARQUEE_PROGRESS_BAR;
+                flags |= ComCtl32.TDF.SHOW_MARQUEE_PROGRESS_BAR;
             }
             else
             {
-                flags |= TaskDialogFlags.TDF_SHOW_PROGRESS_BAR;
+                flags |= ComCtl32.TDF.SHOW_PROGRESS_BAR;
             }
 
             return flags;

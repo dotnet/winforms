@@ -4,6 +4,8 @@
 
 #nullable enable
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -19,66 +21,70 @@ namespace System.Windows.Forms
         /// <summary>
         /// 
         /// </summary>
-        OK = Interop.TaskDialog.IDOK,
+        OK = User32.IDOK,
 
         /// <summary>
         /// 
         /// </summary>
         /// <remarks>
-        /// Note: Adding a Cancel button will automatically add a close button
-        /// to the task dialog's title bar and will allow to close the dialog by
-        /// pressing ESC or Alt+F4 (just as if you enabled
-        /// <see cref="TaskDialogPage.AllowCancel"/>).
+        /// <para>
+        ///   Note: Adding a Cancel button will automatically add a close button
+        ///   to the task dialog's title bar and will allow to close the dialog by
+        ///   pressing ESC or Alt+F4 (just as if you enabled
+        ///   <see cref="TaskDialogPage.AllowCancel"/>).
+        /// </para>
         /// </remarks>
-        Cancel = Interop.TaskDialog.IDCANCEL,
+        Cancel = User32.IDCANCEL,
 
         /// <summary>
         /// 
         /// </summary>
-        Abort = Interop.TaskDialog.IDABORT,
+        Abort = User32.IDABORT,
 
         /// <summary>
         /// 
         /// </summary>
-        Retry = Interop.TaskDialog.IDRETRY,
+        Retry = User32.IDRETRY,
 
         /// <summary>
         /// 
         /// </summary>
-        Ignore = Interop.TaskDialog.IDIGNORE,
+        Ignore = User32.IDIGNORE,
 
         /// <summary>
         /// 
         /// </summary>
-        Yes = Interop.TaskDialog.IDYES,
+        Yes = User32.IDYES,
 
         /// <summary>
         /// 
         /// </summary>
-        No = Interop.TaskDialog.IDNO,
+        No = User32.IDNO,
 
         /// <summary>
         /// 
         /// </summary>
-        Close = Interop.TaskDialog.IDCLOSE,
+        Close = User32.IDCLOSE,
 
         /// <summary>
         /// 
         /// </summary>
         /// <remarks>
-        /// Note: Clicking this button will not close the dialog, but will raise the
-        /// <see cref="TaskDialogPage.HelpRequest"/> event.
+        /// <para>
+        ///   Note: Clicking this button will not close the dialog, but will raise the
+        ///   <see cref="TaskDialogPage.HelpRequest"/> event.
+        /// </para>
         /// </remarks>
-        Help = Interop.TaskDialog.IDHELP,
+        Help = User32.IDHELP,
 
         /// <summary>
         /// 
         /// </summary>
-        TryAgain = Interop.TaskDialog.IDTRYAGAIN,
+        TryAgain = User32.IDTRYAGAIN,
 
         /// <summary>
         /// 
         /// </summary>
-        Continue = Interop.TaskDialog.IDCONTINUE
+        Continue = User32.IDCONTINUE
     }
 }

@@ -4,8 +4,7 @@
 
 #nullable enable
 
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
-using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -77,7 +76,7 @@ namespace System.Windows.Forms
 
                 // Update the text if we are bound.
                 BoundTaskDialog?.UpdateTextElement(
-                    TaskDialogTextElement.TDE_EXPANDED_INFORMATION, value);
+                    ComCtl32.TDE.EXPANDED_INFORMATION, value);
 
                 _text = value;
             }
@@ -192,17 +191,17 @@ namespace System.Windows.Forms
             OnExpandedChanged(EventArgs.Empty);
         }
 
-        private protected override TaskDialogFlags BindCore()
+        private protected override ComCtl32.TDF BindCore()
         {
-            TaskDialogFlags flags = base.BindCore();
+            ComCtl32.TDF flags = base.BindCore();
 
             if (_expanded)
             {
-                flags |= TaskDialogFlags.TDF_EXPANDED_BY_DEFAULT;
+                flags |= ComCtl32.TDF.EXPANDED_BY_DEFAULT;
             }
             if (_expandFooterArea)
             {
-                flags |= TaskDialogFlags.TDF_EXPAND_FOOTER_AREA;
+                flags |= ComCtl32.TDF.EXPAND_FOOTER_AREA;
             }
 
             return flags;

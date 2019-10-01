@@ -5,10 +5,7 @@
 #nullable enable
 
 using System.Linq;
-
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
-using TaskDialogIconElement = Interop.TaskDialog.TASKDIALOG_ICON_ELEMENTS;
-using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -49,7 +46,7 @@ namespace System.Windows.Forms
         private TaskDialogFooter? _footer;
         private TaskDialogProgressBar? _progressBar;
 
-        private TaskDialogFlags _flags;
+        private ComCtl32.TDF _flags;
         private TaskDialogCustomButtonStyle _customButtonStyle;
         private TaskDialogIcon? _icon;
         private string? _caption;
@@ -294,7 +291,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                BoundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_MAIN_INSTRUCTION, value);
+                BoundTaskDialog?.UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, value);
 
                 _mainInstruction = value;
             }
@@ -314,7 +311,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                BoundTaskDialog?.UpdateTextElement(TaskDialogTextElement.TDE_CONTENT, value);
+                BoundTaskDialog?.UpdateTextElement(ComCtl32.TDE.CONTENT, value);
 
                 _text = value;
             }
@@ -347,7 +344,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
-                BoundTaskDialog?.UpdateIconElement(TaskDialogIconElement.TDIE_ICON_MAIN, iconValue);
+                BoundTaskDialog?.UpdateIconElement(ComCtl32.TDIE.ICON_MAIN, iconValue);
 
                 _icon = value;
             }
@@ -436,8 +433,8 @@ namespace System.Windows.Forms
         /// </remarks>
         public bool EnableHyperlinks
         {
-            get => GetFlag(TaskDialogFlags.TDF_ENABLE_HYPERLINKS);
-            set => SetFlag(TaskDialogFlags.TDF_ENABLE_HYPERLINKS, value);
+            get => GetFlag(ComCtl32.TDF.ENABLE_HYPERLINKS);
+            set => SetFlag(ComCtl32.TDF.ENABLE_HYPERLINKS, value);
         }
 
         /// <summary>
@@ -458,8 +455,8 @@ namespace System.Windows.Forms
         /// </remarks>
         public bool AllowCancel
         {
-            get => GetFlag(TaskDialogFlags.TDF_ALLOW_DIALOG_CANCELLATION);
-            set => SetFlag(TaskDialogFlags.TDF_ALLOW_DIALOG_CANCELLATION, value);
+            get => GetFlag(ComCtl32.TDF.ALLOW_DIALOG_CANCELLATION);
+            set => SetFlag(ComCtl32.TDF.ALLOW_DIALOG_CANCELLATION, value);
         }
 
         /// <summary>
@@ -478,8 +475,8 @@ namespace System.Windows.Forms
         /// </remarks>
         public bool RightToLeftLayout
         {
-            get => GetFlag(TaskDialogFlags.TDF_RTL_LAYOUT);
-            set => SetFlag(TaskDialogFlags.TDF_RTL_LAYOUT, value);
+            get => GetFlag(ComCtl32.TDF.RTL_LAYOUT);
+            set => SetFlag(ComCtl32.TDF.RTL_LAYOUT, value);
         }
 
         /// <summary>
@@ -496,8 +493,8 @@ namespace System.Windows.Forms
         /// </remarks>
         public bool CanBeMinimized
         {
-            get => GetFlag(TaskDialogFlags.TDF_CAN_BE_MINIMIZED);
-            set => SetFlag(TaskDialogFlags.TDF_CAN_BE_MINIMIZED, value);
+            get => GetFlag(ComCtl32.TDF.CAN_BE_MINIMIZED);
+            set => SetFlag(ComCtl32.TDF.CAN_BE_MINIMIZED, value);
         }
 
         /// <summary>
@@ -513,8 +510,8 @@ namespace System.Windows.Forms
         /// </remarks>
         public bool SizeToContent
         {
-            get => GetFlag(TaskDialogFlags.TDF_SIZE_TO_CONTENT);
-            set => SetFlag(TaskDialogFlags.TDF_SIZE_TO_CONTENT, value);
+            get => GetFlag(ComCtl32.TDF.SIZE_TO_CONTENT);
+            set => SetFlag(ComCtl32.TDF.SIZE_TO_CONTENT, value);
         }
 
         internal TaskDialog? BoundTaskDialog { get; private set; }
@@ -686,7 +683,7 @@ namespace System.Windows.Forms
 
         internal void Bind(
             TaskDialog owner,
-            out TaskDialogFlags flags,
+            out ComCtl32.TDF flags,
             out TaskDialogButtons buttonFlags,
             out IntPtr iconValue,
             out IntPtr footerIconValue,
@@ -708,7 +705,7 @@ namespace System.Windows.Forms
 
             if (_boundIconIsFromHandle)
             {
-                flags |= TaskDialogFlags.TDF_USE_HICON_MAIN;
+                flags |= ComCtl32.TDF.USE_HICON_MAIN;
             }
 
             // Only specify the command link flags if there actually are custom buttons;
@@ -717,11 +714,11 @@ namespace System.Windows.Forms
             {
                 if (_customButtonStyle == TaskDialogCustomButtonStyle.CommandLinks)
                 {
-                    flags |= TaskDialogFlags.TDF_USE_COMMAND_LINKS;
+                    flags |= ComCtl32.TDF.USE_COMMAND_LINKS;
                 }
                 else if (_customButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon)
                 {
-                    flags |= TaskDialogFlags.TDF_USE_COMMAND_LINKS_NO_ICON;
+                    flags |= ComCtl32.TDF.USE_COMMAND_LINKS_NO_ICON;
                 }
             }
 
@@ -788,7 +785,7 @@ namespace System.Windows.Forms
 
             if (defaultRadioButtonID == 0)
             {
-                flags |= TaskDialogFlags.TDF_NO_DEFAULT_RADIO_BUTTON;
+                flags |= ComCtl32.TDF.NO_DEFAULT_RADIO_BUTTON;
             }
 
             if (_checkBox != null)
@@ -925,12 +922,12 @@ namespace System.Windows.Forms
             HyperlinkClicked?.Invoke(this, e);
         }
 
-        private bool GetFlag(TaskDialogFlags flag)
+        private bool GetFlag(ComCtl32.TDF flag)
         {
             return (_flags & flag) == flag;
         }
 
-        private void SetFlag(TaskDialogFlags flag, bool value)
+        private void SetFlag(ComCtl32.TDF flag, bool value)
         {
             DenyIfBound();
 

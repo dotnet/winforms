@@ -4,9 +4,7 @@
 
 #nullable enable
 
-using TaskDialogFlags = Interop.TaskDialog.TASKDIALOG_FLAGS;
-using TaskDialogIconElement = Interop.TaskDialog.TASKDIALOG_ICON_ELEMENTS;
-using TaskDialogTextElement = Interop.TaskDialog.TASKDIALOG_ELEMENTS;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -61,7 +59,7 @@ namespace System.Windows.Forms
 
                 // Update the text if we are bound.
                 BoundTaskDialog?.UpdateTextElement(
-                    TaskDialogTextElement.TDE_FOOTER, value);
+                    ComCtl32.TDE.FOOTER, value);
 
                 _text = value;
             }
@@ -95,7 +93,7 @@ namespace System.Windows.Forms
                 }
 
                 BoundTaskDialog?.UpdateIconElement(
-                    TaskDialogIconElement.TDIE_ICON_FOOTER, iconValue);
+                    ComCtl32.TDIE.ICON_FOOTER, iconValue);
 
                 _icon = value;
             }
@@ -115,24 +113,24 @@ namespace System.Windows.Forms
             return _text ?? base.ToString() ?? string.Empty;
         }
 
-        internal TaskDialogFlags Bind(TaskDialogPage page, out IntPtr footerIconValue)
+        internal ComCtl32.TDF Bind(TaskDialogPage page, out IntPtr footerIconValue)
         {
-            TaskDialogFlags result = base.Bind(page);
+            ComCtl32.TDF result = base.Bind(page);
 
             footerIconValue = TaskDialogPage.GetIconValue(_icon).iconValue;
 
             return result;
         }
 
-        private protected override TaskDialogFlags BindCore()
+        private protected override ComCtl32.TDF BindCore()
         {
-            TaskDialogFlags flags = base.BindCore();
+            ComCtl32.TDF flags = base.BindCore();
 
             _boundIconIsFromHandle = TaskDialogPage.GetIconValue(_icon).iconIsFromHandle ?? false;
 
             if (_boundIconIsFromHandle)
             {
-                flags |= TaskDialogFlags.TDF_USE_HICON_FOOTER;
+                flags |= ComCtl32.TDF.USE_HICON_FOOTER;
             }
 
             return flags;
