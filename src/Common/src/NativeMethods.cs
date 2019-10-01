@@ -453,12 +453,6 @@ namespace System.Windows.Forms
         ICON_BIG = 1,
         IMAGE_ICON = 1,
         IMAGE_CURSOR = 2,
-        ICC_LISTVIEW_CLASSES = 0x00000001,
-        ICC_TREEVIEW_CLASSES = 0x00000002,
-        ICC_BAR_CLASSES = 0x00000004,
-        ICC_TAB_CLASSES = 0x00000008,
-        ICC_PROGRESS_CLASS = 0x00000020,
-        ICC_DATE_CLASSES = 0x00000100,
         ILC_MASK = 0x0001,
         ILC_COLOR = 0x0000,
         ILC_COLOR4 = 0x0004,
@@ -1633,13 +1627,6 @@ namespace System.Windows.Forms
                 IntPtr hwndBldrOwner,
                 [Out, In, MarshalAs(UnmanagedType.Struct)] ref object pvarValue,
                 BOOL* actionCommitted);
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class INITCOMMONCONTROLSEX
-        {
-            public int dwSize = 8; //ndirect.DllLib.sizeOf(this);
-            public int dwICC;
         }
 
         [StructLayout(LayoutKind.Sequential)]

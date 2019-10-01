@@ -89,12 +89,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                var icc = new ComCtl32.INITCOMMONCONTROLSEX
                 {
-                    dwICC = NativeMethods.ICC_TAB_CLASSES
+                    dwICC = ComCtl32.ICC.TAB_CLASSES
                 };
-                SafeNativeMethods.InitCommonControlsEx(icc);
-                CreateParams cp = new CreateParams
+                ComCtl32.InitCommonControlsEx(ref icc);
+
+                var cp = new CreateParams
                 {
                     Parent = IntPtr.Zero,
                     ClassName = NativeMethods.TOOLTIPS_CLASS

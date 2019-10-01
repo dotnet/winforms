@@ -884,12 +884,12 @@ namespace System.Windows.Forms
 
                     CreateHandle(cparams);
 
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    var icc = new ComCtl32.INITCOMMONCONTROLSEX
                     {
-                        dwICC = NativeMethods.ICC_TAB_CLASSES
+                        dwICC = ComCtl32.ICC.TAB_CLASSES
                     };
-                    icc.dwSize = Marshal.SizeOf(icc);
-                    SafeNativeMethods.InitCommonControlsEx(icc);
+                    ComCtl32.InitCommonControlsEx(ref icc);
+
                     cparams = new CreateParams
                     {
                         Parent = Handle,
