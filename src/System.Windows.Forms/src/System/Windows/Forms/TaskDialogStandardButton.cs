@@ -110,15 +110,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsCreatable
-        {
-            get => base.IsCreatable && _visible;
-        }
+        internal override bool IsCreatable => base.IsCreatable && _visible;
 
-        internal override int ButtonID
-        {
-            get => (int)_result;
-        }
+        internal override int ButtonID => (int)_result;
 
         internal new TaskDialogStandardButtonCollection? Collection
         {
@@ -126,42 +120,31 @@ namespace System.Windows.Forms
             set => base.Collection = value;
         }
 
-        private static TaskDialogButtons GetButtonFlagForResult(TaskDialogResult result)
+        private static TaskDialogButtons GetButtonFlagForResult(TaskDialogResult result) => result switch
         {
-            return result switch
-            {
-                TaskDialogResult.OK => TaskDialogButtons.OK,
-                TaskDialogResult.Cancel => TaskDialogButtons.Cancel,
-                TaskDialogResult.Abort => TaskDialogButtons.Abort,
-                TaskDialogResult.Retry => TaskDialogButtons.Retry,
-                TaskDialogResult.Ignore => TaskDialogButtons.Ignore,
-                TaskDialogResult.Yes => TaskDialogButtons.Yes,
-                TaskDialogResult.No => TaskDialogButtons.No,
-                TaskDialogResult.Close => TaskDialogButtons.Close,
-                TaskDialogResult.Help => TaskDialogButtons.Help,
-                TaskDialogResult.TryAgain => TaskDialogButtons.TryAgain,
-                TaskDialogResult.Continue => TaskDialogButtons.Continue,
-                _ => default,
-            };
-        }
+            TaskDialogResult.OK => TaskDialogButtons.OK,
+            TaskDialogResult.Cancel => TaskDialogButtons.Cancel,
+            TaskDialogResult.Abort => TaskDialogButtons.Abort,
+            TaskDialogResult.Retry => TaskDialogButtons.Retry,
+            TaskDialogResult.Ignore => TaskDialogButtons.Ignore,
+            TaskDialogResult.Yes => TaskDialogButtons.Yes,
+            TaskDialogResult.No => TaskDialogButtons.No,
+            TaskDialogResult.Close => TaskDialogButtons.Close,
+            TaskDialogResult.Help => TaskDialogButtons.Help,
+            TaskDialogResult.TryAgain => TaskDialogButtons.TryAgain,
+            TaskDialogResult.Continue => TaskDialogButtons.Continue,
+            _ => default
+        };
 
-        private static bool IsValidStandardButtonResult(TaskDialogResult result)
-        {
-            return GetButtonFlagForResult(result) != default;
-        }
+        private static bool IsValidStandardButtonResult(TaskDialogResult result) => 
+            GetButtonFlagForResult(result) != default;
 
         /// <summary>
         /// Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
         /// </summary>
         /// <returns>A string that contains the name of the <see cref="TaskDialogResult"/> value.</returns>
-        public override string ToString()
-        {
-            return _result.ToString();
-        }
+        public override string ToString() => _result.ToString();
 
-        internal TaskDialogButtons GetButtonFlag()
-        {
-            return GetButtonFlagForResult(_result);
-        }
+        internal TaskDialogButtons GetButtonFlag() => GetButtonFlagForResult(_result);
     }
 }

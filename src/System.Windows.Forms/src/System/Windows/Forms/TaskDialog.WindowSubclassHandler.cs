@@ -56,15 +56,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            protected override bool CanCatchWndProcException(Exception ex)
-            {
-                return _taskDialog.CanCatchCallbackException();
-            }
+            protected override bool CanCatchWndProcException(Exception ex) => _taskDialog.CanCatchCallbackException();
 
-            protected override void HandleWndProcException(Exception ex)
-            {
-                _taskDialog.HandleCallbackException(ex);
-            }
+            protected override void HandleWndProcException(Exception ex) => _taskDialog.HandleCallbackException(ex);
         }
     }
 }

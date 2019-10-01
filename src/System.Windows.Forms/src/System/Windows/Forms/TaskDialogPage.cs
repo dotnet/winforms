@@ -521,10 +521,7 @@ namespace System.Windows.Forms
         /// started navigation to this page but navigation did not yet complete
         /// (in which case we cannot modify the dialog even though we are bound).
         /// </summary>
-        internal bool WaitingForInitialization
-        {
-            get => BoundTaskDialog != null && !_appliedInitialization;
-        }
+        internal bool WaitingForInitialization => BoundTaskDialog != null && !_appliedInitialization;
 
         internal static bool IsNativeStringNullOrEmpty(string? str)
         {
@@ -890,42 +887,27 @@ namespace System.Windows.Forms
         /// Raises the <see cref="Created"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnCreated(EventArgs e)
-        {
-            Created?.Invoke(this, e);
-        }
+        internal protected void OnCreated(EventArgs e) => Created?.Invoke(this, e);
 
         /// <summary>
         /// Raises the <see cref="Destroyed"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnDestroyed(EventArgs e)
-        {
-            Destroyed?.Invoke(this, e);
-        }
+        internal protected void OnDestroyed(EventArgs e) => Destroyed?.Invoke(this, e);
 
         /// <summary>
         /// Raises the <see cref="HelpRequest"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnHelpRequest(EventArgs e)
-        {
-            HelpRequest?.Invoke(this, e);
-        }
+        internal protected void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
 
         /// <summary>
         /// Raises the <see cref="HyperlinkClicked"/> event.
         /// </summary>
         /// <param name="e">An <see cref="TaskDialogHyperlinkClickedEventArgs"/> that contains the event data.</param>
-        internal protected void OnHyperlinkClicked(TaskDialogHyperlinkClickedEventArgs e)
-        {
-            HyperlinkClicked?.Invoke(this, e);
-        }
+        internal protected void OnHyperlinkClicked(TaskDialogHyperlinkClickedEventArgs e) => HyperlinkClicked?.Invoke(this, e);
 
-        private bool GetFlag(ComCtl32.TDF flag)
-        {
-            return (_flags & flag) == flag;
-        }
+        private bool GetFlag(ComCtl32.TDF flag) => (_flags & flag) == flag;
 
         private void SetFlag(ComCtl32.TDF flag, bool value)
         {

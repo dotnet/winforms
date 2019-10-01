@@ -188,10 +188,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected void OnClick(EventArgs e)
-        {
-            Click?.Invoke(this, e);
-        }
+        private protected void OnClick(EventArgs e) => Click?.Invoke(this, e);
 
         private bool CanUpdate()
         {

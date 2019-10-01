@@ -87,20 +87,15 @@ namespace System.Windows.Forms
             return button;
         }
 
-        internal void HandleKeyChange(TaskDialogStandardButton button, TaskDialogResult newKey)
-        {
+        internal void HandleKeyChange(TaskDialogStandardButton button, TaskDialogResult newKey) => 
             ChangeItemKey(button, newKey);
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected override TaskDialogResult GetKeyForItem(TaskDialogStandardButton item)
-        {
-            return item.Result;
-        }
+        protected override TaskDialogResult GetKeyForItem(TaskDialogStandardButton item) => item.Result;
 
         /// <summary>
         /// 

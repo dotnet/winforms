@@ -58,24 +58,12 @@ namespace System.Windows.Forms
         /// This <see cref="TaskDialogIcon"/> instance was not created using a
         /// constructor that takes an icon or icon handle.
         /// </exception>
-        public IntPtr IconHandle
-        {
-            get => _iconHandle ?? throw new InvalidOperationException();
-        }
+        public IntPtr IconHandle => _iconHandle ?? throw new InvalidOperationException();
 
-        internal TaskDialogStandardIcon StandardIcon
-        {
-            get => _standardIcon ?? throw new InvalidOperationException();
-        }
+        internal TaskDialogStandardIcon StandardIcon => _standardIcon ?? throw new InvalidOperationException();
 
-        internal bool IsStandardIcon
-        {
-            get => _standardIcon != null;
-        }
+        internal bool IsStandardIcon => _standardIcon != null;
 
-        internal bool IsHandleIcon
-        {
-            get => _iconHandle != null;
-        }
+        internal bool IsHandleIcon => _iconHandle != null;
     }
 }

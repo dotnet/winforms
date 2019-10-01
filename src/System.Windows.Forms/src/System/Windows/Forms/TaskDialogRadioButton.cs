@@ -242,10 +242,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal int RadioButtonID
-        {
-            get => _radioButtonID;
-        }
+        internal int RadioButtonID => _radioButtonID;
 
         internal TaskDialogRadioButtonCollection? Collection
         {
@@ -253,19 +250,13 @@ namespace System.Windows.Forms
             set => _collection = value;
         }
 
-        internal override bool IsCreatable
-        {
-            get => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
-        }
+        internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
         /// <summary>
         /// Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
-        {
-            return _text ?? base.ToString() ?? string.Empty;
-        }
+        public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
         internal ComCtl32.TDF Bind(TaskDialogPage page, int radioButtonID)
         {
@@ -332,9 +323,6 @@ namespace System.Windows.Forms
             return BoundPage?.WaitingForInitialization == false;
         }
 
-        private void OnCheckedChanged(EventArgs e)
-        {
-            CheckedChanged?.Invoke(this, e);
-        }
+        private void OnCheckedChanged(EventArgs e) => CheckedChanged?.Invoke(this, e);
     }
 }

@@ -105,10 +105,7 @@ namespace System.Windows.Forms
         /// This method will only be called if <see cref="IsCreatable"/> returns <see langword="true"/>.
         /// </remarks>
         /// <returns></returns>
-        private protected virtual ComCtl32.TDF BindCore()
-        {
-            return default;
-        }
+        private protected virtual ComCtl32.TDF BindCore() => default;
 
         /// <summary>
         /// 
@@ -131,15 +128,9 @@ namespace System.Windows.Forms
         {
         }
 
-        private protected void DenyIfBound()
-        {
-            BoundPage?.DenyIfBound();
-        }
+        private protected void DenyIfBound() => BoundPage?.DenyIfBound();
 
-        private protected void DenyIfWaitingForInitialization()
-        {
-            BoundPage?.DenyIfWaitingForInitialization();
-        }
+        private protected void DenyIfWaitingForInitialization() => BoundPage?.DenyIfWaitingForInitialization();
 
         private protected void DenyIfNotBoundOrWaitingForInitialization()
         {

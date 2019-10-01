@@ -312,28 +312,19 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsCreatable
-        {
-            get => base.IsCreatable && _state != TaskDialogProgressBarState.None;
-        }
+        internal override bool IsCreatable => base.IsCreatable && _state != TaskDialogProgressBarState.None;
 
-        private static bool ProgressBarStateIsMarquee(TaskDialogProgressBarState state)
-        {
-            return state == TaskDialogProgressBarState.Marquee ||
-                state == TaskDialogProgressBarState.MarqueePaused;
-        }
+        private static bool ProgressBarStateIsMarquee(TaskDialogProgressBarState state) =>
+            state == TaskDialogProgressBarState.Marquee ||
+            state == TaskDialogProgressBarState.MarqueePaused;
 
-        private static ComCtl32.PBST GetNativeProgressBarState(
-                TaskDialogProgressBarState state)
+        private static ComCtl32.PBST GetNativeProgressBarState(TaskDialogProgressBarState state) => state switch
         {
-            return state switch
-            {
-                TaskDialogProgressBarState.Normal => ComCtl32.PBST.NORMAL,
-                TaskDialogProgressBarState.Paused => ComCtl32.PBST.PAUSED,
-                TaskDialogProgressBarState.Error => ComCtl32.PBST.ERROR,
-                _ => throw new ArgumentException()
-            };
-        }
+            TaskDialogProgressBarState.Normal => ComCtl32.PBST.NORMAL,
+            TaskDialogProgressBarState.Paused => ComCtl32.PBST.PAUSED,
+            TaskDialogProgressBarState.Error => ComCtl32.PBST.ERROR,
+            _ => throw new ArgumentException()
+        };
 
         private protected override ComCtl32.TDF BindCore()
         {

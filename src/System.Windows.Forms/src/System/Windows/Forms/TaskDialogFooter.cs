@@ -108,10 +108,7 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogFooter"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
-        {
-            return _text ?? base.ToString() ?? string.Empty;
-        }
+        public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
         internal ComCtl32.TDF Bind(TaskDialogPage page, out IntPtr footerIconValue)
         {

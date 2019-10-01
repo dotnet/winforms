@@ -501,10 +501,13 @@ namespace System.Windows.Forms
             string? mainInstruction = null,
             string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
-            TaskDialogIcon? icon = null)
-        {
-            return ShowDialog(IntPtr.Zero, text, mainInstruction, caption, buttons, icon);
-        }
+            TaskDialogIcon? icon = null) => ShowDialog(
+                IntPtr.Zero,
+                text,
+                mainInstruction,
+                caption,
+                buttons,
+                icon);
 
         /// <summary>
         ///   Displays a task dialog in front of the specified window and with the specified
@@ -525,12 +528,13 @@ namespace System.Windows.Forms
             string? mainInstruction = null,
             string? caption = null,
             TaskDialogButtons buttons = TaskDialogButtons.OK,
-            TaskDialogIcon? icon = null)
-        {
-            return ShowDialog(
+            TaskDialogIcon? icon = null) => ShowDialog(
                 owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
-                text, mainInstruction, caption, buttons, icon);
-        }
+                text,
+                mainInstruction,
+                caption,
+                buttons,
+                icon);
 
         /// <summary>
         ///   Displays a task dialog in front of the specified window and with the specified
@@ -568,10 +572,7 @@ namespace System.Windows.Forms
             return ((TaskDialogStandardButton)dialog.ShowDialog(hwndOwner)).Result;
         }
 
-        private static void FreeConfig(IntPtr ptrToFree)
-        {
-            Marshal.FreeHGlobal(ptrToFree);
-        }
+        private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
         private static bool IsTaskDialogButtonCommitting(TaskDialogButton? button)
         {
@@ -608,10 +609,7 @@ namespace System.Windows.Forms
         /// </remarks>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
-        public TaskDialogButton ShowDialog()
-        {
-            return ShowDialog(IntPtr.Zero);
-        }
+        public TaskDialogButton ShowDialog() => ShowDialog(IntPtr.Zero);
 
         /// <summary>
         ///   Shows the task dialog.
@@ -625,10 +623,8 @@ namespace System.Windows.Forms
         /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
-        public TaskDialogButton ShowDialog(IWin32Window owner)
-        {
-            return ShowDialog(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)));
-        }
+        public TaskDialogButton ShowDialog(IWin32Window owner) => ShowDialog(
+            owner?.Handle ?? throw new ArgumentNullException(nameof(owner)));
 
         /// <summary>
         ///   Shows the task dialog.
@@ -854,13 +850,10 @@ namespace System.Windows.Forms
         ///   <see cref="SetProgressBarMarquee(bool, int)"/>.
         /// </summary>
         /// <param name="marqueeProgressBar"></param>
-        internal void SwitchProgressBarMode(bool marqueeProgressBar)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.SET_MARQUEE_PROGRESS_BAR,
-                marqueeProgressBar ? 1 : 0,
-                IntPtr.Zero);
-        }
+        internal void SwitchProgressBarMode(bool marqueeProgressBar) => SendTaskDialogMessage(
+            ComCtl32.TDM.SET_MARQUEE_PROGRESS_BAR,
+            marqueeProgressBar ? 1 : 0,
+            IntPtr.Zero);
 
         /// <summary>
         ///   While the dialog is being shown, enables or disables progress bar marquee when
@@ -940,13 +933,10 @@ namespace System.Windows.Forms
         ///   While the dialog is being shown, sets the progress bar state.
         /// </summary>
         /// <param name="state"></param>
-        internal void SetProgressBarState(ComCtl32.PBST state)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.SET_PROGRESS_BAR_STATE,
-                (int)state,
-                IntPtr.Zero);
-        }
+        internal void SetProgressBarState(ComCtl32.PBST state) => SendTaskDialogMessage(
+            ComCtl32.TDM.SET_PROGRESS_BAR_STATE,
+            (int)state,
+            IntPtr.Zero);
 
         /// <summary>
         ///   While the dialog is being shown, sets the checkbox to the specified
@@ -954,45 +944,30 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="isChecked"></param>
         /// <param name="focus"></param>
-        internal void ClickCheckBox(bool isChecked, bool focus = false)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.CLICK_VERIFICATION,
-                isChecked ? 1 : 0,
-                (IntPtr)(focus ? 1 : 0));
-        }
+        internal void ClickCheckBox(bool isChecked, bool focus = false) => SendTaskDialogMessage(
+            ComCtl32.TDM.CLICK_VERIFICATION,
+            isChecked ? 1 : 0,
+            (IntPtr)(focus ? 1 : 0));
 
-        internal void SetButtonElevationRequiredState(int buttonID, bool requiresElevation)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.SET_BUTTON_ELEVATION_REQUIRED_STATE,
-                buttonID,
-                (IntPtr)(requiresElevation ? 1 : 0));
-        }
+        internal void SetButtonElevationRequiredState(int buttonID, bool requiresElevation) => SendTaskDialogMessage(
+            ComCtl32.TDM.SET_BUTTON_ELEVATION_REQUIRED_STATE,
+            buttonID,
+            (IntPtr)(requiresElevation ? 1 : 0));
 
-        internal void SetButtonEnabled(int buttonID, bool enable)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.ENABLE_BUTTON,
-                buttonID,
-                (IntPtr)(enable ? 1 : 0));
-        }
+        internal void SetButtonEnabled(int buttonID, bool enable) => SendTaskDialogMessage(
+            ComCtl32.TDM.ENABLE_BUTTON,
+            buttonID,
+            (IntPtr)(enable ? 1 : 0));
 
-        internal void SetRadioButtonEnabled(int radioButtonID, bool enable)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.ENABLE_RADIO_BUTTON,
-                radioButtonID,
-                (IntPtr)(enable ? 1 : 0));
-        }
+        internal void SetRadioButtonEnabled(int radioButtonID, bool enable) => SendTaskDialogMessage(
+            ComCtl32.TDM.ENABLE_RADIO_BUTTON,
+            radioButtonID,
+            (IntPtr)(enable ? 1 : 0));
 
-        internal void ClickButton(int buttonID)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.CLICK_BUTTON,
-                buttonID,
-                IntPtr.Zero);
-        }
+        internal void ClickButton(int buttonID) => SendTaskDialogMessage(
+            ComCtl32.TDM.CLICK_BUTTON,
+            buttonID,
+            IntPtr.Zero);
 
         internal void ClickCancelButton()
         {
@@ -1010,13 +985,10 @@ namespace System.Windows.Forms
                 false);
         }
 
-        internal void ClickRadioButton(int radioButtonID)
-        {
-            SendTaskDialogMessage(
-                ComCtl32.TDM.CLICK_RADIO_BUTTON,
-                radioButtonID,
-                IntPtr.Zero);
-        }
+        internal void ClickRadioButton(int radioButtonID) => SendTaskDialogMessage(
+            ComCtl32.TDM.CLICK_RADIO_BUTTON,
+            radioButtonID,
+            IntPtr.Zero);
 
         internal void UpdateTextElement(ComCtl32.TDE element, string? text)
         {
@@ -1081,37 +1053,25 @@ namespace System.Windows.Forms
         ///   Raises the <see cref="Opened"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        protected void OnOpened(EventArgs e)
-        {
-            Opened?.Invoke(this, e);
-        }
+        protected void OnOpened(EventArgs e) => Opened?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Shown"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        protected void OnShown(EventArgs e)
-        {
-            Shown?.Invoke(this, e);
-        }
+        protected void OnShown(EventArgs e) => Shown?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Closing"/> event.
         /// </summary>
         /// <param name="e">An <see cref="TaskDialogClosingEventArgs"/> that contains the event data.</param>
-        protected void OnClosing(TaskDialogClosingEventArgs e)
-        {
-            Closing?.Invoke(this, e);
-        }
+        protected void OnClosing(TaskDialogClosingEventArgs e) => Closing?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Closed"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        protected void OnClosed(EventArgs e)
-        {
-            Closed?.Invoke(this, e);
-        }
+        protected void OnClosed(EventArgs e) => Closed?.Invoke(this, e);
 
         private HRESULT HandleTaskDialogCallback(
             IntPtr hWnd,
@@ -1885,10 +1845,7 @@ namespace System.Windows.Forms
         ///   Called when an exception occurs in dispatching messages through
         ///   the task dialog callback or its window procedure.
         /// </summary>
-        private void HandleCallbackException(Exception e)
-        {
-            Application.OnThreadException(e);
-        }
+        private void HandleCallbackException(Exception e) => Application.OnThreadException(e);
 
         private void SendTaskDialogMessage(
             ComCtl32.TDM message,

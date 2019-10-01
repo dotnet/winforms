@@ -97,10 +97,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsCreatable
-        {
-            get => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
-        }
+        internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
         // TODO: Maybe remove this method for now
         /// <summary>
@@ -118,10 +115,7 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogCheckBox"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
-        {
-            return _text ?? base.ToString() ?? string.Empty;
-        }
+        public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
         internal void HandleCheckBoxClicked(bool @checked)
         {
@@ -149,9 +143,6 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         /// <param name="e"></param>
-        private void OnCheckedChanged(EventArgs e)
-        {
-            CheckedChanged?.Invoke(this, e);
-        }
+        private void OnCheckedChanged(EventArgs e) => CheckedChanged?.Invoke(this, e);
     }
 }

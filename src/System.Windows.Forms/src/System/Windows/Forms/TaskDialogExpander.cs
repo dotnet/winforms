@@ -171,19 +171,13 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsCreatable
-        {
-            get => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
-        }
+        internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
         /// <summary>
         /// Returns a string that represents the current <see cref="TaskDialogExpander"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
-        {
-            return _text ?? base.ToString() ?? string.Empty;
-        }
+        public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
         internal void HandleExpandoButtonClicked(bool expanded)
         {
@@ -207,9 +201,6 @@ namespace System.Windows.Forms
             return flags;
         }
 
-        private void OnExpandedChanged(EventArgs e)
-        {
-            ExpandedChanged?.Invoke(this, e);
-        }
+        private void OnExpandedChanged(EventArgs e) => ExpandedChanged?.Invoke(this, e);
     }
 }

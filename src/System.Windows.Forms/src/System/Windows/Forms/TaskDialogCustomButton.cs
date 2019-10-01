@@ -87,15 +87,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsCreatable
-        {
-            get => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
-        }
+        internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
-        internal override int ButtonID
-        {
-            get => _buttonID;
-        }
+        internal override int ButtonID => _buttonID;
 
         internal new TaskDialogCustomButtonCollection? Collection
         {
@@ -107,10 +101,7 @@ namespace System.Windows.Forms
         /// Returns a string that represents the current <see cref="TaskDialogCustomButton"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
-        public override string ToString()
-        {
-            return _text ?? base.ToString() ?? string.Empty;
-        }
+        public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
         internal ComCtl32.TDF Bind(TaskDialogPage page, int buttonID)
         {
