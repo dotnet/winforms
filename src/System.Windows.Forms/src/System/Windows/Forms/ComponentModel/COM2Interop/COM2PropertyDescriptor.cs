@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  property so that getXXX following a setXXX should return the value
         ///  passed in if no exception was thrown in the setXXX call.
         /// </summary>
-        public override void SetValue(object component, object value)
+        public unsafe override void SetValue(object component, object value)
         {
             if (readOnly)
             {
@@ -1335,20 +1335,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             lastValue = value;
                             return;
                         default:
-                            if (pDisp is UnsafeNativeMethods.ISupportErrorInfo iSupportErrorInfo)
+                            if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
                             {
                                 g = typeof(UnsafeNativeMethods.IDispatch).GUID;
-                                if (NativeMethods.Succeeded(iSupportErrorInfo.InterfaceSupportsErrorInfo(ref g)))
+                                if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                                 {
-                                    UnsafeNativeMethods.IErrorInfo pErrorInfo = null;
-                                    UnsafeNativeMethods.GetErrorInfo(0, ref pErrorInfo);
+                                    Oleaut32.IErrorInfo pErrorInfo = null;
+                                    Oleaut32.GetErrorInfo(0, ref pErrorInfo);
+
                                     string info = null;
-                                    if (pErrorInfo != null)
+                                    if (pErrorInfo != null && pErrorInfo.GetDescription(ref info).Succeeded())
                                     {
-                                        if (NativeMethods.Succeeded(pErrorInfo.GetDescription(ref info)))
-                                        {
-                                            errorInfo = info;
-                                        }
+                                        errorInfo = info;
                                     }
                                 }
                             }

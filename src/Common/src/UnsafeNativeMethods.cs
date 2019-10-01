@@ -509,9 +509,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetMenuItemCount(HandleRef hMenu);
 
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void GetErrorInfo(int reserved, [In, Out] ref IErrorInfo errorInfo);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
 
@@ -2196,46 +2193,6 @@ namespace System.Windows.Forms
                  string[] pBstrLibName);
 
             void LocalReleaseTLibAttr();
-        }
-
-        [ComImport(),
-         Guid("DF0B3D60-548F-101B-8E65-08002B2BD119"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ISupportErrorInfo
-        {
-            int InterfaceSupportsErrorInfo(
-                    [In] ref Guid riid);
-        }
-
-        [ComImport(),
-         Guid("1CF2B120-547D-101B-8E65-08002B2BD119"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IErrorInfo
-        {
-            [PreserveSig]
-            int GetGUID(
-                       [Out]
-                   out Guid pguid);
-
-            [PreserveSig]
-            int GetSource(
-                         [In, Out, MarshalAs(UnmanagedType.BStr)]
-                     ref string pBstrSource);
-
-            [PreserveSig]
-            int GetDescription(
-                              [In, Out, MarshalAs(UnmanagedType.BStr)]
-                          ref string pBstrDescription);
-
-            [PreserveSig]
-            int GetHelpFile(
-                           [In, Out, MarshalAs(UnmanagedType.BStr)]
-                       ref string pBstrHelpFile);
-
-            [PreserveSig]
-            int GetHelpContext(
-                              [In, Out, MarshalAs(UnmanagedType.U4)]
-                          ref int pdwHelpContext);
         }
 
         [StructLayout(LayoutKind.Sequential)]
