@@ -30,12 +30,13 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 | release/3.1   | [![Build Status][release31-public-build]][public-build]   | [![Build Status][release31-internal-build]][internal-build]   | [![Build Status][release31-core-setup-build]][core-setup-build]  | [![Build Status][release31-core-sdk-build]][core-sdk-build]   |
 
 ### Code Coverage
-
+______________________________________________________________________
 |               | Production Code                                   | 
 |-------------  |-------------------------------------------------  |
 | master        | [![codecov][master-coverage-prod]][coverage]      |
 | release/3.0   | [![codecov][release3-coverage-prod]][coverage]    |
 | release/3.1   | [![codecov][release31-coverage-prod]][coverage]   |
+______________________________________________________________________
 
 ## Status
 
@@ -134,3 +135,6 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [release3-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=production
 [release31-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.1/graph/badge.svg?flag=production
 [coverage]: https://codecov.io/gh/dotnet/winforms
+
+
+
