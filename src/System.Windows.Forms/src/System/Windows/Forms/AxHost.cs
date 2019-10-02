@@ -3314,21 +3314,28 @@ namespace System.Windows.Forms
         private unsafe void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
         {
             IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
-            fixed (char* pName = Name)
+            try
             {
-                var opcparams = new Oleaut32.OCPFIPARAMS
+                fixed (char* pName = Name)
                 {
-                    cbStructSize = (uint)Marshal.SizeOf<Oleaut32.OCPFIPARAMS>(),
-                    hwndOwner = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
-                    lpszCaption = pName,
-                    cObjects = 1,
-                    ppUnk = (IntPtr)(&pUnk),
-                    cPages = 1,
-                    lpPages = (IntPtr)(&guid),
-                    lcid = (uint)Application.CurrentCulture.LCID,
-                    dispidInitialProperty = dispid
-                };
-                Oleaut32.OleCreatePropertyFrameIndirect(ref opcparams);
+                    var opcparams = new Oleaut32.OCPFIPARAMS
+                    {
+                        cbStructSize = (uint)Marshal.SizeOf<Oleaut32.OCPFIPARAMS>(),
+                        hwndOwner = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
+                        lpszCaption = pName,
+                        cObjects = 1,
+                        ppUnk = (IntPtr)(&pUnk),
+                        cPages = 1,
+                        lpPages = (IntPtr)(&guid),
+                        lcid = (uint)Application.CurrentCulture.LCID,
+                        dispidInitialProperty = dispid
+                    };
+                    Oleaut32.OleCreatePropertyFrameIndirect(ref opcparams);
+                }
+            }
+            finally
+            {
+                Marshal.Release(pUnk);
             }
         }
 
