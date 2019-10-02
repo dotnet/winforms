@@ -8,6 +8,7 @@ internal static partial class Interop
     {
         public enum OLECMDID : uint
         {
+            OPEN = 1,
             NEW = 2,
             SAVE = 3,
             SAVEAS = 4,
