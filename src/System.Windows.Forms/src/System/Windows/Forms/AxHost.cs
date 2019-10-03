@@ -3362,62 +3362,71 @@ namespace System.Windows.Forms
 
         public unsafe void ShowPropertyPages(Control control)
         {
+            if (!CanShowPropertyPages())
+            {
+                return;
+            }
+
+            Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
+            var uuids = new Ole32.CAUUID();
+            HRESULT hr = ispp.GetPages(&uuids);
+            if (!hr.Succeeded() || uuids.cElems == 0)
+            {
+                return;
+            }
+
+            IDesignerHost host = null;
+            if (Site != null)
+            {
+                host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
+            }
+
+            DesignerTransaction trans = null;
             try
             {
-                if (!CanShowPropertyPages())
+                if (host != null)
                 {
-                    return;
+                    trans = host.CreateTransaction(SR.AXEditProperties);
                 }
 
-                Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
-                var uuids = new Ole32.CAUUID();
-                HRESULT hr = ispp.GetPages(&uuids);
-                if (!hr.Succeeded() || uuids.cElems == 0)
-                {
-                    return;
-                }
-
-                IDesignerHost host = null;
-                if (Site != null)
-                {
-                    host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
-                }
-
-                DesignerTransaction trans = null;
+                IntPtr handle = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
+                IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
                 try
                 {
-                    if (host != null)
-                    {
-                        trans = host.CreateTransaction(SR.AXEditProperties);
-                    }
-
-                    string name = null;
-                    object o = GetOcx();
-                    IntPtr handle = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
-                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(this, handle), 0, 0, name, 1, ref o, uuids.cElems, (IntPtr)uuids.pElems, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
+                    Oleaut32.OleCreatePropertyFrame(
+                        new HandleRef(this, handle),
+                        0,
+                        0,
+                        null,
+                        1,
+                        &pUnk,
+                        uuids.cElems,
+                        uuids.pElems,
+                        (uint)Application.CurrentCulture.LCID,
+                        0,
+                        IntPtr.Zero);
                 }
                 finally
                 {
-                    if (oleSite != null)
-                    {
-                        ((Ole32.IPropertyNotifySink)oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
-                    }
-
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
-
-                    if (uuids.pElems != null)
-                    {
-                        Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
-                    }
+                    Marshal.Release(pUnk);
                 }
             }
-            catch (Exception t)
+            finally
             {
-                Debug.Fail(t.ToString());
-                throw t;
+                if (oleSite != null)
+                {
+                    ((Ole32.IPropertyNotifySink)oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
+                }
+
+                if (trans != null)
+                {
+                    trans.Commit();
+                }
+
+                if (uuids.pElems != null)
+                {
+                    Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                }
             }
         }
 
