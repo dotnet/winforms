@@ -1323,48 +1323,6 @@ namespace System.Windows.Forms
 
         public const string WinFormFrameworkId = "WinForm";
 
-        /*
-        * MISCELLANEOUS
-        */
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class OLECMD
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int cmdID = 0;
-            [MarshalAs(UnmanagedType.U4)]
-            public int cmdf = 0;
-
-        }
-
-        [ComVisible(true)]
-        [ComImport]
-        [Guid("B722BCCB-4E68-101B-A2BC-00AA00404770")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleCommandTarget
-        {
-            [return: MarshalAs(UnmanagedType.I4)]
-            [PreserveSig]
-            int QueryStatus(
-                ref Guid pguidCmdGroup,
-                int cCmds,
-                [In, Out]
-                OLECMD prgCmds,
-                [In, Out]
-                IntPtr pCmdText);
-
-            [return: MarshalAs(UnmanagedType.I4)]
-            [PreserveSig]
-            int Exec(
-                ref Guid pguidCmdGroup,
-                int nCmdID,
-                int nCmdexecopt,
-                // we need to have this an array because callers need to be able to specify NULL or VT_NULL
-                [In, MarshalAs(UnmanagedType.LPArray)]
-                object[] pvaIn,
-                int pvaOut);
-        }
-
         public struct USEROBJECTFLAGS
         {
             public int fInherit;
@@ -3031,35 +2989,6 @@ namespace System.Windows.Forms
             SHOWPROPERTIES = 0x1,
             SHOWCODE = 0x2
         }
-
-#pragma warning disable CA1712 // Don't prefix enum values with enum type
-        public enum OLECMDID
-        {
-            OLECMDID_SAVEAS = 4,
-            OLECMDID_PRINT = 6,
-            OLECMDID_PRINTPREVIEW = 7,
-            OLECMDID_PAGESETUP = 8,
-            OLECMDID_PROPERTIES = 10
-        }
-
-        public enum OLECMDEXECOPT
-        {
-            OLECMDEXECOPT_DODEFAULT = 0,
-            OLECMDEXECOPT_PROMPTUSER = 1,
-            OLECMDEXECOPT_DONTPROMPTUSER = 2,
-            OLECMDEXECOPT_SHOWHELP = 3
-        }
-
-        public enum OLECMDF
-        {
-            OLECMDF_SUPPORTED = 0x00000001,
-            OLECMDF_ENABLED = 0x00000002,
-            OLECMDF_LATCHED = 0x00000004,
-            OLECMDF_NINCHED = 0x00000008,
-            OLECMDF_INVISIBLE = 0x00000010,
-            OLECMDF_DEFHIDEONCTXTMENU = 0x00000020
-        }
-#pragma warning restore CA1712
 
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES

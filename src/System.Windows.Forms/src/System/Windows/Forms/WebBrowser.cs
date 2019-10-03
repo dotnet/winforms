@@ -781,18 +781,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Print()
         {
-            object nullObjectArray = null;
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -879,18 +868,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPageSetupDialog()
         {
-            object nullObjectArray = null;
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PAGESETUP, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -899,19 +877,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPrintDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -919,19 +885,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPrintPreviewDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINTPREVIEW, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINTPREVIEW, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -940,19 +894,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPropertiesDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PROPERTIES, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PROPERTIES, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -961,19 +903,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowSaveAsDialog()
         {
-            object nullObjectArray = null;
-
-            try
-            {
-                AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_SAVEAS, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nullObjectArray, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-            }
+            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.SAVEAS, Ole32.OLECMDEXECOPT.DODEFAULT, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -1605,11 +1535,14 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject,
-                    NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame,
-                    UnsafeNativeMethods.IOleInPlaceUIWindow doc)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.ShowUI(
+                uint dwID,
+                UnsafeNativeMethods.IOleInPlaceActiveObject activeObject,
+                Ole32.IOleCommandTarget commandTarget,
+                UnsafeNativeMethods.IOleInPlaceFrame frame,
+                UnsafeNativeMethods.IOleInPlaceUIWindow doc)
             {
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             int UnsafeNativeMethods.IDocHostUIHandler.HideUI()

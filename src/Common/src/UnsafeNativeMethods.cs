@@ -899,15 +899,12 @@ namespace System.Windows.Forms
                 [In, Out]
                 NativeMethods.DOCHOSTUIINFO info);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int ShowUI(
-                [In, MarshalAs(UnmanagedType.I4)]
-                int dwID,
+            HRESULT ShowUI(
+                uint dwID,
                 [In]
                 IOleInPlaceActiveObject activeObject,
-                [In]
-                NativeMethods.IOleCommandTarget commandTarget,
+                Ole32.IOleCommandTarget commandTarget,
                 [In]
                 IOleInPlaceFrame frame,
                 [In]
@@ -1042,12 +1039,18 @@ namespace System.Windows.Forms
             void Navigate2([In] ref object URL, [In] ref object flags,
                             [In] ref object targetFrameName, [In] ref object postData,
                             [In] ref object headers);
-            [DispId(501)] NativeMethods.OLECMDF QueryStatusWB([In] NativeMethods.OLECMDID cmdID);
+            [DispId(501)]
+            Ole32.OLECMDF QueryStatusWB(
+                Ole32.OLECMDID cmdID);
+
             [DispId(502)]
-            void ExecWB([In] NativeMethods.OLECMDID cmdID,
-                    [In] NativeMethods.OLECMDEXECOPT cmdexecopt,
-                    ref object pvaIn,
-                    IntPtr pvaOut);
+            [PreserveSig]
+            HRESULT ExecWB(
+                Ole32.OLECMDID cmdID,
+                Ole32.OLECMDEXECOPT cmdexecopt,
+                IntPtr pvaIn,
+                IntPtr pvaOut);
+
             [DispId(503)]
             void ShowBrowserBar([In] ref object pvaClsid, [In] ref object pvarShow,
                     [In] ref object pvarSize);
