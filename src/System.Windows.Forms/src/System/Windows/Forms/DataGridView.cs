@@ -2368,7 +2368,7 @@ namespace System.Windows.Forms
                 DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = DefaultBackBrush.Color,
-                    ForeColor = base.ForeColor,
+                    ForeColor = DefaultForeBrush.Color,
                     SelectionBackColor = DefaultSelectionBackBrush.Color,
                     SelectionForeColor = DefaultSelectionForeBrush.Color,
                     Font = base.Font,
@@ -2394,7 +2394,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
         }
 
-        private static SolidBrush DefaultForeBrush
+        internal static SolidBrush DefaultForeBrush
         {
             get
             {
@@ -3423,6 +3423,11 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        /// <summary>
+        /// Indicates whether a style has been changed by a customer.
+        /// </summary>
+        internal bool IsDefaultCellStyleChanged { get; private set; }
 
         private bool IsEscapeKeyEffective
         {

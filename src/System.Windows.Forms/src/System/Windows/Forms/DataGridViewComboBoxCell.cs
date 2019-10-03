@@ -2533,7 +2533,7 @@ namespace System.Windows.Forms
                                 Color textColor;
                                 if (paintPostXPThemes && (drawDropDownButton || drawComboBox))
                                 {
-                                    textColor = DataGridViewComboBoxCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
+                                    textColor = DataGridView.DefaultForeBrush.Color;
                                 }
                                 else
                                 {

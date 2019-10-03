@@ -913,7 +913,7 @@ namespace System.Windows.Forms
                 Color textColor;
                 if (DataGridView.ApplyVisualStylesToHeaderCells)
                 {
-                    textColor = DataGridViewColumnHeaderCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
+                    textColor = DataGridView.DefaultForeBrush.Color;
                 }
                 else
                 {

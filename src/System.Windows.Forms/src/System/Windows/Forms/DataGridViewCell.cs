@@ -2189,6 +2189,10 @@ namespace System.Windows.Forms
                 {
                     inheritedCellStyleTmp.ForeColor = columnStyle.ForeColor;
                 }
+                else if ((this is DataGridViewButtonCell || this is DataGridViewCheckBoxCell) && !DataGridView.IsDefaultCellStyleChanged)
+                {
+                    inheritedCellStyleTmp.ForeColor = DataGridView.ForeColor;
+                }
                 else
                 {
                     inheritedCellStyleTmp.ForeColor = dataGridViewStyle.ForeColor;

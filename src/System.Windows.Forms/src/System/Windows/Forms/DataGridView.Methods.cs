@@ -15079,6 +15079,8 @@ namespace System.Windows.Forms
 
         protected virtual void OnDefaultCellStyleChanged(EventArgs e)
         {
+            IsDefaultCellStyleChanged = true;
+
             if (e is DataGridViewCellStyleChangedEventArgs dgvcsce && !dgvcsce.ChangeAffectsPreferredSize)
             {
                 Invalidate();
