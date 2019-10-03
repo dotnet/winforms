@@ -629,14 +629,15 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
                     UnsafeNativeMethods.IDispatch disp = (UnsafeNativeMethods.IDispatch)_clientSite;
+                    var dispParams = new Ole32.DISPPARAMS();
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
                     HRESULT hr = disp.Invoke(
                         dispid,
-                        ref g,
+                        &g,
                         NativeMethods.LOCALE_USER_DEFAULT,
                         NativeMethods.DISPATCH_PROPERTYGET,
-                        new NativeMethods.tagDISPPARAMS(),
+                        &dispParams,
                         pvt,
                         null,
                         null);

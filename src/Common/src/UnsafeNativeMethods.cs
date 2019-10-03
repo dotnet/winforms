@@ -1944,7 +1944,9 @@ namespace System.Windows.Forms
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IDispatch
         {
-            int GetTypeInfoCount();
+            [PreserveSig]
+            HRESULT GetTypeInfoCount(
+                uint* pctinfo);
 
             [PreserveSig]
             HRESULT GetTypeInfo(
@@ -1963,13 +1965,13 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT Invoke(
                 Ole32.DispatchID dispIdMember,
-                [In] ref Guid riid,
+                Guid* riid,
                 uint lcid,
                 uint dwFlags,
-                [Out, In] NativeMethods.tagDISPPARAMS pDispParams,
+                Ole32.DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
                 [Out, In] NativeMethods.tagEXCEPINFO pExcepInfo,
-                [Out, MarshalAs(UnmanagedType.LPArray)] IntPtr [] pArgErr);
+                IntPtr* pArgErr);
         }
 
         [ComImport(), Guid("00020401-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

@@ -2265,17 +2265,6 @@ namespace System.Windows.Forms
             public IntPtr lParam;
         }
 
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagDISPPARAMS
-        {
-            public IntPtr rgvarg;
-            public IntPtr rgdispidNamedArgs;
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, cArgs)*/]
-            public int cArgs;
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, cNamedArgs)*/]
-            public int cNamedArgs;
-        }
-
         public enum tagINVOKEKIND
         {
             INVOKE_FUNC = 1,

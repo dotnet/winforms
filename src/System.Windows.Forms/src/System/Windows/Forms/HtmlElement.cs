@@ -434,10 +434,7 @@ namespace System.Windows.Forms
         public unsafe object InvokeMember(string methodName, params object[] parameter)
         {
             object retVal = null;
-            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS
-            {
-                rgvarg = IntPtr.Zero
-            };
+            var dispParams = new Ole32.DISPPARAMS();
             try
             {
                 if (NativeHtmlElement is UnsafeNativeMethods.IDispatch scriptObject)
@@ -454,18 +451,18 @@ namespace System.Windows.Forms
                             // Reverse the parm order so that they read naturally after IDispatch. (
                             Array.Reverse(parameter);
                         }
-                        dp.rgvarg = (parameter == null) ? IntPtr.Zero : HtmlDocument.ArrayToVARIANTVector(parameter);
-                        dp.cArgs = (parameter == null) ? 0 : parameter.Length;
-                        dp.rgdispidNamedArgs = IntPtr.Zero;
-                        dp.cNamedArgs = 0;
+                        dispParams.rgvarg = (parameter == null) ? IntPtr.Zero : HtmlDocument.ArrayToVARIANTVector(parameter);
+                        dispParams.cArgs = (parameter == null) ? 0 : (uint)parameter.Length;
+                        dispParams.rgdispidNamedArgs = IntPtr.Zero;
+                        dispParams.cNamedArgs = 0;
 
                         object[] retVals = new object[1];
                         hr = scriptObject.Invoke(
                             dispid,
-                            ref g,
+                            &g,
                             Kernel32.GetThreadLocale(),
                             NativeMethods.DISPATCH_METHOD,
-                            dp,
+                            &dispParams,
                             retVals,
                             new NativeMethods.tagEXCEPINFO(),
                             null);
@@ -481,9 +478,9 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dp.rgvarg != IntPtr.Zero)
+                if (dispParams.rgvarg != IntPtr.Zero)
                 {
-                    HtmlDocument.FreeVARIANTVector(dp.rgvarg, parameter.Length);
+                    HtmlDocument.FreeVARIANTVector(dispParams.rgvarg, parameter.Length);
                 }
             }
 

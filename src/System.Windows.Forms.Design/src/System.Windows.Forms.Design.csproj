@@ -75,6 +75,7 @@
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumUnknown.cs" Link="Interop\Ole32\Interop.IEnumUnknown.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
