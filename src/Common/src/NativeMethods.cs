@@ -2992,22 +2992,6 @@ namespace System.Windows.Forms
             // public RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public class OCPFIPARAMS
-        {
-            public int cbSizeOfStruct = Marshal.SizeOf<OCPFIPARAMS>();
-            public IntPtr hwndOwner;
-            public int x = 0;
-            public int y = 0;
-            public string lpszCaption;
-            public int cObjects = 1;
-            public IntPtr ppUnk;
-            public int pageCount = 1;
-            public IntPtr uuid;
-            public int lcid = Application.CurrentCulture.LCID;
-            public Ole32.DispatchID dispidInitial;
-        }
-
         [ComVisible(true), StructLayout(LayoutKind.Sequential)]
         public class DOCHOSTUIINFO
         {

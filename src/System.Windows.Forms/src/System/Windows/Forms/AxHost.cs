@@ -3311,25 +3311,31 @@ namespace System.Windows.Forms
             return false;
         }
 
-        unsafe private void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
+        private unsafe void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
         {
+            IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
             try
             {
-                IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
-                NativeMethods.OCPFIPARAMS opcparams = new NativeMethods.OCPFIPARAMS
+                fixed (char* pName = Name)
                 {
-                    hwndOwner = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
-                    lpszCaption = Name,
-                    ppUnk = (IntPtr)(long)&pUnk,
-                    uuid = (IntPtr)(long)&guid,
-                    dispidInitial = dispid
-                };
-                UnsafeNativeMethods.OleCreatePropertyFrameIndirect(opcparams);
+                    var opcparams = new Oleaut32.OCPFIPARAMS
+                    {
+                        cbStructSize = (uint)Marshal.SizeOf<Oleaut32.OCPFIPARAMS>(),
+                        hwndOwner = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
+                        lpszCaption = pName,
+                        cObjects = 1,
+                        ppUnk = (IntPtr)(&pUnk),
+                        cPages = 1,
+                        lpPages = (IntPtr)(&guid),
+                        lcid = (uint)Application.CurrentCulture.LCID,
+                        dispidInitialProperty = dispid
+                    };
+                    Oleaut32.OleCreatePropertyFrameIndirect(ref opcparams);
+                }
             }
-            catch (Exception t)
+            finally
             {
-                Debug.Fail(t.ToString());
-                throw t;
+                Marshal.Release(pUnk);
             }
         }
 
