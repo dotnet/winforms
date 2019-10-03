@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms
                         if (_caretHidden)
                         {
                             _caretHidden = false;
-                            SafeNativeMethods.ShowCaret(NativeMethods.NullHandleRef);
+                            User32.ShowCaret(IntPtr.Zero);
                         }
 
                         if (lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool != null)
@@ -1309,16 +1309,15 @@ namespace System.Windows.Forms
                 if (!InMenuMode && _inputFilterQueue.Count > 0)
                 {
                     Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.SetActiveToolStripCore] Setting " + WindowsFormsUtils.GetControlInformation(toolStrip.Handle) + " active.");
-
                     EnterMenuModeCore();
                 }
-                // hide the caret if we're showing a toolstrip dropdown
+
+                // Hide the caret if we're showing a toolstrip dropdown
                 if (!_caretHidden && toolStrip.IsDropDown && InMenuMode)
                 {
                     _caretHidden = true;
-                    SafeNativeMethods.HideCaret(NativeMethods.NullHandleRef);
+                    User32.HideCaret(IntPtr.Zero);
                 }
-
             }
 
             internal static void SuspendMenuMode()
