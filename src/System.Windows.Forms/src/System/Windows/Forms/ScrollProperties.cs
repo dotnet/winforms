@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -55,10 +56,10 @@ namespace System.Windows.Forms
                     _enabled = value;
                     if (_parent != null)
                     {
-                        UnsafeNativeMethods.EnableScrollBar(
-                            new HandleRef(_parent, _parent.Handle),
+                        User32.EnableScrollBar(
+                            _parent,
                             Orientation,
-                            value ? NativeMethods.ESB_ENABLE_BOTH : NativeMethods.ESB_DISABLE_BOTH
+                            value ? User32.ESB.ENABLE_BOTH : User32.ESB.DISABLE_BOTH
                         );
                     }
                 }
@@ -175,7 +176,7 @@ namespace System.Windows.Forms
 
         internal abstract int PageSize { get; }
 
-        internal abstract int Orientation { get; }
+        internal abstract User32.SB Orientation { get; }
 
         internal abstract int HorizontalDisplayPosition { get; }
 
@@ -270,17 +271,17 @@ namespace System.Windows.Forms
         {
             if (_parent != null && _parent.IsHandleCreated && _visible)
             {
-                var si = new NativeMethods.SCROLLINFO
+                var si = new User32.SCROLLINFO
                 {
-                    cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
-                    fMask = NativeMethods.SIF_ALL,
+                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                    fMask = User32.SIF.ALL,
                     nMin = _minimum,
                     nMax = _maximum,
-                    nPage = _parent.AutoScroll ? PageSize : LargeChange,
+                    nPage = _parent.AutoScroll ? (uint)PageSize : (uint)LargeChange,
                     nPos = _value,
                     nTrackPos = 0
                 };
-                UnsafeNativeMethods.SetScrollInfo(new HandleRef(_parent, _parent.Handle), Orientation, si, true);
+                User32.SetScrollInfo(_parent, Orientation, ref si, BOOL.TRUE);
             }
         }
     }

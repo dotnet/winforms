@@ -3879,32 +3879,33 @@ namespace System.Windows.Forms
                     break;
 
                 case WindowMessages.WM_VSCROLL:
+                {
                     base.WndProc(ref m);
-                    int loWord = Util.LOWORD(m.WParam);
-                    if (loWord == NativeMethods.SB_THUMBTRACK)
+                    User32.SBV loWord = (User32.SBV)Util.LOWORD(m.WParam);
+                    if (loWord == User32.SBV.THUMBTRACK)
                     {
                         OnVScroll(EventArgs.Empty);
                     }
-                    else
-                        if (loWord == NativeMethods.SB_THUMBPOSITION)
+                    else if (loWord == User32.SBV.THUMBPOSITION)
                     {
                         OnVScroll(EventArgs.Empty);
                     }
                     break;
-
+                }
                 case WindowMessages.WM_HSCROLL:
+                {
                     base.WndProc(ref m);
-                    loWord = Util.LOWORD(m.WParam);
-                    if (loWord == NativeMethods.SB_THUMBTRACK)
+                    User32.SBH loWord = (User32.SBH)Util.LOWORD(m.WParam);
+                    if (loWord == User32.SBH.THUMBTRACK)
                     {
                         OnHScroll(EventArgs.Empty);
                     }
-                    if (loWord == NativeMethods.SB_THUMBPOSITION)
+                    else if (loWord == User32.SBH.THUMBPOSITION)
                     {
                         OnHScroll(EventArgs.Empty);
                     }
                     break;
-
+                }
                 default:
                     base.WndProc(ref m);
                     break;

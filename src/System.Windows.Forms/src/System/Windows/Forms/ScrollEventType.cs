@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -17,54 +18,54 @@ namespace System.Windows.Forms
         ///  left (horizontal) or top (vertical) scroll arrow or pressed
         ///  the UP ARROW
         /// </summary>
-        SmallDecrement = NativeMethods.SB_LINELEFT,
+        SmallDecrement = User32.SBH.LINELEFT,
 
         /// <summary>
         ///  The scroll box was moved a small distance. The user clicked the
         ///  right (horizontal) or bottom (vertical) scroll arrow or pressed
         ///  the DOWN ARROW key.
         /// </summary>
-        SmallIncrement = NativeMethods.SB_LINERIGHT,
+        SmallIncrement = User32.SBH.LINERIGHT,
 
         /// <summary>
         ///  The scroll box moved a large distance. The user clicked the scroll bar
         ///  to the left (horizontal) or above (vertical) the scroll box, or pressed
         ///  the PAGE UP key.
         /// </summary>
-        LargeDecrement = NativeMethods.SB_PAGELEFT,
+        LargeDecrement = User32.SBH.PAGELEFT,
 
         /// <summary>
         ///  The scroll box moved a large distance. The user clicked the scroll bar
         ///  to the right (horizontal) or below (vertical) the scroll box, or pressed
         ///  the PAGE DOWN key.
         /// </summary>
-        LargeIncrement = NativeMethods.SB_PAGERIGHT,
+        LargeIncrement = User32.SBH.PAGERIGHT,
 
         /// <summary>
         ///  The scroll box was moved.
         /// </summary>
-        ThumbPosition = NativeMethods.SB_THUMBPOSITION,
+        ThumbPosition = User32.SBH.THUMBPOSITION,
 
         /// <summary>
         ///  The scroll box is currently being moved.
         /// </summary>
-        ThumbTrack = NativeMethods.SB_THUMBTRACK,
+        ThumbTrack = User32.SBH.THUMBTRACK,
 
         /// <summary>
         ///  The scroll box was moved to the <see cref='ScrollBar.Minimum'/>
         ///  position.
         /// </summary>
-        First = NativeMethods.SB_LEFT,
+        First = User32.SBH.LEFT,
 
         /// <summary>
         ///  The scroll box was moved to the <see cref='ScrollBar.Maximum'/>
         ///  position.
         /// </summary>
-        Last = NativeMethods.SB_RIGHT,
+        Last = User32.SBH.RIGHT,
 
         /// <summary>
         ///  The scroll box has stopped moving.
         /// </summary>
-        EndScroll = NativeMethods.SB_ENDSCROLL
+        EndScroll = User32.SBH.ENDSCROLL
     }
 }
