@@ -24,33 +24,28 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (obj is NativeMethods.ISpecifyPropertyPages)
+            if (obj is Ole32.ISpecifyPropertyPages ispp)
             {
+                var uuids = new Ole32.CAUUID();
                 try
                 {
-                    NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
-                    try
+                    HRESULT hr = ispp.GetPages(&uuids);
+                    if (!hr.Succeeded())
                     {
-                        ((NativeMethods.ISpecifyPropertyPages)obj).GetPages(uuids);
-                        if (uuids.cElems > 0)
-                        {
-                            return true;
-                        }
+                        return false;
                     }
-                    finally
-                    {
-                        if (uuids.pElems != IntPtr.Zero)
-                        {
-                            Marshal.FreeCoTaskMem(uuids.pElems);
-                        }
-                    }
-                }
-                catch
-                {
-                }
 
-                return false;
+                    return uuids.cElems > 0;
+                }
+                finally
+                {
+                    if (uuids.pElems != null)
+                    {
+                        Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                    }
+                }
             }
+
             return false;
         }
 
@@ -72,40 +67,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (obj is NativeMethods.ISpecifyPropertyPages)
+            if (obj is Ole32.ISpecifyPropertyPages ispp)
             {
                 bool failed = false;
                 Exception failureException;
 
                 try
                 {
-                    NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
-                    try
-                    {
-                        ((NativeMethods.ISpecifyPropertyPages)obj).GetPages(uuids);
-                        if (uuids.cElems <= 0)
-                        {
-                            return false;
-                        }
-                    }
-                    catch
+                    var uuids = new Ole32.CAUUID();
+                    HRESULT hr = ispp.GetPages(&uuids);
+                    if (!hr.Succeeded() || uuids.cElems == 0)
                     {
                         return false;
                     }
+
                     try
                     {
                         object o = obj;
-                        SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, uuids.cElems, new HandleRef(uuids, uuids.pElems), Application.CurrentCulture.LCID, 0, IntPtr.Zero);
+                        SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, uuids.cElems, (IntPtr)uuids.pElems, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
                         return true;
                     }
                     finally
                     {
-                        if (uuids.pElems != IntPtr.Zero)
+                        if (uuids.pElems != null)
                         {
-                            Marshal.FreeCoTaskMem(uuids.pElems);
+                            Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
                         }
                     }
-
                 }
                 catch (Exception ex1)
                 {

@@ -104,7 +104,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         nObjs,
                         new HandleRef(null, (IntPtr)(long)pAddrs),
                         1,
-                        new HandleRef(null, guidsAddr),
+                        guidsAddr,
                         (int)Kernel32.GetThreadLocale(),
                         0,
                         IntPtr.Zero);

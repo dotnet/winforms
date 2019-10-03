@@ -2309,24 +2309,6 @@ namespace System.Windows.Forms
             public    /*NativeMethods.tagVARKIND*/ int varkind;
         }
 
-        [ComImport]
-        [Guid("B196B28B-BAB4-101A-B69C-00AA00341D07")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ISpecifyPropertyPages
-        {
-            void GetPages(
-               [Out]
-                tagCAUUID pPages);
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagCAUUID
-        {
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cElems)*/]
-            public int cElems = 0;
-            public IntPtr pElems = IntPtr.Zero;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct NMTOOLBAR
         {
