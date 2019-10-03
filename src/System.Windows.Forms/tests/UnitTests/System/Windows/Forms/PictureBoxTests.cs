@@ -864,25 +864,74 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, pictureBox.ImageLocation);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
-        public void PictureBox_ImeMode_Set_GetReturnsExpected(ImeMode value)
+        public static IEnumerable<object[]> ImeMode_Set_TestData()
         {
-            var control = new PictureBox
+            yield return new object[] { ImeMode.Inherit, ImeMode.NoControl };
+            yield return new object[] { ImeMode.NoControl, ImeMode.NoControl };
+            yield return new object[] { ImeMode.On, ImeMode.On };
+            yield return new object[] { ImeMode.Off, ImeMode.Off };
+            yield return new object[] { ImeMode.Disable, ImeMode.Disable };
+            yield return new object[] { ImeMode.Hiragana, ImeMode.Hiragana };
+            yield return new object[] { ImeMode.Katakana, ImeMode.Katakana };
+            yield return new object[] { ImeMode.KatakanaHalf, ImeMode.KatakanaHalf };
+            yield return new object[] { ImeMode.AlphaFull, ImeMode.AlphaFull };
+            yield return new object[] { ImeMode.Alpha, ImeMode.Alpha };
+            yield return new object[] { ImeMode.HangulFull, ImeMode.HangulFull };
+            yield return new object[] { ImeMode.Hangul, ImeMode.Hangul };
+            yield return new object[] { ImeMode.Close, ImeMode.Close };
+            yield return new object[] { ImeMode.OnHalf, ImeMode.On };
+        }
+
+        [Theory]
+        [MemberData(nameof(ImeMode_Set_TestData))]
+        public void PictureBox_ImeMode_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
+        {
+            using var control = new PictureBox
             {
                 ImeMode = value
             };
-            Assert.Equal(value, control.ImeMode);
+            Assert.Equal(expected, control.ImeMode);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ImeMode = value;
-            Assert.Equal(value, control.ImeMode);
+            Assert.Equal(expected, control.ImeMode);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(ImeMode_Set_TestData))]
+        public void PictureBox_ImeMode_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
+        {
+            using var control = new PictureBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ImeMode = value;
+            Assert.Equal(expected, control.ImeMode);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ImeMode = value;
+            Assert.Equal(expected, control.ImeMode);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
         public void PictureBox_ImeMode_SetWithHandler_DoesNotCallImeModeChanged()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -918,7 +967,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void PictureBox_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
         }
 

@@ -2512,25 +2512,74 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
-        public void Control_ImeMode_Set_GetReturnsExpected(ImeMode value)
+        public static IEnumerable<object[]> ImeMode_Set_TestData()
         {
-            var control = new Control
+            yield return new object[] { ImeMode.Inherit, ImeMode.NoControl };
+            yield return new object[] { ImeMode.NoControl, ImeMode.NoControl };
+            yield return new object[] { ImeMode.On, ImeMode.On };
+            yield return new object[] { ImeMode.Off, ImeMode.Off };
+            yield return new object[] { ImeMode.Disable, ImeMode.Disable };
+            yield return new object[] { ImeMode.Hiragana, ImeMode.Hiragana };
+            yield return new object[] { ImeMode.Katakana, ImeMode.Katakana };
+            yield return new object[] { ImeMode.KatakanaHalf, ImeMode.KatakanaHalf };
+            yield return new object[] { ImeMode.AlphaFull, ImeMode.AlphaFull };
+            yield return new object[] { ImeMode.Alpha, ImeMode.Alpha };
+            yield return new object[] { ImeMode.HangulFull, ImeMode.HangulFull };
+            yield return new object[] { ImeMode.Hangul, ImeMode.Hangul };
+            yield return new object[] { ImeMode.Close, ImeMode.Close };
+            yield return new object[] { ImeMode.OnHalf, ImeMode.On };
+        }
+
+        [Theory]
+        [MemberData(nameof(ImeMode_Set_TestData))]
+        public void Control_ImeMode_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
+        {
+            using var control = new Control
             {
                 ImeMode = value
             };
-            Assert.Equal(value, control.ImeMode);
+            Assert.Equal(expected, control.ImeMode);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ImeMode = value;
-            Assert.Equal(value, control.ImeMode);
+            Assert.Equal(expected, control.ImeMode);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(ImeMode_Set_TestData))]
+        public void Control_ImeMode_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ImeMode = value;
+            Assert.Equal(expected, control.ImeMode);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ImeMode = value;
+            Assert.Equal(expected, control.ImeMode);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
         public void Control_ImeMode_SetWithHandler_CallsImeModeChanged()
         {
-            var control = new Control();
+            using var control = new Control();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2566,29 +2615,78 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void Control_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
-        public void Control_ImeModeBase_Set_GetReturnsExpected(ImeMode value)
+        public static IEnumerable<object[]> ImeModeBase_Set_TestData()
         {
-            var control = new SubControl
+            yield return new object[] { ImeMode.Inherit, ImeMode.NoControl };
+            yield return new object[] { ImeMode.NoControl, ImeMode.NoControl };
+            yield return new object[] { ImeMode.On, ImeMode.On };
+            yield return new object[] { ImeMode.Off, ImeMode.Off };
+            yield return new object[] { ImeMode.Disable, ImeMode.Disable };
+            yield return new object[] { ImeMode.Hiragana, ImeMode.Hiragana };
+            yield return new object[] { ImeMode.Katakana, ImeMode.Katakana };
+            yield return new object[] { ImeMode.KatakanaHalf, ImeMode.KatakanaHalf };
+            yield return new object[] { ImeMode.AlphaFull, ImeMode.AlphaFull };
+            yield return new object[] { ImeMode.Alpha, ImeMode.Alpha };
+            yield return new object[] { ImeMode.HangulFull, ImeMode.HangulFull };
+            yield return new object[] { ImeMode.Hangul, ImeMode.Hangul };
+            yield return new object[] { ImeMode.Close, ImeMode.Close };
+            yield return new object[] { ImeMode.OnHalf, ImeMode.OnHalf };
+        }
+
+        [Theory]
+        [MemberData(nameof(ImeModeBase_Set_TestData))]
+        public void Control_ImeModeBase_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
+        {
+            using var control = new SubControl
             {
                 ImeModeBase = value
             };
-            Assert.Equal(value, control.ImeModeBase);
+            Assert.Equal(expected, control.ImeModeBase);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ImeModeBase = value;
-            Assert.Equal(value, control.ImeModeBase);
+            Assert.Equal(expected, control.ImeModeBase);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(ImeModeBase_Set_TestData))]
+        public void Control_ImeModeBase_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ImeModeBase = value;
+            Assert.Equal(expected, control.ImeModeBase);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ImeModeBase = value;
+            Assert.Equal(expected, control.ImeModeBase);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
-        public void Control_ImeModeBase_SetWithHandler_CallsImeModeBaseChanged()
+        public void Control_ImeModeBase_SetWithHandler_CallsImeModeChanged()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2624,7 +2722,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void Control_ImeModeBase_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeModeBase = value);
         }
 
@@ -2766,15 +2864,121 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void Control_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var control = new Control
+            using var control = new Control
             {
                 Padding = value
             };
             Assert.Equal(expected, control.Padding);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Padding = value;
             Assert.Equal(expected, control.Padding);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void Control_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Padding_SetWithResizeRedraw_TestData()
+        {
+            yield return new object[] { new Padding(), new Padding(), 0, 0 };
+            yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
+            yield return new object[] { new Padding(1), new Padding(1), 1, 1 };
+            yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
+        }
+
+        [Theory]
+        [MemberData(nameof(Padding_SetWithResizeRedraw_TestData))]
+        public void Control_Padding_SetWithResizeRedraw_GetReturnsExpected(Padding value, Padding expected, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Fact]
+        public void Control_Padding_SetWithHandler_CallsPaddingChanged()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Equal(control, sender);
+                Assert.Equal(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.PaddingChanged += handler;
+
+            // Set different.
+            var padding1 = new Padding(1);
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            var padding2 = new Padding(2);
+            control.Padding = padding2;
+            Assert.Equal(padding2, control.Padding);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.PaddingChanged -= handler;
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(2, callCount);
         }
 
         public static IEnumerable<object[]> Anchor_Set_TestData()
@@ -2898,22 +3102,157 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.Bounds);
         }
 
-        /// <summary>
-        ///  Data for the HeightGetSet test
-        /// </summary>
-        public static TheoryData<int> HeightGetSetData =>
-            CommonTestHelper.GetIntTheoryData();
+        [Theory]
+        [InlineData(1)]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void Control_Height_Set_GetReturnsExpected(int value)
+        {
+            using var control = new Control
+            {
+                Height = value
+            };
+            Assert.Equal(new Size(0, value), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, 0, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, 0, value), control.DisplayRectangle);
+            Assert.Equal(new Size(0, value), control.Size);
+            Assert.Equal(new Rectangle(0, 0, 0, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Height = value;
+            Assert.Equal(new Size(0, value), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, 0, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, 0, value), control.DisplayRectangle);
+            Assert.Equal(new Size(0, value), control.Size);
+            Assert.Equal(new Rectangle(0, 0, 0, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
+        }
 
         [Theory]
-        [MemberData(nameof(HeightGetSetData))]
-        public void Control_HeightGetSet(int expected)
+        [InlineData(1, 1)]
+        [InlineData(0, 0)]
+        [InlineData(-1, 0)]
+        public void Control_Height_SetWithHandle_GetReturnsExpected(int value, int expectedHeight)
         {
-            var cont = new Control
-            {
-                Height = expected
-            };
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            Assert.Equal(expected, cont.Height);
+            control.Height = value;
+            Assert.Equal(new Size(0, expectedHeight), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.DisplayRectangle);
+            Assert.Equal(new Size(0, expectedHeight), control.Size);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Height = value;
+            Assert.Equal(new Size(0, expectedHeight), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.DisplayRectangle);
+            Assert.Equal(new Size(0, expectedHeight), control.Size);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [InlineData(1, 1, 1)]
+        [InlineData(0, 0, 0)]
+        [InlineData(-1, 0, 0)]
+        public void Control_Height_SetWithResizeRedraw_GetReturnsExpected(int value, int expectedHeight, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Height = value;
+            Assert.Equal(new Size(0, expectedHeight), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.DisplayRectangle);
+            Assert.Equal(new Size(0, expectedHeight), control.Size);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Height = value;
+            Assert.Equal(new Size(0, expectedHeight), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.DisplayRectangle);
+            Assert.Equal(new Size(0, expectedHeight), control.Size);
+            Assert.Equal(new Rectangle(0, 0, 0, expectedHeight), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Fact]
+        public void Control_Height_SetWithHandler_CallsSizeChanged()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            int clientSizeChangedCallCount = 0;
+            EventHandler clientSizeChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                clientSizeChangedCallCount++;
+            };
+            control.SizeChanged += handler;
+            control.ClientSizeChanged += clientSizeChangedHandler;
+
+            control.Height = 10;
+            Assert.Equal(new Size(0, 10), control.Size);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, clientSizeChangedCallCount);
+
+            // Set same.
+            control.Height = 10;
+            Assert.Equal(new Size(0, 10), control.Size);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, clientSizeChangedCallCount);
+
+            // Set different.
+            control.Height = 11;
+            Assert.Equal(new Size(0, 11), control.Size);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, clientSizeChangedCallCount);
+
+            // Remove handler.
+            control.SizeChanged -= handler;
+            control.ClientSizeChanged -= clientSizeChangedHandler;
+            control.Height = 10;
+            Assert.Equal(new Size(0, 10), control.Size);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, clientSizeChangedCallCount);
         }
 
         /// <summary>
@@ -3402,37 +3741,331 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
-        public void Control_SizeGetSet(Size value)
+        public static IEnumerable<object[]> Size_Set_TestData()
         {
-            var control = new Control
+            yield return new object[] { new Size(1, 2) };
+            yield return new object[] { new Size(0, 0) };
+            yield return new object[] { new Size(-1, -2) };
+            yield return new object[] { new Size(-1, 2) };
+            yield return new object[] { new Size(1, -2) };
+        }
+
+        [Theory]
+        [MemberData(nameof(Size_Set_TestData))]
+        public void Control_Size_Set_GetReturnsExpected(Size value)
+        {
+            using var control = new Control
             {
                 Size = value
             };
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
             Assert.Equal(value, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Size = value;
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
             Assert.Equal(value, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the WidthGetSet test
-        /// </summary>
-        public static TheoryData<int> WidthGetSetData =>
-            CommonTestHelper.GetIntTheoryData();
+        public static IEnumerable<object[]> Size_SetWithHandle_TestData()
+        {
+            yield return new object[] { new Size(1, 2), new Size(1, 2) };
+            yield return new object[] { new Size(0, 0), new Size(0, 0) };
+            yield return new object[] { new Size(-1, -2), new Size(0, 0) };
+            yield return new object[] { new Size(-1, 2), new Size(0, 2) };
+            yield return new object[] { new Size(1, -2), new Size(1, 0) };
+        }
 
         [Theory]
-        [MemberData(nameof(WidthGetSetData))]
-        public void Control_WidthGetSet(int expected)
+        [MemberData(nameof(Size_SetWithHandle_TestData))]
+        public void Control_Size_SetWithHandle_GetReturnsExpected(Size value, Size expectedSize)
         {
-            var cont = new Control
-            {
-                Width = expected
-            };
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            Assert.Equal(expected, cont.Width);
+            control.Size = value;
+            Assert.Equal(expectedSize, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Size = value;
+            Assert.Equal(expectedSize, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Size_SetWithResizeRedraw_TestData()
+        {
+            yield return new object[] { new Size(1, 2), new Size(1, 2), 1 };
+            yield return new object[] { new Size(0, 0), new Size(0, 0), 0 };
+            yield return new object[] { new Size(-1, -2), new Size(0, 0), 0 };
+            yield return new object[] { new Size(-1, 2), new Size(0, 2), 1 };
+            yield return new object[] { new Size(1, -2), new Size(1, 0), 1 };
+        }
+
+        [Theory]
+        [MemberData(nameof(Size_SetWithResizeRedraw_TestData))]
+        public void Control_Size_SetWithResizeRedraw_GetReturnsExpected(Size value, Size expectedSize, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Size = value;
+            Assert.Equal(expectedSize, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Size = value;
+            Assert.Equal(expectedSize, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Fact]
+        public void Control_Size_SetWithHandler_CallsSizeChanged()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            int clientSizeChangedCallCount = 0;
+            EventHandler clientSizeChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                clientSizeChangedCallCount++;
+            };
+            control.SizeChanged += handler;
+            control.ClientSizeChanged += clientSizeChangedHandler;
+
+            control.Size = new Size(10, 10);
+            Assert.Equal(new Size(10, 10), control.Size);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, clientSizeChangedCallCount);
+
+            // Set same.
+            control.Size = new Size(10, 10);
+            Assert.Equal(new Size(10, 10), control.Size);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, clientSizeChangedCallCount);
+
+            // Set different.
+            control.Size = new Size(11, 11);
+            Assert.Equal(new Size(11, 11), control.Size);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, clientSizeChangedCallCount);
+
+            // Remove handler.
+            control.SizeChanged -= handler;
+            control.ClientSizeChanged -= clientSizeChangedHandler;
+            control.Size = new Size(10, 10);
+            Assert.Equal(new Size(10, 10), control.Size);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, clientSizeChangedCallCount);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void Control_Width_Set_GetReturnsExpected(int value)
+        {
+            using var control = new Control
+            {
+                Width = value
+            };
+            Assert.Equal(new Size(value, 0), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, value, 0), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, value, 0), control.DisplayRectangle);
+            Assert.Equal(new Size(value, 0), control.Size);
+            Assert.Equal(new Rectangle(0, 0, value, 0), control.Bounds);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Width = value;
+            Assert.Equal(new Size(value, 0), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, value, 0), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, value, 0), control.DisplayRectangle);
+            Assert.Equal(new Size(value, 0), control.Size);
+            Assert.Equal(new Rectangle(0, 0, value, 0), control.Bounds);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(0, 0)]
+        [InlineData(-1, 0)]
+        public void Control_Width_SetWithHandle_GetReturnsExpected(int value, int expectedWidth)
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Width = value;
+            Assert.Equal(new Size(expectedWidth, 0), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.DisplayRectangle);
+            Assert.Equal(new Size(expectedWidth, 0), control.Size);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Width = value;
+            Assert.Equal(new Size(expectedWidth, 0), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.DisplayRectangle);
+            Assert.Equal(new Size(expectedWidth, 0), control.Size);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [InlineData(1, 1, 1)]
+        [InlineData(0, 0, 0)]
+        [InlineData(-1, 0, 0)]
+        public void Control_Width_SetWithResizeRedraw_GetReturnsExpected(int value, int expectedWidth, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Width = value;
+            Assert.Equal(new Size(expectedWidth, 0), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.DisplayRectangle);
+            Assert.Equal(new Size(expectedWidth, 0), control.Size);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Width = value;
+            Assert.Equal(new Size(expectedWidth, 0), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.ClientRectangle);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.DisplayRectangle);
+            Assert.Equal(new Size(expectedWidth, 0), control.Size);
+            Assert.Equal(new Rectangle(0, 0, expectedWidth, 0), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Fact]
+        public void Control_Width_SetWithHandler_CallsSizeChanged()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            int clientSizeChangedCallCount = 0;
+            EventHandler clientSizeChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                clientSizeChangedCallCount++;
+            };
+            control.SizeChanged += handler;
+            control.ClientSizeChanged += clientSizeChangedHandler;
+
+            control.Width = 10;
+            Assert.Equal(new Size(10, 0), control.Size);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, clientSizeChangedCallCount);
+
+            // Set same.
+            control.Width = 10;
+            Assert.Equal(new Size(10, 0), control.Size);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, clientSizeChangedCallCount);
+
+            // Set different.
+            control.Width = 11;
+            Assert.Equal(new Size(11, 0), control.Size);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, clientSizeChangedCallCount);
+
+            // Remove handler.
+            control.SizeChanged -= handler;
+            control.ClientSizeChanged -= clientSizeChangedHandler;
+            control.Width = 10;
+            Assert.Equal(new Size(10, 0), control.Size);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, clientSizeChangedCallCount);
         }
 
         #endregion
@@ -3459,18 +4092,6 @@ namespace System.Windows.Forms.Tests
             cont.Leave += (sender, args) => wasChanged = true;
 
             cont.NotifyLeave();
-
-            Assert.True(wasChanged);
-        }
-
-        [Fact]
-        public void Control_PaddingChanged()
-        {
-            bool wasChanged = false;
-            var cont = new Control();
-            cont.PaddingChanged += (sender, args) => wasChanged = true;
-
-            cont.Padding = new Padding(1);
 
             Assert.True(wasChanged);
         }
@@ -4617,36 +5238,52 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Text_Set_GetReturnsExpected(string value, string expected)
         {
-            var control = new Control
+            using var control = new Control
             {
                 Text = value
             };
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
         public void Control_Text_SetWithHandler_CallsTextChanged()
         {
-            var control = new Control();
+            using var control = new Control();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -5731,19 +6368,178 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.CacheTextInternal);
         }
 
+        public static IEnumerable<object[]> ClientSize_Set_TestData()
+        {
+            yield return new object[] { new Size(1, 2) };
+            yield return new object[] { new Size(0, 0) };
+            yield return new object[] { new Size(-1, -2) };
+            yield return new object[] { new Size(-1, 2) };
+            yield return new object[] { new Size(1, -2) };
+        }
+
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        [MemberData(nameof(ClientSize_Set_TestData))]
         public void Control_ClientSize_Set_GetReturnsExpected(Size value)
         {
-            var control = new Control
+            using var control = new Control
             {
                 ClientSize = value
             };
             Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(value, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ClientSize = value;
             Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(value, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ClientSize_SetWithHandle_TestData()
+        {
+            yield return new object[] { new Size(1, 2), new Size(1, 2) };
+            yield return new object[] { new Size(0, 0), new Size(0, 0) };
+            yield return new object[] { new Size(-1, -2), new Size(0, 0) };
+            yield return new object[] { new Size(-1, 2), new Size(0, 2) };
+            yield return new object[] { new Size(1, -2), new Size(1, 0) };
+        }
+
+        [Theory]
+        [MemberData(nameof(ClientSize_SetWithHandle_TestData))]
+        public void Control_ClientSize_SetWithHandle_GetReturnsExpected(Size value, Size expectedSize)
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ClientSize = value;
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ClientSize = value;
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> ClientSize_SetWithResizeRedraw_TestData()
+        {
+            yield return new object[] { new Size(1, 2), new Size(1, 2), 1 };
+            yield return new object[] { new Size(0, 0), new Size(0, 0), 0 };
+            yield return new object[] { new Size(-1, -2), new Size(0, 0), 0 };
+            yield return new object[] { new Size(-1, 2), new Size(0, 2), 1 };
+            yield return new object[] { new Size(1, -2), new Size(1, 0), 1 };
+        }
+
+        [Theory]
+        [MemberData(nameof(ClientSize_SetWithResizeRedraw_TestData))]
+        public void Control_ClientSize_SetWithResizeRedraw_GetReturnsExpected(Size value, Size expectedSize, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ClientSize = value;
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ClientSize = value;
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Fact]
+        public void Control_ClientSize_SetWithHandler_CallsClientSizeChanged()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            int sizeChangedCallCount = 0;
+            EventHandler sizeChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                sizeChangedCallCount++;
+            };
+            control.ClientSizeChanged += handler;
+            control.SizeChanged += sizeChangedHandler;
+
+            control.ClientSize = new Size(10, 10);
+            Assert.Equal(new Size(10, 10), control.ClientSize);
+            Assert.Equal(2, callCount);
+            Assert.Equal(1, sizeChangedCallCount);
+
+            // Set same.
+            control.ClientSize = new Size(10, 10);
+            Assert.Equal(new Size(10, 10), control.ClientSize);
+            Assert.Equal(3, callCount);
+            Assert.Equal(1, sizeChangedCallCount);
+
+            // Set different.
+            control.ClientSize = new Size(11, 11);
+            Assert.Equal(new Size(11, 11), control.ClientSize);
+            Assert.Equal(5, callCount);
+            Assert.Equal(2, sizeChangedCallCount);
+
+            // Remove handler.
+            control.ClientSizeChanged -= handler;
+            control.SizeChanged -= sizeChangedHandler;
+            control.ClientSize = new Size(10, 10);
+            Assert.Equal(new Size(10, 10), control.ClientSize);
+            Assert.Equal(5, callCount);
+            Assert.Equal(2, sizeChangedCallCount);
         }
 
         public static IEnumerable<object[]> ContextMenu_Set_TestData()
@@ -7862,6 +8658,159 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnClientSizeChanged_Invoke_CallsClientSizeChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int sizeChangedCallCount = 0;
+            EventHandler sizeChangedHandler = (sender, e) => sizeChangedCallCount++;
+            int resizeCallCount = 0;
+            EventHandler resizeHandler = (sender, e) => resizeCallCount++;
+
+            // Call with handler.
+            control.ClientSizeChanged += handler;
+            control.SizeChanged += sizeChangedHandler;
+            control.Resize += resizeHandler;
+            control.OnClientSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, sizeChangedCallCount);
+            Assert.Equal(0, resizeCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.ClientSizeChanged -= handler;
+            control.SizeChanged += sizeChangedHandler;
+            control.Resize += resizeHandler;
+            control.OnClientSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, sizeChangedCallCount);
+            Assert.Equal(0, resizeCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnClientSizeChanged_InvokeWithHandle_CallsClientSizeChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int sizeChangedCallCount = 0;
+            EventHandler sizeChangedHandler = (sender, e) => sizeChangedCallCount++;
+            int resizeCallCount = 0;
+            EventHandler resizeHandler = (sender, e) => resizeCallCount++;
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.ClientSizeChanged += handler;
+            control.SizeChanged += sizeChangedHandler;
+            control.Resize += resizeHandler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnClientSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, sizeChangedCallCount);
+            Assert.Equal(0, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.ClientSizeChanged -= handler;
+            control.SizeChanged -= sizeChangedHandler;
+            control.Resize -= resizeHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnClientSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, sizeChangedCallCount);
+            Assert.Equal(0, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnClientSizeChanged_InvokeWithResizeRedraw_CallsClientSizeChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int sizeChangedCallCount = 0;
+            EventHandler sizeChangedHandler = (sender, e) => sizeChangedCallCount++;
+            int resizeCallCount = 0;
+            EventHandler resizeHandler = (sender, e) => resizeCallCount++;
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.ClientSizeChanged += handler;
+            control.SizeChanged += sizeChangedHandler;
+            control.Resize += resizeHandler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnClientSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, sizeChangedCallCount);
+            Assert.Equal(0, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.ClientSizeChanged -= handler;
+            control.SizeChanged -= sizeChangedHandler;
+            control.Resize -= resizeHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnClientSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, sizeChangedCallCount);
+            Assert.Equal(0, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnContextMenuChanged_Invoke_CallsContextMenuChanged(EventArgs eventArgs)
         {
             var control = new SubControl();
@@ -9527,6 +10476,30 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnImeModeChanged_Invoke_CallsImeModeChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.ImeModeChanged += handler;
+            control.OnImeModeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.ImeModeChanged -= handler;
+            control.OnImeModeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
         public void Control_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
@@ -10083,6 +11056,122 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnPaddingChanged_Invoke_CallsPaddingChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.PaddingChanged += handler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.PaddingChanged -= handler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnPaddingChanged_InvokeWithHandle_CallsPaddingChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.PaddingChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.PaddingChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnPaddingChanged_InvokeWithResizeRedraw_CallsPaddingChangedAndInvalidate(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.PaddingChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.PaddingChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
         public void Control_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
@@ -10614,7 +11703,33 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnResize_Invoke_CallsResize(EventArgs eventArgs)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Resize += handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Resize -= handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnResize_InvokeWithHandle_CallsResize(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -10624,19 +11739,35 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.Resize += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             control.Resize -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Theory]
@@ -10655,20 +11786,172 @@ namespace System.Windows.Forms.Tests
             };
             int invalidatedCallCount = 0;
             InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.Resize += handler;
             control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             control.Resize -= handler;
             control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnSizeChanged_Invoke_CallsSizeChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.SizeChanged += handler;
+            control.OnSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.SizeChanged -= handler;
+            control.OnSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnSizeChanged_Invoke_CallsSizeChangedAndResize(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int resizeCallCount = 0;
+            EventHandler resizeHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                resizeCallCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.SizeChanged += handler;
+            control.Resize += resizeHandler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.SizeChanged -= handler;
+            control.Resize -= resizeHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnSizeChanged_InvokeWithResizeRedraw_CallsSizeChangedAndResizeAndInvalidate(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int resizeCallCount = 0;
+            EventHandler resizeHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                resizeCallCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.SizeChanged += handler;
+            control.Resize += resizeHandler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.SizeChanged -= handler;
+            control.Resize -= resizeHandler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, resizeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Theory]
@@ -10692,6 +11975,30 @@ namespace System.Windows.Forms.Tests
            // Remove handler.
            control.StyleChanged -= handler;
            control.OnStyleChanged(eventArgs);
+           Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.TextChanged += handler;
+            control.OnTextChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           control.TextChanged -= handler;
+           control.OnTextChanged(eventArgs);
            Assert.Equal(1, callCount);
         }
 
@@ -10934,6 +12241,16 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(0, 0)]
+        [InlineData(-1, -2)]
+        public void Control_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
+        {
+            var control = new SubControl();
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+        }
+
         [Fact]
         public void Control_ResetMouseEventArgs_InvokeWithoutHandle_Success()
         {
@@ -10950,6 +12267,151 @@ namespace System.Windows.Forms.Tests
 
             control.ResetMouseEventArgs();
             control.ResetMouseEventArgs();
+        }
+
+        [Theory]
+        [MemberData(nameof(ClientSize_Set_TestData))]
+        public void Control_SetClientSizeCore_Set_GetReturnsExpected(Size value)
+        {
+            using var control = new SubControl();
+            control.SetClientSizeCore(value.Width, value.Height);
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(value, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.SetClientSizeCore(value.Width, value.Height);
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(value, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.Bounds);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(ClientSize_SetWithHandle_TestData))]
+        public void Control_SetClientSizeCore_SetWithHandle_GetReturnsExpected(Size value, Size expectedSize)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.SetClientSizeCore(value.Width, value.Height);
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.SetClientSizeCore(value.Width, value.Height);
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [MemberData(nameof(ClientSize_SetWithResizeRedraw_TestData))]
+        public void Control_SetClientSizeCore_SetWithResizeRedraw_GetReturnsExpected(Size value, Size expectedSize, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, true);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.SetClientSizeCore(value.Width, value.Height);
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.SetClientSizeCore(value.Width, value.Height);
+            Assert.Equal(value, control.ClientSize);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.ClientRectangle);
+            Assert.Equal(new Rectangle(Point.Empty, value), control.DisplayRectangle);
+            Assert.Equal(expectedSize, control.Size);
+            Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Fact]
+        public void Control_SetClientSizeCore_SetWithHandler_CallsClientSizeChanged()
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            int sizeChangedCallCount = 0;
+            EventHandler sizeChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                sizeChangedCallCount++;
+            };
+            control.ClientSizeChanged += handler;
+            control.SizeChanged += sizeChangedHandler;
+
+            control.SetClientSizeCore(10, 10);
+            Assert.Equal(new Size(10, 10), control.ClientSize);
+            Assert.Equal(2, callCount);
+            Assert.Equal(1, sizeChangedCallCount);
+
+            // Set same.
+            control.SetClientSizeCore(10, 10);
+            Assert.Equal(new Size(10, 10), control.ClientSize);
+            Assert.Equal(3, callCount);
+            Assert.Equal(1, sizeChangedCallCount);
+
+            // Set different.
+            control.SetClientSizeCore(11, 11);
+            Assert.Equal(new Size(11, 11), control.ClientSize);
+            Assert.Equal(5, callCount);
+            Assert.Equal(2, sizeChangedCallCount);
+
+            // Remove handler.
+            control.ClientSizeChanged -= handler;
+            control.SizeChanged -= sizeChangedHandler;
+            control.SetClientSizeCore(10, 10);
+            Assert.Equal(new Size(10, 10), control.ClientSize);
+            Assert.Equal(5, callCount);
+            Assert.Equal(2, sizeChangedCallCount);
         }
 
         [Theory]
@@ -11119,6 +12581,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
 
+            public new void OnClientSizeChanged(EventArgs e) => base.OnClientSizeChanged(e);
+
             public new void OnContextMenuChanged(EventArgs e) => base.OnContextMenuChanged(e);
 
             public new void OnContextMenuStripChanged(EventArgs e) => base.OnContextMenuStripChanged(e);
@@ -11153,6 +12617,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnHelpRequested(HelpEventArgs e) => base.OnHelpRequested(e);
 
+            public new void OnImeModeChanged(EventArgs e) => base.OnImeModeChanged(e);
+
             public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
 
             public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
@@ -11185,6 +12651,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnMove(EventArgs e) => base.OnMove(e);
 
+            public new void OnPaddingChanged(EventArgs e) => base.OnPaddingChanged(e);
+
             public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
 
             public new void OnParentChanged(EventArgs e) => base.OnParentChanged(e);
@@ -11211,13 +12679,21 @@ namespace System.Windows.Forms.Tests
 
             public new void OnResize(EventArgs e) => base.OnResize(e);
 
+            public new void OnSizeChanged(EventArgs e) => base.OnSizeChanged(e);
+
             public new void OnStyleChanged(EventArgs e) => base.OnStyleChanged(e);
+
+            public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
 
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
 
             public new void RecreateHandle() => base.RecreateHandle();
 
+            public new void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) => base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
             public new void ResetMouseEventArgs() => base.ResetMouseEventArgs();
+
+            public new void SetClientSizeCore(int x, int y) => base.SetClientSizeCore(x, y);
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
