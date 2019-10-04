@@ -1913,20 +1913,6 @@ namespace System.Windows.Forms
             int FindConnectionPoint([In] ref Guid guid, [Out, MarshalAs(UnmanagedType.Interface)]out IConnectionPoint ppCP);
         }
 
-        [ComImport(), Guid("B196B285-BAB4-101A-B69C-00AA00341D07"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IEnumConnectionPoints
-        {
-            [PreserveSig]
-            int Next(int cConnections, out IConnectionPoint pCp, out int pcFetched);
-
-            [PreserveSig]
-            int Skip(int cSkip);
-
-            void Reset();
-
-            IEnumConnectionPoints Clone();
-        }
-
         [ComImport]
         [Guid("00020400-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1962,16 +1948,21 @@ namespace System.Windows.Forms
                 IntPtr* pArgErr);
         }
 
-        [ComImport(), Guid("00020401-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ITypeInfo
+        [ComImport]
+        [Guid("00020401-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface ITypeInfo
         {
             [PreserveSig]
             HRESULT GetTypeAttr(ref IntPtr pTypeAttr);
 
+            /// <remarks>
+            /// This method is unused so we do not define the interface ITypeComp
+            /// and its dependencies to avoid maintenance costs and code size.
+            /// </remarks>
             [PreserveSig]
-            int GetTypeComp(
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                       ITypeComp[] ppTComp);
+            HRESULT GetTypeComp(
+                IntPtr* ppTComp);
 
             [PreserveSig]
             HRESULT GetFuncDesc(
@@ -2052,12 +2043,14 @@ namespace System.Windows.Forms
                    [Out, MarshalAs(UnmanagedType.LPArray)]
                      string[] pBstrMops);
 
+            /// <remarks>
+            /// This method is unused so we do not define the interface ITypeLib
+            /// and its dependencies to avoid maintenance costs and code size.
+            /// </remarks>
             [PreserveSig]
-            int GetContainingTypeLib(
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                       ITypeLib[] ppTLib,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      int[] pIndex);
+            HRESULT GetContainingTypeLib(
+                IntPtr* ppTLib,
+                uint* pIndex);
 
             [PreserveSig]
             void ReleaseTypeAttr(IntPtr typeAttr);
@@ -2067,112 +2060,6 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             void ReleaseVarDesc(IntPtr varDesc);
-        }
-
-        [ComImport(), Guid("00020403-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ITypeComp
-        {
-            unsafe void RemoteBind(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szName,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [In, MarshalAs(UnmanagedType.U2)]
-                 short wFlags,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  NativeMethods.tagDESCKIND[] pDescKind,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   NativeMethods.tagFUNCDESC*[] ppFuncDesc,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   NativeMethods.tagVARDESC*[] ppVarDesc,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeComp[] ppTypeComp,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  int[] pDummy);
-
-            void RemoteBindType(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szName,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo);
-        }
-
-        [ComImport(), Guid("00020402-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ITypeLib
-        {
-            void RemoteGetTypeInfoCount(
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  int[] pcTInfo);
-
-            void GetTypeInfo(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int index,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo);
-
-            void GetTypeInfoType(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int index,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  NativeMethods.tagTYPEKIND[] pTKind);
-
-            void GetTypeInfoOfGuid(
-                   [In]
-                  ref Guid guid,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo);
-
-            void RemoteGetLibAttr(
-                   IntPtr ppTLibAttr,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  int[] pDummy);
-
-            void GetTypeComp(
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeComp[] ppTComp);
-
-            void RemoteGetDocumentation(
-                    int index,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int refPtrFlags,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrName,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrDocString,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 int[] pdwHelpContext,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrHelpFile);
-
-            void RemoteIsName(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szNameBuf,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 IntPtr [] pfName,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrLibName);
-
-            void RemoteFindName(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szNameBuf,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 ITypeInfo[] ppTInfo,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 int[] rgMemId,
-                   [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                 short[] pcFound,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrLibName);
-
-            void LocalReleaseTLibAttr();
         }
 
         [StructLayout(LayoutKind.Sequential)]
