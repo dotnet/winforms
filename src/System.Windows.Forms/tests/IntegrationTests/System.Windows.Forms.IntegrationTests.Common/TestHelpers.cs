@@ -65,11 +65,6 @@ namespace System.Windows.Forms.IntegrationTests.Common
             if (!File.Exists(path))
                 throw new FileNotFoundException("File does not exist", path);
 
-            var dotnetPath = GetDotNetPath();
-            if (!Directory.Exists(dotnetPath))
-                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
-
-            var process = new Process();
             var startInfo = new ProcessStartInfo
             {
                 FileName = path
@@ -79,6 +74,25 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 startInfo.WorkingDirectory = Path.GetDirectoryName(path);
             }
 
+            return StartProcess(startInfo);
+        }
+
+        /// <summary>
+        ///  Start a process with the specified start info.
+        ///  Also searches for a local .dotnet folder and adds it to the path.
+        ///  If a local folder is not found, searches for a machine-wide install that matches
+        ///  the version specified in the global.json.
+        /// </summary>
+        /// <param name="startInfo">The start info</param>
+        /// <returns>The new Process</returns>
+        public static Process StartProcess(ProcessStartInfo startInfo)
+        {
+            var dotnetPath = GetDotNetPath();
+            if (!Directory.Exists(dotnetPath))
+                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
+
+            var process = new Process();
+
             // Set the dotnet_root for the exe being launched
             // This allows the exe to look for runtime dependencies (like the shared framework (NetCore.App))
             // outside of the normal machine-wide install location (program files\dotnet)
@@ -86,8 +100,25 @@ namespace System.Windows.Forms.IntegrationTests.Common
             process.StartInfo = startInfo;
 
             process.Start();
-            Thread.Sleep(500);
+            process.WaitForExit(500);
             return process;
+        }
+
+        /// <summary>
+        /// End the process.
+        /// </summary>
+        /// <returns>The process ExitCode</returns>
+        public static int EndProcess(Process process, int timeout = Timeout.Infinite)
+        {
+            try
+            {
+                process.Kill();
+            }
+            catch (Exception)
+            {
+            }
+            process.WaitForExit(timeout);
+            return process.ExitCode;
         }
 
         /// <summary>

@@ -69,6 +69,12 @@
     <!-- Reference and Source System.Windows.Forms.Design.Editors includes -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
 
+    <!-- Facade for Microsoft.VisualBasic include -->
+    <ProjectReference Include="..\..\src\Microsoft.VisualBasic\src\Microsoft.VisualBasic.Facade.csproj" />
+
+    <!-- Reference and Source Microsoft.VisualBasic.Forms includes -->
+    <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Forms\src\Microsoft.VisualBasic.Forms.vbproj" />
+
     <ProjectReference Include="..\..\src\Accessibility\src\Accessibility.ilproj" />
 
   </ItemGroup>
