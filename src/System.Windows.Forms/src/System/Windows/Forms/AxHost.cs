@@ -2597,41 +2597,37 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            try
+            VSSDK.PROPCAT propcat = 0;
+            HRESULT hr = icp.MapPropertyToCategory(dispid, &propcat);
+            if (hr != HRESULT.S_OK || propcat == 0)
             {
-                VSSDK.PROPCAT propcat = 0;
-                HRESULT hr = icp.MapPropertyToCategory(dispid, &propcat);
-                if (propcat != 0)
+                return null;
+            }
+
+            int index = -(int)propcat;
+            if (index > 0 && index < categoryNames.Length && categoryNames[index] != null)
+            {
+                return categoryNames[index];
+            }
+
+            if (objectDefinedCategoryNames != null)
+            {
+                CategoryAttribute rval = (CategoryAttribute)objectDefinedCategoryNames[propcat];
+                if (rval != null)
                 {
-                    int index = -(int)propcat;
-                    if (index > 0 && index < categoryNames.Length && categoryNames[index] != null)
-                    {
-                        return categoryNames[index];
-                    }
-
-                    if (objectDefinedCategoryNames != null)
-                    {
-                        CategoryAttribute rval = (CategoryAttribute)objectDefinedCategoryNames[propcat];
-                        if (rval != null)
-                        {
-                            return rval;
-                        }
-                    }
-
-                    hr = icp.GetCategoryName(propcat, (uint)CultureInfo.CurrentCulture.LCID, out string name);
-                    if (hr == HRESULT.S_OK && name != null)
-                    {
-                        var rval = new CategoryAttribute(name);
-                        objectDefinedCategoryNames ??= new Hashtable();
-                        objectDefinedCategoryNames.Add(propcat, rval);
-                        return rval;
-                    }
+                    return rval;
                 }
             }
-            catch (Exception t)
+
+            hr = icp.GetCategoryName(propcat, (uint)CultureInfo.CurrentCulture.LCID, out string name);
+            if (hr == HRESULT.S_OK && name != null)
             {
-                Debug.Fail(t.ToString());
+                var rval = new CategoryAttribute(name);
+                objectDefinedCategoryNames ??= new Hashtable();
+                objectDefinedCategoryNames.Add(propcat, rval);
+                return rval;
             }
+
             return null;
         }
 
