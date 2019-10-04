@@ -2574,10 +2574,6 @@ namespace System.Windows.Forms
         public const int DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED = -5;
 
         // Theming/Visual Styles stuff
-        public const int STAP_ALLOW_NONCLIENT = (1 << 0);
-        public const int STAP_ALLOW_CONTROLS = (1 << 1);
-        public const int STAP_ALLOW_WEBCONTENT = (1 << 2);
-
         public const int WS_EX_TRANSPARENT = 0x00000020;
 
         // Threading stuff
