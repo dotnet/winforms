@@ -2070,24 +2070,6 @@ namespace System.Windows.Forms
 
         }
 
-        [ComImport]
-        [Guid("4D07FC10-F931-11CE-B001-00AA006884E5")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ICategorizeProperties
-        {
-            [PreserveSig]
-            HRESULT MapPropertyToCategory(
-                Ole32.DispatchID dispID,
-                ref int categoryID);
-
-            [PreserveSig]
-            int GetCategoryName(
-                int propcat,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int lcid,
-                out string categoryName);
-        }
-
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagOLEVERB
         {
@@ -2981,17 +2963,6 @@ namespace System.Windows.Forms
             public const int QACONTAINER_AUTOCLIP = 0x20;
             public const int QACONTAINER_MESSAGEREFLECT = 0x40;
             public const int QACONTAINER_SUPPORTSMNEMONICS = 0x80;
-            public const int PROPCAT_Nil = unchecked((int)0xFFFFFFFF);
-            public const int PROPCAT_Misc = unchecked((int)0xFFFFFFFE);
-            public const int PROPCAT_Font = unchecked((int)0xFFFFFFFD);
-            public const int PROPCAT_Position = unchecked((int)0xFFFFFFFC);
-            public const int PROPCAT_Appearance = unchecked((int)0xFFFFFFFB);
-            public const int PROPCAT_Behavior = unchecked((int)0xFFFFFFFA);
-            public const int PROPCAT_Data = unchecked((int)0xFFFFFFF9);
-            public const int PROPCAT_List = unchecked((int)0xFFFFFFF8);
-            public const int PROPCAT_Text = unchecked((int)0xFFFFFFF7);
-            public const int PROPCAT_Scale = unchecked((int)0xFFFFFFF6);
-            public const int PROPCAT_DDE = unchecked((int)0xFFFFFFF5);
             public const int ALIGN_MIN = 0x0;
             public const int ALIGN_NO_CHANGE = 0x0;
             public const int ALIGN_TOP = 0x1;
