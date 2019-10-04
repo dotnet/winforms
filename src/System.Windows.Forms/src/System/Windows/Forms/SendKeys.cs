@@ -329,16 +329,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private static byte[] GetKeyboardState()
+        private static byte[] KeyboardState
         {
-            byte[] keystate = new byte[256];
-            UnsafeNativeMethods.GetKeyboardState(keystate);
-            return keystate;
-        }
-
-        private static void SetKeyboardState(byte[] keystate)
-        {
-            UnsafeNativeMethods.SetKeyboardState(keystate);
+            get
+            {
+                var keystate = new byte[256];
+                User32.GetKeyboardState(keystate);
+                return keystate;
+            }
+            set => User32.SetKeyboardState(value);
         }
 
         /// <summary>
@@ -348,13 +347,13 @@ namespace System.Windows.Forms
         /// </summary>
         private static void ClearKeyboardState()
         {
-            byte[] keystate = GetKeyboardState();
+            byte[] keystate = KeyboardState;
 
             keystate[(int)Keys.Capital] = 0;
             keystate[(int)Keys.NumLock] = 0;
             keystate[(int)Keys.Scroll] = 0;
 
-            SetKeyboardState(keystate);
+            KeyboardState = keystate;
         }
 
         /// <summary>
@@ -748,7 +747,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    SetKeyboardState(oldKeyboardState);
+                    KeyboardState = oldKeyboardState;
 
                     // unblock input if it was previously blocked
                     if (blockInputSuccess)
@@ -975,7 +974,7 @@ namespace System.Windows.Forms
 
             LoadSendMethodFromConfig();
 
-            byte[] oldstate = GetKeyboardState();
+            byte[] oldstate = KeyboardState;
 
             if (sendMethod.Value != SendMethodTypes.SendInput)
             {
@@ -992,7 +991,7 @@ namespace System.Windows.Forms
                 {
                     ClearKeyboardState();
                     InstallHook();
-                    SetKeyboardState(oldstate);
+                    KeyboardState = oldstate;
                 }
             }
 

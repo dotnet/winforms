@@ -156,12 +156,6 @@ namespace System.Windows.Forms
         public static extern void CopyMemoryW(IntPtr pdst, char[] psrc, int cb);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetKeyboardState(byte[] keystate);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetKeyboardState(byte[] keystate);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern short GetAsyncKeyState(int vkey);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]

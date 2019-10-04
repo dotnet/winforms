@@ -14557,7 +14557,7 @@ namespace System.Windows.Forms
             {
                 t_tempKeyboardStateArray = new byte[256];
             }
-            UnsafeNativeMethods.GetKeyboardState(t_tempKeyboardStateArray);
+            User32.GetKeyboardState(t_tempKeyboardStateArray);
             return IsKeyDown(Keys.Tab)
                 || IsKeyDown(Keys.Up)
                 || IsKeyDown(Keys.Down)
