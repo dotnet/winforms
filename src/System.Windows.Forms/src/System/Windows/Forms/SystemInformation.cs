@@ -347,7 +347,7 @@ namespace System.Windows.Forms
         ///  Gets the maximum number of milliseconds allowed between mouse clicks for a
         ///  double-click.
         /// </summary>
-        public static int DoubleClickTime => SafeNativeMethods.GetDoubleClickTime();
+        public static int DoubleClickTime => unchecked((int)User32.GetDoubleClickTime());
 
         /// <summary>
         ///  Gets the dimensions in pixels, of the grid used to arrange icons in a large
