@@ -163,9 +163,6 @@ namespace System.Windows.Forms
 
         // Theming/Visual Styles
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern bool IsAppThemed();
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemeAppProperties();
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
