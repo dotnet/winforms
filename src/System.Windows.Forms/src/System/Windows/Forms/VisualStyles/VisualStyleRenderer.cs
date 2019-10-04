@@ -504,15 +504,13 @@ namespace System.Windows.Forms.VisualStyles
                 return;
             }
 
-            int disableFlag = drawDisabled ? 0x1 : 0;
-
             if (!string.IsNullOrEmpty(textToDraw))
             {
-                using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
-                {
-                    HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                    lastHResult = SafeNativeMethods.DrawThemeText(new HandleRef(this, Handle), hdc, part, state, textToDraw, textToDraw.Length, (int)flags, disableFlag, new NativeMethods.COMRECT(bounds));
-                }
+                using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
+                var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
+                uint disableFlag = drawDisabled ? 0x1u : 0u;
+                RECT rect = bounds;
+                lastHResult = (int)UxTheme.DrawThemeText(this, hdc, part, state, textToDraw, textToDraw.Length, (User32.DT)flags, disableFlag, ref rect);
             }
         }
 
