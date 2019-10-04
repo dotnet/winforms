@@ -11,8 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors.csproj" />
+    <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
     <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
     <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
   </ItemGroup>
