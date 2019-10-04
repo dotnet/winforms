@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Design.Editors.Tests.Serialization
         {
             BinarySerialization.EnsureSerializableAttribute(
                 typeof(ArrayEditor).Assembly,
-                new List<string>
+                new HashSet<string>
                 {
                     // This Assembly does not have any serializable types.
                 });

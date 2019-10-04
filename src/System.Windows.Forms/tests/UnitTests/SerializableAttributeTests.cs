@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Resources;
 using Xunit;
 
 namespace System.Windows.Forms.Tests.Serialization
@@ -15,7 +14,7 @@ namespace System.Windows.Forms.Tests.Serialization
         {
             BinarySerialization.EnsureSerializableAttribute(
                 typeof(ListViewItem).Assembly,
-                new List<string>
+                new HashSet<string>
                 {
                     // This state is serialized to communicate to the native control
                     { typeof(AxHost.State).FullName},

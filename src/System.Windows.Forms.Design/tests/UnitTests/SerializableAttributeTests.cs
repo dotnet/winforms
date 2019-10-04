@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design.Tests.Serialization
         public void EnsureSerializableAttribute()
         {
             BinarySerialization.EnsureSerializableAttribute(
-                typeof(Behavior.Behavior).Assembly, 
-                new List<string>
+                typeof(Behavior.Behavior).Assembly,
+                new HashSet<string>
                 {
                     { "System.Windows.Forms.Design.Behavior.DesignerActionKeyboardBehavior+<>c"}
                 });
