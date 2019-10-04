@@ -1144,7 +1144,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.EVENTMSG eventmsg = Marshal.PtrToStructure<NativeMethods.EVENTMSG>(lparam);
 
-                if (UnsafeNativeMethods.GetAsyncKeyState((int)Keys.Pause) != 0)
+                if (User32.GetAsyncKeyState((int)Keys.Pause) != 0)
                 {
                     SendKeys.s_stopHook = true;
                 }
