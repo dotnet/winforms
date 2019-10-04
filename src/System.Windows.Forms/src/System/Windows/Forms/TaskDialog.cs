@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms
             // (or null) with this method causes the window title to be empty.
             // We could replicate the Task Dialog behavior by also using the
             // executable's name as title if the string is null or empty.
-            if (User32.SetWindowTextW(new HandleRef(this, Handle), caption) == 0)
+            if (User32.SetWindowTextW(Handle, caption) == 0)
             {
                 Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
             }
