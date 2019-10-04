@@ -8678,7 +8678,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
         <source>{0} Properties Window</source>
-        <target state="new">{0} Properties Window</target>
+        <target state="translated">{0} — okno właściwości</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
@@ -8688,7 +8688,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">{0} — opis</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">

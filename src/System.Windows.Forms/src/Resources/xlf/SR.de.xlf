@@ -8678,7 +8678,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
         <source>{0} Properties Window</source>
-        <target state="new">{0} Properties Window</target>
+        <target state="translated">{0}-Eigenschaftenfenster</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
@@ -8688,7 +8688,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">{0}-Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">

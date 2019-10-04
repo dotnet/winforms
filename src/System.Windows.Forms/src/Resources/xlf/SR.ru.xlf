@@ -8679,7 +8679,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
         <source>{0} Properties Window</source>
-        <target state="new">{0} Properties Window</target>
+        <target state="translated">{0}: окно свойств</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
@@ -8689,7 +8689,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">{0}: описание</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">

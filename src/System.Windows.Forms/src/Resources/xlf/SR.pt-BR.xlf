@@ -8678,7 +8678,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
         <source>{0} Properties Window</source>
-        <target state="new">{0} Properties Window</target>
+        <target state="translated">Janela Propriedades de {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
@@ -8688,7 +8688,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">Descrição de {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
