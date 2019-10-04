@@ -2182,8 +2182,8 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_Size_SetWithHandle_GetReturnsExpected(Size value)
         {
             using var control = new MonthCalendar();
-            Size size = control.SingleMonthSize;
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Size size = control.SingleMonthSize;
 
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2220,7 +2220,7 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_Size_SetWithHandler_CallsSizeChanged()
         {
             using var control = new MonthCalendar();
-            Size size = control.SingleMonthSize;
+            Size size = control.Size;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
