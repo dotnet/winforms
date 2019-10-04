@@ -222,8 +222,7 @@ namespace System.Windows.Forms.Internal
 
         public Color GetNearestColor(Color color)
         {
-            HandleRef hdc = new HandleRef(null, DeviceContext.Hdc);
-            int colorResult = IntUnsafeNativeMethods.GetNearestColor(hdc, ColorTranslator.ToWin32(color));
+            int colorResult = Gdi32.GetNearestColor(DeviceContext.Hdc, ColorTranslator.ToWin32(color));
             return ColorTranslator.FromWin32(colorResult);
         }
 
