@@ -162,12 +162,6 @@ namespace System.Windows.Forms
         public static extern bool DrawFrameControl(HandleRef hDC, ref RECT rect, int type, int state);
 
         // Theming/Visual Styles
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern IntPtr OpenThemeData(HandleRef hwnd, [MarshalAs(UnmanagedType.LPWStr)] string pszClassList);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int CloseThemeData(HandleRef hTheme);
-
         [DllImport(ExternDll.Uxtheme, CharSet=CharSet.Auto)]
         public static extern bool IsThemePartDefined(HandleRef hTheme, int iPartId, int iStateId);
 

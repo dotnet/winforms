@@ -289,7 +289,7 @@ namespace System.Windows.Forms.VisualStyles
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (IntPtr.Zero != hWnd)
                 {
-                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, new HandleRef(null, hWnd)))
+                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
                     {
                         lastHResult = SafeNativeMethods.DrawThemeBackground(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, new NativeMethods.COMRECT(bounds), null);
                     }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.VisualStyles
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (IntPtr.Zero != hWnd)
                 {
-                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, new HandleRef(null, hWnd)))
+                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
                     {
                         lastHResult = SafeNativeMethods.DrawThemeBackground(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, new NativeMethods.COMRECT(bounds), new NativeMethods.COMRECT(clipRectangle));
                     }
@@ -760,7 +760,7 @@ namespace System.Windows.Forms.VisualStyles
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (DpiHelper.IsPerMonitorV2Awareness && (IntPtr.Zero != hWnd))
                 {
-                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, new HandleRef(null, hWnd)))
+                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
                     {
                         lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, null, type, out Size size);
                         return size;
@@ -1125,34 +1125,25 @@ namespace System.Windows.Forms.VisualStyles
 
             public static ThemeHandle Create(string className, bool throwExceptionOnFail)
             {
-                return Create(className, throwExceptionOnFail, new HandleRef(null, IntPtr.Zero));
+                return Create(className, throwExceptionOnFail, IntPtr.Zero);
             }
 
-            internal static ThemeHandle Create(string className, bool throwExceptionOnFail, HandleRef hWndRef)
+            internal static ThemeHandle Create(string className, bool throwExceptionOnFail, IntPtr hWndRef)
             {
                 // HThemes require an HWND when display scaling is different between monitors.
                 IntPtr hTheme = IntPtr.Zero;
-
                 try
                 {
-                    hTheme = SafeNativeMethods.OpenThemeData(hWndRef, className);
+                    hTheme = UxTheme.OpenThemeData(hWndRef, className);
                 }
-                catch (Exception e)
+                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                 {
-                    //We don't want to eat critical exceptions
-                    if (ClientUtils.IsSecurityOrCriticalException(e))
-                    {
-                        throw;
-                    }
-
                     if (throwExceptionOnFail)
                     {
                         throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed, e);
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    
+                    return null;
                 }
 
                 if (hTheme == IntPtr.Zero)
@@ -1161,11 +1152,10 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    
+                    return null;
                 }
+
                 return new ThemeHandle(hTheme);
             }
 
@@ -1173,9 +1163,10 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (_hTheme != IntPtr.Zero)
                 {
-                    SafeNativeMethods.CloseThemeData(new HandleRef(null, _hTheme));
+                    UxTheme.CloseThemeData(_hTheme);
                     _hTheme = IntPtr.Zero;
                 }
+
                 GC.SuppressFinalize(this);
             }
 
