@@ -211,8 +211,8 @@ namespace System.Windows.Forms
                 // Check if the current window procedure is the correct one.
                 NativeMethods.SetLastError(0);
                 IntPtr currentWindowProcedure = User32.GetWindowLong(
-                        _handle,
-                        User32.GWL.WNDPROC);
+                    _handle,
+                    User32.GWL.WNDPROC);
 
                 if (currentWindowProcedure == IntPtr.Zero && Marshal.GetLastWin32Error() != 0)
                 {
@@ -233,10 +233,10 @@ namespace System.Windows.Forms
                 // procedure.
                 NativeMethods.SetLastError(0);
                 if (User32.SetWindowLong(
-                        _handle,
-                        User32.GWL.WNDPROC,
-                        _originalWindowProc) == IntPtr.Zero &&
-                        Marshal.GetLastWin32Error() != 0)
+                    _handle,
+                    User32.GWL.WNDPROC,
+                    _originalWindowProc) == IntPtr.Zero &&
+                    Marshal.GetLastWin32Error() != 0)
                 {
                     throw new Win32Exception();
                 }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
                 m.Result = User32.CallWindowProcW(
                     _originalWindowProc,
                     m.HWnd,
-                    (User32.WindowMessage)m.Msg,
+                    m.WindowMessage(),
                     m.WParam,
                     m.LParam);
             }

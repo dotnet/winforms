@@ -98,7 +98,6 @@ namespace System.Windows.Forms
 
         private readonly IntPtr? _iconHandle;
 
-
         /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialogIcon"/> class from an
         ///   <see cref="Icon"/> instance.
