@@ -196,7 +196,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal HRESULT GetPropertyValue(object component, Ole32.DispatchID dispid, object[] retval)
+        internal unsafe HRESULT GetPropertyValue(object component, Ole32.DispatchID dispid, object[] retval)
         {
             if (!(component is UnsafeNativeMethods.IDispatch))
             {
@@ -208,14 +208,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 Guid g = Guid.Empty;
                 NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
+                var dispParams = new Ole32.DISPPARAMS();
                 try
                 {
                     HRESULT hr = iDispatch.Invoke(
                         dispid,
-                        ref g,
+                        &g,
                         Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_PROPERTYGET,
-                        new NativeMethods.tagDISPPARAMS(),
+                        &dispParams,
                         retval,
                         pExcepInfo,
                         null);

@@ -889,7 +889,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  invoking the getXXX method.  An exception in the getXXX
         ///  method will pass through.
         /// </summary>
-        public object GetNativeValue(object component)
+        public unsafe object GetNativeValue(object component)
         {
             if (component == null)
             {
@@ -908,15 +908,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
             object[] pVarResult = new object[1];
-            NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
+            var pExcepInfo = new NativeMethods.tagEXCEPINFO();
+            var dispParams = new Ole32.DISPPARAMS();
             Guid g = Guid.Empty;
 
             HRESULT hr = pDisp.Invoke(
                 dispid,
-                ref g,
+                &g,
                 Kernel32.GetThreadLocale(),
                 NativeMethods.DISPATCH_PROPERTYGET,
-                new NativeMethods.tagDISPPARAMS(),
+                &dispParams,
                 pVarResult,
                 pExcepInfo,
                 null);
@@ -1287,34 +1288,35 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)owner;
 
-            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS();
             NativeMethods.tagEXCEPINFO excepInfo = new NativeMethods.tagEXCEPINFO();
-            dp.cArgs = 1;
-            dp.cNamedArgs = 1;
+            var dispParams = new Ole32.DISPPARAMS();
+            dispParams.cArgs = 1;
+            dispParams.cNamedArgs = 1;
             Ole32.DispatchID[] namedArgs = new Ole32.DispatchID[] { Ole32.DispatchID.PROPERTYPUT };
             GCHandle gcHandle = GCHandle.Alloc(namedArgs, GCHandleType.Pinned);
 
             try
             {
-                dp.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
+                dispParams.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
                 const int SizeOfVariant = 16;
                 Debug.Assert(SizeOfVariant == Marshal.SizeOf<Ole32.VARIANT>());
                 IntPtr mem = Marshal.AllocCoTaskMem(SizeOfVariant);
                 Oleaut32.VariantInit(mem);
                 Marshal.GetNativeVariantForObject(value, mem);
-                dp.rgvarg = mem;
+                dispParams.rgvarg = mem;
                 try
                 {
-
                     Guid g = Guid.Empty;
+                    IntPtr pArgError = IntPtr.Zero;
                     HRESULT hr = pDisp.Invoke(
                         dispid,
-                        ref g,
+                        &g,
                         Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_PROPERTYPUT,
-                        dp,
+                        &dispParams,
                         null,
-                        excepInfo, new IntPtr[1]);
+                        excepInfo,
+                        &pArgError);
 
                     string errorInfo = null;
                     if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
