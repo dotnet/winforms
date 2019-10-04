@@ -26,10 +26,10 @@ namespace System.Windows.Forms
         {
             private IntPtr _hBitmap = IntPtr.Zero;
             private IntPtr _hOriginalBmp = IntPtr.Zero;
-            private readonly HandleRef _hMetafileDC;
+            private readonly IntPtr _hMetafileDC;
             private RECT _destRect;
 
-            internal MetafileDCWrapper(HandleRef hOriginalDC, Size size)
+            internal MetafileDCWrapper(IntPtr hOriginalDC, Size size)
             {
                 Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
 
             void IDisposable.Dispose()
             {
-                if (HDC == IntPtr.Zero || _hMetafileDC.Handle == IntPtr.Zero || _hBitmap == IntPtr.Zero)
+                if (HDC == IntPtr.Zero || _hMetafileDC == IntPtr.Zero || _hBitmap == IntPtr.Zero)
                 {
                     return;
                 }
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
             internal IntPtr HDC { get; private set; } = IntPtr.Zero;
 
             // ported form VB6 (Ctls\PortUtil\StdCtl.cpp:6176)
-            private unsafe bool DICopy(HandleRef hdcDest, IntPtr hdcSrc, RECT rect, bool bStretch)
+            private unsafe bool DICopy(IntPtr hdcDest, IntPtr hdcSrc, RECT rect, bool bStretch)
             {
                 long i;
 

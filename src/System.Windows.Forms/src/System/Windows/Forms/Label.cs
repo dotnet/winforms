@@ -1593,17 +1593,13 @@ namespace System.Windows.Forms
             Animate();
         }
 
-        internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
         {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
-            using (WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, bounds))
-            {
-                using (Graphics g = Graphics.FromHdcInternal(hDC.Handle))
-                {
-                    ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
-                }
-            }
+            using var mapping = new WindowsFormsUtils.DCMapping(hDC, bounds);
+            using Graphics g = Graphics.FromHdcInternal(hDC);
+            ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
         }
 
         /// <summary>

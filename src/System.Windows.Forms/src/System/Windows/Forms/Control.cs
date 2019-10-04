@@ -9368,7 +9368,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        private void PrintToMetaFile(HandleRef hDC, IntPtr lParam)
+        private void PrintToMetaFile(IntPtr hDC, IntPtr lParam)
         {
             Debug.Assert(Gdi32.GetObjectType(hDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                 "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
@@ -9403,7 +9403,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds)
+        private protected virtual void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
         {
             // We assume the target does not want us to offset the root control in the metafile.
 
@@ -9439,12 +9439,12 @@ namespace System.Windows.Forms
             }
         }
 
-        private void PrintToMetaFile_SendPrintMessage(HandleRef hDC, IntPtr lParam)
+        private void PrintToMetaFile_SendPrintMessage(IntPtr hDC, IntPtr lParam)
         {
             if (GetStyle(ControlStyles.UserPaint))
             {
                 // We let user paint controls paint directly into the metafile
-                SendMessage(WindowMessages.WM_PRINT, hDC.Handle, lParam);
+                SendMessage(WindowMessages.WM_PRINT, hDC, lParam);
             }
             else
             {
@@ -9460,10 +9460,8 @@ namespace System.Windows.Forms
                 // System controls must be painted into a temporary bitmap
                 // which is then copied into the metafile.  (Old GDI line drawing
                 // is 1px thin, which causes borders to disappear, etc.)
-                using (MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size))
-                {
-                    SendMessage(WindowMessages.WM_PRINT, dcWrapper.HDC, lParam);
-                }
+                using MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size);
+                SendMessage(WindowMessages.WM_PRINT, dcWrapper.HDC, lParam);
             }
         }
 

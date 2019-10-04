@@ -3079,7 +3079,7 @@ namespace System.Windows.Forms
 
         // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
         // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
-        internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
         {
             using (Bitmap image = new Bitmap(bounds.Width, bounds.Height))
             using (Graphics g = Graphics.FromImage(image))
@@ -3090,8 +3090,7 @@ namespace System.Windows.Forms
                     (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                 //now BLT the result to the destination bitmap.
-                IntPtr desthDC = hDC.Handle;
-                SafeNativeMethods.BitBlt(new HandleRef(this, desthDC), bounds.X, bounds.Y, bounds.Width, bounds.Height,
+                SafeNativeMethods.BitBlt(new HandleRef(this, hDC), bounds.X, bounds.Y, bounds.Width, bounds.Height,
                                              new HandleRef(g, imageHdc), 0, 0, NativeMethods.SRCCOPY);
                 g.ReleaseHdcInternal(imageHdc);
             }
