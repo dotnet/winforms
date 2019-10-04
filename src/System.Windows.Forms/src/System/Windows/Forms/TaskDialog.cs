@@ -493,8 +493,8 @@ namespace System.Windows.Forms
         /// <param name="caption">The text to display in the title bar of the task dialog.</param>
         /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
         /// in the task dialog.</param>
-        /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
-        /// icon to display in the task dialog.</param>
+        /// <param name="icon">An <see cref="TaskDialogIcon"/> instance that contains the icon
+        /// to display in the main area of the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult ShowDialog(
             string? text,
@@ -519,8 +519,8 @@ namespace System.Windows.Forms
         /// <param name="caption">The text to display in the title bar of the task dialog.</param>
         /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
         /// in the task dialog.</param>
-        /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
-        /// icon to display in the task dialog.</param>
+        /// <param name="icon">An <see cref="TaskDialogIcon"/> instance that contains the icon
+        /// to display in the main area of the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult ShowDialog(
             IWin32Window owner,
@@ -549,8 +549,8 @@ namespace System.Windows.Forms
         /// <param name="caption">The text to display in the title bar of the task dialog.</param>
         /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
         /// in the task dialog.</param>
-        /// <param name="icon">One of the <see cref="TaskDialogIcon"/> values that specifies which
-        /// icon to display in the task dialog.</param>
+        /// <param name="icon"An <see cref="TaskDialogIcon"/> instance that contains the icon
+        /// to display in the main area of the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult ShowDialog(
             IntPtr hwndOwner,
@@ -753,8 +753,8 @@ namespace System.Windows.Forms
                     Debug.Assert(Handle == IntPtr.Zero);
 
                     // Ensure to keep the callback delegate alive until
-                    // TaskDialogIndirect() returns in case we could not undo the
-                    // subclassing. See comment in UnsubclassWindow().
+                    // TaskDialogIndirect() returns (in case we could not undo the
+                    // subclassing). See comment in UnsubclassWindow().
                     _windowSubclassHandler?.KeepCallbackDelegateAlive();
                     // Then, clear the subclass handler. Note that this only works
                     // correctly if we did not return from TaskDialogIndirect()

@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of <see cref="TaskDialogRadioButton"/> objects.
+    ///   Represents a collection of <see cref="TaskDialogRadioButton"/> objects.
     /// </summary>
     public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
     {
@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private readonly HashSet<TaskDialogRadioButton> _itemSet = new HashSet<TaskDialogRadioButton>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.
         /// </summary>
         public TaskDialogRadioButtonCollection()
         {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates and adds a <see cref="TaskDialogRadioButton"/> to the collection.
+        ///   Creates and adds a <see cref="TaskDialogRadioButton"/> to the collection.
         /// </summary>
         /// <param name="text">The text of the radio button.</param>
         /// <returns>The created <see cref="TaskDialogRadioButton"/>.</returns>
@@ -46,11 +46,7 @@ namespace System.Windows.Forms
             return button;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
+        /// <inheritdoc/>
         protected override void SetItem(int index, TaskDialogRadioButton item)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -77,11 +73,7 @@ namespace System.Windows.Forms
             base.SetItem(index, item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
+        /// <inheritdoc/>
         protected override void InsertItem(int index, TaskDialogRadioButton item)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -98,10 +90,7 @@ namespace System.Windows.Forms
             base.InsertItem(index, item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
+        /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -114,9 +103,7 @@ namespace System.Windows.Forms
             base.RemoveItem(index);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ClearItems()
         {
             // Disallow collection modification, so that we don't need to copy it

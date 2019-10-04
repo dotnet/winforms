@@ -10,31 +10,37 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a page of content of a task dialog.
+    ///   Represents a page of content of a task dialog.
     /// </summary>
     /// <remarks>
-    /// It is possible to navigate a task dialog while it is shown by setting the
-    /// <see cref="TaskDialog.Page"/> property to a different <see cref="TaskDialogPage"/>
-    /// instance. See the <see cref="TaskDialog.Page"/> property for more information about
-    /// navigation.
+    /// <para>
+    ///   It is possible to navigate a task dialog while it is shown by setting the
+    ///   <see cref="TaskDialog.Page"/> property to a different <see cref="TaskDialogPage"/>
+    ///   instance. See the <see cref="TaskDialog.Page"/> property for more information about
+    ///   navigation.
+    /// </para>
     /// </remarks>
     public class TaskDialogPage
     {
         /// <summary>
-        /// The start ID for custom buttons.
+        ///   The start ID for custom buttons.
         /// </summary>
         /// <remarks>
-        /// We need to ensure we don't use a ID that is already used for a
-        /// standard button (TaskDialogResult), so we start with 100 to be safe
-        /// (100 is also used as first ID in MSDN examples for the task dialog).
+        /// <para>
+        ///   We need to ensure we don't use a ID that is already used for a
+        ///   standard button (TaskDialogResult), so we start with 100 to be safe
+        ///   (100 is also used as first ID in MSDN examples for the task dialog).
+        /// </para>
         /// </remarks>
         private const int CustomButtonStartID = 100;
 
         /// <summary>
-        /// The start ID for radio buttons.
+        ///   The start ID for radio buttons.
         /// </summary>
         /// <remarks>
-        /// This must be at least 1 because 0 already stands for "no button".
+        /// <para>
+        ///   This must be at least 1 because 0 already stands for "no button".
+        /// </para>
         /// </remarks>
         private const int RadioButtonStartID = 1;
 
@@ -57,40 +63,46 @@ namespace System.Windows.Forms
         private bool _appliedInitialization;
 
         /// <summary>
-        /// Occurs after this instance is bound to a task dialog and the task dialog
-        /// has created the GUI elements represented by this <see cref="TaskDialogPage"/> instance.
+        ///   Occurs after this instance is bound to a task dialog and the task dialog
+        ///   has created the GUI elements represented by this <see cref="TaskDialogPage"/> instance.
         /// </summary>
         /// <remarks>
-        /// This will happen after showing or navigating the dialog.
+        /// <para>
+        ///   This will happen after showing or navigating the dialog.
+        /// </para>
         /// </remarks>
         public event EventHandler? Created;
 
         /// <summary>
-        /// Occurs when the task dialog is about to destroy the GUI elements represented
-        /// by this <see cref="TaskDialogPage"/> instance and it is about to be
-        /// unbound from the task dialog.
+        ///   Occurs when the task dialog is about to destroy the GUI elements represented
+        ///   by this <see cref="TaskDialogPage"/> instance and it is about to be
+        ///   unbound from the task dialog.
         /// </summary>
         /// <remarks>
-        /// This will happen when closing or navigating the dialog.
+        /// <para>
+        ///   This will happen when closing or navigating the dialog.
+        /// </para>
         /// </remarks>
         public event EventHandler? Destroyed;
 
         /// <summary>
-        /// Occurs when the user presses F1 while the task dialog has focus, or when the
-        /// user clicks the <see cref="TaskDialogResult.Help"/> button.
+        ///   Occurs when the user presses F1 while the task dialog has focus, or when the
+        ///   user clicks the <see cref="TaskDialogResult.Help"/> button.
         /// </summary>
         public event EventHandler? HelpRequest;
 
         /// <summary>
-        /// Occurs when the user has clicked on a hyperlink.
+        ///   Occurs when the user has clicked on a hyperlink.
         /// </summary>
         /// <remarks>
-        /// This event will only be raised if <see cref="EnableHyperlinks"/> is set to <see langword="true"/>.
+        /// <para>
+        ///   This event will only be raised if <see cref="EnableHyperlinks"/> is set to <see langword="true"/>.
+        /// </para>
         /// </remarks>
         public event EventHandler<TaskDialogHyperlinkClickedEventArgs>? HyperlinkClicked;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogPage"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogPage"/> class.
         /// </summary>
         public TaskDialogPage()
         {
@@ -106,12 +118,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the collection of <see cref="TaskDialogStandardButton"/> instances
-        /// to be shown in this page.
+        ///   Gets or sets the collection of <see cref="TaskDialogStandardButton"/> instances
+        ///   to be shown in this page.
         /// </summary>
         /// <value>
-        /// A <see cref="TaskDialogStandardButtonCollection"/> instance representing the
-        /// collection of standard buttons to be shown in this page.
+        ///   A <see cref="TaskDialogStandardButtonCollection"/> instance representing the
+        ///   collection of standard buttons to be shown in this page.
         /// </value>
         public TaskDialogStandardButtonCollection StandardButtons
         {
@@ -128,12 +140,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the collection of <see cref="TaskDialogCustomButton"/> instances
-        /// to be shown in this page.
+        ///   Gets or sets the collection of <see cref="TaskDialogCustomButton"/> instances
+        ///   to be shown in this page.
         /// </summary>
         /// <value>
-        /// A <see cref="TaskDialogCustomButtonCollection"/> instance representing the
-        /// collection of custom buttons to be shown in this page.
+        ///   A <see cref="TaskDialogCustomButtonCollection"/> instance representing the
+        ///   collection of custom buttons to be shown in this page.
         /// </value>
         public TaskDialogCustomButtonCollection CustomButtons
         {
@@ -150,12 +162,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the collection of <see cref="TaskDialogRadioButton"/> instances
-        /// to be shown in this page.
+        ///   Gets or sets the collection of <see cref="TaskDialogRadioButton"/> instances
+        ///   to be shown in this page.
         /// </summary>
         /// <value>
-        /// A <see cref="TaskDialogRadioButtonCollection"/> instance representing the
-        /// collection of radio buttons to be shown in this page.
+        ///   A <see cref="TaskDialogRadioButtonCollection"/> instance representing the
+        ///   collection of radio buttons to be shown in this page.
         /// </value>
         public TaskDialogRadioButtonCollection RadioButtons
         {
@@ -172,11 +184,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TaskDialogCheckBox"/> to be shown in this page.
+        ///   Gets or sets the <see cref="TaskDialogCheckBox"/> to be shown in this page.
         /// </summary>
         /// <remarks>
-        /// The checkbox will only be shown if its <see cref="TaskDialogCheckBox.Text"/> property
-        /// is not <c>null</c> or an empty string.
+        /// <para>
+        ///   The checkbox will only be shown if its <see cref="TaskDialogCheckBox.Text"/> property
+        ///   is not <see langword="null"/> or an empty string.
+        /// </para>
         /// </remarks>
         public TaskDialogCheckBox? CheckBox
         {
@@ -193,11 +207,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TaskDialogExpander"/> to be shown in this page.
+        ///   Gets or sets the <see cref="TaskDialogExpander"/> to be shown in this page.
         /// </summary>
         /// <remarks>
-        /// The expander button (and the expanded area) will only be shown if its
-        /// <see cref="TaskDialogExpander.Text"/> property is not <c>null</c> or an empty string.
+        /// <para>
+        ///   The expander button (and the expanded area) will only be shown if its
+        ///   <see cref="TaskDialogExpander.Text"/> property is not <see langword="null"/> or an empty string.
+        /// </para>
         /// </remarks>
         public TaskDialogExpander? Expander
         {
@@ -214,11 +230,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TaskDialogFooter"/> to be shown in this page.
+        ///   Gets or sets the <see cref="TaskDialogFooter"/> to be shown in this page.
         /// </summary>
         /// <remarks>
-        /// The footer will only be shown if its <see cref="TaskDialogFooter.Text"/> property
-        /// is not <c>null</c> or an empty string.
+        /// <para>
+        ///   The footer will only be shown if its <see cref="TaskDialogFooter.Text"/> property
+        ///   is not <see langword="null"/> or an empty string.
+        /// </para>
         /// </remarks>
         public TaskDialogFooter? Footer
         {
@@ -235,11 +253,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TaskDialogProgressBar"/> to be shown in this page.
+        ///   Gets or sets the <see cref="TaskDialogProgressBar"/> to be shown in this page.
         /// </summary>
         /// <remarks>
-        /// The progress bar will only be shown if its <see cref="TaskDialogProgressBar.State"/>
-        /// property is not <see cref="TaskDialogProgressBarState.None"/>.
+        /// <para>
+        ///   The progress bar will only be shown if its <see cref="TaskDialogProgressBar.State"/>
+        ///   property is not <see cref="TaskDialogProgressBarState.None"/>.
+        /// </para>
         /// </remarks>
         public TaskDialogProgressBar? ProgressBar
         {
@@ -256,10 +276,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the text to display in the title bar of the task dialog.
+        ///   Gets or sets the text to display in the title bar of the task dialog.
         /// </summary>
         /// <remarks>
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public string? Caption
         {
@@ -278,10 +300,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the main instruction text.
+        ///   Gets or sets the main instruction text.
         /// </summary>
         /// <remarks>
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public string? MainInstruction
         {
@@ -298,10 +322,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the dialog's primary text content.
+        ///   Gets or sets the dialog's primary text content.
         /// </summary>
         /// <remarks>
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public string? Text
         {
@@ -318,12 +344,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the main icon.
+        ///   Gets or sets the main icon.
         /// </summary>
         /// <remarks>
-        /// This property can be set while the dialog is shown (but in that case, it
-        /// cannot be switched between instances of <see cref="TaskDialogIconHandle"/>
-        /// and instances of other icon types).
+        /// <para>
+        ///   This property can be set while the dialog is shown (but in that case, it
+        ///   cannot be switched between instances created from an
+        ///   <see cref="System.Drawing.Icon"/> (or from a handle pointer)
+        ///   and standard icon instances).
+        /// </para>
         /// </remarks>
         public TaskDialogIcon? Icon
         {
@@ -351,13 +380,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the width in dialog units that the dialog's client area will get
-        /// when the dialog is is created or navigated.
-        /// If <c>0</c>, the width will be automatically calculated by the system.
+        ///   Gets or sets the width in dialog units that the dialog's client area will get
+        ///   when the dialog is is created or navigated.
+        ///   If <c>0</c>, the width will be automatically calculated by the system.
         /// </summary>
         /// <value>
-        /// The width in dialog units that the dialog's client area will get. The default is
-        /// <c>0</c> which means the width is calculated by the system.
+        ///   The width in dialog units that the dialog's client area will get. The default is
+        ///   <c>0</c> which means the width is calculated by the system.
         /// </value>
         public int Width
         {
@@ -377,12 +406,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TaskDialogCustomButtonStyle"/> that specifies how to
-        /// display custom buttons.
+        ///   Gets or sets the <see cref="TaskDialogCustomButtonStyle"/> that specifies how to
+        ///   display custom buttons.
         /// </summary>
         /// <value>
-        /// The <see cref="TaskDialogCustomButtonStyle"/> that specifies how to display custom
-        /// buttons. The default value is <see cref="TaskDialogCustomButtonStyle.Default"/>.
+        ///   The <see cref="TaskDialogCustomButtonStyle"/> that specifies how to display custom
+        ///   buttons. The default value is <see cref="TaskDialogCustomButtonStyle.Default"/>.
         /// </value>
         public TaskDialogCustomButtonStyle CustomButtonStyle
         {
@@ -438,20 +467,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the task dialog can be closed with a
-        /// <see cref="TaskDialogResult.Cancel"/> result by pressing ESC or Alt+F4 or by clicking
-        /// the title bar's close button even if no button with a <see cref="TaskDialogResult.Cancel"/>
-        /// result is added to the <see cref="StandardButtons"/> collection.
+        ///   Gets or sets a value that indicates whether the task dialog can be closed with a
+        ///   <see cref="TaskDialogResult.Cancel"/> result by pressing ESC or Alt+F4 or by clicking
+        ///   the title bar's close button even if no button with a <see cref="TaskDialogResult.Cancel"/>
+        ///   result is added to the <see cref="StandardButtons"/> collection.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
-        /// the title bar's close button; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+        ///   <see langword="true"/> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
+        ///   the title bar's close button; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// You can intercept cancellation of the dialog without displaying a "Cancel"
-        /// button by adding a <see cref="TaskDialogStandardButton"/> with its
-        /// <see cref="TaskDialogStandardButton.Visible"/> set to <see langword="false"/> and specifying
-        /// a <see cref="TaskDialogResult.Cancel"/> result.
+        /// <para>
+        ///   You can intercept cancellation of the dialog without displaying a "Cancel"
+        ///   button by adding a <see cref="TaskDialogStandardButton"/> with its
+        ///   <see cref="TaskDialogStandardButton.Visible"/> set to <see langword="false"/> and specifying
+        ///   a <see cref="TaskDialogResult.Cancel"/> result.
+        /// </para>
         /// </remarks>
         public bool AllowCancel
         {
@@ -460,18 +491,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether text and controls are displayed
-        /// reading right to left. 
+        ///   Gets or sets a value that indicates whether text and controls are displayed
+        ///   reading right to left. 
         /// </summary>
         /// <value>
-        /// <see langword="true"/> to display text and controls reading right to left; <see langword="false"/>
-        /// to display controls reading left to right. The default value is <see langword="false"/>.
+        ///   <see langword="true"/> to display text and controls reading right to left; <see langword="false"/>
+        ///   to display controls reading left to right. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// Note that once a task dialog has been opened with or has navigated to a
-        /// <see cref="TaskDialogPage"/> where this flag is set, it will keep on
-        /// subsequent navigations to a new <see cref="TaskDialogPage"/> even when
-        /// it doesn't have this flag set.
+        /// <para>
+        ///   Note that once a task dialog has been opened with or has navigated to a
+        ///   <see cref="TaskDialogPage"/> where this flag is set, it will keep on
+        ///   subsequent navigations to a new <see cref="TaskDialogPage"/> even when
+        ///   it doesn't have this flag set.
+        /// </para>
         /// </remarks>
         public bool RightToLeftLayout
         {
@@ -480,16 +513,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the task dialog can be minimized
-        /// when it is shown modeless.
+        ///   Gets or sets a value that indicates whether the task dialog can be minimized
+        ///   when it is shown modeless.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> to specify that the task dialog can be minimized; otherwise, <see langword="false"/>.
-        /// The default value is <see langword="false"/>.
+        ///   <see langword="true"/> to specify that the task dialog can be minimized; otherwise, <see langword="false"/>.
+        ///   The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// When setting this property to <see langword="true"/>, <see cref="AllowCancel"/> is
-        /// automatically implied.
+        /// <para>
+        ///   When setting this property to <see langword="true"/>, <see cref="AllowCancel"/> is
+        ///   automatically implied.
+        /// </para>
         /// </remarks>
         public bool CanBeMinimized
         {
@@ -498,15 +533,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Indicates that the width of the task dialog is determined by the width
-        /// of its content area (similar to Message Box sizing behavior).
+        ///   Indicates that the width of the task dialog is determined by the width
+        ///   of its content area (similar to Message Box sizing behavior).
         /// </summary>
         /// <value>
-        /// <see langword="true"/> to determine the width of the task dialog by the width of
-        /// its content area; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+        ///   <see langword="true"/> to determine the width of the task dialog by the width of
+        ///   its content area; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// This flag is ignored if <see cref="Width"/> is not set to <c>0</c>.
+        /// <para>
+        ///   This flag is ignored if <see cref="Width"/> is not set to <c>0</c>.
+        /// </para>
         /// </remarks>
         public bool SizeToContent
         {
@@ -517,9 +554,9 @@ namespace System.Windows.Forms
         internal TaskDialog? BoundTaskDialog { get; private set; }
 
         /// <summary>
-        /// Gets a value that indicates if the <see cref="BoundTaskDialog"/>
-        /// started navigation to this page but navigation did not yet complete
-        /// (in which case we cannot modify the dialog even though we are bound).
+        ///   Gets a value that indicates if the <see cref="BoundTaskDialog"/>
+        ///   started navigation to this page but navigation did not yet complete
+        ///   (in which case we cannot modify the dialog even though we are bound).
         /// </summary>
         internal bool WaitingForInitialization => BoundTaskDialog != null && !_appliedInitialization;
 
@@ -884,25 +921,25 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Raises the <see cref="Created"/> event.
+        ///   Raises the <see cref="Created"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         internal protected void OnCreated(EventArgs e) => Created?.Invoke(this, e);
 
         /// <summary>
-        /// Raises the <see cref="Destroyed"/> event.
+        ///   Raises the <see cref="Destroyed"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         internal protected void OnDestroyed(EventArgs e) => Destroyed?.Invoke(this, e);
 
         /// <summary>
-        /// Raises the <see cref="HelpRequest"/> event.
+        ///   Raises the <see cref="HelpRequest"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         internal protected void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
 
         /// <summary>
-        /// Raises the <see cref="HyperlinkClicked"/> event.
+        ///   Raises the <see cref="HyperlinkClicked"/> event.
         /// </summary>
         /// <param name="e">An <see cref="TaskDialogHyperlinkClickedEventArgs"/> that contains the event data.</param>
         internal protected void OnHyperlinkClicked(TaskDialogHyperlinkClickedEventArgs e) => HyperlinkClicked?.Invoke(this, e);

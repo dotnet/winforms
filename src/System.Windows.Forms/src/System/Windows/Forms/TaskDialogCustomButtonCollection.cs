@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of <see cref="TaskDialogCustomButton"/> objects.
+    ///   Represents a collection of <see cref="TaskDialogCustomButton"/> objects.
     /// </summary>
     public class TaskDialogCustomButtonCollection : Collection<TaskDialogCustomButton>
     {
@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private readonly HashSet<TaskDialogCustomButton> _itemSet = new HashSet<TaskDialogCustomButton>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogCustomButtonCollection"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogCustomButtonCollection"/> class.
         /// </summary>
         public TaskDialogCustomButtonCollection()
         {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates and adds a <see cref="TaskDialogCustomButton"/> to the collection.
+        ///   Creates and adds a <see cref="TaskDialogCustomButton"/> to the collection.
         /// </summary>
         /// <param name="text">The text of the custom button.</param>
         /// <param name="descriptionText">The description text of the custom button.</param>

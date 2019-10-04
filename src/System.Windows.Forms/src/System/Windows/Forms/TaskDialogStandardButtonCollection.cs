@@ -10,21 +10,23 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a collection of <see cref="TaskDialogStandardButton"/> objects.
+    ///   Represents a collection of <see cref="TaskDialogStandardButton"/> objects.
     /// </summary>
     public class TaskDialogStandardButtonCollection : KeyedCollection<TaskDialogResult, TaskDialogStandardButton>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogStandardButtonCollection"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogStandardButtonCollection"/> class.
         /// </summary>
         public TaskDialogStandardButtonCollection()
         {
         }
 
         /// <summary>
-        /// 
+        ///   Converts the specified <see cref="TaskDialogButtons"/> flags into a new
+        ///   <see cref="TaskDialogStandardButtonCollection"/> containing an
+        ///   <see cref="TaskDialogStandardButton"/> instance for each flag.
         /// </summary>
-        /// <param name="buttons"></param>
+        /// <param name="buttons">The flags to convert.</param>
         public static implicit operator TaskDialogStandardButtonCollection(
                 TaskDialogButtons buttons)
         {
@@ -74,7 +76,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates and adds a <see cref="TaskDialogStandardButton"/> to the collection.
+        ///   Creates and adds a <see cref="TaskDialogStandardButton"/> to the collection.
         /// </summary>
         /// <param name="result">The <see cref="TaskDialogResult"/> that is represented by the
         /// <see cref="TaskDialogStandardButton"/>.</param>
@@ -90,18 +92,10 @@ namespace System.Windows.Forms
         internal void HandleKeyChange(TaskDialogStandardButton button, TaskDialogResult newKey) => 
             ChangeItemKey(button, newKey);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         protected override TaskDialogResult GetKeyForItem(TaskDialogStandardButton item) => item.Result;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
+        /// <inheritdoc/>
         protected override void SetItem(int index, TaskDialogStandardButton item)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -119,11 +113,7 @@ namespace System.Windows.Forms
             item.Collection = this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
+        /// <inheritdoc/>
         protected override void InsertItem(int index, TaskDialogStandardButton item)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -138,10 +128,7 @@ namespace System.Windows.Forms
             item.Collection = this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
+        /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -153,9 +140,7 @@ namespace System.Windows.Forms
             base.RemoveItem(index);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ClearItems()
         {
             // Disallow collection modification, so that we don't need to copy it

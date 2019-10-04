@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the footer area of a task dialog.
+    ///   Represents the footer area of a task dialog.
     /// </summary>
     public sealed class TaskDialogFooter : TaskDialogControl
     {
@@ -20,15 +20,15 @@ namespace System.Windows.Forms
         private bool _boundIconIsFromHandle;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogFooter"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogFooter"/> class.
         /// </summary>
         public TaskDialogFooter()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogFooter"/> class
-        /// using the given <paramref name="text"/>.
+        ///   Initializes a new instance of the <see cref="TaskDialogFooter"/> class
+        ///   using the given <paramref name="text"/>.
         /// </summary>
         /// <param name="text">The text to be displayed in the dialog's footer area.</param>
         public TaskDialogFooter(string? text)
@@ -38,15 +38,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the text to be displayed in the dialog's footer area.
+        ///   Gets or sets the text to be displayed in the dialog's footer area.
         /// </summary>
         /// <value>
-        /// The text to be displayed in the dialog's footer area. The default value is <c>null</c>.
+        ///   The text to be displayed in the dialog's footer area. The default value is <see langword="null"/>.
         /// </value>
         /// <remarks>
-        /// This control will only be shown if this property is not <c>null</c> or an empty string.
-        /// 
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This control will only be shown if this property is not <see langword="null"/> or an empty string.
+        /// </para>
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public string? Text
         {
@@ -66,12 +69,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the footer icon.
+        ///   Gets or sets the footer icon.
         /// </summary>
         /// <remarks>
-        /// This property can be set while the dialog is shown (but in that case, it
-        /// cannot be switched between instances of <see cref="TaskDialogIconHandle"/>
-        /// and instances of other icon types).
+        /// <para>
+        ///   This property can be set while the dialog is shown (but in that case, it
+        ///   cannot be switched between instances created from an
+        ///   <see cref="System.Drawing.Icon"/> (or from a handle pointer)
+        ///   and standard icon instances).
+        /// </para>
         /// </remarks>
         public TaskDialogIcon? Icon
         {
@@ -105,7 +111,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a string that represents the current <see cref="TaskDialogFooter"/> control.
+        ///   Returns a string that represents the current <see cref="TaskDialogFooter"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;
