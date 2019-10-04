@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private string[] strings;
         private int current;
         private int size;
-        private UnsafeNativeMethods.IAutoComplete2 autoCompleteObject2;
+        private Shell32.IAutoComplete2 _autoCompleteObject2;
 
         /// <summary>
         ///  SHAutoComplete COM object CLSID.
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
             current = 0;
             size = (strings == null) ? 0 : strings.Length;
 
-            Guid iid_iunknown = typeof(UnsafeNativeMethods.IAutoComplete2).GUID;
+            Guid iid_iunknown = typeof(Shell32.IAutoComplete2).GUID;
             HRESULT hr = Ole32.CoCreateInstance(
                 ref autoCompleteClsid,
                 IntPtr.Zero,
@@ -51,39 +51,35 @@ namespace System.Windows.Forms
                 throw Marshal.GetExceptionForHR((int)hr);
             }
 
-            autoCompleteObject2 = (UnsafeNativeMethods.IAutoComplete2)obj;
+            _autoCompleteObject2 = (Shell32.IAutoComplete2)obj;
         }
 
         /// <summary>
         ///  This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle
         ///  to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         /// </summary>
-        public bool Bind(HandleRef edit, int options)
+        public bool Bind(HandleRef edit, Shell32.AUTOCOMPLETEOPTIONS options)
         {
-            bool retVal = false;
-
-            if (autoCompleteObject2 != null)
+            if (_autoCompleteObject2 == null)
             {
-                try
-                {
-                    autoCompleteObject2.SetOptions(options);
-                    autoCompleteObject2.Init(edit, (IEnumString)this, null, null);
-                    retVal = true;
-                }
-                catch
-                {
-                    retVal = false;
-                }
+                return false;
             }
-            return retVal;
+            if (!_autoCompleteObject2.SetOptions(options).Succeeded())
+            {
+                return false;
+            }
+
+            HRESULT hr = _autoCompleteObject2.Init(edit.Handle, (IEnumString)this, null, null);
+            GC.KeepAlive(edit.Wrapper);
+            return hr.Succeeded();
         }
 
         public void ReleaseAutoComplete()
         {
-            if (autoCompleteObject2 != null)
+            if (_autoCompleteObject2 != null)
             {
-                Marshal.ReleaseComObject(autoCompleteObject2);
-                autoCompleteObject2 = null;
+                Marshal.ReleaseComObject(_autoCompleteObject2);
+                _autoCompleteObject2 = null;
             }
         }
 
