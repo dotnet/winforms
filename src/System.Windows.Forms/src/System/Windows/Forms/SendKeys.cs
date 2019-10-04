@@ -182,7 +182,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                int oemVal = SafeNativeMethods.OemKeyScan((short)(0xFF & (int)character));
+                uint oemVal = User32.OemKeyScan((ushort)(0xFF & (int)character));
                 for (int i = 0; i < repeat; i++)
                 {
                     AddEvent(new SKEvent(WindowMessages.WM_CHAR, character, (int)(oemVal & 0xFFFF), hwnd));
