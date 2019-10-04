@@ -930,15 +930,14 @@ namespace System.Windows.Forms
             get
             {
                 ScreenOrientation so = ScreenOrientation.Angle0;
-                NativeMethods.DEVMODE dm = new NativeMethods.DEVMODE
+                var dm = new User32.DEVMODEW
                 {
-                    dmSize = (short)Marshal.SizeOf<NativeMethods.DEVMODE>(),
-                    dmDriverExtra = 0
+                    dmSize = (ushort)Marshal.SizeOf<User32.DEVMODEW>(),
                 };
                 try
                 {
-                    SafeNativeMethods.EnumDisplaySettings(null, -1 /*ENUM_CURRENT_SETTINGS*/, ref dm);
-                    if ((dm.dmFields & NativeMethods.DM_DISPLAYORIENTATION) > 0)
+                    User32.EnumDisplaySettingsW(null, User32.ENUM.CURRENT_SETTINGS, ref dm);
+                    if ((dm.dmFields & User32.DM.DISPLAYORIENTATION) > 0)
                     {
                         so = dm.dmDisplayOrientation;
                     }
