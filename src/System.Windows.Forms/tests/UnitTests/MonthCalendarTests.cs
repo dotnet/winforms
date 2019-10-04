@@ -2183,7 +2183,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new MonthCalendar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Size size = control.SingleMonthSize;
+            Size size = control.Size;
 
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
