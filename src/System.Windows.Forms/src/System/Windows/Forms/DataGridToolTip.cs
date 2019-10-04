@@ -31,13 +31,13 @@ namespace System.Windows.Forms
         {
             if (tipWindow == null || tipWindow.Handle == IntPtr.Zero)
             {
-                NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                var icc = new ComCtl32.INITCOMMONCONTROLSEX
                 {
-                    dwICC = NativeMethods.ICC_TAB_CLASSES
+                    dwICC = ComCtl32.ICC.TAB_CLASSES
                 };
-                icc.dwSize = Marshal.SizeOf(icc);
-                SafeNativeMethods.InitCommonControlsEx(icc);
-                CreateParams cparams = new CreateParams
+                ComCtl32.InitCommonControlsEx(ref icc);
+
+                var cparams = new CreateParams
                 {
                     Parent = dataGrid.Handle,
                     ClassName = NativeMethods.TOOLTIPS_CLASS,

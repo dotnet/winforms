@@ -604,13 +604,13 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && Enabled)
             {
-                var si = new NativeMethods.SCROLLINFO
+                var si = new User32.SCROLLINFO
                 {
-                    cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
-                    fMask = NativeMethods.SIF_ALL,
+                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                    fMask = User32.SIF.ALL,
                     nMin = _minimum,
                     nMax = _maximum,
-                    nPage = LargeChange
+                    nPage = (uint)LargeChange
                 };
 
                 if (RightToLeft == RightToLeft.Yes)
@@ -625,7 +625,7 @@ namespace System.Windows.Forms
 
                 si.nTrackPos = 0;
 
-                UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_CTL, si, true);
+                User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
             }
         }
 
@@ -702,11 +702,12 @@ namespace System.Windows.Forms
 
                 case ScrollEventType.ThumbPosition:
                 case ScrollEventType.ThumbTrack:
-                    var si = new NativeMethods.SCROLLINFO
+                    var si = new User32.SCROLLINFO
                     {
-                        fMask = NativeMethods.SIF_TRACKPOS
+                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        fMask = User32.SIF.TRACKPOS
                     };
-                    SafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_CTL, si);
+                    User32.GetScrollInfo(this, User32.SB.CTL, ref si);
 
                     if (RightToLeft == RightToLeft.Yes)
                     {

@@ -29,9 +29,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr CreateCompatibleBitmap(HandleRef hDC, int width, int height);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, [In, Out] NativeMethods.SCROLLINFO si);
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseFont([In, Out] NativeMethods.CHOOSEFONT cf);
 
@@ -92,12 +89,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
-
-        [DllImport(ExternDll.Comctl32)]
-        public static extern void InitCommonControls();
-
-        [DllImport(ExternDll.Comctl32)]
-        public static extern bool InitCommonControlsEx(NativeMethods.INITCOMMONCONTROLSEX icc);
 
 #if DEBUG
         private static readonly ArrayList validImageListHandles = ArrayList.Synchronized(new ArrayList());
@@ -303,9 +294,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool UpdateWindow(HandleRef hWnd);
 
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true)]
-        public static extern int ScrollWindowEx(HandleRef hWnd, int nXAmount, int nYAmount, NativeMethods.COMRECT rectScrollRegion, ref RECT rectClip, HandleRef hrgnUpdate, ref RECT prcUpdate, int flags);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool MessageBeep(int type);
 
@@ -342,15 +330,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool BitBlt(IntPtr hDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, int dwRop);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ShowCaret(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool HideCaret(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern uint GetCaretBlinkTime();
 
         // Theming/Visual Styles
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]

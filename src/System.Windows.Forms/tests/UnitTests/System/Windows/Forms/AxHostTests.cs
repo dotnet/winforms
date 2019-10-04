@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
@@ -977,7 +976,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetFontFromIFont(new object()));
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2002")]
         public void AxHost_GetIFontDispFromFont_InvokeSimpleStyle_Roundtrips()
         {
             Font font = new Font(SystemFonts.StatusFont.FontFamily, 10);
@@ -1070,7 +1069,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(SubAxHost.GetIFontDispFromFont(null));
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2003")]
         public void AxHost_GetIFontFromFont_InvokeSimpleStyle_Roundtrips()
         {
             Font font = new Font(SystemFonts.StatusFont.FontFamily, 10);
@@ -1182,7 +1181,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2005")]
         public void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
@@ -1248,7 +1247,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
-        [Fact]
+        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2004")]
         public void AxHost_GetIPictureFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");

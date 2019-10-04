@@ -1339,11 +1339,11 @@ namespace System.Windows.Forms
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    var icc = new ComCtl32.INITCOMMONCONTROLSEX
                     {
-                        dwICC = NativeMethods.ICC_DATE_CLASSES
+                        dwICC = ComCtl32.ICC.DATE_CLASSES
                     };
-                    SafeNativeMethods.InitCommonControlsEx(icc);
+                    ComCtl32.InitCommonControlsEx(ref icc);
                 }
                 finally
                 {

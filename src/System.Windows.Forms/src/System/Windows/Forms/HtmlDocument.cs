@@ -418,7 +418,7 @@ namespace System.Windows.Forms
         public unsafe object InvokeScript(string scriptName, object[] args)
         {
             object retVal = null;
-            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS
+            var dispParams = new Ole32.DISPPARAMS
             {
                 rgvarg = IntPtr.Zero
             };
@@ -437,18 +437,19 @@ namespace System.Windows.Forms
                             // Reverse the arg order so that parms read naturally after IDispatch. (
                             Array.Reverse(args);
                         }
-                        dp.rgvarg = (args == null) ? IntPtr.Zero : HtmlDocument.ArrayToVARIANTVector(args);
-                        dp.cArgs = (args == null) ? 0 : args.Length;
-                        dp.rgdispidNamedArgs = IntPtr.Zero;
-                        dp.cNamedArgs = 0;
+                        dispParams.rgvarg = (args == null) ? IntPtr.Zero : HtmlDocument.ArrayToVARIANTVector(args);
+                        dispParams.cArgs = (args == null) ? 0 : (uint)args.Length;
+                        dispParams.rgdispidNamedArgs = IntPtr.Zero;
+                        dispParams.cNamedArgs = 0;
 
                         object[] retVals = new object[1];
 
                         hr = scriptObject.Invoke(
                             dispid,
-                            ref g,
+                            &g,
                             Kernel32.GetThreadLocale(),
-                            NativeMethods.DISPATCH_METHOD, dp,
+                            NativeMethods.DISPATCH_METHOD,
+                            &dispParams,
                             retVals,
                             new NativeMethods.tagEXCEPINFO(),
                             null);
@@ -464,9 +465,9 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dp.rgvarg != IntPtr.Zero)
+                if (dispParams.rgvarg != IntPtr.Zero)
                 {
-                    HtmlDocument.FreeVARIANTVector(dp.rgvarg, args.Length);
+                    HtmlDocument.FreeVARIANTVector(dispParams.rgvarg, args.Length);
                 }
             }
 

@@ -339,17 +339,17 @@ namespace System.Windows.Forms
 
         private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch (NativeMethods.Util.LOWORD(m.WParam))
+            switch ((User32.SBH)NativeMethods.Util.LOWORD(m.WParam))
             {
-                case NativeMethods.SB_THUMBPOSITION:
-                case NativeMethods.SB_THUMBTRACK:
-                    NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO
+                case User32.SBH.THUMBPOSITION:
+                case User32.SBH.THUMBTRACK:
+                    var si = new User32.SCROLLINFO
                     {
-                        cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
-                        fMask = NativeMethods.SIF_TRACKPOS
+                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        fMask = User32.SIF.TRACKPOS
                     };
-                    int direction = horizontal ? NativeMethods.SB_HORZ : NativeMethods.SB_VERT;
-                    if (SafeNativeMethods.GetScrollInfo(new HandleRef(this, m.HWnd), direction, si))
+                    User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
+                    if (User32.GetScrollInfo(m.HWnd, direction, ref si).IsTrue())
                     {
                         pos = si.nTrackPos;
                     }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                         pos = NativeMethods.Util.HIWORD(m.WParam);
                     }
                     break;
-                case NativeMethods.SB_LINEUP:
+                case User32.SBH.LINELEFT:
                     if (pos > SCROLL_LINE)
                     {
                         pos -= SCROLL_LINE;
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_LINEDOWN:
+                case User32.SBH.LINERIGHT:
                     if (pos < maxPos - SCROLL_LINE)
                     {
                         pos += SCROLL_LINE;
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
                         pos = maxPos;
                     }
                     break;
-                case NativeMethods.SB_PAGEUP:
+                case User32.SBH.PAGELEFT:
                     if (pos > SCROLL_PAGE)
                     {
                         pos -= SCROLL_PAGE;
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_PAGEDOWN:
+                case User32.SBH.PAGERIGHT:
                     if (pos < maxPos - SCROLL_PAGE)
                     {
                         pos += SCROLL_PAGE;
@@ -782,8 +782,8 @@ namespace System.Windows.Forms
                                  ref scroll,
                                  ref scroll);
 
-            UnsafeNativeMethods.SetScrollPos(new HandleRef(this, Handle), NativeMethods.SB_HORZ, position.X, true);
-            UnsafeNativeMethods.SetScrollPos(new HandleRef(this, Handle), NativeMethods.SB_VERT, position.Y, true);
+            User32.SetScrollPos(this, User32.SB.HORZ, position.X, BOOL.TRUE);
+            User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
         }
 
         internal void SetVirtualSizeNoInvalidate(Size value)
@@ -791,20 +791,21 @@ namespace System.Windows.Forms
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
 
-            NativeMethods.SCROLLINFO info = new NativeMethods.SCROLLINFO
+            var info = new User32.SCROLLINFO
             {
-                fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE,
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.RANGE | User32.SIF.PAGE,
                 nMin = 0,
                 nMax = Math.Max(Height, virtualSize.Height) - 1,
-                nPage = Height
+                nPage = (uint)Height
             };
-            UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_VERT, info, true);
+            User32.SetScrollInfo(this, User32.SB.VERT, ref info, BOOL.TRUE);
 
-            info.fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE;
+            info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;
             info.nMin = 0;
             info.nMax = Math.Max(Width, virtualSize.Width) - 1;
-            info.nPage = Width;
-            UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, info, true);
+            info.nPage = (uint)Width;
+            User32.SetScrollInfo(this, User32.SB.HORZ, ref info, BOOL.TRUE);
         }
 
         /// <summary>

@@ -74,9 +74,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
-        [DllImport(ExternDll.Oleaut32, ExactSpelling = true)]
-        public static extern void OleCreatePropertyFrameIndirect(NativeMethods.OCPFIPARAMS p);
-
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder lpszFile, int cch);
 
@@ -115,12 +112,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool EnumChildWindows(HandleRef hwndParent, NativeMethods.EnumChildrenCallback lpEnumFunc, HandleRef lParam);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int SetScrollPos(HandleRef hWnd, int nBar, int nPos, bool bRedraw);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool EnableScrollBar(HandleRef hWnd, int nBar, int value);
 
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
@@ -218,16 +209,10 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool BlockInput([In, MarshalAs(UnmanagedType.Bool)] bool fBlockIt);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern uint SendInput(uint nInputs, NativeMethods.INPUT[] pInputs, int cbSize);
-
         #endregion
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern uint GetShortPathName(string lpszLongPath, StringBuilder lpszShortPath, uint cchBuffer);
@@ -383,10 +368,6 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Size lParam);
 
         // For ListView
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] ref NativeMethods.LVFINDINFO lParam);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVHITTESTINFO lParam);
 
@@ -509,9 +490,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetMenuItemCount(HandleRef hMenu);
 
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void GetErrorInfo(int reserved, [In, Out] ref IErrorInfo errorInfo);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
 
@@ -520,12 +498,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Shell32, ExactSpelling = true, CharSet = CharSet.Ansi)]
         public static extern void DragAcceptFiles(HandleRef hWnd, bool fAccept);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetScrollInfo(HandleRef hWnd, int fnBar, NativeMethods.SCROLLINFO si);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetScrollInfo(HandleRef hWnd, int fnBar, NativeMethods.SCROLLINFO si, bool redraw);
 
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
         //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should
@@ -915,15 +887,12 @@ namespace System.Windows.Forms
                 [In, Out]
                 NativeMethods.DOCHOSTUIINFO info);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int ShowUI(
-                [In, MarshalAs(UnmanagedType.I4)]
-                int dwID,
+            HRESULT ShowUI(
+                uint dwID,
                 [In]
                 IOleInPlaceActiveObject activeObject,
-                [In]
-                NativeMethods.IOleCommandTarget commandTarget,
+                Ole32.IOleCommandTarget commandTarget,
                 [In]
                 IOleInPlaceFrame frame,
                 [In]
@@ -1058,12 +1027,18 @@ namespace System.Windows.Forms
             void Navigate2([In] ref object URL, [In] ref object flags,
                             [In] ref object targetFrameName, [In] ref object postData,
                             [In] ref object headers);
-            [DispId(501)] NativeMethods.OLECMDF QueryStatusWB([In] NativeMethods.OLECMDID cmdID);
+            [DispId(501)]
+            Ole32.OLECMDF QueryStatusWB(
+                Ole32.OLECMDID cmdID);
+
             [DispId(502)]
-            void ExecWB([In] NativeMethods.OLECMDID cmdID,
-                    [In] NativeMethods.OLECMDEXECOPT cmdexecopt,
-                    ref object pvaIn,
-                    IntPtr pvaOut);
+            [PreserveSig]
+            HRESULT ExecWB(
+                Ole32.OLECMDID cmdID,
+                Ole32.OLECMDEXECOPT cmdexecopt,
+                IntPtr pvaIn,
+                IntPtr pvaOut);
+
             [DispId(503)]
             void ShowBrowserBar([In] ref object pvaClsid, [In] ref object pvarShow,
                     [In] ref object pvarSize);
@@ -1938,26 +1913,14 @@ namespace System.Windows.Forms
             int FindConnectionPoint([In] ref Guid guid, [Out, MarshalAs(UnmanagedType.Interface)]out IConnectionPoint ppCP);
         }
 
-        [ComImport(), Guid("B196B285-BAB4-101A-B69C-00AA00341D07"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IEnumConnectionPoints
-        {
-            [PreserveSig]
-            int Next(int cConnections, out IConnectionPoint pCp, out int pcFetched);
-
-            [PreserveSig]
-            int Skip(int cSkip);
-
-            void Reset();
-
-            IEnumConnectionPoints Clone();
-        }
-
         [ComImport]
         [Guid("00020400-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IDispatch
         {
-            int GetTypeInfoCount();
+            [PreserveSig]
+            HRESULT GetTypeInfoCount(
+                uint* pctinfo);
 
             [PreserveSig]
             HRESULT GetTypeInfo(
@@ -1976,25 +1939,30 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT Invoke(
                 Ole32.DispatchID dispIdMember,
-                [In] ref Guid riid,
+                Guid* riid,
                 uint lcid,
                 uint dwFlags,
-                [Out, In] NativeMethods.tagDISPPARAMS pDispParams,
+                Ole32.DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
                 [Out, In] NativeMethods.tagEXCEPINFO pExcepInfo,
-                [Out, MarshalAs(UnmanagedType.LPArray)] IntPtr [] pArgErr);
+                IntPtr* pArgErr);
         }
 
-        [ComImport(), Guid("00020401-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ITypeInfo
+        [ComImport]
+        [Guid("00020401-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface ITypeInfo
         {
             [PreserveSig]
             HRESULT GetTypeAttr(ref IntPtr pTypeAttr);
 
+            /// <remarks>
+            /// This method is unused so we do not define the interface ITypeComp
+            /// and its dependencies to avoid maintenance costs and code size.
+            /// </remarks>
             [PreserveSig]
-            int GetTypeComp(
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                       ITypeComp[] ppTComp);
+            HRESULT GetTypeComp(
+                IntPtr* ppTComp);
 
             [PreserveSig]
             HRESULT GetFuncDesc(
@@ -2075,12 +2043,14 @@ namespace System.Windows.Forms
                    [Out, MarshalAs(UnmanagedType.LPArray)]
                      string[] pBstrMops);
 
+            /// <remarks>
+            /// This method is unused so we do not define the interface ITypeLib
+            /// and its dependencies to avoid maintenance costs and code size.
+            /// </remarks>
             [PreserveSig]
-            int GetContainingTypeLib(
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                       ITypeLib[] ppTLib,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      int[] pIndex);
+            HRESULT GetContainingTypeLib(
+                IntPtr* ppTLib,
+                uint* pIndex);
 
             [PreserveSig]
             void ReleaseTypeAttr(IntPtr typeAttr);
@@ -2090,152 +2060,6 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             void ReleaseVarDesc(IntPtr varDesc);
-        }
-
-        [ComImport(), Guid("00020403-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ITypeComp
-        {
-            unsafe void RemoteBind(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szName,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [In, MarshalAs(UnmanagedType.U2)]
-                 short wFlags,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  NativeMethods.tagDESCKIND[] pDescKind,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   NativeMethods.tagFUNCDESC*[] ppFuncDesc,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   NativeMethods.tagVARDESC*[] ppVarDesc,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeComp[] ppTypeComp,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  int[] pDummy);
-
-            void RemoteBindType(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szName,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo);
-        }
-
-        [ComImport(), Guid("00020402-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ITypeLib
-        {
-            void RemoteGetTypeInfoCount(
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  int[] pcTInfo);
-
-            void GetTypeInfo(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int index,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo);
-
-            void GetTypeInfoType(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int index,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  NativeMethods.tagTYPEKIND[] pTKind);
-
-            void GetTypeInfoOfGuid(
-                   [In]
-                  ref Guid guid,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeInfo[] ppTInfo);
-
-            void RemoteGetLibAttr(
-                   IntPtr ppTLibAttr,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                  int[] pDummy);
-
-            void GetTypeComp(
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                   ITypeComp[] ppTComp);
-
-            void RemoteGetDocumentation(
-                    int index,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int refPtrFlags,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrName,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrDocString,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 int[] pdwHelpContext,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrHelpFile);
-
-            void RemoteIsName(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szNameBuf,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 IntPtr [] pfName,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrLibName);
-
-            void RemoteFindName(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                 string szNameBuf,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int lHashVal,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 ITypeInfo[] ppTInfo,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 int[] rgMemId,
-                   [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                 short[] pcFound,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                 string[] pBstrLibName);
-
-            void LocalReleaseTLibAttr();
-        }
-
-        [ComImport(),
-         Guid("DF0B3D60-548F-101B-8E65-08002B2BD119"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ISupportErrorInfo
-        {
-            int InterfaceSupportsErrorInfo(
-                    [In] ref Guid riid);
-        }
-
-        [ComImport(),
-         Guid("1CF2B120-547D-101B-8E65-08002B2BD119"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IErrorInfo
-        {
-            [PreserveSig]
-            int GetGUID(
-                       [Out]
-                   out Guid pguid);
-
-            [PreserveSig]
-            int GetSource(
-                         [In, Out, MarshalAs(UnmanagedType.BStr)]
-                     ref string pBstrSource);
-
-            [PreserveSig]
-            int GetDescription(
-                              [In, Out, MarshalAs(UnmanagedType.BStr)]
-                          ref string pBstrDescription);
-
-            [PreserveSig]
-            int GetHelpFile(
-                           [In, Out, MarshalAs(UnmanagedType.BStr)]
-                       ref string pBstrHelpFile);
-
-            [PreserveSig]
-            int GetHelpContext(
-                              [In, Out, MarshalAs(UnmanagedType.U4)]
-                          ref int pdwHelpContext);
         }
 
         [StructLayout(LayoutKind.Sequential)]

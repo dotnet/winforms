@@ -453,12 +453,6 @@ namespace System.Windows.Forms
         ICON_BIG = 1,
         IMAGE_ICON = 1,
         IMAGE_CURSOR = 2,
-        ICC_LISTVIEW_CLASSES = 0x00000001,
-        ICC_TREEVIEW_CLASSES = 0x00000002,
-        ICC_BAR_CLASSES = 0x00000004,
-        ICC_TAB_CLASSES = 0x00000008,
-        ICC_PROGRESS_CLASS = 0x00000020,
-        ICC_DATE_CLASSES = 0x00000100,
         ILC_MASK = 0x0001,
         ILC_COLOR = 0x0000,
         ILC_COLOR4 = 0x0004,
@@ -487,12 +481,6 @@ namespace System.Windows.Forms
         IDM_PRINTPREVIEW = 2003,
         IDM_PROPERTIES = 28,
         IDM_SAVEAS = 71;
-
-        public const int INPUT_KEYBOARD = 1;
-
-        public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
-        public const int KEYEVENTF_KEYUP = 0x0002;
-        public const int KEYEVENTF_UNICODE = 0x0004;
 
         public const int LB_ERR = (-1),
         LB_ERRSPACE = (-2),
@@ -586,10 +574,6 @@ namespace System.Windows.Forms
         LVIS_STATEIMAGEMASK = 0xF000,
         LVNI_FOCUSED = 0x0001,
         LVNI_SELECTED = 0x0002,
-        LVFI_PARAM = 0x0001,
-        LVFI_NEARESTXY = 0x0040,
-        LVFI_PARTIAL = 0x0008,
-        LVFI_STRING = 0x0002,
         LVIR_BOUNDS = 0,
         LVIR_ICON = 1,
         LVIR_LABEL = 2,
@@ -918,28 +902,8 @@ namespace System.Windows.Forms
 
         public const int stc4 = 0x0443,
         STARTF_USESHOWWINDOW = 0x00000001,
-        SB_HORZ = 0,
-        SB_VERT = 1,
-        SB_CTL = 2,
-        SB_LINEUP = 0,
-        SB_LINELEFT = 0,
-        SB_LINEDOWN = 1,
-        SB_LINERIGHT = 1,
-        SB_PAGEUP = 2,
-        SB_PAGELEFT = 2,
-        SB_PAGEDOWN = 3,
-        SB_PAGERIGHT = 3,
-        SB_THUMBPOSITION = 4,
-        SB_THUMBTRACK = 5,
-        SB_LEFT = 6,
-        SB_RIGHT = 7,
-        SB_ENDSCROLL = 8,
-        SB_TOP = 6,
-        SB_BOTTOM = 7,
         SIZE_RESTORED = 0,
         SIZE_MAXIMIZED = 2,
-        ESB_ENABLE_BOTH = 0x0000,
-        ESB_DISABLE_BOTH = 0x0003,
         SORT_DEFAULT = 0x0,
         SUBLANG_DEFAULT = 0x01;
 
@@ -948,10 +912,7 @@ namespace System.Windows.Forms
         HLP_NAVIGATOR = 3,
         HLP_OBJECT = 4;
 
-        public const int SW_SCROLLCHILDREN = 0x0001,
-        SW_INVALIDATE = 0x0002,
-        SW_ERASE = 0x0004,
-        SW_SMOOTHSCROLL = 0x0010,
+        public const int
         SC_SIZE = 0xF000,
         SC_MINIMIZE = 0xF020,
         SC_MAXIMIZE = 0xF030,
@@ -968,11 +929,6 @@ namespace System.Windows.Forms
         SS_SUNKEN = 0x00001000,
         SBS_HORZ = 0x0000,
         SBS_VERT = 0x0001,
-        SIF_RANGE = 0x0001,
-        SIF_PAGE = 0x0002,
-        SIF_POS = 0x0004,
-        SIF_TRACKPOS = 0x0010,
-        SIF_ALL = (0x0001 | 0x0002 | 0x0004 | 0x0010),
         SBARS_SIZEGRIP = 0x0100,
         SB_SETTEXT = (0x0400 + 11),
         SB_GETTEXT = (0x0400 + 13),
@@ -1211,26 +1167,7 @@ namespace System.Windows.Forms
         USERCLASSTYPE_APPNAME = 3,
         UOI_FLAGS = 1;
 
-        public const int VIEW_E_DRAW = unchecked((int)0x80040140),
-        VK_PRIOR = 0x21,
-        VK_NEXT = 0x22,
-        VK_LEFT = 0x25,
-        VK_UP = 0x26,
-        VK_RIGHT = 0x27,
-        VK_DOWN = 0x28,
-        VK_TAB = 0x09,
-        VK_SHIFT = 0x10,
-        VK_CONTROL = 0x11,
-        VK_MENU = 0x12,
-        VK_CAPITAL = 0x14,
-        VK_KANA = 0x15,
-        VK_ESCAPE = 0x1B,
-        VK_END = 0x23,
-        VK_HOME = 0x24,
-        VK_NUMLOCK = 0x90,
-        VK_SCROLL = 0x91,
-        VK_INSERT = 0x002D,
-        VK_DELETE = 0x002E;
+        public const int VIEW_E_DRAW = unchecked((int)0x80040140);
 
         public const int WH_JOURNALPLAYBACK = 1;
         public const int WH_GETMESSAGE = 3;
@@ -1357,48 +1294,6 @@ namespace System.Windows.Forms
         public const string uuid_IAccessible = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
 
         public const string WinFormFrameworkId = "WinForm";
-
-        /*
-        * MISCELLANEOUS
-        */
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class OLECMD
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int cmdID = 0;
-            [MarshalAs(UnmanagedType.U4)]
-            public int cmdf = 0;
-
-        }
-
-        [ComVisible(true)]
-        [ComImport]
-        [Guid("B722BCCB-4E68-101B-A2BC-00AA00404770")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleCommandTarget
-        {
-            [return: MarshalAs(UnmanagedType.I4)]
-            [PreserveSig]
-            int QueryStatus(
-                ref Guid pguidCmdGroup,
-                int cCmds,
-                [In, Out]
-                OLECMD prgCmds,
-                [In, Out]
-                IntPtr pCmdText);
-
-            [return: MarshalAs(UnmanagedType.I4)]
-            [PreserveSig]
-            int Exec(
-                ref Guid pguidCmdGroup,
-                int nCmdID,
-                int nCmdexecopt,
-                // we need to have this an array because callers need to be able to specify NULL or VT_NULL
-                [In, MarshalAs(UnmanagedType.LPArray)]
-                object[] pvaIn,
-                int pvaOut);
-        }
 
         public struct USEROBJECTFLAGS
         {
@@ -1665,13 +1560,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class INITCOMMONCONTROLSEX
-        {
-            public int dwSize = 8; //ndirect.DllLib.sizeOf(this);
-            public int dwICC;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class IMAGELISTDRAWPARAMS
         {
             public int cbSize = Marshal.SizeOf<IMAGELISTDRAWPARAMS>();
@@ -1721,22 +1609,6 @@ namespace System.Windows.Forms
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class SCROLLINFO
-        {
-            public int cbSize = Marshal.SizeOf<SCROLLINFO>();
-            public int fMask;
-            public int nMin;
-            public int nMax;
-            public int nPage;
-            public int nPos;
-            public int nTrackPos;
-
-            public SCROLLINFO()
-            {
-            }
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         public class TPMPARAMS
@@ -2204,14 +2076,6 @@ namespace System.Windows.Forms
 
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMLVFINDITEM
-        {
-            public User32.NMHDR hdr;
-            public int iStart;
-            public LVFINDINFO lvfi;
-        }
-
         [ComImport]
         [Guid("4D07FC10-F931-11CE-B001-00AA006884E5")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -2355,17 +2219,6 @@ namespace System.Windows.Forms
             public int cchTextMax;
             public int iImage;
             public IntPtr lParam;
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagDISPPARAMS
-        {
-            public IntPtr rgvarg;
-            public IntPtr rgdispidNamedArgs;
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, cArgs)*/]
-            public int cArgs;
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, cNamedArgs)*/]
-            public int cNamedArgs;
         }
 
         public enum tagINVOKEKIND
@@ -2710,16 +2563,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct LVFINDINFO
-        {
-            public int flags;
-            public string psz;
-            public IntPtr lParam;
-            public Point pt;
-            public int vkDirection;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct LVITEM
         {
             public int mask;
@@ -2911,59 +2754,6 @@ namespace System.Windows.Forms
             public int dwExtraInfo = 0;
         }
 
-        #region SendKeys SendInput functionality
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MOUSEINPUT
-        {
-            public int dx;
-            public int dy;
-            public int mouseData;
-            public int dwFlags;
-            public int time;
-            public IntPtr dwExtraInfo;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct KEYBDINPUT
-        {
-            public short wVk;
-            public short wScan;
-            public int dwFlags;
-            public int time;
-            public IntPtr dwExtraInfo;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct HARDWAREINPUT
-        {
-            public int uMsg;
-            public short wParamL;
-            public short wParamH;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct INPUT
-        {
-            public int type;
-            public INPUTUNION inputUnion;
-        }
-
-        // We need to split the field offset out into a union struct to avoid
-        // silent problems in 64 bit
-        [StructLayout(LayoutKind.Explicit)]
-        public struct INPUTUNION
-        {
-            [FieldOffset(0)]
-            public MOUSEINPUT mi;
-            [FieldOffset(0)]
-            public KEYBDINPUT ki;
-            [FieldOffset(0)]
-            public HARDWAREINPUT hi;
-        }
-
-        #endregion
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct CHARFORMATW
         {
@@ -3105,22 +2895,6 @@ namespace System.Windows.Forms
             // public RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public class OCPFIPARAMS
-        {
-            public int cbSizeOfStruct = Marshal.SizeOf<OCPFIPARAMS>();
-            public IntPtr hwndOwner;
-            public int x = 0;
-            public int y = 0;
-            public string lpszCaption;
-            public int cObjects = 1;
-            public IntPtr ppUnk;
-            public int pageCount = 1;
-            public IntPtr uuid;
-            public int lcid = Application.CurrentCulture.LCID;
-            public Ole32.DispatchID dispidInitial;
-        }
-
         [ComVisible(true), StructLayout(LayoutKind.Sequential)]
         public class DOCHOSTUIINFO
         {
@@ -3160,35 +2934,6 @@ namespace System.Windows.Forms
             SHOWPROPERTIES = 0x1,
             SHOWCODE = 0x2
         }
-
-#pragma warning disable CA1712 // Don't prefix enum values with enum type
-        public enum OLECMDID
-        {
-            OLECMDID_SAVEAS = 4,
-            OLECMDID_PRINT = 6,
-            OLECMDID_PRINTPREVIEW = 7,
-            OLECMDID_PAGESETUP = 8,
-            OLECMDID_PROPERTIES = 10
-        }
-
-        public enum OLECMDEXECOPT
-        {
-            OLECMDEXECOPT_DODEFAULT = 0,
-            OLECMDEXECOPT_PROMPTUSER = 1,
-            OLECMDEXECOPT_DONTPROMPTUSER = 2,
-            OLECMDEXECOPT_SHOWHELP = 3
-        }
-
-        public enum OLECMDF
-        {
-            OLECMDF_SUPPORTED = 0x00000001,
-            OLECMDF_ENABLED = 0x00000002,
-            OLECMDF_LATCHED = 0x00000004,
-            OLECMDF_NINCHED = 0x00000008,
-            OLECMDF_INVISIBLE = 0x00000010,
-            OLECMDF_DEFHIDEONCTXTMENU = 0x00000020
-        }
-#pragma warning restore CA1712
 
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES
@@ -3945,9 +3690,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);

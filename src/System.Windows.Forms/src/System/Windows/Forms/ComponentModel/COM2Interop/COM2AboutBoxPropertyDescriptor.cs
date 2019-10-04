@@ -152,31 +152,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public class AboutBoxUITypeEditor : UITypeEditor
         {
             /// <summary>
-            ///  Edits the given object value using the editor style provided by
-            ///  GetEditorStyle.  A service provider is provided so that any
-            ///  required editing services can be obtained.
+            ///  Edits the given object value using the editor style provided by GetEditorStyle.
+            ///  A service provider is provided so that any required editing services can be obtained.
             /// </summary>
-            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            public unsafe override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
                 object component = context.Instance;
 
                 if (Marshal.IsComObject(component) && component is UnsafeNativeMethods.IDispatch)
                 {
                     UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
-                    NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
+                    var pExcepInfo = new NativeMethods.tagEXCEPINFO();
+                    var dispParams = new Ole32.DISPPARAMS();
                     Guid g = Guid.Empty;
-
                     HRESULT hr = pDisp.Invoke(
                         Ole32.DispatchID.ABOUTBOX,
-                        ref g,
+                        &g,
                         Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_METHOD,
-                        new NativeMethods.tagDISPPARAMS(),
+                        &dispParams,
                         null,
                         pExcepInfo,
                         null);
                     Debug.Assert(hr.Succeeded(), "Failed to launch about box.");
                 }
+
                 return value;
             }
 

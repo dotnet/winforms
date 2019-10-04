@@ -889,7 +889,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  invoking the getXXX method.  An exception in the getXXX
         ///  method will pass through.
         /// </summary>
-        public object GetNativeValue(object component)
+        public unsafe object GetNativeValue(object component)
         {
             if (component == null)
             {
@@ -908,15 +908,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
             object[] pVarResult = new object[1];
-            NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
+            var pExcepInfo = new NativeMethods.tagEXCEPINFO();
+            var dispParams = new Ole32.DISPPARAMS();
             Guid g = Guid.Empty;
 
             HRESULT hr = pDisp.Invoke(
                 dispid,
-                ref g,
+                &g,
                 Kernel32.GetThreadLocale(),
                 NativeMethods.DISPATCH_PROPERTYGET,
-                new NativeMethods.tagDISPPARAMS(),
+                &dispParams,
                 pVarResult,
                 pExcepInfo,
                 null);
@@ -1256,7 +1257,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  property so that getXXX following a setXXX should return the value
         ///  passed in if no exception was thrown in the setXXX call.
         /// </summary>
-        public override void SetValue(object component, object value)
+        public unsafe override void SetValue(object component, object value)
         {
             if (readOnly)
             {
@@ -1287,34 +1288,35 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)owner;
 
-            NativeMethods.tagDISPPARAMS dp = new NativeMethods.tagDISPPARAMS();
             NativeMethods.tagEXCEPINFO excepInfo = new NativeMethods.tagEXCEPINFO();
-            dp.cArgs = 1;
-            dp.cNamedArgs = 1;
+            var dispParams = new Ole32.DISPPARAMS();
+            dispParams.cArgs = 1;
+            dispParams.cNamedArgs = 1;
             Ole32.DispatchID[] namedArgs = new Ole32.DispatchID[] { Ole32.DispatchID.PROPERTYPUT };
             GCHandle gcHandle = GCHandle.Alloc(namedArgs, GCHandleType.Pinned);
 
             try
             {
-                dp.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
+                dispParams.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
                 const int SizeOfVariant = 16;
                 Debug.Assert(SizeOfVariant == Marshal.SizeOf<Ole32.VARIANT>());
                 IntPtr mem = Marshal.AllocCoTaskMem(SizeOfVariant);
                 Oleaut32.VariantInit(mem);
                 Marshal.GetNativeVariantForObject(value, mem);
-                dp.rgvarg = mem;
+                dispParams.rgvarg = mem;
                 try
                 {
-
                     Guid g = Guid.Empty;
+                    IntPtr pArgError = IntPtr.Zero;
                     HRESULT hr = pDisp.Invoke(
                         dispid,
-                        ref g,
+                        &g,
                         Kernel32.GetThreadLocale(),
                         NativeMethods.DISPATCH_PROPERTYPUT,
-                        dp,
+                        &dispParams,
                         null,
-                        excepInfo, new IntPtr[1]);
+                        excepInfo,
+                        &pArgError);
 
                     string errorInfo = null;
                     if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
@@ -1335,20 +1337,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             lastValue = value;
                             return;
                         default:
-                            if (pDisp is UnsafeNativeMethods.ISupportErrorInfo iSupportErrorInfo)
+                            if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
                             {
                                 g = typeof(UnsafeNativeMethods.IDispatch).GUID;
-                                if (NativeMethods.Succeeded(iSupportErrorInfo.InterfaceSupportsErrorInfo(ref g)))
+                                if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                                 {
-                                    UnsafeNativeMethods.IErrorInfo pErrorInfo = null;
-                                    UnsafeNativeMethods.GetErrorInfo(0, ref pErrorInfo);
+                                    Oleaut32.IErrorInfo pErrorInfo = null;
+                                    Oleaut32.GetErrorInfo(0, ref pErrorInfo);
+
                                     string info = null;
-                                    if (pErrorInfo != null)
+                                    if (pErrorInfo != null && pErrorInfo.GetDescription(ref info).Succeeded())
                                     {
-                                        if (NativeMethods.Succeeded(pErrorInfo.GetDescription(ref info)))
-                                        {
-                                            errorInfo = info;
-                                        }
+                                        errorInfo = info;
                                     }
                                 }
                             }

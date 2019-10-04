@@ -1664,11 +1664,11 @@ namespace System.Windows.Forms
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try
                 {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
+                    var icc = new ComCtl32.INITCOMMONCONTROLSEX
                     {
-                        dwICC = NativeMethods.ICC_TREEVIEW_CLASSES
+                        dwICC = ComCtl32.ICC.TREEVIEW_CLASSES
                     };
-                    SafeNativeMethods.InitCommonControlsEx(icc);
+                    ComCtl32.InitCommonControlsEx(ref icc);
                 }
                 finally
                 {
@@ -2797,14 +2797,13 @@ namespace System.Windows.Forms
                         {
                             Rectangle bounds = node.RowBounds;
 
-                            NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO
+                            var si = new User32.SCROLLINFO
                             {
-                                cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>(),
-                                fMask = NativeMethods.SIF_POS
+                                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                                fMask = User32.SIF.POS
                             };
-                            if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, si) != false)
+                            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                             {
-
                                 // need to get the correct bounds if horizontal scroll bar is shown.
                                 // In this case the bounds.X needs to be negative and width needs to be updated to the increased width (scrolled region).
                                 int value = si.nPos;

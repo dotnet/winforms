@@ -892,10 +892,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates the caret blink time.
         /// </summary>
-        public static int CaretBlinkTime
-        {
-            get => unchecked((int)SafeNativeMethods.GetCaretBlinkTime());
-        }
+        public static int CaretBlinkTime => unchecked((int)User32.GetCaretBlinkTime());
 
         /// <summary>
         ///  Indicates the caret width in edit controls.

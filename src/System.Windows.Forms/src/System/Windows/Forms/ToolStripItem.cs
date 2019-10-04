@@ -2940,7 +2940,7 @@ namespace System.Windows.Forms
                         if (ParentInternal.LastMouseDownedItem == this)
                         {
                             // Same as Control.MouseButtons == MouseButtons.Left, but slightly more efficient.
-                            if (UnsafeNativeMethods.GetKeyState((int)Keys.LButton) < 0)
+                            if (User32.GetKeyState((int)Keys.LButton) < 0)
                             {
                                 Push(true);
                             }

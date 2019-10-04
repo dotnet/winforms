@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -15,7 +17,7 @@ namespace System.Windows.Forms
 
         internal override int PageSize => ParentControl.ClientRectangle.Width;
 
-        internal override int Orientation => NativeMethods.SB_HORZ;
+        internal override User32.SB Orientation => User32.SB.HORZ;
 
         internal override int HorizontalDisplayPosition => -_value;
 
