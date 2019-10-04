@@ -682,7 +682,7 @@ namespace System.Windows.Forms
             lock (events.SyncRoot)
             {
                 // block keyboard and mouse input events from reaching applications.
-                bool blockInputSuccess = UnsafeNativeMethods.BlockInput(true);
+                BOOL blockInputSuccess = User32.BlockInput(BOOL.TRUE);
 
                 try
                 {
@@ -750,9 +750,9 @@ namespace System.Windows.Forms
                     KeyboardState = oldKeyboardState;
 
                     // unblock input if it was previously blocked
-                    if (blockInputSuccess)
+                    if (blockInputSuccess.IsTrue())
                     {
-                        UnsafeNativeMethods.BlockInput(false);
+                        User32.BlockInput(BOOL.FALSE);
                     }
                 }
             }
