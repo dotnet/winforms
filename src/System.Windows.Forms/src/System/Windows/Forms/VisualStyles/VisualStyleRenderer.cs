@@ -15,7 +15,7 @@ namespace System.Windows.Forms.VisualStyles
     /// <summary>
     ///  This class provides full feature parity with UxTheme API.
     /// </summary>
-    public sealed class VisualStyleRenderer
+    public sealed class VisualStyleRenderer : IHandle
     {
         private const TextFormatFlags AllGraphicsProperties = TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform;
 
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.VisualStyles
                 }
                 else
                 {
-                    returnVal = SafeNativeMethods.IsThemePartDefined(new HandleRef(null, hTheme), part, 0);
+                    returnVal = UxTheme.IsThemePartDefined(hTheme, part, 0).IsTrue();
                 }
             }
 
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     if (tHandle != null)
                     {
-                        returnVal = SafeNativeMethods.IsThemePartDefined(new HandleRef(null, tHandle.NativeHandle), part, 0);
+                        returnVal = UxTheme.IsThemePartDefined(tHandle, part, 0).IsTrue();
                     }
 
                     //if we did, in fact get a new correct theme handle, our cache is out of date -- update it now.
@@ -762,7 +762,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
                     {
-                        lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, null, type, out Size size);
+                        lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.Handle), hdc, part, state, null, type, out Size size);
                         return size;
                     }
                 }
@@ -1102,26 +1102,18 @@ namespace System.Windows.Forms.VisualStyles
                 tHandle = (ThemeHandle)themeHandles[className];
             }
 
-            return tHandle.NativeHandle;
+            return tHandle.Handle;
         }
 
         // This wrapper class is needed for safely cleaning up TLS cache of handles.
-        private class ThemeHandle : IDisposable
+        private class ThemeHandle : IDisposable, IHandle
         {
-            private IntPtr _hTheme = IntPtr.Zero;
-
             private ThemeHandle(IntPtr hTheme)
             {
-                _hTheme = hTheme;
+                Handle = hTheme;
             }
 
-            public IntPtr NativeHandle
-            {
-                get
-                {
-                    return _hTheme;
-                }
-            }
+            public IntPtr Handle { get; private set; }
 
             public static ThemeHandle Create(string className, bool throwExceptionOnFail)
             {
@@ -1161,19 +1153,16 @@ namespace System.Windows.Forms.VisualStyles
 
             public void Dispose()
             {
-                if (_hTheme != IntPtr.Zero)
+                if (Handle != IntPtr.Zero)
                 {
-                    UxTheme.CloseThemeData(_hTheme);
-                    _hTheme = IntPtr.Zero;
+                    UxTheme.CloseThemeData(Handle);
+                    Handle = IntPtr.Zero;
                 }
 
                 GC.SuppressFinalize(this);
             }
 
-            ~ThemeHandle()
-            {
-                Dispose();
-            }
+            ~ThemeHandle() => Dispose();
         }
     }
 }
