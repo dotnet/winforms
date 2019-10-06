@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms
 
         private void WmNCHitTest(ref Message m)
         {
-            int x = NativeMethods.Util.LOWORD(m.LParam);
+            int x = NativeMethods.Util.SignedLOWORD(m.LParam);
             Rectangle bounds = Bounds;
             bool callSuper = true;
 

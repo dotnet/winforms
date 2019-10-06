@@ -7017,8 +7017,8 @@ namespace System.Windows.Forms
         {
             if (formState[FormStateRenderSizeGrip] != 0)
             {
-                int x = NativeMethods.Util.LOWORD(m.LParam);
-                int y = NativeMethods.Util.HIWORD(m.LParam);
+                int x = NativeMethods.Util.SignedLOWORD(m.LParam);
+                int y = NativeMethods.Util.SignedHIWORD(m.LParam);
 
                 // Convert to client coordinates
                 var pt = new Point(x, y);
