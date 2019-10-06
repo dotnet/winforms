@@ -319,7 +319,7 @@ namespace System.Windows.Forms
 
                                     if (uReason != msoloop.Main)
                                     {
-                                        UnsafeNativeMethods.PostQuitMessage((int)msg.wParam);
+                                        User32.PostQuitMessage((int)msg.wParam);
                                     }
 
                                     continueLoop = BOOL.FALSE;

@@ -9,6 +9,6 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL WaitMessage();
+        public static extern void PostQuitMessage(int nExitCode);
     }
 }

@@ -612,9 +612,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr WindowFromPoint(Point pt);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern void PostQuitMessage(int nExitCode);
-
         // This method is not available until Windows 8.1
         [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true)]
         public static extern uint GetDpiForWindow(HandleRef hWnd);
