@@ -1242,7 +1242,7 @@ namespace System.Windows.Forms
                         }
                         else if (User32.PeekMessageW(ref msg).IsFalse())
                         {
-                            UnsafeNativeMethods.WaitMessage();
+                            User32.WaitMessage();
                         }
                     }
                     return continueLoop;
