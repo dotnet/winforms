@@ -455,9 +455,6 @@ namespace System.Windows.Forms
         public static extern IntPtr GetForegroundWindow();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds, int dwWakeMask, int dwFlags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDesktopWindow();
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
