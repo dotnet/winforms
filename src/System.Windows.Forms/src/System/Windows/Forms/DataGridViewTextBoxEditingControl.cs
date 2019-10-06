@@ -229,7 +229,7 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
 
-            AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -375,24 +375,24 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override object GetPropertyValue(int propertyID)
+        internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
             switch (propertyID)
             {
-                case NativeMethods.UIA_ControlTypePropertyId:
-                    return NativeMethods.UIA_EditControlTypeId;
-                case NativeMethods.UIA_NamePropertyId:
+                case UiaCore.UIA.ControlTypePropertyId:
+                    return UiaCore.UIA.EditControlTypeId;
+                case UiaCore.UIA.NamePropertyId:
                     return Name;
-                case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
+                case UiaCore.UIA.IsValuePatternAvailablePropertyId:
                     return true;
             }
 
             return base.GetPropertyValue(propertyID);
         }
 
-        internal override bool IsPatternSupported(int patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == NativeMethods.UIA_ValuePatternId)
+            if (patternId == UiaCore.UIA.ValuePatternId)
             {
                 return true;
             }

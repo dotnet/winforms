@@ -5583,11 +5583,11 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_ToolBarControlTypeId;
+                    return UiaCore.UIA.ToolBarControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

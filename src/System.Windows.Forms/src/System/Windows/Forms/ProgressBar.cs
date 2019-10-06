@@ -848,10 +848,10 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_ValuePatternId ||
-                    patternId == NativeMethods.UIA_RangeValuePatternId)
+                if (patternId == UiaCore.UIA.ValuePatternId ||
+                    patternId == UiaCore.UIA.RangeValuePatternId)
                 {
                     return true;
                 }
@@ -859,24 +859,24 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ProgressBarControlTypeId;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ProgressBarControlTypeId;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.
                         return true;
-                    case NativeMethods.UIA_IsRangeValuePatternAvailablePropertyId:
-                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
-                    case NativeMethods.UIA_RangeValueIsReadOnlyPropertyId:
+                    case UiaCore.UIA.IsRangeValuePatternAvailablePropertyId:
+                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
+                    case UiaCore.UIA.RangeValueIsReadOnlyPropertyId:
                         return true;
-                    case NativeMethods.UIA_RangeValueLargeChangePropertyId:
-                    case NativeMethods.UIA_RangeValueSmallChangePropertyId:
+                    case UiaCore.UIA.RangeValueLargeChangePropertyId:
+                    case UiaCore.UIA.RangeValueSmallChangePropertyId:
                         return double.NaN;
                 }
 

@@ -2239,28 +2239,28 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                return patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId);
+                return patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId);
             }
 
-            internal override object GetPropertyValue(int propertyId)
+            internal override object GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return Owner.DataGridView.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                 }
 

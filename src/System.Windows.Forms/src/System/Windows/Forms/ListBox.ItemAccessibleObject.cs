@@ -182,38 +182,38 @@ namespace System.Windows.Forms
                 return CurrentIndex + 1; // Index is zero-based, Child ID is 1-based.
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return Bounds;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ListItemControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ListItemControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owningListBox.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_NativeWindowHandlePropertyId:
+                    case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _owningListBox.Handle;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case NativeMethods.UIA_IsSelectionItemPatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_SelectionItemPatternId);
-                    case NativeMethods.UIA_IsScrollItemPatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_ScrollItemPatternId);
+                    case UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.SelectionItemPatternId);
+                    case UiaCore.UIA.IsScrollItemPatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.ScrollItemPatternId);
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
@@ -224,11 +224,11 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_ScrollItemPatternId ||
-                    patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
-                    patternId == NativeMethods.UIA_SelectionItemPatternId)
+                if (patternId == UiaCore.UIA.ScrollItemPatternId ||
+                    patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                    patternId == UiaCore.UIA.SelectionItemPatternId)
                 {
                     return true;
                 }
@@ -290,13 +290,13 @@ namespace System.Windows.Forms
                 _owningListBox.SelectedIndex = CurrentIndex;
 
                 User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, BOOL.FALSE);
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-                RaiseAutomationEvent(NativeMethods.UIA_SelectionItem_ElementSelectedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
             }
 
             internal override void SetFocus()
             {
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 SelectItem();
             }
 

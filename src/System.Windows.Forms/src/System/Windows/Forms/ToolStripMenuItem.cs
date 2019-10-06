@@ -1359,13 +1359,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_MenuItemControlTypeId;
+                    return UiaCore.UIA.MenuItemControlTypeId;
                 }
-                else if (propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId)
+                else if (propertyID == UiaCore.UIA.AcceleratorKeyPropertyId)
                 {
                     return ownerItem.GetShortcutText();
                 }

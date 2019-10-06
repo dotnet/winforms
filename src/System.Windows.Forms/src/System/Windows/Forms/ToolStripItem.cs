@@ -4336,27 +4336,27 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return (object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
+                        return (object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return ownerItem.Enabled;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return ownerItem.Placement != ToolStripItemPlacement.Main;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return ownerItem.CanSelect;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return ownerItem.Selected;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
                 }
 
@@ -4731,7 +4731,7 @@ namespace System.Windows.Forms
                 ToolStrip root = ownerItem.RootToolStrip;
                 if (root != null && root.SupportsUiaProviders)
                 {
-                    RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                    RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }
             }
         }

@@ -213,9 +213,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsPatternSupported(int patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+            if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
             {
                 return ownerControl.DropDownStyle != ComboBoxStyle.Simple;
             }
@@ -223,11 +223,11 @@ namespace System.Windows.Forms
             return base.IsPatternSupported(patternId);
         }
 
-        internal override object GetPropertyValue(int propertyID)
+        internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId)
+            if (propertyID == UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId)
             {
-                return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
             }
 
             return base.GetPropertyValue(propertyID);

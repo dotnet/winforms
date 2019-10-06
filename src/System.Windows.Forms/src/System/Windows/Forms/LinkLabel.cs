@@ -2728,9 +2728,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
+                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
                     if (!Owner.Enabled)
                     {
@@ -2901,9 +2901,9 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
+                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
                     if (!link.Owner.Enabled)
                     {

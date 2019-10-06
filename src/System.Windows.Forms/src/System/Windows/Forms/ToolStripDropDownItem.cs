@@ -812,9 +812,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsPatternSupported(int patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId && owner.HasDropDownItems)
+            if (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.HasDropDownItems)
             {
                 return true;
             }
@@ -824,9 +824,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override object GetPropertyValue(int propertyID)
+        internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == NativeMethods.UIA_IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown)
+            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown)
             {
                 return !((ToolStripDropDown)owner.Owner).Visible;
             }

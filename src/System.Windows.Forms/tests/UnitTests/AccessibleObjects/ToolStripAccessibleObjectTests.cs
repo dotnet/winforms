@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
-            Assert.Equal(NativeConstants.UIA_ThumbControlTypeId, firstChild.GetPropertyValue(NativeConstants.UIA_ControlTypePropertyId));
+            Assert.Equal(UiaCore.UIA.ThumbControlTypeId, firstChild.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         }
     }
 }

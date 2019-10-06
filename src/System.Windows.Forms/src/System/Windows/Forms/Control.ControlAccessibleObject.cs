@@ -435,15 +435,15 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.OwnerControlIsNotALiveRegion);
                 }
 
-                return RaiseAutomationEvent(NativeMethods.UIA_LiveRegionChangedEventId);
+                return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
             }
 
             internal override bool IsIAccessibleExSupported()
                 => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion)
+                if (propertyID == UiaCore.UIA.LiveSettingPropertyId && Owner is IAutomationLiveRegion)
                 {
                     return ((IAutomationLiveRegion)Owner).LiveSetting;
                 }
@@ -452,14 +452,14 @@ namespace System.Windows.Forms
                 {
                     switch (propertyID)
                     {
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                             return Owner.CanSelect;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                        case NativeMethods.UIA_IsPasswordPropertyId:
+                        case UiaCore.UIA.IsOffscreenPropertyId:
+                        case UiaCore.UIA.IsPasswordPropertyId:
                             return false;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
+                        case UiaCore.UIA.AccessKeyPropertyId:
                             return string.Empty;
-                        case NativeMethods.UIA_HelpTextPropertyId:
+                        case UiaCore.UIA.HelpTextPropertyId:
                             return Help ?? string.Empty;
                     }
                 }

@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             ComboBox comboBox = new ComboBox();
             comboBox.AccessibleName = name;
             comboBox.CreateControl(false);
-            object editAccessibleName = comboBox.ChildEditAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
+            object editAccessibleName = comboBox.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
             Assert.NotNull(editAccessibleName);
         }
     }

@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1005,14 +1006,14 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_ImageControlTypeId;
+                    return UiaCore.UIA.ImageControlTypeId;
                 }
 
-                if (propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
+                if (propertyID == UiaCore.UIA.IsInvokePatternAvailablePropertyId)
                 {
                     return true;
                 }
@@ -1020,9 +1021,9 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_InvokePatternId)
+                if (patternId == UiaCore.UIA.InvokePatternId)
                 {
                     return true;
                 }

@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+using System.ComponentModel;
+using System.Windows.Forms.Design;
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Windows.Forms.Design;
-
-    /// <devdoc/>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripButton : ToolStripItem
     {
@@ -295,12 +294,12 @@ namespace System.Windows.Forms
                 this.ownerItem = ownerItem;
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ButtonControlTypeId;
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ButtonControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

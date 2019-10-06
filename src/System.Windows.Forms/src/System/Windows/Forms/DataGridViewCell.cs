@@ -5105,7 +5105,7 @@ namespace System.Windows.Forms
             {
                 base.SetFocus();
 
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             internal override int[] RuntimeId
@@ -5197,50 +5197,50 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return (State & AccessibleStates.Focused) == AccessibleStates.Focused; // Announce the cell when focusing.
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return owner.DataGridView.Enabled;
-                    case NativeMethods.UIA_AutomationIdPropertyId:
+                    case UiaCore.UIA.AutomationIdPropertyId:
                         return AutomationId;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_GridItemContainingGridPropertyId:
+                    case UiaCore.UIA.GridItemContainingGridPropertyId:
                         return Owner.DataGridView.AccessibilityObject;
-                    case NativeMethods.UIA_IsTableItemPatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_TableItemPatternId);
-                    case NativeMethods.UIA_IsGridItemPatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_GridItemPatternId);
+                    case UiaCore.UIA.IsTableItemPatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.TableItemPatternId);
+                    case UiaCore.UIA.IsGridItemPatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.GridItemPatternId);
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
-                    patternId == NativeMethods.UIA_InvokePatternId ||
-                    patternId == NativeMethods.UIA_ValuePatternId)
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                    patternId == UiaCore.UIA.InvokePatternId ||
+                    patternId == UiaCore.UIA.ValuePatternId)
                 {
                     return true;
                 }
 
-                if ((patternId == NativeMethods.UIA_TableItemPatternId ||
-                    patternId == NativeMethods.UIA_GridItemPatternId) &&
+                if ((patternId == UiaCore.UIA.TableItemPatternId ||
+                    patternId == UiaCore.UIA.GridItemPatternId) &&
                     // We don't want to implement patterns for header cells
                     owner.ColumnIndex != -1 && owner.RowIndex != -1)
                 {

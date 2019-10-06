@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -30,7 +31,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             dataGridView.Columns.Add(column);
             dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Ascending);
 
-            string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(NativeMethods.UIA_ItemStatusPropertyId)?.ToString();
+            string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId)?.ToString();
             string expectedStatus = "Sorted ascending by Some column.";
             Assert.Equal(expectedStatus, itemStatus);
         }

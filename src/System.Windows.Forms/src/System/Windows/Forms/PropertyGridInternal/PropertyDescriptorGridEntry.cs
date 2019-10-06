@@ -1224,9 +1224,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_ValuePatternId)
+                if (patternId == UiaCore.UIA.ValuePatternId)
                 {
                     return true;
                 }
@@ -1234,17 +1234,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
+                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
                     return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
                 }
-                else if (propertyID == NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId)
+                else if (propertyID == UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId)
                 {
                     return string.Empty;
                 }
-                else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId)
+                else if (propertyID == UiaCore.UIA.IsValuePatternAvailablePropertyId)
                 {
                     return true;
                 }
