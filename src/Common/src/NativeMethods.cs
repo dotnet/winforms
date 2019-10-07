@@ -220,8 +220,6 @@ namespace System.Windows.Forms
         CDIS_MARKED = 0x0080,
         CDIS_INDETERMINATE = 0x0100,
         CDIS_SHOWKEYBOARDCUES = 0x0200,
-        CLR_NONE = unchecked((int)0xFFFFFFFF),
-        CLR_DEFAULT = unchecked((int)0xFF000000),
         CCM_SETVERSION = (0x2000 + 0x7),
         CCM_GETVERSION = (0x2000 + 0x8),
         CCS_NORESIZE = 0x00000004,
@@ -446,29 +444,7 @@ namespace System.Windows.Forms
         ICON_SMALL = 0,
         ICON_BIG = 1,
         IMAGE_ICON = 1,
-        IMAGE_CURSOR = 2,
-        ILC_MASK = 0x0001,
-        ILC_COLOR = 0x0000,
-        ILC_COLOR4 = 0x0004,
-        ILC_COLOR8 = 0x0008,
-        ILC_COLOR16 = 0x0010,
-        ILC_COLOR24 = 0x0018,
-        ILC_COLOR32 = 0x0020,
-        ILC_MIRROR = 0x00002000,
-        ILD_NORMAL = 0x0000,
-        ILD_TRANSPARENT = 0x0001,
-        ILD_MASK = 0x0010,
-        ILD_ROP = 0x0040,
-
-        // ImageList
-        //
-        ILP_NORMAL = 0,
-        ILP_DOWNLEVEL = 1,
-        ILS_NORMAL = 0x0,
-        ILS_GLOW = 0x1,
-        ILS_SHADOW = 0x2,
-        ILS_SATURATE = 0x4,
-        ILS_ALPHA = 0x8;
+        IMAGE_CURSOR = 2;
 
         public const int IDM_PRINT = 27,
         IDM_PAGESETUP = 2004,
@@ -1511,20 +1487,6 @@ namespace System.Windows.Forms
             public int fState = 0;
             public int Frame = 0;
             public int crEffect = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class IMAGEINFO
-        {
-            public IntPtr hbmImage = IntPtr.Zero;
-            public IntPtr hbmMask = IntPtr.Zero;
-            public int Unused1 = 0;
-            public int Unused2 = 0;
-            // rcImage was a by-value RECT structure
-            public int rcImage_left = 0;
-            public int rcImage_top = 0;
-            public int rcImage_right = 0;
-            public int rcImage_bottom = 0;
         }
 
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);

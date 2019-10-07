@@ -747,9 +747,13 @@ namespace System.Windows.Forms.Design
                     ref rc2,
                     User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
 
-                SafeNativeMethods.ImageList_Draw(new HandleRef(imagelist, imagelist.Handle), imageIndex, new HandleRef(null, dc),
-                                       PADDING_HORZ, rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
-                                       NativeMethods.ILD_TRANSPARENT);
+                ComCtl32.ImageList.Draw(
+                    imagelist,
+                    imageIndex,
+                    dc,
+                    PADDING_HORZ,
+                    rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
+                    ComCtl32.ILD.TRANSPARENT);
 
                 // Draw the hot-tracking border if needed
                 if ((state & STATE_HOT) != 0)

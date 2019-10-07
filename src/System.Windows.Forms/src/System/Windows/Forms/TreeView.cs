@@ -2138,7 +2138,7 @@ namespace System.Windows.Forms
             IntPtr handleOld = SendMessage(NativeMethods.TVM_SETIMAGELIST, NativeMethods.TVSIL_STATE, handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
-                SafeNativeMethods.ImageList_Destroy_Native(new HandleRef(this, handleOld));
+                ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
             }
         }
 
@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms
             IntPtr handle = SendMessage(NativeMethods.TVM_GETIMAGELIST, NativeMethods.TVSIL_STATE, IntPtr.Zero);
             if (handle != IntPtr.Zero)
             {
-                SafeNativeMethods.ImageList_Destroy_Native(new HandleRef(this, handle));
+                ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
                 if (reset)
                 {
                     SendMessage(NativeMethods.TVM_SETIMAGELIST, NativeMethods.TVSIL_STATE, IntPtr.Zero);
