@@ -2795,8 +2795,8 @@ namespace System.Windows.Forms
                         // real item state to be sure.
                         if (!HideSelection)
                         {
-                            int realState = GetItemState((int)(nmcd->nmcd.dwItemSpec));
-                            if ((realState & NativeMethods.LVIS_SELECTED) == 0)
+                            ComCtl32.LVIS realState = GetItemState((int)(nmcd->nmcd.dwItemSpec));
+                            if ((realState & ComCtl32.LVIS.SELECTED) == 0)
                             {
                                 state &= ~NativeMethods.CDIS_SELECTED;
                             }
@@ -3551,22 +3551,22 @@ namespace System.Windows.Forms
             return pt;
         }
 
-        internal int GetItemState(int index)
+        internal ComCtl32.LVIS GetItemState(int index)
         {
-            return GetItemState(index, NativeMethods.LVIS_FOCUSED | NativeMethods.LVIS_SELECTED | NativeMethods.LVIS_CUT |
-                                NativeMethods.LVIS_DROPHILITED | NativeMethods.LVIS_OVERLAYMASK |
-                                NativeMethods.LVIS_STATEIMAGEMASK);
+            return GetItemState(index, ComCtl32.LVIS.FOCUSED | ComCtl32.LVIS.SELECTED | ComCtl32.LVIS.CUT |
+                                ComCtl32.LVIS.DROPHILITED | ComCtl32.LVIS.OVERLAYMASK |
+                                ComCtl32.LVIS.STATEIMAGEMASK);
         }
 
-        internal int GetItemState(int index, int mask)
+        internal ComCtl32.LVIS GetItemState(int index, ComCtl32.LVIS mask)
         {
             if (index < 0 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
-            return unchecked((int)(long)SendMessage((int)LVM.GETITEMSTATE, index, mask));
+            Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
+            return unchecked((ComCtl32.LVIS)(long)SendMessage((int)LVM.GETITEMSTATE, index, (int)mask));
         }
 
         /// <summary>
@@ -4544,9 +4544,9 @@ namespace System.Windows.Forms
             // in VirtualMode we have to tell the list view to ask for the list view item's state image index
             if (VirtualMode)
             {
-                int callbackMask = unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETCALLBACKMASK, 0, 0));
-                callbackMask |= NativeMethods.LVIS_STATEIMAGEMASK;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCALLBACKMASK, callbackMask, 0);
+                ComCtl32.LVIS callbackMask = unchecked((ComCtl32.LVIS)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETCALLBACKMASK, 0, 0));
+                callbackMask |= ComCtl32.LVIS.STATEIMAGEMASK;
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCALLBACKMASK, (int)callbackMask, 0);
             }
 
             if (ComctlSupportsVisualStyles)
@@ -5325,14 +5325,14 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEMPOSITION32, index, ref pt);
         }
 
-        internal void SetItemState(int index, int state, int mask)
+        internal void SetItemState(int index, ComCtl32.LVIS state, ComCtl32.LVIS mask)
         {
             if (index < -1 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            Debug.Assert(index == -1 || IsHandleCreated, "How did we add items without a handle?");
 
+            Debug.Assert(index == -1 || IsHandleCreated, "How did we add items without a handle?");
             if (IsHandleCreated)
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
@@ -6219,8 +6219,8 @@ namespace System.Windows.Forms
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
-                            CheckState oldState = (CheckState)(((nmlv->uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                            CheckState newState = (CheckState)(((nmlv->uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState oldState = (CheckState)(((int)(nmlv->uOldState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState newState = (CheckState)(((int)(nmlv->uNewState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                             if (oldState != newState)
                             {
@@ -6240,8 +6240,8 @@ namespace System.Windows.Forms
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
-                            CheckState oldValue = (CheckState)(((nmlv->uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                            CheckState newValue = (CheckState)(((nmlv->uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState oldValue = (CheckState)(((int)(nmlv->uOldState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState newValue = (CheckState)(((int)(nmlv->uNewState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                             if (newValue != oldValue)
                             {
@@ -6252,8 +6252,8 @@ namespace System.Windows.Forms
                                 AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
                             }
 
-                            int oldState = nmlv->uOldState & NativeMethods.LVIS_SELECTED;
-                            int newState = nmlv->uNewState & NativeMethods.LVIS_SELECTED;
+                            ComCtl32.LVIS oldState = nmlv->uOldState & ComCtl32.LVIS.SELECTED;
+                            ComCtl32.LVIS newState = nmlv->uNewState & ComCtl32.LVIS.SELECTED;
                             // Windows common control always fires
                             // this event twice, once with newState, oldState, and again with
                             // oldState, newState.
@@ -6434,7 +6434,7 @@ namespace System.Windows.Forms
                                 dispInfo.item.iIndent = lvItem.IndentCount;
                             }
 
-                            if ((dispInfo.item.stateMask & NativeMethods.LVIS_STATEIMAGEMASK) != 0)
+                            if ((dispInfo.item.stateMask & ComCtl32.LVIS.STATEIMAGEMASK) != 0)
                             {
                                 dispInfo.item.state |= lvItem.RawStateImageIndex;
                             }
@@ -6447,14 +6447,14 @@ namespace System.Windows.Forms
                         if (VirtualMode && m.LParam != IntPtr.Zero)
                         {
                             NativeMethods.NMLVODSTATECHANGE odStateChange = (NativeMethods.NMLVODSTATECHANGE)m.GetLParam(typeof(NativeMethods.NMLVODSTATECHANGE));
-                            bool selectedChanged = (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != (odStateChange.uOldState & NativeMethods.LVIS_SELECTED);
+                            bool selectedChanged = (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange.uOldState & ComCtl32.LVIS.SELECTED);
                             if (selectedChanged)
                             {
                                 // we have to substract 1 from iTo
                                 //
                                 //
                                 int iTo = odStateChange.iTo;
-                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != 0);
+                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
                             }
                         }
@@ -7548,7 +7548,7 @@ namespace System.Windows.Forms
                     }
                     if (owner.IsHandleCreated)
                     {
-                        owner.SetItemState(itemIndex, NativeMethods.LVIS_SELECTED, NativeMethods.LVIS_SELECTED);
+                        owner.SetItemState(itemIndex, ComCtl32.LVIS.SELECTED, ComCtl32.LVIS.SELECTED);
                         return Count;
                     }
                     else
@@ -7575,7 +7575,7 @@ namespace System.Windows.Forms
                 }
                 if (owner.IsHandleCreated)
                 {
-                    owner.SetItemState(-1, 0, NativeMethods.LVIS_SELECTED);
+                    owner.SetItemState(-1, 0, ComCtl32.LVIS.SELECTED);
                 }
             }
 
@@ -7610,7 +7610,7 @@ namespace System.Windows.Forms
                     }
                     if (owner.IsHandleCreated)
                     {
-                        owner.SetItemState(itemIndex, 0, NativeMethods.LVIS_SELECTED);
+                        owner.SetItemState(itemIndex, 0, ComCtl32.LVIS.SELECTED);
                     }
                 }
                 else

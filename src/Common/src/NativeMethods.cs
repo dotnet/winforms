@@ -566,12 +566,6 @@ namespace System.Windows.Forms
         LVIF_STATE = 0x0008,
         LVIF_GROUPID = 0x0100,
         LVIF_COLUMNS = 0x0200,
-        LVIS_FOCUSED = 0x0001,
-        LVIS_SELECTED = 0x0002,
-        LVIS_CUT = 0x0004,
-        LVIS_DROPHILITED = 0x0008,
-        LVIS_OVERLAYMASK = 0x0F00,
-        LVIS_STATEIMAGEMASK = 0xF000,
         LVNI_FOCUSED = 0x0001,
         LVNI_SELECTED = 0x0002,
         LVIR_BOUNDS = 0,
@@ -2055,8 +2049,8 @@ namespace System.Windows.Forms
             public User32.NMHDR hdr;
             public int iItem;
             public int iSubItem;
-            public int uNewState;
-            public int uOldState;
+            public ComCtl32.LVIS uNewState;
+            public ComCtl32.LVIS uOldState;
             public int uChanged;
             public IntPtr lParam;
         }
@@ -2550,8 +2544,8 @@ namespace System.Windows.Forms
             public int mask;
             public int iItem;
             public int iSubItem;
-            public int state;
-            public int stateMask;
+            public ComCtl32.LVIS state;
+            public ComCtl32.LVIS stateMask;
             public string pszText;
             public int cchTextMax;
             public int iImage;
@@ -2595,8 +2589,8 @@ namespace System.Windows.Forms
             public int mask;
             public int iItem;
             public int iSubItem;
-            public int state;
-            public int stateMask;
+            public ComCtl32.LVIS state;
+            public ComCtl32.LVIS stateMask;
             public IntPtr /*string*/   pszText;
             public int cchTextMax;
             public int iImage;
@@ -2685,8 +2679,8 @@ namespace System.Windows.Forms
             public User32.NMHDR hdr;
             public int iFrom = 0;
             public int iTo = 0;
-            public int uNewState = 0;
-            public int uOldState = 0;
+            public ComCtl32.LVIS uNewState;
+            public ComCtl32.LVIS uOldState;
         }
 
         [StructLayout(LayoutKind.Sequential)]
