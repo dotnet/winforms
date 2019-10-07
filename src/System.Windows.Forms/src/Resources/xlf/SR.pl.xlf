@@ -5996,11 +5996,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Obraz musi mieć format mapy bitowej.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">Po użyciu elementu ImageList nie można zmienić listy '{0}', chyba że jest ona pusta.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Liczba kolorów używanych do realizacji obrazów.</target>

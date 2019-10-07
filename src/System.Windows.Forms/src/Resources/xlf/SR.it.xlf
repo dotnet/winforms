@@ -5996,11 +5996,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">L'immagine deve essere una bitmap.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">Se l'elenco non è vuoto, non è possibile modificare '{0}' dopo che ImageList è stato utilizzato.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Il numero di colori da utilizzare per il rendering delle immagini.</target>

@@ -956,11 +956,6 @@ namespace System.Windows.Forms
                 originals = new ArrayList(); // spoof it into thinking this is the first CreateHandle
             }
 
-            if (originals == null)
-            {
-                throw new InvalidOperationException(string.Format(SR.ImageListCantRecreate, reason));
-            }
-
             DestroyHandle();
             CreateHandle();
             OnRecreateHandle(EventArgs.Empty);

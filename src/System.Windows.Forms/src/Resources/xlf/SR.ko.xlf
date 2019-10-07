@@ -5996,11 +5996,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">이미지는 비트맵이어야 합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">목록이 비어 있지 않으면 ImageList를 사용한 후에 '{0}'을(를) 변경할 수 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">이미지를 렌더링하는 데 사용할 색 수입니다.</target>
