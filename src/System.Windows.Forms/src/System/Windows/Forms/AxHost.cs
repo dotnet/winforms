@@ -3275,40 +3275,35 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            return (GetOcx() is NativeMethods.ISpecifyPropertyPages);
+            return GetOcx() is Ole32.ISpecifyPropertyPages;
         }
 
-        public bool HasPropertyPages()
+        public unsafe bool HasPropertyPages()
         {
             if (!CanShowPropertyPages())
             {
                 return false;
             }
 
-            NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages)GetOcx();
+            Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
+            var uuids = new Ole32.CAUUID();
             try
             {
-                NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
-                try
+                HRESULT hr = ispp.GetPages(&uuids);
+                if (!hr.Succeeded())
                 {
-                    ispp.GetPages(uuids);
-                    if (uuids.cElems > 0)
-                    {
-                        return true;
-                    }
+                    return false;
                 }
-                finally
-                {
-                    if (uuids.pElems != IntPtr.Zero)
-                    {
-                        Marshal.FreeCoTaskMem(uuids.pElems);
-                    }
-                }
+
+                return uuids.cElems > 0;
             }
-            catch
+            finally
             {
+                if (uuids.pElems != null)
+                {
+                    Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                }
             }
-            return false;
         }
 
         private unsafe void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
@@ -3374,7 +3369,7 @@ namespace System.Windows.Forms
             ShowPropertyPages(ParentInternal);
         }
 
-        public void ShowPropertyPages(Control control)
+        public unsafe void ShowPropertyPages(Control control)
         {
             try
             {
@@ -3383,22 +3378,13 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages)GetOcx();
-                NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
-                try
-                {
-                    ispp.GetPages(uuids);
-                    if (uuids.cElems <= 0)
-                    {
-                        return;
-                    }
-                }
-                catch
+                Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
+                var uuids = new Ole32.CAUUID();
+                HRESULT hr = ispp.GetPages(&uuids);
+                if (!hr.Succeeded() || uuids.cElems == 0)
                 {
                     return;
                 }
-
-                // State oldOcxState = OcxState;
 
                 IDesignerHost host = null;
                 if (Site != null)
@@ -3417,7 +3403,7 @@ namespace System.Windows.Forms
                     string name = null;
                     object o = GetOcx();
                     IntPtr handle = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
-                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(this, handle), 0, 0, name, 1, ref o, uuids.cElems, new HandleRef(null, uuids.pElems), Application.CurrentCulture.LCID, 0, IntPtr.Zero);
+                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(this, handle), 0, 0, name, 1, ref o, uuids.cElems, (IntPtr)uuids.pElems, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
                 }
                 finally
                 {
@@ -3431,9 +3417,9 @@ namespace System.Windows.Forms
                         trans.Commit();
                     }
 
-                    if (uuids.pElems != IntPtr.Zero)
+                    if (uuids.pElems != null)
                     {
-                        Marshal.FreeCoTaskMem(uuids.pElems);
+                        Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
                     }
                 }
             }

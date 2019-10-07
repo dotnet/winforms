@@ -39,13 +39,13 @@ namespace System.Windows.Forms
         public static extern int CommDlgExtendedError();
 
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int objects, [MarshalAs(UnmanagedType.Interface)] ref object pobjs, int pages, HandleRef pClsid, int locale, int reserved1, IntPtr reserved2);
+        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int cObjects, [MarshalAs(UnmanagedType.Interface)] ref object pobjs, uint cPages, IntPtr pClsid, int locale, int reserved1, IntPtr reserved2);
 
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int objects, [MarshalAs(UnmanagedType.Interface)] ref object pobjs, int pages, Guid[] pClsid, int locale, int reserved1, IntPtr reserved2);
+        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int cObjects, [MarshalAs(UnmanagedType.Interface)] ref object pobjs, uint cPages, Guid[] pClsid, int locale, int reserved1, IntPtr reserved2);
 
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int objects, HandleRef lplpobjs, int pages, HandleRef pClsid, int locale, int reserved1, IntPtr reserved2);
+        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int cObjects, HandleRef lplpobjs, uint cPages, IntPtr pClsid, int locale, int reserved1, IntPtr reserved2);
 
         [DllImport(ExternDll.Hhctrl, CharSet = CharSet.Auto)]
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, int dwData);
