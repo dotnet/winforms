@@ -4,6 +4,7 @@
 
 using Xunit;
 using System.ComponentModel;
+using System.Collections.Generic;
 using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
@@ -163,15 +164,91 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void CheckedListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var box = new CheckedListBox
+            using var control = new CheckedListBox
             {
                 Padding = value
             };
-            Assert.Equal(expected, box.Padding);
+            Assert.Equal(expected, control.Padding);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            box.Padding = value;
-            Assert.Equal(expected, box.Padding);
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Padding_Set_TestData()
+        {
+            yield return new object[] { new Padding(), new Padding(), 0, 0 };
+            yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
+            yield return new object[] { new Padding(1), new Padding(1), 1, 1 };
+            yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
+        }
+
+        [Theory]
+        [MemberData(nameof(Padding_Set_TestData))]
+        public void CheckedListBox_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
+        {
+            using var control = new CheckedListBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Fact]
+        public void CheckedListBox_Padding_SetWithHandler_CallsPaddingChanged()
+        {
+            using var control = new CheckedListBox();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Equal(control, sender);
+                Assert.Equal(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.PaddingChanged += handler;
+
+            // Set different.
+            var padding1 = new Padding(1);
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            var padding2 = new Padding(2);
+            control.Padding = padding2;
+            Assert.Equal(padding2, control.Padding);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.PaddingChanged -= handler;
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(2, callCount);
         }
 
         [Theory]
