@@ -15,6 +15,11 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
+  <!-- Allow SourceLink to work for strongly types resource files (SR) by embeddeding generated files into the PDBs -->
+  <PropertyGroup>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
   <!-- For the purposes of generating code coverage as part of the build -->
   <PropertyGroup Condition="'$(Coverage)' == 'true'">
     <!-- Coverlet assumes PDB files exist on disk https://github.com/tonerdo/coverlet/issues/362 -->

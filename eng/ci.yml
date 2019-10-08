@@ -160,8 +160,7 @@ stages:
       # Symbol validation isn't being very reliable lately. This should be enabled back
       # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
       enableSymbolValidation: false
-      # Sourcelink validation isn't passing for Arcade due to some regressions. This should be
-      # enabled back once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
+      # SourceLink validation
       enableSourceLinkValidation: true
       # This is to enable SDL runs part of Post-Build Validation Stage
       # Disabled for now until winforms onboards to TSA
