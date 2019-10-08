@@ -619,15 +619,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the computer name of the current system.
         /// </summary>
-        public static string ComputerName
-        {
-            get
-            {
-                var sb = new StringBuilder(256);
-                UnsafeNativeMethods.GetComputerName(sb, new int[] { sb.Capacity });
-                return sb.ToString();
-            }
-        }
+        public static string ComputerName => Environment.MachineName;
 
         /// <summary>
         ///  Gets the user's domain name.
@@ -669,15 +661,7 @@ namespace System.Windows.Forms
         ///  Gets the user name for the current thread, that is, the name of the user currently logged onto
         ///  the system.
         /// </summary>
-        public static string UserName
-        {
-            get
-            {
-                var sb = new StringBuilder(256);
-                UnsafeNativeMethods.GetUserName(sb, new int[] { sb.Capacity });
-                return sb.ToString();
-            }
-        }
+        public static string UserName => Environment.UserName;
 
         private static void EnsureSystemEvents()
         {
