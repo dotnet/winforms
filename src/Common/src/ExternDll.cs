@@ -7,7 +7,6 @@ namespace System
     internal static class ExternDll
     {
         public const string Activeds = "activeds.dll";
-        public const string Advapi32 = "advapi32.dll";
         public const string Comctl32 = "comctl32.dll";
         public const string Comdlg32 = "comdlg32.dll";
         public const string Gdi32 = "gdi32.dll";

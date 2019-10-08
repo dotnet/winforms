@@ -445,12 +445,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefMDIChildProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern bool GetComputerName(StringBuilder lpBuffer, int[] nSize);
-
-        [DllImport(ExternDll.Advapi32, CharSet = CharSet.Auto)]
-        public static extern bool GetUserName(StringBuilder lpBuffer, int[] nSize);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetProcessWindowStation();
 
