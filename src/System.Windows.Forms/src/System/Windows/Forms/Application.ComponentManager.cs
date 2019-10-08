@@ -319,7 +319,7 @@ namespace System.Windows.Forms
 
                                     if (uReason != msoloop.Main)
                                     {
-                                        UnsafeNativeMethods.PostQuitMessage((int)msg.wParam);
+                                        User32.PostQuitMessage((int)msg.wParam);
                                     }
 
                                     continueLoop = BOOL.FALSE;
@@ -394,7 +394,7 @@ namespace System.Windows.Forms
                                     // by calling PeekMessage.
                                     if (User32.PeekMessageW(ref msg, IntPtr.Zero, 0, 0, User32.PM.NOREMOVE).IsFalse())
                                     {
-                                        UnsafeNativeMethods.WaitMessage();
+                                        User32.WaitMessage();
                                     }
                                 }
                             }
