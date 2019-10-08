@@ -62,12 +62,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  These are the interfaces we recognize for extended browsing.
         /// </summary>
-        private static readonly Type[] extendedInterfaces = new Type[]{
-                                                        typeof(NativeMethods.ICategorizeProperties),
-                                                        typeof(NativeMethods.IProvidePropertyBuilder),
-                                                        typeof(Ole32.IPerPropertyBrowsing),
-                                                        typeof(NativeMethods.IVsPerPropertyBrowsing),
-                                                        typeof(NativeMethods.IManagedPerPropertyBrowsing)};
+        private static readonly Type[] extendedInterfaces = new Type[]
+        {
+            typeof(VSSDK.ICategorizeProperties),
+            typeof(NativeMethods.IProvidePropertyBuilder),
+            typeof(Ole32.IPerPropertyBrowsing),
+            typeof(NativeMethods.IVsPerPropertyBrowsing),
+            typeof(NativeMethods.IManagedPerPropertyBrowsing)
+        };
 
         /// <summary>
         ///  These are the classes of handlers corresponding to the extended

@@ -10,66 +10,52 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHandler
     {
-        public override Type Interface
-        {
-            get
-            {
-                return typeof(NativeMethods.ICategorizeProperties);
-            }
-        }
+        public override Type Interface => typeof(VSSDK.ICategorizeProperties);
 
-        private string GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
+        private unsafe string GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
         {
-            if (obj == null)
+            if (!(obj is VSSDK.ICategorizeProperties catObj))
             {
                 return null;
             }
 
-            if (obj is NativeMethods.ICategorizeProperties catObj)
+            VSSDK.PROPCAT categoryID = 0;
+            if (catObj.MapPropertyToCategory(dispid, &categoryID) != HRESULT.S_OK)
             {
-                try
-                {
-                    int categoryID = 0;
-
-                    if (catObj.MapPropertyToCategory(dispid, ref categoryID) == HRESULT.S_OK)
-                    {
-
-                        switch (categoryID)
-                        {
-                            case NativeMethods.ActiveX.PROPCAT_Nil:
-                                return "";
-                            case NativeMethods.ActiveX.PROPCAT_Misc:
-                                return SR.PropertyCategoryMisc;
-                            case NativeMethods.ActiveX.PROPCAT_Font:
-                                return SR.PropertyCategoryFont;
-                            case NativeMethods.ActiveX.PROPCAT_Position:
-                                return SR.PropertyCategoryPosition;
-                            case NativeMethods.ActiveX.PROPCAT_Appearance:
-                                return SR.PropertyCategoryAppearance;
-                            case NativeMethods.ActiveX.PROPCAT_Behavior:
-                                return SR.PropertyCategoryBehavior;
-                            case NativeMethods.ActiveX.PROPCAT_Data:
-                                return SR.PropertyCategoryData;
-                            case NativeMethods.ActiveX.PROPCAT_List:
-                                return SR.PropertyCategoryList;
-                            case NativeMethods.ActiveX.PROPCAT_Text:
-                                return SR.PropertyCategoryText;
-                            case NativeMethods.ActiveX.PROPCAT_Scale:
-                                return SR.PropertyCategoryScale;
-                            case NativeMethods.ActiveX.PROPCAT_DDE:
-                                return SR.PropertyCategoryDDE;
-                        }
-
-                        if (NativeMethods.S_OK == catObj.GetCategoryName(categoryID, CultureInfo.CurrentCulture.LCID, out string categoryName))
-                        {
-                            return categoryName;
-                        }
-                    }
-                }
-                catch
-                {
-                }
+                return null;
             }
+    
+            switch (categoryID)
+            {
+                case VSSDK.PROPCAT.Nil:
+                    return string.Empty;
+                case VSSDK.PROPCAT.Misc:
+                    return SR.PropertyCategoryMisc;
+                case VSSDK.PROPCAT.Font:
+                    return SR.PropertyCategoryFont;
+                case VSSDK.PROPCAT.Position:
+                    return SR.PropertyCategoryPosition;
+                case VSSDK.PROPCAT.Appearance:
+                    return SR.PropertyCategoryAppearance;
+                case VSSDK.PROPCAT.Behavior:
+                    return SR.PropertyCategoryBehavior;
+                case VSSDK.PROPCAT.Data:
+                    return SR.PropertyCategoryData;
+                case VSSDK.PROPCAT.List:
+                    return SR.PropertyCategoryList;
+                case VSSDK.PROPCAT.Text:
+                    return SR.PropertyCategoryText;
+                case VSSDK.PROPCAT.Scale:
+                    return SR.PropertyCategoryScale;
+                case VSSDK.PROPCAT.DDE:
+                    return SR.PropertyCategoryDDE;
+            }
+
+            if (catObj.GetCategoryName(categoryID, (uint)CultureInfo.CurrentCulture.LCID, out string categoryName) == HRESULT.S_OK)
+            {
+                return categoryName;
+            }
+
             return null;
         }
 

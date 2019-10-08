@@ -193,7 +193,7 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObject;
         private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
         private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
-        private NativeMethods.ICategorizeProperties iCategorizeProperties;
+        private VSSDK.ICategorizeProperties iCategorizeProperties;
         private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
         private Ole32.IPersistStream iPersistStream;
         private Ole32.IPersistStreamInit iPersistStreamInit;
@@ -2589,54 +2589,45 @@ namespace System.Windows.Forms
             return instance;
         }
 
-        private CategoryAttribute GetCategoryForDispid(Ole32.DispatchID dispid)
+        private unsafe CategoryAttribute GetCategoryForDispid(Ole32.DispatchID dispid)
         {
-            NativeMethods.ICategorizeProperties icp = GetCategorizeProperties();
+            VSSDK.ICategorizeProperties icp = GetCategorizeProperties();
             if (icp == null)
             {
                 return null;
             }
 
-            CategoryAttribute rval = null;
-            int propcat = 0;
-            try
+            VSSDK.PROPCAT propcat = 0;
+            HRESULT hr = icp.MapPropertyToCategory(dispid, &propcat);
+            if (hr != HRESULT.S_OK || propcat == 0)
             {
-                icp.MapPropertyToCategory(dispid, ref propcat);
-                if (propcat != 0)
-                {
-                    int cat = -propcat;
-                    if (cat > 0 && cat < categoryNames.Length && categoryNames[cat] != null)
-                    {
-                        return categoryNames[cat];
-                    }
-                    cat = -cat;
-                    int key = cat;
-                    if (objectDefinedCategoryNames != null)
-                    {
-                        rval = (CategoryAttribute)objectDefinedCategoryNames[key];
-                        if (rval != null)
-                        {
-                            return rval;
-                        }
-                    }
+                return null;
+            }
 
-                    int hr = icp.GetCategoryName(cat, CultureInfo.CurrentCulture.LCID, out string name);
-                    if (hr == NativeMethods.S_OK && name != null)
-                    {
-                        rval = new CategoryAttribute(name);
-                        if (objectDefinedCategoryNames == null)
-                        {
-                            objectDefinedCategoryNames = new Hashtable();
-                        }
-                        objectDefinedCategoryNames.Add(key, rval);
-                        return rval;
-                    }
+            int index = -(int)propcat;
+            if (index > 0 && index < categoryNames.Length && categoryNames[index] != null)
+            {
+                return categoryNames[index];
+            }
+
+            if (objectDefinedCategoryNames != null)
+            {
+                CategoryAttribute rval = (CategoryAttribute)objectDefinedCategoryNames[propcat];
+                if (rval != null)
+                {
+                    return rval;
                 }
             }
-            catch (Exception t)
+
+            hr = icp.GetCategoryName(propcat, (uint)CultureInfo.CurrentCulture.LCID, out string name);
+            if (hr == HRESULT.S_OK && name != null)
             {
-                Debug.Fail(t.ToString());
+                var rval = new CategoryAttribute(name);
+                objectDefinedCategoryNames ??= new Hashtable();
+                objectDefinedCategoryNames.Add(propcat, rval);
+                return rval;
             }
+
             return null;
         }
 
@@ -4906,14 +4897,14 @@ namespace System.Windows.Forms
             return iOleInPlaceObject;
         }
 
-        private NativeMethods.ICategorizeProperties GetCategorizeProperties()
+        private VSSDK.ICategorizeProperties GetCategorizeProperties()
         {
             if (iCategorizeProperties == null && !axState[checkedCP] && instance != null)
             {
                 axState[checkedCP] = true;
-                if (instance is NativeMethods.ICategorizeProperties)
+                if (instance is VSSDK.ICategorizeProperties)
                 {
-                    iCategorizeProperties = (NativeMethods.ICategorizeProperties)instance;
+                    iCategorizeProperties = (VSSDK.ICategorizeProperties)instance;
                 }
             }
             return iCategorizeProperties;
