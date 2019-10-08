@@ -10,12 +10,6 @@ namespace System.Windows.Forms.Internal
 {
     internal static partial class IntUnsafeNativeMethods
     {
-        // Drawing.
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern int GetNearestColor(HandleRef hDC, int color);
-
-        /// <remarks>
         ///  This method is currently used just for drawing the text background
         ///  (ComponentEditorForm.cs) and not for rendering text.
         ///  Prefer using DrawText over this method if possible, it handles issues on older
