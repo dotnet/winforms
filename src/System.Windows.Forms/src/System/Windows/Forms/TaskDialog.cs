@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     /// <remarks>
     /// <para>
     ///   For more information, see:
-    ///   https://docs.microsoft.com/en-us/windows/desktop/Controls/task-dialogs-overview
+    /// <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">About Task Dialogs</see>.
     /// </para>
     /// <para>
     ///   Note: In order to use the dialog, you need ensure <see cref="Application.EnableVisualStyles"/>
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         public event EventHandler? Shown;
 
         /// <summary>
-        ///   Occurs when the task dialog closing.
+        ///   Occurs when the task dialog is closing.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -251,13 +251,13 @@ namespace System.Windows.Forms
         /// <para>
         ///   Note: The <see cref="Closed"/> event might not be called immediately
         ///   after the <see cref="Closing"/> event (even though the dialog window
-        ///   has already closed). This can happen for example when showing multiple 
+        ///   has already closed). This can happen, for example, when showing multiple 
         ///   (modeless) dialogs at the same time and then closing the one that
-        ///   was shown first – in that case, the <see cref="Closed"/> event for
+        ///   was shown first. In that case, the <see cref="Closed"/> event for
         ///   that dialog will be called only after the second dialog is also closed.
         /// </para>
         /// <para>
-        ///   Note: This event might not always be called, e.g. if navigation of the
+        ///   Note: This event might not always be called. For example, if navigation of the
         ///   dialog fails; however, the <see cref="Closed"/> event will always be
         ///   called.
         /// </para>
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref='TaskDialog'/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialog"/> class.
         /// </summary>
         public TaskDialog()
             : this(new TaskDialogPage())
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref='TaskDialog'/> class using the
+        ///   Initializes a new instance of the <see cref="TaskDialog"/> class using the
         ///   specified task dialog page.
         /// </summary>
         public TaskDialog(TaskDialogPage page)
@@ -328,23 +328,23 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   When setting this property while the task dialog is displayed, it will
-        ///   recreate its contents from the specified <see cref="TaskDialogPage"/>
+        ///   When setting this property while the task dialog is displayed, its contents
+        ///   will be recreated from the specified <see cref="TaskDialogPage"/>
         ///   ("navigation"). This means that the <see cref="TaskDialogPage.Destroyed"/>
         ///   event will occur for the current page, and after the dialog
         ///   completed navigation, the <see cref="TaskDialogPage.Created"/> event
         ///   of the new page will occur.
         /// </para>
         /// <para>
-        ///   Please note that you cannot manipulate the task dialog or its controls
+        ///   Note that you can't manipulate the task dialog or its controls
         ///   immediately after navigating it (except for calling <see cref="Close"/>
         ///   or navigating the dialog again).
-        ///   You will need to wait for the <see cref="TaskDialogPage.Created"/>
+        ///   You need to wait for the <see cref="TaskDialogPage.Created"/>
         ///   event to occur before you can manipulate the dialog or its controls.
         /// </para>
         /// <para>
         ///   Note that when navigating the dialog, the new page will be bound
-        ///   immediately, but the previous page will not be unbound until the
+        ///   immediately, but the previous page won't be unbound until the
         ///   <see cref="TaskDialogPage.Created"/> event of the new page is raised,
         ///   because during that time the task dialog behaves as if it still
         ///   showed the controls of the previous page.
@@ -384,7 +384,7 @@ namespace System.Windows.Forms
         ///   Gets or sets the position of the task dialog when it is shown.
         /// </summary>
         /// <value>
-        ///   The <see cref="TaskDialogStartupLocation"/> that specifies the position of the task dialog
+        ///   The position of the task dialog
         ///   when it is shown. The default value is <see cref="TaskDialogStartupLocation.CenterParent"/>.
         /// </value>
         public TaskDialogStartupLocation StartupLocation
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
         ///   foreground window when showing it.
         /// </summary>
         /// <value>
-        ///   <see langword="true"/> to indicate that the task dialog should set itself as foreground window
+        ///   <see langword="true"/> if the task dialog should set itself as foreground window
         ///   when showing it; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
@@ -486,16 +486,15 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Displays a task dialog with the specified text, instruction,
-        ///   caption, buttons and icon.
+        ///   caption, buttons, and icon.
         /// </summary>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
         /// <param name="caption">The text to display in the title bar of the task dialog.</param>
-        /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
+        /// <param name="buttons">A bitwise combination of the enumeration values that specify the buttons to be shown
         /// in the task dialog.</param>
-        /// <param name="icon">An <see cref="TaskDialogIcon"/> instance that contains the icon
-        /// to display in the main area of the task dialog.</param>
-        /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
+        /// <param name="icon">The icon to display in the main area of the task dialog.</param>
+        /// <returns>One of the enumeration values that indicates the return value of the task dialog.</returns>
         public static TaskDialogResult ShowDialog(
             string? text,
             string? mainInstruction = null,
@@ -511,16 +510,15 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Displays a task dialog in front of the specified window and with the specified
-        ///   text, main instruction, caption, buttons and icon.
+        ///   text, main instruction, caption, buttons, and icon.
         /// </summary>
         /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
         /// <param name="caption">The text to display in the title bar of the task dialog.</param>
-        /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
+        /// <param name="buttons">A bitwise combination of the enumeration values that specify the buttons to be shown
         /// in the task dialog.</param>
-        /// <param name="icon">An <see cref="TaskDialogIcon"/> instance that contains the icon
-        /// to display in the main area of the task dialog.</param>
+        /// <param name="icon">The icon to display in the main area of the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult ShowDialog(
             IWin32Window owner,
@@ -538,7 +536,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Displays a task dialog in front of the specified window and with the specified
-        ///   text, instruction, caption, buttons and icon.
+        ///   text, instruction, caption, buttons, and icon.
         /// </summary>
         /// <param name="hwndOwner">
         /// The handle of the owner window, or <see cref="IntPtr.Zero"/> to show a
@@ -547,10 +545,9 @@ namespace System.Windows.Forms
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
         /// <param name="caption">The text to display in the title bar of the task dialog.</param>
-        /// <param name="buttons">A combination of <see cref="TaskDialogButtons"/> flags to be shown
+        /// <param name="buttons">A bitwise combination of enumeration values that specify the buttons to be shown
         /// in the task dialog.</param>
-        /// <param name="icon"An <see cref="TaskDialogIcon"/> instance that contains the icon
-        /// to display in the main area of the task dialog.</param>
+        /// <param name="icon">The icon to display in the main area of the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
         public static TaskDialogResult ShowDialog(
             IntPtr hwndOwner,
@@ -612,7 +609,7 @@ namespace System.Windows.Forms
         public TaskDialogButton ShowDialog() => ShowDialog(IntPtr.Zero);
 
         /// <summary>
-        ///   Shows the task dialog.
+        ///   Shows the task dialog with the specified owner.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -824,9 +821,9 @@ namespace System.Windows.Forms
         /// </para>
         /// <para>
         ///   Note: This method can be called while the dialog is waiting for
-        ///   navigation to complete (whereas <see cref="TaskDialogButton.PerformClick"/>
-        ///   would throw in that case), and that when calling this method, the
-        ///   <see cref="TaskDialogButton.Click"/> event will not be raised.
+        ///   navigation to complete, whereas <see cref="TaskDialogButton.PerformClick"/>
+        ///   would throw in that case. When calling this method, the
+        ///   <see cref="TaskDialogButton.Click"/> event won't be raised.
         /// </para>
         /// </remarks>
         public void Close()
@@ -1049,25 +1046,25 @@ namespace System.Windows.Forms
         /// <summary>
         ///   Raises the <see cref="Opened"/> event.
         /// </summary>
-        /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+        /// <param name="e">The event data.</param>
         protected void OnOpened(EventArgs e) => Opened?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Shown"/> event.
         /// </summary>
-        /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+        /// <param name="e">The event data.</param>
         protected void OnShown(EventArgs e) => Shown?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Closing"/> event.
         /// </summary>
-        /// <param name="e">An <see cref="TaskDialogClosingEventArgs"/> that contains the event data.</param>
+        /// <param name="e">The event data.</param>
         protected void OnClosing(TaskDialogClosingEventArgs e) => Closing?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Closed"/> event.
         /// </summary>
-        /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+        /// <param name="e">The event data.</param>
         protected void OnClosed(EventArgs e) => Closed?.Invoke(this, e);
 
         private HRESULT HandleTaskDialogCallback(

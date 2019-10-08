@@ -7,7 +7,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Contains constants that defines how <see cref="TaskDialogCustomButton"/>s are to be
+    /// Specifies how a <see cref="TaskDialogCustomButton"/> is to be
     /// displayed in a task dialog.
     /// </summary>
     public enum TaskDialogCustomButtonStyle

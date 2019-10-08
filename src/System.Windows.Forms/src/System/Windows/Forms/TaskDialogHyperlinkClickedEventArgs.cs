@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// The value of the <c>href</c> attribute of the hyperlink that the user clicked.
+        /// Gets the value of the <c>href</c> attribute of the hyperlink that the user clicked.
         /// </summary>
         /// <remarks>
         /// Please note: In order to avoid possible security vulnerabilities when showing content
