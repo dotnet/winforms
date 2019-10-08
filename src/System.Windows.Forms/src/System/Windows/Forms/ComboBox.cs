@@ -3324,7 +3324,7 @@ namespace System.Windows.Forms
                             if (stringSource == null)
                             {
                                 stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
-                                if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (int)AutoCompleteMode))
+                                if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
@@ -3353,7 +3353,7 @@ namespace System.Windows.Forms
                                 if (stringSource == null)
                                 {
                                     stringSource = new StringSource(GetStringsForAutoComplete(Items));
-                                    if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (int)AutoCompleteMode))
+                                    if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                     {
                                         throw new ArgumentException(SR.AutoCompleteFailureListItems);
                                     }

@@ -1806,23 +1806,6 @@ namespace System.Windows.Forms
                out IEnumOLEVERB ppenum);
         }
 
-        [ComImport(), Guid("EAC04BC0-3791-11d2-BB95-0060977B464C"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IAutoComplete2
-        {
-            int Init(
-                    [In] HandleRef hwndEdit,          // hwnd of editbox or editbox deriviative.
-                    [In] IEnumString punkACL,          // Pointer to object containing string to complete from. (IEnumString *)
-                    [In] string pwszRegKeyPath,       //
-                    [In] string pwszQuickComplete
-                    );
-
-            void Enable([In] bool fEnable);            // Is it enabled?
-
-            int SetOptions([In] int dwFlag);
-
-            void GetOptions([Out] IntPtr pdwFlag);
-        }
-
         public abstract class CharBuffer
         {
             public static CharBuffer CreateBuffer(int size)

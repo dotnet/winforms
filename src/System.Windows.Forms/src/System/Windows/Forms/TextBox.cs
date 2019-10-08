@@ -775,7 +775,7 @@ namespace System.Windows.Forms
                             if (stringSource == null)
                             {
                                 stringSource = new StringSource(GetStringsForAutoComplete());
-                                if (!stringSource.Bind(new HandleRef(this, Handle), (int)AutoCompleteMode))
+                                if (!stringSource.Bind(new HandleRef(this, Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
