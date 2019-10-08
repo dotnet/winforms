@@ -119,18 +119,15 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException();
             }
 
-            // Replace the existing window procedure with our one
-            // ("instance subclassing").
-            // We need to explicitely clear the last Win32 error and then retrieve
-            // it, to check if the call succeeded, because if the function returns null
-            // but it succeeded, it doesn't necessarily set the last Win32 error to 0.
-            NativeMethods.SetLastError(0);
+            // Replace the existing window procedure with our one ("instance subclassing").
+            // Note: It shouldn't be possible to set a null pointer as window procedure, so we
+            // can use the return value to determine if the call succeeded.
             _originalWindowProc = User32.SetWindowLong(
                 _handle,
                 User32.GWL.WNDPROC,
                 _windowProcDelegatePtr);
 
-            if (_originalWindowProc == IntPtr.Zero && Marshal.GetLastWin32Error() != 0)
+            if (_originalWindowProc == IntPtr.Zero)
             {
                 throw new Win32Exception();
             }
@@ -209,12 +206,11 @@ namespace System.Windows.Forms
             if (disposing && _opened)
             {
                 // Check if the current window procedure is the correct one.
-                NativeMethods.SetLastError(0);
                 IntPtr currentWindowProcedure = User32.GetWindowLong(
                     _handle,
                     User32.GWL.WNDPROC);
 
-                if (currentWindowProcedure == IntPtr.Zero && Marshal.GetLastWin32Error() != 0)
+                if (currentWindowProcedure == IntPtr.Zero)
                 {
                     throw new Win32Exception();
                 }
@@ -231,12 +227,10 @@ namespace System.Windows.Forms
 
                 // Undo the subclassing by restoring the original window
                 // procedure.
-                NativeMethods.SetLastError(0);
                 if (User32.SetWindowLong(
                     _handle,
                     User32.GWL.WNDPROC,
-                    _originalWindowProc) == IntPtr.Zero &&
-                    Marshal.GetLastWin32Error() != 0)
+                    _originalWindowProc) == IntPtr.Zero)
                 {
                     throw new Win32Exception();
                 }

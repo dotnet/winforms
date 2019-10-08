@@ -11,10 +11,10 @@ internal static partial class Interop
     internal static partial class User32
     {
         // We only ever call this on 32 bit so IntPtr is correct
-        [DllImport(Libraries.User32, ExactSpelling = true)]
+        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
         private static extern IntPtr SetWindowLongW(IntPtr hWnd, GWL nIndex, IntPtr dwNewLong);
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
+        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
         public static extern IntPtr SetWindowLongPtrW(IntPtr hWnd, GWL nIndex, IntPtr dwNewLong);
 
         public static IntPtr SetWindowLong(IntPtr hWnd, GWL nIndex, IntPtr dwNewLong)
