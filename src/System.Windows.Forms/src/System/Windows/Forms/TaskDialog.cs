@@ -512,7 +512,7 @@ namespace System.Windows.Forms
         ///   Displays a task dialog in front of the specified window and with the specified
         ///   text, main instruction, caption, buttons, and icon.
         /// </summary>
-        /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
+        /// <param name="owner">The owner window, or <see langword="null"/> to show a modeless dialog.</param>
         /// <param name="text">The text ("content") to display in the task dialog.</param>
         /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
         /// <param name="caption">The text to display in the title bar of the task dialog.</param>
@@ -617,14 +617,14 @@ namespace System.Windows.Forms
         ///   controls until this method returns.
         /// </para>
         /// </remarks>
-        /// <param name="owner">The owner window, or <c>null</c> to show a modeless dialog.</param>
+        /// <param name="owner">The owner window, or <see langword="null"/> to show a modeless dialog.</param>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
         public TaskDialogButton ShowDialog(IWin32Window owner) => ShowDialog(
             owner?.Handle ?? throw new ArgumentNullException(nameof(owner)));
 
         /// <summary>
-        ///   Shows the task dialog.
+        ///   Shows the task dialog with the specified owner.
         /// </summary>
         /// <remarks>
         /// <para>

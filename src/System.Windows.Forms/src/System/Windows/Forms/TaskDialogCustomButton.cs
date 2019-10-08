@@ -10,11 +10,13 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a button control with a custom text that of a task dialog.
+    ///   Represents a button control of a task dialog that has a custom text.
     /// </summary>
     /// <remarks>
-    /// A custom button can either be displayed as regular button or as command link,
-    /// depending on the value of <see cref="TaskDialogPage.CustomButtonStyle"/>.
+    /// <para>
+    ///   A custom button can either be displayed as regular button or as command link,
+    ///   depending on the value of <see cref="TaskDialogPage.CustomButtonStyle"/>.
+    /// </para>
     /// </remarks>
     public sealed class TaskDialogCustomButton : TaskDialogButton
     {
@@ -23,15 +25,15 @@ namespace System.Windows.Forms
         private int _buttonID;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class.
         /// </summary>
         public TaskDialogCustomButton()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class
-        /// using the given <paramref name="text"/> and optionally a <paramref name="descriptionText"/>.
+        ///   Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class
+        ///   using the given <paramref name="text"/> and optionally a <paramref name="descriptionText"/>.
         /// </summary>
         /// <param name="text">The text of the control.</param>
         /// <param name="descriptionText">An additional description text that will be displayed in
@@ -45,14 +47,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the text associated with this control.
+        ///   Gets or sets the text associated with this control.
         /// </summary>
         /// <value>
-        /// The text associated with this control. The default value is <c>null</c>.
+        ///   The text associated with this control. The default value is <see langword="null"/>.
         /// </value>
         /// <remarks>
-        /// This property must not be <c>null</c> or an empty string when showing or navigating
-        /// the dialog; otherwise the operation will fail.
+        /// <para>
+        ///   This property must not be <see langword="null"/> or an empty string when showing or navigating
+        ///   the dialog; otherwise the operation will fail.
+        /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
         public string? Text
@@ -68,9 +72,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets an additional description text that will be displayed in a separate
-        /// line when the <see cref="TaskDialogCustomButton"/>s of the task dialog are shown
-        /// as command links (when
+        ///   Gets or sets an additional description text that will be displayed in a separate
+        ///   line when the <see cref="TaskDialogCustomButton"/>s of the task dialog are shown
+        ///   as command links (when
         /// <see cref="TaskDialogPage.CustomButtonStyle"/> is set to
         /// <see cref="TaskDialogCustomButtonStyle.CommandLinks"/> or
         /// <see cref="TaskDialogCustomButtonStyle.CommandLinksNoIcon"/>).
@@ -98,7 +102,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a string that represents the current <see cref="TaskDialogCustomButton"/> control.
+        ///   Returns a string that represents the current <see cref="TaskDialogCustomButton"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;

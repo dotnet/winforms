@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <value>
         /// An <see cref="object"/> that contains data about the control.
-        /// The default is <c>null</c>.
+        /// The default is <see langword="null"/>.
         /// </value>
         public object? Tag
         {

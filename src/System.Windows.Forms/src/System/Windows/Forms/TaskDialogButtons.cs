@@ -11,12 +11,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///   Contains constants representing standard buttons of a task dialog.
     /// </summary>
-    /// <remarks>
-    /// <para>
-    ///   This enumeration has a <see cref="FlagsAttribute"/> attribute that allows a bitwise
-    ///   combination of its member values.
-    /// </para>
-    /// </remarks>
     [Flags]
     public enum TaskDialogButtons : int
     {

@@ -45,10 +45,10 @@ namespace System.Windows.Forms
         /// Gets or sets the text associated with this control.
         /// </summary>
         /// <value>
-        /// The text associated with this control. The default value is <c>null</c>.
+        /// The text associated with this control. The default value is <see langword="null"/>.
         /// </value>
         /// <remarks>
-        /// This control will only be shown if this property is not <c>null</c> or an empty string.
+        /// This control will only be shown if this property is not <see langword="null"/> or an empty string.
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
         public string? Text
@@ -99,7 +99,6 @@ namespace System.Windows.Forms
 
         internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
-        // TODO: Maybe remove this method for now
         /// <summary>
         /// 
         /// </summary>
