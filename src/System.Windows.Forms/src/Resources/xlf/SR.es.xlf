@@ -5996,11 +5996,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">La imagen debe ser un mapa de bits.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">No se puede cambiar '{0}' una vez que se ha utilizado ImageList, a menos que la lista esté vacía.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Número de colores utilizado para presentar imágenes.</target>

@@ -5996,11 +5996,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">影像必須為點陣圖。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">除非清單是空的，否則一旦使用 ImageList 就無法變更 '{0}'。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">用來呈現影像的色彩數目。</target>

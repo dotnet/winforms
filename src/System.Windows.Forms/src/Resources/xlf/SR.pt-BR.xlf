@@ -5996,11 +5996,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A imagem deve ser um bitmap.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">A menos que a lista esteja vazia, '{0}' não pode ser alterado após o uso de ImageList.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">O número de cores para renderizar imagens.</target>
