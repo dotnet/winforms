@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Powrprof
     {
-        [DllImport(Libraries.Powrprof, ExactSpelling = true)]
-        public static extern bool SetSuspendState(bool bHibernate, bool bForce, bool bWakeupEventsDisabled);
+        [DllImport(Libraries.Powrprof, ExactSpelling = true, SetLastError = true)]
+        public static extern BOOLEAN SetSuspendState(BOOLEAN bHibernate, BOOLEAN bForce, BOOLEAN bWakeupEventsDisabled);
     }
 }
