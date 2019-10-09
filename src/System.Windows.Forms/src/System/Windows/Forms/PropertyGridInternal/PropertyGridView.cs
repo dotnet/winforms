@@ -8131,8 +8131,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly IMouseHookClient client;
 
             internal uint _thisProcessID = 0;
-            private GCHandle mouseHookRoot;
-            private IntPtr mouseHookHandle = IntPtr.Zero;
+            private GCHandle _mouseHookRoot;
+            private IntPtr _mouseHookHandle = IntPtr.Zero;
             private bool hookDisable = false;
 
             private bool processing;
@@ -8151,7 +8151,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             readonly string callingStack;
             ~MouseHook()
             {
-                Debug.Assert(mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
+                Debug.Assert(_mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
             }
 #endif
 
@@ -8173,7 +8173,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     GC.KeepAlive(this);
-                    return mouseHookHandle != IntPtr.Zero;
+                    return _mouseHookHandle != IntPtr.Zero;
                 }
                 set
                 {
@@ -8202,7 +8202,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (mouseHookHandle != IntPtr.Zero)
+                    if (_mouseHookHandle != IntPtr.Zero)
                     {
                         return;
                     }
@@ -8212,15 +8212,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         User32.GetWindowThreadProcessId(control, out _thisProcessID);
                     }
 
-                    NativeMethods.HookProc hook = new NativeMethods.HookProc(new MouseHookObject(this).Callback);
-                    mouseHookRoot = GCHandle.Alloc(hook);
-
-                    mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
-                        NativeMethods.WH_MOUSE,
+                    var hook = new User32.HOOKPROC(new MouseHookObject(this).Callback);
+                    _mouseHookRoot = GCHandle.Alloc(hook);
+                    _mouseHookHandle = User32.SetWindowsHookExW(
+                        User32.WH.MOUSE,
                         hook,
                         IntPtr.Zero,
                         Kernel32.GetCurrentThreadId());
-                    Debug.Assert(mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
+                    Debug.Assert(_mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }
             }
@@ -8228,10 +8227,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  HookProc used for catch mouse messages.
             /// </summary>
-            private IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam)
+            private IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
             {
                 GC.KeepAlive(this);
-                if (nCode == NativeMethods.HC_ACTION)
+                if (nCode == User32.HC.ACTION)
                 {
                     NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
                     if (mhs != null)
@@ -8255,7 +8254,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
+                return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
             }
 
             /// <summary>
@@ -8267,11 +8266,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (mouseHookHandle != IntPtr.Zero)
+                    if (_mouseHookHandle != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, mouseHookHandle));
-                        mouseHookRoot.Free();
-                        mouseHookHandle = IntPtr.Zero;
+                        User32.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
+                        _mouseHookRoot.Free();
+                        _mouseHookHandle = IntPtr.Zero;
                         Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:UnhookMouse()");
                     }
                 }
@@ -8361,7 +8360,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     reference = new WeakReference(parent, false);
                 }
 
-                public virtual IntPtr Callback(int nCode, IntPtr wparam, IntPtr lparam)
+                public virtual IntPtr Callback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
                 {
                     IntPtr ret = IntPtr.Zero;
                     try

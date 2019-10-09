@@ -87,14 +87,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  should we stop using the hook?
         /// </summary>
-        private static bool stopHook;
+        private static bool s_stopHook;
 
         /// <summary>
         ///  HHOOK
         /// </summary>
-        private static IntPtr hhook;
+        private static IntPtr s_hhook;
 
-        private static NativeMethods.HookProc hook;
+        private static User32.HOOKPROC s_hook;
 
         /// <summary>
         ///  vector of events that we have yet to post to the journaling hook.
@@ -238,16 +238,16 @@ namespace System.Windows.Forms
         /// </summary>
         private static void InstallHook()
         {
-            if (hhook == IntPtr.Zero)
+            if (s_hhook == IntPtr.Zero)
             {
-                hook = new NativeMethods.HookProc(new SendKeysHookProc().Callback);
-                stopHook = false;
-                hhook = UnsafeNativeMethods.SetWindowsHookEx(
-                    NativeMethods.WH_JOURNALPLAYBACK,
-                    hook,
+                s_hook = new User32.HOOKPROC(new SendKeysHookProc().Callback);
+                s_stopHook = false;
+                s_hhook = User32.SetWindowsHookExW(
+                    User32.WH.JOURNALPLAYBACK,
+                    s_hook,
                     Kernel32.GetModuleHandleW(null),
                     0);
-                if (hhook == IntPtr.Zero)
+                if (s_hhook == IntPtr.Zero)
                 {
                     throw new SecurityException(SR.SendKeysHookFailed);
                 }
@@ -259,10 +259,9 @@ namespace System.Windows.Forms
             hookSupported = false;
             try
             {
-
-                NativeMethods.HookProc hookProc = new NativeMethods.HookProc(EmptyHookCallback);
-                IntPtr hookHandle = UnsafeNativeMethods.SetWindowsHookEx(
-                    NativeMethods.WH_JOURNALPLAYBACK,
+                var hookProc = new User32.HOOKPROC(EmptyHookCallback);
+                IntPtr hookHandle = User32.SetWindowsHookExW(
+                    User32.WH.JOURNALPLAYBACK,
                     hookProc,
                     Kernel32.GetModuleHandleW(null),
                     0);
@@ -270,13 +269,16 @@ namespace System.Windows.Forms
 
                 if (hookHandle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(null, hookHandle));
+                    User32.UnhookWindowsHookEx(hookHandle);
                 }
             }
-            catch { } // ignore any exceptions to keep existing SendKeys behavior
+            catch
+            {
+                // Ignore any exceptions to keep existing SendKeys behavior
+            }
         }
 
-        private static IntPtr EmptyHookCallback(int code, IntPtr wparam, IntPtr lparam)
+        private static IntPtr EmptyHookCallback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
         {
             return IntPtr.Zero;
         }
@@ -316,14 +318,14 @@ namespace System.Windows.Forms
         /// </summary>
         private static void JournalCancel()
         {
-            if (hhook != IntPtr.Zero)
+            if (s_hhook != IntPtr.Zero)
             {
-                stopHook = false;
+                s_stopHook = false;
                 if (events != null)
                 {
                     events.Clear();
                 }
-                hhook = IntPtr.Zero;
+                s_hhook = IntPtr.Zero;
             }
         }
 
@@ -1046,15 +1048,13 @@ namespace System.Windows.Forms
         /// </summary>
         private static void UninstallJournalingHook()
         {
-            if (hhook != IntPtr.Zero)
+            if (s_hhook != IntPtr.Zero)
             {
-                stopHook = false;
-                if (events != null)
-                {
-                    events.Clear();
-                }
-                UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(null, hhook));
-                hhook = IntPtr.Zero;
+                s_stopHook = false;
+                events?.Clear();
+
+                User32.UnhookWindowsHookEx(s_hhook);
+                s_hhook = IntPtr.Zero;
             }
         }
 
@@ -1141,19 +1141,18 @@ namespace System.Windows.Forms
             //
             private bool gotNextEvent = false;
 
-            public virtual IntPtr Callback(int code, IntPtr wparam, IntPtr lparam)
+            public virtual IntPtr Callback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
             {
                 NativeMethods.EVENTMSG eventmsg = Marshal.PtrToStructure<NativeMethods.EVENTMSG>(lparam);
 
                 if (UnsafeNativeMethods.GetAsyncKeyState((int)Keys.Pause) != 0)
                 {
-                    SendKeys.stopHook = true;
+                    SendKeys.s_stopHook = true;
                 }
 
-                //
-                switch (code)
+                switch (nCode)
                 {
-                    case NativeMethods.HC_SKIP:
+                    case User32.HC.SKIP:
 
                         if (!gotNextEvent)
                         {
@@ -1164,15 +1163,15 @@ namespace System.Windows.Forms
                         {
                             SendKeys.events.Dequeue();
                         }
-                        SendKeys.stopHook = SendKeys.events == null || SendKeys.events.Count == 0;
+                        SendKeys.s_stopHook = SendKeys.events == null || SendKeys.events.Count == 0;
                         break;
 
-                    case NativeMethods.HC_GETNEXT:
+                    case User32.HC.GETNEXT:
 
                         gotNextEvent = true;
 
 #if DEBUG
-                        Debug.Assert(SendKeys.events != null && SendKeys.events.Count > 0 && !SendKeys.stopHook, "HC_GETNEXT when queue is empty!");
+                        Debug.Assert(SendKeys.events != null && SendKeys.events.Count > 0 && !SendKeys.s_stopHook, "HC_GETNEXT when queue is empty!");
 #endif
 
                         SKEvent evt = (SKEvent)SendKeys.events.Peek();
@@ -1185,15 +1184,15 @@ namespace System.Windows.Forms
                         break;
 
                     default:
-                        if (code < 0)
+                        if (nCode < 0)
                         {
-                            UnsafeNativeMethods.CallNextHookEx(new HandleRef(null, SendKeys.hhook), code, wparam, lparam);
+                            User32.CallNextHookEx(SendKeys.s_hhook, nCode, wparam, lparam);
                         }
 
                         break;
                 }
 
-                if (SendKeys.stopHook)
+                if (SendKeys.s_stopHook)
                 {
                     SendKeys.UninstallJournalingHook();
                     gotNextEvent = false;

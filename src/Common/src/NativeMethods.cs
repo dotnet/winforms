@@ -399,9 +399,6 @@ namespace System.Windows.Forms
         CPS_CANCEL = 0x04;
 
         public const int
-        HC_ACTION = 0,
-        HC_GETNEXT = 1,
-        HC_SKIP = 2,
         HTTRANSPARENT = (-1),
         HTNOWHERE = 0,
         HTCLIENT = 1,
@@ -1163,9 +1160,6 @@ namespace System.Windows.Forms
 
         public const int VIEW_E_DRAW = unchecked((int)0x80040140);
 
-        public const int WH_JOURNALPLAYBACK = 1;
-        public const int WH_GETMESSAGE = 3;
-        public const int WH_MOUSE = 7;
         public const int WSF_VISIBLE = 0x0001;
 
         public const int WA_INACTIVE = 0;
@@ -1849,8 +1843,6 @@ namespace System.Windows.Forms
             public WndProc lpfnHook;
             public string lpTemplateName = null;
         }
-
-        public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NOTIFYICONDATA

@@ -97,6 +97,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.CallNextHookEx.cs" Link="Interop\User32\Interop.CallNextHookEx.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ClientToScreen.cs" Link="Interop\User32\Interop.ClientToScreen.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DefWindowProcW.cs" Link="Interop\User32\Interop.DefWindowProcW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
@@ -108,6 +109,8 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowThreadProcessId.cs" Link="Interop\User32\Interop.GetWindowThreadProcessId.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.HC.cs" Link="Interop\User32\Interop.HC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.HOOKPROC.cs" Link="Interop\User32\Interop.HOOKPROC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MSG.cs" Link="Interop\User32\Interop.MSG.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.NMHDR.cs" Link="Interop\User32\Interop.NMHDR.cs" />
@@ -121,9 +124,12 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SBV.cs" Link="Interop\User32\Interop.SBV.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetActiveWindow.cs" Link="Interop\User32\Interop.SetActiveWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowPos.cs" Link="Interop\User32\Interop.SetWindowPos.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SetWindowsHookExW.cs" Link="Interop\User32\Interop.SetWindowsHookExW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SWP.cs" Link="Interop\User32\Interop.SWP.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.TME.cs" Link="Interop\User32\Interop.TME.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.TrackMouseEvent.cs" Link="Interop\User32\Interop.TrackMouseEvent.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.UnhookWindowsHookEx.cs" Link="Interop\User32\Interop.UnhookWindowsHookEx.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WH.cs" Link="Interop\User32\Interop.WH.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
   </ItemGroup>
