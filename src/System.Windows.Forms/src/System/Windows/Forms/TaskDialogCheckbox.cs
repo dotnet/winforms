@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         /// The text associated with this control. The default value is <see langword="null"/>.
         /// </value>
         /// <remarks>
-        /// This control will only be shown if this property is not <see langword="null"/> or an empty string.
+        /// This control is only shown if this property is not <see langword="null"/> or an empty string.
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
         public string? Text

@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <value>
         /// <see langword="true"/> if the task dialog should close when
-        /// this button is clicked; <see langword="false"/> otherwise.
+        /// this button is clicked; otherwise, <see langword="false"/>. The default value is <see langword="true"/>.
         /// </value>
         /// <remarks>
         /// If this property is set to <see langword="true"/> (the default value) after the

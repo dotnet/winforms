@@ -33,7 +33,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class
-        ///   using the given <paramref name="text"/> and optionally a <paramref name="descriptionText"/>.
+        ///   using the given text and, optionally, a description text.
         /// </summary>
         /// <param name="text">The text of the control.</param>
         /// <param name="descriptionText">An additional description text that will be displayed in
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   This property must not be <see langword="null"/> or an empty string when showing or navigating
-        ///   the dialog; otherwise the operation will fail.
+        ///   the dialog; otherwise, the operation will fail.
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>

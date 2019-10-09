@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   This event will only occur when the expanded state is changed by the user,
-        ///   because it is not possible to programmatically change the <see cref="Expanded"/>
+        ///   because it isn't possible to programmatically change the <see cref="Expanded"/>
         ///   property while this control is shown in a task dialog.
         /// </para>
         /// </remarks>
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialogExpander"/> class
-        ///   using the given <paramref name="text"/>.
+        ///   using the given text.
         /// </summary>
         /// <param name="text">The text to be displayed in the dialog's expanded area.</param>
         public TaskDialogExpander(string? text)
@@ -129,12 +129,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets a value that indicates if the expander button is in the
+        ///   Gets or sets a value that indicates whether the expander button is in the
         ///   expanded state (so that the dialog's expanded area is visible).
         /// </summary>
         /// <value>
         ///   <see langword="true"/> if the expander button is in the expanded state; <see langword="false"/> if
-        ///   it is in the collapsed state. The default value is <see langword="false"/>.
+        ///   it's in the collapsed state. The default value is <see langword="false"/>.
         /// </value>
         public bool Expanded
         {
@@ -154,13 +154,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets a value that indicates if the expanded area is displayed at the bottom
+        ///   Gets or sets a value that indicates whether the expanded area is displayed at the bottom
         ///   of the task dialog's footer area, instead of immediately after the dialog's
         ///   <see cref="TaskDialogPage.Text"/>.
         /// </summary>
         /// <value>
-        ///   <see langword="true"/> to display the expanded area at the bottom of the task dialog's
-        ///   footer area, <see langword="false"/> to display the expanded area immediately after the
+        ///   <see langword="true"/> if the expanded area is displayed at the bottom of the task dialog's
+        ///   footer area; <see langword="false"/> if the expanded area is displayed immediately after the
         ///   dialog's <see cref="TaskDialogPage.Text"/>. The default value is <see langword="false"/>.
         /// </value>
         public bool ExpandFooterArea
