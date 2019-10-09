@@ -32,7 +32,7 @@ internal partial class Interop
             }
 
             // Load without this flag.
-            if (Marshal.GetLastWin32Error() != Errors.ERROR_INVALID_PARAMETER)
+            if (Marshal.GetLastWin32Error() != ERROR.INVALID_PARAMETER)
             {
                 return IntPtr.Zero;
             }

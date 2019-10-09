@@ -4,8 +4,9 @@
 
 internal partial class Interop
 {
-    internal static class Errors
+    internal static class ERROR
     {
-        public const int ERROR_INVALID_PARAMETER = 0x57;
+        public const int ACCESS_DENIED = 0x0005;
+        public const int INVALID_PARAMETER = 0x0057;
     }
 }

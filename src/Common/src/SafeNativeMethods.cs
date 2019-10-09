@@ -416,12 +416,6 @@ namespace System.Windows.Forms
             public const int MinimumColorDepth = 1301;
         }
 
-        [DllImport(ExternDll.User32)]
-        public static extern IntPtr OpenInputDesktop(int dwFlags, [MarshalAs(UnmanagedType.Bool)] bool fInherit, int dwDesiredAccess);
-
-        [DllImport(ExternDll.User32)]
-        public static extern bool CloseDesktop(IntPtr hDesktop);
-
         // for Windows Windows 7 to Windows 8.
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool IsProcessDPIAware();

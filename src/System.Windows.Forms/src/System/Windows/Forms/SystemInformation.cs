@@ -990,14 +990,13 @@ namespace System.Windows.Forms
             {
                 // Try to open the input desktop. If it fails with access denied assume
                 // the app is running on a secure desktop.
-                IntPtr hDsk = SafeNativeMethods.OpenInputDesktop(0, false, NativeMethods.DESKTOP_SWITCHDESKTOP);
+                IntPtr hDsk = User32.OpenInputDesktop(0, BOOL.FALSE, User32.DESKTOP.SWITCHDESKTOP);
                 if (hDsk == IntPtr.Zero)
                 {
-                    int error = Marshal.GetLastWin32Error();
-                    return error == NativeMethods.ERROR_ACCESS_DENIED;
+                    return Marshal.GetLastWin32Error() == ERROR.ACCESS_DENIED;
                 }
 
-                SafeNativeMethods.CloseDesktop(hDsk);
+                User32.CloseDesktop(hDsk);
             }
 
             return false;
