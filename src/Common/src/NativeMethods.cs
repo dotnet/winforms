@@ -872,22 +872,6 @@ namespace System.Windows.Forms
         public const int PBS_SMOOTH = 0x01,
         PBS_MARQUEE = 0x08;
 
-        public const int QS_KEY = 0x0001,
-        QS_MOUSEMOVE = 0x0002,
-        QS_MOUSEBUTTON = 0x0004,
-        QS_POSTMESSAGE = 0x0008,
-        QS_TIMER = 0x0010,
-        QS_PAINT = 0x0020,
-        QS_SENDMESSAGE = 0x0040,
-        QS_HOTKEY = 0x0080,
-        QS_ALLPOSTMESSAGE = 0x0100,
-        QS_MOUSE = QS_MOUSEMOVE | QS_MOUSEBUTTON,
-        QS_INPUT = QS_MOUSE | QS_KEY,
-        QS_ALLEVENTS = QS_INPUT | QS_POSTMESSAGE | QS_TIMER | QS_PAINT | QS_HOTKEY,
-        QS_ALLINPUT = QS_INPUT | QS_POSTMESSAGE | QS_TIMER | QS_PAINT | QS_HOTKEY | QS_SENDMESSAGE;
-
-        public const int MWMO_INPUTAVAILABLE = 0x0004;  // don't use MWMO_WAITALL, see ddb#176342
-
         //public const int RECO_PASTE = 0x00000000;   // paste from clipboard
         public const int RECO_DROP = 0x00000001;    // drop
                                                     //public const int RECO_COPY  = 0x00000002;    // copy to the clipboard

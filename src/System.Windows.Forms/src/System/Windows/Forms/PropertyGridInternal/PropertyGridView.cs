@@ -6445,14 +6445,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void DoModalLoop()
             {
-
                 // Push a modal loop.  This seems expensive, but I think it is a
                 // better user model than returning from DropDownControl immediately.
-                //
                 while (Visible)
                 {
                     Application.DoEventsModal();
-                    UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
+                    User32.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, User32.QS.ALLINPUT, User32.MWMO.INPUTAVAILABLE);
                 }
             }
 

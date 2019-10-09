@@ -2408,7 +2408,7 @@ namespace System.ComponentModel.Design
                     while (Visible)
                     {
                         Application.DoEvents();
-                        UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
+                        User32.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, User32.QS.ALLINPUT, User32.MWMO.INPUTAVAILABLE);
                     }
                 }
 
@@ -2512,22 +2512,7 @@ namespace System.ComponentModel.Design
                 public const int WS_POPUP = unchecked((int)0x80000000);
                 public const int WS_BORDER = 0x00800000;
                 public const int GWL_HWNDPARENT = (-8);
-                public const int QS_KEY = 0x0001;
-                public const int QS_MOUSEMOVE = 0x0002;
-                public const int QS_MOUSEBUTTON = 0x0004;
-                public const int QS_POSTMESSAGE = 0x0008;
-                public const int QS_TIMER = 0x0010;
-                public const int QS_PAINT = 0x0020;
-                public const int QS_SENDMESSAGE = 0x0040;
-                public const int QS_HOTKEY = 0x0080;
-                public const int QS_ALLPOSTMESSAGE = 0x0100;
-                public const int QS_MOUSE = QS_MOUSEMOVE | QS_MOUSEBUTTON;
-                public const int QS_INPUT = QS_MOUSE | QS_KEY;
-                public const int QS_ALLEVENTS = QS_INPUT | QS_POSTMESSAGE | QS_TIMER | QS_PAINT | QS_HOTKEY;
-                public const int QS_ALLINPUT = QS_INPUT | QS_POSTMESSAGE | QS_TIMER | QS_PAINT | QS_HOTKEY | QS_SENDMESSAGE;
                 public const int CS_SAVEBITS = 0x0800;
-
-                public const int MWMO_INPUTAVAILABLE = 0x0004; // don't use MWMO_WAITALL, see ddb#176342
 
                 internal static class Util
                 {
@@ -2548,9 +2533,6 @@ namespace System.ComponentModel.Design
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
-
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds, int dwWakeMask, int dwFlags);
 
                 [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
