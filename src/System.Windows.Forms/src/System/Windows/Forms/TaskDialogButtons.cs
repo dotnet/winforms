@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///   Contains constants representing standard buttons of a task dialog.
+    ///   Represents standard buttons of a task dialog.
     /// </summary>
     [Flags]
     public enum TaskDialogButtons : int

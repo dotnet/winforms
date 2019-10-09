@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         /// Gets the value of the <c>href</c> attribute of the hyperlink that the user clicked.
         /// </summary>
         /// <remarks>
-        /// Please note: In order to avoid possible security vulnerabilities when showing content
+        /// Note: In order to avoid possible security vulnerabilities when showing content
         /// from unsafe sources in a task dialog, you should always verify the value of this
         /// property before actually opening the link.
         /// </remarks>

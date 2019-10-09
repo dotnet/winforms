@@ -22,14 +22,14 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// By default, the dialog will be closed after the event handler returns 
-        /// (except for the <see cref="TaskDialogResult.Help"/> button which instead
+        /// (except for the <see cref="TaskDialogResult.Help"/> button, which instead
         /// will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
         /// To prevent the dialog from closing when this button is clicked, set the
         /// <see cref="ShouldCloseDialog"/> property to <see langword="false"/>.
         /// 
         /// When the <see cref="ShouldCloseDialog"/> is set to
         /// <see langword="true"/> (the default value), the <see cref="TaskDialog.Closing"/>
-        /// event will occur afterwards which also allows you to prevent the dialog from closing.
+        /// event will occur afterwards, which also allows you to prevent the dialog from closing.
         /// </remarks>
         public event EventHandler<EventArgs>? Click;
 
@@ -40,20 +40,20 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets a value that indicates whether the task dialog should close
-        /// when this button is clicked (or, if this button represents the
-        /// <see cref="TaskDialogResult.Help"/> result, whether the
-        /// <see cref="TaskDialogPage.HelpRequest"/> should be raised).
+        /// when this button is clicked. Or, if this button represents the
+        /// <see cref="TaskDialogResult.Help"/> result, indicates whether the
+        /// <see cref="TaskDialogPage.HelpRequest"/> should be raised.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> to indicate that the task dialog should close when
+        /// <see langword="true"/> if the task dialog should close when
         /// this button is clicked; <see langword="false"/> otherwise.
         /// </value>
         /// <remarks>
         /// If this property is set to <see langword="true"/> (the default value) after the
         /// <see cref="Click"/> event handler returns, the <see cref="TaskDialog.Closing"/> event
-        /// will occur (except if this button represents the <see cref="TaskDialogResult.Help"/> result)
-        /// which allows you to cancel the close. If it is not cancelled, the dialog will close and
-        /// set the clicked button as result value.
+        /// will occur (except if this button represents the <see cref="TaskDialogResult.Help"/> result),
+        /// which allows you to cancel the close. If it isn't canceled, the dialog closes and
+        /// sets the clicked button as result value.
         /// </remarks>
         public bool ShouldCloseDialog { get; set; } = true;
 
@@ -113,15 +113,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates if this button will be the default button
+        /// Gets or sets a value that indicates whether this button is the default button
         /// in the task dialog.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> to indicate that this button will be the default button in the task dialog;
+        /// <see langword="true"/> if this button is the default button in the task dialog;
         /// otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// Note that only a single button in a task dialog can be set as the default button.
+        /// Only a single button in a task dialog can be set as the default button.
         /// </remarks>
         public bool DefaultButton
         {

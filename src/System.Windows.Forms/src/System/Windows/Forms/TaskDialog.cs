@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     /// </summary>
     /// <remarks>
     /// <para>
-    ///   For more information, see:
+    ///   For more information, see
     /// <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">About Task Dialogs</see>.
     /// </para>
     /// <para>
@@ -817,7 +817,7 @@ namespace System.Windows.Forms
         /// <para>
         /// To close the dialog with a different result, call the
         /// <see cref="TaskDialogButton.PerformClick"/> method of the
-        /// <see cref="TaskDialogButton"/> which you want to set as result.
+        /// <see cref="TaskDialogButton"/> that you want to set as a result.
         /// </para>
         /// <para>
         ///   Note: This method can be called while the dialog is waiting for

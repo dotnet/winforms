@@ -118,12 +118,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the collection of <see cref="TaskDialogStandardButton"/> instances
+        ///   Gets or sets the collection of standard buttons
         ///   to be shown in this page.
         /// </summary>
         /// <value>
-        ///   A <see cref="TaskDialogStandardButtonCollection"/> instance representing the
-        ///   collection of standard buttons to be shown in this page.
+        ///   The collection of standard buttons to be shown in this page.
         /// </value>
         public TaskDialogStandardButtonCollection StandardButtons
         {
@@ -140,12 +139,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the collection of <see cref="TaskDialogCustomButton"/> instances
+        ///   Gets or sets the collection of custom buttons
         ///   to be shown in this page.
         /// </summary>
         /// <value>
-        ///   A <see cref="TaskDialogCustomButtonCollection"/> instance representing the
-        ///   collection of custom buttons to be shown in this page.
+        ///   The collection of custom buttons to be shown in this page.
         /// </value>
         public TaskDialogCustomButtonCollection CustomButtons
         {
@@ -162,12 +160,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the collection of <see cref="TaskDialogRadioButton"/> instances
+        ///   Gets or sets the collection of radio buttons
         ///   to be shown in this page.
         /// </summary>
         /// <value>
-        ///   A <see cref="TaskDialogRadioButtonCollection"/> instance representing the
-        ///   collection of radio buttons to be shown in this page.
+        ///   The collection of radio buttons to be shown in this page.
         /// </value>
         public TaskDialogRadioButtonCollection RadioButtons
         {
@@ -184,11 +181,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the <see cref="TaskDialogCheckBox"/> to be shown in this page.
+        ///   Gets or sets the check box to be shown in this page.
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   The checkbox will only be shown if its <see cref="TaskDialogCheckBox.Text"/> property
+        ///   The check box will only be shown if its <see cref="TaskDialogCheckBox.Text"/> property
         ///   is not <see langword="null"/> or an empty string.
         /// </para>
         /// </remarks>
@@ -207,7 +204,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the <see cref="TaskDialogExpander"/> to be shown in this page.
+        ///   Gets or sets the dialog expander to be shown in this page.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -230,7 +227,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the <see cref="TaskDialogFooter"/> to be shown in this page.
+        ///   Gets or sets the footer to be shown in this page.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -253,7 +250,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the <see cref="TaskDialogProgressBar"/> to be shown in this page.
+        ///   Gets or sets the progress bar to be shown in this page.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -348,7 +345,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   This property can be set while the dialog is shown (but in that case, it
+        ///   This property can be set while the dialog is shown, however, it
         ///   cannot be switched between instances created from an
         ///   <see cref="System.Drawing.Icon"/> (or from a handle pointer)
         ///   and standard icon instances).

@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value that indicates if the current state of this control
+        /// Gets a value that indicates whether the current state of this control
         /// allows it to be created in a task dialog when binding it.
         /// </summary>
         internal virtual bool IsCreatable
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates if this control has been created
+        /// Gets or sets a value that indicates whether this control has been created
         /// in a bound task dialog.
         /// </summary>
         internal bool IsCreated
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a subclass, runs additional binding logic and returns
+        /// When overridden in a derived class, runs additional binding logic and returns
         /// flags to be specified before the task dialog is displayed or navigated.
         /// </summary>
         /// <remarks>
