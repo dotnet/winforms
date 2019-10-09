@@ -22,6 +22,7 @@ internal static partial class Interop
             public const int IDC_SIZENS = 32645;
             public const int IDC_UPARROW = 32516;
             public const int IDC_NO = 32648;
+            public const int IDC_HAND = 32649;
             public const int IDC_APPSTARTING = 32650;
             public const int IDC_HELP = 32651;
         }
