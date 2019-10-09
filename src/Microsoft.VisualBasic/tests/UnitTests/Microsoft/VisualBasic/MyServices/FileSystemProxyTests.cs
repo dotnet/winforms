@@ -5,13 +5,12 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
-using Microsoft.VisualBasic.Tests;
 using Xunit;
 
 namespace Microsoft.VisualBasic.MyServices.Tests
 {
     // File tests cloned from Microsoft.VisualBasic.FileIO.Tests.FileSystemTests.
-    public class FileSystemProxyTests : FileCleanupTestBase
+    public class FileSystemProxyTests : Microsoft.VisualBasic.Tests.FileCleanupTestBase
     {
         private static readonly string DestData = "xXy";
         private static readonly string SourceData = "aAb";

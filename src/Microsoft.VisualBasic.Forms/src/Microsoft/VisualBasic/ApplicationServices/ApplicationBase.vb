@@ -44,7 +44,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         ''' <value>Returns a Microsoft.VisualBasic.Windows.Log object used for logging to OS log, debug window
         ''' and a delimited text file or xml log.</value>
-        ''' <remarks></remarks>
         Public ReadOnly Property Log() As Logging.Log
             Get
                 If m_Log Is Nothing Then

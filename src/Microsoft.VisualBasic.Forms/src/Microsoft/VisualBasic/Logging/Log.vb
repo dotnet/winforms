@@ -21,7 +21,6 @@ Namespace Microsoft.VisualBasic.Logging
     ''' <summary>
     ''' Enables logging to configured TraceListeners
     ''' </summary>
-    ''' <remarks></remarks>
     Public Class Log
 
         ''' <summary>

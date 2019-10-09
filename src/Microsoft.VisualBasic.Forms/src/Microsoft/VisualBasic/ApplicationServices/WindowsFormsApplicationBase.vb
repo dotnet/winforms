@@ -297,7 +297,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'Prime the command line args with what we receive from Main() so that Click-Once windows apps don't have to do a System.Environment call which would require permissions.
             MyBase.InternalCommandLine = New System.Collections.ObjectModel.ReadOnlyCollection(Of String)(commandLine)
 
-            ' .NET Framework implementation uses System.Runtime.Remoting when  Me.IsSingleInstance
+            ' .NET Framework implementation uses System.Runtime.Remoting when Me.IsSingleInstance
             ' to avoid launching multiple instances. System.Runtime.Remoting is not available on .NET Core.
             DoApplicationModel()
         End Sub
@@ -498,12 +498,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 'so we need to disconnect the network listener so that it can't fire any events in response to changing network availability conditions through a dead context.  VSWHIDBEY #343374
                 If m_NetworkObject IsNot Nothing Then m_NetworkObject.DisconnectListener()
 
-                'The app is exiting - if another instance has launched, don't let it attach to this one.
-                If m_FirstInstanceSemaphore IsNot Nothing Then
-                    m_FirstInstanceSemaphore.Close()
-                    m_FirstInstanceSemaphore = Nothing
-                End If
-
                 AsyncOperationManager.SynchronizationContext = m_AppSyncronizationContext 'Restore the prior sync context
                 m_AppSyncronizationContext = Nothing
             End Try
@@ -633,10 +627,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Advanced)>
         Protected Property IsSingleInstance() As Boolean
             Get
-                Return m_IsSingleInstance
+                Return False
             End Get
             Set(ByVal value As Boolean)
-                m_IsSingleInstance = value
+                If value Then
+                    Throw New PlatformNotSupportedException()
+                End If
             End Set
         End Property
 
@@ -777,13 +773,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private m_TurnOnNetworkListener As Boolean 'Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event
         Private m_FinishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize 
         Private m_NetworkAvailabilityEventHandlers As System.Collections.ArrayList
-        Private m_FirstInstanceSemaphore As System.Threading.EventWaitHandle 'Used to determine if we are the first instance or not and to prevent race conditions if we are launching subsequent instances.  Owned by the first instance to run
-        Private m_MessageReceivedSemaphore As System.Threading.EventWaitHandle 'Used to let us know when the first instance has been contacted
         Private m_NetworkObject As Microsoft.VisualBasic.Devices.Network
         Private m_MemoryMappedID As String 'global OS handles must have a unique ID
-        <SecurityCritical()>
-        Private m_FirstInstanceMemoryMappedFileHandle As SafeFileHandle 'Used to communicate the URL of the single instance between processes.  We hang on to it for the life of the process so that it is available to subsequent instances.  It's a SafeHandle so it'll be sure to release the handle when the app exits.
-        Private m_IsSingleInstance As Boolean 'whether this app runs using Word like instancing behavior
         Private m_ShutdownStyle As ShutdownMode 'defines when the application decides to close
         Private m_EnableVisualStyles As Boolean 'whether to use Windows XP styles
         Private m_DidSplashScreen As Boolean 'we only need to show the splash screen once.  Protect the user from himself if they are overriding our app model.
@@ -797,7 +788,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private m_AppSyncronizationContext As SynchronizationContext
         Private m_NetworkAvailChangeLock As New Object 'sync object
         Private m_SaveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
-        Private m_StartNextInstanceCallback As Threading.SendOrPostCallback 'Used for marshalling the start next instance event to the foreground thread
 
         ''' <summary>
         ''' Runs the user's program through the VB Startup/Shutdown application model 

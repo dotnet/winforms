@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
-using Microsoft.VisualBasic.Tests;
 using Xunit;
 
 namespace Microsoft.VisualBasic.Logging.Tests
 {
-    public class FileLogTraceListenerTests : FileCleanupTestBase
+    public class FileLogTraceListenerTests : Microsoft.VisualBasic.Tests.FileCleanupTestBase
     {
         [Fact]
         public void Properties()

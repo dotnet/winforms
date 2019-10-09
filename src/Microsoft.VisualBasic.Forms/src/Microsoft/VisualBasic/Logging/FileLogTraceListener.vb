@@ -73,7 +73,6 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         ''' Creates a FileLogTraceListener with default name
         ''' </summary>
-        ''' <remarks></remarks>
         Public Sub New()
             Me.New(DEFAULT_NAME)
         End Sub
@@ -768,7 +767,7 @@ Namespace Microsoft.VisualBasic.Logging
                 End SyncLock
             End While
             'If we fall out the loop, we have failed to obtain a valid stream name.  This occurs if there are files on your system
-            'ranging from  BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
+            'ranging from BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
             Throw GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, BaseStreamName)
         End Function
 
