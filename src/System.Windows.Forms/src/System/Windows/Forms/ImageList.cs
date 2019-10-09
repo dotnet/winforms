@@ -30,7 +30,7 @@ namespace System.Windows.Forms
     DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionImageList))
     ]
-    public sealed class ImageList : Component
+    public sealed class ImageList : Component, IHandle
     {
         // gpr: Copied from Icon
         private static readonly Color fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
@@ -337,15 +337,15 @@ namespace System.Windows.Forms
                     bool recreatingHandle = HandleCreated; // We only need to fire RecreateHandle if there was a previous handle
                     DestroyHandle();
                     originals = null;
-                    nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Duplicate(new HandleRef(himl, himl.Handle)));
-                    if (SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y))
+                    nativeImageList = new NativeImageList(ComCtl32.ImageList.Duplicate(himl));
+                    if (ComCtl32.ImageList.GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y).IsTrue())
                     {
                         imageSize = new Size(x, y);
                     }
 
                     // need to get the image bpp
-                    NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image?
-                    if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo))
+                    var imageInfo = new ComCtl32.IMAGEINFO();
+                    if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, ref imageInfo).IsTrue())
                     {
                         Gdi32.GetObjectW(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
                         colorDepth = bmp.bmBitsPixel switch
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
             try
             {
                 Debug.Assert(HandleCreated, "Calling AddIconToHandle when there is no handle");
-                int index = SafeNativeMethods.ImageList_ReplaceIcon(new HandleRef(this, Handle), -1, new HandleRef(icon, icon.Handle));
+                int index = ComCtl32.ImageList.ReplaceIcon(this, -1, new HandleRef(icon, icon.Handle));
                 if (index == -1)
                 {
                     throw new InvalidOperationException(SR.ImageListAddFailed);
@@ -531,9 +531,16 @@ namespace System.Windows.Forms
             Debug.Assert(HandleCreated, "Calling AddToHandle when there is no handle");
             IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);   // Calls GDI to create Bitmap.
             IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask); // Calls GDI+ to create Bitmap. Need to add handle to HandleCollector.
-            int index = SafeNativeMethods.ImageList_Add(new HandleRef(this, Handle), hBitmap, hMask);
-            Gdi32.DeleteObject(hBitmap);
-            Gdi32.DeleteObject(hMask);
+            int index;
+            try
+            {
+                index = ComCtl32.ImageList.Add(this, hBitmap, hMask);
+            }
+            finally
+            {
+                Gdi32.DeleteObject(hBitmap);
+                Gdi32.DeleteObject(hMask);
+            }
 
             if (index == -1)
             {
@@ -552,23 +559,23 @@ namespace System.Windows.Forms
         {
             Debug.Assert(nativeImageList == null, "Handle already created, this may be a source of temporary GDI leaks");
 
-            int flags = NativeMethods.ILC_MASK;
+            ComCtl32.ILC flags = ComCtl32.ILC.MASK;
             switch (colorDepth)
             {
                 case ColorDepth.Depth4Bit:
-                    flags |= NativeMethods.ILC_COLOR4;
+                    flags |= ComCtl32.ILC.COLOR4;
                     break;
                 case ColorDepth.Depth8Bit:
-                    flags |= NativeMethods.ILC_COLOR8;
+                    flags |= ComCtl32.ILC.COLOR8;
                     break;
                 case ColorDepth.Depth16Bit:
-                    flags |= NativeMethods.ILC_COLOR16;
+                    flags |= ComCtl32.ILC.COLOR16;
                     break;
                 case ColorDepth.Depth24Bit:
-                    flags |= NativeMethods.ILC_COLOR24;
+                    flags |= ComCtl32.ILC.COLOR24;
                     break;
                 case ColorDepth.Depth32Bit:
-                    flags |= NativeMethods.ILC_COLOR32;
+                    flags |= ComCtl32.ILC.COLOR32;
                     break;
                 default:
                     Debug.Fail("Unknown color depth in ImageList");
@@ -581,7 +588,7 @@ namespace System.Windows.Forms
             try
             {
                 ComCtl32.InitCommonControls();
-                nativeImageList = new NativeImageList(SafeNativeMethods.ImageList_Create(imageSize.Width, imageSize.Height, flags, INITIAL_CAPACITY, GROWBY));
+                nativeImageList = new NativeImageList(ComCtl32.ImageList.Create(imageSize.Width, imageSize.Height, flags, INITIAL_CAPACITY, GROWBY));
             }
             finally
             {
@@ -593,7 +600,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ImageListCreateFailed);
             }
 
-            SafeNativeMethods.ImageList_SetBkColor(new HandleRef(this, Handle), NativeMethods.CLR_NONE);
+            ComCtl32.ImageList.SetBkColor(this, ComCtl32.CLR.NONE);
 
             Debug.Assert(originals != null, "Handle not yet created, yet original images are gone");
             for (int i = 0; i < originals.Count; i++)
@@ -690,8 +697,17 @@ namespace System.Windows.Forms
             IntPtr dc = g.GetHdc();
             try
             {
-                SafeNativeMethods.ImageList_DrawEx(new HandleRef(this, Handle), index, new HandleRef(g, dc), x, y,
-                                       width, height, NativeMethods.CLR_NONE, NativeMethods.CLR_NONE, NativeMethods.ILD_TRANSPARENT);
+                ComCtl32.ImageList.DrawEx(
+                    this,
+                    index,
+                    new HandleRef(g, dc),
+                    x,
+                    y,
+                    width,
+                    height,
+                    ComCtl32.CLR.NONE,
+                    ComCtl32.CLR.NONE,
+                    ComCtl32.ILD.TRANSPARENT);
             }
             finally
             {
@@ -780,9 +796,8 @@ namespace System.Windows.Forms
 
             if (ColorDepth == ColorDepth.Depth32Bit)
             {
-
-                NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image inside of imageinfo?
-                if (SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, Handle), index, imageInfo))
+                var imageInfo = new ComCtl32.IMAGEINFO();
+                if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, Handle), index, ref imageInfo).IsTrue())
                 {
                     Bitmap tmpBitmap = null;
                     BitmapData bmpData = null;
@@ -792,7 +807,7 @@ namespace System.Windows.Forms
                         tmpBitmap = Bitmap.FromHbitmap(imageInfo.hbmImage);
                         //
 
-                        bmpData = tmpBitmap.LockBits(new Rectangle(imageInfo.rcImage_left, imageInfo.rcImage_top, imageInfo.rcImage_right - imageInfo.rcImage_left, imageInfo.rcImage_bottom - imageInfo.rcImage_top), ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
+                        bmpData = tmpBitmap.LockBits(new Rectangle(imageInfo.rcImage.left, imageInfo.rcImage.top, imageInfo.rcImage.right - imageInfo.rcImage.left, imageInfo.rcImage.bottom - imageInfo.rcImage.top), ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
 
                         int offset = bmpData.Stride * imageSize.Height * index;
                         // we need do the following if the image has alpha because otherwise the image is fully transparent even though it has data
@@ -831,8 +846,17 @@ namespace System.Windows.Forms
                     IntPtr dc = graphics.GetHdc();
                     try
                     {
-                        SafeNativeMethods.ImageList_DrawEx(new HandleRef(this, Handle), index, new HandleRef(graphics, dc), 0, 0,
-                                                imageSize.Width, imageSize.Height, NativeMethods.CLR_NONE, NativeMethods.CLR_NONE, NativeMethods.ILD_TRANSPARENT);
+                        ComCtl32.ImageList.DrawEx(
+                            this,
+                            index,
+                            new HandleRef(graphics, dc),
+                            0,
+                            0,
+                            imageSize.Width,
+                            imageSize.Height,
+                            ComCtl32.CLR.NONE,
+                            ComCtl32.CLR.NONE,
+                            ComCtl32.ILD.TRANSPARENT);
 
                     }
                     finally
@@ -895,7 +919,7 @@ namespace System.Windows.Forms
             Debug.Assert(!useSnapshot || himlTemp != 0, "Where's himlTemp?");
 
             IntPtr handleUse = (useSnapshot ? himlTemp : Handle);
-            int count = SafeNativeMethods.ImageList_GetImageCount(handleUse);
+            int count = ComCtl32.ImageList.GetImageCount(handleUse);
 
             if (index < 0 || index >= count)
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -912,13 +936,31 @@ namespace System.Windows.Forms
             }
 
             temp.Transparent = useMask;
-            // OldGraphics gTemp = /*gpr useMask ? temp.ColorMask.GetGraphics() :*/ temp.GetGraphics();
-            SafeNativeMethods.ImageList_DrawEx(handleUse, index, gTemp.Handle, 0, 0,
-                                    imageSize.Width, imageSize.Height, useMask ? 0 : NativeMethods.CLR_DEFAULT, NativeMethods.CLR_NONE, NativeMethods.ILD_NORMAL);
+            ComCtl32.ImageList.DrawEx(
+                handleUse,
+                index,
+                new HandleRef(gTemp, gTemp.Handle),
+                0,
+                0,
+                imageSize.Width,
+                imageSize.Height,
+                useMask ? 0 : ComCtl32.CLR.DEFAULT,
+                ComCtl32.CLR.NONE,
+                ComCtl32.ILD.NORMAL);
 
             if (useMask) {
-                gTemp = temp/*gpr .MonochromeMask*/.GetGraphics();
-                SafeNativeMethods.ImageList_DrawEx(handleUse, index, gTemp.Handle, 0, 0, imageSize.Width, imageSize.Height, NativeMethods.CLR_DEFAULT, NativeMethods.CLR_NONE, NativeMethods.ILD_MASK);
+                gTemp = temp.GetGraphics();
+                ComCtl32.ImageList.DrawEx(
+                    handleUse,
+                    index,
+                    new HandleRef(gTemp, gTemp.Handle),
+                    0,
+                    0,
+                    imageSize.Width,
+                    imageSize.Height,
+                    ComCtl32.CLR.DEFAULT,
+                    ComCtl32.CLR.NONE,
+                    ComCtl32.ILD.MASK);
             }
         }
 #endif
@@ -992,7 +1034,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class NativeImageList : IDisposable
+        internal class NativeImageList : IDisposable, IHandle
         {
             private IntPtr himl;
 #if DEBUG
@@ -1007,7 +1049,7 @@ namespace System.Windows.Forms
 #endif
             }
 
-            internal IntPtr Handle
+            public IntPtr Handle
             {
                 get
                 {
@@ -1025,7 +1067,7 @@ namespace System.Windows.Forms
             {
                 if (himl != IntPtr.Zero)
                 {
-                    SafeNativeMethods.ImageList_Destroy(new HandleRef(null, himl));
+                    ComCtl32.ImageList.Destroy(himl);
                     himl = IntPtr.Zero;
                 }
             }
@@ -1158,7 +1200,7 @@ namespace System.Windows.Forms
 
                     if (owner.HandleCreated)
                     {
-                        return SafeNativeMethods.ImageList_GetImageCount(new HandleRef(owner, owner.Handle));
+                        return ComCtl32.ImageList.GetImageCount(owner);
                     }
                     else
                     {
@@ -1266,9 +1308,16 @@ namespace System.Windows.Forms
                     {
                         IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                         IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
-                        bool ok = SafeNativeMethods.ImageList_Replace(new HandleRef(owner, owner.Handle), index, hBitmap, hMask);
-                        Gdi32.DeleteObject(hBitmap);
-                        Gdi32.DeleteObject(hMask);
+                        bool ok;
+                        try
+                        {
+                            ok = ComCtl32.ImageList.Replace(owner, index, hBitmap, hMask).IsTrue();
+                        }
+                        finally
+                        {
+                            Gdi32.DeleteObject(hBitmap);
+                            Gdi32.DeleteObject(hMask);
+                        }
 
                         if (!ok)
                         {
@@ -1557,7 +1606,7 @@ namespace System.Windows.Forms
 
                 if (owner.HandleCreated)
                 {
-                    SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), -1);
+                    ComCtl32.ImageList.Remove(owner, -1);
                 }
 
                 owner.OnChangeHandle(EventArgs.Empty);
@@ -1704,7 +1753,7 @@ namespace System.Windows.Forms
                 }
 
                 AssertInvariant();
-                bool ok = SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), index);
+                bool ok = ComCtl32.ImageList.Remove(owner, index).IsTrue();
                 if (!ok)
                 {
                     throw new InvalidOperationException(SR.ImageListRemoveFailed);

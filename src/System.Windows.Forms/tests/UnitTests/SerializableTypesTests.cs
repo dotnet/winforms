@@ -95,11 +95,11 @@ namespace System.Windows.Forms.Tests.Serialization
 
                 using (NativeImageList nativeImageList = result.GetNativeImageList())
                 {
-                    Assert.True(SafeNativeMethods.ImageList_GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y));
+                    Assert.True(ComCtl32.ImageList.GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y).IsTrue());
                     Assert.Equal(16, x);
                     Assert.Equal(16, y);
-                    NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO();
-                    Assert.True(SafeNativeMethods.ImageList_GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, imageInfo));
+                    var imageInfo = new ComCtl32.IMAGEINFO();
+                    Assert.True(ComCtl32.ImageList.GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, ref imageInfo).IsTrue());
                     Assert.True(IntPtr.Zero != imageInfo.hbmImage);
                 }
             }

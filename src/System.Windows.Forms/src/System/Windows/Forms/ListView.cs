@@ -4529,7 +4529,7 @@ namespace System.Windows.Forms
             // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
             // However, if the customer paints the items w/ a color different from the list view's back color
             // then when the user changes selection the native list view will not invalidate the entire list view item area.
-            SendMessage((int)LVM.SETTEXTBKCOLOR, 0, NativeMethods.CLR_NONE);
+            SendMessage((int)LVM.SETTEXTBKCOLOR, 0, ComCtl32.CLR.NONE);
 
             // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
             // we have to set this style after the list view was created and before we position the native list view items.
@@ -4812,7 +4812,7 @@ namespace System.Windows.Forms
                 SendMessage((int)LVM.SETBKCOLOR, 0, color);
                 // We should probably be OK if we don't set the TEXTBKCOLOR to CLR_NONE.
                 // However, for the sake of being more robust, reset the TECTBKCOLOR to CLR_NONE when the system palette changes.
-                SendMessage((int)LVM.SETTEXTBKCOLOR, 0, NativeMethods.CLR_NONE);
+                SendMessage((int)LVM.SETTEXTBKCOLOR, 0, ComCtl32.CLR.NONE);
             }
         }
 
