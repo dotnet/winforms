@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a button control of a task dialog.
+    ///   Represents a button control of a task dialog.
     /// </summary>
     public abstract class TaskDialogButton : TaskDialogControl
     {
@@ -18,18 +18,21 @@ namespace System.Windows.Forms
         private bool _elevationRequired;
 
         /// <summary>
-        /// Occurs when the button is clicked.
+        ///   Occurs when the button is clicked.
         /// </summary>
         /// <remarks>
-        /// By default, the dialog will be closed after the event handler returns 
-        /// (except for the <see cref="TaskDialogResult.Help"/> button, which instead
-        /// will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
-        /// To prevent the dialog from closing when this button is clicked, set the
-        /// <see cref="ShouldCloseDialog"/> property to <see langword="false"/>.
-        /// 
-        /// When the <see cref="ShouldCloseDialog"/> is set to
-        /// <see langword="true"/> (the default value), the <see cref="TaskDialog.Closing"/>
-        /// event will occur afterwards, which also allows you to prevent the dialog from closing.
+        /// <para>
+        ///   By default, the dialog will be closed after the event handler returns 
+        ///   (except for the <see cref="TaskDialogResult.Help"/> button, which instead
+        ///   will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
+        ///   To prevent the dialog from closing when this button is clicked, set the
+        ///   <see cref="ShouldCloseDialog"/> property to <see langword="false"/>.
+        /// </para>
+        /// <para>
+        ///   When <see cref="ShouldCloseDialog"/> is set to <see langword="true"/>,
+        ///   the <see cref="TaskDialog.Closing"/> event will occur afterwards,
+        ///   which also allows you to prevent the dialog from closing.
+        /// </para>
         /// </remarks>
         public event EventHandler<EventArgs>? Click;
 
@@ -39,33 +42,37 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the task dialog should close
-        /// when this button is clicked. Or, if this button represents the
-        /// <see cref="TaskDialogResult.Help"/> result, indicates whether the
-        /// <see cref="TaskDialogPage.HelpRequest"/> should be raised.
+        ///   Gets or sets a value that indicates whether the task dialog should close
+        ///   when this button is clicked. Or, if this button represents the
+        ///   <see cref="TaskDialogResult.Help"/> result, indicates whether the
+        ///   <see cref="TaskDialogPage.HelpRequest"/> should be raised.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if the task dialog should close when
-        /// this button is clicked; otherwise, <see langword="false"/>. The default value is <see langword="true"/>.
+        ///   <see langword="true"/> if the task dialog should close when
+        ///   this button is clicked; otherwise, <see langword="false"/>. The default value is <see langword="true"/>.
         /// </value>
         /// <remarks>
-        /// If this property is set to <see langword="true"/> (the default value) after the
-        /// <see cref="Click"/> event handler returns, the <see cref="TaskDialog.Closing"/> event
-        /// will occur (except if this button represents the <see cref="TaskDialogResult.Help"/> result),
-        /// which allows you to cancel the close. If it isn't canceled, the dialog closes and
-        /// sets the clicked button as result value.
+        /// <para>
+        ///   If this property is set to <see langword="true"/> after the <see cref="Click"/>
+        ///   event handler returns, the <see cref="TaskDialog.Closing"/> event will occur
+        ///   (except if this button represents the <see cref="TaskDialogResult.Help"/> result),
+        ///   which allows you to cancel the close. If it isn't canceled, the dialog closes and
+        ///   sets the clicked button as result value.
+        /// </para>
         /// </remarks>
         public bool ShouldCloseDialog { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the button can respond to user interaction.
+        ///   Gets or sets a value indicating whether the button can respond to user interaction.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if the button can respond to user interaction; otherwise,
-        /// <see langword="false"/>. The default value is <see langword="true"/>.
+        ///   <see langword="true"/> if the button can respond to user interaction; otherwise,
+        ///   <see langword="false"/>. The default value is <see langword="true"/>.
         /// </value>
         /// <remarks>
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public bool Enabled
         {
@@ -86,14 +93,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates if the User Account Control (UAC) shield icon
-        /// should be shown near the button; that is, whether the action invoked by the button
-        /// requires elevation.
+        ///   Gets or sets a value that indicates if the User Account Control (UAC) shield icon
+        ///   should be shown near the button; that is, whether the action invoked by the button
+        ///   requires elevation.
         /// </summary>
-        /// <value><see langword="true"/> to show the UAC shield icon; otherwise, <see langword="false"/>.
-        /// The default value is <see langword="false"/>.</value>
+        /// <value>
+        ///   <see langword="true"/> to show the UAC shield icon; otherwise, <see langword="false"/>.
+        ///   The default value is <see langword="false"/>.
+        /// </value>
         /// <remarks>
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public bool ElevationRequired
         {
@@ -113,15 +124,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether this button is the default button
-        /// in the task dialog.
+        ///   Gets or sets a value that indicates whether this button is the default button
+        ///   in the task dialog.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if this button is the default button in the task dialog;
-        /// otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+        ///   <see langword="true"/> if this button is the default button in the task dialog;
+        ///   otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// Only a single button in a task dialog can be set as the default button.
+        /// <para>
+        ///   Only a single button in a task dialog can be set as the default button.
+        /// </para>
         /// </remarks>
         public bool DefaultButton
         {
@@ -158,7 +171,7 @@ namespace System.Windows.Forms
         private protected IReadOnlyList<TaskDialogButton>? Collection { get; set; }
 
         /// <summary>
-        /// Simulates a click on this button.
+        ///   Simulates a click on this button.
         /// </summary>
         public void PerformClick()
         {

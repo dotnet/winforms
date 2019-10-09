@@ -16,8 +16,8 @@ namespace System.Windows.Forms
     /// <para>
     ///   It is possible to navigate a task dialog while it is shown by setting the
     ///   <see cref="TaskDialog.Page"/> property to a different <see cref="TaskDialogPage"/>
-    ///   instance. See the <see cref="TaskDialog.Page"/> property for more information about
-    ///   navigation.
+    ///   instance. For more information about navigation, see the
+    ///   <see cref="TaskDialog.Page"/> property.
     /// </para>
     /// </remarks>
     public class TaskDialogPage
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown, however, it
         ///   cannot be switched between instances created from an
         ///   <see cref="System.Drawing.Icon"/> (or from a handle pointer)
-        ///   and standard icon instances).
+        ///   and standard icon instances.
         /// </para>
         /// </remarks>
         public TaskDialogIcon? Icon

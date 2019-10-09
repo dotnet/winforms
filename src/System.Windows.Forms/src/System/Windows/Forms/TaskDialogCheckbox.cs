@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a checkbox control of a task dialog.
+    ///   Represents a checkbox control of a task dialog.
     /// </summary>
     public sealed class TaskDialogCheckBox : TaskDialogControl
     {
@@ -18,21 +18,21 @@ namespace System.Windows.Forms
         private bool _checked;
 
         /// <summary>
-        /// Occurs when the value of the <see cref="Checked"/> property changes while 
-        /// this control is shown in a task dialog.
+        ///   Occurs when the value of the <see cref="Checked"/> property changes while 
+        ///   this control is shown in a task dialog.
         /// </summary>
         public event EventHandler? CheckedChanged;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogCheckBox"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogCheckBox"/> class.
         /// </summary>
         public TaskDialogCheckBox()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogCheckBox"/> class with
-        /// the given <paramref name="text"/>.
+        ///   Initializes a new instance of the <see cref="TaskDialogCheckBox"/> class with
+        ///   the given text.
         /// </summary>
         /// <param name="text"></param>
         public TaskDialogCheckBox(string? text)
@@ -42,13 +42,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the text associated with this control.
+        ///   Gets or sets the text associated with this control.
         /// </summary>
         /// <value>
-        /// The text associated with this control. The default value is <see langword="null"/>.
+        ///   The text associated with this control. The default value is <see langword="null"/>.
         /// </value>
         /// <remarks>
-        /// This control is only shown if this property is not <see langword="null"/> or an empty string.
+        /// <para>
+        ///   This control is only shown if this property is not <see langword="null"/> or an empty string.
+        /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
         public string? Text
@@ -64,15 +66,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or set a value indicating whether the <see cref="TaskDialogCheckBox"/> is in
-        /// the checked state.
+        ///   Gets or set a value indicating whether the <see cref="TaskDialogCheckBox"/> is in
+        ///   the checked state.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if the <see cref="TaskDialogCheckBox"/> is in the checked state;
-        /// otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+        ///   <see langword="true"/> if the <see cref="TaskDialogCheckBox"/> is in the checked state;
+        ///   otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public bool Checked
         {
@@ -100,7 +104,7 @@ namespace System.Windows.Forms
         internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
         /// <summary>
-        /// 
+        ///   Sets input focus to the control.
         /// </summary>
         public void Focus()
         {
@@ -111,7 +115,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Returns a string that represents the current <see cref="TaskDialogCheckBox"/> control.
+        ///   Returns a string that represents the current <see cref="TaskDialogCheckBox"/> control.
         /// </summary>
         /// <returns>The control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;
@@ -138,10 +142,6 @@ namespace System.Windows.Forms
             return flags;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
         private void OnCheckedChanged(EventArgs e) => CheckedChanged?.Invoke(this, e);
     }
 }

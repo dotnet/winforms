@@ -336,14 +336,14 @@ namespace System.Windows.Forms
         ///   of the new page will occur.
         /// </para>
         /// <para>
-        ///   Note that you can't manipulate the task dialog or its controls
+        ///   You can't manipulate the task dialog or its controls
         ///   immediately after navigating it (except for calling <see cref="Close"/>
         ///   or navigating the dialog again).
         ///   You need to wait for the <see cref="TaskDialogPage.Created"/>
         ///   event to occur before you can manipulate the dialog or its controls.
         /// </para>
         /// <para>
-        ///   Note that when navigating the dialog, the new page will be bound
+        ///   When navigating the dialog, the new page will be bound
         ///   immediately, but the previous page won't be unbound until the
         ///   <see cref="TaskDialogPage.Created"/> event of the new page is raised,
         ///   because during that time the task dialog behaves as if it still
