@@ -12,10 +12,10 @@ internal static partial class Interop
     internal static partial class ComCtl32
     {
         [DllImport(Libraries.Comctl32, ExactSpelling = true)]
-        public static extern int TaskDialogIndirect(
+        public static extern HRESULT TaskDialogIndirect(
             IntPtr pTaskConfig,
-            [Out] out int pnButton,
-            [Out] out int pnRadioButton,
-            [MarshalAs(UnmanagedType.Bool), Out] out bool pfVerificationFlagChecked);
+            out int pnButton,
+            out int pnRadioButton,
+            out BOOL pfVerificationFlagChecked);
     }
 }

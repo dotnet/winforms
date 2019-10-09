@@ -693,7 +693,8 @@ namespace System.Windows.Forms
                     // earlier). Otherwise, the "TaskDialogIndirect" entry point will
                     // not be available in comctl32.dll.
                     IntPtr themingCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                    int returnValue, resultButtonID;
+                    HRESULT returnValue;
+                    int resultButtonID;
                     try
                     {
                         returnValue = ComCtl32.TaskDialogIndirect(
@@ -717,9 +718,9 @@ namespace System.Windows.Forms
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
                     // current thread if it exists.
-                    if (returnValue < 0)
+                    if (returnValue.Failed())
                     {
-                        Marshal.ThrowExceptionForHR(returnValue);
+                        Marshal.ThrowExceptionForHR((int)returnValue);
                     }
 
                     // Normally, the returned button ID should always equal the cached
