@@ -61,22 +61,6 @@ namespace System.Windows.Forms.Internal
             return wg;
         }
 
-        /// <summary>
-        ///  Creates a WindowsGraphics from a memory DeviceContext object compatible with the a screen device.
-        ///  This object is suitable for performing text measuring but not for drawing into it because it does
-        ///  not have a backup bitmap.
-        /// </summary>
-        public static WindowsGraphics CreateMeasurementWindowsGraphics(IntPtr screenDC)
-        {
-            DeviceContext dc = DeviceContext.FromCompatibleDC(screenDC);
-            WindowsGraphics wg = new WindowsGraphics(dc)
-            {
-                _disposeDc = true // we create it, we dispose it.
-            };
-
-            return wg;
-        }
-
         public static WindowsGraphics FromHwnd(IntPtr hWnd)
         {
             DeviceContext dc = DeviceContext.FromHwnd(hWnd);

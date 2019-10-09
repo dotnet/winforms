@@ -46,33 +46,6 @@ namespace System.Windows.Forms.Internal
 
         ///  Drawing methods.
 
-        public unsafe void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
-        {
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
-
-            if (pen != null)
-            {
-                // 1. Select the pen in the DC
-                Gdi32.SelectObject(hdc, new HandleRef(pen, pen.HPen));
-            }
-
-            // 2. call the functions
-            // we first draw a path that goes :
-            // from center of pie, draw arc (this draw the line to the beginning of the arc
-            // then, draw the closing line.
-            // paint the path with the pen
-            int sideLength = Math.Min(bounds.Width, bounds.Height);
-            Point p = new Point(bounds.X + sideLength / 2, bounds.Y + sideLength / 2);
-            int radius = sideLength / 2;
-            IntUnsafeNativeMethods.BeginPath(hdc);
-            Point oldPoint = default;
-            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, &oldPoint);
-            IntUnsafeNativeMethods.AngleArc(hdc, p.X, p.Y, radius, startAngle, sweepAngle);
-            IntUnsafeNativeMethods.LineTo(hdc, p.X, p.Y);
-            IntUnsafeNativeMethods.EndPath(hdc);
-            IntUnsafeNativeMethods.StrokePath(hdc);
-        }
-
         private void DrawEllipse(WindowsPen pen, WindowsBrush brush,
             int nLeftRect,  // x-coord of upper-left corner of rectangle
             int nTopRect,   // y-coord of upper-left corner of rectangle
