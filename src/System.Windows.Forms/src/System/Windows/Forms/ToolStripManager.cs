@@ -1535,7 +1535,7 @@ namespace System.Windows.Forms
             {
                 private IntPtr messageHookHandle = IntPtr.Zero;
                 private bool isHooked = false;
-                private NativeMethods.HookProc hookProc;
+                private User32.HOOKPROC _hookProc;
 
                 public HostedWindowsFormsMessageHook()
                 {
@@ -1587,11 +1587,10 @@ namespace System.Windows.Forms
                             return;
                         }
 
-                        hookProc = new NativeMethods.HookProc(MessageHookProc);
-
-                        messageHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
-                            NativeMethods.WH_GETMESSAGE,
-                            hookProc,
+                        _hookProc = new User32.HOOKPROC(MessageHookProc);
+                        messageHookHandle = User32.SetWindowsHookExW(
+                            User32.WH.GETMESSAGE,
+                            _hookProc,
                             IntPtr.Zero,
                             Kernel32.GetCurrentThreadId());
 
@@ -1603,9 +1602,9 @@ namespace System.Windows.Forms
                     }
                 }
 
-                private unsafe IntPtr MessageHookProc(int nCode, IntPtr wparam, IntPtr lparam)
+                private unsafe IntPtr MessageHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
                 {
-                    if (nCode == NativeMethods.HC_ACTION)
+                    if (nCode == User32.HC.ACTION)
                     {
                         if (isHooked && (User32.PM)wparam == User32.PM.REMOVE)
                         {
@@ -1623,7 +1622,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, messageHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(new HandleRef(this, messageHookHandle), nCode, wparam, lparam);
                 }
 
                 private void UninstallMessageHook()
@@ -1632,8 +1631,8 @@ namespace System.Windows.Forms
                     {
                         if (messageHookHandle != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, messageHookHandle));
-                            hookProc = null;
+                            User32.UnhookWindowsHookEx(new HandleRef(this, messageHookHandle));
+                            _hookProc = null;
                             messageHookHandle = IntPtr.Zero;
                             isHooked = false;
                         }
