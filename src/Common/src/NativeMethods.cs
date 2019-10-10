@@ -3175,17 +3175,6 @@ namespace System.Windows.Forms
             return uri.LocalPath + uri.Fragment;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct SYSTEM_POWER_STATUS
-        {
-            public byte ACLineStatus;
-            public byte BatteryFlag;
-            public byte BatteryLifePercent;
-            public byte Reserved1;
-            public int BatteryLifeTime;
-            public int BatteryFullLifeTime;
-        }
-
         public enum PROCESS_DPI_AWARENESS
         {
             PROCESS_DPI_UNINITIALIZED = -1,

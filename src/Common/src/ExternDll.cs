@@ -25,7 +25,6 @@ namespace System
         public const string Oleaut32 = "oleaut32.dll";
         public const string Olepro32 = "olepro32.dll";
         public const string PerfCounter = "perfcounter.dll";
-        public const string Powrprof = "Powrprof.dll";
         public const string Psapi = "psapi.dll";
         public const string Shell32 = "shell32.dll";
         public const string User32 = "user32.dll";
