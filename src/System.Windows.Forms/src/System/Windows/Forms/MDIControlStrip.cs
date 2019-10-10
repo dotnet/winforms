@@ -29,13 +29,13 @@ namespace System.Windows.Forms
         /// </summary>
         public MdiControlStrip(IWin32Window target)
         {
-            IntPtr hMenu = UnsafeNativeMethods.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), /*bRevert=*/false);
+            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE);
             this.target = target;
 
             // The menu item itself takes care of enabledness and sending WM_SYSCOMMAND messages to the target.
-            minimize = new ControlBoxMenuItem(hMenu, NativeMethods.SC_MINIMIZE, target);
-            close = new ControlBoxMenuItem(hMenu, NativeMethods.SC_CLOSE, target);
-            restore = new ControlBoxMenuItem(hMenu, NativeMethods.SC_RESTORE, target);
+            minimize = new ControlBoxMenuItem(hMenu, User32.SC.MINIMIZE, target);
+            close = new ControlBoxMenuItem(hMenu, User32.SC.CLOSE, target);
+            restore = new ControlBoxMenuItem(hMenu, User32.SC.RESTORE, target);
 
             // The dropDown of the system menu is the one that talks to native.
             system = new SystemMenuItem();
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
             close.SetNativeTargetWindow(target);
             restore.SetNativeTargetWindow(target);
 
-            IntPtr hMenu = UnsafeNativeMethods.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), /*bRevert=*/false);
+            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE);
             system.SetNativeTargetMenu(hMenu);
             minimize.SetNativeTargetMenu(hMenu);
             close.SetNativeTargetMenu(hMenu);
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
         {
             if (!system.HasDropDownItems && (target != null))
             {
-                system.DropDown = ToolStripDropDownMenu.FromHMenu(UnsafeNativeMethods.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), /*bRevert=*/false), target);
+                system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE), target);
             }
             else if (MergedMenu == null)
             {
@@ -218,18 +218,12 @@ namespace System.Windows.Forms
         // when the system menu item shortcut is evaluated - pop the dropdown
         internal class ControlBoxMenuItem : ToolStripMenuItem
         {
-            internal ControlBoxMenuItem(IntPtr hMenu, int nativeMenuCommandId, IWin32Window targetWindow) :
-                                        base(hMenu, nativeMenuCommandId, targetWindow)
+            internal ControlBoxMenuItem(IntPtr hMenu, User32.SC nativeMenuCommandId, IWin32Window targetWindow) :
+                base(hMenu, (int)nativeMenuCommandId, targetWindow)
             {
             }
 
-            internal override bool CanKeyboardSelect
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            internal override bool CanKeyboardSelect => false;
         }
 
         // when the system menu item shortcut is evaluated - pop the dropdown

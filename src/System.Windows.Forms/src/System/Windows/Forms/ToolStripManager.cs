@@ -1922,7 +1922,7 @@ namespace System.Windows.Forms
                 toplevelControl = intendedControl.TopLevelControlInternal;
                 if (toplevelControl != null)
                 {
-                    IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(toplevelControl, toplevelControl.Handle));
+                    IntPtr hMenu = User32.GetMenu(toplevelControl);
                     if (hMenu == IntPtr.Zero)
                     {
                         // only activate the menu if there's no win32 menu.  Win32 menus trump menustrips.

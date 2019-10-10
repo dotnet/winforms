@@ -210,11 +210,11 @@ namespace System.Windows.Forms
                 {
                     if (value)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), MenuID, false);
+                        User32.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), MenuID, BOOL.FALSE);
                     }
                     else if (DefaultItem)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), -1, false);
+                        User32.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), -1, BOOL.FALSE);
                     }
                 }
 
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
                     return -1;
                 }
 
-                int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
+                int count = User32.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
                 int id = MenuID;
                 NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T
                 {
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
             Form menuForm = null;
             if (main != null)
             {
-                menuForm = main.GetFormUnsafe();
+                menuForm = main.GetForm();
             }
             if (menuForm != null)
             {
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms
                 if (forms != null && forms.Length > 0)
                 {
 
-                    Form activeMdiChild = GetMainMenu().GetFormUnsafe().ActiveMdiChild;
+                    Form activeMdiChild = GetMainMenu().GetForm().ActiveMdiChild;
 
                     if (senderMenu.MenuItems.Count > 0)
                     {
@@ -1411,7 +1411,7 @@ namespace System.Windows.Forms
                 _dataVersion = _data._version;
                 if (Parent is MainMenu mainMenu)
                 {
-                    Form f = mainMenu.GetFormUnsafe();
+                    Form f = mainMenu.GetForm();
                     if (f != null)
                     {
                         SafeNativeMethods.DrawMenuBar(new HandleRef(f, f.Handle));
@@ -1768,7 +1768,7 @@ namespace System.Windows.Forms
             {
                 Form[] forms = _parent.FindMdiForms();
                 Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
-                Form active = _parent.GetMainMenu().GetFormUnsafe().ActiveMdiChild;
+                Form active = _parent.GetMainMenu().GetForm().ActiveMdiChild;
                 Debug.Assert(active != null, "Didn't get the active MDI child");
                 if (forms != null && forms.Length > 0 && active != null)
                 {

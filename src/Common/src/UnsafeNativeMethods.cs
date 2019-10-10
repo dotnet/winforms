@@ -122,17 +122,28 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr GetMenu(HandleRef hWnd);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T lpmii);
+        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
+        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T lpmii);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T_RW lpmii);
+        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii)
+        {
+            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
+            GC.KeepAlive(hMenu.Wrapper);
+            return result;
+        }
+
+        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
+        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T_RW lpmii);
+
+        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T_RW lpmii)
+        {
+            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
+            GC.KeepAlive(hMenu.Wrapper);
+            return result;
+        }
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static bool SetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr CreateMenu();
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
@@ -463,15 +474,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetMenuItemID(HandleRef hMenu, int nPos);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetSubMenu(HandleRef hwnd, int index);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetMenuItemCount(HandleRef hMenu);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
 
@@ -534,20 +536,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLongPtr")]
         public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, NativeMethods.WndProc wndproc);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr CreatePopupMenu();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool RemoveMenu(HandleRef hMenu, int uPosition, int uFlags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DestroyMenu(HandleRef hMenu);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetForegroundWindow(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetSystemMenu(HandleRef hWnd, bool bRevert);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefFrameProc(IntPtr hWnd, IntPtr hWndClient, int msg, IntPtr wParam, IntPtr lParam);
@@ -555,17 +545,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetLayeredWindowAttributes(HandleRef hwnd, int crKey, byte bAlpha, int dwFlags);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public extern static bool SetMenu(HandleRef hWnd, HandleRef hMenu);
-
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetStartupInfo([In, Out] NativeMethods.STARTUPINFO_I startupinfo_i);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetMenuDefaultItem(HandleRef hwnd, int nIndex, bool pos);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool EnableMenuItem(HandleRef hMenu, int UIDEnabledItem, int uEnable);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetActiveWindow(HandleRef hWnd);
