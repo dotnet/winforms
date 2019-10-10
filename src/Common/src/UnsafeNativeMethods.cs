@@ -693,8 +693,7 @@ namespace System.Windows.Forms
                 out IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
-                [In, Out]
-                NativeMethods.tagOIFI lpFrameInfo);
+                Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo);
 
             [PreserveSig]
             HRESULT Scroll(

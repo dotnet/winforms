@@ -1922,21 +1922,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagOIFI
-        {
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-            public int cb;
-
-            public bool fMDIApp;
-            public IntPtr hwndFrame;
-            public IntPtr hAccel;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=16, cAccelEntries)*/]
-            public int cAccelEntries;
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagOLEVERB
         {
             public int lVerb;
