@@ -84,9 +84,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int GetClipboardFormatName(int format, StringBuilder lpString, int cchMax);
 
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool ChooseColor([In, Out] NativeMethods.CHOOSECOLOR cc);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
 
