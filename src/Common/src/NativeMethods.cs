@@ -270,8 +270,6 @@ namespace System.Windows.Forms
         DLGC_WANTCHARS = 0x0080,
         DLGC_WANTMESSAGE = 0x0004,      /* Pass message to control          */
         DLGC_HASSETSEL = 0x0008,      /* Understands EM_SETSEL message    */
-        DTM_GETSYSTEMTIME = (0x1000 + 1),
-        DTM_SETSYSTEMTIME = (0x1000 + 2),
         DTM_SETRANGE = (0x1000 + 4),
         DTM_SETFORMAT = (0x1000 + 50),
         DTM_SETMCCOLOR = (0x1000 + 6),
@@ -355,8 +353,6 @@ namespace System.Windows.Forms
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
         GDTR_MIN = 0x0001,
         GDTR_MAX = 0x0002,
-        GDT_VALID = 0,
-        GDT_NONE = 1,
         GA_PARENT = 1,
         GA_ROOT = 2;
 
@@ -668,8 +664,6 @@ namespace System.Windows.Forms
         MCM_GETMONTHRANGE = (0x1000 + 7),
         MCM_GETMINREQRECT = (0x1000 + 9),
         MCM_SETCOLOR = (0x1000 + 10),
-        MCM_SETTODAY = (0x1000 + 12),
-        MCM_GETTODAY = (0x1000 + 13),
         MCM_HITTEST = (0x1000 + 14),
         MCM_SETFIRSTDAYOFWEEK = (0x1000 + 15),
         MCM_SETRANGE = (0x1000 + 18),
@@ -1823,27 +1817,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class SYSTEMTIME
-        {
-            public short wYear;
-            public short wMonth;
-            public short wDayOfWeek;
-            public short wDay;
-            public short wHour;
-            public short wMinute;
-            public short wSecond;
-            public short wMilliseconds;
-
-            public override string ToString()
-            {
-                return "[SYSTEMTIME: "
-                + wDay.ToString(CultureInfo.InvariantCulture) + "/" + wMonth.ToString(CultureInfo.InvariantCulture) + "/" + wYear.ToString(CultureInfo.InvariantCulture)
-                + " " + wHour.ToString(CultureInfo.InvariantCulture) + ":" + wMinute.ToString(CultureInfo.InvariantCulture) + ":" + wSecond.ToString(CultureInfo.InvariantCulture)
-                + "]";
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class COMRECT
         {
             public int left;
@@ -2103,23 +2076,6 @@ namespace System.Windows.Forms
             public short st_wMilliseconds = 0;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMSELCHANGE
-        {
-            public User32.NMHDR nmhdr;
-            public SYSTEMTIME stSelStart = null;
-            public SYSTEMTIME stSelEnd = null;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMDAYSTATE
-        {
-            public User32.NMHDR nmhdr;
-            public SYSTEMTIME stStart = null;
-            public int cDayState = 0;
-            public IntPtr prgDayState;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct NMLVCUSTOMDRAW
         {
@@ -2349,14 +2305,6 @@ namespace System.Windows.Forms
                 hWindowMenu = hmenu;
                 idFirstChild = idFirst;
             }
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMDATETIMECHANGE
-        {
-            public User32.NMHDR nmhdr;
-            public int dwFlags = 0;
-            public SYSTEMTIME st = null;
         }
 
         [StructLayout(LayoutKind.Sequential)]
