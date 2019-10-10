@@ -1894,13 +1894,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagOleMenuGroupWidths
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)/*leftover(offset=0, widths)*/]
-            public int[] widths = new int[6];
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagOLEVERB
         {
             public int lVerb;
