@@ -1866,22 +1866,22 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_IsTogglePatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_TogglePatternId);
-                    case NativeMethods.UIA_LocalizedControlTypePropertyId:
+                    case UiaCore.UIA.IsTogglePatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.TogglePatternId);
+                    case UiaCore.UIA.LocalizedControlTypePropertyId:
                         return DateTimePickerLocalizedControlTypeString;
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox)
+                if (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox)
                 {
                     return true;
                 }

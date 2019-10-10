@@ -382,11 +382,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             return true;
         }
 
-        internal override object GetPropertyValue(int propertyID)
+        internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+            if (propertyID == UiaCore.UIA.ControlTypePropertyId)
             {
-                return NativeMethods.UIA_ButtonControlTypeId;
+                return UiaCore.UIA.ButtonControlTypeId;
             }
             else
             {
@@ -394,9 +394,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal override bool IsPatternSupported(int patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+            if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
             {
                 return true;
             }

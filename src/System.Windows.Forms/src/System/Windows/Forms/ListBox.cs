@@ -1827,12 +1827,12 @@ namespace System.Windows.Forms
             if (item != null)
             {
                 HasKeyboardFocus = false;
-                item.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                item.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
             else
             {
                 HasKeyboardFocus = true;
-                AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             base.OnGotFocus(e);
@@ -1987,13 +1987,13 @@ namespace System.Windows.Forms
                 var focused = AccessibilityObject.GetFocused();
                 if (focused == AccessibilityObject.GetSelected())
                 {
-                    focused?.RaiseAutomationEvent(NativeMethods.UIA_SelectionItem_ElementSelectedEventId);
+                    focused?.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
                 }
-                focused?.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                focused?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
             else if (ItemsCountIsChanged())
             {
-                AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             base.OnSelectedIndexChanged(e);

@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -324,14 +325,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ThumbControlTypeId;
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ThumbControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

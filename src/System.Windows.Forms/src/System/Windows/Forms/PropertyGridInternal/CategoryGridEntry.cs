@@ -312,10 +312,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.FragmentNavigate(direction);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_GridItemPatternId ||
-                    patternId == NativeMethods.UIA_TableItemPatternId)
+                if (patternId == UiaCore.UIA.GridItemPatternId ||
+                    patternId == UiaCore.UIA.TableItemPatternId)
                 {
                     return true;
                 }
@@ -323,14 +323,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
                         // To announce expanded collapsed state control type should be appropriate:
                         // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
-                        return NativeMethods.UIA_TreeItemControlTypeId;
+                        return UiaCore.UIA.TreeItemControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

@@ -245,9 +245,9 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId))
+                if (patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId))
                 {
                     return true;
                 }
@@ -255,27 +255,27 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(int propertyId)
+            internal override object GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return SR.DataGridView_AccTopRow;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return owner.Enabled;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsContentElementPropertyId:
+                    case UiaCore.UIA.IsContentElementPropertyId:
                         return true;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
+                    case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
                         return true;
                 }
 

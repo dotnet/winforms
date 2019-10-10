@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1146,11 +1147,11 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_HyperlinkControlTypeId;
+                    return UiaCore.UIA.HyperlinkControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

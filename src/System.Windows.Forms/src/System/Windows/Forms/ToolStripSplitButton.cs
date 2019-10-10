@@ -857,11 +857,11 @@ namespace System.Windows.Forms
                 ownerItem = item;
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_ButtonControlTypeId;
+                    return UiaCore.UIA.ButtonControlTypeId;
                 }
                 else
                 {
@@ -881,9 +881,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId && ownerItem.HasDropDownItems)
+                if (patternId == UiaCore.UIA.ExpandCollapsePatternId && ownerItem.HasDropDownItems)
                 {
                     return true;
                 }
@@ -959,14 +959,14 @@ namespace System.Windows.Forms
                 _accessibleObject.DoDefaultAction();
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 return _accessibleObject.GetPropertyValue(propertyID);
             }
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
                 return _accessibleObject.IsPatternSupported(patternId);
             }

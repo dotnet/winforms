@@ -9686,9 +9686,9 @@ namespace System.Windows.Forms
                 return base.IsIAccessibleExSupported();
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ItemStatusPropertyId)
+                if (propertyID == UiaCore.UIA.ItemStatusPropertyId)
                 {
                     switch (owner.Sorting)
                     {

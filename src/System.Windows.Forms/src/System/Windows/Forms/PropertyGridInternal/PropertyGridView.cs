@@ -5338,7 +5338,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
                 var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
-                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
                     oldExpandedState,
                     newExpandedState);
 
@@ -7189,31 +7189,31 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return GetCurrentIndex() + 1; // Index is zero-based, Child ID is 1-based.
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return BoundingRectangle;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ListItemControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ListItemControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningGridViewListBox.Focused;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owningGridViewListBox.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     default:
                         return base.GetPropertyValue(propertyID);
@@ -7249,10 +7249,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
-                    patternId == NativeMethods.UIA_InvokePatternId)
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                    patternId == UiaCore.UIA.InvokePatternId)
                 {
                     return true;
                 }
@@ -7323,7 +7323,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void SetFocus()
             {
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
                 base.SetFocus();
             }
@@ -7442,13 +7442,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_ListControlTypeId;
+                    return UiaCore.UIA.ListControlTypeId;
                 }
-                else if (propertyID == NativeMethods.UIA_NamePropertyId)
+                else if (propertyID == UiaCore.UIA.NamePropertyId)
                 {
                     return Name;
                 }
@@ -7458,7 +7458,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void SetFocus()
             {
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
                 base.SetFocus();
             }
@@ -7645,7 +7645,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnGotFocus(e);
 
-                this.AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                this.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             protected override void OnKeyDown(KeyEventArgs ke)
@@ -7996,34 +7996,34 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                internal override object GetPropertyValue(int propertyID)
+                internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 {
                     switch (propertyID)
                     {
-                        case NativeMethods.UIA_RuntimeIdPropertyId:
+                        case UiaCore.UIA.RuntimeIdPropertyId:
                             return RuntimeId;
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_EditControlTypeId;
-                        case NativeMethods.UIA_NamePropertyId:
+                        case UiaCore.UIA.ControlTypePropertyId:
+                            return UiaCore.UIA.EditControlTypeId;
+                        case UiaCore.UIA.NamePropertyId:
                             return Name;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        case UiaCore.UIA.HasKeyboardFocusPropertyId:
                             return Owner.Focused;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
+                        case UiaCore.UIA.IsEnabledPropertyId:
                             return !IsReadOnly;
-                        case NativeMethods.UIA_ClassNamePropertyId:
+                        case UiaCore.UIA.ClassNamePropertyId:
                             return Owner.GetType().ToString();
-                        case NativeMethods.UIA_FrameworkIdPropertyId:
+                        case UiaCore.UIA.FrameworkIdPropertyId:
                             return NativeMethods.WinFormFrameworkId;
-                        case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
-                            return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
+                        case UiaCore.UIA.IsValuePatternAvailablePropertyId:
+                            return IsPatternSupported(UiaCore.UIA.ValuePatternId);
                     }
 
                     return base.GetPropertyValue(propertyID);
                 }
 
-                internal override bool IsPatternSupported(int patternId)
+                internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
-                    if (patternId == NativeMethods.UIA_ValuePatternId)
+                    if (patternId == UiaCore.UIA.ValuePatternId)
                     {
                         return true;
                     }
@@ -8108,7 +8108,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 internal override void SetFocus()
                 {
-                    RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                    RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
                     base.SetFocus();
                 }
@@ -8484,28 +8484,28 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_TableControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.TableControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
-                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
+                    case UiaCore.UIA.IsTablePatternAvailablePropertyId:
+                    case UiaCore.UIA.IsGridPatternAvailablePropertyId:
                         return true;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
                 switch (patternId)
                 {
-                    case NativeMethods.UIA_TablePatternId:
-                    case NativeMethods.UIA_GridPatternId:
+                    case UiaCore.UIA.TablePatternId:
+                    case UiaCore.UIA.GridPatternId:
                         return true;
                 }
 

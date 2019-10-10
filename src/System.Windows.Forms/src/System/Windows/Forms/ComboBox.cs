@@ -2660,7 +2660,7 @@ namespace System.Windows.Forms
 
             // Notify collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
                 UiaCore.ExpandCollapseState.Collapsed,
                 UiaCore.ExpandCollapseState.Expanded);
 
@@ -3087,12 +3087,12 @@ namespace System.Windows.Forms
             // This is necessary for DropDown style as edit should not take focus.
             if (DropDownStyle == ComboBoxStyle.DropDown)
             {
-                AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             // Notify Collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
                 UiaCore.ExpandCollapseState.Expanded,
                 UiaCore.ExpandCollapseState.Collapsed);
 
@@ -4777,41 +4777,41 @@ namespace System.Windows.Forms
                 return GetCurrentIndex() + 1; // Index is zero-based, Child ID is 1-based.
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return BoundingRectangle;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ListItemControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ListItemControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut ?? string.Empty;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused && _owningComboBox.SelectedIndex == GetCurrentIndex();
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owningComboBox.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsControlElementPropertyId:
+                    case UiaCore.UIA.IsControlElementPropertyId:
                         return true;
-                    case NativeMethods.UIA_IsContentElementPropertyId:
+                    case UiaCore.UIA.IsContentElementPropertyId:
                         return true;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case NativeMethods.UIA_IsSelectionItemPatternAvailablePropertyId:
+                    case UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId:
                         return true;
-                    case NativeMethods.UIA_SelectionItemIsSelectedPropertyId:
+                    case UiaCore.UIA.SelectionItemIsSelectedPropertyId:
                         return (State & AccessibleStates.Selected) != 0;
-                    case NativeMethods.UIA_SelectionItemSelectionContainerPropertyId:
+                    case UiaCore.UIA.SelectionItemSelectionContainerPropertyId:
                         return _owningComboBox.ChildListAccessibleObject;
 
                     default:
@@ -4835,11 +4835,11 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
-                    patternId == NativeMethods.UIA_InvokePatternId ||
-                    patternId == NativeMethods.UIA_SelectionItemPatternId)
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                    patternId == UiaCore.UIA.InvokePatternId ||
+                    patternId == UiaCore.UIA.SelectionItemPatternId)
                 {
                     return true;
                 }
@@ -4911,7 +4911,7 @@ namespace System.Windows.Forms
 
             internal override void SetFocus()
             {
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
                 base.SetFocus();
             }
@@ -5028,9 +5028,9 @@ namespace System.Windows.Forms
                 return base.IsIAccessibleExSupported();
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
                 {
                     if (_owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
                     {
@@ -5040,7 +5040,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (patternId == NativeMethods.UIA_ValuePatternId)
+                    if (patternId == UiaCore.UIA.ValuePatternId)
                     {
                         return true;
                     }
@@ -5246,22 +5246,22 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ComboBoxControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ComboBoxControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused;
-                    case NativeMethods.UIA_NativeWindowHandlePropertyId:
+                    case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _owningComboBox.Handle;
-                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
+                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
+                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.ValuePatternId);
 
                     default:
                         return base.GetPropertyValue(propertyID);
@@ -5297,7 +5297,7 @@ namespace System.Windows.Forms
 
                 if (ItemAccessibleObjects[selectedItem] is ComboBoxItemAccessibleObject itemAccessibleObject)
                 {
-                    itemAccessibleObject.RaiseAutomationEvent(NativeMethods.UIA_SelectionItem_ElementSelectedEventId);
+                    itemAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
                 }
             }
 
@@ -5305,7 +5305,7 @@ namespace System.Windows.Forms
             {
                 base.SetFocus();
 
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
         }
 
@@ -5340,7 +5340,7 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        Debug.WriteLine("Edit parent " + _owner.AccessibilityObject.GetPropertyValue(NativeMethods.UIA_ControlTypePropertyId));
+                        Debug.WriteLine("Edit parent " + _owner.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
                         return _owner.AccessibilityObject;
                     case UiaCore.NavigateDirection.NextSibling:
                         if (_owner.DropDownStyle == ComboBoxStyle.Simple)
@@ -5391,35 +5391,35 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return Bounds;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_EditControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.EditControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name ?? SR.ComboBoxEditDefaultAccessibleName;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owner.Focused;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owner.Enabled;
-                    case NativeMethods.UIA_AutomationIdPropertyId:
+                    case UiaCore.UIA.AutomationIdPropertyId:
                         return COMBO_BOX_EDIT_AUTOMATION_ID;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_NativeWindowHandlePropertyId:
+                    case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _handle;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
 
                     default:
@@ -5558,41 +5558,41 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return Bounds;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ListControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ListControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return false; // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owningComboBox.Enabled;
-                    case NativeMethods.UIA_AutomationIdPropertyId:
+                    case UiaCore.UIA.AutomationIdPropertyId:
                         return COMBO_BOX_LIST_AUTOMATION_ID;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_NativeWindowHandlePropertyId:
+                    case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _childListControlhandle;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsSelectionPatternAvailablePropertyId:
+                    case UiaCore.UIA.IsSelectionPatternAvailablePropertyId:
                         return true;
-                    case NativeMethods.UIA_SelectionCanSelectMultiplePropertyId:
+                    case UiaCore.UIA.SelectionCanSelectMultiplePropertyId:
                         return CanSelectMultiple;
-                    case NativeMethods.UIA_SelectionIsSelectionRequiredPropertyId:
+                    case UiaCore.UIA.SelectionIsSelectionRequiredPropertyId:
                         return IsSelectionRequired;
 
                     default:
@@ -5647,10 +5647,10 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
-                    patternId == NativeMethods.UIA_SelectionPatternId)
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                    patternId == UiaCore.UIA.SelectionPatternId)
                 {
                     return true;
                 }
@@ -5810,30 +5810,30 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return Bounds;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_TextControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.TextControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owner.Focused;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owner.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
                     default:
                         return base.GetPropertyValue(propertyID);
@@ -5990,31 +5990,31 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return BoundingRectangle;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ButtonControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ButtonControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owner.Focused;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owner.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     default:
                         return base.GetPropertyValue(propertyID);
@@ -6050,10 +6050,10 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
-                    patternId == NativeMethods.UIA_InvokePatternId)
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                    patternId == UiaCore.UIA.InvokePatternId)
                 {
                     return true;
                 }

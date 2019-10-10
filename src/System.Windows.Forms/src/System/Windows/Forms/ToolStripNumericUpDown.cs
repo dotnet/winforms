@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     internal class ToolStripNumericUpDown : ToolStripControlHost
@@ -37,24 +39,24 @@ namespace System.Windows.Forms
                 {
                 }
 
-                internal override object GetPropertyValue(int propertyID)
+                internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 {
-                    if (propertyID == NativeMethods.UIA_NamePropertyId)
+                    if (propertyID == UiaCore.UIA.NamePropertyId)
                     {
                         return Name;
                     }
 
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                    if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                     {
-                        return NativeMethods.UIA_SpinnerControlTypeId;
+                        return UiaCore.UIA.SpinnerControlTypeId;
                     }
 
                     return base.GetPropertyValue(propertyID);
                 }
 
-                internal override bool IsPatternSupported(int patternId)
+                internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
-                    if (patternId == NativeMethods.UIA_ValuePatternId)
+                    if (patternId == UiaCore.UIA.ValuePatternId)
                     {
                         return true;
                     }

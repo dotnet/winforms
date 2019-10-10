@@ -753,23 +753,23 @@ namespace System.Windows.Forms
                     }
                 }
 
-                internal override object GetPropertyValue(int propertyID)
+                internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 {
                     switch (propertyID)
                     {
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_ComboBoxControlTypeId;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
+                        case UiaCore.UIA.ControlTypePropertyId:
+                            return UiaCore.UIA.ComboBoxControlTypeId;
+                        case UiaCore.UIA.IsOffscreenPropertyId:
                             return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     }
 
                     return base.GetPropertyValue(propertyID);
                 }
 
-                internal override bool IsPatternSupported(int patternId)
+                internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
-                    if (patternId == NativeMethods.UIA_ExpandCollapsePatternId ||
-                        patternId == NativeMethods.UIA_ValuePatternId)
+                    if (patternId == UiaCore.UIA.ExpandCollapsePatternId ||
+                        patternId == UiaCore.UIA.ValuePatternId)
                     {
                         return true;
                     }

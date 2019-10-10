@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -532,11 +533,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_SeparatorControlTypeId;
+                    return UiaCore.UIA.SeparatorControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

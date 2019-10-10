@@ -660,23 +660,23 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override object GetPropertyValue(int propertyId)
+            internal override object GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_HeaderControlTypeId;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.HeaderControlTypeId;
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return Owner.DataGridView.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                    case NativeMethods.UIA_IsPasswordPropertyId:
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                 }
 
