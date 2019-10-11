@@ -2044,13 +2044,6 @@ namespace System.Windows.Forms
             public short tdExtDevmodeOffset = 0;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMTVDISPINFO
-        {
-            public User32.NMHDR hdr;
-            public ComCtl32.TVITEMW item;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TCITEM_T
         {

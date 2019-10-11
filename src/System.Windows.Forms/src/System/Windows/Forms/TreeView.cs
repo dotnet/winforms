@@ -2638,7 +2638,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private IntPtr TvnBeginLabelEdit(NativeMethods.NMTVDISPINFO nmtvdi)
+        private IntPtr TvnBeginLabelEdit(ComCtl32.NMTVDISPINFOW nmtvdi)
         {
             // Check for invalid node handle
             if (nmtvdi.item.hItem == IntPtr.Zero)
@@ -2657,7 +2657,7 @@ namespace System.Windows.Forms
             return (IntPtr)(e.CancelEdit ? 1 : 0);
         }
 
-        private IntPtr TvnEndLabelEdit(NativeMethods.NMTVDISPINFO nmtvdi)
+        private IntPtr TvnEndLabelEdit(ComCtl32.NMTVDISPINFOW nmtvdi)
         {
             editNode = null;
 
@@ -3083,10 +3083,10 @@ namespace System.Windows.Forms
                         TvnBeginDrag(MouseButtons.Right, nmtv);
                         break;
                     case NativeMethods.TVN_BEGINLABELEDIT:
-                        m.Result = TvnBeginLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
+                        m.Result = TvnBeginLabelEdit(*(ComCtl32.NMTVDISPINFOW*)m.LParam);
                         break;
                     case NativeMethods.TVN_ENDLABELEDIT:
-                        m.Result = TvnEndLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
+                        m.Result = TvnEndLabelEdit(*(ComCtl32.NMTVDISPINFOW*)m.LParam);
                         break;
                     case NativeMethods.NM_CLICK:
                     case NativeMethods.NM_RCLICK:
