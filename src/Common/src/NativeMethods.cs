@@ -1921,18 +1921,6 @@ namespace System.Windows.Forms
             public int[] widths = new int[6];
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMLISTVIEW
-        {
-            public User32.NMHDR hdr;
-            public int iItem;
-            public int iSubItem;
-            public ComCtl32.LVIS uNewState;
-            public ComCtl32.LVIS uOldState;
-            public int uChanged;
-            public IntPtr lParam;
-        }
-
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagOIFI
         {

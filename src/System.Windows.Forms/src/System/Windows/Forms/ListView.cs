@@ -4336,12 +4336,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private void LvnBeginDrag(MouseButtons buttons, NativeMethods.NMLISTVIEW nmlv)
-        {
-            ListViewItem item = Items[nmlv.iItem];
-            OnItemDrag(new ItemDragEventArgs(buttons, item));
-        }
-
         /// <summary>
         ///  Fires the afterLabelEdit event.
         /// </summary>
@@ -6156,9 +6150,9 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_COLUMNCLICK:
                     {
-                        NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
+                        ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         listViewState[LISTVIEWSTATE_columnClicked] = true;
-                        columnIndex = nmlv.iSubItem;
+                        columnIndex = nmlv->iSubItem;
                         break;
                     }
 
@@ -6185,14 +6179,14 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_BEGINDRAG:
                     {
-                        // the items collection was modified while dragging
-                        // that means that we can't reliably give the user the item on which the dragging started
-                        // so don't tell the user about this operation...
-                        //
+                        // The items collection was modified while dragging that means that
+                        // we can't reliably give the user the item on which the dragging
+                        // started so don't tell the user about this operation.
                         if (!ItemCollectionChangedInMouseDown)
                         {
-                            NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
-                            LvnBeginDrag(MouseButtons.Left, nmlv);
+                            ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
+                            ListViewItem item = Items[nmlv->iItem];
+                            OnItemDrag(new ItemDragEventArgs(MouseButtons.Left, item));
                         }
 
                         break;
@@ -6200,21 +6194,22 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_BEGINRDRAG:
                     {
-                        // the items collection was modified while dragging
-                        // that means that we can't reliably give the user the item on which the dragging started
-                        // so don't tell the user about this operation...
-                        //
+                        // The items collection was modified while dragging. That means that
+                        // we can't reliably give the user the item on which the dragging
+                        // started so don't tell the user about this operation.
                         if (!ItemCollectionChangedInMouseDown)
                         {
-                            NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
-                            LvnBeginDrag(MouseButtons.Right, nmlv);
+                            ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
+                            ListViewItem item = Items[nmlv->iItem];
+                            OnItemDrag(new ItemDragEventArgs(MouseButtons.Right, item));
                         }
+
                         break;
                     }
 
                 case NativeMethods.LVN_ITEMCHANGING:
                     {
-                        NativeMethods.NMLISTVIEW* nmlv = (NativeMethods.NMLISTVIEW*)m.LParam;
+                        ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
@@ -6234,7 +6229,7 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_ITEMCHANGED:
                     {
-                        NativeMethods.NMLISTVIEW* nmlv = (NativeMethods.NMLISTVIEW*)m.LParam;
+                        ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         // Check for state changes to the selected state...
                         if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
                         {
