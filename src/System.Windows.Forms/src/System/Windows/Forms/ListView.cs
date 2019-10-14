@@ -3301,11 +3301,12 @@ namespace System.Windows.Forms
                         lvFindInfo.vkDirection = (uint)dir;
                     }
                     lvFindInfo.lParam = IntPtr.Zero;
-                    int index = (int)User32.SendMessageW(
-                        this,
-                        User32.WindowMessage.LVM_FINDITEMW,
+
+                    int index = (int)SendMessage((int)LVM.FINDITEM,
                         (IntPtr)(startIndex - 1), // decrement startIndex so that the search is 0-based
-                        ref lvFindInfo);
+                        (IntPtr)(void*)&lvFindInfo
+                        );
+
                     if (index >= 0)
                     {
                         return Items[index];
@@ -3412,7 +3413,7 @@ namespace System.Windows.Forms
         ///  value from GetDisplayIndex, or -1 if you don't know.  If provided,
         ///  the search for the index can be greatly improved.
         /// </summary>
-        internal int GetDisplayIndex(ListViewItem item, int lastIndex)
+        internal unsafe int GetDisplayIndex(ListViewItem item, int lastIndex)
         {
             Debug.Assert(item.listView == this, "Can't GetDisplayIndex if the list item doesn't belong to us");
             Debug.Assert(item.ID != -1, "ListViewItem has no ID yet");
@@ -3430,13 +3431,20 @@ namespace System.Windows.Forms
 
                 if (lastIndex != -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, User32.WindowMessage.LVM_FINDITEMW, (IntPtr)(lastIndex - 1), ref info);
+                    displayIndex = (int)SendMessage((int)LVM.FINDITEM,
+                        (IntPtr)(lastIndex - 1), // decrement startIndex so that the search is 0-based
+                        (IntPtr)(void*)&info
+                        );
                 }
 
                 if (displayIndex == -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, User32.WindowMessage.LVM_FINDITEMW, (IntPtr)(-1) /* beginning */, ref info);
+                    displayIndex = (int)SendMessage((int)LVM.FINDITEM,
+                        (IntPtr)(-1), // beginning
+                        (IntPtr)(void*)&info
+                        );
                 }
+
                 Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
                 return displayIndex;
             }

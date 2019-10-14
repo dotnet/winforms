@@ -18,17 +18,6 @@ internal static partial class Interop
             IntPtr lParam);
 
         public static IntPtr SendMessageW(
-            HandleRef hWnd,
-            WindowMessage Msg,
-            IntPtr wParam,
-            IntPtr lParam)
-        {
-            IntPtr result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
-
-        public static IntPtr SendMessageW(
             IHandle hWnd,
             WindowMessage Msg,
             IntPtr wParam = default,

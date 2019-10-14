@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -3431,6 +3431,78 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsTheory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("bla")]
+        public void ListView_FindItemWithText_1_should_return_null_if_no_items(string text)
+        {
+            var listView = new ListView();
+
+            Assert.Null(listView.FindItemWithText(text));
+        }
+
+        [WinFormsFact]
+        public void ListView_FindItemWithText_should_throw_ArgumentOutOfRangeException_if_startIndex_invalid()
+        {
+            var listView = new ListView();
+
+            // no items
+            Assert.Throws<ArgumentOutOfRangeException>(() => listView.FindItemWithText("", /* immaterial */false, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => listView.FindItemWithText("", /* immaterial */false, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => listView.FindItemWithText("", /* immaterial */false, 1));
+
+            // add 2 items
+            listView.Items.Add("item1");
+            listView.Items.Add("item2");
+            Assert.Throws<ArgumentOutOfRangeException>(() => listView.FindItemWithText("", /* immaterial */false, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => listView.FindItemWithText("", /* immaterial */false, listView.Items.Count));
+        }
+
+        [WinFormsFact]
+        public void ListView_FindItemWithText_FindItem_non_VirtualMode_should_find_existing_item()
+        {
+            var listView = new ListView();
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+
+            for (int i = 0; i < 100; i++)
+            {
+                listView.Items.Add($"item{i:00}");
+            }
+
+            for (int i = 0; i < 100; i++)
+            {
+                // search for an item
+                var text = $"item{i:00}";
+                ListViewItem item = listView.FindItemWithText(text);
+                Assert.NotNull(item);
+                Assert.Equal(text, item.Text);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListView_GetDisplayIndex_non_VirtualMode_should_find_existing_item_index()
+        {
+            var listView = new ListView();
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+
+            var items = new List<ListViewItem>(100);
+            for (int i = 0; i < 100; i++)
+            {
+                items.Add(listView.Items.Add($"item{i:00}"));
+            }
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                var itemIndex = listView.GetDisplayIndex(items[i], 0);
+                Assert.Same(items[i], listView.Items[itemIndex]);
+
+                itemIndex = listView.GetDisplayIndex(items[i], -1);
+                Assert.Same(items[i], listView.Items[itemIndex]);
+            }
         }
 
         private class SubListView : ListView
