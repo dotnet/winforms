@@ -110,13 +110,6 @@ namespace System.Windows.Forms
         CDERR_REGISTERMSGFAIL = 0x000C,
         CFERR_NOFONTS = 0x2001,
         CFERR_MAXLESSTHANMIN = 0x2002,
-        CC_RGBINIT = 0x00000001,
-        CC_FULLOPEN = 0x00000002,
-        CC_PREVENTFULLOPEN = 0x00000004,
-        CC_SHOWHELP = 0x00000008,
-        CC_ENABLEHOOK = 0x00000010,
-        CC_SOLIDCOLOR = 0x00000080,
-        CC_ANYCOLOR = 0x00000100,
         CF_SCREENFONTS = 0x00000001,
         CF_SHOWHELP = 0x00000004,
         CF_ENABLEHOOK = 0x00000008,
@@ -1714,20 +1707,6 @@ namespace System.Windows.Forms
         {
             public int nFromPage = 0;
             public int nToPage = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class CHOOSECOLOR
-        {
-            public int lStructSize = Marshal.SizeOf<CHOOSECOLOR>(); //ndirect.DllLib.sizeOf(this);
-            public IntPtr hwndOwner;
-            public IntPtr hInstance;
-            public int rgbResult;
-            public IntPtr lpCustColors;
-            public int Flags;
-            public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
-            public string lpTemplateName = null;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

@@ -46,12 +46,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return !GetOption(NativeMethods.CC_PREVENTFULLOPEN);
+                return !GetOption((int)Comdlg32.CC.PREVENTFULLOPEN);
             }
 
             set
             {
-                SetOption(NativeMethods.CC_PREVENTFULLOPEN, !value);
+                SetOption((int)Comdlg32.CC.PREVENTFULLOPEN, !value);
             }
         }
 
@@ -68,12 +68,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetOption(NativeMethods.CC_ANYCOLOR);
+                return GetOption((int)Comdlg32.CC.ANYCOLOR);
             }
 
             set
             {
-                SetOption(NativeMethods.CC_ANYCOLOR, value);
+                SetOption((int)Comdlg32.CC.ANYCOLOR, value);
             }
         }
 
@@ -143,12 +143,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetOption(NativeMethods.CC_FULLOPEN);
+                return GetOption((int)Comdlg32.CC.FULLOPEN);
             }
 
             set
             {
-                SetOption(NativeMethods.CC_FULLOPEN, value);
+                SetOption((int)Comdlg32.CC.FULLOPEN, value);
             }
         }
 
@@ -181,11 +181,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetOption(NativeMethods.CC_SHOWHELP);
+                return GetOption((int)Comdlg32.CC.SHOWHELP);
             }
             set
             {
-                SetOption(NativeMethods.CC_SHOWHELP, value);
+                SetOption((int)Comdlg32.CC.SHOWHELP, value);
             }
         }
 
@@ -204,11 +204,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetOption(NativeMethods.CC_SOLIDCOLOR);
+                return GetOption((int)Comdlg32.CC.SOLIDCOLOR);
             }
             set
             {
-                SetOption(NativeMethods.CC_SOLIDCOLOR, value);
+                SetOption((int)Comdlg32.CC.SOLIDCOLOR, value);
             }
         }
 
@@ -238,10 +238,13 @@ namespace System.Windows.Forms
             Color = Color.Black;
         }
 
-        protected override bool RunDialog(IntPtr hwndOwner)
+        protected unsafe override bool RunDialog(IntPtr hwndOwner)
         {
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
-            NativeMethods.CHOOSECOLOR cc = new NativeMethods.CHOOSECOLOR();
+            var hookProcPtr = new User32.WNDPROCINT(HookProc);
+            var cc = new Comdlg32.CHOOSECOLORW
+            {
+                lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSECOLORW>()
+            };
             IntPtr custColorPtr = Marshal.AllocCoTaskMem(64);
             try
             {
@@ -251,17 +254,17 @@ namespace System.Windows.Forms
                 cc.rgbResult = ColorTranslator.ToWin32(color);
                 cc.lpCustColors = custColorPtr;
 
-                int flags = Options | (NativeMethods.CC_RGBINIT | NativeMethods.CC_ENABLEHOOK);
+                Comdlg32.CC flags = (Comdlg32.CC)Options | Comdlg32.CC.RGBINIT | Comdlg32.CC.ENABLEHOOK;
                 // Our docs say AllowFullOpen takes precedence over FullOpen; ChooseColor implements the opposite
                 if (!AllowFullOpen)
                 {
-                    flags &= ~NativeMethods.CC_FULLOPEN;
+                    flags &= ~Comdlg32.CC.FULLOPEN;
                 }
 
                 cc.Flags = flags;
 
                 cc.lpfnHook = hookProcPtr;
-                if (!SafeNativeMethods.ChooseColor(cc))
+                if (!Comdlg32.ChooseColorW(ref cc).IsTrue())
                 {
                     return false;
                 }
