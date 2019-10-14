@@ -119,8 +119,8 @@ namespace System.Windows.Forms
         private DateTime selectionStart;
         private DateTime selectionEnd;
         private Day firstDayOfWeek = DEFAULT_FIRST_DAY_OF_WEEK;
-        private NativeMethods.MONTCALENDAR_VIEW_MODE mcCurView = NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH;
-        private NativeMethods.MONTCALENDAR_VIEW_MODE mcOldView = NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH;
+        private ComCtl32.MCMV _mcCurView = ComCtl32.MCMV.MONTH;
+        private ComCtl32.MCMV _mcOldView = ComCtl32.MCMV.MONTH;
 
         /// <summary>
         ///  Bitmask for the annually bolded dates.  Months start on January.
@@ -2361,14 +2361,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the MCN_VIEWCHANGE  notification
         /// </summary>
-        private void WmCalViewChanged(ref Message m)
+        private unsafe void WmCalViewChanged(ref Message m)
         {
-            NativeMethods.NMVIEWCHANGE nmmcvm = (NativeMethods.NMVIEWCHANGE)m.GetLParam(typeof(NativeMethods.NMVIEWCHANGE));
-            Debug.Assert(mcCurView == (NativeMethods.MONTCALENDAR_VIEW_MODE)nmmcvm.uOldView, "Calendar view mode is out of sync with native control");
-            if (mcCurView != (NativeMethods.MONTCALENDAR_VIEW_MODE)nmmcvm.uNewView)
+            ComCtl32.NMVIEWCHANGE* nmmcvm = (ComCtl32.NMVIEWCHANGE*)m.LParam;
+            Debug.Assert(_mcCurView == nmmcvm->uOldView, "Calendar view mode is out of sync with native control");
+            if (_mcCurView != nmmcvm->uNewView)
             {
-                mcOldView = mcCurView;
-                mcCurView = (NativeMethods.MONTCALENDAR_VIEW_MODE)nmmcvm.uNewView;
+                _mcOldView = _mcCurView;
+                _mcCurView = nmmcvm->uNewView;
 
                 AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
                 AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
@@ -2690,7 +2690,7 @@ namespace System.Windows.Forms
                     if (calendar != null)
                     {
 
-                        if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH)
+                        if (calendar._mcCurView == ComCtl32.MCMV.MONTH)
                         {
                             if (System.DateTime.Equals(calendar.SelectionStart.Date, calendar.SelectionEnd.Date))
                             {
@@ -2701,7 +2701,7 @@ namespace System.Windows.Forms
                                 name = string.Format(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
                             }
                         }
-                        else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
+                        else if (calendar._mcCurView == ComCtl32.MCMV.YEAR)
                         {
                             if (System.DateTime.Equals(calendar.SelectionStart.Month, calendar.SelectionEnd.Month))
                             {
@@ -2712,7 +2712,7 @@ namespace System.Windows.Forms
                                 name = string.Format(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToString("y"), calendar.SelectionEnd.ToString("y"));
                             }
                         }
-                        else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_DECADE)
+                        else if (calendar._mcCurView == ComCtl32.MCMV.DECADE)
                         {
                             if (System.DateTime.Equals(calendar.SelectionStart.Year, calendar.SelectionEnd.Year))
                             {
@@ -2723,7 +2723,7 @@ namespace System.Windows.Forms
                                 name = string.Format(SR.MonthCalendarYearRangeSelected, calendar.SelectionStart.ToString("yyyy"), calendar.SelectionEnd.ToString("yyyy"));
                             }
                         }
-                        else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_CENTURY)
+                        else if (calendar._mcCurView == ComCtl32.MCMV.CENTURY)
                         {
                             name = string.Format(SR.MonthCalendarSingleDecadeSelected, calendar.SelectionStart.ToString("yyyy"));
                         }
@@ -2741,7 +2741,7 @@ namespace System.Windows.Forms
                     {
                         if (calendar != null)
                         {
-                            if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH)
+                            if (calendar._mcCurView == ComCtl32.MCMV.MONTH)
                             {
                                 if (System.DateTime.Equals(calendar.SelectionStart.Date, calendar.SelectionEnd.Date))
                                 {
@@ -2752,7 +2752,7 @@ namespace System.Windows.Forms
                                     value = string.Format("{0} - {1}", calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
                                 }
                             }
-                            else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
+                            else if (calendar._mcCurView == ComCtl32.MCMV.YEAR)
                             {
                                 if (System.DateTime.Equals(calendar.SelectionStart.Month, calendar.SelectionEnd.Month))
                                 {
