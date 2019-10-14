@@ -2740,13 +2740,6 @@ namespace System.Windows.Forms
             public bool fProtected = false;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class REQRESIZE
-        {
-            public User32.NMHDR nmhdr;
-            public Interop.RECT rc;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class ENPROTECTED
         {
