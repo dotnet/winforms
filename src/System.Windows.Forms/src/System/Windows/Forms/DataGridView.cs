@@ -3434,7 +3434,9 @@ namespace System.Windows.Forms
                        dataGridViewOper[DATAGRIDVIEWOPER_trackColRelocation] ||
                        IsCurrentCellDirty ||
                        ((VirtualMode || DataSource != null) && IsCurrentRowDirty) ||
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                        (EditMode != DataGridViewEditMode.EditOnEnter && editingControl != null ||
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
                        dataGridViewState1[DATAGRIDVIEWSTATE1_newRowEdited]);
             }
         }

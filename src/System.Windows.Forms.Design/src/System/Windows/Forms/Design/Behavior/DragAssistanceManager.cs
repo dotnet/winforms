@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -650,8 +649,8 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 // If a distance is 0 or if it is to our left and we're heading right or if it is to our right and we're heading left then we can null this value out
                 if (distances[i] == 0 ||
-                  distances[i] > 0 && direction > 0 ||
-                  distances[i] < 0 && direction < 0)
+                  (distances[i] > 0 && direction > 0) ||
+                  (distances[i] < 0 && direction < 0))
                 {
                     distances[i] = INVALID_VALUE;
                 }

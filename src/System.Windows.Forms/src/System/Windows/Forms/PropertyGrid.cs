@@ -1282,7 +1282,9 @@ namespace System.Windows.Forms
                             // or Guid.Emtpy, assume the classes are different.
                             //
                             if (classesSame &&
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                                 (oldType != newType || oldType.IsCOMObject && newType.IsCOMObject))
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
                             {
                                 classesSame = false;
                             }
@@ -3617,7 +3619,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < currentObjects.Length; i++)
                 {
                     Type typeChanged = e.TypeChanged;
-                    if (currentObjects[i] == e.ComponentChanged || typeChanged != null && typeChanged.IsAssignableFrom(currentObjects[i].GetType()))
+                    if (currentObjects[i] == e.ComponentChanged || typeChanged?.IsAssignableFrom(currentObjects[i].GetType()) == true)
                     {
                         // clear our property hashes
                         ClearCachedProps();

@@ -783,8 +783,10 @@ namespace System.Windows.Forms
             _displayRect.X = x;
             _displayRect.Y = y;
 
-            if (xDelta != 0 || yDelta != 0 && IsHandleCreated)
+            if (IsHandleCreated && (xDelta != 0 || yDelta != 0))
             {
+                Debug.Assert(IsHandleCreated, "Handle is not created");
+
                 RECT rcClip = ClientRectangle;
                 RECT rcUpdate = ClientRectangle;
                 User32.ScrollWindowEx(
@@ -972,10 +974,10 @@ namespace System.Windows.Forms
         {
             bool needLayout = false;
 
-            if (!horiz && HScroll
-                || horiz && !HScroll
-                || !vert && VScroll
-                || vert && !VScroll)
+            if ((!horiz && HScroll)
+                || (horiz && !HScroll)
+                || (!vert && VScroll)
+                || (vert && !VScroll))
             {
 
                 needLayout = true;

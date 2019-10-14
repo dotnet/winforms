@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Layout;
 
@@ -424,7 +424,9 @@ namespace System.Windows.Forms
 
             Size toolStripPreferredSize = displayRectangle.Size;
             DockStyle dock = toolStrip.Dock;
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
             if (toolStrip.AutoSize && (!toolStrip.IsInToolStripPanel && (dock == DockStyle.Left) || (dock == DockStyle.Right)))
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 // if we're autosizing, make sure we pad out items to the preferred width, not the
                 // width of the display rectangle.

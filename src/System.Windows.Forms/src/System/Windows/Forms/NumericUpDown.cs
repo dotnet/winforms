@@ -517,8 +517,7 @@ namespace System.Windows.Forms
             {
                 // Digits are OK
             }
-            else if (keyInput.Equals(decimalSeparator) || keyInput.Equals(groupSeparator) ||
-                     keyInput.Equals(negativeSign))
+            else if (keyInput.Equals(decimalSeparator) || keyInput.Equals(groupSeparator) || keyInput.Equals(negativeSign))
             {
                 // Decimal separator is OK
             }
@@ -526,7 +525,7 @@ namespace System.Windows.Forms
             {
                 // Backspace key is OK
             }
-            else if (Hexadecimal && ((e.KeyChar >= 'a' && e.KeyChar <= 'f') || e.KeyChar >= 'A' && e.KeyChar <= 'F'))
+            else if (Hexadecimal && ((e.KeyChar >= 'a' && e.KeyChar <= 'f') || (e.KeyChar >= 'A' && e.KeyChar <= 'F')))
             {
                 // Hexadecimal digits are OK
             }

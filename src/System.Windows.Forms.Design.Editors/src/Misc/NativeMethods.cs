@@ -18,8 +18,6 @@ namespace System.Windows.Forms.Design
 
         public const int VK_PROCESSKEY = 0xE5;
 
-        public const int CC_FULLOPEN = 0x00000002;
-        public const int CC_ENABLETEMPLATEHANDLE = 0x00000040;
         public const int STGM_DELETEONRELEASE = 0x04000000;
 
         public const int RECO_PASTE = 0x00000000; // paste from clipboard

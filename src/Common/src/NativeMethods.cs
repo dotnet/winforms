@@ -110,13 +110,6 @@ namespace System.Windows.Forms
         CDERR_REGISTERMSGFAIL = 0x000C,
         CFERR_NOFONTS = 0x2001,
         CFERR_MAXLESSTHANMIN = 0x2002,
-        CC_RGBINIT = 0x00000001,
-        CC_FULLOPEN = 0x00000002,
-        CC_PREVENTFULLOPEN = 0x00000004,
-        CC_SHOWHELP = 0x00000008,
-        CC_ENABLEHOOK = 0x00000010,
-        CC_SOLIDCOLOR = 0x00000080,
-        CC_ANYCOLOR = 0x00000100,
         CF_SCREENFONTS = 0x00000001,
         CF_SHOWHELP = 0x00000004,
         CF_ENABLEHOOK = 0x00000008,
@@ -1717,20 +1710,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class CHOOSECOLOR
-        {
-            public int lStructSize = Marshal.SizeOf<CHOOSECOLOR>(); //ndirect.DllLib.sizeOf(this);
-            public IntPtr hwndOwner;
-            public IntPtr hInstance;
-            public int rgbResult;
-            public IntPtr lpCustColors;
-            public int Flags;
-            public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
-            public string lpTemplateName = null;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NOTIFYICONDATA
         {
             public int cbSize = Marshal.SizeOf<NOTIFYICONDATA>();
@@ -2042,13 +2021,6 @@ namespace System.Windows.Forms
             public short tdPortNameOffset = 0;
             [MarshalAs(UnmanagedType.U2)]
             public short tdExtDevmodeOffset = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMTVDISPINFO
-        {
-            public User32.NMHDR hdr;
-            public ComCtl32.TVITEMW item;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

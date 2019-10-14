@@ -636,7 +636,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(HeaderFont)));
                 }
 
-                if (value == null && headerFont != null || (value != null && !value.Equals(headerFont)))
+                if ((value == null && headerFont != null) || (value != null && !value.Equals(headerFont)))
                 {
                     headerFont = value;
                     OnHeaderFontChanged(EventArgs.Empty);

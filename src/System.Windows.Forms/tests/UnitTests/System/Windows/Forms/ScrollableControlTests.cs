@@ -113,6 +113,51 @@ namespace System.Windows.Forms.Tests
             Assert.Same(createParams, control.CreateParams);
         }
 
+        public static IEnumerable<object[]> SetClientRectangle_TestData()
+        {
+            const int width = 70;
+            const int height = 80;
+
+            // create handle
+            yield return new object[] { true, width, height, width - 20, height + 50, new Rectangle(0, 0, width - SystemInformation.VerticalScrollBarWidth, height) };
+            yield return new object[] { true, width, height, width + 50, height - 20, new Rectangle(0, 0, width, height - SystemInformation.HorizontalScrollBarHeight) };
+            yield return new object[] { true, width, height, width + 50, height + 50, new Rectangle(0, 0, width - SystemInformation.VerticalScrollBarWidth, height - SystemInformation.HorizontalScrollBarHeight) };
+            yield return new object[] { true, width, height, width - 20, height - 20, new Rectangle(0, 0, width, height) };
+
+            // no handle
+            yield return new object[] { false, width, height, width + 50, height - 20, new Rectangle(0, 0, width, height) };
+            yield return new object[] { false, width, height, width - 20, height + 50, new Rectangle(0, 0, width, height) };
+            yield return new object[] { false, width, height, width + 50, height + 50, new Rectangle(0, 0, width, height) };
+            yield return new object[] { false, width, height, width - 20, height - 20, new Rectangle(0, 0, width, height) };
+        }
+
+        [Theory]
+        [MemberData(nameof(SetClientRectangle_TestData))]
+        public void ScrollableControl_ClientRectangle_should_reduce_if_scrollbars_shown(bool createHandle, int width, int height, int childWidth, int childHeight, Rectangle expected)
+        {
+            var control = new SubScrollableControl
+            {
+                AutoScroll = true,
+                ClientSize = new Size(width, height)
+            };
+
+            // if handle isn't created, scrollbars won't be rendered, which in turn affects the size of ClientRectangle
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, control.Handle);
+            }
+
+            // add a child control
+            var child = new Button
+            {
+                Width = childWidth,
+                Height = childHeight
+            };
+            control.Controls.Add(child);
+
+            Assert.Equal(expected, control.ClientRectangle);
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_AutoScroll_Set_GetReturnsExpected(bool value)
@@ -463,16 +508,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Layout += handler;
             control.OnLayout(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.Layout -= handler;
-           control.OnLayout(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
 #pragma warning disable 0618
@@ -543,85 +588,63 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetDisplayRectLocation_TestData()
         {
-            yield return new object[] { true, 0, 0, new Rectangle(0, 0, 100, 150), new Rectangle(0, 0, 100, 150) };
-            yield return new object[] { false, 0, 0, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            const int width = 70;
+            const int height = 80;
+            Size scrollableSize = new Size(100, 150);
+            Size nonScrollableSize = new Size(width, height);
 
-            yield return new object[] { true, -10, 0, new Rectangle(-10, 0, 110, 150), new Rectangle(-10, 0, 100, 150) };
-            yield return new object[] { false, -10, 0, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            yield return new object[] { true, width, height, 0, 0, new Point(0, 0), scrollableSize };
+            yield return new object[] { false, width, height, 0, 0, new Point(0, 0), nonScrollableSize };
 
-            yield return new object[] { true, 0, -20, new Rectangle(0, -20, 100, 150), new Rectangle(0, 0, 100, 150) };
-            yield return new object[] { false, 0, -20, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            yield return new object[] { true, width, height, -10, 0, new Point(-10, 0), scrollableSize };
+            yield return new object[] { false, width, height, -10, 0, new Point(0, 0), nonScrollableSize };
 
-            yield return new object[] { true, -10, -20, new Rectangle(-10, -20, 110, 170), new Rectangle(-10, -20, 100, 150) };
-            yield return new object[] { false, -10, -20, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            yield return new object[] { true, width, height, 0, -20, new Point(0, -20), scrollableSize };
+            yield return new object[] { false, width, height, 0, -20, new Point(0, 0), nonScrollableSize };
+
+            yield return new object[] { true, width, height, -10, -20, new Point(-10, -20), scrollableSize };
+            yield return new object[] { false, width, height, -10, -20, new Point(0, 0), nonScrollableSize };
 
             // Overflow.
-            yield return new object[] { true, -100, -20, new Rectangle(-30, -20, 130, 170), new Rectangle(-30, -20, 100, 150) };
-            yield return new object[] { false, -100, -20, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            yield return new object[] { true, width, height, -100, -20, new Point(-30, -20), scrollableSize };
+            yield return new object[] { false, width, height, -100, -20, new Point(0, 0), nonScrollableSize };
 
-            yield return new object[] { true, -10, -200, new Rectangle(-10, -70, 110, 220), new Rectangle(-10, -70, 100, 150) };
-            yield return new object[] { false, -10, -200, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            yield return new object[] { true, width, height, -10, -200, new Point(-10, -70), scrollableSize };
+            yield return new object[] { false, width, height, -10, -200, new Point(0, 0), nonScrollableSize };
 
             // Underflow.
-            yield return new object[] { true, 1, 20, new Rectangle(0, 0, 100, 150), new Rectangle(0, 0, 100, 150) };
-            yield return new object[] { false, 1, 20, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            yield return new object[] { true, width, height, 1, 20, new Point(0, 0), scrollableSize };
+            yield return new object[] { false, width, height, 1, 20, new Point(0, 0), nonScrollableSize };
 
-            yield return new object[] { true, 10, 2, new Rectangle(0, 0, 100, 150), new Rectangle(0, 0, 100, 150) };
-            yield return new object[] { false, 10, 2, new Rectangle(0, 0, 70, 80), new Rectangle(0, 0, 100, 150) };
+            yield return new object[] { true, width, height, 10, 2, new Point(0, 0), scrollableSize };
+            yield return new object[] { false, width, height, 10, 2, new Point(0, 0), nonScrollableSize };
         }
 
         [Theory]
         [MemberData(nameof(SetDisplayRectLocation_TestData))]
-        public void SetDisplayRectLocation_InvokeWithoutHandle_Success(bool autoScroll, int x, int y, Rectangle expectedDisplayRectangle, Rectangle expectedBounds)
+        public void SetDisplayRectLocation_Invoke_Success(bool autoScroll, int width, int height, int scrollX, int scrollY, Point expectedDisplayRectangleLocation, Size expectedDisplayRectangleSize)
         {
             var control = new SubScrollableControl
             {
                 AutoScroll = autoScroll,
-                ClientSize = new Size(70, 80)
+                ClientSize = new Size(width, height)
             };
 
             // Without child.
-            control.SetDisplayRectLocation(x, y);
-            Assert.Equal(new Rectangle(0, 0, 70, 80), control.DisplayRectangle);
+            control.SetDisplayRectLocation(scrollX, scrollY);
+            Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
 
             // With child.
             var child = new LargeControl();
             control.Controls.Add(child);
-            Assert.Equal(new Rectangle(0, 0, 100, 150), child.Bounds);
+            Assert.Equal(child.ExpectedSize, child.Bounds);
 
-            control.SetDisplayRectLocation(x, y);
-            Assert.Equal(expectedDisplayRectangle, control.DisplayRectangle);
-            Assert.Equal(expectedDisplayRectangle.Location, control.AutoScrollPosition);
-            Assert.Equal(expectedBounds, child.Bounds);
-        }
-
-        [Theory]
-        [MemberData(nameof(SetDisplayRectLocation_TestData))]
-        public void SetDisplayRectLocation_InvokeWithHandle_Success(bool autoScroll, int x, int y, Rectangle expectedDisplayRectangle, Rectangle expectedBounds)
-        {
-            var control = new SubScrollableControl
-            {
-                AutoScroll = autoScroll,
-                ClientSize = new Size(70, 80)
-            };
-
-            // Without child.
-            control.SetDisplayRectLocation(x, y);
-            Assert.Equal(new Rectangle(0, 0, 70, 80), control.DisplayRectangle);
-            Assert.Equal(Point.Empty, control.AutoScrollPosition);
-
-            // With child.
-            var child = new LargeControl();
-            control.Controls.Add(child);
-            Assert.Equal(new Rectangle(0, 0, 100, 150), child.Bounds);
-
-            // With created handle.
-            Assert.NotEqual(IntPtr.Zero, child.Handle);
-            control.SetDisplayRectLocation(x, y);
-            Assert.Equal(expectedDisplayRectangle, control.DisplayRectangle);
-            Assert.Equal(expectedDisplayRectangle.Location, control.AutoScrollPosition);
-            Assert.Equal(expectedBounds, child.Bounds);
+            control.SetDisplayRectLocation(scrollX, scrollY);
+            Assert.Equal(expectedDisplayRectangleSize, control.DisplayRectangle.Size);
+            Assert.Equal(expectedDisplayRectangleLocation, control.DisplayRectangle.Location);
+            Assert.Equal(expectedDisplayRectangleLocation, control.AutoScrollPosition);
+            Assert.Equal(child.ExpectedSize, child.Bounds);
         }
 
         public static IEnumerable<object[]> ScrollControlIntoView_TestData()
@@ -694,6 +717,8 @@ namespace System.Windows.Forms.Tests
         private class LargeControl : Control
         {
             protected override Size DefaultSize => new Size(100, 150);
+
+            public Rectangle ExpectedSize => new Rectangle(new Point(0, 0), DefaultSize);
         }
 
         private class SmallControl : Control

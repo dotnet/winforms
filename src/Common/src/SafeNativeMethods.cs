@@ -38,15 +38,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Comdlg32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CommDlgExtendedError();
 
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int cObjects, [MarshalAs(UnmanagedType.Interface)] ref object pobjs, uint cPages, IntPtr pClsid, int locale, int reserved1, IntPtr reserved2);
-
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int cObjects, [MarshalAs(UnmanagedType.Interface)] ref object pobjs, uint cPages, Guid[] pClsid, int locale, int reserved1, IntPtr reserved2);
-
-        [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        public static extern void OleCreatePropertyFrame(HandleRef hwndOwner, int x, int y, [MarshalAs(UnmanagedType.LPWStr)]string caption, int cObjects, HandleRef lplpobjs, uint cPages, IntPtr pClsid, int locale, int reserved1, IntPtr reserved2);
-
         [DllImport(ExternDll.Hhctrl, CharSet = CharSet.Auto)]
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, int dwData);
 
@@ -83,9 +74,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int GetClipboardFormatName(int format, StringBuilder lpString, int cchMax);
-
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool ChooseColor([In, Out] NativeMethods.CHOOSECOLOR cc);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
