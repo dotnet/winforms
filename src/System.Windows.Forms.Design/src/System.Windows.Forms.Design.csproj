@@ -103,6 +103,8 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCapture.cs" Link="Interop\User32\Interop.GetCapture.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCursor.cs" Link="Interop\User32\Interop.GetCursor.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCursorPos.cs" Link="Interop\User32\Interop.GetCursorPos.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetKeyState.cs" Link="Interop\User32\Interop.GetKeyState.cs" />
