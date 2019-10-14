@@ -14,9 +14,6 @@ namespace System.Windows.Forms
 {
     internal static class SafeNativeMethods
     {
-        [DllImport(ExternDll.User32)]
-        public static extern int OemKeyScan(short wAsciiVal);
-
         [DllImport(ExternDll.Gdi32)]
         public static extern int GetSystemPaletteEntries(IntPtr hdc, int iStartIndex, int nEntries, byte[] lppe);
 

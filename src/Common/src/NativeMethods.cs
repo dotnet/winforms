@@ -2948,16 +2948,6 @@ namespace System.Windows.Forms
                                 IntPtr piidSource);
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class EVENTMSG
-        {
-            public int message;
-            public int paramL;
-            public int paramH;
-            public int time;
-            public IntPtr hwnd;
-        }
-
         [ComImport]
         [Guid("B196B283-BAB4-101A-B69C-00AA00341D07")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

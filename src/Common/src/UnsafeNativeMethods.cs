@@ -166,15 +166,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, EntryPoint = "RtlMoveMemory", CharSet = CharSet.Unicode)]
         public static extern void CopyMemoryW(IntPtr pdst, char[] psrc, int cb);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetKeyboardState(byte[] keystate);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetKeyboardState(byte[] keystate);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern short GetAsyncKeyState(int vkey);
-
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
 
@@ -206,12 +197,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
 
-        #region SendKeys SendInput functionality
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool BlockInput([In, MarshalAs(UnmanagedType.Bool)] bool fBlockIt);
-
-        #endregion
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
