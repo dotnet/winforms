@@ -3600,12 +3600,12 @@ namespace System.Windows.Forms
                     case RichTextBoxConstants.EN_REQUESTRESIZE:
                         if (!CallOnContentsResized)
                         {
-                            NativeMethods.REQRESIZE reqResize = (NativeMethods.REQRESIZE)m.GetLParam(typeof(NativeMethods.REQRESIZE));
+                            Richedit.REQRESIZE* reqResize = (Richedit.REQRESIZE*)m.LParam;
                             if (BorderStyle == System.Windows.Forms.BorderStyle.Fixed3D)
                             {
-                                reqResize.rc.bottom++;
+                                reqResize->rc.bottom++;
                             }
-                            OnContentsResized(new ContentsResizedEventArgs(Rectangle.FromLTRB(reqResize.rc.left, reqResize.rc.top, reqResize.rc.right, reqResize.rc.bottom)));
+                            OnContentsResized(new ContentsResizedEventArgs(reqResize->rc));
                         }
                         break;
 
