@@ -132,6 +132,11 @@
         <target state="new">Top Right</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataSourceLocksItems">
+        <source>Items collection cannot be modified when the DataSource property is set.</source>
+        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
         <target state="translated">Encaixar Seletor</target>
