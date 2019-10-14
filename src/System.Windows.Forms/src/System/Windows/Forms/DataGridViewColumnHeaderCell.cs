@@ -911,9 +911,9 @@ namespace System.Windows.Forms
                 valBounds.Width -= DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginRight;
 
                 Color textColor;
-                if (DataGridView.ApplyVisualStylesToHeaderCells)
+                if (DataGridView.ApplyVisualStylesToHeaderCells && !SystemInformation.HighContrast)
                 {
-                    textColor = DataGridView.DefaultForeBrush.Color;
+                    textColor = DataGridViewColumnHeaderCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
                 }
                 else
                 {

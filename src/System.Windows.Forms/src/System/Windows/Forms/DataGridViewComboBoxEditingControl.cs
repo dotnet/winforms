@@ -183,73 +183,69 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            if (m.Msg == WindowMessages.WM_PAINT)
             {
-                case WindowMessages.WM_PAINT:
-                    if (SystemInformation.HighContrast && GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System))
+                if (SystemInformation.HighContrast && GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System))
+                {
+                    using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
                     {
-                        using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
+                        using (WindowsRegion wr = new WindowsRegion(Bounds))
                         {
-                            using (WindowsRegion wr = new WindowsRegion(Bounds))
+                            // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
+                            RegionType updateRegionFlags = User32.GetUpdateRgn(Handle, wr.HRegion, BOOL.TRUE);
+
+                            dr.CombineRegion(wr, dr, Gdi32.CombineMode.RGN_DIFF);
+
+                            Rectangle updateRegionBoundingRect = wr.ToRectangle();
+                            FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
+                            // Call the base class to do its painting (with a clipped DC).
+
+                            NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
+                            IntPtr dc;
+                            bool disposeDc = false;
+                            if (m.WParam == IntPtr.Zero)
                             {
-                                // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                                RegionType updateRegionFlags = User32.GetUpdateRgn(Handle, wr.HRegion, BOOL.TRUE);
+                                dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                                disposeDc = true;
+                            }
+                            else
+                            {
+                                dc = m.WParam;
+                            }
 
-                                dr.CombineRegion(wr, dr, Gdi32.CombineMode.RGN_DIFF);
-
-                                Rectangle updateRegionBoundingRect = wr.ToRectangle();
-                                FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
-                                //// Call the base class to do its painting (with a clipped DC).
-
-                                NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                                IntPtr dc;
-                                bool disposeDc = false;
-                                if (m.WParam == IntPtr.Zero)
+                            using (DeviceContext mDC = DeviceContext.FromHdc(dc))
+                            {
+                                using (WindowsGraphics wg = new WindowsGraphics(mDC))
                                 {
-                                    dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
-                                    disposeDc = true;
-                                }
-                                else
-                                {
-                                    dc = m.WParam;
-                                }
-
-                                using (DeviceContext mDC = DeviceContext.FromHdc(dc))
-                                {
-                                    using (WindowsGraphics wg = new WindowsGraphics(mDC))
+                                    if (updateRegionFlags != RegionType.ERROR)
                                     {
-                                        if (updateRegionFlags != RegionType.ERROR)
-                                        {
-                                            wg.DeviceContext.SetClip(dr);
-                                        }
-                                        m.WParam = dc;
-                                        DefWndProc(ref m);
-                                        if (updateRegionFlags != RegionType.ERROR)
-                                        {
-                                            wg.DeviceContext.SetClip(wr);
-                                        }
-                                        using (Graphics g = Graphics.FromHdcInternal(dc))
-                                        {
-                                            FlatComboBoxAdapter.DrawFlatCombo(this, g);
-                                        }
+                                        wg.DeviceContext.SetClip(dr);
+                                    }
+                                    m.WParam = dc;
+                                    DefWndProc(ref m);
+                                    if (updateRegionFlags != RegionType.ERROR)
+                                    {
+                                        wg.DeviceContext.SetClip(wr);
+                                    }
+                                    using (Graphics g = Graphics.FromHdcInternal(dc))
+                                    {
+                                        FlatComboBoxAdapter.DrawFlatCombo(this, g);
                                     }
                                 }
-
-                                if (disposeDc)
-                                {
-                                    UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
-                                }
                             }
-                            return;
-                        }
-                    }
 
-                    base.WndProc(ref m);
-                    break;
-                default:
-                    base.WndProc(ref m);
-                    break;
+                            if (disposeDc)
+                            {
+                                UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+                            }
+                        }
+
+                        return;
+                    }
+                }
             }
+
+            base.WndProc(ref m);
         }
     }
 

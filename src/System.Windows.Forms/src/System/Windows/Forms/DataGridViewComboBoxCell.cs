@@ -2531,13 +2531,13 @@ namespace System.Windows.Forms
                                     flags |= TextFormatFlags.EndEllipsis;
                                 }
                                 Color textColor;
-                                if (paintPostXPThemes && (drawDropDownButton || drawComboBox))
+                                if (paintPostXPThemes && (drawDropDownButton || drawComboBox) && !SystemInformation.HighContrast)
                                 {
-                                    textColor = DataGridView.DefaultForeBrush.Color;
+                                    textColor = DataGridViewComboBoxCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
                                 }
                                 else
                                 {
-                                    textColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+                                    textColor = (cellSelected && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                                 }
                                 TextRenderer.DrawText(g,
                                                     formattedString,
