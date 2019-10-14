@@ -1651,45 +1651,45 @@ namespace System.Windows.Forms
         // Track the currently hot item since the user might be using the tab and
         // arrow keys to navigate the toolbar and if that's the case, we'll need to know where to re-
         // position the tooltip window when the underlying toolbar control attempts to display it.
-        private void WmNotifyHotItemChange(ref Message m)
+        private unsafe void WmNotifyHotItemChange(ref Message m)
         {
             // Should we set the hot item?
-            NativeMethods.NMTBHOTITEM nmTbHotItem = (NativeMethods.NMTBHOTITEM)m.GetLParam(typeof(NativeMethods.NMTBHOTITEM));
-            if (NativeMethods.HICF_ENTERING == (nmTbHotItem.dwFlags & NativeMethods.HICF_ENTERING))
+            ComCtl32.NMTBHOTITEM* nmTbHotItem = (ComCtl32.NMTBHOTITEM*)m.LParam;
+            if ((nmTbHotItem->dwFlags & ComCtl32.HICF.ENTERING) == ComCtl32.HICF.ENTERING)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_LEAVING == (nmTbHotItem.dwFlags & NativeMethods.HICF_LEAVING))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.LEAVING) == ComCtl32.HICF.LEAVING)
             {
                 hotItem = -1;
             }
-            else if (NativeMethods.HICF_MOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_MOUSE))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.MOUSE) == ComCtl32.HICF.MOUSE)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_ARROWKEYS == (nmTbHotItem.dwFlags & NativeMethods.HICF_ARROWKEYS))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.ARROWKEYS) == ComCtl32.HICF.ARROWKEYS)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_ACCELERATOR == (nmTbHotItem.dwFlags & NativeMethods.HICF_ACCELERATOR))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.ACCELERATOR) == ComCtl32.HICF.ACCELERATOR)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_DUPACCEL == (nmTbHotItem.dwFlags & NativeMethods.HICF_DUPACCEL))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.DUPACCEL) == ComCtl32.HICF.DUPACCEL)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_RESELECT == (nmTbHotItem.dwFlags & NativeMethods.HICF_RESELECT))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.RESELECT) == ComCtl32.HICF.RESELECT)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_LMOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_LMOUSE))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.LMOUSE) == ComCtl32.HICF.LMOUSE)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_TOGGLEDROPDOWN == (nmTbHotItem.dwFlags & NativeMethods.HICF_TOGGLEDROPDOWN))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.TOGGLEDROPDOWN) == ComCtl32.HICF.TOGGLEDROPDOWN)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
         }
 

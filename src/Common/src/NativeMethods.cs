@@ -2159,26 +2159,6 @@ namespace System.Windows.Forms
             public int uFlags;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMTBHOTITEM
-        {
-            public User32.NMHDR hdr;
-            public int idOld;
-            public int idNew;
-            public int dwFlags;
-        }
-
-        public const int HICF_OTHER = 0x00000000;
-        public const int HICF_MOUSE = 0x00000001;          // Triggered by mouse
-        public const int HICF_ARROWKEYS = 0x00000002;          // Triggered by arrow keys
-        public const int HICF_ACCELERATOR = 0x00000004;          // Triggered by accelerator
-        public const int HICF_DUPACCEL = 0x00000008;          // This accelerator is not unique
-        public const int HICF_ENTERING = 0x00000010;          // idOld is invalid
-        public const int HICF_LEAVING = 0x00000020;          // idNew is invalid
-        public const int HICF_RESELECT = 0x00000040;          // hot item reselected
-        public const int HICF_LMOUSE = 0x00000080;          // left mouse button selected
-        public const int HICF_TOGGLEDROPDOWN = 0x00000100;          // Toggle button's dropdown state
-
         // HDN_ITEMCHANGING will send us an HDITEM w/ pszText set to some random pointer.
         // Marshal.PtrToStructure chokes when it has to convert a random pointer to a string.
         // For HDN_ITEMCHANGING map pszText to an IntPtr
