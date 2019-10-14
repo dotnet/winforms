@@ -3277,73 +3277,69 @@ namespace System.Windows.Forms
                 {
                     return Items[sviEvent.Index];
                 }
+
+                return null;
+            }
+
+            fixed (char* pText = text)
+            {
+                var lvFindInfo = new ComCtl32.LVFINDINFOW();
+                if (isTextSearch)
+                {
+                    lvFindInfo.flags = ComCtl32.LVFI.STRING;
+                    lvFindInfo.flags |= (isPrefixSearch ? ComCtl32.LVFI.PARTIAL : 0);
+                    lvFindInfo.psz = pText;
+                }
                 else
                 {
-                    return null;
+                    lvFindInfo.flags = ComCtl32.LVFI.NEARESTXY;
+                    lvFindInfo.pt = pt;
+                    // we can do this because SearchDirectionHint is set to the VK_*
+                    lvFindInfo.vkDirection = (uint)dir;
                 }
-            }
-            else
-            {
-                fixed (char *pText = text)
+                lvFindInfo.lParam = IntPtr.Zero;
+
+                int index = (int)SendMessage((int)LVM.FINDITEM,
+                    (IntPtr)(startIndex - 1), // decrement startIndex so that the search is 0-based
+                    (IntPtr)(void*)&lvFindInfo
+                    );
+
+                if (index >= 0)
                 {
-                    var lvFindInfo = new ComCtl32.LVFINDINFOW();
-                    if (isTextSearch)
-                    {
-                        lvFindInfo.flags = ComCtl32.LVFI.STRING;
-                        lvFindInfo.flags |= (isPrefixSearch ? ComCtl32.LVFI.PARTIAL : 0);
-                        lvFindInfo.psz = pText;
-                    }
-                    else
-                    {
-                        lvFindInfo.flags = ComCtl32.LVFI.NEARESTXY;
-                        lvFindInfo.pt = pt;
-                        // we can do this because SearchDirectionHint is set to the VK_*
-                        lvFindInfo.vkDirection = (uint)dir;
-                    }
-                    lvFindInfo.lParam = IntPtr.Zero;
+                    return Items[index];
+                }
 
-                    int index = (int)SendMessage((int)LVM.FINDITEM,
-                        (IntPtr)(startIndex - 1), // decrement startIndex so that the search is 0-based
-                        (IntPtr)(void*)&lvFindInfo
-                        );
-
-                    if (index >= 0)
+                if (isTextSearch && includeSubItemsInSearch)
+                {
+                    // win32 listView control can't search inside sub items
+                    for (int i = startIndex; i < Items.Count; i++)
                     {
-                        return Items[index];
-                    }
-                    
-                    if (isTextSearch && includeSubItemsInSearch)
-                    {
-                        // win32 listView control can't search inside sub items
-                        for (int i = startIndex; i < Items.Count; i++)
+                        ListViewItem lvi = Items[i];
+                        for (int j = 0; j < lvi.SubItems.Count; j++)
                         {
-                            ListViewItem lvi = Items[i];
-                            for (int j = 0; j < lvi.SubItems.Count; j++)
+                            ListViewItem.ListViewSubItem lvsi = lvi.SubItems[j];
+                            // the win32 list view search for items w/ text is case insensitive
+                            // do the same for sub items
+                            // because we are comparing user defined strings we have to do the slower String search
+                            // ie, use String.Compare(string, string, case sensitive, CultureInfo)
+                            // instead of new Whidbey String.Equals overload
+                            // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
+                            if (string.Equals(text, lvsi.Text, StringComparison.OrdinalIgnoreCase))
                             {
-                                ListViewItem.ListViewSubItem lvsi = lvi.SubItems[j];
-                                // the win32 list view search for items w/ text is case insensitive
-                                // do the same for sub items
-                                // because we are comparing user defined strings we have to do the slower String search
-                                // ie, use String.Compare(string, string, case sensitive, CultureInfo)
-                                // instead of new Whidbey String.Equals overload
-                                // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
-                                if (string.Equals(text, lvsi.Text, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    return lvi;
-                                }
-                                
-                                if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(lvsi.Text, text, CompareOptions.IgnoreCase))
-                                {
-                                    return lvi;
-                                }
+                                return lvi;
+                            }
+
+                            if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(lvsi.Text, text, CompareOptions.IgnoreCase))
+                            {
+                                return lvi;
                             }
                         }
-
-                        return null;
                     }
-                    
+
                     return null;
                 }
+
+                return null;
             }
         }
 
@@ -3390,6 +3386,7 @@ namespace System.Windows.Forms
             {
                 rnd = new Random(handle);
             }
+
             return rnd.Next().ToString(CultureInfo.InvariantCulture);
         }
 
@@ -3401,10 +3398,12 @@ namespace System.Windows.Forms
             // on a per-list view basis to reduce the problem.
             int result = nextID++;
             if (result == -1)
-            {// leave -1 as a "no such value" ID
+            {
+                // leave -1 as a "no such value" ID
                 result = 0;
                 nextID = 1;
             }
+
             return result;
         }
 
@@ -3448,24 +3447,23 @@ namespace System.Windows.Forms
                 Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
                 return displayIndex;
             }
-            else
+
+            // PERF: The only reason we should ever call this before the handle is created
+            // is if the user calls ListViewItem.Index.
+            Debug.Assert(listItemsArray != null, "listItemsArray is null, but the handle isn't created");
+
+            int index = 0;
+            foreach (object o in listItemsArray)
             {
-                // PERF: The only reason we should ever call this before the handle is created
-                // is if the user calls ListViewItem.Index.
-                Debug.Assert(listItemsArray != null, "listItemsArray is null, but the handle isn't created");
-
-                int index = 0;
-                foreach (object o in listItemsArray)
+                if (o == item)
                 {
-                    if (o == item)
-                    {
-                        return index;
-                    }
-
-                    index++;
+                    return index;
                 }
-                return -1;
+
+                index++;
             }
+
+            return -1;
         }
 
         /// <summary>
