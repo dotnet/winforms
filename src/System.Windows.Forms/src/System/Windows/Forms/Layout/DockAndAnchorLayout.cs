@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Layout
             Rectangle oldBounds = GetCachedBounds(element);
             Point location = oldBounds.Location;
 
-            Debug.Assert((CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink || newSize.Height >= oldBounds.Height && newSize.Width >= oldBounds.Width),
+            Debug.Assert((CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink || (newSize.Height >= oldBounds.Height && newSize.Width >= oldBounds.Width)),
                 "newSize expected to be >= current size.");
 
             if ((direction & GrowthDirection.Left) != GrowthDirection.None)

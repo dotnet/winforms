@@ -3961,9 +3961,9 @@ namespace System.Windows.Forms
                 try
                 {
                     Set_ListManager(DataSource, DataMember, true, false);     // we do not want to create columns
-                                                                                        // if the columns are already created
-                                                                                        // the grid should not rely on OnBindingContextChanged
-                                                                                        // to create columns.
+                                                                              // if the columns are already created
+                                                                              // the grid should not rely on OnBindingContextChanged
+                                                                              // to create columns.
                 }
                 catch
                 {
@@ -5654,7 +5654,9 @@ namespace System.Windows.Forms
             // 1. the user was editing or navigating around the data grid and
             // 2. this is not the result of moving focus inside the data grid and
             // 3. if the user was scrolling
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
             if (!gridState[GRIDSTATE_isEditing] && !gridState[GRIDSTATE_isNavigating] || (gridState[GRIDSTATE_editControlChanging] && !gridState[GRIDSTATE_isScrolling]))
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 return true;
             }
@@ -7011,9 +7013,11 @@ namespace System.Windows.Forms
             int previousLastTotallyVisibleCol = lastTotallyVisibleCol;
 
             while (col < firstVisibleCol
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                 || col == firstVisibleCol && negOffset != 0
                 || lastTotallyVisibleCol == -1 && col > firstVisibleCol
                 || lastTotallyVisibleCol > -1 && col > lastTotallyVisibleCol)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
 
                 ScrollToColumn(col);
@@ -9622,8 +9626,10 @@ namespace System.Windows.Forms
                 }
             }
 
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
             if (lastTotallyVisibleCol == nVisibleCols - 1 && columns > 0 ||
                 firstVisibleCol == 0 && columns < 0 && negOffset == 0)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 return;
             }
