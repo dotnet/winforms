@@ -79,40 +79,35 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public unsafe void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, IntPtr parentHandle)
         {
-            Guid[] guids = new Guid[] { pageGuid };
-            IntPtr guidsAddr = Marshal.UnsafeAddrOfPinnedArrayElement(guids, 0);
-
             object[] objs = component.GetType().IsArray ? (object[])component : new object[] { component };
-
-            int nObjs = objs.Length;
-            IntPtr[] objAddrs = new IntPtr[nObjs];
+            IntPtr[] objAddrs = new IntPtr[objs.Length];
 
             try
             {
-                for (int i = 0; i < nObjs; i++)
+                for (int i = 0; i < objAddrs.Length; i++)
                 {
                     objAddrs[i] = Marshal.GetIUnknownForObject(objs[i]);
                 }
 
-                fixed (IntPtr* pAddrs = objAddrs)
+                fixed (IntPtr* pObjAddrs = objAddrs)
                 {
-                    SafeNativeMethods.OleCreatePropertyFrame(
-                        new HandleRef(null, parentHandle),
+                    Oleaut32.OleCreatePropertyFrame(
+                        parentHandle,
                         0,
                         0,
                         title,
-                        nObjs,
-                        new HandleRef(null, (IntPtr)(long)pAddrs),
+                        (uint)objAddrs.Length,
+                        pObjAddrs,
                         1,
-                        guidsAddr,
-                        (int)Kernel32.GetThreadLocale(),
+                        &pageGuid,
+                        Kernel32.GetThreadLocale(),
                         0,
                         IntPtr.Zero);
                 }
             }
             finally
             {
-                for (int i = 0; i < nObjs; i++)
+                for (int i = 0; i < objAddrs.Length; i++)
                 {
                     if (objAddrs[i] != IntPtr.Zero)
                     {

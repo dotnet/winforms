@@ -61,17 +61,32 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 HRESULT hr = ((Ole32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
                 {
-                    object o = obj;
-                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, 1, new Guid[] { guid }, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
-                    return true;
+                    IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
+                    try
+                    {
+                        Oleaut32.OleCreatePropertyFrame(
+                            new HandleRef(parent, handle),
+                            0,
+                            0,
+                            "PropertyPages",
+                            1,
+                            &pUnk,
+                            1,
+                            &guid,
+                            (uint)Application.CurrentCulture.LCID,
+                            0,
+                            IntPtr.Zero);
+                        return true;
+                    }
+                    finally
+                    {
+                        Marshal.Release(pUnk);
+                    }
                 }
             }
 
             if (obj is Ole32.ISpecifyPropertyPages ispp)
             {
-                bool failed = false;
-                Exception failureException;
-
                 try
                 {
                     var uuids = new Ole32.CAUUID();
@@ -81,27 +96,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         return false;
                     }
 
+                    IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
                     try
                     {
-                        object o = obj;
-                        SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, uuids.cElems, (IntPtr)uuids.pElems, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
+                        Oleaut32.OleCreatePropertyFrame(
+                            new HandleRef(parent, handle),
+                            0,
+                            0,
+                            "PropertyPages",
+                            1,
+                            &pUnk,
+                            uuids.cElems,
+                            uuids.pElems,
+                            (uint)Application.CurrentCulture.LCID,
+                            0,
+                            IntPtr.Zero);
                         return true;
                     }
                     finally
                     {
+                        Marshal.Release(pUnk);
                         if (uuids.pElems != null)
                         {
                             Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
                         }
                     }
                 }
-                catch (Exception ex1)
-                {
-                    failed = true;
-                    failureException = ex1;
-                }
-
-                if (failed)
+                catch (Exception ex)
                 {
                     string errString = SR.ErrorPropertyPageFailed;
 
@@ -113,9 +134,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 MessageBoxButtons.OK, MessageBoxIcon.Error,
                                 MessageBoxDefaultButton.Button1, 0);
                     }
-                    else if (failureException != null)
+                    else if (ex != null)
                     {
-                        uiSvc.ShowError(failureException, errString);
+                        uiSvc.ShowError(ex, errString);
                     }
                     else
                     {
@@ -123,9 +144,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
+
             return false;
         }
-
     }
-
 }
