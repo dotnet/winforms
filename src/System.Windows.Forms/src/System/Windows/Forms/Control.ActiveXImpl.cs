@@ -878,9 +878,9 @@ namespace System.Windows.Forms
                 if (!_activeXState[s_inPlaceVisible])
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
-                    NativeMethods.tagOIFI inPlaceFrameInfo = new NativeMethods.tagOIFI
+                    var inPlaceFrameInfo = new Ole32.OLEINPLACEFRAMEINFO
                     {
-                        cb = Marshal.SizeOf<NativeMethods.tagOIFI>()
+                        cb = (uint)Marshal.SizeOf<Ole32.OLEINPLACEFRAMEINFO>()
                     };
 
                     // We are entering a secure context here.
@@ -911,7 +911,7 @@ namespace System.Windows.Forms
                         out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow,
                         &posRect,
                         &clipRect,
-                        inPlaceFrameInfo);
+                        &inPlaceFrameInfo);
 
                     SetObjectRects(&posRect, &clipRect);
 

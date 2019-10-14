@@ -267,7 +267,7 @@ namespace System.Windows.Forms
             out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
             RECT* lprcPosRect,
             RECT* lprcClipRect,
-            NativeMethods.tagOIFI lpFrameInfo)
+            Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo)
         {
             ppDoc = null;
             ppFrame = Host.GetParentContainer();
@@ -281,11 +281,11 @@ namespace System.Windows.Forms
             *lprcClipRect = WebBrowserHelper.GetClipRect();
             if (lpFrameInfo != null)
             {
-                lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
-                lpFrameInfo.fMDIApp = false;
-                lpFrameInfo.hAccel = IntPtr.Zero;
-                lpFrameInfo.cAccelEntries = 0;
-                lpFrameInfo.hwndFrame = (Host.ParentInternal == null) ? IntPtr.Zero : Host.ParentInternal.Handle;
+                lpFrameInfo->cb = (uint)Marshal.SizeOf<Ole32.OLEINPLACEFRAMEINFO>();
+                lpFrameInfo->fMDIApp = BOOL.FALSE;
+                lpFrameInfo->hAccel = IntPtr.Zero;
+                lpFrameInfo->cAccelEntries = 0;
+                lpFrameInfo->hwndFrame = (Host.ParentInternal == null) ? IntPtr.Zero : Host.ParentInternal.Handle;
             }
 
             return HRESULT.S_OK;
