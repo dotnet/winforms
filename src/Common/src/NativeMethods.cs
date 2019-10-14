@@ -2631,14 +2631,6 @@ namespace System.Windows.Forms
             public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 4)]
-        public class SELCHANGE
-        {
-            public User32.NMHDR nmhdr;
-            public Interop.Richedit.CHARRANGE chrg;
-            public int seltyp = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class PARAFORMAT
         {
