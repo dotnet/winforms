@@ -235,7 +235,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return CanCopy && selectedGridEntry.IsTextEditable;
+                return CanCopy && selectedGridEntry != null && selectedGridEntry.IsTextEditable;
             }
         }
 
@@ -1355,7 +1355,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Edit.Copy();
                 }
-                else
+                else if (selectedGridEntry != null)
                 {
                     Clipboard.SetDataObject(selectedGridEntry.GetPropertyTextValue());
                 }
@@ -3591,7 +3591,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                }
             */
 
-            if (selectedGridEntry.Enumerable &&
+            if (selectedGridEntry != null && selectedGridEntry.Enumerable &&
                 dropDownHolder != null && dropDownHolder.Visible &&
                 (keyCode == Keys.Up || keyCode == Keys.Down))
             {
@@ -6634,7 +6634,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 InstanceCreationEditor ice = e.Link.LinkData as InstanceCreationEditor;
 
                 Debug.Assert(ice != null, "How do we have a link without the InstanceCreationEditor?");
-                if (ice != null)
+                if (ice != null && gridView?.SelectedGridEntry != null)
                 {
                     Type createType = gridView.SelectedGridEntry.PropertyType;
                     if (createType != null)
@@ -7392,7 +7392,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
             {
-                if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                if (direction == UnsafeNativeMethods.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry != null)
                 {
                     return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
                 }
@@ -7789,7 +7789,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         case Keys.Return:
                             bool fwdReturn = !psheet.NeedsCommit;
-                            if (psheet.UnfocusSelection() && fwdReturn)
+                            if (psheet.UnfocusSelection() && fwdReturn && psheet.SelectedGridEntry != null)
                             {
                                 psheet.SelectedGridEntry.OnValueReturnKey();
                             }
@@ -7972,7 +7972,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// <returns>Returns the element in the specified direction.</returns>
                 internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
                 {
-                    if (direction == UnsafeNativeMethods.NavigateDirection.Parent)
+                    if (direction == UnsafeNativeMethods.NavigateDirection.Parent && propertyGridView.SelectedGridEntry != null)
                     {
                         return propertyGridView.SelectedGridEntry.AccessibilityObject;
                     }
