@@ -480,7 +480,7 @@ namespace System.Windows.Forms
                     // use.
                     SafeNativeMethods.LPtoDP(new HandleRef(null, hdcDraw), ref rc, 2);
 
-                    iMode = SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), NativeMethods.MM_ANISOTROPIC);
+                    iMode = SafeNativeMethods.SetMapMode(hdcDraw, NativeMethods.MM_ANISOTROPIC);
                     SafeNativeMethods.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
                     SafeNativeMethods.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
                     SafeNativeMethods.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        _control.PrintToMetaFile(new HandleRef(null, hdcDraw), flags);
+                        _control.PrintToMetaFile(hdcDraw, flags);
                     }
                 }
                 finally
@@ -513,7 +513,7 @@ namespace System.Windows.Forms
                         SafeNativeMethods.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
                         SafeNativeMethods.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
                         SafeNativeMethods.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
-                        SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), iMode);
+                        SafeNativeMethods.SetMapMode(hdcDraw, iMode);
                     }
                 }
             }

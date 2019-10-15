@@ -558,7 +558,7 @@ namespace System.Windows.Forms
         ///  mapping.Graphics.DrawRectangle(Pens.Black, rect);
         ///  }
         ///  }
-        ///  finally { g.ReleaseHdc(hDC.Handle);}
+        ///  finally { g.ReleaseHdc(hDC);}
         ///
         ///  PERF: DCMapping is a structure so that it will allocate on the stack rather than in GC managed
         ///  memory. This way disposing the object does not force a GC. Since DCMapping objects aren't
@@ -571,9 +571,9 @@ namespace System.Windows.Forms
             private Graphics _graphics;
             private Rectangle _translatedBounds;
 
-            public unsafe DCMapping(HandleRef hDC, Rectangle bounds)
+            public unsafe DCMapping(IntPtr hDC, Rectangle bounds)
             {
-                if (hDC.Handle == IntPtr.Zero)
+                if (hDC == IntPtr.Zero)
                 {
                     throw new ArgumentNullException(nameof(hDC));
                 }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
 
                 _translatedBounds = bounds;
                 _graphics = null;
-                _dc = DeviceContext.FromHdc(hDC.Handle);
+                _dc = DeviceContext.FromHdc(hDC);
                 _dc.SaveHdc();
 
                 // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
