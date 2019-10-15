@@ -3128,12 +3128,6 @@ namespace System.Windows.Forms
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetCursor();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetCursorPos(out Point pt);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
     }
 }
