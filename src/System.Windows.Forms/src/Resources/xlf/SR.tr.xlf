@@ -7481,6 +7481,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Yıl içinde hangi tarihlerin kalın görüntülenmesi gerektiğini gösterir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">Aylık takvimde ayların gösterileceği satır ve sütun sayısı.</target>
@@ -7531,6 +7536,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Ayın hangi günlerinin kalın görüntüleneceğini gösterir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Kullanıcı seçimi veya takvimde önceki/sonraki aya gitme dolayısıyla tarih aralıkları değiştiğinde gerçekleşir.</target>
@@ -7539,6 +7549,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Kullanıcı bir tarih veya tarih aralığı seçtiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">Takvim başlığında metin görüntülemek için kullanılan renk.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">

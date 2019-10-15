@@ -316,6 +316,9 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern uint SendInput(uint nInputs, NativeMethods.INPUT[] pInputs, int cbSize);
 
+        [DllImport(ExternDll.User32, SetLastError = true)]
+        internal static extern int SendInput(int nInputs, ref NativeMethods.INPUT input, int cbSize);
+
         #endregion
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
@@ -568,10 +571,10 @@ namespace System.Windows.Forms
         // For MonthCalendar
         //
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.MCHITTESTINFO lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Interop.ComCtl32.MCHITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIME lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Interop.Kernel32.SYSTEMTIME lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIMEARRAY lParam);
@@ -1110,8 +1113,8 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             Interop.HRESULT TransformCoords(
-                Point *pPtlHimetric,
-                PointF *pPtfContainer,
+                Point* pPtlHimetric,
+                PointF* pPtfContainer,
                 uint dwFlags);
 
             [PreserveSig]
@@ -2832,7 +2835,7 @@ namespace System.Windows.Forms
                 uint dwDrawAspect,
                 int lindex,
                 NativeMethods.tagDVTARGETDEVICE ptd,
-                Size *lpsizel);
+                Size* lpsizel);
         }
 
         [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -4694,5 +4697,8 @@ namespace System.Windows.Forms
             /// </summary>
             void ScrollIntoView();
         }
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
+        internal static extern bool GetPhysicalCursorPos([In, Out] ref Interop.POINT pt);
     }
 }

@@ -221,7 +221,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarForeColor))
                 {
                     calendarForeColor = value;
-                    SetControlColor(NativeMethods.MCSC_TEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TEXT, value);
                 }
             }
         }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTitleBackColor))
                 {
                     calendarTitleBackColor = value;
-                    SetControlColor(NativeMethods.MCSC_TITLEBK, value);
+                    SetControlColor(ComCtl32.MCSC.TITLEBK, value);
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTitleForeColor))
                 {
                     calendarTitleForeColor = value;
-                    SetControlColor(NativeMethods.MCSC_TITLETEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TITLETEXT, value);
                 }
             }
         }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTrailingText))
                 {
                     calendarTrailingText = value;
-                    SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, value);
                 }
             }
         }
@@ -387,7 +387,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarMonthBackground))
                 {
                     calendarMonthBackground = value;
-                    SetControlColor(NativeMethods.MCSC_MONTHBK, value);
+                    SetControlColor(ComCtl32.MCSC.MONTHBK, value);
                 }
             }
         }
@@ -408,8 +408,8 @@ namespace System.Windows.Forms
                 // the information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
                 if (ShowCheckBox && IsHandleCreated)
                 {
-                    NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
-                    int gdt = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_GETSYSTEMTIME, 0, sys);
+                    Kernel32.SYSTEMTIME sys = new Kernel32.SYSTEMTIME();
+                    int gdt = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_GETSYSTEMTIME, 0, ref sys);
                     return gdt == NativeMethods.GDT_VALID;
                 }
                 else
@@ -427,14 +427,13 @@ namespace System.Windows.Forms
                         if (value)
                         {
                             int gdt = NativeMethods.GDT_VALID;
-                            NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                            Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, ref sys);
                         }
                         else
                         {
                             int gdt = NativeMethods.GDT_NONE;
-                            NativeMethods.SYSTEMTIME sys = null;
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, IntPtr.Zero);
                         }
                     }
                     // this.validTime is used when the DateTimePicker receives date time change notification
@@ -1054,8 +1053,8 @@ namespace System.Windows.Forms
                         * get propagated to createHandle
                         */
                         int gdt = NativeMethods.GDT_VALID;
-                        NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                        Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, ref sys);
                     }
 
                     if (valueChanged)
@@ -1151,14 +1150,13 @@ namespace System.Windows.Forms
                 * get propagated to setValue
                 */
                 int gdt = NativeMethods.GDT_VALID;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, ref sys);
             }
             else if (!validTime)
             {
                 int gdt = NativeMethods.GDT_NONE;
-                NativeMethods.SYSTEMTIME sys = null;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, IntPtr.Zero);
             }
 
             if (format == DateTimePickerFormat.Custom)
@@ -1386,8 +1384,8 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 int gdt = NativeMethods.GDT_VALID;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, ref sys);
             }
 
             // Updating Checked to false will set the control to "no date",
@@ -1401,11 +1399,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If the handle has been created, this applies the color to the control
         /// </summary>
-        private void SetControlColor(int colorIndex, Color value)
+        private void SetControlColor(Interop.ComCtl32.MCSC colorIndex, Color value)
         {
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.DTM_SETMCCOLOR, colorIndex, ColorTranslator.ToWin32(value));
+                SendMessage(NativeMethods.DTM_SETMCCOLOR, (int)colorIndex, ColorTranslator.ToWin32(value));
             }
         }
 
@@ -1425,11 +1423,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAllControlColors()
         {
-            SetControlColor(NativeMethods.MCSC_MONTHBK, calendarMonthBackground);
-            SetControlColor(NativeMethods.MCSC_TEXT, calendarForeColor);
-            SetControlColor(NativeMethods.MCSC_TITLEBK, calendarTitleBackColor);
-            SetControlColor(NativeMethods.MCSC_TITLETEXT, calendarTitleForeColor);
-            SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, calendarTrailingText);
+            SetControlColor(ComCtl32.MCSC.MONTHBK, calendarMonthBackground);
+            SetControlColor(ComCtl32.MCSC.TEXT, calendarForeColor);
+            SetControlColor(ComCtl32.MCSC.TITLEBK, calendarTitleBackColor);
+            SetControlColor(ComCtl32.MCSC.TITLETEXT, calendarTitleForeColor);
+            SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, calendarTrailingText);
         }
 
         /// <summary>
@@ -1450,7 +1448,7 @@ namespace System.Windows.Forms
                 NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
 
                 flags |= NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(min);
+                Kernel32.SYSTEMTIME sys = DateTimeToSysTime(min);
                 sa.wYear1 = sys.wYear;
                 sa.wMonth1 = sys.wMonth;
                 sa.wDayOfWeek1 = sys.wDayOfWeek;
@@ -1459,7 +1457,7 @@ namespace System.Windows.Forms
                 sa.wMinute1 = sys.wMinute;
                 sa.wSecond1 = sys.wSecond;
                 sa.wMilliseconds1 = sys.wMilliseconds;
-                sys = DateTimePicker.DateTimeToSysTime(max);
+                sys = DateTimeToSysTime(max);
                 sa.wYear2 = sys.wYear;
                 sa.wMonth2 = sys.wMonth;
                 sa.wDayOfWeek2 = sys.wDayOfWeek;
@@ -1747,9 +1745,9 @@ namespace System.Windows.Forms
         ///  Takes a DateTime value and returns a SYSTEMTIME struct
         ///  Note: 1 second granularity
         /// </summary>
-        internal static NativeMethods.SYSTEMTIME DateTimeToSysTime(DateTime time)
+        internal static Kernel32.SYSTEMTIME DateTimeToSysTime(DateTime time)
         {
-            NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME
+            Kernel32.SYSTEMTIME sys = new Kernel32.SYSTEMTIME
             {
                 wYear = (short)time.Year,
                 wMonth = (short)time.Month,
@@ -1767,7 +1765,7 @@ namespace System.Windows.Forms
         ///  Takes a SYSTEMTIME struct and returns a DateTime value
         ///  Note: 1 second granularity.
         /// </summary>
-        internal static DateTime SysTimeToDateTime(NativeMethods.SYSTEMTIME s)
+        internal static DateTime SysTimeToDateTime(Kernel32.SYSTEMTIME s)
         {
             return new DateTime(s.wYear, s.wMonth, s.wDay, s.wHour, s.wMinute, s.wSecond);
         }

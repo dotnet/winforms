@@ -7481,6 +7481,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Indica as datas do ano que devem ser exibidas em negrito.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">O número de linhas e colunas dos meses em um calendário mensal.</target>
@@ -7531,6 +7536,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Indica as datas mensais que devem ser exibidas em negrito.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Ocorre quando o intervalo de datas é alterado devido à seleção de usuário ou através de navegação para o mês seguinte/anterior.</target>
@@ -7539,6 +7549,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Ocorre quando o usuário seleciona uma data ou um intervalo de datas.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">A cor usada para exibir texto no título do calendário.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">

@@ -7481,6 +7481,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wskazuje, które daty lat mają być pogrubione.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">Liczba wierszy i kolumn miesięcy w kalendarzu miesięcznym.</target>
@@ -7531,6 +7536,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wskazuje, które dni miesiąca mają zostać pogrubione.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Występuje, gdy zakres dat zmieni się w wyniku zaznaczenia przez użytkownika lub przez nawigację do następnego/poprzedniego miesiąca.</target>
@@ -7539,6 +7549,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Występuje, gdy użytkownik zaznaczy datę lub zakres dat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">Kolor używany do wyświetlania tekstu w tytule kalendarza.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
