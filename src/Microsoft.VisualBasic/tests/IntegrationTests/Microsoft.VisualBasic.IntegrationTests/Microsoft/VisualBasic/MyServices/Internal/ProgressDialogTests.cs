@@ -17,8 +17,8 @@ namespace Microsoft.VisualBasic.MyServices.Internal.Tests
             string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
             var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "ProgressDialog.ShowProgressDialog" };
             var process = TestHelpers.StartProcess(startInfo);
-            Assert.False(process.HasExited);
             TestHelpers.EndProcess(process, timeout: 1000);
+            Assert.True(process.HasExited);
         }
     }
 }

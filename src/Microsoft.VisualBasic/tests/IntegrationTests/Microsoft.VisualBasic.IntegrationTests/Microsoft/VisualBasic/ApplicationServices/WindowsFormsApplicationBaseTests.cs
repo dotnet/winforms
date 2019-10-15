@@ -18,8 +18,8 @@ namespace Microsoft.VisualBasic.IntegrationTests
             string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
             var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "WindowsFormsApplicationBase.Run" };
             var process = TestHelpers.StartProcess(startInfo);
-            Assert.False(process.HasExited);
             TestHelpers.EndProcess(process, timeout: 1000);
+            Assert.True(process.HasExited);
         }
 
         [Fact]
