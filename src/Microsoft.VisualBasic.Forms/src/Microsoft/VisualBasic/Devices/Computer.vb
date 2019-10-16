@@ -54,20 +54,6 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets a port object which gives access to the ports on the local machine
-        ''' </summary>
-        ''' <value>A collection of serial ports on the machine.</value>
-        Public ReadOnly Property Ports() As Ports
-            Get
-                If m_Ports Is Nothing Then
-                    m_Ports = New Ports()
-                End If
-
-                Return m_Ports
-            End Get
-        End Property
-
-        ''' <summary>
         ''' This property returns the Mouse object containing information about
         ''' the physical mouse installed to the machine.
         ''' </summary>
@@ -107,7 +93,6 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         Private m_Audio As Audio 'Lazy initialized cache for the Audio class.
-        Private m_Ports As Ports 'Lazy initialized cache for the Ports class
         Private Shared m_Clipboard As ClipboardProxy 'Lazy initialized cacche for the clipboard class. (proxies can be shared - they have no state)
         Private Shared m_Mouse As Mouse 'Lazy initialized cache for the Mouse class. SHARED because Mouse behaves as a readonly singleton class
         Private Shared m_KeyboardInstance As Keyboard 'Lazy initialized cache for the Keyboard class.  SHARED because Keyboard behaves as a readonly singleton class

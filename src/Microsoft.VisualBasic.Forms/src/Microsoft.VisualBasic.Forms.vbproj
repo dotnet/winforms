@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
-    <PackageReference Include="System.Management" Version="$(SystemManagementExtensionsPackageVersion)" />
-    <PackageReference Include="System.IO.Ports" Version="$(SystemIOPortsPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

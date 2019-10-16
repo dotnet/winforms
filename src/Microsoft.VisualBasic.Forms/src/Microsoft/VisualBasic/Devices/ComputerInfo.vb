@@ -4,7 +4,7 @@
 
 Imports System
 Imports System.Diagnostics
-Imports System.Management
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
@@ -84,30 +84,12 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the full operating system name. This method requires full trust and WMI installed.
+        ''' Gets the full operating system name.
         ''' </summary>
         ''' <value>A string contains the operating system name.</value>
-        ''' <exception cref="System.Security.SecurityException">If the immediate caller does not have full trust.</exception>
-        ''' <exception cref="System.InvalidOperationException">If we cannot obtain the query object from WMI.</exception>
-        ''' <remarks>Since this property depends on WMI, we have OSPlatform property that does not require WMI.</remarks>
         Public ReadOnly Property OSFullName() As String
             Get
-                Try
-                    ' There is no PInvoke Call for this purpose, have to use WMI.
-                    ' The result from WMI is 'MS Windows xxx|C:\WINNT\Device\Harddisk0\Partition1.
-                    ' We only show the first part. NOTE: This is fragile.
-                    Dim PropertyName As String = "Name"
-                    Dim Separator As Char = "|"c
-
-                    Dim Result As String = CStr(OSManagementBaseObject.Properties(PropertyName).Value)
-                    If Result.Contains(Separator) Then
-                        Return Result.Substring(0, Result.IndexOf(Separator))
-                    Else
-                        Return Result
-                    End If
-                Catch ex As System.Runtime.InteropServices.COMException
-                    Return OSPlatform
-                End Try
+                Return RuntimeInformation.OSDescription
             End Get
         End Property
 
@@ -208,45 +190,6 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
-        ''' <summary>
-        ''' Get the management object used in WMI to query for the operating system name.
-        ''' </summary>
-        ''' <value>A ManagementBaseObject represents the result of "Win32_OperatingSystem" query.</value>
-        ''' <exception cref="System.Security.SecurityException">If the immediate caller does not have full trust.</exception>
-        ''' <exception cref="System.InvalidOperationException">If we cannot obtain the query object from WMI.</exception>
-        Private ReadOnly Property OSManagementBaseObject() As ManagementBaseObject
-            Get
-                ' Query string to get the OperatingSystem information.
-                Dim QueryString As String = "Win32_OperatingSystem"
-
-                ' Assumption: Each thread will have its own instance of App class so no need to SyncLock this.
-                If m_OSManagementObject Is Nothing Then
-                    ' Build a query for enumeration of Win32_OperatingSystem instances
-                    Dim Query As New SelectQuery(QueryString)
-
-                    ' Instantiate an object searcher with this query
-                    Dim Searcher As New ManagementObjectSearcher(Query)
-
-                    Dim ManagementObjCollection As ManagementObjectCollection = Searcher.Get
-
-                    If ManagementObjCollection.Count > 0 Then
-                        Debug.Assert(ManagementObjCollection.Count = 1, "Should find 1 instance only!!!")
-
-                        Dim ManagementObjEnumerator As ManagementObjectCollection.ManagementObjectEnumerator =
-                            ManagementObjCollection.GetEnumerator
-                        ManagementObjEnumerator.MoveNext()
-                        m_OSManagementObject = ManagementObjEnumerator.Current
-                    Else
-                        Throw ExceptionUtils.GetInvalidOperationException(SR.DiagnosticInfo_FullOSName)
-                    End If
-                End If
-
-                Debug.Assert(m_OSManagementObject IsNot Nothing, "Null management object!!!")
-                Return m_OSManagementObject
-            End Get
-        End Property
-
-        Private m_OSManagementObject As ManagementBaseObject = Nothing ' Cache the management object gotten from WMI.
         Private m_InternalMemoryStatus As InternalMemoryStatus = Nothing ' Cache our InternalMemoryStatus
 
         ''' <summary>

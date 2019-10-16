@@ -42,7 +42,9 @@ namespace Microsoft.VisualBasic.Devices.Tests
         public void OSFullName()
         {
             var info = new ComputerInfo();
-            Assert.False(string.IsNullOrEmpty(info.OSFullName));
+            var fullName = info.OSFullName;
+            Assert.False(string.IsNullOrEmpty(fullName));
+            Assert.Equal(System.Runtime.InteropServices.RuntimeInformation.OSDescription, fullName);
         }
     }
 }

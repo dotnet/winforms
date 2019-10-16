@@ -95,7 +95,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Management" Version="$(SystemManagementExtensionsPackageVersion)" />
+    <PackageReference Include="System.Management" Version="4.5.0-preview1-25914-04" />
   </ItemGroup>
 
   <ItemGroup>

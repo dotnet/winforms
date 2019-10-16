@@ -29,10 +29,6 @@ namespace Microsoft.VisualBasic.Devices.Tests
             var mouse = computer.Mouse;
             Assert.NotNull(mouse);
             Assert.Same(mouse, computer.Mouse);
-
-            var ports = computer.Ports;
-            Assert.NotNull(ports);
-            Assert.Same(ports, computer.Ports);
         }
 
         [Fact]
