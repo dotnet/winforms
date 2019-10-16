@@ -81,6 +81,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DESCKIND.cs" Link="Interop\Ole32\Interop.DESCKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DVASPECT.cs" Link="Interop\Ole32\Interop.DVASPECT.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCFLAGS.cs" Link="Interop\Ole32\Interop.FUNCFLAGS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCKIND.cs" Link="Interop\Ole32\Interop.FUNCKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDLFLAG.cs" Link="Interop\Ole32\Interop.IDLFLAG.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECONTF.cs" Link="Interop\Ole32\Interop.OLECONTF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" Link="Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" Link="Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMISC.cs" Link="Interop\Ole32\Interop.OLEMISC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMFLAG.cs" Link="Interop\Ole32\Interop.PARAMFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />

@@ -45,12 +45,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Paste special flags.
         /// </summary>
-        private const int DV_E_DVASPECT = unchecked((int)0x8004006B);
-        private const int DVASPECT_CONTENT = 1;
-        private const int DVASPECT_THUMBNAIL = 2;
-        private const int DVASPECT_ICON = 4;
-        private const int DVASPECT_DOCPRINT = 8;
-
         internal const int INPUT = 0x0001;
         internal const int OUTPUT = 0x0002;
         internal const int DIRECTIONMASK = INPUT | OUTPUT;

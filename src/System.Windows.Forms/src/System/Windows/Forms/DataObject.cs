@@ -33,7 +33,6 @@ namespace System.Windows.Forms
         private const int DV_E_FORMATETC = unchecked((int)0x80040064);
         private const int DV_E_LINDEX = unchecked((int)0x80040068);
         private const int DV_E_TYMED = unchecked((int)0x80040069);
-        private const int DV_E_DVASPECT = unchecked((int)0x8004006B);
         private const int OLE_E_NOTRUNNING = unchecked((int)0x80040005);
         private const int OLE_E_ADVISENOTSUPPORTED = unchecked((int)0x80040003);
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
@@ -725,7 +724,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return (DV_E_DVASPECT);
+                return (int)HRESULT.DV_E_DVASPECT;
             }
 #if DEBUG
             int format = unchecked((ushort)formatetc.cfFormat);

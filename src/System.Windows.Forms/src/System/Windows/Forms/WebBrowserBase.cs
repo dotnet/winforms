@@ -960,15 +960,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private void TransitionFromLoadedToRunning()
+        private unsafe void TransitionFromLoadedToRunning()
         {
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.Loaded)
             {
-                //
                 // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
-                int hr = axOleObject.GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out int bits);
-                if (NativeMethods.Succeeded(hr) && ((bits & NativeMethods.ActiveX.OLEMISC_SETCLIENTSITEFIRST) != 0))
+                Ole32.OLEMISC bits = 0;
+                HRESULT hr = axOleObject.GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
+                if (hr.Succeeded() && ((bits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0))
                 {
                     //
                     // Simply setting the site to the ActiveX control should activate it.
@@ -1191,15 +1191,15 @@ namespace System.Windows.Forms
             var sz = new Size(width, height);
             bool resetExtents = DesignMode;
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            Interop.HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
             if (hr != Interop.HRESULT.S_OK)
             {
                 resetExtents = true;
             }
             if (resetExtents)
             {
-                axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
-                axOleObject.SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+                axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
+                axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
             }
 
             return GetExtent();
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms
         private unsafe Size GetExtent()
         {
             var sz = new Size();
-            axOleObject.GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
             HiMetric2Pixel(ref sz);
             return sz;
         }

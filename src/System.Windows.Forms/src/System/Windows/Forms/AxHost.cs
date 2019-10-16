@@ -155,7 +155,7 @@ namespace System.Windows.Forms
 
         private int storageType = STG_UNKNOWN;
         private int ocState = OC_PASSIVE;
-        private int miscStatusBits;
+        private Ole32.OLEMISC _miscStatusBits;
         private int freezeCount = 0;
         private readonly int flags = 0;
         private int selectionStyle = 0;
@@ -320,14 +320,15 @@ namespace System.Windows.Forms
         {
         }
 
-        private void RealizeStyles()
+        private unsafe void RealizeStyles()
         {
             SetStyle(ControlStyles.UserPaint, false);
-            int hr = GetOleObject().GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out int bits);
-            if (!NativeMethods.Failed(hr))
+            Ole32.OLEMISC bits = 0;
+            HRESULT hr = GetOleObject().GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
+            if (hr.Succeeded())
             {
-                miscStatusBits = bits;
-                ParseMiscBits(miscStatusBits);
+                _miscStatusBits = bits;
+                ParseMiscBits(_miscStatusBits);
             }
         }
 
@@ -1327,15 +1328,15 @@ namespace System.Windows.Forms
             Size sz = new Size(width, height);
             bool resetExtents = !IsUserMode();
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            Interop.HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
             if (hr != Interop.HRESULT.S_OK)
             {
                 resetExtents = true;
             }
             if (resetExtents)
             {
-                GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
-                GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+                GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
+                GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
             }
 
             return GetExtent();
@@ -1344,7 +1345,7 @@ namespace System.Windows.Forms
         private unsafe Size GetExtent()
         {
             var sz = new Size();
-            GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
             HiMetric2Pixel(ref sz);
             return sz;
         }
@@ -4370,10 +4371,10 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
+            HRESULT UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in CanInPlaceActivate");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()
@@ -4661,8 +4662,8 @@ namespace System.Windows.Forms
                 DisposeAxControl();
                 return false;
             }
-            miscStatusBits = qaControl.dwMiscStatus;
-            ParseMiscBits(miscStatusBits);
+            _miscStatusBits = qaControl.dwMiscStatus;
+            ParseMiscBits(_miscStatusBits);
             return true;
         }
 
@@ -4790,17 +4791,17 @@ namespace System.Windows.Forms
             }
         }
 
-        private void ParseMiscBits(int bits)
+        private void ParseMiscBits(Ole32.OLEMISC bits)
         {
-            axState[fOwnWindow] = ((bits & NativeMethods.ActiveX.OLEMISC_INVISIBLEATRUNTIME) != 0) && IsUserMode();
-            axState[fSimpleFrame] = ((bits & NativeMethods.ActiveX.OLEMISC_SIMPLEFRAME) != 0);
+            axState[fOwnWindow] = ((bits & Ole32.OLEMISC.INVISIBLEATRUNTIME) != 0) && IsUserMode();
+            axState[fSimpleFrame] = ((bits & Ole32.OLEMISC.SIMPLEFRAME) != 0);
         }
 
         private void SlowActivate()
         {
             bool setClientSite = false;
 
-            if ((miscStatusBits & NativeMethods.ActiveX.OLEMISC_SETCLIENTSITEFIRST) != 0)
+            if ((_miscStatusBits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0)
             {
                 GetOleObject().SetClientSite(oleSite);
                 setClientSite = true;
