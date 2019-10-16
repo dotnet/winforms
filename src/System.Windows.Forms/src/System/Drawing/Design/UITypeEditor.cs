@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace System.Drawing.Design
@@ -16,9 +17,10 @@ namespace System.Drawing.Design
     {
         static UITypeEditor()
         {
+            // Our set of intrinsic editors.
             Hashtable intrinsicEditors = new Hashtable
             {
-                // Our set of intrinsic editors.
+                // System.ComponentModel type Editors
                 [typeof(DateTime)] = "System.ComponentModel.Design.DateTimeEditor, " + AssemblyRef.SystemDesign,
                 [typeof(Array)] = "System.ComponentModel.Design.ArrayEditor, " + AssemblyRef.SystemDesign,
                 [typeof(IList)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
@@ -26,7 +28,17 @@ namespace System.Drawing.Design
                 [typeof(byte[])] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
                 [typeof(Stream)] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
                 [typeof(string[])] = "System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign,
-                [typeof(Collection<string>)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign
+
+                // System.Windows.Forms type Editors
+                [typeof(Collection<string>)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign,
+
+                // System.Drawing.Design type Editors
+                [typeof(Bitmap)] = "System.Drawing.Design.BitmapEditor, " + AssemblyRef.SystemDrawingDesign,
+                [typeof(Color)] = "System.Drawing.Design.ColorEditor, " + AssemblyRef.SystemDrawingDesign,
+                [typeof(Font)] = "System.Drawing.Design.FontEditor, " + AssemblyRef.SystemDrawingDesign,
+                // no way to add Font.Name and associate it with FontNameEditor
+                [typeof(Image)] = "System.Drawing.Design.ImageEditor, " + AssemblyRef.SystemDrawingDesign,
+                [typeof(Metafile)] = "System.Drawing.Design.MetafileEditor, " + AssemblyRef.SystemDrawingDesign,
             };
 
             // Add our intrinsic editors to TypeDescriptor.
