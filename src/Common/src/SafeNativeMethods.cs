@@ -51,9 +51,6 @@ namespace System.Windows.Forms
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, [MarshalAs(UnmanagedType.LPStruct)]NativeMethods.HH_AKLINK dwData);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static unsafe extern bool MoveToEx(HandleRef hdc, int x, int y, Point *lppt);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool Rectangle(
                                            HandleRef hdc, int left, int top, int right, int bottom);
 

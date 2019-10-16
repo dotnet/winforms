@@ -10,9 +10,6 @@ namespace System.Windows.Forms.Internal
 {
     internal static partial class IntUnsafeNativeMethods
     {
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static unsafe extern bool MoveToEx(HandleRef hdc, int x, int y, Point *lppt);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "Rectangle", CharSet = CharSet.Auto)]
         public static extern bool IntRectangle(HandleRef hdc, int left, int top, int right, int bottom);
 
