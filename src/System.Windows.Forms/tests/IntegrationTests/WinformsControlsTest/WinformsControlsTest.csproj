@@ -8,6 +8,8 @@
     <OutputType>WinExe</OutputType>
     <StartupObject />
     <ApplicationManifest>app1.manifest</ApplicationManifest>
+    <EnableXlfLocalization>false</EnableXlfLocalization>
+    <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netcoreapp\d'))">
