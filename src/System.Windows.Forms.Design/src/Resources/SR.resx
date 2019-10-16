@@ -753,4 +753,19 @@
   <data name="ToolStripSelectMenuItem" xml:space="preserve">
     <value>'{0}'</value>
   </data>
+  <data name="BinaryEditorAllFiles" xml:space="preserve">
+    <value>All Files</value>
+  </data>
+  <data name="BinaryEditorFileError" xml:space="preserve">
+    <value>Error writing to file: {0}</value>
+  </data>
+  <data name="BinaryEditorFileName" xml:space="preserve">
+    <value>ByteArray</value>
+  </data>
+  <data name="BinaryEditorSaveFile" xml:space="preserve">
+    <value>Save File As</value>
+  </data>
+  <data name="BinaryEditorTitle" xml:space="preserve">
+    <value>Byte Array Property Editor</value>
+  </data>
 </root>
