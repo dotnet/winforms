@@ -96,6 +96,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGC.cs" Link="Interop\Ole32\Interop.STGC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGM.cs" Link="Interop\Ole32\Interop.STGM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARENUM.cs" Link="Interop\Ole32\Interop.VARENUM.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.CallNextHookEx.cs" Link="Interop\User32\Interop.CallNextHookEx.cs" />

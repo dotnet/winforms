@@ -315,33 +315,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IntPtr hreftype;
             HRESULT hr = HRESULT.S_OK;
 
-            switch ((NativeMethods.tagVT)typeDesc.vt)
+            switch (typeDesc.vt)
             {
                 default:
-                    return VTToType((NativeMethods.tagVT)typeDesc.vt);
+                    return VTToType(typeDesc.vt);
 
-                case NativeMethods.tagVT.VT_UNKNOWN:
-                case NativeMethods.tagVT.VT_DISPATCH:
+                case Ole32.VARENUM.UNKNOWN:
+                case Ole32.VARENUM.DISPATCH:
                     // get the guid
                     typeData[0] = GetGuidForTypeInfo(typeInfo, null);
 
                     // return the type
-                    return VTToType((NativeMethods.tagVT)typeDesc.vt);
+                    return VTToType(typeDesc.vt);
 
-                case NativeMethods.tagVT.VT_USERDEFINED:
+                case Ole32.VARENUM.USERDEFINED:
                     // we'll need to recurse into a user defined reference typeinfo
                     Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an hreftype!");
                     hreftype = typeDesc.unionMember;
                     break;
 
-                case NativeMethods.tagVT.VT_PTR:
+                case Ole32.VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
                     Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
                     ref readonly NativeMethods.tagTYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEDESC>(typeDesc.unionMember);
 
-                    if (refTypeDesc.vt == (int)NativeMethods.tagVT.VT_VARIANT)
+                    if (refTypeDesc.vt == Ole32.VARENUM.VARIANT)
                     {
-                        return VTToType((NativeMethods.tagVT)refTypeDesc.vt);
+                        return VTToType(refTypeDesc.vt);
                     }
 
                     hreftype = refTypeDesc.unionMember;
@@ -393,10 +393,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 // recurse here
                                 return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData);
                             case NativeMethods.tagTYPEKIND.TKIND_DISPATCH:
-                                return VTToType(NativeMethods.tagVT.VT_DISPATCH);
+                                return VTToType(Ole32.VARENUM.DISPATCH);
                             case NativeMethods.tagTYPEKIND.TKIND_INTERFACE:
                             case NativeMethods.tagTYPEKIND.TKIND_COCLASS:
-                                return VTToType(NativeMethods.tagVT.VT_UNKNOWN);
+                                return VTToType(Ole32.VARENUM.UNKNOWN);
                             default:
                                 return null;
                         }
@@ -944,97 +944,77 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static Type VTToType(NativeMethods.tagVT vt)
+        private static Type VTToType(Ole32.VARENUM vt)
         {
             switch (vt)
             {
-                case NativeMethods.tagVT.VT_EMPTY:
-                case NativeMethods.tagVT.VT_NULL:
+                case Ole32.VARENUM.EMPTY:
+                case Ole32.VARENUM.NULL:
                     return null;
-                case NativeMethods.tagVT.VT_I1:
+                case Ole32.VARENUM.I1:
                     return typeof(sbyte);
-                case NativeMethods.tagVT.VT_UI1:
+                case Ole32.VARENUM.UI1:
                     return typeof(byte);
-
-                case NativeMethods.tagVT.VT_I2:
+                case Ole32.VARENUM.I2:
                     return typeof(short);
-                case NativeMethods.tagVT.VT_UI2:
+                case Ole32.VARENUM.UI2:
                     return typeof(ushort);
-
-                case NativeMethods.tagVT.VT_I4:
-                case NativeMethods.tagVT.VT_INT:
+                case Ole32.VARENUM.I4:
+                case Ole32.VARENUM.INT:
                     return typeof(int);
-
-                case NativeMethods.tagVT.VT_UI4:
-                case NativeMethods.tagVT.VT_UINT:
+                case Ole32.VARENUM.UI4:
+                case Ole32.VARENUM.UINT:
                     return typeof(uint);
-
-                case NativeMethods.tagVT.VT_I8:
+                case Ole32.VARENUM.I8:
                     return typeof(long);
-                case NativeMethods.tagVT.VT_UI8:
+                case Ole32.VARENUM.UI8:
                     return typeof(ulong);
-
-                case NativeMethods.tagVT.VT_R4:
+                case Ole32.VARENUM.R4:
                     return typeof(float);
-
-                case NativeMethods.tagVT.VT_R8:
+                case Ole32.VARENUM.R8:
                     return typeof(double);
-
-                case NativeMethods.tagVT.VT_CY:
+                case Ole32.VARENUM.CY:
                     return typeof(decimal);
-                case NativeMethods.tagVT.VT_DATE:
+                case Ole32.VARENUM.DATE:
                     return typeof(DateTime);
-                case NativeMethods.tagVT.VT_BSTR:
-                case NativeMethods.tagVT.VT_LPSTR:
-                case NativeMethods.tagVT.VT_LPWSTR:
+                case Ole32.VARENUM.BSTR:
+                case Ole32.VARENUM.LPSTR:
+                case Ole32.VARENUM.LPWSTR:
                     return typeof(string);
-
-                case NativeMethods.tagVT.VT_DISPATCH:
+                case Ole32.VARENUM.DISPATCH:
                     return typeof(UnsafeNativeMethods.IDispatch);
-                case NativeMethods.tagVT.VT_UNKNOWN:
+                case Ole32.VARENUM.UNKNOWN:
                     return typeof(object);
-
-                case NativeMethods.tagVT.VT_ERROR:
-                case NativeMethods.tagVT.VT_HRESULT:
+                case Ole32.VARENUM.ERROR:
+                case Ole32.VARENUM.HRESULT:
                     return typeof(int);
-
-                case NativeMethods.tagVT.VT_BOOL:
+                case Ole32.VARENUM.BOOL:
                     return typeof(bool);
-
-                case NativeMethods.tagVT.VT_VARIANT:
+                case Ole32.VARENUM.VARIANT:
                     return typeof(Com2Variant);
-                case NativeMethods.tagVT.VT_CLSID:
+                case Ole32.VARENUM.CLSID:
                     return typeof(Guid);
-
-                case NativeMethods.tagVT.VT_FILETIME:
+                case Ole32.VARENUM.FILETIME:
                     return typeof(FILETIME);
-
-                case NativeMethods.tagVT.VT_USERDEFINED:
+                case Ole32.VARENUM.USERDEFINED:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
-
-                /*case VT_ENUM:
-                    if (enumNames != null || null != pPropertyInfo.GetEnum()) {
-                        return typeof(IEnum);
-                    }
-                    goto default;*/
-                case NativeMethods.tagVT.VT_VOID:
-                case NativeMethods.tagVT.VT_PTR:
-                case NativeMethods.tagVT.VT_SAFEARRAY:
-                case NativeMethods.tagVT.VT_CARRAY:
-
-                case NativeMethods.tagVT.VT_RECORD:
-                case NativeMethods.tagVT.VT_BLOB:
-                case NativeMethods.tagVT.VT_STREAM:
-                case NativeMethods.tagVT.VT_STORAGE:
-                case NativeMethods.tagVT.VT_STREAMED_OBJECT:
-                case NativeMethods.tagVT.VT_STORED_OBJECT:
-                case NativeMethods.tagVT.VT_BLOB_OBJECT:
-                case NativeMethods.tagVT.VT_CF:
-                case NativeMethods.tagVT.VT_BSTR_BLOB:
-                case NativeMethods.tagVT.VT_VECTOR:
-                case NativeMethods.tagVT.VT_ARRAY:
-                case NativeMethods.tagVT.VT_BYREF:
-                case NativeMethods.tagVT.VT_RESERVED:
+                case Ole32.VARENUM.VOID:
+                case Ole32.VARENUM.PTR:
+                case Ole32.VARENUM.SAFEARRAY:
+                case Ole32.VARENUM.CARRAY:
+                case Ole32.VARENUM.RECORD:
+                case Ole32.VARENUM.BLOB:
+                case Ole32.VARENUM.STREAM:
+                case Ole32.VARENUM.STORAGE:
+                case Ole32.VARENUM.STREAMED_OBJECT:
+                case Ole32.VARENUM.STORED_OBJECT:
+                case Ole32.VARENUM.BLOB_OBJECT:
+                case Ole32.VARENUM.CF:
+                case Ole32.VARENUM.BSTR_BLOB:
+                case Ole32.VARENUM.VECTOR:
+                case Ole32.VARENUM.ARRAY:
+                case Ole32.VARENUM.BYREF:
+                case Ole32.VARENUM.RESERVED:
                 default:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, ((int)vt).ToString(CultureInfo.InvariantCulture)));
             }
