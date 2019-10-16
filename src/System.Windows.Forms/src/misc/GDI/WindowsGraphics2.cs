@@ -479,7 +479,7 @@ namespace System.Windows.Forms.Internal
             Gdi32.SelectObject(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
 
             // Add 1 to width and height to create the 'bounding box' (convert from point to size).
-            IntUnsafeNativeMethods.Rectangle(hdc, x, y, x + width, y + height);
+            Gdi32.Rectangle(hdc, x, y, x + width, y + height);
 
             if (rasterOp != Gdi32.R2.COPYPEN)
             {

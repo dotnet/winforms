@@ -63,6 +63,7 @@
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.GetTextMetricsW.cs" Link="Interop\Gdi32\Interop.GetTextMetricsW.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.PS.cs" Link="Interop\Gdi32\Interop.PS.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.SelectObject.cs" Link="Interop\Gdi32\Interop.SelectObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.Rectangle.cs" Link="Interop\Gdi32\Interop.Rectangle.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.TEXTMETRICW.cs" Link="Interop\Gdi32\Interop.TEXTMETRICW.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.TMPF.cs" Link="Interop\Gdi32\Interop.TMPF.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.GetCurrentProcessId.cs" Link="Interop\Kernel32\Interop.GetCurrentProcessId.cs" />

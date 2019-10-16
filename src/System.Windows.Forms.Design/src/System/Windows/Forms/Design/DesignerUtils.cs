@@ -316,7 +316,7 @@ namespace System.Windows.Forms.Design
                 IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
 
                 //draw our rect no-resize handle
-                SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+                Gdi32.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
                 //restore old pen and brush
                 Gdi32.SelectObject(hDC, oldBrush);
                 Gdi32.SelectObject(hDC, oldPen);
@@ -342,7 +342,7 @@ namespace System.Windows.Forms.Design
                                             bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
                 // Lower rect - its fillbrush depends on the primary selection
                 Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
+                Gdi32.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
 
                 //restore old pen and brush
                 Gdi32.SelectObject(hDC, oldBrush);

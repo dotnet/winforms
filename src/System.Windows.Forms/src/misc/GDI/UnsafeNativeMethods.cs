@@ -10,16 +10,6 @@ namespace System.Windows.Forms.Internal
 {
     internal static partial class IntUnsafeNativeMethods
     {
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "Rectangle", CharSet = CharSet.Auto)]
-        public static extern bool IntRectangle(HandleRef hdc, int left, int top, int right, int bottom);
-
-        public static bool Rectangle(HandleRef hdc, int left, int top, int right, int bottom)
-        {
-            bool retVal = IntRectangle(hdc, left, top, right, bottom);
-            DbgUtil.AssertWin32(retVal, "Rectangle(hdc=[0x{0:X8}], left=[{1}], top=[{2}], right=[{3}], bottom=[{4}] failed.", hdc.Handle, left, top, right, bottom);
-            return retVal;
-        }
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SetMapMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int IntSetMapMode(HandleRef hDC, int nMapMode);
 
