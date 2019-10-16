@@ -539,7 +539,7 @@ namespace System.Windows.Forms.Internal
             Point oldPoint = new Point();
 
             IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, &oldPoint);
-            IntUnsafeNativeMethods.LineTo(hdc, x2, y2);
+            Gdi32.LineTo(hdc, x2, y2);
 
             if (bckMode != Gdi32.BKMODE.TRANSPARENT)
             {

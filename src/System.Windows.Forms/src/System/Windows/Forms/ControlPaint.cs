@@ -2027,7 +2027,7 @@ namespace System.Windows.Forms
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
 
             SafeNativeMethods.MoveToEx(new HandleRef(null, dc), start.X, start.Y, null);
-            SafeNativeMethods.LineTo(new HandleRef(null, dc), end.X, end.Y);
+            Gdi32.LineTo(dc, end.X, end.Y);
 
             Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
