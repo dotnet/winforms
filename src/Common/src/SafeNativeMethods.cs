@@ -311,9 +311,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool SetProcessDpiAwarenessContext(int dpiFlag);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool RoundRect(HandleRef hDC, int left, int top, int right, int bottom, int width, int height);
-
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
 
