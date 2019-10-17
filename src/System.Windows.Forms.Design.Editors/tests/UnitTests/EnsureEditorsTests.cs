@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         //[InlineData(typeof(MaskedTextBox), "Text", typeof(MaskedTextBoxTextEditor))]
         [InlineData(typeof(NotifyIcon), "BalloonTipText", typeof(MultilineStringEditor))]
         [InlineData(typeof(NotifyIcon), "Text", typeof(MultilineStringEditor))]
-        //[InlineData(typeof(TabControl), "TabPages", typeof(TabPageCollectionEditor))]
+        [InlineData(typeof(TabControl), "TabPages", typeof(TabPageCollectionEditor))]
         [InlineData(typeof(TabPage), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(TabPage), "ImageKey", typeof(ImageIndexEditor))]
         //[InlineData(typeof(TextBox), "AutoCompleteCustomSource", typeof(ListControlStringCollectionEditor))]
