@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         //[InlineData(typeof(MaskedTextBox), "Text", typeof(MaskedTextBoxTextEditor))]
         [InlineData(typeof(NotifyIcon), "BalloonTipText", typeof(MultilineStringEditor))]
         [InlineData(typeof(NotifyIcon), "Text", typeof(MultilineStringEditor))]
-        //[InlineData(typeof(TabControl), "TabPages", typeof(TabPageCollectionEditor))]
+        [InlineData(typeof(TabControl), "TabPages", typeof(TabPageCollectionEditor))]
         [InlineData(typeof(TabPage), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(TabPage), "ImageKey", typeof(ImageIndexEditor))]
         //[InlineData(typeof(TextBox), "AutoCompleteCustomSource", typeof(ListControlStringCollectionEditor))]
