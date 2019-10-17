@@ -6,7 +6,7 @@ This document describes the experience of using WinForms on .NET Core. The [Deve
 
 Choose one of these options:
 
-1. [.NET Core 3.0 SDK Preview 1 (recommended)][.net-core-3.0-sdk-preview]
+1. [.NET Core 3.0 SDK (recommended)][.net-core-3.0-sdk-preview]
 
 1. [.NET Core 3.0 daily build (latest changes, but less stable)][.net-core-3.0-daily]
 
@@ -22,7 +22,7 @@ dotnet run
 
 ## Designing Forms
 
-WinForms Core does not yet have a dedicated Designer tool. For the time being, you can use [this workaround](winforms-designer.md).
+You can try the WinForms Core Designer Visual Studio extension preview, see [Windows Forms Designer Documentation](Documentation/winforms-designer.md). As an alternative, you can use [this workaround](winforms-designer.md).
 
 ## Samples
 
