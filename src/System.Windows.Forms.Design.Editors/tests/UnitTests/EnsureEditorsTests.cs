@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
 
         // With Editor Attribute
         [InlineData(typeof(Cursor), typeof(CursorEditor))]
-        //[InlineData(typeof(GridColumnStylesCollection), typeof(DataGridColumnCollectionEditor))]
+        [InlineData(typeof(GridColumnStylesCollection), typeof(DataGridColumnCollectionEditor))]
         //[InlineData(typeof(DataGridView), typeof(DataGridViewComponentEditor))]
         //[InlineData(typeof(DataGridViewCellStyle), typeof(DataGridViewCellStyleEditor))]
         [InlineData(typeof(ImageList.ImageCollection), typeof(ImageCollectionEditor))]
