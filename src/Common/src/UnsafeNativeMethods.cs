@@ -638,7 +638,8 @@ namespace System.Windows.Forms
                 out object moniker);
 
             [PreserveSig]
-            int GetContainer(out IOleContainer container);
+            HRESULT GetContainer(
+                out Ole32.IOleContainer container);
 
             [PreserveSig]
             int ShowObject();
@@ -700,30 +701,6 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT OnPosRectChange(
                 RECT* lprcPosRect);
-        }
-
-        [ComImport(), Guid("0000011B-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleContainer
-        {
-            [PreserveSig]
-            int ParseDisplayName(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pbc,
-                [In, MarshalAs(UnmanagedType.BStr)]
-                string pszDisplayName,
-                [Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] pchEaten,
-                [Out, MarshalAs(UnmanagedType.LPArray)]
-                object[] ppmkOut);
-
-            [PreserveSig]
-            HRESULT EnumObjects(
-                Ole32.OLECONTF grfFlags,
-                out Ole32.IEnumUnknown ppenum);
-
-            [PreserveSig]
-            int LockContainer(
-                bool fLock);
         }
 
         [ComImport]

@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class WebBrowserContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame
+    internal class WebBrowserContainer : Ole32.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame
     {
         private readonly WebBrowserBase parent;
         private IContainer assocContainer;  // associated IContainer...
@@ -28,20 +28,18 @@ namespace System.Windows.Forms
             this.parent = parent;
         }
 
-        //
         // IOleContainer methods:
-        //
-        int UnsafeNativeMethods.IOleContainer.ParseDisplayName(object pbc, string pszDisplayName, int[] pchEaten, object[] ppmkOut)
+        unsafe HRESULT Ole32.IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint* pchEaten, IntPtr* ppmkOut)
         {
             if (ppmkOut != null)
             {
-                ppmkOut[0] = null;
+                *ppmkOut = IntPtr.Zero;
             }
 
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT UnsafeNativeMethods.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
+        HRESULT Ole32.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
         {
             ppenum = null;
             if ((grfFlags & Ole32.OLECONTF.EMBEDDINGS) != 0)
@@ -62,9 +60,9 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock)
+        HRESULT Ole32.IOleContainer.LockContainer(BOOL fLock)
         {
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
         // IOleInPlaceFrame methods:
