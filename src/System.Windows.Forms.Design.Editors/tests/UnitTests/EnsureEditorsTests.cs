@@ -24,6 +24,13 @@ namespace System.Windows.Forms.Design.Editors.Tests
         [InlineData(typeof(Font))]
         [InlineData(typeof(Image))]
         [InlineData(typeof(Metafile))]
+
+        [InlineData(typeof(AnchorStyles))]
+        [InlineData(typeof(ToolStripStatusLabelBorderSides))]
+        [InlineData(typeof(DockStyle))]
+        [InlineData(typeof(ImageList.ImageCollection))]
+        [InlineData(typeof(ImageListImage))]
+        [InlineData(typeof(Keys))]
         public void EnsureUITypeEditorForType(Type type)
         {
             var editor = TypeDescriptor.GetEditor(type, typeof(UITypeEditor));
