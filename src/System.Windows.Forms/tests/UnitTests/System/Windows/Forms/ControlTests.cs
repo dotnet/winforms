@@ -1751,6 +1751,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ForeColor_SetWithHandle_TestData()
         {
             yield return new object[] { Color.Red, Color.Red, 1 };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3), 1 };
             yield return new object[] { Color.Empty, Control.DefaultForeColor, 0 };
         }
 
@@ -7529,6 +7530,17 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ObjectDisposedException>(() => control.CreateControl());
         }
 
+        [WinFormsFact]
+        public void Control_CreateControlsInstance_Invoke_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            Control.ControlCollection controls = Assert.IsType<Control.ControlCollection>(control.CreateControlsInstance());
+            Assert.Empty(controls);
+            Assert.Same(control, controls.Owner);
+            Assert.False(controls.IsReadOnly);
+            Assert.NotSame(controls, control.CreateControlsInstance());
+        }
+
         [Fact]
         public void Control_CreateHandle_Invoke_Success()
         {
@@ -7668,8 +7680,8 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ObjectDisposedException>(() => control.CreateHandle());
         }
 
-        [Fact]
-        public void Control_CreateHandle_InvokeDisposed_ThrowsInvalidOperationException()
+        [WinFormsFact]
+        public void Control_CreateHandle_InvokeAlreadyCreated_ThrowsInvalidOperationException()
         {
             var control = new SubControl();
             control.CreateHandle();
@@ -7862,6 +7874,112 @@ namespace System.Windows.Forms.Tests
         {
             var control = new SubControl();
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        public static IEnumerable<object[]> IsInputKey_TestData()
+        {
+            yield return new object[] { Keys.Tab, false };
+            yield return new object[] { Keys.Up, false };
+            yield return new object[] { Keys.Down, false };
+            yield return new object[] { Keys.Left, false };
+            yield return new object[] { Keys.Right, false };
+            yield return new object[] { Keys.Return, false };
+            yield return new object[] { Keys.Escape, false };
+            yield return new object[] { Keys.A, false };
+            yield return new object[] { Keys.C, false };
+            yield return new object[] { Keys.Insert, false };
+            yield return new object[] { Keys.Space, false };
+            yield return new object[] { Keys.Home, false };
+            yield return new object[] { Keys.End, false }; ;
+            yield return new object[] { Keys.Back, false };
+            yield return new object[] { Keys.Next, false };
+            yield return new object[] { Keys.Prior, false };
+            yield return new object[] { Keys.Delete, false };
+            yield return new object[] { Keys.D0, false };
+            yield return new object[] { Keys.NumPad0, false };
+            yield return new object[] { Keys.F1, false };
+            yield return new object[] { Keys.F2, false };
+            yield return new object[] { Keys.F3, false };
+            yield return new object[] { Keys.F4, false };
+            yield return new object[] { Keys.RButton, false };
+            yield return new object[] { Keys.PageUp, false };
+            yield return new object[] { Keys.PageDown, false };
+            yield return new object[] { Keys.None, false };
+
+            yield return new object[] { Keys.Control | Keys.Tab, false };
+            yield return new object[] { Keys.Control | Keys.Up, false };
+            yield return new object[] { Keys.Control | Keys.Down, false };
+            yield return new object[] { Keys.Control | Keys.Left, false };
+            yield return new object[] { Keys.Control | Keys.Right, false };
+            yield return new object[] { Keys.Control | Keys.Return, false };
+            yield return new object[] { Keys.Control | Keys.Escape, false };
+            yield return new object[] { Keys.Control | Keys.A, false };
+            yield return new object[] { Keys.Control | Keys.C, false };
+            yield return new object[] { Keys.Control | Keys.Insert, false };
+            yield return new object[] { Keys.Control | Keys.Space, false };
+            yield return new object[] { Keys.Control | Keys.Home, false };
+            yield return new object[] { Keys.Control | Keys.End, false }; ;
+            yield return new object[] { Keys.Control | Keys.Back, false };
+            yield return new object[] { Keys.Control | Keys.Next, false };
+            yield return new object[] { Keys.Control | Keys.Prior, false };
+            yield return new object[] { Keys.Control | Keys.Delete, false };
+            yield return new object[] { Keys.Control | Keys.D0, false };
+            yield return new object[] { Keys.Control | Keys.NumPad0, false };
+            yield return new object[] { Keys.Control | Keys.F1, false };
+            yield return new object[] { Keys.Control | Keys.F2, false };
+            yield return new object[] { Keys.Control | Keys.F3, false };
+            yield return new object[] { Keys.Control | Keys.F4, false };
+            yield return new object[] { Keys.Control | Keys.RButton, false };
+            yield return new object[] { Keys.Control | Keys.PageUp, false };
+            yield return new object[] { Keys.Control | Keys.PageDown, false };
+            yield return new object[] { Keys.Control | Keys.None, false };
+
+            yield return new object[] { Keys.Alt | Keys.Tab, false };
+            yield return new object[] { Keys.Alt | Keys.Up, false };
+            yield return new object[] { Keys.Alt | Keys.Down, false };
+            yield return new object[] { Keys.Alt | Keys.Left, false };
+            yield return new object[] { Keys.Alt | Keys.Right, false };
+            yield return new object[] { Keys.Alt | Keys.Return, false };
+            yield return new object[] { Keys.Alt | Keys.Escape, false };
+            yield return new object[] { Keys.Alt | Keys.A, false };
+            yield return new object[] { Keys.Alt | Keys.C, false };
+            yield return new object[] { Keys.Alt | Keys.Insert, false };
+            yield return new object[] { Keys.Alt | Keys.Space, false };
+            yield return new object[] { Keys.Alt | Keys.Home, false };
+            yield return new object[] { Keys.Alt | Keys.End, false }; ;
+            yield return new object[] { Keys.Alt | Keys.Back, false };
+            yield return new object[] { Keys.Alt | Keys.Next, false };
+            yield return new object[] { Keys.Alt | Keys.Prior, false };
+            yield return new object[] { Keys.Alt | Keys.Delete, false };
+            yield return new object[] { Keys.Alt | Keys.D0, false };
+            yield return new object[] { Keys.Alt | Keys.NumPad0, false };
+            yield return new object[] { Keys.Alt | Keys.F1, false };
+            yield return new object[] { Keys.Alt | Keys.F2, false };
+            yield return new object[] { Keys.Alt | Keys.F3, false };
+            yield return new object[] { Keys.Alt | Keys.F4, false };
+            yield return new object[] { Keys.Alt | Keys.RButton, false };
+            yield return new object[] { Keys.Alt | Keys.PageUp, false };
+            yield return new object[] { Keys.Alt | Keys.PageDown, false };
+            yield return new object[] { Keys.Alt | Keys.None, false };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsInputKey_TestData))]
+        public void Control_IsInputKey_InvokeWithoutHandle_ReturnsExpected(Keys keyData, bool expected)
+        {
+            using var control = new SubControl();
+            Assert.Equal(expected, control.IsInputKey(keyData));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsInputKey_TestData))]
+        public void Control_IsInputKey_InvokeWithHandle_ReturnsExpected(Keys keyData, bool expected)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expected, control.IsInputKey(keyData));
+            Assert.True(control.IsHandleCreated);
         }
 
         [Theory]
@@ -10595,6 +10713,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        public void Control_OnLeave_Invoke_CallsLeave(KeyEventArgs eventArgs)
+        {
+            var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Leave += handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Leave -= handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnLocationChanged_Invoke_CallsLocationChangedAndMove(EventArgs eventArgs)
@@ -12206,7 +12348,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childCallCount1);
             Assert.Equal(0, childCallCount2);
         }
-        
+
         [Fact]
         public void Control_RecreateHandle_InvokeWithHandle_Success()
         {
@@ -12563,11 +12705,15 @@ namespace System.Windows.Forms.Tests
 
             public new void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID) => base.AccessibilityNotifyClients(accEvent, objectID, childID);
 
+            public new ControlCollection CreateControlsInstance() => base.CreateControlsInstance();
+
             public new void CreateHandle() => base.CreateHandle();
 
             public new void DestroyHandle() => base.DestroyHandle();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 
             public new void OnBackColorChanged(EventArgs e) => base.OnBackColorChanged(e);
 

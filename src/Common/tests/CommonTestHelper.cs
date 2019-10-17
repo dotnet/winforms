@@ -314,6 +314,8 @@ namespace WinForms.Common.Tests
             {
                 { Color.Red, Color.Red },
                 { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) },
+                { Color.White, Color.White },
+                { Color.Black, Color.Black },
                 { Color.Empty, Control.DefaultForeColor }
             };
         }

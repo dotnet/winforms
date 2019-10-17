@@ -1219,10 +1219,13 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, control.FocusedItem);
             Assert.True(value.Focused);
         }
+
         public static IEnumerable<object[]> ForeColor_Set_TestData()
         {
             yield return new object[] { Color.Empty, SystemColors.WindowText };
             yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.White, Color.White };
+            yield return new object[] { Color.Black, Color.Black };
             yield return new object[] { Color.Red, Color.Red };
         }
 
@@ -1247,6 +1250,8 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { Color.Empty, SystemColors.WindowText, 0 };
             yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3), 1 };
+            yield return new object[] { Color.White, Color.White, 1 };
+            yield return new object[] { Color.Black, Color.Black, 1 };
             yield return new object[] { Color.Red, Color.Red, 1 };
         }
 
