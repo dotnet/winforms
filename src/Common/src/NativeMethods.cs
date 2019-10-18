@@ -887,23 +887,10 @@ namespace System.Windows.Forms
         TPM_RIGHTALIGN = 0x0008,
         TPM_VERTICAL = 0x0040,
         TV_FIRST = 0x1100,
-        TBSTATE_CHECKED = 0x01,
-        TBSTATE_ENABLED = 0x04,
-        TBSTATE_HIDDEN = 0x08,
-        TBSTATE_INDETERMINATE = 0x10,
-        TBSTYLE_BUTTON = 0x00,
-        TBSTYLE_SEP = 0x01,
-        TBSTYLE_CHECK = 0x02,
-        TBSTYLE_DROPDOWN = 0x08,
-        TBSTYLE_TOOLTIPS = 0x0100,
-        TBSTYLE_FLAT = 0x0800,
-        TBSTYLE_LIST = 0x1000,
-        TBSTYLE_EX_DRAWDDARROWS = 0x00000001,
         TB_ENABLEBUTTON = (0x0400 + 1),
         TB_ISBUTTONCHECKED = (0x0400 + 10),
         TB_ISBUTTONINDETERMINATE = (0x0400 + 13),
         TB_ADDBUTTONS = (0x0400 + 68),
-        TB_INSERTBUTTON = (0x0400 + 67),
         TB_DELETEBUTTON = (0x0400 + 22),
         TB_GETBUTTON = (0x0400 + 23),
         TB_SAVERESTORE = (0x0400 + 76),
@@ -916,18 +903,10 @@ namespace System.Windows.Forms
         TB_SETIMAGELIST = (0x0400 + 48),
         TB_GETRECT = (0x0400 + 51),
         TB_GETBUTTONSIZE = (0x0400 + 58),
-        TB_GETBUTTONINFO = (0x0400 + 63),
-        TB_SETBUTTONINFO = (0x0400 + 64),
         TB_SETEXTENDEDSTYLE = (0x0400 + 84),
         TB_MAPACCELERATOR = (0x0400 + 90),
         TB_GETTOOLTIPS = (0x0400 + 35),
         TB_SETTOOLTIPS = (0x0400 + 36),
-        TBIF_IMAGE = 0x00000001,
-        TBIF_TEXT = 0x00000002,
-        TBIF_STATE = 0x00000004,
-        TBIF_STYLE = 0x00000008,
-        TBIF_COMMAND = 0x00000020,
-        TBIF_SIZE = 0x00000040,
         TBN_GETBUTTONINFO = ((0 - 700) - 20),
         TBN_QUERYINSERT = ((0 - 700) - 6),
         TBN_DROPDOWN = ((0 - 700) - 10),
@@ -1056,7 +1035,6 @@ namespace System.Windows.Forms
         TCM_SETTOOLTIPS = (0x1300 + 46),
         TCN_SELCHANGE = ((0 - 550) - 1),
         TCN_SELCHANGING = ((0 - 550) - 2),
-        TBSTYLE_WRAPPABLE = 0x0200,
         TVM_SETBKCOLOR = (TV_FIRST + 29),
         TVM_SETTEXTCOLOR = (TV_FIRST + 30),
         TYMED_NULL = 0,
@@ -2046,29 +2024,6 @@ namespace System.Windows.Forms
             public    /*NativeMethods.tagVARKIND*/ int varkind;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMTOOLBAR
-        {
-            public User32.NMHDR hdr;
-            public int iItem;
-            public TBBUTTON tbButton;
-            public int cchText;
-            public IntPtr pszText;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct TBBUTTON
-        {
-            public int iBitmap;
-            public int idCommand;
-            public byte fsState;
-            public byte fsStyle;
-            public byte bReserved0;
-            public byte bReserved1;
-            public IntPtr dwData;
-            public IntPtr iString;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TOOLTIPTEXT
         {
@@ -2099,21 +2054,6 @@ namespace System.Windows.Forms
             public int iOrder = 0;
             public int type = 0;
             public IntPtr pvFilter = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct TBBUTTONINFO
-        {
-            public int cbSize;
-            public int dwMask;
-            public int idCommand;
-            public int iImage;
-            public byte fsState;
-            public byte fsStyle;
-            public short cx;
-            public IntPtr lParam;
-            public IntPtr pszText;
-            public int cchTest;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
