@@ -301,8 +301,6 @@ namespace System.Windows.Forms
         E_FAIL = unchecked((int)0x80004005),
         E_UNEXPECTED = unchecked((int)0x8000FFFF),
         INET_E_DEFAULT_ACTION = unchecked((int)0x800C0011),
-        ETO_OPAQUE = 0x0002,
-        ETO_CLIPPED = 0x0004,
         EMR_POLYTEXTOUT = 97,
         EDGE_RAISED = (0x0001 | 0x0004),
         EDGE_SUNKEN = (0x0002 | 0x0008),

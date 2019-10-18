@@ -479,7 +479,7 @@ namespace System.Windows.Forms.Internal
             Gdi32.SelectObject(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
 
             // Add 1 to width and height to create the 'bounding box' (convert from point to size).
-            IntUnsafeNativeMethods.Rectangle(hdc, x, y, x + width, y + height);
+            Gdi32.Rectangle(hdc, x, y, x + width, y + height);
 
             if (rasterOp != Gdi32.R2.COPYPEN)
             {
@@ -537,9 +537,8 @@ namespace System.Windows.Forms.Internal
             }
 
             Point oldPoint = new Point();
-
-            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, &oldPoint);
-            IntUnsafeNativeMethods.LineTo(hdc, x2, y2);
+            Gdi32.MoveToEx(hdc, x1, y1, &oldPoint);
+            Gdi32.LineTo(hdc, x2, y2);
 
             if (bckMode != Gdi32.BKMODE.TRANSPARENT)
             {
@@ -551,7 +550,7 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.SetRasterOperation(rasterOp);
             }
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
+            Gdi32.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
         }
 
         /// <summary>
