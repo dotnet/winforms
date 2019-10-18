@@ -2275,7 +2275,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (SolidBrush)SystemBrushes.AppWorkspace;
+                return (SolidBrush)SystemBrushes.ControlDark;
             }
         }
 
