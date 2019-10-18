@@ -27,6 +27,8 @@ namespace System.Drawing.Design
                 [typeof(ICollection)] = "System.ComponentModel.Design.CollectionEditor, " + AssemblyRef.SystemDesign,
                 [typeof(byte[])] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
                 [typeof(Stream)] = "System.ComponentModel.Design.BinaryEditor, " + AssemblyRef.SystemDesign,
+
+                // System.Windows.Forms type Editors
                 [typeof(string[])] = "System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign,
 
                 // System.Windows.Forms type Editors
@@ -37,6 +39,7 @@ namespace System.Drawing.Design
                 [typeof(Color)] = "System.Drawing.Design.ColorEditor, " + AssemblyRef.SystemDrawingDesign,
                 [typeof(Font)] = "System.Drawing.Design.FontEditor, " + AssemblyRef.SystemDrawingDesign,
                 // no way to add Font.Name and associate it with FontNameEditor
+                [typeof(Icon)] = "System.Drawing.Design.IconEditor, " + AssemblyRef.SystemDrawingDesign,
                 [typeof(Image)] = "System.Drawing.Design.ImageEditor, " + AssemblyRef.SystemDrawingDesign,
                 [typeof(Metafile)] = "System.Drawing.Design.MetafileEditor, " + AssemblyRef.SystemDrawingDesign,
             };
