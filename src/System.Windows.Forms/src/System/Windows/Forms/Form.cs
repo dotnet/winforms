@@ -204,20 +204,6 @@ namespace System.Windows.Forms
 
             SetState(States.Visible, false);
             SetState(States.TopLevel, true);
-
-#if EVERETTROLLBACK
-            // (MDI: Roll back feature to Everett + QFE source base).  Code left here for ref.
-            // Enabling this code introduces a breaking change that has was approved.
-            // If this needs to be enabled, also CanTabStop and TabStop code needs to be added back in Control.cs
-            // and Form.cs.
-
-            // Set this value to false
-            // so that the window style will not include the WS_TABSTOP bit, which is
-            // identical to WS_MAXIMIZEBOX. Otherwise, our test suite won't be able to
-            // determine whether or not the window utilizes the Maximize Box in the
-            // window caption.
-            SetState(States.TABSTOP, false);
-#endif
         }
 
         /// <summary>
