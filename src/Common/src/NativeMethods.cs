@@ -1958,14 +1958,6 @@ namespace System.Windows.Forms
             public IntPtr lParam;
         }
 
-        public enum tagINVOKEKIND
-        {
-            INVOKE_FUNC = 1,
-            INVOKE_PROPERTYGET = 2,
-            INVOKE_PROPERTYPUT = 4,
-            INVOKE_PROPERTYPUTREF = 8
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class tagEXCEPINFO
         {
@@ -1989,16 +1981,6 @@ namespace System.Windows.Forms
             public int scode = 0;
         }
 
-        public enum tagDESCKIND
-        {
-            DESCKIND_NONE = 0,
-            DESCKIND_FUNCDESC = 1,
-            DESCKIND_VARDESC = 2,
-            DESCKIND_TYPECOMP = 3,
-            DESCKIND_IMPLICITAPPOBJ = 4,
-            DESCKIND_MAX = 5
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct tagFUNCDESC
         {
@@ -2014,13 +1996,9 @@ namespace System.Windows.Forms
 
             public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam;
 
-            // cpb, Microsoft, the EE chokes on Enums in structs
-
-            public    /*NativeMethods.tagFUNCKIND*/ int funckind;
-
-            public    /*NativeMethods.tagINVOKEKIND*/ int invkind;
-
-            public    /*NativeMethods.tagCALLCONV*/ int callconv;
+            public Ole32.FUNCKIND funckind;
+            public Ole32.INVOKEKIND invkind;
+            public Ole32.CALLCONV callconv;
             [MarshalAs(UnmanagedType.I2)]
             public short cParams;
             [MarshalAs(UnmanagedType.I2)]
@@ -2030,8 +2008,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.I2)]
             public short cScodesi;
             public tagELEMDESC elemdescFunc;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wFuncFlags;
+            public Ole32.FUNCFLAGS wFuncFlags;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2041,9 +2018,8 @@ namespace System.Windows.Forms
             public IntPtr lpstrSchema;
             public IntPtr unionMember;
             public tagELEMDESC elemdescVar;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wVarFlags;
-            public    /*NativeMethods.tagVARKIND*/ int varkind;
+            public Ole32.VARFLAGS wVarFlags;
+            public Ole32.VARKIND varkind;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2785,19 +2761,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public enum tagTYPEKIND
-        {
-            TKIND_ENUM = 0,
-            TKIND_RECORD = 1,
-            TKIND_MODULE = 2,
-            TKIND_INTERFACE = 3,
-            TKIND_DISPATCH = 4,
-            TKIND_COCLASS = 5,
-            TKIND_ALIAS = 6,
-            TKIND_UNION = 7,
-            TKIND_MAX = 8
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct tagTYPEDESC
         {
@@ -2809,9 +2772,7 @@ namespace System.Windows.Forms
         public struct tagPARAMDESC
         {
             public IntPtr pparamdescex;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public short wParamFlags;
+            public Ole32.PARAMFLAG wParamFlags;
         }
 
         public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
@@ -2866,7 +2827,7 @@ namespace System.Windows.Forms
             public IntPtr lpstrSchema;
             [MarshalAs(UnmanagedType.U4)]
             public int cbSizeInstance;
-            public    /*NativeMethods.tagTYPEKIND*/ int typekind;
+            public Ole32.TYPEKIND typekind;
             [MarshalAs(UnmanagedType.U2)]
             public short cFuncs;
             [MarshalAs(UnmanagedType.U2)]
@@ -2895,8 +2856,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U4)]
             public int idldescType_dwReserved;
 
-            [MarshalAs(UnmanagedType.U2)]
-            public short idldescType_wIDLFlags;
+            public Ole32.IDLFLAG idldescType_wIDLFlags;
 
             public tagTYPEDESC Get_tdescAlias()
             {
@@ -2917,22 +2877,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public enum tagVARFLAGS
-        {
-            VARFLAG_FREADONLY = 1,
-            VARFLAG_FSOURCE = 0x2,
-            VARFLAG_FBINDABLE = 0x4,
-            VARFLAG_FREQUESTEDIT = 0x8,
-            VARFLAG_FDISPLAYBIND = 0x10,
-            VARFLAG_FDEFAULTBIND = 0x20,
-            VARFLAG_FHIDDEN = 0x40,
-            VARFLAG_FDEFAULTCOLLELEM = 0x100,
-            VARFLAG_FUIDEFAULT = 0x200,
-            VARFLAG_FNONBROWSABLE = 0x400,
-            VARFLAG_FREPLACEABLE = 0x800,
-            VARFLAG_FIMMEDIATEBIND = 0x1000
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct tagELEMDESC
         {
@@ -2940,21 +2884,12 @@ namespace System.Windows.Forms
             public tagPARAMDESC paramdesc;
         }
 
-        public enum tagVARKIND
-        {
-            VAR_PERINSTANCE = 0,
-            VAR_STATIC = 1,
-            VAR_CONST = 2,
-            VAR_DISPATCH = 3
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct tagIDLDESC
         {
             [MarshalAs(UnmanagedType.U4)]
             public int dwReserved;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wIDLFlags;
+            public Ole32.IDLFLAG wIDLFlags;
         }
 
         public struct RGBQUAD
