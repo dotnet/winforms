@@ -3610,8 +3610,8 @@ namespace System.Windows.Forms
                         break;
 
                     case RichTextBoxConstants.EN_SELCHANGE:
-                        NativeMethods.SELCHANGE selChange = (NativeMethods.SELCHANGE)m.GetLParam(typeof(NativeMethods.SELCHANGE));
-                        WmSelectionChange(selChange);
+                        Richedit.SELCHANGE* selChange = (Richedit.SELCHANGE*)m.LParam;
+                        WmSelectionChange(*selChange);
                         break;
 
                     case RichTextBoxConstants.EN_PROTECTED:
@@ -3734,7 +3734,7 @@ namespace System.Windows.Forms
             return es;
         }
 
-        private void WmSelectionChange(NativeMethods.SELCHANGE selChange)
+        private void WmSelectionChange(Richedit.SELCHANGE selChange)
         {
             int selStart = selChange.chrg.cpMin;
             int selEnd = selChange.chrg.cpMax;
