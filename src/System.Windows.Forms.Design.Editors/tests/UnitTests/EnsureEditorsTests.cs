@@ -79,7 +79,6 @@ namespace System.Windows.Forms.Design.Editors.Tests
         //[InlineData(typeof(HelpProvider), "HelpNamespace", typeof(HelpNamespaceEditor))]
         [InlineData(typeof(Label), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(Label), "ImageKey", typeof(ImageIndexEditor))]
-        [InlineData(typeof(Label), "Text", typeof(MultilineStringEditor))]
         //[InlineData(typeof(LinkLabel), "LinkArea", typeof(LinkAreaEditor))]
         //[InlineData(typeof(ListBox), "Items", typeof(ListControlStringCollectionEditor))]
         //[InlineData(typeof(ListControl), "DisplayMember", typeof(DataMemberFieldEditor))]
