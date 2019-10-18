@@ -2120,14 +2120,6 @@ namespace System.Windows.Forms
             public IntPtr prgDayState;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMVIEWCHANGE
-        {
-            public User32.NMHDR nmhdr;
-            public uint uOldView;
-            public uint uNewView;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct NMLVCUSTOMDRAW
         {
@@ -2944,14 +2936,6 @@ namespace System.Windows.Forms
             PROCESS_DPI_UNAWARE = 0,
             PROCESS_SYSTEM_DPI_AWARE = 1,
             PROCESS_PER_MONITOR_DPI_AWARE = 2
-        }
-
-        public enum MONTCALENDAR_VIEW_MODE
-        {
-            MCMV_MONTH = 0,
-            MCMV_YEAR = 1,
-            MCMV_DECADE = 2,
-            MCMV_CENTURY = 3
         }
 
         public const int DPI_AWARENESS_CONTEXT_UNAWARE = -1;
