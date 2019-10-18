@@ -159,6 +159,11 @@ Per accettare testo premere CTRL+INVIO.</target>
         <target state="translated">File bitmap</target>
         <note />
       </trans-unit>
+      <trans-unit id="iconFileDescription">
+        <source>Icon files</source>
+        <target state="new">Icon files</target>
+        <note />
+      </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
         <target state="translated">Tutti i file di immagine</target>

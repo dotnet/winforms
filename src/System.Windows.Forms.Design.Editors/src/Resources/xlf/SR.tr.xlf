@@ -159,6 +159,11 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <target state="translated">Bit eşlem dosyaları</target>
         <note />
       </trans-unit>
+      <trans-unit id="iconFileDescription">
+        <source>Icon files</source>
+        <target state="new">Icon files</target>
+        <note />
+      </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
         <target state="translated">Tüm resim dosyaları</target>
