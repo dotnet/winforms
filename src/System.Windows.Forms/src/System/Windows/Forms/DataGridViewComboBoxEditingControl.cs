@@ -181,68 +181,27 @@ namespace System.Windows.Forms
             dataGridView.SetAccessibleObjectParent(this.AccessibilityObject);
         }
 
+        /// <summary>
+        ///  Handles the WM_PAINT messages.
+        /// </summary>
+        private void WmPaint(ref Message m)
+        {
+            if (m.WParam == IntPtr.Zero && SystemInformation.HighContrast &&
+                GetStyle(ControlStyles.UserPaint) == false &&
+                (FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System))
+            {
+                NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
+                m.WParam = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
+                DefWndProc(ref m);
+                UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
+            }
+        }
+
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == WindowMessages.WM_PAINT)
             {
-                if (SystemInformation.HighContrast && GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System))
-                {
-                    using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
-                    {
-                        using (WindowsRegion wr = new WindowsRegion(Bounds))
-                        {
-                            // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                            RegionType updateRegionFlags = User32.GetUpdateRgn(Handle, wr.HRegion, BOOL.TRUE);
-
-                            dr.CombineRegion(wr, dr, Gdi32.CombineMode.RGN_DIFF);
-
-                            Rectangle updateRegionBoundingRect = wr.ToRectangle();
-                            FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
-                            // Call the base class to do its painting (with a clipped DC).
-
-                            NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
-                            IntPtr dc;
-                            bool disposeDc = false;
-                            if (m.WParam == IntPtr.Zero)
-                            {
-                                dc = UnsafeNativeMethods.BeginPaint(new HandleRef(this, Handle), ref ps);
-                                disposeDc = true;
-                            }
-                            else
-                            {
-                                dc = m.WParam;
-                            }
-
-                            using (DeviceContext mDC = DeviceContext.FromHdc(dc))
-                            {
-                                using (WindowsGraphics wg = new WindowsGraphics(mDC))
-                                {
-                                    if (updateRegionFlags != RegionType.ERROR)
-                                    {
-                                        wg.DeviceContext.SetClip(dr);
-                                    }
-                                    m.WParam = dc;
-                                    DefWndProc(ref m);
-                                    if (updateRegionFlags != RegionType.ERROR)
-                                    {
-                                        wg.DeviceContext.SetClip(wr);
-                                    }
-                                    using (Graphics g = Graphics.FromHdcInternal(dc))
-                                    {
-                                        FlatComboBoxAdapter.DrawFlatCombo(this, g);
-                                    }
-                                }
-                            }
-
-                            if (disposeDc)
-                            {
-                                UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
-                            }
-                        }
-
-                        return;
-                    }
-                }
+                WmPaint(ref m);
             }
 
             base.WndProc(ref m);
