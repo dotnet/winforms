@@ -159,6 +159,11 @@ Press Ctrl+Enter to accept Text.</source>
         <target state="translated">點陣圖檔</target>
         <note />
       </trans-unit>
+      <trans-unit id="iconFileDescription">
+        <source>Icon files</source>
+        <target state="new">Icon files</target>
+        <note />
+      </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
         <target state="translated">所有影像檔</target>

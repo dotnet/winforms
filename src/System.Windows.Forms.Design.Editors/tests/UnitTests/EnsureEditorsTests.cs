@@ -27,6 +27,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         [InlineData(typeof(Bitmap), typeof(BitmapEditor))]
         [InlineData(typeof(Color), typeof(ColorEditor))]
         [InlineData(typeof(Font), typeof(FontEditor))]
+        [InlineData(typeof(Icon), typeof(IconEditor))]
         [InlineData(typeof(Image), typeof(ImageEditor))]
         [InlineData(typeof(Metafile), typeof(MetafileEditor))]
         [InlineData(typeof(AnchorStyles), typeof(AnchorEditor))]
