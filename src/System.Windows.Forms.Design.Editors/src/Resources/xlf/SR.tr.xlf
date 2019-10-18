@@ -82,6 +82,56 @@
         <target state="translated">Sistem</target>
         <note />
       </trans-unit>
+      <trans-unit id="ContentAlignmentEditorAccName">
+        <source>Alignment Picker</source>
+        <target state="new">Alignment Picker</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorBottomCenterAccName">
+        <source>Bottom Middle</source>
+        <target state="new">Bottom Middle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorBottomLeftAccName">
+        <source>Bottom Left</source>
+        <target state="new">Bottom Left</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorBottomRightAccName">
+        <source>Bottom Right</source>
+        <target state="new">Bottom Right</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorMiddleCenterAccName">
+        <source>Middle Center</source>
+        <target state="new">Middle Center</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorMiddleLeftAccName">
+        <source>Middle Left</source>
+        <target state="new">Middle Left</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorMiddleRightAccName">
+        <source>Middle Right</source>
+        <target state="new">Middle Right</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorTopCenterAccName">
+        <source>Top Center</source>
+        <target state="new">Top Center</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorTopLeftAccName">
+        <source>Top Left</source>
+        <target state="new">Top Left</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContentAlignmentEditorTopRightAccName">
+        <source>Top Right</source>
+        <target state="new">Top Right</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
         <target state="translated">Seçiciyi Yerleştir</target>
