@@ -218,6 +218,36 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="ImageCollectionEditorFormText" xml:space="preserve">
     <value>Images Collection Editor</value>
   </data>
+  <data name="ContentAlignmentEditorAccName" xml:space="preserve">
+    <value>Alignment Picker</value>
+  </data>
+  <data name="ContentAlignmentEditorBottomCenterAccName" xml:space="preserve">
+    <value>Bottom Middle</value>
+  </data>
+  <data name="ContentAlignmentEditorBottomLeftAccName" xml:space="preserve">
+    <value>Bottom Left</value>
+  </data>
+  <data name="ContentAlignmentEditorBottomRightAccName" xml:space="preserve">
+    <value>Bottom Right</value>
+  </data>
+  <data name="ContentAlignmentEditorMiddleCenterAccName" xml:space="preserve">
+    <value>Middle Center</value>
+  </data>
+  <data name="ContentAlignmentEditorMiddleLeftAccName" xml:space="preserve">
+    <value>Middle Left</value>
+  </data>
+  <data name="ContentAlignmentEditorMiddleRightAccName" xml:space="preserve">
+    <value>Middle Right</value>
+  </data>
+  <data name="ContentAlignmentEditorTopCenterAccName" xml:space="preserve">
+    <value>Top Center</value>
+  </data>
+  <data name="ContentAlignmentEditorTopLeftAccName" xml:space="preserve">
+    <value>Top Left</value>
+  </data>
+  <data name="ContentAlignmentEditorTopRightAccName" xml:space="preserve">
+    <value>Top Right</value>
+  </data>
   <data name="iconFileDescription" xml:space="preserve">
     <value>Icon files</value>
   </data>
