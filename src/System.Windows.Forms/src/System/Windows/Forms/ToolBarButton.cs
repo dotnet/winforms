@@ -610,13 +610,13 @@ namespace System.Windows.Forms
             // Assume that this button is the same width as the parent's ButtonSize's Width
             int buttonWidth = Parent.ButtonSize.Width;
 
-            NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO
+            var button = new ComCtl32.TBBUTTONINFOW
             {
-                cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
-                dwMask = NativeMethods.TBIF_SIZE
+                cbSize = (uint)Marshal.SizeOf<ComCtl32.TBBUTTONINFOW>(),
+                dwMask = ComCtl32.TBIF.SIZE
             };
 
-            int buttonID = (int)UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), NativeMethods.TB_GETBUTTONINFO, commandId, ref button);
+            int buttonID = (int)User32.SendMessageW(Parent, (User32.WindowMessage)ComCtl32.TB.GETBUTTONINFOW, (IntPtr)commandId, ref button);
             if (buttonID != -1)
             {
                 buttonWidth = button.cx;
@@ -642,51 +642,48 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a TBBUTTON object that represents this ToolBarButton.
         /// </summary>
-        internal NativeMethods.TBBUTTON GetTBBUTTON(int commandId)
+        internal ComCtl32.TBBUTTON GetTBBUTTON(int commandId)
         {
-            NativeMethods.TBBUTTON button = new NativeMethods.TBBUTTON
+            // Set up the state of the button
+            var button = new ComCtl32.TBBUTTON
             {
                 iBitmap = ImageIndexer.ActualIndex,
-
-                // set up the state of the button
-                //
                 fsState = 0
             };
             if (enabled)
             {
-                button.fsState |= NativeMethods.TBSTATE_ENABLED;
+                button.fsState |= ComCtl32.TBSTATE.ENABLED;
             }
 
             if (partialPush && style == ToolBarButtonStyle.ToggleButton)
             {
-                button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+                button.fsState |= ComCtl32.TBSTATE.INDETERMINATE;
             }
 
             if (pushed)
             {
-                button.fsState |= NativeMethods.TBSTATE_CHECKED;
+                button.fsState |= ComCtl32.TBSTATE.CHECKED;
             }
 
             if (!visible)
             {
-                button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+                button.fsState |= ComCtl32.TBSTATE.HIDDEN;
             }
 
             // set the button style
-            //
             switch (style)
             {
                 case ToolBarButtonStyle.PushButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_BUTTON;
+                    button.fsStyle = (byte)ComCtl32.TBSTYLE.BUTTON;
                     break;
                 case ToolBarButtonStyle.ToggleButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_CHECK;
+                    button.fsStyle = (byte)ComCtl32.TBSTYLE.CHECK;
                     break;
                 case ToolBarButtonStyle.Separator:
-                    button.fsStyle = NativeMethods.TBSTYLE_SEP;
+                    button.fsStyle = (byte)ComCtl32.TBSTYLE.SEP;
                     break;
                 case ToolBarButtonStyle.DropDownButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_DROPDOWN;
+                    button.fsStyle = (byte)ComCtl32.TBSTYLE.DROPDOWN;
                     break;
 
             }
@@ -700,15 +697,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns a TBBUTTONINFO object that represents this ToolBarButton.
+        ///  Returns a TBBUTTONINFOW object that represents this ToolBarButton.
         /// </summary>
-        internal NativeMethods.TBBUTTONINFO GetTBBUTTONINFO(bool updateText, int newCommandId)
+        internal ComCtl32.TBBUTTONINFOW GetTBBUTTONINFO(bool updateText, int newCommandId)
         {
-            NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO
+            var button = new ComCtl32.TBBUTTONINFOW
             {
-                cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
-                dwMask = NativeMethods.TBIF_IMAGE
-                            | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE
+                cbSize = (uint)Marshal.SizeOf<ComCtl32.TBBUTTONINFOW>(),
+                dwMask = ComCtl32.TBIF.IMAGE | ComCtl32.TBIF.STATE | ComCtl32.TBIF.STYLE
             };
 
             // Older platforms interpret null strings as empty, which forces the button to
@@ -716,7 +712,7 @@ namespace System.Windows.Forms
             // The only workaround is to avoid having comctl update the text.
             if (updateText)
             {
-                button.dwMask |= NativeMethods.TBIF_TEXT;
+                button.dwMask |= ComCtl32.TBIF.TEXT;
             }
 
             button.iImage = ImageIndexer.ActualIndex;
@@ -725,44 +721,42 @@ namespace System.Windows.Forms
             {
                 commandId = newCommandId;
                 button.idCommand = newCommandId;
-                button.dwMask |= NativeMethods.TBIF_COMMAND;
+                button.dwMask |= ComCtl32.TBIF.COMMAND;
             }
 
             // set up the state of the button
-            //
             button.fsState = 0;
             if (enabled)
             {
-                button.fsState |= NativeMethods.TBSTATE_ENABLED;
+                button.fsState |= ComCtl32.TBSTATE.ENABLED;
             }
 
             if (partialPush && style == ToolBarButtonStyle.ToggleButton)
             {
-                button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+                button.fsState |= ComCtl32.TBSTATE.INDETERMINATE;
             }
 
             if (pushed)
             {
-                button.fsState |= NativeMethods.TBSTATE_CHECKED;
+                button.fsState |= ComCtl32.TBSTATE.CHECKED;
             }
 
             if (!visible)
             {
-                button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+                button.fsState |= ComCtl32.TBSTATE.HIDDEN;
             }
 
             // set the button style
-            //
             switch (style)
             {
                 case ToolBarButtonStyle.PushButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_BUTTON;
+                    button.fsStyle = (byte)ComCtl32.TBSTYLE.BUTTON;
                     break;
                 case ToolBarButtonStyle.ToggleButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_CHECK;
+                    button.fsStyle = (byte)ComCtl32.TBSTYLE.CHECK;
                     break;
                 case ToolBarButtonStyle.Separator:
-                    button.fsStyle = NativeMethods.TBSTYLE_SEP;
+                    button.fsStyle = (byte)ComCtl32.TBSTYLE.SEP;
                     break;
             }
 
