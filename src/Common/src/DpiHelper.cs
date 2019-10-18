@@ -5,8 +5,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-
-using CAPS = System.Windows.Forms.NativeMethods;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -383,33 +381,32 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows10_1703OrGreater)
             {
                 // SetProcessDpiAwarenessContext needs Windows 10 RS2 and above
-
-                int rs2AndAboveDpiFlag;
+                IntPtr rs2AndAboveDpiFlag;
                 switch (highDpiMode)
                 {
                     case HighDpiMode.SystemAware:
-                        rs2AndAboveDpiFlag = CAPS.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
+                        rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
                         break;
                     case HighDpiMode.PerMonitor:
-                        rs2AndAboveDpiFlag = CAPS.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE;
+                        rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE;
                         break;
                     case HighDpiMode.PerMonitorV2:
                         // Necessary for RS1, since this SetProcessDpiAwarenessContext IS available here.
-                        rs2AndAboveDpiFlag = SafeNativeMethods.IsValidDpiAwarenessContext(CAPS.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) ?
-                                             CAPS.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 :
-                                             CAPS.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
+                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2).IsTrue() ?
+                                             User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2 :
+                                             User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
                         break;
                     case HighDpiMode.DpiUnawareGdiScaled:
                         // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
-                        rs2AndAboveDpiFlag = SafeNativeMethods.IsValidDpiAwarenessContext(CAPS.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED) ?
-                                             CAPS.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED :
-                                             CAPS.DPI_AWARENESS_CONTEXT_UNAWARE;
+                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED).IsTrue() ?
+                                             User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED :
+                                             User32.DPI_AWARENESS_CONTEXT.UNAWARE;
                         break;
                     default:
-                        rs2AndAboveDpiFlag = CAPS.DPI_AWARENESS_CONTEXT_UNAWARE;
+                        rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.UNAWARE;
                         break;
                 }
-                return SafeNativeMethods.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
+                return User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag).IsTrue();
             }
             else if (OsVersion.IsWindows8_1OrGreater)
             {

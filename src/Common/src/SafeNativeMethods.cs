@@ -224,14 +224,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool SetProcessDPIAware();
 
-        // for Windows 10 version RS2 and above
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool IsValidDpiAwarenessContext(int dpiFlag);
-
-        // for Windows 10 version RS2 and above
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool SetProcessDpiAwarenessContext(int dpiFlag);
-
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
 
