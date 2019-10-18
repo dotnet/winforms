@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,6 +40,11 @@ namespace System.Windows.Forms
         private Image _image;
 
         /// <summary>
+        ///  Http client instance.
+        /// </summary>
+        private readonly HttpClient _httpClient;
+
+        /// <summary>
         ///  Controls how the image is placed within our bounds, or how we are sized to fit said image.
         /// </summary>
         private PictureBoxSizeMode _sizeMode = PictureBoxSizeMode.Normal;
@@ -46,6 +52,8 @@ namespace System.Windows.Forms
         private Size _savedSize;
 
         private bool _currentlyAnimating;
+
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         // Instance members for asynchronous behavior
         private AsyncOperation _currentAsyncLoadOperation;
@@ -101,8 +109,11 @@ namespace System.Windows.Forms
         ///  Creates a new picture with all default properties and no Image. The default PictureBox.SizeMode
         ///  will be PictureBoxSizeMode.NORMAL.
         /// </summary>
-        public PictureBox()
+        /// <param name="httpClient">Http client instance that will be used to download the image.</param>
+        public PictureBox(HttpClient httpClient = null)
         {
+            _httpClient = httpClient ?? new HttpClient();
+
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
@@ -172,6 +183,7 @@ namespace System.Windows.Forms
         public void CancelAsync()
         {
             _pictureBoxState[CancellationPendingState] = true;
+            _cancellationTokenSource.Cancel();
         }
 
         [Browsable(false)]
@@ -555,12 +567,40 @@ namespace System.Windows.Forms
             _contentLength = -1;
             _tempDownloadStream = new MemoryStream();
 
-            WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
-
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                // Invoke BeginGetResponse on a threadpool thread, as it has unpredictable latency
-                req.BeginGetResponse(new AsyncCallback(GetResponseCallback), req);
+                try
+                {
+                    HttpResponseMessage responseMessage = await _httpClient.GetAsync(CalculateUri(_imageLocation), _cancellationTokenSource.Token);
+                    if (!responseMessage.IsSuccessStatusCode)
+                    {
+                        PostCompleted(new Exception($"HttpClient received non-successful status code: {responseMessage.StatusCode}"), false);
+                        return;
+                    }
+
+                    _contentLength = (int)responseMessage.Content.Headers.ContentLength;
+                    _totalBytesRead = 0;
+
+                    Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
+
+                    // Continue on with asynchronous reading.
+                    responseStream.BeginRead(
+                        _readBuffer,
+                        0,
+                        ReadBlockSize,
+                        new AsyncCallback(ReadCallBack),
+                        responseStream);
+                }
+                catch (TaskCanceledException)
+                {
+                    PostCompleted(null, true);
+                }
+                catch (Exception error)
+                {
+                    // Since this is on a non-UI thread, we catch any exceptions and
+                    // pass them back as data to the UI-thread.
+                    PostCompleted(error, false);
+                }
             });
         }
 
@@ -607,41 +647,6 @@ namespace System.Windows.Forms
         }
 
         private void LoadProgressDelegate(object arg) => OnLoadProgressChanged((ProgressChangedEventArgs)arg);
-
-        private void GetResponseCallback(IAsyncResult result)
-        {
-            if (_pictureBoxState[CancellationPendingState])
-            {
-                PostCompleted(null, true);
-                return;
-            }
-
-            try
-            {
-                WebRequest req = (WebRequest)result.AsyncState;
-                WebResponse webResponse = req.EndGetResponse(result);
-
-                _contentLength = (int)webResponse.ContentLength;
-                _totalBytesRead = 0;
-
-                Stream responseStream = webResponse.GetResponseStream();
-
-                // Continue on with asynchronous reading.
-                responseStream.BeginRead(
-                    _readBuffer,
-                    0,
-                    ReadBlockSize,
-                    new AsyncCallback(ReadCallBack),
-                    responseStream);
-
-            }
-            catch (Exception error)
-            {
-                // Since this is on a non-UI thread, we catch any exceptions and
-                // pass them back as data to the UI-thread.
-                PostCompleted(error, false);
-            }
-        }
 
         private void ReadCallBack(IAsyncResult result)
         {
