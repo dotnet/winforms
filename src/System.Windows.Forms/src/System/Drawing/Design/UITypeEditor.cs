@@ -37,6 +37,7 @@ namespace System.Drawing.Design
                 // System.Drawing.Design type Editors
                 [typeof(Bitmap)] = "System.Drawing.Design.BitmapEditor, " + AssemblyRef.SystemDrawingDesign,
                 [typeof(Color)] = "System.Drawing.Design.ColorEditor, " + AssemblyRef.SystemDrawingDesign,
+                [typeof(ContentAlignment)] = "System.Drawing.Design.ContentAlignmentEditor, " + AssemblyRef.SystemDrawingDesign,
                 [typeof(Font)] = "System.Drawing.Design.FontEditor, " + AssemblyRef.SystemDrawingDesign,
                 // no way to add Font.Name and associate it with FontNameEditor
                 [typeof(Icon)] = "System.Drawing.Design.IconEditor, " + AssemblyRef.SystemDrawingDesign,

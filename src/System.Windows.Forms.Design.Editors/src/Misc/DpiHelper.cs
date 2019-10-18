@@ -127,6 +127,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// scale logical pixel to the factor
+        /// </summary>
+        public static int ConvertToGivenDpiPixel(int value, double pixelFactor)
+        {
+            var scaledValue = (int)Math.Round(value * pixelFactor);
+            return scaledValue == 0 ? 1 : scaledValue;
+        }
+
+        /// <summary>
         ///  Transforms a horizontal or vertical integer coordinate from logical to device units
         ///  by scaling it up  for current DPI and rounding to nearest integer value
         /// </summary>
@@ -140,6 +149,20 @@ namespace System.Windows.Forms
             }
             double scalingFactor = devicePixels / LogicalDpi;
             return (int)Math.Round(scalingFactor * (double)value);
+        }
+
+        /// <summary>
+        /// Transforms a horizontal or vertical integer coordinate from logical to device units
+        /// by scaling it up  for current DPI and rounding to nearest integer value
+        /// </summary>
+        public static double LogicalToDeviceUnits(double value, int devicePixels = 0)
+        {
+            if (devicePixels == 0)
+            {
+                return LogicalToDeviceUnitsScalingFactor * value;
+            }
+            double scalingFactor = devicePixels / LogicalDpi;
+            return scalingFactor * value;
         }
 
         /// <summary>
