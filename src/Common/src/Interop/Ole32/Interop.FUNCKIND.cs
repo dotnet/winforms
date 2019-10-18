@@ -8,11 +8,11 @@ internal static partial class Interop
     {
         public enum FUNCKIND : int
         {
-            VIRTUAL,
-            PUREVIRTUAL,
-            NONVIRTUAL,
-            STATIC,
-            DISPATCH
+            VIRTUAL = 0,
+            PUREVIRTUAL = 1,
+            NONVIRTUAL = 2,
+            STATIC = 3,
+            DISPATCH = 4
         }
     }
 }

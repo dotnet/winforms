@@ -10,15 +10,15 @@ internal static partial class Interop
         {
             FASTCALL = 0,
             CDECL = 1,
-            MSCPASCAL,
+            MSCPASCAL = 2,
             PASCAL = MSCPASCAL,
-            MACPASCAL,
-            STDCALL,
-            FPFASTCALL,
-            SYSCALL,
-            MPWCDECL,
-            MPWPASCAL,
-            MAX
+            MACPASCAL = 3,
+            STDCALL = 4,
+            FPFASTCALL = 5,
+            SYSCALL = 6,
+            MPWCDECL = 7,
+            MPWPASCAL = 8,
+            MAX = 9
         }
     }
 }

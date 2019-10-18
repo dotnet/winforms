@@ -11,10 +11,10 @@ internal static partial class Interop
         [Flags]
         public enum INVOKEKIND : int
         {
-            FUNC = 1,
-            PROPERTYGET = 2,
-            PROPERTYPUT = 4,
-            PROPERTYPUTREF = 8
+            FUNC = 0x1,
+            PROPERTYGET = 0x2,
+            PROPERTYPUT = 0x4,
+            PROPERTYPUTREF = 0x8
         }
     }
 }
