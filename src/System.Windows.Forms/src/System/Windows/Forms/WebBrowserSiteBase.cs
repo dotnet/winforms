@@ -184,10 +184,10 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)
+        HRESULT UnsafeNativeMethods.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
         {
             container = Host.GetParentContainer();
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         unsafe int UnsafeNativeMethods.IOleClientSite.ShowObject()

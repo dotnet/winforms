@@ -4283,11 +4283,11 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)
+            HRESULT UnsafeNativeMethods.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getContainer");
                 container = host.GetParentContainer();
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             unsafe int UnsafeNativeMethods.IOleClientSite.ShowObject()
@@ -5505,7 +5505,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class AxContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame, IReflect
+        internal class AxContainer : Ole32.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame, IReflect
         {
             internal ContainerControl parent;
             private IContainer assocContainer; // associated IContainer...
@@ -6182,19 +6182,18 @@ namespace System.Windows.Forms
             }
 
             // IOleContainer methods:
-
-            int UnsafeNativeMethods.IOleContainer.ParseDisplayName(object pbc, string pszDisplayName, int[] pchEaten, object[] ppmkOut)
+            unsafe HRESULT Ole32.IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint *pchEaten, IntPtr* ppmkOut)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ParseDisplayName");
                 if (ppmkOut != null)
                 {
-                    ppmkOut[0] = null;
+                    *ppmkOut = IntPtr.Zero;
                 }
 
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT UnsafeNativeMethods.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
+            HRESULT Ole32.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumObjects");
                 ppenum = null;
@@ -6216,10 +6215,10 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock)
+            HRESULT Ole32.IOleContainer.LockContainer(BOOL fLock)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in LockContainer");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             // IOleInPlaceFrame methods:

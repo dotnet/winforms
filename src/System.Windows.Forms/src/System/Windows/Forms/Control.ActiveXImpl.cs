@@ -254,8 +254,7 @@ namespace System.Windows.Forms
                         if (Assembly.GetEntryAssembly() == null)
                         {
                             // Now check for IHTMLDocument2
-
-                            if (NativeMethods.Succeeded(_clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)) && container is Mshtml.IHTMLDocument)
+                            if (_clientSite.GetContainer(out Ole32.IOleContainer container).Succeeded() && container is Mshtml.IHTMLDocument)
                             {
                                 s_isIE = true;
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:IsIE running under IE");
