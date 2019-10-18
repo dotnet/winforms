@@ -739,11 +739,9 @@ namespace System.Windows.Forms
                 string pszObjName);
 
             [PreserveSig]
-            int InsertMenus(
-                [In]
+            HRESULT InsertMenus(
                 IntPtr hmenuShared,
-                [In, Out]
-                NativeMethods.tagOleMenuGroupWidths lpMenuWidths);
+                Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths);
 
             [PreserveSig]
             int SetMenu(
