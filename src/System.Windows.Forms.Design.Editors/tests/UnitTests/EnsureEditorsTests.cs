@@ -26,6 +26,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         [InlineData(typeof(string[]), typeof(StringArrayEditor))]
         [InlineData(typeof(Bitmap), typeof(BitmapEditor))]
         [InlineData(typeof(Color), typeof(ColorEditor))]
+        [InlineData(typeof(ContentAlignment), typeof(ContentAlignmentEditor))]
         [InlineData(typeof(Font), typeof(FontEditor))]
         [InlineData(typeof(Icon), typeof(IconEditor))]
         [InlineData(typeof(Image), typeof(ImageEditor))]
