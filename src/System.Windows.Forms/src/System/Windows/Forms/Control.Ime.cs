@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IOleControl,
         UnsafeNativeMethods.IOleObject,
         Ole32.IOleInPlaceObject,
-        UnsafeNativeMethods.IOleInPlaceActiveObject,
+        Ole32.IOleInPlaceActiveObject,
         Ole32.IOleWindow,
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,

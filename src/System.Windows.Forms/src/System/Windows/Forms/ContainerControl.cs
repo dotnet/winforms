@@ -788,7 +788,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnAutoValidateChanged(EventArgs e) => _autoValidateChanged?.Invoke(this, e);
 
-        internal override void OnFrameWindowActivate(bool fActivate)
+        private protected override void OnFrameWindowActivate(bool fActivate)
         {
             if (fActivate)
             {

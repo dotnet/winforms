@@ -1537,10 +1537,10 @@ namespace System.Windows.Forms
 
             HRESULT UnsafeNativeMethods.IDocHostUIHandler.ShowUI(
                 uint dwID,
-                UnsafeNativeMethods.IOleInPlaceActiveObject activeObject,
+                Ole32.IOleInPlaceActiveObject activeObject,
                 Ole32.IOleCommandTarget commandTarget,
                 UnsafeNativeMethods.IOleInPlaceFrame frame,
-                UnsafeNativeMethods.IOleInPlaceUIWindow doc)
+                Ole32.IOleInPlaceUIWindow doc)
             {
                 return HRESULT.S_FALSE;
             }
@@ -1555,9 +1555,9 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(bool fActivate)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(BOOL fActivate)
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             int UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate)
@@ -1565,9 +1565,9 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(NativeMethods.COMRECT rect, UnsafeNativeMethods.IOleInPlaceUIWindow doc, bool fFrameWindow)
+            unsafe HRESULT UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(RECT* rect, Ole32.IOleInPlaceUIWindow doc, BOOL fFrameWindow)
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw)

@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
         private UnsafeNativeMethods.IOleObject axOleObject;
         private Ole32.IOleInPlaceObject axOleInPlaceObject;
-        private UnsafeNativeMethods.IOleInPlaceActiveObject axOleInPlaceActiveObject;
+        private Ole32.IOleInPlaceActiveObject axOleInPlaceActiveObject;
         private UnsafeNativeMethods.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
         // We need to change the size of the inner ActiveX control before the
@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms
             Debug.Assert(activeXInstance != null, "The native control is null");
             axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
             axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
-            axOleInPlaceActiveObject = (UnsafeNativeMethods.IOleInPlaceActiveObject)activeXInstance;
+            axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
             axOleControl = (UnsafeNativeMethods.IOleControl)activeXInstance;
             //
             // Lets give the inheriting classes a chance to cast

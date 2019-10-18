@@ -676,7 +676,7 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT GetWindowContext(
                 out IOleInPlaceFrame ppFrame,
-                out IOleInPlaceUIWindow ppDoc,
+                out Ole32.IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
                 Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo);
@@ -732,11 +732,9 @@ namespace System.Windows.Forms
                 NativeMethods.COMRECT pborderwidths);
 
             [PreserveSig]
-            int SetActiveObject(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IOleInPlaceActiveObject pActiveObject,
-                [In, MarshalAs(UnmanagedType.LPWStr)]
-                string pszObjName);
+            HRESULT SetActiveObject(
+                Ole32.IOleInPlaceActiveObject pActiveObject,
+                [MarshalAs(UnmanagedType.LPWStr)] string pszObjName);
 
             [PreserveSig]
             HRESULT InsertMenus(
@@ -798,13 +796,10 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT ShowUI(
                 uint dwID,
-                [In]
-                IOleInPlaceActiveObject activeObject,
+                Ole32.IOleInPlaceActiveObject activeObject,
                 Ole32.IOleCommandTarget commandTarget,
-                [In]
                 IOleInPlaceFrame frame,
-                [In]
-                IOleInPlaceUIWindow doc);
+                Ole32.IOleInPlaceUIWindow doc);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
@@ -820,11 +815,9 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fEnable);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int OnDocWindowActivate(
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fActivate);
+            HRESULT OnDocWindowActivate(
+                BOOL fActivate);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
@@ -832,14 +825,11 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fActivate);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int ResizeBorder(
-                [In]
-                NativeMethods.COMRECT rect,
-                [In]
-                IOleInPlaceUIWindow doc,
-                bool fFrameWindow);
+            HRESULT ResizeBorder(
+                RECT* rect,
+                Ole32.IOleInPlaceUIWindow doc,
+                BOOL fFrameWindow);
 
             [PreserveSig]
             HRESULT TranslateAccelerator(
@@ -1129,75 +1119,6 @@ namespace System.Windows.Forms
             void SetPoint(int x, int y, int type, int extend);
             void ScrollIntoView(int value);
             object GetEmbeddedObject();
-        };
-
-        [ComImport]
-        [Guid("00000115-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceUIWindow
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            int GetBorder(
-                   [Out]
-                      NativeMethods.COMRECT lprectBorder);
-
-            [PreserveSig]
-            int RequestBorderSpace(
-                   [In]
-                      NativeMethods.COMRECT pborderwidths);
-
-            [PreserveSig]
-            int SetBorderSpace(
-                   [In]
-                      NativeMethods.COMRECT pborderwidths);
-
-            void SetActiveObject(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                      IOleInPlaceActiveObject pActiveObject,
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                      string pszObjName);
-        }
-
-        [ComImport]
-        [Guid("00000117-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceActiveObject
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            HRESULT TranslateAccelerator(
-                User32.MSG* lpmsg);
-
-            void OnFrameWindowActivate(
-                    bool fActivate);
-
-            void OnDocWindowActivate(
-                    int fActivate);
-
-            void ResizeBorder(
-                   [In]
-                      NativeMethods.COMRECT prcBorder,
-                   [In]
-                      IOleInPlaceUIWindow pUIWindow,
-                    bool fFrameWindow);
-
-            void EnableModeless(
-                    int fEnable);
         }
 
         [ComImport]
