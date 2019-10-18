@@ -191,7 +191,7 @@ namespace System.Windows.Forms
             return deviceImage;
         }
 
-        private static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0)
+        public static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0)
         {
             Size deviceImageSize = LogicalToDeviceUnits(logicalImage.Size, deviceDpi);
             return ScaleBitmapToSize(logicalImage, deviceImageSize);

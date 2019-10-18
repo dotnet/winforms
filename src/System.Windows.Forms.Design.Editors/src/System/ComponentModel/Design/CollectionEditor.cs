@@ -758,8 +758,8 @@ namespace System.ComponentModel.Design
                 InitializeComponent();
                 if (DpiHelper.IsScalingRequired)
                 {
-                    DpiHelper.ScaleButtonImageLogicalToDevice(_downButton);
-                    DpiHelper.ScaleButtonImageLogicalToDevice(_upButton);
+                    ScaleButtonImageLogicalToDevice(_downButton);
+                    ScaleButtonImageLogicalToDevice(_upButton);
                 }
                 Text = string.Format(SR.CollectionEditorCaption, CollectionItemType.Name);
 
@@ -1811,6 +1811,23 @@ namespace System.ComponentModel.Design
             private void Form_Shown(object sender, EventArgs e)
             {
                 OnEditValueChanged();
+            }
+
+            /// <summary>
+            ///  Create a new button bitmap scaled for the device units.
+            ///  Note: original image might be disposed.
+            /// </summary>
+            /// <param name="button">button with an image, image size is defined in logical units</param>
+            private static void ScaleButtonImageLogicalToDevice(Button button)
+            {
+                if (button == null || !(button.Image is Bitmap buttonBitmap))
+                {
+                    return;
+                }
+
+                Bitmap deviceBitmap = DpiHelper.CreateScaledBitmap(buttonBitmap);
+                button.Image.Dispose();
+                button.Image = deviceBitmap;
             }
 
             /// <summary>
