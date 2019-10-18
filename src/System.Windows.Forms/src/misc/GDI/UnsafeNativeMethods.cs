@@ -29,11 +29,5 @@ namespace System.Windows.Forms.Internal
             DbgUtil.AssertWin32(mapMode != 0, "GetMapMode(hdc=[0x{0:X8}]", hDC.Handle);
             return mapMode;
         }
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool GetViewportOrgEx(HandleRef hdc, out Point lpPoint);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static unsafe extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, Point *point);
     }
 }

@@ -294,12 +294,12 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                IntUnsafeNativeMethods.GetViewportOrgEx(new HandleRef(this, Hdc), out Point point);
+                Gdi32.GetViewportOrgEx(this, out Point point);
                 return point;
             }
             set
             {
-                IntUnsafeNativeMethods.SetViewportOrgEx(new HandleRef(this, Hdc), value.X, value.Y, null);
+                Gdi32.SetViewportOrgEx(this, value.X, value.Y, null);
             }
         }
     }
