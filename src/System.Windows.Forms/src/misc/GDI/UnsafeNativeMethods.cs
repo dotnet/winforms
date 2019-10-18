@@ -31,13 +31,7 @@ namespace System.Windows.Forms.Internal
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool GetViewportExtEx(HandleRef hdc, ref Size lpSize);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern bool GetViewportOrgEx(HandleRef hdc, out Point lpPoint);
-
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
-        public static extern bool SetViewportExtEx(HandleRef hDC, int x, int y, ref Size size);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static unsafe extern bool SetViewportOrgEx(HandleRef hDC, int x, int y, Point *point);

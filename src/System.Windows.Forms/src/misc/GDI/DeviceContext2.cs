@@ -274,18 +274,16 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  DC Viewport Extent in device units.
         /// </summary>
-        public Size ViewportExtent
+        public unsafe Size ViewportExtent
         {
             get
             {
-                Size size = new Size();
-                IntUnsafeNativeMethods.GetViewportExtEx(new HandleRef(this, Hdc), ref size);
+                Gdi32.GetViewportExtEx(this, out Size size);
                 return size;
             }
             set
             {
-                Size oldExtent = new Size();
-                IntUnsafeNativeMethods.SetViewportExtEx(new HandleRef(this, Hdc), value.Width, value.Height, ref oldExtent);
+                Gdi32.SetViewportExtEx(this, value.Width, value.Height, null);
             }
         }
 

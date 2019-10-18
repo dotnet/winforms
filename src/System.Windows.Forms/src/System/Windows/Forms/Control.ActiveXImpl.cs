@@ -483,7 +483,7 @@ namespace System.Windows.Forms
                     SafeNativeMethods.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
                     SafeNativeMethods.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
                     SafeNativeMethods.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
-                    SafeNativeMethods.SetViewportExtEx(hdcDraw, rc.right - rc.left, rc.bottom - rc.top, &sViewportExt);
+                    Gdi32.SetViewportExtEx(hdcDraw, rc.right - rc.left, rc.bottom - rc.top, &sViewportExt);
                 }
 
                 // Now do the actual drawing.  We must ask all of our children to draw as well.
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
                         SafeNativeMethods.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
                         SafeNativeMethods.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
                         SafeNativeMethods.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
-                        SafeNativeMethods.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
+                        Gdi32.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
                         SafeNativeMethods.SetMapMode(hdcDraw, iMode);
                     }
                 }

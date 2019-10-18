@@ -98,9 +98,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
-        public static unsafe extern bool SetViewportExtEx(IntPtr hDC, int x, int y, Size *size);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool AdjustWindowRectEx(ref Interop.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle);
 
