@@ -216,14 +216,6 @@ namespace System.Windows.Forms
             public const int MinimumColorDepth = 1301;
         }
 
-        // for Windows Windows 7 to Windows 8.
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool IsProcessDPIAware();
-
-        // for Windows Windows 7 to Windows 8.
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool SetProcessDPIAware();
-
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
 
