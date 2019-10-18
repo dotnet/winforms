@@ -480,8 +480,8 @@ namespace System.Windows.Forms
                     SafeNativeMethods.LPtoDP(new HandleRef(null, hdcDraw), ref rc, 2);
 
                     iMode = SafeNativeMethods.SetMapMode(hdcDraw, NativeMethods.MM_ANISOTROPIC);
-                    SafeNativeMethods.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
-                    SafeNativeMethods.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
+                    Gdi32.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
+                    Gdi32.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
                     Gdi32.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
                     Gdi32.SetViewportExtEx(hdcDraw, rc.right - rc.left, rc.bottom - rc.top, &sViewportExt);
                 }
@@ -508,8 +508,8 @@ namespace System.Windows.Forms
                     // And clean up the DC
                     if (prcBounds != null)
                     {
-                        SafeNativeMethods.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
-                        SafeNativeMethods.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
+                        Gdi32.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
+                        Gdi32.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
                         Gdi32.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
                         Gdi32.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
                         SafeNativeMethods.SetMapMode(hdcDraw, iMode);
