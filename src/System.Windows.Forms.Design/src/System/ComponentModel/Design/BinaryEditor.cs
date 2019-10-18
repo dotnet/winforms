@@ -1,313 +1,51 @@
-//------------------------------------------------------------------------------
-// <copyright file="BinaryEditor.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>                                                                
-//------------------------------------------------------------------------------
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
-namespace System.ComponentModel.Design {
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
-    using System.Design;
-    using System;
-    using System.Text;
-    using System.IO;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using Microsoft.Win32;
-    using System.Windows.Forms.Design;
-    using System.Windows.Forms.ComponentModel;
+namespace System.ComponentModel.Design
+{
+    /// <summary>
+    ///  Generic editor for editing binary data.  This presents a hex editing window to the user.
+    /// </summary>
+    public sealed class BinaryEditor : UITypeEditor
+    {
+        private const string HELP_KEYWORD = "System.ComponentModel.Design.BinaryEditor";
+        private ITypeDescriptorContext _context;
+        private BinaryUI _binaryUI;
 
-    /// <internalonly/>
-    internal class BinaryUI : System.Windows.Forms.Form {
-        private BinaryEditor editor;
-        object value;
-
-        private RadioButton radioAuto;
-        private Button buttonSave;
-        private Button buttonOK;
-        private ByteViewer byteViewer;
-        private GroupBox groupBoxMode;
-        private RadioButton radioHex;
-        private RadioButton radioAnsi;
-        private TableLayoutPanel radioButtonsTableLayoutPanel;
-        private TableLayoutPanel okSaveTableLayoutPanel;
-        private TableLayoutPanel overarchingTableLayoutPanel;
-        private RadioButton radioUnicode;
-
-        public BinaryUI(BinaryEditor editor) {
-            this.editor = editor;
-            InitializeComponent();
-        }
-
-        public object Value {
-            get {
-                return value;
-            }
-            set {
-                this.value = value;
-                byte[] bytes = null;
-
-                if (value != null) {
-                    bytes = editor.ConvertToBytes(value);
-                }
-
-                if (bytes != null) {
-                    byteViewer.SetBytes(bytes);
-                    byteViewer.Enabled = true;
-                } else {
-                    byteViewer.SetBytes(new byte[0]);
-                    byteViewer.Enabled = false;
-                }
-            }
-        }
-
-        private void RadioAuto_checkedChanged(object source, EventArgs e) {
-            if (radioAuto.Checked)
-                byteViewer.SetDisplayMode(DisplayMode.Auto);
-        }
-
-        private void RadioHex_checkedChanged(object source, EventArgs e) {
-            if (radioHex.Checked)
-                byteViewer.SetDisplayMode(DisplayMode.Hexdump);
-        }
-
-        private void RadioAnsi_checkedChanged(object source, EventArgs e) {
-            if (radioAnsi.Checked)
-                byteViewer.SetDisplayMode(DisplayMode.Ansi);
-        }
-
-        private void RadioUnicode_checkedChanged(object source, EventArgs e) {
-            if (radioUnicode.Checked)
-                byteViewer.SetDisplayMode(DisplayMode.Unicode);
-        }
-
-        private void ButtonOK_click(object source, EventArgs e) {
-            object localValue = value;
-            editor.ConvertToValue(byteViewer.GetBytes(), ref localValue);
-            value = localValue;
-        }
-
-        private void ButtonSave_click(object source, EventArgs e) {
-            try {
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.FileName = SR.GetString(SR.BinaryEditorFileName);
-                sfd.Title = SR.GetString(SR.BinaryEditorSaveFile);
-                sfd.Filter = SR.GetString(SR.BinaryEditorAllFiles) + " (*.*)|*.*";
-
-                DialogResult result = sfd.ShowDialog();
-                if (result == DialogResult.OK) {
-                    byteViewer.SaveToFile(sfd.FileName);
-                }
-            } catch (IOException x) {
-                RTLAwareMessageBox.Show(null, SR.GetString(SR.BinaryEditorFileError, x.Message),
-                                SR.GetString(SR.BinaryEditorTitle), MessageBoxButtons.OK,
-                                MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
-            }
-        }
-
-        private void Form_HelpRequested(object sender, HelpEventArgs e) {
-            editor.ShowHelp();
-        }
-
-        private void Form_HelpButtonClicked(object sender, CancelEventArgs e)
+        internal object GetService(Type serviceType)
         {
-            e.Cancel = true;
-            editor.ShowHelp();
-        }
-
-        private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BinaryEditor));
-            this.byteViewer = new ByteViewer(); 
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.buttonSave = new System.Windows.Forms.Button();
-            this.groupBoxMode = new System.Windows.Forms.GroupBox();
-            this.radioButtonsTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.radioUnicode = new System.Windows.Forms.RadioButton();
-            this.radioAuto = new System.Windows.Forms.RadioButton();
-            this.radioAnsi = new System.Windows.Forms.RadioButton();
-            this.radioHex = new System.Windows.Forms.RadioButton();
-            this.okSaveTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.overarchingTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.byteViewer.SuspendLayout();
-            this.groupBoxMode.SuspendLayout();
-            this.radioButtonsTableLayoutPanel.SuspendLayout();
-            this.okSaveTableLayoutPanel.SuspendLayout();
-            this.overarchingTableLayoutPanel.SuspendLayout();
-            this.SuspendLayout();
-
-            // 
-            // byteViewer
-            // 
-            resources.ApplyResources(this.byteViewer, "byteViewer");
-            this.byteViewer.SetDisplayMode(DisplayMode.Auto);
-            this.byteViewer.Name = "byteViewer";
-            this.byteViewer.Margin = Padding.Empty;
-            this.byteViewer.Dock = DockStyle.Fill;  
-            // 
-            // buttonOK
-            // 
-            resources.ApplyResources(this.buttonOK, "buttonOK");
-            this.buttonOK.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.buttonOK.MinimumSize = new System.Drawing.Size(75, 23);
-            this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.buttonOK.Click += new System.EventHandler(this.ButtonOK_click);
-            // 
-            // buttonSave
-            // 
-            resources.ApplyResources(this.buttonSave, "buttonSave");
-            this.buttonSave.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.buttonSave.MinimumSize = new System.Drawing.Size(75, 23);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_click);
-            // 
-            // groupBoxMode
-            // 
-            resources.ApplyResources(this.groupBoxMode, "groupBoxMode");
-            this.groupBoxMode.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBoxMode.Controls.Add(this.radioButtonsTableLayoutPanel);
-            this.groupBoxMode.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.groupBoxMode.Name = "groupBoxMode";
-            this.groupBoxMode.Padding = new System.Windows.Forms.Padding(0);
-            this.groupBoxMode.TabStop = false;
-            // 
-            // radioButtonsTableLayoutPanel
-            // 
-            resources.ApplyResources(this.radioButtonsTableLayoutPanel, "radioButtonsTableLayoutPanel");
-            this.radioButtonsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.radioButtonsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.radioButtonsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.radioButtonsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.radioButtonsTableLayoutPanel.Controls.Add(this.radioUnicode, 3, 0);
-            this.radioButtonsTableLayoutPanel.Controls.Add(this.radioAuto, 0, 0);
-            this.radioButtonsTableLayoutPanel.Controls.Add(this.radioAnsi, 2, 0);
-            this.radioButtonsTableLayoutPanel.Controls.Add(this.radioHex, 1, 0);
-            this.radioButtonsTableLayoutPanel.Margin = new System.Windows.Forms.Padding(9);
-            this.radioButtonsTableLayoutPanel.Name = "radioButtonsTableLayoutPanel";
-            this.radioButtonsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            // 
-            // radioUnicode
-            // 
-            resources.ApplyResources(this.radioUnicode, "radioUnicode");
-            this.radioUnicode.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.radioUnicode.Name = "radioUnicode";
-            this.radioUnicode.CheckedChanged += new System.EventHandler(this.RadioUnicode_checkedChanged);
-            // 
-            // radioAuto
-            // 
-            resources.ApplyResources(this.radioAuto, "radioAuto");
-            this.radioAuto.Checked = true;
-            this.radioAuto.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.radioAuto.Name = "radioAuto";
-            this.radioAuto.CheckedChanged += new System.EventHandler(this.RadioAuto_checkedChanged);
-            // 
-            // radioAnsi
-            // 
-            resources.ApplyResources(this.radioAnsi, "radioAnsi");
-            this.radioAnsi.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.radioAnsi.Name = "radioAnsi";
-            this.radioAnsi.CheckedChanged += new System.EventHandler(this.RadioAnsi_checkedChanged);
-            // 
-            // radioHex
-            // 
-            resources.ApplyResources(this.radioHex, "radioHex");
-            this.radioHex.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.radioHex.Name = "radioHex";
-            this.radioHex.CheckedChanged += new System.EventHandler(this.RadioHex_checkedChanged);
-            // 
-            // okSaveTableLayoutPanel
-            // 
-            resources.ApplyResources(this.okSaveTableLayoutPanel, "okSaveTableLayoutPanel");
-            this.okSaveTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.okSaveTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.okSaveTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.okSaveTableLayoutPanel.Controls.Add(this.buttonOK, 0, 0);
-            this.okSaveTableLayoutPanel.Controls.Add(this.buttonSave, 1, 0);
-            this.okSaveTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
-            this.okSaveTableLayoutPanel.Name = "okSaveTableLayoutPanel";
-            this.okSaveTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            // 
-            // overarchingTableLayoutPanel
-            // 
-            resources.ApplyResources(this.overarchingTableLayoutPanel, "overarchingTableLayoutPanel");  
-            this.overarchingTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.overarchingTableLayoutPanel.Controls.Add(this.byteViewer, 0, 0);
-            this.overarchingTableLayoutPanel.Controls.Add(this.groupBoxMode, 0, 1);
-            this.overarchingTableLayoutPanel.Controls.Add(this.okSaveTableLayoutPanel, 0, 2);
-            this.overarchingTableLayoutPanel.Name = "overarchingTableLayoutPanel";
-            this.overarchingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.overarchingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.overarchingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            
-            // 
-            // BinaryUI
-            // 
-            this.AcceptButton = this.buttonOK;
-            resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.buttonOK;
-            this.Controls.Add(this.overarchingTableLayoutPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.HelpButton = true;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "BinaryUI";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.Form_HelpRequested);
-            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.Form_HelpButtonClicked);
-            this.byteViewer.ResumeLayout(false);
-            this.byteViewer.PerformLayout();
-            this.groupBoxMode.ResumeLayout(false);
-            this.groupBoxMode.PerformLayout();
-            this.radioButtonsTableLayoutPanel.ResumeLayout(false);
-            this.radioButtonsTableLayoutPanel.PerformLayout();
-            this.okSaveTableLayoutPanel.ResumeLayout(false);
-            this.okSaveTableLayoutPanel.PerformLayout();
-            this.overarchingTableLayoutPanel.ResumeLayout(false);
-            this.overarchingTableLayoutPanel.PerformLayout();
-            this.ResumeLayout(false);
-
-        }
-    }
-
-    /// <include file='doc\BinaryEditor.uex' path='docs/doc[@for="BinaryEditor"]/*' />
-    /// <devdoc>
-    ///      Generic editor for editing binary data.  This presents
-    ///      a hex editing window to the user.
-    /// </devdoc>
-    public sealed class BinaryEditor : UITypeEditor {
-        private static readonly string HELP_KEYWORD = "System.ComponentModel.Design.BinaryEditor";
-        private ITypeDescriptorContext context;
-        private BinaryUI binaryUI;
-
-        internal object GetService(Type serviceType) {
-            if (this.context != null) {
-                IDesignerHost host = this.context.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                if (host == null)
-                    return this.context.GetService(serviceType);
-                else
-                    return host.GetService(serviceType);
+            if (_context == null)
+            {
+                return null;
             }
-            return null;
+
+            IDesignerHost host = _context.GetService(typeof(IDesignerHost)) as IDesignerHost;
+            if (host == null)
+            {
+                return _context.GetService(serviceType);
+            }
+
+            return host.GetService(serviceType);
         }
 
-        /// <include file='doc\BinaryEditor.uex' path='docs/doc[@for="BinaryEditor.ConvertToBytes"]/*' />
-        /// <devdoc>
-        ///      Converts the given object to an array of bytes to be manipulated
-        ///      by the editor.  The default implementation of this supports
-        ///      byte[] and stream objects.
-        /// </devdoc>
-        internal byte[] ConvertToBytes(object value) {
-            if (value is Stream) {
-                Stream s = (Stream)value;
+        /// <summary>
+        ///  Converts the given object to an array of bytes to be manipulated
+        ///  by the editor.  The default implementation of this supports
+        ///  byte[] and stream objects.
+        /// </summary>
+        internal byte[] ConvertToBytes(object value)
+        {
+            if (value is Stream s)
+            {
                 s.Position = 0;
                 int byteCount = (int)(s.Length - s.Position);
                 byte[] bytes = new byte[byteCount];
@@ -315,14 +53,16 @@ namespace System.ComponentModel.Design {
                 return bytes;
             }
 
-            if (value is byte[]) {
-                return (byte[])value;
+            if (value is byte[] b)
+            {
+                return b;
             }
 
-            if (value is string) {
-                int size = ((string)value).Length * 2;
+            if (value is string str)
+            {
+                int size = str.Length * 2;
                 byte[] buffer = new byte[size];
-                Encoding.Unicode.GetBytes(((string)value).ToCharArray(), 0, size / 2, buffer, 0);
+                Encoding.Unicode.GetBytes(str.ToCharArray(), 0, size / 2, buffer, 0);
                 return buffer;
             }
 
@@ -330,76 +70,363 @@ namespace System.ComponentModel.Design {
             return null;
         }
 
-        /// <include file='doc\BinaryEditor.uex' path='docs/doc[@for="BinaryEditor.ConvertToValue"]/*' />
-        /// <devdoc>
-        ///      Converts the given byte array back into a native object.  If
-        ///      the object itself needs to be replace (as is the case for arrays),
-        ///      then a new object may be assigned out through the parameter.
-        /// </devdoc>
-        internal void ConvertToValue(byte[] bytes, ref object value) {
-
-            if (value is Stream) {
-                Stream s = (Stream)value;
+        /// <summary>
+        ///  Converts the given byte array back into a native object.  If
+        ///  the object itself needs to be replace (as is the case for arrays),
+        ///  then a new object may be assigned out through the parameter.
+        /// </summary>
+        internal void ConvertToValue(byte[] bytes, ref object value)
+        {
+            if (value is Stream s)
+            {
                 s.Position = 0;
                 s.Write(bytes, 0, bytes.Length);
-            } else if (value is byte[]) {
+            }
+            else if (value is byte[])
+            {
                 value = bytes;
-            } else if (value is string) {
+            }
+            else if (value is string)
+            {
                 value = BitConverter.ToString(bytes);
-            } else {
+            }
+            else
+            {
                 Debug.Fail("No conversion from byte[] to " + value == null ? "null" : value.GetType().FullName);
             }
         }
 
-        /// <include file='doc\BinaryEditor.uex' path='docs/doc[@for="BinaryEditor.EditValue"]/*' />
-        /// <devdoc>
-        ///      Edits the given object value using the editor style provided by
-        ///      GetEditorStyle.  A service provider is provided so that any
-        ///      required editing services can be obtained.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
-            if (provider != null) {
-                this.context = context;
-
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-                if (edSvc != null) {
-                    if (binaryUI == null) {
-
-                        // child modal dialog -launching in System Aware mode
-                        binaryUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));
-                    }
-
-                    binaryUI.Value = value;
-
-                    if (edSvc.ShowDialog(binaryUI) == DialogResult.OK) {
-                        value = binaryUI.Value;
-                    }
-
-                    binaryUI.Value = null;
-                }
+        /// <summary>
+        ///  Edits the given object value using the editor style provided by GetEditorStyle.
+        ///  A service provider is provided so that any required editing services can be obtained.
+        /// </summary>
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider == null)
+            {
+                return value;
             }
+
+            _context = context;
+
+            IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+            if (edSvc == null)
+            {
+                return value;
+            }
+
+            if (_binaryUI == null)
+            {
+                // child modal dialog -launching in System Aware mode
+                _binaryUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));
+            }
+
+            _binaryUI.Value = value;
+            if (edSvc.ShowDialog(_binaryUI) == DialogResult.OK)
+            {
+                value = _binaryUI.Value;
+            }
+            _binaryUI.Value = null;
 
             return value;
         }
 
-        /// <include file='doc\BinaryEditor.uex' path='docs/doc[@for="BinaryEditor.GetEditStyle"]/*' />
-        /// <devdoc>
-        ///      Retrieves the editing style of the Edit method.  If the method
-        ///      is not supported, this will return None.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
+        /// <summary>
+        ///  Retrieves the editing style of the Edit method.  If the method is not supported, this will return None.
+        /// </summary>
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
             return UITypeEditorEditStyle.Modal;
         }
 
-        internal void ShowHelp() {
+        internal void ShowHelp()
+        {
             IHelpService helpService = GetService(typeof(IHelpService)) as IHelpService;
-            if (helpService != null) {
+            if (helpService != null)
+            {
                 helpService.ShowHelpFromKeyword(HELP_KEYWORD);
-            } else {
+            }
+            else
+            {
                 Debug.Fail("Unable to get IHelpService.");
+            }
+        }
+
+        private class BinaryUI : Form
+        {
+            private readonly BinaryEditor _editor;
+            private object _value;
+
+            private RadioButton _radioAuto;
+            private Button _buttonSave;
+            private Button _buttonOK;
+            private ByteViewer _byteViewer;
+            private GroupBox _groupBoxMode;
+            private RadioButton _radioHex;
+            private RadioButton _radioAnsi;
+            private TableLayoutPanel _radioButtonsTableLayoutPanel;
+            private TableLayoutPanel _okSaveTableLayoutPanel;
+            private TableLayoutPanel _overarchingTableLayoutPanel;
+            private RadioButton _radioUnicode;
+
+            public BinaryUI(BinaryEditor editor)
+            {
+                _editor = editor;
+                InitializeComponent();
+            }
+
+            public object Value
+            {
+                get
+                {
+                    return _value;
+                }
+                set
+                {
+                    _value = value;
+                    byte[] bytes = null;
+
+                    if (value != null)
+                    {
+                        bytes = _editor.ConvertToBytes(value);
+                    }
+
+                    if (bytes != null)
+                    {
+                        _byteViewer.SetBytes(bytes);
+                        _byteViewer.Enabled = true;
+                    }
+                    else
+                    {
+                        _byteViewer.SetBytes(new byte[0]);
+                        _byteViewer.Enabled = false;
+                    }
+                }
+            }
+
+            private void RadioAuto_checkedChanged(object source, EventArgs e)
+            {
+                if (_radioAuto.Checked)
+                    _byteViewer.SetDisplayMode(DisplayMode.Auto);
+            }
+
+            private void RadioHex_checkedChanged(object source, EventArgs e)
+            {
+                if (_radioHex.Checked)
+                    _byteViewer.SetDisplayMode(DisplayMode.Hexdump);
+            }
+
+            private void RadioAnsi_checkedChanged(object source, EventArgs e)
+            {
+                if (_radioAnsi.Checked)
+                    _byteViewer.SetDisplayMode(DisplayMode.Ansi);
+            }
+
+            private void RadioUnicode_checkedChanged(object source, EventArgs e)
+            {
+                if (_radioUnicode.Checked)
+                    _byteViewer.SetDisplayMode(DisplayMode.Unicode);
+            }
+
+            private void ButtonOK_click(object source, EventArgs e)
+            {
+                object localValue = _value;
+                _editor.ConvertToValue(_byteViewer.GetBytes(), ref localValue);
+                _value = localValue;
+            }
+
+            private void ButtonSave_click(object source, EventArgs e)
+            {
+                try
+                {
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.FileName = SR.BinaryEditorFileName;
+                    sfd.Title = SR.BinaryEditorSaveFile;
+                    sfd.Filter = SR.BinaryEditorAllFiles + " (*.*)|*.*";
+
+                    DialogResult result = sfd.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        _byteViewer.SaveToFile(sfd.FileName);
+                    }
+                }
+                catch (IOException x)
+                {
+                    RTLAwareMessageBox.Show(null, string.Format(SR.BinaryEditorFileError, x.Message),
+                                    SR.BinaryEditorTitle, MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
+                }
+            }
+
+            private void Form_HelpRequested(object sender, HelpEventArgs e)
+            {
+                _editor.ShowHelp();
+            }
+
+            private void Form_HelpButtonClicked(object sender, CancelEventArgs e)
+            {
+                e.Cancel = true;
+                _editor.ShowHelp();
+            }
+
+            private void InitializeComponent()
+            {
+                ComponentResourceManager resources = new ComponentResourceManager(typeof(BinaryEditor));
+                _byteViewer = new ByteViewer();
+                _buttonOK = new Button();
+                _buttonSave = new Button();
+                _groupBoxMode = new GroupBox();
+                _radioButtonsTableLayoutPanel = new TableLayoutPanel();
+                _radioUnicode = new RadioButton();
+                _radioAuto = new RadioButton();
+                _radioAnsi = new RadioButton();
+                _radioHex = new RadioButton();
+                _okSaveTableLayoutPanel = new TableLayoutPanel();
+                _overarchingTableLayoutPanel = new TableLayoutPanel();
+                _byteViewer.SuspendLayout();
+                _groupBoxMode.SuspendLayout();
+                _radioButtonsTableLayoutPanel.SuspendLayout();
+                _okSaveTableLayoutPanel.SuspendLayout();
+                _overarchingTableLayoutPanel.SuspendLayout();
+                SuspendLayout();
+
+                // 
+                // byteViewer
+                // 
+                resources.ApplyResources(_byteViewer, "byteViewer");
+                _byteViewer.SetDisplayMode(DisplayMode.Auto);
+                _byteViewer.Name = "byteViewer";
+                _byteViewer.Margin = Padding.Empty;
+                _byteViewer.Dock = DockStyle.Fill;
+                // 
+                // buttonOK
+                // 
+                resources.ApplyResources(_buttonOK, "buttonOK");
+                _buttonOK.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                _buttonOK.DialogResult = DialogResult.OK;
+                _buttonOK.Margin = new Padding(0, 0, 3, 0);
+                _buttonOK.MinimumSize = new Size(75, 23);
+                _buttonOK.Name = "buttonOK";
+                _buttonOK.Padding = new Padding(10, 0, 10, 0);
+                _buttonOK.Click += new EventHandler(ButtonOK_click);
+                // 
+                // buttonSave
+                // 
+                resources.ApplyResources(_buttonSave, "buttonSave");
+                _buttonSave.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                _buttonSave.Margin = new Padding(3, 0, 0, 0);
+                _buttonSave.MinimumSize = new Size(75, 23);
+                _buttonSave.Name = "buttonSave";
+                _buttonSave.Padding = new Padding(10, 0, 10, 0);
+                _buttonSave.Click += new EventHandler(ButtonSave_click);
+                // 
+                // groupBoxMode
+                // 
+                resources.ApplyResources(_groupBoxMode, "groupBoxMode");
+                _groupBoxMode.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                _groupBoxMode.Controls.Add(_radioButtonsTableLayoutPanel);
+                _groupBoxMode.Margin = new Padding(0, 3, 0, 3);
+                _groupBoxMode.Name = "groupBoxMode";
+                _groupBoxMode.Padding = new Padding(0);
+                _groupBoxMode.TabStop = false;
+                // 
+                // radioButtonsTableLayoutPanel
+                // 
+                resources.ApplyResources(_radioButtonsTableLayoutPanel, "radioButtonsTableLayoutPanel");
+                _radioButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+                _radioButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+                _radioButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+                _radioButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+                _radioButtonsTableLayoutPanel.Controls.Add(_radioUnicode, 3, 0);
+                _radioButtonsTableLayoutPanel.Controls.Add(_radioAuto, 0, 0);
+                _radioButtonsTableLayoutPanel.Controls.Add(_radioAnsi, 2, 0);
+                _radioButtonsTableLayoutPanel.Controls.Add(_radioHex, 1, 0);
+                _radioButtonsTableLayoutPanel.Margin = new Padding(9);
+                _radioButtonsTableLayoutPanel.Name = "radioButtonsTableLayoutPanel";
+                _radioButtonsTableLayoutPanel.RowStyles.Add(new RowStyle());
+                // 
+                // radioUnicode
+                // 
+                resources.ApplyResources(_radioUnicode, "radioUnicode");
+                _radioUnicode.Margin = new Padding(3, 0, 0, 0);
+                _radioUnicode.Name = "radioUnicode";
+                _radioUnicode.CheckedChanged += new EventHandler(RadioUnicode_checkedChanged);
+                // 
+                // radioAuto
+                // 
+                resources.ApplyResources(_radioAuto, "radioAuto");
+                _radioAuto.Checked = true;
+                _radioAuto.Margin = new Padding(0, 0, 3, 0);
+                _radioAuto.Name = "radioAuto";
+                _radioAuto.CheckedChanged += new EventHandler(RadioAuto_checkedChanged);
+                // 
+                // radioAnsi
+                // 
+                resources.ApplyResources(_radioAnsi, "radioAnsi");
+                _radioAnsi.Margin = new Padding(3, 0, 3, 0);
+                _radioAnsi.Name = "radioAnsi";
+                _radioAnsi.CheckedChanged += new EventHandler(RadioAnsi_checkedChanged);
+                // 
+                // radioHex
+                // 
+                resources.ApplyResources(_radioHex, "radioHex");
+                _radioHex.Margin = new Padding(3, 0, 3, 0);
+                _radioHex.Name = "radioHex";
+                _radioHex.CheckedChanged += new EventHandler(RadioHex_checkedChanged);
+                // 
+                // okSaveTableLayoutPanel
+                // 
+                resources.ApplyResources(_okSaveTableLayoutPanel, "okSaveTableLayoutPanel");
+                _okSaveTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                _okSaveTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+                _okSaveTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+                _okSaveTableLayoutPanel.Controls.Add(_buttonOK, 0, 0);
+                _okSaveTableLayoutPanel.Controls.Add(_buttonSave, 1, 0);
+                _okSaveTableLayoutPanel.Margin = new Padding(0, 9, 0, 0);
+                _okSaveTableLayoutPanel.Name = "okSaveTableLayoutPanel";
+                _okSaveTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+                // 
+                // overarchingTableLayoutPanel
+                // 
+                resources.ApplyResources(_overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
+                _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+                _overarchingTableLayoutPanel.Controls.Add(_byteViewer, 0, 0);
+                _overarchingTableLayoutPanel.Controls.Add(_groupBoxMode, 0, 1);
+                _overarchingTableLayoutPanel.Controls.Add(_okSaveTableLayoutPanel, 0, 2);
+                _overarchingTableLayoutPanel.Name = "overarchingTableLayoutPanel";
+                _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+                _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+                _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+
+                // 
+                // BinaryUI
+                // 
+                AcceptButton = _buttonOK;
+                resources.ApplyResources(this, "$this");
+                AutoScaleMode = AutoScaleMode.Font;
+                CancelButton = _buttonOK;
+                Controls.Add(_overarchingTableLayoutPanel);
+                FormBorderStyle = FormBorderStyle.FixedDialog;
+                HelpButton = true;
+                MaximizeBox = false;
+                MinimizeBox = false;
+                Name = "BinaryUI";
+                ShowIcon = false;
+                ShowInTaskbar = false;
+                HelpRequested += new HelpEventHandler(Form_HelpRequested);
+                HelpButtonClicked += new CancelEventHandler(Form_HelpButtonClicked);
+                _byteViewer.ResumeLayout(false);
+                _byteViewer.PerformLayout();
+                _groupBoxMode.ResumeLayout(false);
+                _groupBoxMode.PerformLayout();
+                _radioButtonsTableLayoutPanel.ResumeLayout(false);
+                _radioButtonsTableLayoutPanel.PerformLayout();
+                _okSaveTableLayoutPanel.ResumeLayout(false);
+                _okSaveTableLayoutPanel.PerformLayout();
+                _overarchingTableLayoutPanel.ResumeLayout(false);
+                _overarchingTableLayoutPanel.PerformLayout();
+                ResumeLayout(false);
+
             }
         }
     }
