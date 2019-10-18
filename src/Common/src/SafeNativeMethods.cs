@@ -224,14 +224,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool SetProcessDPIAware();
 
-        // for Windows 8.1 and above
-        [DllImport(ExternDll.ShCore, SetLastError = true)]
-        public static extern int SetProcessDpiAwareness(NativeMethods.PROCESS_DPI_AWARENESS awareness);
-
-        // for Windows 8.1 and above
-        [DllImport(ExternDll.ShCore, SetLastError = true)]
-        public static extern int GetProcessDpiAwareness(IntPtr processHandle, out NativeMethods.PROCESS_DPI_AWARENESS awareness);
-
         // for Windows 10 version RS2 and above
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool IsValidDpiAwarenessContext(int dpiFlag);
