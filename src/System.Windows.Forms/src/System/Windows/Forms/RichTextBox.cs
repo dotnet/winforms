@@ -2216,7 +2216,7 @@ namespace System.Windows.Forms
 
             // Use the TEXTRANGE to move our text buffer forward
             // or backwards within the main text
-            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
+            var txrg = new Richedit.TEXTRANGE
             {
                 chrg = new Richedit.CHARRANGE
                 {
@@ -2272,7 +2272,7 @@ namespace System.Windows.Forms
 
                     // go get the text in this range, if we didn't get any text then punt
                     int len;
-                    len = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETTEXTRANGE, 0, txrg);
+                    len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
                     if (len == 0)
                     {
                         chrg.cpMax = chrg.cpMin = -1; // Hit end of control without finding what we wanted
@@ -3490,7 +3490,7 @@ namespace System.Windows.Forms
         /// </remarks>
         private string CharRangeToString(Richedit.CHARRANGE c)
         {
-            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
+            var txrg = new Richedit.TEXTRANGE
             {
                 chrg = c
             };
@@ -3510,7 +3510,7 @@ namespace System.Windows.Forms
             }
 
             txrg.lpstrText = unmanagedBuffer;
-            int len = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETTEXTRANGE, 0, txrg);
+            int len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
             Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
             charBuffer.PutCoTaskMem(unmanagedBuffer);
             if (txrg.lpstrText != IntPtr.Zero)
