@@ -10,20 +10,20 @@
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <!-- Core Setup for coherency -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>5.0.0-alpha1.19518.1</MicrosoftNETCoreAppPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>5.0.0-alpha1.19518.11</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
   <!-- CoreFX via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-alpha1.19517.14</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32RegistryPackageVersion>5.0.0-alpha1.19517.14</MicrosoftWin32RegistryPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-alpha1.19517.14</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>5.0.0-alpha1.19517.14</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-alpha1.19517.14</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>5.0.0-alpha1.19517.14</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>5.0.0-alpha1.19517.14</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>5.0.0-alpha1.19517.14</SystemSecurityCryptographyCngPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>5.0.0-alpha1.19517.14</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>5.0.0-alpha1.19517.14</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-alpha1.19518.9</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>5.0.0-alpha1.19518.9</MicrosoftWin32RegistryPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-alpha1.19518.9</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>5.0.0-alpha1.19518.9</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-alpha1.19518.9</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>5.0.0-alpha1.19518.9</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>5.0.0-alpha1.19518.9</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>5.0.0-alpha1.19518.9</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>5.0.0-alpha1.19518.9</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>5.0.0-alpha1.19518.9</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
