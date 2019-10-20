@@ -3616,29 +3616,36 @@ namespace System.Windows.Forms
             }
         }
 
+#if DEBUG
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
-#if false
-// DEBUG code which is helpful for FlickerFest debugging.
-            if (FlickerDebug.TraceVerbose) {
+            // Debug code which is helpful for FlickerFest debugging.
+            if (FlickerDebug.TraceVerbose)
+            {
                 string name = this.Name;
-                if (string.IsNullOrEmpty(name)) {
-                    if (IsDropDown) {
+                if (string.IsNullOrEmpty(name))
+                {
+                    if (IsDropDown)
+                    {
                         ToolStripItem item = ((ToolStripDropDown)this).OwnerItem;
-                        if (item != null && item.Name != null) {
+                        if (item != null && item.Name != null)
+                        {
                             name = item.Name = ".DropDown";
                         }
                     }
-                    if (string.IsNullOrEmpty(name)) {
-                        name = this.GetType().Name;
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        name = GetType().Name;
                     }
                 }
+
                 // for debugging VS we want to filter out the propgrid toolstrip
-                Debug.WriteLineIf(!(this.ParentInternal is PropertyGrid), "Invalidate called on: " + name + new StackTrace().ToString());
+                Debug.WriteLineIf(!(ParentInternal is PropertyGrid), "Invalidate called on: " + name + new StackTrace().ToString());
             }
-#endif
         }
+#endif
+
         /// <summary>
         ///  Summary of OnHandleCreated.
         /// </summary>

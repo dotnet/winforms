@@ -8242,25 +8242,6 @@ namespace System.Windows.Forms
                 rowBounds.Height = localGridRows[row].Height;
                 rowBounds.Y = boundingRect.Y + cy;
 
-                // will add some errors
-#if false
-                    if (forDebug == 0 || forDebug == 1)
-                    {
-                        object dRowView = listManager[row];
-                        DataRow dRow= ((DataRowView) dRowView).Row;
-                        // dRow.RowError = "Error " + forDebug.ToString();
-                        dRow.SetColumnError(forDebug, "another error " + forDebug.ToString());
-
-                        /*
-                        if (localGridRows[row].DataRow != null)
-                        {
-                            localGridRows[row].DataRow.RowError = "error " + forDebug.ToString();
-                            localGridRows[row].DataRow.SetColumnError(forDebug, "another error " + forDebug.ToString());
-                        }
-                        */
-                        forDebug ++;
-                    }
-#endif // false
                 if (paintRowHeaders)
                 {
                     headerBounds = rowBounds;
