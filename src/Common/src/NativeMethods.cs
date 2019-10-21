@@ -2377,13 +2377,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class TEXTRANGE
-        {
-            public Richedit.CHARRANGE chrg;
-            public IntPtr lpstrText; /* allocated by caller, zero terminated by RichEdit */
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class GETTEXTLENGTHEX
         {                               // Taken from richedit.h:
             public uint flags;          // Flags (see GTL_XXX defines)
