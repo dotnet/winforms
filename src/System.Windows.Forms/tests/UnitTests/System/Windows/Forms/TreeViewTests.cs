@@ -806,8 +806,10 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ForeColor_Set_TestData()
         {
             yield return new object[] { Color.Empty, SystemColors.WindowText };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.White, Color.White };
+            yield return new object[] { Color.Black, Color.Black };
             yield return new object[] { Color.Red, Color.Red };
-            yield return new object[] { Color.FromArgb(0x01, 0x02, 0x03, 0x4), Color.FromArgb(0x01, 0x02, 0x03, 0x4) };
         }
 
         [Theory]
