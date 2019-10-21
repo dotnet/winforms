@@ -93,6 +93,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleCommandTarget.cs" Link="Interop\Ole32\Interop.IOleCommandTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleContainer.cs" Link="Interop\Ole32\Interop.IOleContainer.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" Link="Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceFrame.cs" Link="Interop\Ole32\Interop.IOleInPlaceFrame.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceUIWindow.cs" Link="Interop\Ole32\Interop.IOleInPlaceUIWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IPropertyNotifySink.cs" Link="Interop\Ole32\Interop.IPropertyNotifySink.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />

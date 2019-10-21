@@ -1539,7 +1539,7 @@ namespace System.Windows.Forms
                 uint dwID,
                 Ole32.IOleInPlaceActiveObject activeObject,
                 Ole32.IOleCommandTarget commandTarget,
-                UnsafeNativeMethods.IOleInPlaceFrame frame,
+                Ole32.IOleInPlaceFrame frame,
                 Ole32.IOleInPlaceUIWindow doc)
             {
                 return HRESULT.S_FALSE;

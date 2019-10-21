@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             private IntPtr _clipRegion;
             private UnsafeNativeMethods.IOleClientSite _clientSite;
             private Ole32.IOleInPlaceUIWindow _inPlaceUiWindow;
-            private UnsafeNativeMethods.IOleInPlaceFrame _inPlaceFrame;
+            private Ole32.IOleInPlaceFrame _inPlaceFrame;
             private readonly ArrayList _adviseList;
             private IAdviseSink _viewAdviseSink;
             private BitVector32 _activeXState;
@@ -905,7 +905,7 @@ namespace System.Windows.Forms
                     }
 
                     inPlaceSite.GetWindowContext(
-                        out UnsafeNativeMethods.IOleInPlaceFrame pFrame,
+                        out Ole32.IOleInPlaceFrame pFrame,
                         out Ole32.IOleInPlaceUIWindow pWindow,
                         &posRect,
                         &clipRect,
@@ -965,20 +965,20 @@ namespace System.Windows.Forms
                     }
 
                     // we have to explicitly say we don't wany any border space.
-                    int hr = _inPlaceFrame.SetBorderSpace(null);
-                    if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
-                        hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL)
+                    HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
+                    if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
+                        hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                     {
-                        Marshal.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR((int)hr);
                     }
 
                     if (_inPlaceUiWindow != null)
                     {
                         hr = _inPlaceFrame.SetBorderSpace(null);
-                        if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
-                            hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL)
+                        if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
+                            hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                         {
-                            Marshal.ThrowExceptionForHR(hr);
+                            Marshal.ThrowExceptionForHR((int)hr);
                         }
                     }
                 }
@@ -1374,11 +1374,10 @@ namespace System.Windows.Forms
                 if (_activeXState[s_uiActive] && fActivate.IsTrue() && _inPlaceFrame != null)
                 {
                     // we have to explicitly say we don't wany any border space.
-                    int hr = _inPlaceFrame.SetBorderSpace(null);
-
-                    if (NativeMethods.Failed(hr) && hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL)
+                    HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
+                    if (!hr.Succeeded() && hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                     {
-                        Marshal.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR((int)hr);
                     }
                 }
             }
