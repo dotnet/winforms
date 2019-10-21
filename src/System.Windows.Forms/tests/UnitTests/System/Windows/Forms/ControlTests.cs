@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -82,6 +83,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
             Assert.Equal(0, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
@@ -7850,6 +7853,116 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Control_FromChildHandle_InvokeControlHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            IntPtr handle = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle);
+            Assert.Same(control, Control.FromChildHandle(handle));
+
+            // Get when destroyed.
+            control.DestroyHandle();
+            Assert.Null(Control.FromChildHandle(handle));
+        }
+
+        [WinFormsFact]
+        public void Control_FromChildHandle_InvokeNativeWindowHandle_ReturnsExpected()
+        {
+            var window = new NativeWindow();
+            window.CreateHandle(new CreateParams());
+            IntPtr handle = window.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle);
+            Assert.Null(Control.FromChildHandle(handle));
+
+            // Get when destroyed.
+            window.DestroyHandle();
+            Assert.Null(Control.FromChildHandle(handle));
+        }
+
+        [WinFormsFact]
+        public void Control_FromChildHandle_InvokeChildHandle_ReturnsExpected()
+        {
+            using var parent = new SubControl();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            IntPtr parentHandle = parent.Handle;
+            Assert.NotEqual(IntPtr.Zero, parentHandle);
+            Assert.True(control.IsHandleCreated);
+
+            var window = new NativeWindow();
+            window.CreateHandle(control.CreateParams);
+            Assert.Same(parent, Control.FromChildHandle(window.Handle));
+
+            // Get when destroyed.
+            window.DestroyHandle();
+            Assert.Null(Control.FromChildHandle(window.Handle));
+        }
+
+        [WinFormsFact]
+        public void Control_FromChildHandle_InvokeNoSuchControl_ReturnsNull()
+        {
+            Assert.Null(Control.FromChildHandle(IntPtr.Zero));
+            Assert.Null(Control.FromChildHandle((IntPtr)1));
+        }
+
+        [WinFormsFact]
+        public void Control_FromHandle_InvokeControlHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            IntPtr handle = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle);
+            Assert.Same(control, Control.FromHandle(handle));
+
+            // Get when destroyed.
+            control.DestroyHandle();
+            Assert.Null(Control.FromHandle(handle));
+        }
+
+        [WinFormsFact]
+        public void Control_FromHandle_InvokeNativeWindowHandle_ReturnsExpected()
+        {
+            var window = new NativeWindow();
+            window.CreateHandle(new CreateParams());
+            IntPtr handle = window.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle);
+            Assert.Null(Control.FromHandle(handle));
+
+            // Get when destroyed.
+            window.DestroyHandle();
+            Assert.Null(Control.FromHandle(handle));
+        }
+
+        [WinFormsFact]
+        public void Control_FromHandle_InvokeChildHandle_ReturnsExpected()
+        {
+            using var parent = new SubControl();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            IntPtr parentHandle = parent.Handle;
+            Assert.NotEqual(IntPtr.Zero, parentHandle);
+            Assert.True(control.IsHandleCreated);
+
+            var window = new NativeWindow();
+            window.CreateHandle(control.CreateParams);
+            Assert.Null(Control.FromHandle(window.Handle));
+
+            // Get when destroyed.
+            window.DestroyHandle();
+            Assert.Null(Control.FromHandle(window.Handle));
+        }
+
+        [WinFormsFact]
+        public void Control_FromHandle_InvokeNoSuchControl_ReturnsNull()
+        {
+            Assert.Null(Control.FromHandle(IntPtr.Zero));
+            Assert.Null(Control.FromHandle((IntPtr)1));
+        }
+
         [Theory]
         [InlineData(ControlStyles.ContainerControl, false)]
         [InlineData(ControlStyles.UserPaint, true)]
@@ -7874,6 +7987,25 @@ namespace System.Windows.Forms.Tests
         {
             var control = new SubControl();
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsInputKey_TestData))]
+        public void Control_IsInputChar_InvokeWithoutHandle_ReturnsExpected(Keys keyData, bool expected)
+        {
+            using var control = new SubControl();
+            Assert.Equal(expected, control.IsInputChar((char)keyData));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsInputKey_TestData))]
+        public void Control_IsInputChar_InvokeWithHandle_ReturnsExpected(Keys keyData, bool expected)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expected, control.IsInputChar((char)keyData));
+            Assert.True(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> IsInputKey_TestData()
@@ -7901,9 +8033,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.F2, false };
             yield return new object[] { Keys.F3, false };
             yield return new object[] { Keys.F4, false };
+            yield return new object[] { Keys.F10, false };
             yield return new object[] { Keys.RButton, false };
             yield return new object[] { Keys.PageUp, false };
             yield return new object[] { Keys.PageDown, false };
+            yield return new object[] { Keys.Menu, false };
             yield return new object[] { Keys.None, false };
 
             yield return new object[] { Keys.Control | Keys.Tab, false };
@@ -7929,9 +8063,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Control | Keys.F2, false };
             yield return new object[] { Keys.Control | Keys.F3, false };
             yield return new object[] { Keys.Control | Keys.F4, false };
+            yield return new object[] { Keys.Control | Keys.F10, false };
             yield return new object[] { Keys.Control | Keys.RButton, false };
             yield return new object[] { Keys.Control | Keys.PageUp, false };
             yield return new object[] { Keys.Control | Keys.PageDown, false };
+            yield return new object[] { Keys.Control | Keys.Menu, false };
             yield return new object[] { Keys.Control | Keys.None, false };
 
             yield return new object[] { Keys.Alt | Keys.Tab, false };
@@ -7957,9 +8093,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Alt | Keys.F2, false };
             yield return new object[] { Keys.Alt | Keys.F3, false };
             yield return new object[] { Keys.Alt | Keys.F4, false };
+            yield return new object[] { Keys.Alt | Keys.F10, false };
             yield return new object[] { Keys.Alt | Keys.RButton, false };
             yield return new object[] { Keys.Alt | Keys.PageUp, false };
             yield return new object[] { Keys.Alt | Keys.PageDown, false };
+            yield return new object[] { Keys.Alt | Keys.Menu, false };
             yield return new object[] { Keys.Alt | Keys.None, false };
         }
 
@@ -12349,6 +12487,1090 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childCallCount2);
         }
 
+        public static IEnumerable<object[]> PreProcessMessage_TestData()
+        {
+            yield return new object[] { 0, Keys.None, false };
+            yield return new object[] { 0, Keys.A, false };
+            yield return new object[] { 0, Keys.Tab, false };
+            yield return new object[] { 0, Keys.Menu, false };
+            yield return new object[] { 0, Keys.F10, false };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.Tab, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.Menu, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.F10, true };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.Tab, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.Menu, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.F10, true };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.F10, false };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.F10, false };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.Tab, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.Menu, true };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.F10, true };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.Tab, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.Menu, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.F10, false };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.F10, false };
+            
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.F10, false };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(PreProcessMessage_TestData))]
+        public void Control_PreProcessMessage_Invoke_ReturnsExpected(int windowMsg, Keys keys, bool expectedIsHandleCreated)
+        {
+            using var control = new SubControl();
+            var msg = new Message
+            {
+                Msg = windowMsg,
+                WParam = (IntPtr)keys
+            };
+            Assert.False(control.PreProcessMessage(ref msg));
+            Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(PreProcessMessage_TestData))]
+        public void Control_PreProcessMessage_InvokeWithParent_ReturnsExpected(int windowMsg, Keys keys, bool expectedIsHandleCreated)
+        {
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            var msg = new Message
+            {
+                Msg = windowMsg,
+                WParam = (IntPtr)keys
+            };
+            Assert.False(control.PreProcessMessage(ref msg));
+            Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> PreProcessMessage_CustomProcessCmdKeyParent_TestData()
+        {
+            yield return new object[] { 0, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { 0, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
+
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(PreProcessMessage_CustomProcessCmdKeyParent_TestData))]
+        public void Control_PreProcessMessage_InvokeWithCustomParent_ReturnsExpected(int windowMsg, Keys keys, bool processCmdKeyResult, bool isInputKeyResult, bool processDialogKeyResult, bool isInputCharResult, bool processDialogCharResult, bool expectedResult, int expectedProcessCmdKeyCallCount, int expectedIsInputKeyCallCount, int expectedProcessDialogKeyCallCount, int expectedIsInputCharCallCount, int expectedProcessDialogCharCallCount)
+        {
+            int processCmdKeyCallCount = 0;
+            bool processCmdKeyAction(Message actualM, Keys actualKeyData)
+            {
+                Assert.Equal((IntPtr)keys, actualM.WParam);
+                Assert.Equal(keys, actualKeyData);
+                processCmdKeyCallCount++;
+                return processCmdKeyResult;
+            };
+            int isInputKeyCallCount = 0;
+            bool isInputKeyAction(Keys actualKeyData)
+            {
+                Assert.Equal(keys, actualKeyData);
+                isInputKeyCallCount++;
+                return isInputKeyResult;
+            };
+            int processDialogKeyCallCount = 0;
+            bool processDialogKeyAction(Keys actualKeyData)
+            {
+                Assert.Equal(keys, actualKeyData);
+                processDialogKeyCallCount++;
+                return processDialogKeyResult;
+            };
+            int isInputCharCallCount = 0;
+            bool isInputCharAction(char actualCharCode)
+            {
+                Assert.Equal((char)keys, actualCharCode);
+                isInputCharCallCount++;
+                return isInputCharResult;
+            };
+            int processDialogCharCallCount = 0;
+            bool processDialogCharAction(char actualCharCode)
+            {
+                Assert.Equal((char)keys, actualCharCode);
+                processDialogCharCallCount++;
+                return processDialogCharResult;
+            };
+            using var parent = new CustomProcessControl
+            {
+                ProcessCmdKeyAction = processCmdKeyAction,
+                ProcessDialogKeyAction = processDialogKeyAction,
+                ProcessDialogCharAction = processDialogCharAction
+            };
+            using var control = new CustomIsInputControl
+            {
+                Parent = parent,
+                IsInputKeyAction = isInputKeyAction,
+                IsInputCharAction = isInputCharAction
+            };
+            var msg = new Message
+            {
+                Msg = windowMsg,
+                WParam = (IntPtr)keys
+            };
+            Assert.Equal(expectedResult, control.PreProcessMessage(ref msg));
+            Assert.Equal(expectedProcessCmdKeyCallCount, processCmdKeyCallCount);
+            Assert.Equal(expectedIsInputKeyCallCount, isInputKeyCallCount);
+            Assert.Equal(expectedProcessDialogKeyCallCount, processDialogKeyCallCount);
+            Assert.Equal(expectedIsInputCharCallCount, isInputCharCallCount);
+            Assert.Equal(expectedProcessDialogCharCallCount, processDialogCharCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        private class CustomIsInputControl : Control
+        {
+            public Func<char, bool> IsInputCharAction { get; set; }
+
+            protected override bool IsInputChar(char charCode) => IsInputCharAction(charCode);
+
+            public Func<Keys, bool> IsInputKeyAction { get; set; }
+
+            protected override bool IsInputKey(Keys keyData) => IsInputKeyAction(keyData);
+        }
+
+        private class CustomProcessControl : Control
+        {
+            public Func<Message, Keys, bool> ProcessCmdKeyAction { get; set; }
+
+            protected override bool ProcessCmdKey(ref Message msg, Keys keyData) => ProcessCmdKeyAction(msg, keyData);
+
+            public Func<char, bool> ProcessDialogCharAction { get; set; }
+
+            protected override bool ProcessDialogChar(char charCode) => ProcessDialogCharAction(charCode);
+
+            public Func<Keys, bool> ProcessDialogKeyAction { get; set; }
+
+            protected override bool ProcessDialogKey(Keys keyData) => ProcessDialogKeyAction(keyData);
+
+            public Func<Message, bool> ProcessKeyPreviewAction { get; set; }
+
+            protected override bool ProcessKeyPreview(ref Message m) => ProcessKeyPreviewAction(m);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        public void Control_ProcessCmdKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
+        {
+            using var control = new SubControl();
+            var m = new Message();
+            Assert.False(control.ProcessCmdKey(ref m, keyData));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        public void Control_ProcessCmdKey_InvokeWithContextMenu_ReturnsFalse(Keys keyData)
+        {
+            using var menu = new ContextMenu();
+            using var control = new SubControl
+            {
+                ContextMenu = menu
+            };
+            var msg = new Message();
+            Assert.False(control.ProcessCmdKey(ref msg, keyData));
+            Assert.Same(control, menu.SourceControl);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A, true)]
+        [InlineData(Keys.A, false)]
+        public void Control_ProcessCmdKey_InvokeWithCustomContextMenu_ReturnsExpected(Keys keyData, bool result)
+        {
+            using var control = new SubControl();
+            var msg = new Message
+            {
+                Msg = 1
+            };
+            int callCount = 0;
+            using var contextMenu = new CustomProcessCmdKeyContextMenu();
+            bool action(Message actualMsg, Keys actualKeyData, Control actualControl)
+            {
+                Assert.Equal(1, actualMsg.Msg);
+                Assert.Equal(keyData, actualKeyData);
+                Assert.Same(control, actualControl);
+                Assert.Null(contextMenu.SourceControl);
+                callCount++;
+                return result;
+            }
+            contextMenu.ProcessCmdKeyAction = action;
+            control.ContextMenu = contextMenu;
+
+            Assert.Equal(result, control.ProcessCmdKey(ref msg, keyData));
+            Assert.Null(contextMenu.SourceControl);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        public void Control_ProcessCmdKey_InvokeWithParent_ReturnsFalse(Keys keyData)
+        {
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            var msg = new Message();
+            Assert.False(control.ProcessCmdKey(ref msg, keyData));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A, true)]
+        [InlineData(Keys.A, false)]
+        public void Control_ProcessCmdKey_InvokeWithCustomParent_ReturnsExpected(Keys keyData, bool result)
+        {
+            using var control = new SubControl();
+            var msg = new Message
+            {
+                Msg = 1
+            };
+            int callCount = 0;
+            bool action(Message actualMsg, Keys actualKeyData)
+            {
+                Assert.Equal(1, actualMsg.Msg);
+                Assert.Equal(keyData, actualKeyData);
+                callCount++;
+                return result;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessCmdKeyAction = action
+            };
+            control.Parent = parent;
+
+            Assert.Equal(result, control.ProcessCmdKey(ref msg, keyData));
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A, true, true, 0, true)]
+        [InlineData(Keys.A, true, false, 0, true)]
+        [InlineData(Keys.A, false, true, 1, true)]
+        [InlineData(Keys.A, false, false, 1, false)]
+        public void Control_ProcessCmdKey_InvokeWithCustomContextMenuAndParent_ReturnsExpected(Keys keyData, bool contextMenuResult, bool parentResult, int expectedParentCallCount, bool expectedResult)
+        {
+            using var control = new SubControl();
+            var msg = new Message
+            {
+                Msg = 1
+            };
+            using var contextMenu = new CustomProcessCmdKeyContextMenu();
+            int contextMenuCallCount = 0;
+            bool contextMenuAction(Message actualMsg, Keys actualKeyData, Control actualControl)
+            {
+                Assert.Equal(1, actualMsg.Msg);
+                Assert.Equal(keyData, actualKeyData);
+                Assert.Same(control, actualControl);
+                Assert.Null(contextMenu.SourceControl);
+                contextMenuCallCount++;
+                return contextMenuResult;
+            }
+            contextMenu.ProcessCmdKeyAction = contextMenuAction;
+            control.ContextMenu = contextMenu;
+            int parentCallCount = 0;
+            bool parentAction(Message actualMsg, Keys actualKeyData)
+            {
+                Assert.Equal(1, actualMsg.Msg);
+                Assert.Equal(keyData, actualKeyData);
+                parentCallCount++;
+                return parentResult;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessCmdKeyAction = parentAction
+            };
+            control.Parent = parent;
+
+            Assert.Equal(expectedResult, control.ProcessCmdKey(ref msg, keyData));
+            Assert.Null(contextMenu.SourceControl);
+            Assert.Equal(1, contextMenuCallCount);
+            Assert.Equal(expectedParentCallCount, parentCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        private class CustomProcessCmdKeyContextMenu : ContextMenu
+        {
+            public Func<Message, Keys, Control, bool> ProcessCmdKeyAction { get; set; }
+
+            protected internal override bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) => ProcessCmdKeyAction(msg, keyData, control);
+        }
+        
+        [WinFormsTheory]
+        [InlineData('a')]
+        public void Control_ProcessDialogChar_InvokeWithoutParent_ReturnsFalse(char charCode)
+        {
+            using var control = new SubControl();
+            Assert.False(control.ProcessDialogChar(charCode));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData('a')]
+        public void Control_ProcessDialogChar_InvokeWithParent_ReturnsFalse(char charCode)
+        {
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.False(control.ProcessDialogChar(charCode));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData('a', true)]
+        [InlineData('a', false)]
+        public void Control_ProcessDialogChar_InvokeWithCustomParent_ReturnsExpected(char charCode, bool result)
+        {
+            int callCount = 0;
+            bool action(char actualKeyData)
+            {
+                Assert.Equal(charCode, actualKeyData);
+                callCount++;
+                return result;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessDialogCharAction = action
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Equal(result, control.ProcessDialogChar(charCode));
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        public void Control_ProcessDialogKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
+        {
+            using var control = new SubControl();
+            Assert.False(control.ProcessDialogKey(keyData));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        public void Control_ProcessDialogKey_InvokeWithParent_ReturnsFalse(Keys keyData)
+        {
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.False(control.ProcessDialogKey(keyData));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A, true)]
+        [InlineData(Keys.A, false)]
+        public void Control_ProcessDialogKey_InvokeWithCustomParent_ReturnsExpected(Keys keyData, bool result)
+        {
+            int callCount = 0;
+            bool action(Keys actualKeyData)
+            {
+                Assert.Equal(keyData, actualKeyData);
+                callCount++;
+                return result;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessDialogKeyAction = action
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Equal(result, control.ProcessDialogKey(keyData));
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ProcessKeyEventArgs_TestData()
+        {
+            foreach (bool handled in new bool[] { true })
+            {
+                yield return new object[] { (int)User32.WindowMessage.WM_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WindowMessage.WM_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WindowMessage.WM_IME_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WindowMessage.WM_IME_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
+                yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
+                yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
+                yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
+                yield return new object[] { 0, '2', handled, 0, 0, 1, (IntPtr)2 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ProcessKeyEventArgs_TestData))]
+        public void Control_ProcessKeyEventArgs_InvokeWithoutParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
+        {
+            using var control = new SubControl();
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyChar);
+                e.KeyChar = newChar;
+                e.Handled = handled;
+                keyPressCallCount++;
+            };
+            int keyDownCallCount = 0;
+            control.KeyDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyDownCallCount++;
+            };
+            int keyUpCallCount = 0;
+            control.KeyUp += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyUpCallCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                WParam = (IntPtr)2
+            };
+            Assert.Equal(handled, control.ProcessKeyEventArgs(ref m));
+            Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
+            Assert.Equal(expectedKeyDownCallCount, keyDownCallCount);
+            Assert.Equal(expectedKeyUpCallCount, keyUpCallCount);
+            Assert.Equal(expectedWParam, m.WParam);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ProcessKeyEventArgs_TestData))]
+        public void Control_ProcessKeyEventArgs_InvokeWithParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
+        {
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyChar);
+                e.KeyChar = newChar;
+                e.Handled = handled;
+                keyPressCallCount++;
+            };
+            int keyDownCallCount = 0;
+            control.KeyDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyDownCallCount++;
+            };
+            int keyUpCallCount = 0;
+            control.KeyUp += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyUpCallCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                WParam = (IntPtr)2
+            };
+            Assert.Equal(handled, control.ProcessKeyEventArgs(ref m));
+            Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
+            Assert.Equal(expectedKeyDownCallCount, keyDownCallCount);
+            Assert.Equal(expectedKeyUpCallCount, keyUpCallCount);
+            Assert.Equal(expectedWParam, m.WParam);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ProcessKeyEventArgs_TestData))]
+        public void Control_ProcessKeyEventArgs_InvokeWithCustomParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
+        {
+            int callCount = 0;
+            bool action(Message m)
+            {
+                callCount++;
+                return true;
+            }
+            using var parent = new CustomProcessKeyEventArgsControl
+            {
+                ProcessKeyEventArgsAction = action
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyChar);
+                e.KeyChar = newChar;
+                e.Handled = handled;
+                keyPressCallCount++;
+            };
+            int keyDownCallCount = 0;
+            control.KeyDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyDownCallCount++;
+            };
+            int keyUpCallCount = 0;
+            control.KeyUp += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyUpCallCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                WParam = (IntPtr)2
+            };
+            Assert.Equal(handled, control.ProcessKeyEventArgs(ref m));
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
+            Assert.Equal(expectedKeyDownCallCount, keyDownCallCount);
+            Assert.Equal(expectedKeyUpCallCount, keyUpCallCount);
+            Assert.Equal(expectedWParam, m.WParam);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)User32.WindowMessage.WM_CHAR)]
+        [InlineData((int)User32.WindowMessage.WM_SYSCHAR)]
+        public void Control_ProcessKeyEventArgs_InvokeCharAfterImeChar_Success(int msg)
+        {
+            using var control = new SubControl();
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(0, e.KeyChar);
+                e.Handled = true;
+                keyPressCallCount++;
+            };
+            var charM = new Message
+            {
+                Msg = msg
+            };
+            var imeM = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_IME_CHAR
+            };
+
+            // Char.
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(1, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Ime, Char.
+            Assert.True(control.ProcessKeyEventArgs(ref imeM));
+            Assert.Equal(2, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(2, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(3, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+            
+            // Ime, Ime, Char.
+            Assert.True(control.ProcessKeyEventArgs(ref imeM));
+            Assert.Equal(4, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref imeM));
+            Assert.Equal(5, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(5, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(5, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(6, keyPressCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)User32.WindowMessage.WM_KEYDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_SYSKEYDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_KEYUP)]
+        [InlineData((int)User32.WindowMessage.WM_SYSKEYUP)]
+        public void Control_ProcessKeyEventArgs_InvokeNonCharAfterImeChar_Success(int msg)
+        {
+            using var control = new SubControl();
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                e.Handled = true;
+                keyPressCallCount++;
+            };
+            int keyCallCount = 0;
+            control.KeyDown += (sender, e) =>
+            {
+                e.Handled = true;
+                keyCallCount++;
+            };
+            control.KeyUp += (sender, e) =>
+            {
+                e.Handled = true;
+                keyCallCount++;
+            };
+            var charM = new Message
+            {
+                Msg = msg
+            };
+            var imeM = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_IME_CHAR
+            };
+
+            // Non-Char.
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(0, keyPressCallCount);
+            Assert.Equal(1, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Ime, Non-Char.
+            Assert.True(control.ProcessKeyEventArgs(ref imeM));
+            Assert.Equal(1, keyPressCallCount);
+            Assert.Equal(1, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(1, keyPressCallCount);
+            Assert.Equal(2, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(1, keyPressCallCount);
+            Assert.Equal(3, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+            
+            // Ime, Ime, Non-Char.
+            Assert.True(control.ProcessKeyEventArgs(ref imeM));
+            Assert.Equal(2, keyPressCallCount);
+            Assert.Equal(3, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref imeM));
+            Assert.Equal(3, keyPressCallCount);
+            Assert.Equal(3, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(3, keyPressCallCount);
+            Assert.Equal(4, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(3, keyPressCallCount);
+            Assert.Equal(5, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.ProcessKeyEventArgs(ref charM));
+            Assert.Equal(3, keyPressCallCount);
+            Assert.Equal(6, keyCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        private class CustomProcessKeyEventArgsControl : Control
+        {
+            public Func<Message, bool> ProcessKeyEventArgsAction { get; set; }
+
+            protected override bool ProcessKeyEventArgs(ref Message m) => ProcessKeyEventArgsAction(m);
+
+            public new bool ProcessKeyMessage(ref Message m) => base.ProcessKeyMessage(ref m);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ProcessKeyEventArgs_TestData))]
+        public void Control_ProcessKeyMessage_InvokeWithoutParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
+        {
+            using var control = new SubControl();
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyChar);
+                e.KeyChar = newChar;
+                e.Handled = handled;
+                keyPressCallCount++;
+            };
+            int keyDownCallCount = 0;
+            control.KeyDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyDownCallCount++;
+            };
+            int keyUpCallCount = 0;
+            control.KeyUp += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyUpCallCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                WParam = (IntPtr)2
+            };
+            Assert.Equal(handled, control.ProcessKeyMessage(ref m));
+            Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
+            Assert.Equal(expectedKeyDownCallCount, keyDownCallCount);
+            Assert.Equal(expectedKeyUpCallCount, keyUpCallCount);
+            Assert.Equal(expectedWParam, m.WParam);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ProcessKeyEventArgs_TestData))]
+        public void Control_ProcessKeyMessage_InvokeWithParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
+        {
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyChar);
+                e.KeyChar = newChar;
+                e.Handled = handled;
+                keyPressCallCount++;
+            };
+            int keyDownCallCount = 0;
+            control.KeyDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyDownCallCount++;
+            };
+            int keyUpCallCount = 0;
+            control.KeyUp += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyUpCallCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                WParam = (IntPtr)2
+            };
+            Assert.Equal(handled, control.ProcessKeyMessage(ref m));
+            Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
+            Assert.Equal(expectedKeyDownCallCount, keyDownCallCount);
+            Assert.Equal(expectedKeyUpCallCount, keyUpCallCount);
+            Assert.Equal(expectedWParam, m.WParam);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ProcessKeyEventArgs_TestData))]
+        public void Control_ProcessKeyMessage_InvokeWithCustomParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
+        {
+            int callCount = 0;
+            bool action(Message m)
+            {
+                callCount++;
+                return true;
+            }
+            using var parent = new CustomProcessKeyEventArgsControl
+            {
+                ProcessKeyEventArgsAction = action
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int keyPressCallCount = 0;
+            control.KeyPress += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyChar);
+                e.KeyChar = newChar;
+                e.Handled = handled;
+                keyPressCallCount++;
+            };
+            int keyDownCallCount = 0;
+            control.KeyDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyDownCallCount++;
+            };
+            int keyUpCallCount = 0;
+            control.KeyUp += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(2, e.KeyValue);
+                e.Handled = handled;
+                keyUpCallCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                WParam = (IntPtr)2
+            };
+            Assert.Equal(handled, control.ProcessKeyMessage(ref m));
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
+            Assert.Equal(expectedKeyDownCallCount, keyDownCallCount);
+            Assert.Equal(expectedKeyUpCallCount, keyUpCallCount);
+            Assert.Equal(expectedWParam, m.WParam);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_ProcessKeyMessage_InvokeWithCustomParentProcessKeyPreview_ReturnsExpected(bool result)
+        {
+            int callCount = 0;
+            bool action(Message actualM)
+            {
+                Assert.Equal(1, actualM.Msg);
+                callCount++;
+                return result;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessKeyPreviewAction = action
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            var m = new Message
+            {
+                Msg = 1
+            };
+            Assert.Equal(result, control.ProcessKeyMessage(ref m));
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_ProcessKeyMessage_InvokeWithCustomProcessKeyEventArgs_ReturnsExpected(bool result)
+        {
+            int callCount = 0;
+            bool action(Message actualM)
+            {
+                Assert.Equal(1, actualM.Msg);
+                callCount++;
+                return result;
+            }
+            using var control = new CustomProcessKeyEventArgsControl
+            {
+                ProcessKeyEventArgsAction = action
+            };
+            var m = new Message
+            {
+                Msg = 1
+            };
+            Assert.Equal(result, control.ProcessKeyMessage(ref m));
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true, 0, true)]
+        [InlineData(true, false, 0, true)]
+        [InlineData(false, true, 1, true)]
+        [InlineData(false, false, 1, false)]
+        public void Control_ProcessKeyMessage_InvokeWithCustomParentProcessKeyPreviewCustomProcessKeyEventArgs_ReturnsExpected(bool parentResult, bool result, int expectedCallCount, bool expectedResult)
+        {
+            int parentCallCount = 0;
+            bool parentAction(Message actualM)
+            {
+                Assert.Equal(1, actualM.Msg);
+                parentCallCount++;
+                return parentResult;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessKeyPreviewAction = parentAction
+            };
+            int callCount = 0;
+            bool action(Message actualM)
+            {
+                Assert.Equal(1, actualM.Msg);
+                callCount++;
+                return result;
+            }
+            using var control = new CustomProcessKeyEventArgsControl
+            {
+                Parent = parent,
+                ProcessKeyEventArgsAction = action
+            };
+            var m = new Message
+            {
+                Msg = 1
+            };
+            Assert.Equal(expectedResult, control.ProcessKeyMessage(ref m));
+            Assert.Equal(1, parentCallCount);
+            Assert.Equal(expectedCallCount, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_ProcessKeyPreview_InvokeWithoutParent_ReturnsFalse()
+        {
+            using var control = new SubControl();
+            var m = new Message();
+            Assert.False(control.ProcessKeyPreview(ref m));
+        }
+        
+        [WinFormsFact]
+        public void Control_ProcessKeyPreview_InvokeWithParent_ReturnsFalse()
+        {
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            var m = new Message();
+            Assert.False(control.ProcessKeyPreview(ref m));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_ProcessKeyPreview_InvokeWithCustomParent_ReturnsExpected(bool result)
+        {
+            int callCount = 0;
+            bool action(Message actualM)
+            {
+                Assert.Equal(1, actualM.Msg);
+                callCount++;
+                return result;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessKeyPreviewAction = action
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            var m = new Message
+            {
+                Msg = 1
+            };
+            Assert.Equal(result, control.ProcessKeyPreview(ref m));
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData('a')]
+        [InlineData(char.MinValue)]
+        public void Control_ProcessMnemonic_Invoke_ReturnsFalse(char charCode)
+        {
+            using var control = new SubControl();
+            Assert.False(control.ProcessMnemonic(charCode));
+            Assert.False(control.IsHandleCreated);
+        }
+
         [Fact]
         public void Control_RecreateHandle_InvokeWithHandle_Success()
         {
@@ -12713,6 +13935,8 @@ namespace System.Windows.Forms.Tests
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
+            public new bool IsInputChar(char charCode) => base.IsInputChar(charCode);
+
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 
             public new void OnBackColorChanged(EventArgs e) => base.OnBackColorChanged(e);
@@ -12832,6 +14056,20 @@ namespace System.Windows.Forms.Tests
             public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
 
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
+
+            public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
+
+            public new bool ProcessDialogChar(char charCode) => base.ProcessDialogChar(charCode);
+
+            public new bool ProcessDialogKey(Keys keyData) => base.ProcessDialogKey(keyData);
+
+            public new bool ProcessKeyEventArgs(ref Message m) => base.ProcessKeyEventArgs(ref m);
+
+            public new bool ProcessKeyMessage(ref Message m) => base.ProcessKeyMessage(ref m);
+
+            public new bool ProcessKeyPreview(ref Message m) => base.ProcessKeyPreview(ref m);
+
+            public new bool ProcessMnemonic(char charCode) => base.ProcessMnemonic(charCode);
 
             public new void RecreateHandle() => base.RecreateHandle();
 

@@ -15,26 +15,31 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Ctor_MenuItemArray_TestData()
         {
-            yield return new object[] { null, false };
-            yield return new object[] { Array.Empty<MenuItem>(), false };
-            yield return new object[] { new MenuItem[] { new MenuItem() }, true };
+            using var menuItem = new MenuItem();
+            yield return new object[] { null, false, Array.Empty<MenuItem>() };
+            yield return new object[] { Array.Empty<MenuItem>(), false, Array.Empty<MenuItem>() };
+            yield return new object[] { new MenuItem[] { menuItem }, true, new MenuItem[] { menuItem } };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_MenuItemArray_TestData))]
-        public void Menu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent)
+        public void Menu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent, MenuItem[] expectedItems)
         {
-            var menu = new SubMenu(items);
-            Assert.Equal(items ?? Array.Empty<MenuItem>(), menu.MenuItems.Cast<MenuItem>());
-            for (int i = 0; i < (items?.Length ?? 0); i++)
+            using var menu = new SubMenu(items);
+            Assert.True(menu.CanRaiseEvents);
+            Assert.Null(menu.Container);
+            Assert.False(menu.DesignMode);
+            Assert.NotNull(menu.Events);
+            Assert.Same(menu.Events, menu.Events);
+            Assert.Equal(expectedIsParent, menu.IsParent);
+            Assert.Equal(expectedItems, menu.MenuItems.Cast<MenuItem>());
+            for (int i = 0; i < menu.MenuItems.Count; i++)
             {
                 Assert.Equal(i, menu.MenuItems[i].Index);
                 Assert.Equal(menu, menu.MenuItems[i].Parent);
             }
-            Assert.Equal(expectedIsParent, menu.IsParent);
             Assert.Empty(menu.Name);
             Assert.Null(menu.Site);
-            Assert.Null(menu.Container);
             Assert.Null(menu.Tag);
         }
 
@@ -88,57 +93,49 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(HandleMenuItems_TestData))]
         public void Menu_Handle_Get_ReturnsExpected(MenuItem[] items)
         {
-            using (var menu = new SubMenu(items))
-            {
-                Assert.NotEqual(IntPtr.Zero, menu.Handle);
-                Assert.Equal(menu.Handle, menu.Handle);
-            }
+            using var menu = new SubMenu(items);
+            Assert.NotEqual(IntPtr.Zero, menu.Handle);
+            Assert.Equal(menu.Handle, menu.Handle);
         }
 
         [Fact]
         public void Menu_Handle_GetWithDashTextInNormalMenu_ReturnsExpected()
         {
-            var menuItem = new MenuItem("-");
-            using (var menu = new SubMenu(new MenuItem[] { menuItem }))
-            {
-                Assert.NotEqual(IntPtr.Zero, menu.Handle);
-                Assert.Equal(menu.Handle, menu.Handle);
+            using var menuItem = new MenuItem("-");
+            using var menu = new SubMenu(new MenuItem[] { menuItem });
+            Assert.NotEqual(IntPtr.Zero, menu.Handle);
+            Assert.Equal(menu.Handle, menu.Handle);
 
-                // Does not affect the text.
-                Assert.Equal("-", menuItem.Text);
-            }
+            // Does not affect the text.
+            Assert.Equal("-", menuItem.Text);
         }
 
         [Fact]
         public void Menu_Handle_GetWithDashTextInMainMenu_ReturnsExpected()
         {
-            var menuItem = new MenuItem("-");
-            using (var menu = new MainMenu(new MenuItem[] { menuItem }))
-            {
-                Assert.NotEqual(IntPtr.Zero, menu.Handle);
-                Assert.Equal(menu.Handle, menu.Handle);
+            using var menuItem = new MenuItem("-");
+            using var menu = new MainMenu(new MenuItem[] { menuItem });
+            Assert.NotEqual(IntPtr.Zero, menu.Handle);
+            Assert.Equal(menu.Handle, menu.Handle);
 
-                // Sets the separator to a space.
-                Assert.Equal(" ", menuItem.Text);
-            }
+            // Sets the separator to a space.
+            Assert.Equal(" ", menuItem.Text);
         }
 
         [Fact]
         public void Menu_Handle_GetWithRightToLeftItem_ReturnsExpected()
         {
-            using (var menu = new ContextMenu(new MenuItem[] { new MenuItem("text") }))
-            {
-                menu.RightToLeft = RightToLeft.Yes;
-                Assert.NotEqual(IntPtr.Zero, menu.Handle);
-                Assert.Equal(menu.Handle, menu.Handle);
-            }
+            using var menu = new ContextMenu(new MenuItem[] { new MenuItem("text") });
+            menu.RightToLeft = RightToLeft.Yes;
+            Assert.NotEqual(IntPtr.Zero, menu.Handle);
+            Assert.Equal(menu.Handle, menu.Handle);
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Menu_Name_GetWithSite_ReturnsExpected(string name, string expected)
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>())
+            using var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Site = Mock.Of<ISite>(s => s.Name == name)
             };
@@ -149,7 +146,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Menu_Name_SetWithoutSite_GetReturnsExpected(string value, string expected)
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>())
+            using var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Name = value
             };
@@ -161,16 +158,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
-        public void Menu_Name_SetWithSite_GetReturnsExpected(string value, string expected)
+        [InlineData(null, "", null)]
+        [InlineData("", "", null)]
+        [InlineData("name", "name", "name")]
+        public void Menu_Name_SetWithSite_GetReturnsExpected(string value, string expected, string expectedSiteName)
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>())
+            using var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Site = Mock.Of<ISite>(),
                 Name = value
             };
             Assert.Equal(expected, menu.Name);
-            Assert.Equal(value?.Length == 0 ? null : value, menu.Site.Name);
+            Assert.Equal(expectedSiteName, menu.Site.Name);
         }
 
         public static IEnumerable<object[]> MdiListItem_TestData()
@@ -189,7 +188,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(MdiListItem_TestData))]
         public void Menu_MdiListItem_Get_ReturnsExpected(MenuItem[] items, MenuItem expected)
         {
-            var menu = new SubMenu(items);
+            using var menu = new SubMenu(items);
             Assert.Equal(expected, menu.MdiListItem);
         }
 
@@ -197,7 +196,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Menu_Tag_Set_GetReturnsExpected(object value)
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>())
+            using var menu = new SubMenu(Array.Empty<MenuItem>())
             {
                 Tag = value
             };
@@ -245,7 +244,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(FindMenuItem_TestData))]
         public void Menu_FindMenuItem_Invoke_ReturnsExpected(MenuItem[] items, int type, IntPtr value, MenuItem expected)
         {
-            var menu = new SubMenu(items);
+            using var menu = new SubMenu(items);
             Assert.Equal(expected, menu.FindMenuItem(type, value));
         }
 
@@ -277,7 +276,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(EventArgs.Empty, e);
             };
 
-            var menu = new SubMenu(new MenuItem[] { menuItem });
+            using var menu = new SubMenu(new MenuItem[] { menuItem });
             var message = new Message();
             Assert.Equal(expectedResult, menu.ProcessCmdKey(ref message, Keys.Control | Keys.A));
             Assert.Equal(expectedOnClickCallCount, onClickCallCount);
@@ -287,21 +286,21 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ProcessCmdKey_MenuItemParent_TestData()
         {
             var enabledParentChild = new MenuItem { Shortcut = Shortcut.CtrlA };
-            var enabledParent = new MenuItem("text", new MenuItem[] { enabledParentChild });
+            var enabledParent = new SubMenuItem("text", new MenuItem[] { enabledParentChild });
             yield return new object[] { enabledParent, enabledParentChild, true, 1, 0, 0, 1 };
 
             var enabledParentChildWithItems = new MenuItem("text", new MenuItem[] { new MenuItem() }) { Shortcut = Shortcut.CtrlA };
-            var enabledParentWithItems = new MenuItem("text", new MenuItem[] { enabledParentChildWithItems });
+            var enabledParentWithItems = new SubMenuItem("text", new MenuItem[] { enabledParentChildWithItems });
             yield return new object[] { enabledParentWithItems, enabledParentChildWithItems, true, 0, 1, 0, 1 };
 
             var disabledParentChild = new MenuItem { Shortcut = Shortcut.CtrlA };
-            var disabledParent = new MenuItem("text", new MenuItem[] { disabledParentChild }) { Enabled = false };
+            var disabledParent = new SubMenuItem("text", new MenuItem[] { disabledParentChild }) { Enabled = false };
             yield return new object[] { disabledParent, disabledParentChild, false, 0, 0, 0, 0 };
         }
 
         [Theory]
         [MemberData(nameof(ProcessCmdKey_MenuItemParent_TestData))]
-        public void Menu_ProcessCmdKey_MenuItemParent_ReturnsExpected(MenuItem parent, MenuItem child, bool expectedResult, int expectedChildOnClickCallCount, int expectedChildOnPopupCallCount, int expectedParentOnClickCallCount, int expectedParentOnPopupCallCount)
+        public void Menu_ProcessCmdKey_MenuItemParent_ReturnsExpected(SubMenuItem parent, MenuItem child, bool expectedResult, int expectedChildOnClickCallCount, int expectedChildOnPopupCallCount, int expectedParentOnClickCallCount, int expectedParentOnPopupCallCount)
         {
             int childOnClickCallCount = 0;
             child.Click += (sender, e) =>
@@ -335,8 +334,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(EventArgs.Empty, e);
             };
 
-            var message = new Message();
-            Assert.Equal(expectedResult, parent.ProcessCmdKey(ref message, Keys.Control | Keys.A));
+            var msg = new Message();
+            Assert.Equal(expectedResult, parent.ProcessCmdKey(ref msg, Keys.Control | Keys.A));
             Assert.Equal(expectedChildOnClickCallCount, childOnClickCallCount);
             Assert.Equal(expectedChildOnPopupCallCount, childOnPopupCallCount);
             Assert.Equal(expectedParentOnClickCallCount, parentOnClickCallCount);
@@ -347,21 +346,20 @@ namespace System.Windows.Forms.Tests
         public void Menu_ProcessCmdKey_ParentMenuItemPopupHandlerRemovesChild_ReturnsFalse()
         {
             var child = new MenuItem { Shortcut = Shortcut.CtrlA };
-            var parent = new MenuItem("text", new MenuItem[] { child });
-            var message = new Message();
-
+            var parent = new SubMenuItem("text", new MenuItem[] { child });
             parent.Popup += (sender, e) =>
             {
                 parent.MenuItems.Remove(child);
             };
 
-            Assert.False(parent.ProcessCmdKey(ref message, Keys.Control | Keys.A));
+            var msg = new Message();
+            Assert.False(parent.ProcessCmdKey(ref msg, Keys.Control | Keys.A));
         }
 
         [Fact]
         public void Menu_ProcessCmdKey_NoSuchShortcutKey_ReturnsFalse()
         {
-            var menu = new SubMenu(new MenuItem[] { new MenuItem() });
+            using var menu = new SubMenu(new MenuItem[] { new MenuItem() });
             var message = new Message();
             Assert.False(menu.ProcessCmdKey(ref message, Keys.Control | Keys.A));
         }
@@ -369,7 +367,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_Dispose_NoChildren_Success()
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>());
+            using var menu = new SubMenu(Array.Empty<MenuItem>());
             menu.Dispose();
             menu.Dispose();
         }
@@ -377,8 +375,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_Dispose_WithChildren_Success()
         {
-            var menuItem = new MenuItem();
-            var menu = new SubMenu(new MenuItem[] { menuItem });
+            using var menuItem = new MenuItem();
+            using var menu = new SubMenu(new MenuItem[] { menuItem });
             menu.Dispose();
             Assert.Null(menuItem.Parent);
             Assert.Empty(menu.MenuItems);
@@ -390,11 +388,11 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_Dispose_ItemHasSite_Success()
         {
-            var menuItem = new MenuItem
+            using var menuItem = new MenuItem
             {
                 Site = Mock.Of<ISite>()
             };
-            var menu = new SubMenu(new MenuItem[] { menuItem });
+            using var menu = new SubMenu(new MenuItem[] { menuItem });
             menu.Dispose();
             Assert.Null(menuItem.Parent);
             Assert.Empty(menu.MenuItems);
@@ -407,12 +405,12 @@ namespace System.Windows.Forms.Tests
         public void Menu_Dispose_ItemHasSiteWithContainer_Success()
         {
             var container = new Container();
-            var menuItem = new MenuItem
+            using var menuItem = new MenuItem
             {
                 Site = Mock.Of<ISite>(s => s.Container == container)
             };
             container.Add(menuItem);
-            var menu = new SubMenu(new MenuItem[] { menuItem });
+            using var menu = new SubMenu(new MenuItem[] { menuItem });
             menu.Dispose();
             Assert.Empty(container.Components);
             Assert.Null(menuItem.Parent);
@@ -437,7 +435,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(FindMergePosition_TestData))]
         public void Menu_FindMergePosition_Invoke_ReturnsExpected(MenuItem[] items, int mergeOrder, int expected)
         {
-            var menu = new SubMenu(items);
+            using var menu = new SubMenu(items);
             Assert.Equal(expected, menu.FindMergePosition(mergeOrder));
         }
 
@@ -640,8 +638,8 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(MergeMenu_TestData))]
         public void Menu_MergeMenu_Invoke_ReturnsExpected(MenuItem[] destinationItems, MenuItem[] sourceItems, MenuItem[] expectedItems)
         {
-            var menu = new SubMenu(destinationItems);
-            var menuSrc = new SubMenu(sourceItems);
+            using var menu = new SubMenu(destinationItems);
+            using var menuSrc = new SubMenu(sourceItems);
             menu.MergeMenu(menuSrc);
             AssertEqualMenuItems(expectedItems, menu.MenuItems.Cast<MenuItem>().ToArray());
         }
@@ -649,14 +647,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_MergeMenu_SameSourceAndDestination_ThrowsArgumentException()
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>());
+            using var menu = new SubMenu(Array.Empty<MenuItem>());
             Assert.Throws<ArgumentException>("menuSrc", () => menu.MergeMenu(menu));
         }
 
         [Fact]
         public void Menu_MergeMenu_NullSource_ThrowsArgumentNullException()
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>());
+            using var menu = new SubMenu(Array.Empty<MenuItem>());
             Assert.Throws<ArgumentNullException>("menuSrc", () => menu.MergeMenu(null));
         }
 
@@ -670,7 +668,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CloneMenu_TestData))]
         public void Menu_CloneMenu_Invoke_Success(MenuItem[] items)
         {
-            var menu = new SubMenu(new MenuItem[] { new MenuItem() });
+            using var menu = new SubMenu(new MenuItem[] { new MenuItem() });
             menu.CloneMenu(new SubMenu(items));
             AssertEqualMenuItems(items, menu.MenuItems.Cast<MenuItem>().ToArray());
             for (int i = 0; i < items.Length; i++)
@@ -683,21 +681,21 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Menu_CloneMenu_NullMenuSource_ThrowsArgumentNullException()
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>());
+            using var menu = new SubMenu(Array.Empty<MenuItem>());
             Assert.Throws<ArgumentNullException>("menuSrc", () => menu.CloneMenu(null));
         }
 
         [Fact]
         public void Menu_CreateMenuHandle_Invoke_ReturnsExpected()
         {
-            var menu = new SubMenu(Array.Empty<MenuItem>());
+            using var menu = new SubMenu(Array.Empty<MenuItem>());
             Assert.NotEqual(IntPtr.Zero, menu.CreateMenuHandle());
         }
 
         [Fact]
         public void Menu_ToString_Invoke_ReturnsExpected()
         {
-            var menu = new SubMenu(new MenuItem[] { new MenuItem() });
+            using var menu = new SubMenu(new MenuItem[] { new MenuItem() });
             Assert.Equal("System.Windows.Forms.Tests.MenuTests+SubMenu, Items.Count: 1", menu.ToString());
         }
 
@@ -735,11 +733,46 @@ namespace System.Windows.Forms.Tests
             {
             }
 
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new EventHandlerList Events => base.Events;
+
             public new IntPtr CreateMenuHandle() => base.CreateMenuHandle();
 
             public new int FindMergePosition(int mergeOrder) => base.FindMergePosition(mergeOrder);
 
             public new void CloneMenu(Menu menuSrc) => base.CloneMenu(menuSrc);
+
+            public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        public class SubMenuItem : MenuItem
+        {
+            public SubMenuItem() : base()
+            {
+            }
+
+            public SubMenuItem(string text) : base(text)
+            {
+            }
+
+            public SubMenuItem(string text, EventHandler onClick) : base(text, onClick)
+            {
+            }
+
+            public SubMenuItem(string text, MenuItem[] items) : base(text, items)
+            {
+            }
+
+            public SubMenuItem(string text, EventHandler onClick, Shortcut shortcut) : base(text, onClick, shortcut)
+            {
+            }
+
+            public SubMenuItem(MenuMerge mergeType, int mergeOrder, Shortcut shortcut, string text, EventHandler onClick, EventHandler onPopup, EventHandler onSelect, MenuItem[] items) : base(mergeType, mergeOrder, shortcut, text, onClick, onPopup, onSelect, items)
+            {
+            }
 
             public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
         }

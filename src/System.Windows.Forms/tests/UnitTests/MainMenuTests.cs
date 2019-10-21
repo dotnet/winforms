@@ -11,38 +11,46 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MainMenuTestsTests
+    public class MainMenuTests
     {
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_Ctor_Default()
         {
-            var menu = new MainMenu();
+            using var menu = new SubMainMenu();
+            Assert.True(menu.CanRaiseEvents);
+            Assert.Null(menu.Container);
+            Assert.False(menu.DesignMode);
+            Assert.NotNull(menu.Events);
+            Assert.Same(menu.Events, menu.Events);
             Assert.Empty(menu.MenuItems);
+            Assert.Empty(menu.Name);
             Assert.False(menu.IsParent);
             Assert.Equal(RightToLeft.Inherit, menu.RightToLeft);
             Assert.Null(menu.GetForm());
-            Assert.Empty(menu.Name);
             Assert.Null(menu.Site);
-            Assert.Null(menu.Container);
             Assert.Null(menu.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_Ctor_IContainer()
         {
             var container = new Container();
-            var menu = new MainMenu(container);
-            Assert.Empty(menu.MenuItems);
+            using var menu = new SubMainMenu(container);
+            Assert.True(menu.CanRaiseEvents);
+            Assert.Same(container, menu.Container);
+            Assert.False(menu.DesignMode);
+            Assert.NotNull(menu.Events);
+            Assert.Same(menu.Events, menu.Events);
             Assert.False(menu.IsParent);
+            Assert.Empty(menu.MenuItems);
+            Assert.Empty(menu.Name);
             Assert.Equal(RightToLeft.Inherit, menu.RightToLeft);
             Assert.Null(menu.GetForm());
-            Assert.Empty(menu.Name);
             Assert.NotNull(menu.Site);
-            Assert.Equal(container, menu.Container);
             Assert.Null(menu.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_Ctor_NullContainer_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("container", () => new MainMenu((IContainer)null));
@@ -50,121 +58,134 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_MenuItemArray_TestData()
         {
-            yield return new object[] { null, false };
-            yield return new object[] { Array.Empty<MenuItem>(), false };
-            yield return new object[] { new MenuItem[] { new MenuItem() }, true };
+            using var menuItem = new MenuItem();
+            yield return new object[] { null, false, Array.Empty<MenuItem>() };
+            yield return new object[] { Array.Empty<MenuItem>(), false, Array.Empty<MenuItem>() };
+            yield return new object[] { new MenuItem[] { menuItem }, true, new MenuItem[] { menuItem } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_MenuItemArray_TestData))]
-        public void MainMenu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent)
+        public void MainMenu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent, MenuItem[] expectedItems)
         {
-            var menu = new MainMenu(items);
-            Assert.Equal(items ?? Array.Empty<MenuItem>(), menu.MenuItems.Cast<MenuItem>());
-            for (int i = 0; i < (items?.Length ?? 0); i++)
+            using var menu = new SubMainMenu(items);
+            Assert.True(menu.CanRaiseEvents);
+            Assert.Null(menu.Container);
+            Assert.False(menu.DesignMode);
+            Assert.NotNull(menu.Events);
+            Assert.Same(menu.Events, menu.Events);
+            Assert.Equal(expectedIsParent, menu.IsParent);
+            Assert.Equal(expectedItems, menu.MenuItems.Cast<MenuItem>());
+            for (int i = 0; i < menu.MenuItems.Count; i++)
             {
                 Assert.Equal(i, menu.MenuItems[i].Index);
                 Assert.Equal(menu, menu.MenuItems[i].Parent);
             }
-            Assert.Equal(expectedIsParent, menu.IsParent);
+            Assert.Empty(menu.Name);
             Assert.Equal(RightToLeft.Inherit, menu.RightToLeft);
             Assert.Null(menu.GetForm());
-            Assert.Empty(menu.Name);
             Assert.Null(menu.Site);
-            Assert.Null(menu.Container);
             Assert.Null(menu.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_Ctor_NullItemInMenuItemArray_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("item", () => new MainMenu(new MenuItem[] { null }));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_GetForm_AddedToForm_ReturnsExpected()
         {
-            var form = new Form
+            using var menu = new MainMenu();
+            using var form = new Form
             {
-                Menu = new MainMenu()
+                Menu = menu
             };
-
-            MainMenu menu = form.Menu;
             Assert.Equal(form, menu.GetForm());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RightToLeft), MemberType = typeof(CommonTestHelper))]
         public void MainMenu_RightToLeft_SetWithoutForm_GetReturnsExpected(RightToLeft value)
         {
-            var menu = new MainMenu
+            using var menu = new MainMenu
             {
                 RightToLeft = value
             };
             Assert.Equal(value, menu.RightToLeft);
+            
+            // Set same.
+            menu.RightToLeft = value;
+            Assert.Equal(value, menu.RightToLeft);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
         [InlineData(RightToLeft.No, RightToLeft.No)]
         [InlineData(RightToLeft.Inherit, RightToLeft.Yes)]
         public void MainMenu_RightToLeft_SetWithSourceControl_GetReturnsExpected(RightToLeft value, RightToLeft expectedValue)
         {
+            using var menu = new MainMenu();
             var form = new Form
             {
-                Menu = new MainMenu(),
+                Menu = menu,
                 RightToLeft = RightToLeft.Yes
             };
-            MainMenu menu = form.Menu;
 
+            menu.RightToLeft = value;
+            Assert.Equal(expectedValue, menu.RightToLeft);
+            
+            // Set same.
             menu.RightToLeft = value;
             Assert.Equal(expectedValue, menu.RightToLeft);
         }
 
-        [Fact]
-        public void MainMenu_RightToLeft_SetCreated_GetReturnsExpected()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void MainMenu_RightToLeft_SetCreated_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            using (var menu = new MainMenu(new MenuItem[] { new MenuItem("text") }))
-            {
-                Assert.NotEqual(IntPtr.Zero, menu.Handle);
-                menu.RightToLeft = RightToLeft.Yes;
-                menu.RightToLeft = RightToLeft.No;
-                Assert.Equal(RightToLeft.No, menu.RightToLeft);
-            }
+            using var menu = new MainMenu(new MenuItem[] { new MenuItem("text") });
+            Assert.NotEqual(IntPtr.Zero, menu.Handle);
+
+            menu.RightToLeft = value;
+            Assert.Equal(expected, menu.RightToLeft);
+
+            // Set same.
+            menu.RightToLeft = value;
+            Assert.Equal(expected, menu.RightToLeft);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft), MemberType = typeof(CommonTestHelper))]
         public void MainMenu_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var menu = new MainMenu();
+            using var menu = new MainMenu();
             Assert.Throws<InvalidEnumArgumentException>("RightToLeft", () => menu.RightToLeft = value);
         }
 
-        [Fact]
-        public void MainMenu_OnCollapse_Invoke_Success()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void MainMenu_OnCollapse_Invoke_CallsCollapse(EventArgs eventArgs)
         {
-            var menu = new MainMenu();
-
-            // No handler.
-            menu.OnCollapse(null);
-
-            // Handler.
+            using var menu = new SubMainMenu();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
-                Assert.Equal(menu, sender);
+                Assert.Same(menu, sender);
+                Assert.Same(eventArgs, e);
                 callCount++;
             };
-
+        
+            // Call with handler.
             menu.Collapse += handler;
-            menu.OnCollapse(null);
+            menu.OnCollapse(eventArgs);
             Assert.Equal(1, callCount);
-
-            // Should not call if the handler is removed.
-            menu.Collapse -= handler;
-            menu.OnCollapse(null);
-            Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           menu.Collapse -= handler;
+           menu.OnCollapse(eventArgs);
+           Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> CloneMenu_TestData()
@@ -173,15 +194,15 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new MenuItem[] { new MenuItem("text") } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CloneMenu_TestData))]
         public void MainMenu_CloneMenu_Invoke_Success(MenuItem[] items)
         {
-            var source = new MainMenu(items)
+            using var source = new MainMenu(items)
             {
                 RightToLeft = RightToLeft.No
             };
-            MainMenu menu = source.CloneMenu();
+            using MainMenu menu = source.CloneMenu();
             Assert.NotSame(source, menu);
             Assert.Equal(items.Select(m => m.Name), menu.MenuItems.Cast<MenuItem>().Select(m => m.Name));
             Assert.Equal(source.IsParent, menu.IsParent);
@@ -193,28 +214,28 @@ namespace System.Windows.Forms.Tests
             Assert.Null(menu.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_CreateMenuHandle_Invoke_ReturnsExpected()
         {
-            var menu = new SubMainMenu();
+            using var menu = new SubMainMenu();
             Assert.NotEqual(IntPtr.Zero, menu.CreateMenuHandle());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_Dispose_HasForm_Success()
         {
-            var form = new Form
+            using var menu = new MainMenu();
+            using var form = new Form
             {
-                Menu = new MainMenu()
+                Menu = menu
             };
 
-            MainMenu menu = form.Menu;
             menu.Dispose();
             Assert.Null(menu.GetForm());
             Assert.Null(form.Menu);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MainMenu_Dispose_HasOwnerForm_Success()
         {
             var parentForm = new Form { IsMdiContainer = true };
@@ -232,6 +253,24 @@ namespace System.Windows.Forms.Tests
 
         private class SubMainMenu : MainMenu
         {
+            public SubMainMenu() : base()
+            {
+            }
+            
+            public SubMainMenu(IContainer container) : base(container)
+            {
+            }
+            
+            public SubMainMenu(MenuItem[] items) : base(items)
+            {
+            }
+
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new EventHandlerList Events => base.Events;
+
             public new IntPtr CreateMenuHandle() => base.CreateMenuHandle();
 
             public new void OnCollapse(EventArgs e) => base.OnCollapse(e);
