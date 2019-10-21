@@ -22,21 +22,9 @@ namespace System.Windows.Forms
                 _owner = owner;
             }
 
-            public override Rectangle Bounds
-            {
-                get
-                {
-                    // Get rectangle without a title bar
-                    Rectangle rectangle = _owner.GetToolNativeScreenRectangle();
+            public override Rectangle Bounds => _owner.RectangleToScreen(_owner.ClientRectangle);
 
-                    // Add a title bar height 
-                    int titleHeight = rectangle.Y - _owner.Top - 1;
-                    rectangle.Y -= titleHeight;
-                    rectangle.Height += titleHeight;
-
-                    return rectangle;
-                }
-            }
+            internal override Rectangle BoundingRectangle => _owner.Bounds;
 
             internal override bool IsIAccessibleExSupported()
             {
