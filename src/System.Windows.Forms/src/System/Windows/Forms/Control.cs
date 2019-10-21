@@ -14045,7 +14045,7 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.SetExtent(uint dwDrawAspect, Size* pSizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.SetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
         {
             if (pSizel == null)
             {
@@ -14059,7 +14059,7 @@ namespace System.Windows.Forms
             return Interop.HRESULT.S_OK;
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.GetExtent(uint dwDrawAspect, Size* pSizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.GetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
         {
             if (pSizel == null)
             {
@@ -14097,32 +14097,34 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleObject.GetMiscStatus(int dwAspect, out int cookie)
+        unsafe HRESULT UnsafeNativeMethods.IOleObject.GetMiscStatus(Ole32.DVASPECT dwAspect, Ole32.OLEMISC* pdwStatus)
         {
-            if ((dwAspect & NativeMethods.DVASPECT_CONTENT) != 0)
+            if (pdwStatus == null)
             {
-                int status = NativeMethods.OLEMISC_ACTIVATEWHENVISIBLE | NativeMethods.OLEMISC_INSIDEOUT | NativeMethods.OLEMISC_SETCLIENTSITEFIRST;
-
-                if (GetStyle(ControlStyles.ResizeRedraw))
-                {
-                    status |= NativeMethods.OLEMISC_RECOMPOSEONRESIZE;
-                }
-
-                if (this is IButtonControl)
-                {
-                    status |= NativeMethods.OLEMISC_ACTSLIKEBUTTON;
-                }
-
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMiscStatus. Status: " + status.ToString(CultureInfo.InvariantCulture));
-                cookie = status;
+                return HRESULT.E_POINTER;
             }
-            else
+
+            if ((dwAspect & Ole32.DVASPECT.CONTENT) != 0)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMiscStatus.  Status: ERROR, wrong aspect.");
-                cookie = 0;
-                return NativeMethods.DV_E_DVASPECT;
+                *pdwStatus = 0;
+                return HRESULT.DV_E_DVASPECT;
             }
-            return NativeMethods.S_OK;
+
+            Ole32.OLEMISC status = Ole32.OLEMISC.ACTIVATEWHENVISIBLE | Ole32.OLEMISC.INSIDEOUT | Ole32.OLEMISC.SETCLIENTSITEFIRST;
+            if (GetStyle(ControlStyles.ResizeRedraw))
+            {
+                status |= Ole32.OLEMISC.RECOMPOSEONRESIZE;
+            }
+
+            if (this is IButtonControl)
+            {
+                status |= Ole32.OLEMISC.ACTSLIKEBUTTON;
+            }
+
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMiscStatus. Status: " + status.ToString(CultureInfo.InvariantCulture));
+            *pdwStatus = status;
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleObject.SetColorScheme(NativeMethods.tagLOGPALETTE pLogpal)
@@ -14273,7 +14275,7 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetContentExtent");
             Debug.Indent();
-            ActiveXInstance.SetExtent(NativeMethods.DVASPECT_CONTENT, pSizel);
+            ActiveXInstance.SetExtent(Ole32.DVASPECT.CONTENT, pSizel);
             Debug.Unindent();
             return Interop.HRESULT.S_OK;
         }
@@ -14287,12 +14289,12 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetContentExtent");
             Debug.Indent();
-            ActiveXInstance.GetExtent(NativeMethods.DVASPECT_CONTENT, pSizel);
+            ActiveXInstance.GetExtent(Ole32.DVASPECT.CONTENT, pSizel);
             Debug.Unindent();
             return Interop.HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IViewObject.Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
+        int UnsafeNativeMethods.IViewObject.Draw(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                             IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
                                             IntPtr pfnContinue, int dwContinue)
         {
@@ -14316,7 +14318,7 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IViewObject.GetColorSet(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
+        int UnsafeNativeMethods.IViewObject.GetColorSet(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                                    IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
@@ -14326,7 +14328,7 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IViewObject.Freeze(int dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze)
+        int UnsafeNativeMethods.IViewObject.Freeze(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
             return NativeMethods.E_NOTIMPL;
@@ -14338,19 +14340,19 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        void UnsafeNativeMethods.IViewObject.SetAdvise(int aspects, int advf, IAdviseSink pAdvSink)
+        void UnsafeNativeMethods.IViewObject.SetAdvise(Ole32.DVASPECT aspects, int advf, IAdviseSink pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        void UnsafeNativeMethods.IViewObject.GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
+        void UnsafeNativeMethods.IViewObject.GetAdvise(Ole32.DVASPECT[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
         }
 
-        void UnsafeNativeMethods.IViewObject2.Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
+        void UnsafeNativeMethods.IViewObject2.Draw(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                              IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
                                              IntPtr pfnContinue, int dwContinue)
         {
@@ -14361,7 +14363,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        int UnsafeNativeMethods.IViewObject2.GetColorSet(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
+        int UnsafeNativeMethods.IViewObject2.GetColorSet(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                                     IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
@@ -14371,7 +14373,7 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IViewObject2.Freeze(int dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze)
+        int UnsafeNativeMethods.IViewObject2.Freeze(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
             return NativeMethods.E_NOTIMPL;
@@ -14383,19 +14385,19 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        void UnsafeNativeMethods.IViewObject2.SetAdvise(int aspects, int advf, IAdviseSink pAdvSink)
+        void UnsafeNativeMethods.IViewObject2.SetAdvise(Ole32.DVASPECT aspects, int advf, IAdviseSink pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        void UnsafeNativeMethods.IViewObject2.GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
+        void UnsafeNativeMethods.IViewObject2.GetAdvise(Ole32.DVASPECT[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IViewObject2.GetExtent(uint dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, Size *lpsizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IViewObject2.GetExtent(Ole32.DVASPECT dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, Size *lpsizel)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent (IViewObject2)");
             // we already have an implementation of this [from IOleObject]

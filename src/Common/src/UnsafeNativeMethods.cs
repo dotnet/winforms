@@ -653,7 +653,7 @@ namespace System.Windows.Forms
                 BOOL fEnterMode);
 
             [PreserveSig]
-            int CanInPlaceActivate();
+            HRESULT CanInPlaceActivate();
 
             [PreserveSig]
             int OnInPlaceActivate();
@@ -1193,10 +1193,14 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT SetExtent(
+                Ole32.DVASPECT dwDrawAspect,
+                Size* pSizel);
 
             [PreserveSig]
-            HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT GetExtent(
+                Ole32.DVASPECT dwDrawAspect,
+                Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -1212,10 +1216,9 @@ namespace System.Windows.Forms
             int EnumAdvise(out IEnumSTATDATA e);
 
             [PreserveSig]
-            int GetMiscStatus(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwAspect,
-                    out int misc);
+            HRESULT GetMiscStatus(
+                Ole32.DVASPECT dwAspect,
+                Ole32.OLEMISC* pdwStatus);
 
             [PreserveSig]
             int SetColorScheme(
@@ -1308,10 +1311,14 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT SetExtent(
+                Ole32.DVASPECT dwDrawAspect, 
+                Size* pSizel);
 
             [PreserveSig]
-            HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT GetExtent(
+                Ole32.DVASPECT dwDrawAspect,
+                Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -1328,10 +1335,9 @@ namespace System.Windows.Forms
             int EnumAdvise(out IEnumSTATDATA e);
 
             [PreserveSig]
-            int GetMiscStatus(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwAspect,
-                    out int misc);
+            HRESULT GetMiscStatus(
+                Ole32.DVASPECT dwAspect,
+                Ole32.OLEMISC* pdwStatus);
 
             [PreserveSig]
             int SetColorScheme(
@@ -1377,8 +1383,7 @@ namespace System.Windows.Forms
         {
             [PreserveSig]
             int Draw(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1395,8 +1400,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int GetColorSet(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1407,8 +1411,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int Freeze(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [Out]
@@ -1420,8 +1423,7 @@ namespace System.Windows.Forms
                 int dwFreeze);
 
             void SetAdvise(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int aspects,
+                Ole32.DVASPECT aspects,
                 [In, MarshalAs(UnmanagedType.U4)]
                 int advf,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -1430,7 +1432,7 @@ namespace System.Windows.Forms
             void GetAdvise(
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] paspects,
+                Ole32.DVASPECT[] paspects,
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 int[] advf,
@@ -1445,8 +1447,7 @@ namespace System.Windows.Forms
         public unsafe interface IViewObject2 /* : IViewObject */
         {
             void Draw(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1463,8 +1464,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int GetColorSet(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1475,8 +1475,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int Freeze(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [Out]
@@ -1488,8 +1487,7 @@ namespace System.Windows.Forms
                 int dwFreeze);
 
             void SetAdvise(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int aspects,
+                Ole32.DVASPECT aspects,
                 [In, MarshalAs(UnmanagedType.U4)]
                 int advf,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -1498,7 +1496,7 @@ namespace System.Windows.Forms
             void GetAdvise(
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] paspects,
+                Ole32.DVASPECT[] paspects,
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 int[] advf,
@@ -1508,7 +1506,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT GetExtent(
-                uint dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 NativeMethods.tagDVTARGETDEVICE ptd,
                 Size *lpsizel);
@@ -1905,14 +1903,12 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
             public int cbSize = Marshal.SizeOf<tagQACONTROL>();
 
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=4, dwMiscStatus)*/]
-            public int dwMiscStatus = 0;
+            public Ole32.OLEMISC dwMiscStatus = 0;
 
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, dwViewStatus)*/]
             public int dwViewStatus = 0;
 
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, dwEventCookie)*/]
-            public int dwEventCookie = 0;
+            public uint dwEventCookie = 0;
 
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=16, dwPropNotifyCookie)*/]
             public int dwPropNotifyCookie = 0;

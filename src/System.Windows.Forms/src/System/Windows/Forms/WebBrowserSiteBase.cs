@@ -242,9 +242,9 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
+        HRESULT UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         unsafe int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()

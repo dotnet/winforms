@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         public const uint DISPATCH_METHOD = 0x1;
         public const uint DISPATCH_PROPERTYGET = 0x2;
         public const uint DISPATCH_PROPERTYPUT = 0x4;
-        public const int DV_E_DVASPECT = unchecked((int)0x8004006B),
+        public const int
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DIB_RGB_COLORS = 0,
@@ -286,10 +286,7 @@ namespace System.Windows.Forms
         DTN_FORMAT = ((0 - 760) + 17),
         DTN_FORMATQUERY = ((0 - 760) + 18),
         DTN_DROPDOWN = ((0 - 760) + 6),
-        DTN_CLOSEUP = ((0 - 760) + 7),
-        DVASPECT_CONTENT = 1,
-        DVASPECT_TRANSPARENT = 32,
-        DVASPECT_OPAQUE = 16;
+        DTN_CLOSEUP = ((0 - 760) + 7);
 
         public const int E_NOTIMPL = unchecked((int)0x80004001),
         E_OUTOFMEMORY = unchecked((int)0x8007000E),
@@ -747,12 +744,6 @@ namespace System.Windows.Forms
         OLEIVERB_DISCARDUNDOSTATE = -6,
         OLEIVERB_PROPERTIES = -7,
         OLE_E_INVALIDRECT = unchecked((int)0x8004000D),
-        OLE_E_NOCONNECTION = unchecked((int)0x80040004),
-        OLEMISC_RECOMPOSEONRESIZE = 0x00000001,
-        OLEMISC_INSIDEOUT = 0x00000080,
-        OLEMISC_ACTIVATEWHENVISIBLE = 0x0000100,
-        OLEMISC_ACTSLIKEBUTTON = 0x00001000,
-        OLEMISC_SETCLIENTSITEFIRST = 0x00020000,
         OLECLOSE_SAVEIFDIRTY = 0,
         OLECLOSE_PROMPTSAVE = 2;
 
@@ -1060,8 +1051,6 @@ namespace System.Windows.Forms
         USERCLASSTYPE_SHORT = 2,
         USERCLASSTYPE_APPNAME = 3,
         UOI_FLAGS = 1;
-
-        public const int VIEW_E_DRAW = unchecked((int)0x80040140);
 
         public const int WSF_VISIBLE = 0x0001;
 
@@ -2504,32 +2493,6 @@ namespace System.Windows.Forms
         public class ActiveX
         {
             public const int OCM__BASE = 0x2000;
-            public const int DVASPECT_CONTENT = 0x1;
-            public const int DVASPECT_THUMBNAIL = 0x2;
-            public const int DVASPECT_ICON = 0x4;
-            public const int DVASPECT_DOCPRINT = 0x8;
-            public const int OLEMISC_RECOMPOSEONRESIZE = 0x1;
-            public const int OLEMISC_ONLYICONIC = 0x2;
-            public const int OLEMISC_INSERTNOTREPLACE = 0x4;
-            public const int OLEMISC_STATIC = 0x8;
-            public const int OLEMISC_CANTLINKINSIDE = 0x10;
-            public const int OLEMISC_CANLINKBYOLE1 = 0x20;
-            public const int OLEMISC_ISLINKOBJECT = 0x40;
-            public const int OLEMISC_INSIDEOUT = 0x80;
-            public const int OLEMISC_ACTIVATEWHENVISIBLE = 0x100;
-            public const int OLEMISC_RENDERINGISDEVICEINDEPENDENT = 0x200;
-            public const int OLEMISC_INVISIBLEATRUNTIME = 0x400;
-            public const int OLEMISC_ALWAYSRUN = 0x800;
-            public const int OLEMISC_ACTSLIKEBUTTON = 0x1000;
-            public const int OLEMISC_ACTSLIKELABEL = 0x2000;
-            public const int OLEMISC_NOUIACTIVATE = 0x4000;
-            public const int OLEMISC_ALIGNABLE = 0x8000;
-            public const int OLEMISC_SIMPLEFRAME = 0x10000;
-            public const int OLEMISC_SETCLIENTSITEFIRST = 0x20000;
-            public const int OLEMISC_IMEMODE = 0x40000;
-            public const int OLEMISC_IGNOREACTIVATEWHENVISIBLE = 0x80000;
-            public const int OLEMISC_WANTSTOMENUMERGE = 0x100000;
-            public const int OLEMISC_SUPPORTSMULTILEVELUNDO = 0x200000;
             public const int QACONTAINER_SHOWHATCHING = 0x1;
             public const int QACONTAINER_SHOWGRABHANDLES = 0x2;
             public const int QACONTAINER_USERMODE = 0x4;
