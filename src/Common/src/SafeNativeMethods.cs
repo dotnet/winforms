@@ -117,9 +117,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern bool LPtoDP(HandleRef hDC, ref RECT lpRect, int nCount);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetMapMode(IntPtr hDC, int nMapMode);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindowEnabled(HandleRef hWnd);
 

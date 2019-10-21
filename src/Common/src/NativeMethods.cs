@@ -634,8 +634,6 @@ namespace System.Windows.Forms
         MA_ACTIVATEANDEAT = 0x0002,
         MA_NOACTIVATE = 0x0003,
         MA_NOACTIVATEANDEAT = 0x0004,
-        MM_TEXT = 1,
-        MM_ANISOTROPIC = 8,
         MNC_EXECUTE = 2,
         MNC_SELECT = 3,
         MIIM_STATE = 0x00000001,
@@ -2789,8 +2787,6 @@ namespace System.Windows.Forms
         public const int STAP_ALLOW_WEBCONTENT = (1 << 2);
 
         public const int WS_EX_TRANSPARENT = 0x00000020;
-
-        public const int MM_HIMETRIC = 3;
 
         // Threading stuff
         public const uint STILL_ACTIVE = 259;

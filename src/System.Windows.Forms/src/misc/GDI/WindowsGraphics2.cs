@@ -559,14 +559,9 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Gdi32.TEXTMETRICW GetTextMetrics()
         {
-            var tm = new Gdi32.TEXTMETRICW();
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
-
             // Set the mapping mode to MM_TEXT so we deal with units of pixels.
-            DeviceContextMapMode mapMode = DeviceContext.MapMode;
-
-            bool setupDC = mapMode != DeviceContextMapMode.Text;
-
+            Gdi32.MM mapMode = DeviceContext.MapMode;
+            bool setupDC = mapMode != Gdi32.MM.TEXT;
             if (setupDC)
             {
                 // Changing the MapMode will affect viewport and window extent and origin, we save the dc
@@ -578,10 +573,12 @@ namespace System.Windows.Forms.Internal
             {
                 if (setupDC)
                 {
-                    mapMode = DeviceContext.SetMapMode(DeviceContextMapMode.Text);
+                    mapMode = DeviceContext.SetMapMode(Gdi32.MM.TEXT);
                 }
 
-                Gdi32.GetTextMetricsW(hdc, ref tm);
+                var tm = new Gdi32.TEXTMETRICW();
+                Gdi32.GetTextMetricsW(new HandleRef(DeviceContext, DeviceContext.Hdc), ref tm);
+                return tm;
             }
             finally
             {
@@ -590,8 +587,6 @@ namespace System.Windows.Forms.Internal
                     DeviceContext.RestoreHdc();
                 }
             }
-
-            return tm;
         }
     }
 }
