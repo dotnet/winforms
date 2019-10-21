@@ -62,9 +62,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int GetClipboardFormatName(int format, StringBuilder lpString, int cchMax);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static unsafe extern bool SetWindowExtEx(IntPtr hDC, int x, int y, Size *size);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool TrackPopupMenuEx(HandleRef hmenu, int fuFlags, int x, int y, HandleRef hwnd, NativeMethods.TPMPARAMS tpm);
 
@@ -98,9 +95,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits);
 
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true)]
-        public static unsafe extern bool SetViewportExtEx(IntPtr hDC, int x, int y, Size *size);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool AdjustWindowRectEx(ref Interop.RECT lpRect, int dwStyle, bool bMenu, int dwExStyle);
 
@@ -120,24 +114,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static unsafe extern bool SetViewportOrgEx(IntPtr hdc, int x, int y, Point *lppt);
-
-        public static unsafe bool SetViewportOrgEx(HandleRef hdc, int x, int y, Point *lppt)
-        {
-            bool result = SetViewportOrgEx(hdc.Handle, x, y, lppt);
-            GC.KeepAlive(hdc.Wrapper);
-            return result;
-        }
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern bool LPtoDP(HandleRef hDC, ref RECT lpRect, int nCount);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static unsafe extern bool SetWindowOrgEx(IntPtr hdc, int x, int y, Point *lppt);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetViewportOrgEx(IntPtr hdc, out Point lppoint);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int SetMapMode(IntPtr hDC, int nMapMode);
