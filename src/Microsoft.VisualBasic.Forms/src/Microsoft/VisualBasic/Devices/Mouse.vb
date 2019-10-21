@@ -3,7 +3,12 @@
 ' See the LICENSE file in the project root for more information.
 
 Option Strict On
-Option Explicit On
+Option Explicit On 
+
+Imports System.ComponentModel
+Imports System.Windows.Forms
+Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -15,6 +20,54 @@ Namespace Microsoft.VisualBasic.Devices
     ''' This class is a Singleton Class. See Common.Computer for details.
     ''' </summary>
     Public Class Mouse
+
+        ''' <summary>
+        ''' Gets a value indicating whether the functions of the left and right
+        ''' mouses buttons have been swapped.
+        ''' </summary>
+        ''' <value>
+        ''' true if the functions of the left and right mouse buttons are swapped. false otherwise. 
+        ''' </value>
+        ''' <exception cref="System.InvalidOperationException">If no mouse is installed.</exception>
+        Public ReadOnly Property ButtonsSwapped() As Boolean
+            Get
+                If System.Windows.Forms.SystemInformation.MousePresent Then
+                    Return SystemInformation.MouseButtonsSwapped
+                Else
+                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                End If
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Gets a value indicating whether a mouse with a mouse wheel is installed
+        ''' </summary>
+        ''' <value>true if a mouse with a mouse wheel is installed, false otherwise.</value>
+        ''' <exception cref="System.InvalidOperationException">If no mouse is installed.</exception>
+        Public ReadOnly Property WheelExists() As Boolean
+            Get
+                If System.Windows.Forms.SystemInformation.MousePresent Then
+                    Return SystemInformation.MouseWheelPresent
+                Else
+                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                End If
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Gets the number of lines to scroll when the mouse wheel is rotated.
+        ''' </summary>
+        ''' <value>The number of lines to scroll.</value>
+        ''' <exception cref="System.InvalidOperationException">if no mouse is installed or no wheels exists.</exception>
+        Public ReadOnly Property WheelScrollLines() As Integer
+            Get
+                If WheelExists Then
+                    Return SystemInformation.MouseWheelScrollLines
+                Else
+                    Throw GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
+                End If
+            End Get
+        End Property
 
     End Class 'Mouse
 End Namespace

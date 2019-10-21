@@ -40,6 +40,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
+        ''' Provides access to logging capability.
+        ''' </summary>
+        ''' <value>Returns a Microsoft.VisualBasic.Windows.Log object used for logging to OS log, debug window
+        ''' and a delimited text file or xml log.</value>
+        Public ReadOnly Property Log() As Logging.Log
+            Get
+                If m_Log Is Nothing Then
+                    m_Log = New Logging.Log
+                End If
+                Return m_Log
+            End Get
+        End Property
+
+        ''' <summary>
         ''' Returns the info about the application.  If we are executing in a DLL, we still return the info
         ''' about the application, not the DLL.
         ''' </summary>
@@ -102,6 +116,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             System.Threading.Thread.CurrentThread.CurrentUICulture = New System.Globalization.CultureInfo(cultureName)
         End Sub
 
+        Private m_Log As Logging.Log 'Lazy-initialized and cached log object.
         Private m_Info As AssemblyInfo ' The executing application (the EntryAssembly)
     End Class 'ApplicationBase
 End Namespace

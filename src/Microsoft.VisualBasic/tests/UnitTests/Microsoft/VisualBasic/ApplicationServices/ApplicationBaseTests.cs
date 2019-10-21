@@ -87,5 +87,14 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             Assert.Equal(assemblyName.Name, app.Info.AssemblyName);
             Assert.Equal(assemblyName.Version, app.Info.Version);
         }
+
+        [Fact]
+        public void Log()
+        {
+            var app = new ApplicationBase();
+            var log = app.Log;
+            _ = log.TraceSource;
+            _ = log.DefaultFileLogWriter;
+        }
     }
 }

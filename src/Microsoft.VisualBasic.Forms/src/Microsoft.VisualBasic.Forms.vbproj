@@ -13,7 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\VBInputBox.Designer.vb">
+    <Compile Update="Resources\Microsoft\VisualBasic\ProgressDialog.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProgressDialog.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Microsoft\VisualBasic\CompilerServices\VBInputBox.Designer.vb">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>VBInputBox.resx</DependentUpon>
@@ -24,6 +29,9 @@
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
       <Namespace>System</Namespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Microsoft\VisualBasic\MyServices\Internal\ProgressDialog.resx">
+      <LogicalName>Microsoft.VisualBasic.MyServices.Internal.ProgressDialog.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Microsoft\VisualBasic\CompilerServices\VBInputBox.resx">
       <LogicalName>Microsoft.VisualBasic.CompilerServices.VBInputBox.resources</LogicalName>

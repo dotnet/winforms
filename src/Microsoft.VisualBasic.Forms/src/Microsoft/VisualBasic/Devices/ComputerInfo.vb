@@ -4,6 +4,7 @@
 
 Imports System
 Imports System.Diagnostics
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
@@ -79,6 +80,16 @@ Namespace Microsoft.VisualBasic.Devices
         Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
             Get
                 Return Globalization.CultureInfo.InstalledUICulture
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Gets the full operating system name.
+        ''' </summary>
+        ''' <value>A string contains the operating system name.</value>
+        Public ReadOnly Property OSFullName() As String
+            Get
+                Return RuntimeInformation.OSDescription
             End Get
         End Property
 

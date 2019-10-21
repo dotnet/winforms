@@ -34,6 +34,12 @@ namespace VisualBasicRuntimeTest
                 case "Interaction.MsgBox_VbHost":
                     Interaction_MsgBox(useVbHost: true);
                     break;
+                case "WindowsFormsApplicationBase.Run":
+                    WindowsFormsApplicationBase_Run();
+                    break;
+                case "ProgressDialog.ShowProgressDialog":
+                    ProgressDialog_ShowProgressDialog();
+                    break;
                 default:
                     throw new ArgumentException();
             }
@@ -51,6 +57,47 @@ namespace VisualBasicRuntimeTest
             var host = useVbHost ? new VbHost() : null;
             HostServices.VBHost = host;
             Interaction.MsgBox(Prompt: "Message", Buttons: MsgBoxStyle.OkCancel, Title: "Title");
+        }
+
+        private static void WindowsFormsApplicationBase_Run()
+        {
+            var mainForm = new Form();
+            var application = new WindowsApplication(mainForm);
+            bool valid = false;
+
+            mainForm.Load += (object sender, EventArgs e) =>
+            {
+                var forms = application.OpenForms;
+                valid = forms.Count == 1 &&
+                    forms[0] == mainForm &&
+                    application.ApplicationContext.MainForm == mainForm;
+                if (!valid)
+                {
+                    mainForm.Close();
+                }
+            };
+
+            application.Run(new string[0]);
+            if (!valid)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        private static void ProgressDialog_ShowProgressDialog()
+        {
+            var dialogType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.MyServices.Internal.ProgressDialog");
+            var showMethod = dialogType.GetMethod("ShowProgressDialog");
+            var dialog = (Form)Activator.CreateInstance(dialogType, nonPublic: true);
+            showMethod.Invoke(dialog, null);
+        }
+
+        private sealed class WindowsApplication : WindowsFormsApplicationBase
+        {
+            internal WindowsApplication(Form mainForm)
+            {
+                MainForm = mainForm;
+            }
         }
 
         private static string GetUniqueName() => Guid.NewGuid().ToString("D");
