@@ -1059,8 +1059,8 @@ namespace System.Windows.Forms
                       string szContainerObj);
 
             [PreserveSig]
-            int Close(
-                    int dwSaveOption);
+            HRESULT Close(
+                Ole32.OLECLOSE dwSaveOption);
 
             [PreserveSig]
             int SetMoniker(

@@ -304,15 +304,15 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Close
             /// </summary>
-            internal void Close(int dwSaveOption)
+            internal void Close(Ole32.OLECLOSE dwSaveOption)
             {
                 if (_activeXState[s_inPlaceActive])
                 {
                     InPlaceDeactivate();
                 }
 
-                if ((dwSaveOption == NativeMethods.OLECLOSE_SAVEIFDIRTY ||
-                     dwSaveOption == NativeMethods.OLECLOSE_PROMPTSAVE) &&
+                if ((dwSaveOption == Ole32.OLECLOSE.SAVEIFDIRTY ||
+                     dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
 
