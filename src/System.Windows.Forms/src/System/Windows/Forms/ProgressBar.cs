@@ -221,8 +221,9 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("MarqueeAnimationSpeed must be non-negative");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MarqueeAnimationSpeed), value, 0));
                 }
+
                 _marqueeAnimationSpeed = value;
                 if (!DesignMode)
                 {
