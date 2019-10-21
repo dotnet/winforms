@@ -328,7 +328,7 @@ namespace System.Windows.Forms
             ///  Implements IOleObject::DoVerb
             /// </summary>
             internal unsafe HRESULT DoVerb(
-                int iVerb,
+                Ole32.OLEIVERB iVerb,
                 User32.MSG* lpmsg,
                 UnsafeNativeMethods.IOleClientSite pActiveSite,
                 int lindex,
@@ -338,10 +338,10 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:ActiveXImpl:DoVerb(" + iVerb + ")");
                 switch (iVerb)
                 {
-                    case NativeMethods.OLEIVERB_SHOW:
-                    case NativeMethods.OLEIVERB_INPLACEACTIVATE:
-                    case NativeMethods.OLEIVERB_UIACTIVATE:
-                    case NativeMethods.OLEIVERB_PRIMARY:
+                    case Ole32.OLEIVERB.SHOW:
+                    case Ole32.OLEIVERB.INPLACEACTIVATE:
+                    case Ole32.OLEIVERB.UIACTIVATE:
+                    case Ole32.OLEIVERB.PRIMARY:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Show, InPlaceActivate, UIActivate");
                         InPlaceActivate(iVerb);
 
@@ -395,7 +395,7 @@ namespace System.Windows.Forms
                         break;
 
                     // These affect our visibility
-                    case NativeMethods.OLEIVERB_HIDE:
+                    case Ole32.OLEIVERB.HIDE:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Hide");
                         UIDeactivate();
                         InPlaceDeactivate();
@@ -531,12 +531,12 @@ namespace System.Windows.Forms
                     NativeMethods.tagOLEVERB verbPrimary = new NativeMethods.tagOLEVERB();
                     NativeMethods.tagOLEVERB verbProperties = new NativeMethods.tagOLEVERB();
 
-                    verbShow.lVerb = NativeMethods.OLEIVERB_SHOW;
-                    verbInplaceActivate.lVerb = NativeMethods.OLEIVERB_INPLACEACTIVATE;
-                    verbUIActivate.lVerb = NativeMethods.OLEIVERB_UIACTIVATE;
-                    verbHide.lVerb = NativeMethods.OLEIVERB_HIDE;
-                    verbPrimary.lVerb = NativeMethods.OLEIVERB_PRIMARY;
-                    verbProperties.lVerb = NativeMethods.OLEIVERB_PROPERTIES;
+                    verbShow.lVerb = Ole32.OLEIVERB.SHOW;
+                    verbInplaceActivate.lVerb = Ole32.OLEIVERB.INPLACEACTIVATE;
+                    verbUIActivate.lVerb = Ole32.OLEIVERB.UIACTIVATE;
+                    verbHide.lVerb = Ole32.OLEIVERB.HIDE;
+                    verbPrimary.lVerb = Ole32.OLEIVERB.PRIMARY;
+                    verbProperties.lVerb = Ole32.OLEIVERB.PROPERTIES;
                     verbProperties.lpszVerbName = SR.AXProperties;
                     verbProperties.grfAttribs = NativeMethods.ActiveX.OLEVERBATTRIB_ONCONTAINERMENU;
 
@@ -842,7 +842,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  In place activates this Object.
             /// </summary>
-            internal unsafe void InPlaceActivate(int verb)
+            internal unsafe void InPlaceActivate(Ole32.OLEIVERB verb)
             {
                 // If we don't have a client site, then there's not much to do.
                 // We also punt if this isn't an in-place site, since we can't
@@ -935,7 +935,7 @@ namespace System.Windows.Forms
                 }
 
                 // if we weren't asked to UIActivate, then we're done.
-                if (verb != NativeMethods.OLEIVERB_PRIMARY && verb != NativeMethods.OLEIVERB_UIACTIVATE)
+                if (verb != Ole32.OLEIVERB.PRIMARY && verb != Ole32.OLEIVERB.UIACTIVATE)
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> not becoming UIActive");
                     return;
@@ -1395,7 +1395,7 @@ namespace System.Windows.Forms
 
                 if (focus && _activeXState[s_inPlaceActive] && !_activeXState[s_uiActive])
                 {
-                    InPlaceActivate(NativeMethods.OLEIVERB_UIACTIVATE);
+                    InPlaceActivate(Ole32.OLEIVERB.UIACTIVATE);
                 }
             }
 

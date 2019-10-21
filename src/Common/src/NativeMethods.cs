@@ -714,13 +714,6 @@ namespace System.Windows.Forms
         OFN_NODEREFERENCELINKS = 0x00100000,
         OFN_ENABLESIZING = 0x00800000,
         OFN_USESHELLITEM = 0x01000000,
-        OLEIVERB_PRIMARY = 0,
-        OLEIVERB_SHOW = -1,
-        OLEIVERB_HIDE = -3,
-        OLEIVERB_UIACTIVATE = -4,
-        OLEIVERB_INPLACEACTIVATE = -5,
-        OLEIVERB_DISCARDUNDOSTATE = -6,
-        OLEIVERB_PROPERTIES = -7,
         OLECLOSE_SAVEIFDIRTY = 0,
         OLECLOSE_PROMPTSAVE = 2;
 
@@ -1811,7 +1804,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagOLEVERB
         {
-            public int lVerb;
+            public Ole32.OLEIVERB lVerb;
 
             [MarshalAs(UnmanagedType.LPWStr)/*leftover(offset=4, customMarshal="UniStringMarshaller", lpszVerbName)*/]
             public string lpszVerbName;

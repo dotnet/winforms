@@ -13973,7 +13973,7 @@ namespace System.Windows.Forms
         }
 
         unsafe HRESULT UnsafeNativeMethods.IOleObject.DoVerb(
-            int iVerb,
+            Ole32.OLEIVERB iVerb,
             User32.MSG* lpmsg,
             UnsafeNativeMethods.IOleClientSite pActiveSite,
             int lindex,
@@ -13984,7 +13984,7 @@ namespace System.Windows.Forms
             // doing the proper sign extension.  So, we do it here.
             //
             short sVerb = unchecked((short)iVerb);
-            iVerb = (int)sVerb;
+            iVerb = (Ole32.OLEIVERB)sVerb;
 
 #if DEBUG
             if (CompModSwitches.ActiveX.TraceInfo)
@@ -14002,11 +14002,6 @@ namespace System.Windows.Forms
             try
             {
                 return ActiveXInstance.DoVerb(iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
-            }
-            catch (Exception e)
-            {
-                Debug.Fail("Exception occurred during DoVerb(" + iVerb + ") " + e.ToString());
-                throw;
             }
             finally
             {

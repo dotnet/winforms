@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT DoVerb(
-                int iVerb,
+                Ole32.OLEIVERB iVerb,
                 User32.MSG* lpmsg,
                 IOleClientSite pActiveSite,
                 int lindex,
