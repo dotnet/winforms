@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             private readonly IWindowTarget _controlWindowTarget;
             private IntPtr _clipRegion;
             private UnsafeNativeMethods.IOleClientSite _clientSite;
-            private UnsafeNativeMethods.IOleInPlaceUIWindow _inPlaceUiWindow;
+            private Ole32.IOleInPlaceUIWindow _inPlaceUiWindow;
             private UnsafeNativeMethods.IOleInPlaceFrame _inPlaceFrame;
             private readonly ArrayList _adviseList;
             private IAdviseSink _viewAdviseSink;
@@ -907,7 +907,7 @@ namespace System.Windows.Forms
 
                     inPlaceSite.GetWindowContext(
                         out UnsafeNativeMethods.IOleInPlaceFrame pFrame,
-                        out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow,
+                        out Ole32.IOleInPlaceUIWindow pWindow,
                         &posRect,
                         &clipRect,
                         &inPlaceFrameInfo);
@@ -1370,9 +1370,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleInPlaceActiveObject::OnDocWindowActivate.
             /// </summary>
-            internal void OnDocWindowActivate(int fActivate)
+            internal void OnDocWindowActivate(BOOL fActivate)
             {
-                if (_activeXState[s_uiActive] && fActivate != 0 && _inPlaceFrame != null)
+                if (_activeXState[s_uiActive] && fActivate.IsTrue() && _inPlaceFrame != null)
                 {
                     // we have to explicitly say we don't wany any border space.
                     int hr = _inPlaceFrame.SetBorderSpace(null);

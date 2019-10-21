@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         UnsafeNativeMethods.IOleControl,
         UnsafeNativeMethods.IOleObject,
         Ole32.IOleInPlaceObject,
-        UnsafeNativeMethods.IOleInPlaceActiveObject,
+        Ole32.IOleInPlaceActiveObject,
         Ole32.IOleWindow,
         UnsafeNativeMethods.IViewObject,
         UnsafeNativeMethods.IViewObject2,
@@ -7427,7 +7427,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual void OnFrameWindowActivate(bool fActivate)
+        private protected virtual void OnFrameWindowActivate(bool fActivate)
         {
         }
 
@@ -13813,44 +13813,47 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow(IntPtr* phwnd)
+        unsafe HRESULT Ole32.IOleInPlaceActiveObject.GetWindow(IntPtr* phwnd)
         {
             return ((Ole32.IOleInPlaceObject)this).GetWindow(phwnd);
         }
 
-        HRESULT UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT Ole32.IOleInPlaceActiveObject.ContextSensitiveHelp(BOOL fEnterMode)
         {
             return ((Ole32.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator(User32.MSG* lpmsg)
+        unsafe HRESULT Ole32.IOleInPlaceActiveObject.TranslateAccelerator(User32.MSG* lpmsg)
         {
             return ActiveXInstance.TranslateAccelerator(lpmsg);
         }
 
-        void UnsafeNativeMethods.IOleInPlaceActiveObject.OnFrameWindowActivate(bool fActivate)
+        HRESULT Ole32.IOleInPlaceActiveObject.OnFrameWindowActivate(BOOL fActivate)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnFrameWindowActivate");
-            OnFrameWindowActivate(fActivate);
+            OnFrameWindowActivate(fActivate.IsTrue());
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IOleInPlaceActiveObject.OnDocWindowActivate(int fActivate)
+        HRESULT Ole32.IOleInPlaceActiveObject.OnDocWindowActivate(BOOL fActivate)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnDocWindowActivate.  Activate: " + fActivate.ToString(CultureInfo.InvariantCulture));
             Debug.Indent();
             ActiveXInstance.OnDocWindowActivate(fActivate);
             Debug.Unindent();
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IOleInPlaceActiveObject.ResizeBorder(NativeMethods.COMRECT prcBorder, UnsafeNativeMethods.IOleInPlaceUIWindow pUIWindow, bool fFrameWindow)
+        unsafe HRESULT Ole32.IOleInPlaceActiveObject.ResizeBorder(RECT* prcBorder, Ole32.IOleInPlaceUIWindow pUIWindow, BOOL fFrameWindow)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ResizesBorder");
-            // return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IOleInPlaceActiveObject.EnableModeless(int fEnable)
+        HRESULT Ole32.IOleInPlaceActiveObject.EnableModeless(BOOL fEnable)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnableModeless");
+            return HRESULT.E_NOTIMPL;
         }
 
         unsafe HRESULT Ole32.IOleInPlaceObject.GetWindow(IntPtr* phwnd)

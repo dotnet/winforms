@@ -190,8 +190,8 @@ namespace System.Windows.Forms
         private Ole32.IOleInPlaceObject iOleInPlaceObject;
         private UnsafeNativeMethods.IOleObject iOleObject;
         private UnsafeNativeMethods.IOleControl iOleControl;
-        private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObject;
-        private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
+        private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObject;
+        private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
         private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties iCategorizeProperties;
         private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
@@ -1918,7 +1918,7 @@ namespace System.Windows.Forms
                 axState[siteProcessedInputKey] = false;
                 try
                 {
-                    UnsafeNativeMethods.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
+                    Ole32.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
                     if (activeObj != null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
@@ -4395,7 +4395,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
                 out UnsafeNativeMethods.IOleInPlaceFrame ppFrame,
-                out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
+                out Ole32.IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
                 Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo)
@@ -4857,7 +4857,7 @@ namespace System.Windows.Forms
             return iOleControl;
         }
 
-        private UnsafeNativeMethods.IOleInPlaceActiveObject GetInPlaceActiveObject()
+        private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
         {
             // if our AxContainer was set an external active object then use it.
             if (iOleInPlaceActiveObjectExternal != null)
@@ -4871,7 +4871,7 @@ namespace System.Windows.Forms
                 Debug.Assert(instance != null, "must have the ocx");
                 try
                 {
-                    iOleInPlaceActiveObject = (UnsafeNativeMethods.IOleInPlaceActiveObject)instance;
+                    iOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)instance;
                 }
                 catch (InvalidCastException e)
                 {
@@ -6269,7 +6269,7 @@ namespace System.Windows.Forms
                 ctlInEditMode = null;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(UnsafeNativeMethods.IOleInPlaceActiveObject pActiveObject, string pszObjName)
+            HRESULT UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + (pszObjName ?? "<null>"));
                 if (siteUIActive != null)
@@ -6290,7 +6290,7 @@ namespace System.Windows.Forms
                         ctlInEditMode.editMode = EDITM_NONE;
                         ctlInEditMode = null;
                     }
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
                 AxHost ctl = null;
                 if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
