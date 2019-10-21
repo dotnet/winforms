@@ -95,8 +95,8 @@ namespace System.Windows.Forms
         private const int ExtraPadding = 2;
         private int scaledExtraPadding = ExtraPadding;
 
-        private IntPtr mdsBuffer = IntPtr.Zero;
-        private int mdsBufferSize = 0;
+        private IntPtr _mdsBuffer = IntPtr.Zero;
+        private int _mdsBufferSize = 0;
 
         // styles
         private Color titleBackColor = DEFAULT_TITLE_BACK_COLOR;
@@ -1055,8 +1055,8 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    NativeMethods.SYSTEMTIME st = new NativeMethods.SYSTEMTIME();
-                    int res = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_GETTODAY, 0, st);
+                    var st = new Kernel32.SYSTEMTIME();
+                    int res = (int)User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.GETTODAY, IntPtr.Zero, ref st);
                     Debug.Assert(res != 0, "MCM_GETTODAY failed");
                     return DateTimePicker.SysTimeToDateTime(st).Date;
                 }
@@ -1361,10 +1361,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void Dispose(bool disposing)
         {
-            if (mdsBuffer != IntPtr.Zero)
+            if (_mdsBuffer != IntPtr.Zero)
             {
-                Marshal.FreeHGlobal(mdsBuffer);
-                mdsBuffer = IntPtr.Zero;
+                Marshal.FreeHGlobal(_mdsBuffer);
+                _mdsBuffer = IntPtr.Zero;
             }
             base.Dispose(disposing);
         }
@@ -1503,11 +1503,11 @@ namespace System.Windows.Forms
 
         private SelectionRange GetMonthRange(int flag)
         {
-            NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
+            var sa = new NativeMethods.SYSTEMTIMEARRAY();
             SelectionRange range = new SelectionRange();
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_GETMONTHRANGE, flag, sa);
 
-            NativeMethods.SYSTEMTIME st = new NativeMethods.SYSTEMTIME
+            var st = new Kernel32.SYSTEMTIME
             {
                 wYear = sa.wYear1,
                 wMonth = sa.wMonth1,
@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms
             HitArea hitArea = GetHitArea(mchi.uHit);
             if (HitTestInfo.HitAreaHasValidDateTime(hitArea))
             {
-                NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME
+                var sys = new Kernel32.SYSTEMTIME
                 {
                     wYear = mchi.st_wYear,
                     wMonth = mchi.st_wMonth,
@@ -1628,8 +1628,8 @@ namespace System.Windows.Forms
 
             if (todayDateSet)
             {
-                NativeMethods.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETTODAY, 0, st);
+                Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
             }
 
             SetControlColor(NativeMethods.MCSC_TEXT, ForeColor);
@@ -1917,13 +1917,13 @@ namespace System.Windows.Forms
             Debug.Assert(reqSize > 0, "Requesting a ridiculously small buffer");
             int intSize = 4;
             // if the current buffer size is insufficient...
-            if (reqSize * intSize > mdsBufferSize)
+            if (reqSize * intSize > _mdsBufferSize)
             {
                 // free and expand the buffer,
-                if (mdsBuffer != IntPtr.Zero)
+                if (_mdsBuffer != IntPtr.Zero)
                 {
-                    Marshal.FreeHGlobal(mdsBuffer);
-                    mdsBuffer = IntPtr.Zero;
+                    Marshal.FreeHGlobal(_mdsBuffer);
+                    _mdsBuffer = IntPtr.Zero;
                 }
 
                 // Round up to the nearest multiple of MINIMUM_ALLOC_SIZE
@@ -1931,11 +1931,11 @@ namespace System.Windows.Forms
                 int actualSize = ((int)(quotient + 1)) * MINIMUM_ALLOC_SIZE;
                 Debug.Assert(actualSize >= reqSize, "Tried to round up, but got it wrong");
 
-                mdsBufferSize = actualSize * intSize;
-                mdsBuffer = Marshal.AllocHGlobal(mdsBufferSize);
-                return mdsBuffer;
+                _mdsBufferSize = actualSize * intSize;
+                _mdsBuffer = Marshal.AllocHGlobal(_mdsBufferSize);
+                return _mdsBuffer;
             }
-            return mdsBuffer;
+            return _mdsBuffer;
         }
 
         /// <summary>
@@ -2013,14 +2013,11 @@ namespace System.Windows.Forms
             SetSelRange(selectionStart, selectionEnd);
 
             // Updated the calendar range
-            //
             if (IsHandleCreated)
             {
-                int flag = 0;
-
-                NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
-                flag |= NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(minDate);
+                var sa = new NativeMethods.SYSTEMTIMEARRAY();
+                int flag = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(minDate);
                 sa.wYear1 = sys.wYear;
                 sa.wMonth1 = sys.wMonth;
                 sa.wDayOfWeek1 = sys.wDayOfWeek;
@@ -2166,14 +2163,12 @@ namespace System.Windows.Forms
                 selectionEnd = upper;
             }
 
-            // always set the value on the control, to ensure that
-            // it is up to date.
-            //
+            // Always set the value on the control, to ensure that it is up to date.
             if (IsHandleCreated)
             {
-                NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
+                var sa = new NativeMethods.SYSTEMTIMEARRAY();
 
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(lower);
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(lower);
                 sa.wYear1 = sys.wYear;
                 sa.wMonth1 = sys.wMonth;
                 sa.wDayOfWeek1 = sys.wDayOfWeek;
@@ -2286,12 +2281,15 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                NativeMethods.SYSTEMTIME st = null;
                 if (todayDateSet)
                 {
-                    st = DateTimePicker.DateTimeToSysTime(todayDate);
+                    Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
+                    User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
                 }
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETTODAY, 0, st);
+                else
+                {
+                    User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, IntPtr.Zero);
+                }
             }
         }
 
@@ -2319,11 +2317,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the MCN_SELCHANGE notification
         /// </summary>
-        private void WmDateChanged(ref Message m)
+        private unsafe void WmDateChanged(ref Message m)
         {
-            NativeMethods.NMSELCHANGE nmmcsc = (NativeMethods.NMSELCHANGE)m.GetLParam(typeof(NativeMethods.NMSELCHANGE));
-            DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
-            DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelEnd);
+            ComCtl32.NMSELCHANGE* nmmcsc = (ComCtl32.NMSELCHANGE*)m.LParam;
+            DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelStart);
+            DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelEnd);
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
@@ -2344,18 +2342,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the MCN_GETDAYSTATE notification
         /// </summary>
-        private void WmDateBold(ref Message m)
+        private unsafe void WmDateBold(ref Message m)
         {
-            NativeMethods.NMDAYSTATE nmmcds = (NativeMethods.NMDAYSTATE)m.GetLParam(typeof(NativeMethods.NMDAYSTATE));
-            DateTime start = DateTimePicker.SysTimeToDateTime(nmmcds.stStart);
-            DateBoldEventArgs boldEvent = new DateBoldEventArgs(start, nmmcds.cDayState);
+            ComCtl32.NMDAYSTATE* nmmcds = (ComCtl32.NMDAYSTATE*)m.LParam;
+            DateTime start = DateTimePicker.SysTimeToDateTime(nmmcds->stStart);
+            DateBoldEventArgs boldEvent = new DateBoldEventArgs(start, nmmcds->cDayState);
             BoldDates(boldEvent);
-            mdsBuffer = RequestBuffer(boldEvent.Size);
+            _mdsBuffer = RequestBuffer(boldEvent.Size);
             // copy boldEvent into mdsBuffer
-            Marshal.Copy(boldEvent.DaysToBold, 0, mdsBuffer, boldEvent.Size);
+            Marshal.Copy(boldEvent.DaysToBold, 0, _mdsBuffer, boldEvent.Size);
             // now we replug DateBoldEventArgs info into NMDAYSTATE
-            nmmcds.prgDayState = mdsBuffer;
-            Marshal.StructureToPtr(nmmcds, m.LParam, false);
+            nmmcds->prgDayState = _mdsBuffer;
         }
 
         /// <summary>
@@ -2377,11 +2374,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the MCN_SELECT notification
         /// </summary>
-        private void WmDateSelected(ref Message m)
+        private unsafe void WmDateSelected(ref Message m)
         {
-            NativeMethods.NMSELCHANGE nmmcsc = (NativeMethods.NMSELCHANGE)m.GetLParam(typeof(NativeMethods.NMSELCHANGE));
-            DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
-            DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelEnd);
+            ComCtl32.NMSELCHANGE* nmmcsc = (ComCtl32.NMSELCHANGE*)m.LParam;
+            DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelStart);
+            DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelEnd);
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
