@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(UnsafeNativeMethods.IOleInPlaceActiveObject pActiveObject, string pszObjName)
+        HRESULT UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
         {
             if (pActiveObject == null)
             {
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
                     ctlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
                     ctlInEditMode = null;
                 }
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
             WebBrowserBase ctl = null;
             if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
@@ -147,7 +147,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths)

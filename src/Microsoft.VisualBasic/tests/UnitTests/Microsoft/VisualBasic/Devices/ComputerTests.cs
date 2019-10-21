@@ -29,10 +29,13 @@ namespace Microsoft.VisualBasic.Devices.Tests
             var mouse = computer.Mouse;
             Assert.NotNull(mouse);
             Assert.Same(mouse, computer.Mouse);
+        }
 
-            var ports = computer.Ports;
-            Assert.NotNull(ports);
-            Assert.Same(ports, computer.Ports);
+        [Fact]
+        public void Screen()
+        {
+            var computer = new Computer();
+            Assert.Equal(System.Windows.Forms.Screen.PrimaryScreen, computer.Screen);
         }
     }
 }

@@ -587,7 +587,7 @@ namespace System.Windows.Forms
                 _dc.SaveHdc();
 
                 // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-                success = SafeNativeMethods.GetViewportOrgEx(hDC, out Point viewportOrg);
+                success = Gdi32.GetViewportOrgEx(hDC, out Point viewportOrg).IsTrue();
                 Debug.Assert(success, "GetViewportOrgEx() failed.");
 
                 // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
@@ -606,7 +606,7 @@ namespace System.Windows.Forms
 
                     // Shift the viewpoint origint by coordinates specified in "bounds".
                     var lastViewPort = new Point();
-                    success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, &lastViewPort);
+                    success = Gdi32.SetViewportOrgEx(hDC, viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, &lastViewPort).IsTrue();
                     Debug.Assert(success, "SetViewportOrgEx() failed.");
 
                     RegionType originalRegionType;

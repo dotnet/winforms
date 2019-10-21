@@ -907,64 +907,6 @@ namespace System.Windows.Forms
             changeHandler?.Invoke(this, eventargs);
         }
 
-#if false
-        /// <summary>
-        ///  Copies the image at the specified index into the temporary Bitmap object.
-        ///  The temporary Bitmap object is used for stuff that the Windows ImageList
-        ///  control doesn't support, such as stretching images or copying images from
-        ///  different image lists.  Since bitmap creation is expensive, the same instance
-        ///  of the temporary Bitmap is reused.
-        /// </summary>
-        private void PutImageInTempBitmap(int index, bool useSnapshot) {
-            Debug.Assert(!useSnapshot || himlTemp != 0, "Where's himlTemp?");
-
-            IntPtr handleUse = (useSnapshot ? himlTemp : Handle);
-            int count = ComCtl32.ImageList.GetImageCount(handleUse);
-
-            if (index < 0 || index >= count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-
-            if (temp != null) {
-                Size size = temp.Size;
-                if (!temp.Size.Equals(imageSize)) {
-                    temp.Dispose();
-                    temp = null;
-                }
-            }
-            if (temp == null) {
-                temp = new Bitmap(imageSize.Width, imageSize.Height);
-            }
-
-            temp.Transparent = useMask;
-            ComCtl32.ImageList.DrawEx(
-                handleUse,
-                index,
-                new HandleRef(gTemp, gTemp.Handle),
-                0,
-                0,
-                imageSize.Width,
-                imageSize.Height,
-                useMask ? 0 : ComCtl32.CLR.DEFAULT,
-                ComCtl32.CLR.NONE,
-                ComCtl32.ILD.NORMAL);
-
-            if (useMask) {
-                gTemp = temp.GetGraphics();
-                ComCtl32.ImageList.DrawEx(
-                    handleUse,
-                    index,
-                    new HandleRef(gTemp, gTemp.Handle),
-                    0,
-                    0,
-                    imageSize.Width,
-                    imageSize.Height,
-                    ComCtl32.CLR.DEFAULT,
-                    ComCtl32.CLR.NONE,
-                    ComCtl32.ILD.MASK);
-            }
-        }
-#endif
-
         // PerformRecreateHandle doesn't quite do what you would suspect.
         // Any existing images in the imagelist will NOT be copied to the
         // new image list -- they really should.

@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 
-namespace Microsoft.VisualBasic.MyServices.Tests
+namespace Microsoft.VisualBasic.Tests
 {
     public abstract class FileCleanupTestBase : IDisposable
     {

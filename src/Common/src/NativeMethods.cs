@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         public const uint DISPATCH_METHOD = 0x1;
         public const uint DISPATCH_PROPERTYGET = 0x2;
         public const uint DISPATCH_PROPERTYPUT = 0x4;
-        public const int DV_E_DVASPECT = unchecked((int)0x8004006B),
+        public const int
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DIB_RGB_COLORS = 0,
@@ -270,8 +270,6 @@ namespace System.Windows.Forms
         DLGC_WANTCHARS = 0x0080,
         DLGC_WANTMESSAGE = 0x0004,      /* Pass message to control          */
         DLGC_HASSETSEL = 0x0008,      /* Understands EM_SETSEL message    */
-        DTM_GETSYSTEMTIME = (0x1000 + 1),
-        DTM_SETSYSTEMTIME = (0x1000 + 2),
         DTM_SETRANGE = (0x1000 + 4),
         DTM_SETFORMAT = (0x1000 + 50),
         DTM_SETMCCOLOR = (0x1000 + 6),
@@ -288,10 +286,7 @@ namespace System.Windows.Forms
         DTN_FORMAT = ((0 - 760) + 17),
         DTN_FORMATQUERY = ((0 - 760) + 18),
         DTN_DROPDOWN = ((0 - 760) + 6),
-        DTN_CLOSEUP = ((0 - 760) + 7),
-        DVASPECT_CONTENT = 1,
-        DVASPECT_TRANSPARENT = 32,
-        DVASPECT_OPAQUE = 16;
+        DTN_CLOSEUP = ((0 - 760) + 7);
 
         public const int E_NOTIMPL = unchecked((int)0x80004001),
         E_OUTOFMEMORY = unchecked((int)0x8007000E),
@@ -355,8 +350,6 @@ namespace System.Windows.Forms
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
         GDTR_MIN = 0x0001,
         GDTR_MAX = 0x0002,
-        GDT_VALID = 0,
-        GDT_NONE = 1,
         GA_PARENT = 1,
         GA_ROOT = 2;
 
@@ -668,8 +661,6 @@ namespace System.Windows.Forms
         MCM_GETMONTHRANGE = (0x1000 + 7),
         MCM_GETMINREQRECT = (0x1000 + 9),
         MCM_SETCOLOR = (0x1000 + 10),
-        MCM_SETTODAY = (0x1000 + 12),
-        MCM_GETTODAY = (0x1000 + 13),
         MCM_HITTEST = (0x1000 + 14),
         MCM_SETFIRSTDAYOFWEEK = (0x1000 + 15),
         MCM_SETRANGE = (0x1000 + 18),
@@ -753,12 +744,6 @@ namespace System.Windows.Forms
         OLEIVERB_DISCARDUNDOSTATE = -6,
         OLEIVERB_PROPERTIES = -7,
         OLE_E_INVALIDRECT = unchecked((int)0x8004000D),
-        OLE_E_NOCONNECTION = unchecked((int)0x80040004),
-        OLEMISC_RECOMPOSEONRESIZE = 0x00000001,
-        OLEMISC_INSIDEOUT = 0x00000080,
-        OLEMISC_ACTIVATEWHENVISIBLE = 0x0000100,
-        OLEMISC_ACTSLIKEBUTTON = 0x00001000,
-        OLEMISC_SETCLIENTSITEFIRST = 0x00020000,
         OLECLOSE_SAVEIFDIRTY = 0,
         OLECLOSE_PROMPTSAVE = 2;
 
@@ -1066,8 +1051,6 @@ namespace System.Windows.Forms
         USERCLASSTYPE_SHORT = 2,
         USERCLASSTYPE_APPNAME = 3,
         UOI_FLAGS = 1;
-
-        public const int VIEW_E_DRAW = unchecked((int)0x80040140);
 
         public const int WSF_VISIBLE = 0x0001;
 
@@ -1823,27 +1806,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class SYSTEMTIME
-        {
-            public short wYear;
-            public short wMonth;
-            public short wDayOfWeek;
-            public short wDay;
-            public short wHour;
-            public short wMinute;
-            public short wSecond;
-            public short wMilliseconds;
-
-            public override string ToString()
-            {
-                return "[SYSTEMTIME: "
-                + wDay.ToString(CultureInfo.InvariantCulture) + "/" + wMonth.ToString(CultureInfo.InvariantCulture) + "/" + wYear.ToString(CultureInfo.InvariantCulture)
-                + " " + wHour.ToString(CultureInfo.InvariantCulture) + ":" + wMinute.ToString(CultureInfo.InvariantCulture) + ":" + wSecond.ToString(CultureInfo.InvariantCulture)
-                + "]";
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class COMRECT
         {
             public int left;
@@ -1936,14 +1898,6 @@ namespace System.Windows.Forms
             public IntPtr lParam;
         }
 
-        public enum tagINVOKEKIND
-        {
-            INVOKE_FUNC = 1,
-            INVOKE_PROPERTYGET = 2,
-            INVOKE_PROPERTYPUT = 4,
-            INVOKE_PROPERTYPUTREF = 8
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class tagEXCEPINFO
         {
@@ -1967,16 +1921,6 @@ namespace System.Windows.Forms
             public int scode = 0;
         }
 
-        public enum tagDESCKIND
-        {
-            DESCKIND_NONE = 0,
-            DESCKIND_FUNCDESC = 1,
-            DESCKIND_VARDESC = 2,
-            DESCKIND_TYPECOMP = 3,
-            DESCKIND_IMPLICITAPPOBJ = 4,
-            DESCKIND_MAX = 5
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct tagFUNCDESC
         {
@@ -1992,13 +1936,9 @@ namespace System.Windows.Forms
 
             public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam;
 
-            // cpb, Microsoft, the EE chokes on Enums in structs
-
-            public    /*NativeMethods.tagFUNCKIND*/ int funckind;
-
-            public    /*NativeMethods.tagINVOKEKIND*/ int invkind;
-
-            public    /*NativeMethods.tagCALLCONV*/ int callconv;
+            public Ole32.FUNCKIND funckind;
+            public Ole32.INVOKEKIND invkind;
+            public Ole32.CALLCONV callconv;
             [MarshalAs(UnmanagedType.I2)]
             public short cParams;
             [MarshalAs(UnmanagedType.I2)]
@@ -2008,8 +1948,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.I2)]
             public short cScodesi;
             public tagELEMDESC elemdescFunc;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wFuncFlags;
+            public Ole32.FUNCFLAGS wFuncFlags;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2019,9 +1958,8 @@ namespace System.Windows.Forms
             public IntPtr lpstrSchema;
             public IntPtr unionMember;
             public tagELEMDESC elemdescVar;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wVarFlags;
-            public    /*NativeMethods.tagVARKIND*/ int varkind;
+            public Ole32.VARFLAGS wVarFlags;
+            public Ole32.VARKIND varkind;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -2101,23 +2039,6 @@ namespace System.Windows.Forms
             public short st_wMinute = 0;
             public short st_wSecond = 0;
             public short st_wMilliseconds = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMSELCHANGE
-        {
-            public User32.NMHDR nmhdr;
-            public SYSTEMTIME stSelStart = null;
-            public SYSTEMTIME stSelEnd = null;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMDAYSTATE
-        {
-            public User32.NMHDR nmhdr;
-            public SYSTEMTIME stStart = null;
-            public int cDayState = 0;
-            public IntPtr prgDayState;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2351,14 +2272,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMDATETIMECHANGE
-        {
-            public User32.NMHDR nmhdr;
-            public int dwFlags = 0;
-            public SYSTEMTIME st = null;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class COPYDATASTRUCT
         {
@@ -2450,13 +2363,6 @@ namespace System.Windows.Forms
             public byte bUnderlineType = 0;
             public byte bAnimation = 0;
             public byte bRevAuthor = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class TEXTRANGE
-        {
-            public Richedit.CHARRANGE chrg;
-            public IntPtr lpstrText; /* allocated by caller, zero terminated by RichEdit */
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2587,32 +2493,6 @@ namespace System.Windows.Forms
         public class ActiveX
         {
             public const int OCM__BASE = 0x2000;
-            public const int DVASPECT_CONTENT = 0x1;
-            public const int DVASPECT_THUMBNAIL = 0x2;
-            public const int DVASPECT_ICON = 0x4;
-            public const int DVASPECT_DOCPRINT = 0x8;
-            public const int OLEMISC_RECOMPOSEONRESIZE = 0x1;
-            public const int OLEMISC_ONLYICONIC = 0x2;
-            public const int OLEMISC_INSERTNOTREPLACE = 0x4;
-            public const int OLEMISC_STATIC = 0x8;
-            public const int OLEMISC_CANTLINKINSIDE = 0x10;
-            public const int OLEMISC_CANLINKBYOLE1 = 0x20;
-            public const int OLEMISC_ISLINKOBJECT = 0x40;
-            public const int OLEMISC_INSIDEOUT = 0x80;
-            public const int OLEMISC_ACTIVATEWHENVISIBLE = 0x100;
-            public const int OLEMISC_RENDERINGISDEVICEINDEPENDENT = 0x200;
-            public const int OLEMISC_INVISIBLEATRUNTIME = 0x400;
-            public const int OLEMISC_ALWAYSRUN = 0x800;
-            public const int OLEMISC_ACTSLIKEBUTTON = 0x1000;
-            public const int OLEMISC_ACTSLIKELABEL = 0x2000;
-            public const int OLEMISC_NOUIACTIVATE = 0x4000;
-            public const int OLEMISC_ALIGNABLE = 0x8000;
-            public const int OLEMISC_SIMPLEFRAME = 0x10000;
-            public const int OLEMISC_SETCLIENTSITEFIRST = 0x20000;
-            public const int OLEMISC_IMEMODE = 0x40000;
-            public const int OLEMISC_IGNOREACTIVATEWHENVISIBLE = 0x80000;
-            public const int OLEMISC_WANTSTOMENUMERGE = 0x100000;
-            public const int OLEMISC_SUPPORTSMULTILEVELUNDO = 0x200000;
             public const int QACONTAINER_SHOWHATCHING = 0x1;
             public const int QACONTAINER_SHOWGRABHANDLES = 0x2;
             public const int QACONTAINER_USERMODE = 0x4;
@@ -2709,19 +2589,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public enum tagTYPEKIND
-        {
-            TKIND_ENUM = 0,
-            TKIND_RECORD = 1,
-            TKIND_MODULE = 2,
-            TKIND_INTERFACE = 3,
-            TKIND_DISPATCH = 4,
-            TKIND_COCLASS = 5,
-            TKIND_ALIAS = 6,
-            TKIND_UNION = 7,
-            TKIND_MAX = 8
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct tagTYPEDESC
         {
@@ -2733,9 +2600,7 @@ namespace System.Windows.Forms
         public struct tagPARAMDESC
         {
             public IntPtr pparamdescex;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public short wParamFlags;
+            public Ole32.PARAMFLAG wParamFlags;
         }
 
         public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
@@ -2790,7 +2655,7 @@ namespace System.Windows.Forms
             public IntPtr lpstrSchema;
             [MarshalAs(UnmanagedType.U4)]
             public int cbSizeInstance;
-            public    /*NativeMethods.tagTYPEKIND*/ int typekind;
+            public Ole32.TYPEKIND typekind;
             [MarshalAs(UnmanagedType.U2)]
             public short cFuncs;
             [MarshalAs(UnmanagedType.U2)]
@@ -2819,8 +2684,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U4)]
             public int idldescType_dwReserved;
 
-            [MarshalAs(UnmanagedType.U2)]
-            public short idldescType_wIDLFlags;
+            public Ole32.IDLFLAG idldescType_wIDLFlags;
 
             public tagTYPEDESC Get_tdescAlias()
             {
@@ -2841,22 +2705,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public enum tagVARFLAGS
-        {
-            VARFLAG_FREADONLY = 1,
-            VARFLAG_FSOURCE = 0x2,
-            VARFLAG_FBINDABLE = 0x4,
-            VARFLAG_FREQUESTEDIT = 0x8,
-            VARFLAG_FDISPLAYBIND = 0x10,
-            VARFLAG_FDEFAULTBIND = 0x20,
-            VARFLAG_FHIDDEN = 0x40,
-            VARFLAG_FDEFAULTCOLLELEM = 0x100,
-            VARFLAG_FUIDEFAULT = 0x200,
-            VARFLAG_FNONBROWSABLE = 0x400,
-            VARFLAG_FREPLACEABLE = 0x800,
-            VARFLAG_FIMMEDIATEBIND = 0x1000
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct tagELEMDESC
         {
@@ -2864,21 +2712,12 @@ namespace System.Windows.Forms
             public tagPARAMDESC paramdesc;
         }
 
-        public enum tagVARKIND
-        {
-            VAR_PERINSTANCE = 0,
-            VAR_STATIC = 1,
-            VAR_CONST = 2,
-            VAR_DISPATCH = 3
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct tagIDLDESC
         {
             [MarshalAs(UnmanagedType.U4)]
             public int dwReserved;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wIDLFlags;
+            public Ole32.IDLFLAG wIDLFlags;
         }
 
         public struct RGBQUAD

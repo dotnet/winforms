@@ -386,8 +386,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ForeColor_Set_TestData()
         {
-            yield return new object[] { Color.Red, Color.Red };
             yield return new object[] { Color.Empty, SystemColors.WindowText };
+            yield return new object[] { Color.White, Color.White };
+            yield return new object[] { Color.Black, Color.Black };
+            yield return new object[] { Color.Red, Color.Red };
         }
 
         [Theory]
