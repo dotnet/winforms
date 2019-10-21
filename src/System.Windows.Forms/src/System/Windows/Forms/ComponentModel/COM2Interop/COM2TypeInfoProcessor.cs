@@ -290,7 +290,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
                 if (versions != null)
                 {
                     versions[0] = typeAttr.wMajorVerNum;
@@ -310,7 +310,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  user defined, which and may be aliased into other type infos.  This function
         ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
-        private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData)
+        private static Type GetValueTypeFromTypeDesc(in Ole32.TYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData)
         {
             IntPtr hreftype;
             HRESULT hr = HRESULT.S_OK;
@@ -337,7 +337,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 case Ole32.VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
                     Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
-                    ref readonly NativeMethods.tagTYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEDESC>(typeDesc.unionMember);
+                    ref readonly Ole32.TYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEDESC>(typeDesc.unionMember);
 
                     if (refTypeDesc.vt == Ole32.VARENUM.VARIANT)
                     {
@@ -374,7 +374,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly NativeMethods.tagTYPEATTR refTypeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pRefTypeAttr);
+                        ref readonly Ole32.TYPEATTR refTypeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pRefTypeAttr);
                         Guid g = refTypeAttr.guid;
 
                         // save the guid if we've got one here
@@ -389,7 +389,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 return ProcessTypeInfoEnum(refTypeInfo);
                             case Ole32.TYPEKIND.ALIAS:
                                 // recurse here
-                                return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData);
+                                return GetValueTypeFromTypeDesc(refTypeAttr.tdescAlias, refTypeInfo, typeData);
                             case Ole32.TYPEKIND.DISPATCH:
                                 return VTToType(Ole32.VARENUM.DISPATCH);
                             case Ole32.TYPEKIND.INTERFACE:
@@ -511,7 +511,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in NativeMethods.tagTYPEDESC typeDesc, Ole32.VARFLAGS flags)
+        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in Ole32.TYPEDESC typeDesc, Ole32.VARFLAGS flags)
         {
             string pPropName = null;
             string pPropDesc = null;
@@ -620,7 +620,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return pi;
         }
 
-        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
+        private unsafe static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
         {
             IntPtr pTypeAttr = IntPtr.Zero;
             HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
@@ -631,7 +631,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
 
                 bool isPropGet;
                 PropInfo pi;
@@ -648,7 +648,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly NativeMethods.tagFUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagFUNCDESC>(pFuncDesc);
+                        ref readonly Ole32.FUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.FUNCDESC>(pFuncDesc);
                         if (funcDesc.invkind == Ole32.INVOKEKIND.FUNC ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && funcDesc.memid != dispidToGet))
                         {
@@ -660,7 +660,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        NativeMethods.tagTYPEDESC typeDesc;
+                        Ole32.TYPEDESC typeDesc;
 
                         // is this a get or a put?
                         isPropGet = (funcDesc.invkind == Ole32.INVOKEKIND.PROPERTYGET);
@@ -681,17 +681,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                         else
                         {
-                            Debug.Assert(funcDesc.lprgelemdescParam != IntPtr.Zero, "ELEMDESC param is null!");
-                            if (funcDesc.lprgelemdescParam == IntPtr.Zero || funcDesc.cParams != 1)
+                            Debug.Assert(funcDesc.lprgelemdescParam != null, "ELEMDESC param is null!");
+                            if (funcDesc.lprgelemdescParam == null || funcDesc.cParams != 1)
                             {
 
                                 continue;
                             }
 
-                            ref readonly NativeMethods.tagELEMDESC ed = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagELEMDESC>(funcDesc.lprgelemdescParam);
                             unsafe
                             {
-                                typeDesc = ed.tdesc;
+                                typeDesc = funcDesc.lprgelemdescParam->tdesc;
                             }
                         }
                         pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, (Ole32.VARFLAGS)funcDesc.wFuncFlags);
@@ -739,7 +738,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 try
                 {
-                    ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                    ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
 
                     int nItems = typeAttr.cVars;
 
@@ -770,8 +769,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         try
                         {
-                            ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
-
+                            ref readonly Ole32.VARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.VARDESC>(pVarDesc);
                             if (varDesc.varkind != Ole32.VARKIND.CONST || varDesc.unionMember == IntPtr.Zero)
                             {
                                 continue;
@@ -896,7 +894,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
                 for (int i = 0; i < typeAttr.cVars; i++)
                 {
                     IntPtr pVarDesc = IntPtr.Zero;
@@ -909,7 +907,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
+                        ref readonly Ole32.VARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.VARDESC>(pVarDesc);
 
                         if (varDesc.varkind == Ole32.VARKIND.CONST ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && varDesc.memid != dispidToGet))
