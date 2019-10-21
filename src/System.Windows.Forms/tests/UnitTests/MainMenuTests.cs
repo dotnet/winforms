@@ -142,7 +142,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
+        [InlineData(RightToLeft.No, RightToLeft.No)]
+        [InlineData(RightToLeft.Inherit, RightToLeft.Inherit)]
         public void MainMenu_RightToLeft_SetCreated_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var menu = new MainMenu(new MenuItem[] { new MenuItem("text") });
