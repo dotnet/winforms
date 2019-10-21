@@ -383,19 +383,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             typeData[0] = g;
                         }
 
-                        switch ((NativeMethods.tagTYPEKIND)refTypeAttr.typekind)
+                        switch (refTypeAttr.typekind)
                         {
-
-                            case NativeMethods.tagTYPEKIND.TKIND_ENUM:
+                            case Ole32.TYPEKIND.ENUM:
                                 return ProcessTypeInfoEnum(refTypeInfo);
-                            //return VTToType(tagVT.VT_I4);
-                            case NativeMethods.tagTYPEKIND.TKIND_ALIAS:
+                            case Ole32.TYPEKIND.ALIAS:
                                 // recurse here
                                 return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData);
-                            case NativeMethods.tagTYPEKIND.TKIND_DISPATCH:
+                            case Ole32.TYPEKIND.DISPATCH:
                                 return VTToType(Ole32.VARENUM.DISPATCH);
-                            case NativeMethods.tagTYPEKIND.TKIND_INTERFACE:
-                            case NativeMethods.tagTYPEKIND.TKIND_COCLASS:
+                            case Ole32.TYPEKIND.INTERFACE:
+                            case Ole32.TYPEKIND.COCLASS:
                                 return VTToType(Ole32.VARENUM.UNKNOWN);
                             default:
                                 return null;
@@ -513,7 +511,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags)
+        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in NativeMethods.tagTYPEDESC typeDesc, Ole32.VARFLAGS flags)
         {
             string pPropName = null;
             string pPropDesc = null;
@@ -575,7 +573,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (pi.NonBrowsable)
                 {
-                    flags |= (int)NativeMethods.tagVARFLAGS.VARFLAG_FNONBROWSABLE;
+                    flags |= Ole32.VARFLAGS.FNONBROWSABLE;
                 }
 
                 if (pTypeData[0] != null)
@@ -585,13 +583,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // check the flags
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FREADONLY) != 0)
+            if ((flags & Ole32.VARFLAGS.FREADONLY) != 0)
             {
                 pi.ReadOnly = PropInfo.ReadOnlyTrue;
             }
 
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FHIDDEN) != 0 ||
-                (flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FNONBROWSABLE) != 0 ||
+            if ((flags & Ole32.VARFLAGS.FHIDDEN) != 0 ||
+                (flags & Ole32.VARFLAGS.FNONBROWSABLE) != 0 ||
                 pi.Name[0] == '_' ||
                 dispid == Ole32.DispatchID.HWND)
             {
@@ -599,13 +597,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 pi.NonBrowsable = true;
             }
 
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FUIDEFAULT) != 0)
+            if ((flags & Ole32.VARFLAGS.FUIDEFAULT) != 0)
             {
                 pi.IsDefault = true;
             }
 
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FBINDABLE) != 0 &&
-                (flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FDISPLAYBIND) != 0)
+            if ((flags & Ole32.VARFLAGS.FBINDABLE) != 0 &&
+                (flags & Ole32.VARFLAGS.FDISPLAYBIND) != 0)
             {
                 pi.Attributes.Add(new BindableAttribute(true));
             }
@@ -651,7 +649,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     try
                     {
                         ref readonly NativeMethods.tagFUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagFUNCDESC>(pFuncDesc);
-                        if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
+                        if (funcDesc.invkind == Ole32.INVOKEKIND.FUNC ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && funcDesc.memid != dispidToGet))
                         {
 
@@ -665,7 +663,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         NativeMethods.tagTYPEDESC typeDesc;
 
                         // is this a get or a put?
-                        isPropGet = (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_PROPERTYGET);
+                        isPropGet = (funcDesc.invkind == Ole32.INVOKEKIND.PROPERTYGET);
 
                         if (isPropGet)
                         {
@@ -696,7 +694,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 typeDesc = ed.tdesc;
                             }
                         }
-                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, funcDesc.wFuncFlags);
+                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, (Ole32.VARFLAGS)funcDesc.wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
                         if (pi != null && !isPropGet)
@@ -774,8 +772,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         {
                             ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
 
-                            if (varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
-                                varDesc.unionMember == IntPtr.Zero)
+                            if (varDesc.varkind != Ole32.VARKIND.CONST || varDesc.unionMember == IntPtr.Zero)
                             {
                                 continue;
                             }
@@ -914,7 +911,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
 
-                        if (varDesc.varkind == (int)NativeMethods.tagVARKIND.VAR_CONST ||
+                        if (varDesc.varkind == Ole32.VARKIND.CONST ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && varDesc.memid != dispidToGet))
                         {
                             continue;

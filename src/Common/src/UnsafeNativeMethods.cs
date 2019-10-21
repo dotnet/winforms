@@ -1794,11 +1794,9 @@ namespace System.Windows.Forms
                       int[] pRefType);
 
             [PreserveSig]
-            int GetImplTypeFlags(
-                    [In, MarshalAs(UnmanagedType.U4)]
-                     int index,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      int[] pImplTypeFlags);
+            HRESULT GetImplTypeFlags(
+                uint index,
+                Ole32.IMPLTYPEFLAG* pImplTypeFlags);
 
             [PreserveSig]
             int GetIDsOfNames(IntPtr rgszNames, int cNames, IntPtr pMemId);
@@ -1815,15 +1813,12 @@ namespace System.Windows.Forms
                 [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrHelpFile);
 
             [PreserveSig]
-            int GetDllEntry(
-                     int memid,
-                      NativeMethods.tagINVOKEKIND invkind,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      string[] pBstrDllName,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      string[] pBstrName,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      short[] pwOrdinal);
+            HRESULT GetDllEntry(
+                Ole32.DispatchID memid,
+                INVOKEKIND invkind,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrDllName,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrName,
+                short* pwOrdinal);
 
             [PreserveSig]
             HRESULT GetRefTypeInfo(

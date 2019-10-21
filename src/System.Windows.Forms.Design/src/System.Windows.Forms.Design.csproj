@@ -77,11 +77,18 @@
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.ProcessAccessOptions.cs" Link="Interop\Kernel32\Interop.ProcessAccessOptions.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.CALLCONV.cs" Link="Interop\Ole32\Interop.CALLCONV.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DESCKIND.cs" Link="Interop\Ole32\Interop.DESCKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCFLAGS.cs" Link="Interop\Ole32\Interop.FUNCFLAGS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCKIND.cs" Link="Interop\Ole32\Interop.FUNCKIND.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDLFLAG.cs" Link="Interop\Ole32\Interop.IDLFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumUnknown.cs" Link="Interop\Ole32\Interop.IEnumUnknown.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IMPLTYPEFLAG.cs" Link="Interop\Ole32\Interop.IMPLTYPEFLAG.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.INVOKEKIND.cs" Link="Interop\Ole32\Interop.INVOKEKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleCommandTarget.cs" Link="Interop\Ole32\Interop.IOleCommandTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleContainer.cs" Link="Interop\Ole32\Interop.IOleContainer.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" Link="Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" />
@@ -96,13 +103,17 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECONTF.cs" Link="Interop\Ole32\Interop.OLECONTF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" Link="Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" Link="Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMFLAG.cs" Link="Interop\Ole32\Interop.PARAMFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATSTG.cs" Link="Interop\Ole32\Interop.STATSTG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGC.cs" Link="Interop\Ole32\Interop.STGC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGM.cs" Link="Interop\Ole32\Interop.STGM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.TYPEKIND.cs" Link="Interop\Ole32\Interop.TYPEKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARENUM.cs" Link="Interop\Ole32\Interop.VARENUM.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARFLAGS.cs" Link="Interop\Ole32\Interop.VARFLAGS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARKIND.cs" Link="Interop\Ole32\Interop.VARKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.CallNextHookEx.cs" Link="Interop\User32\Interop.CallNextHookEx.cs" />
