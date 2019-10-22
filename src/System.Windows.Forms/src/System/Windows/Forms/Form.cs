@@ -31,7 +31,7 @@ namespace System.Windows.Forms
     DefaultEvent(nameof(Load)),
     InitializationEvent(nameof(Load)),
     ]
-    public class Form : ContainerControl
+    public partial class Form : ContainerControl
     {
 #if DEBUG
         static readonly BooleanSwitch AlwaysRestrictWindows = new BooleanSwitch("AlwaysRestrictWindows", "Always make Form classes behave as though they are restricted");
@@ -1707,10 +1707,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets the MDIClient that the MDI container form is using to contain Multiple Document Interface (MDI) child forms,
+        ///  Gets the MDIClient that the MDI container form is using to contain Multiple Document Interface (MDI) child forms,
         ///  if this is an MDI container form.
         ///  Represents the client area of a Multiple Document Interface (MDI) Form window, also known as the MDI child window.
-            /// </summary>
+        /// </summary>
         internal MdiClient MdiClient
         {
             get
@@ -3361,6 +3361,11 @@ namespace System.Windows.Forms
             return new Size(result.right - result.left, result.bottom - result.top);
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new FormAccessibleObject(this);
+        }
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Control.ControlCollection CreateControlsInstance()
         {
@@ -3552,7 +3557,7 @@ namespace System.Windows.Forms
         ///  a
         ///  subclass overrides this function,
         ///  it must call the base implementation.
-            /// </summary>
+        /// </summary>
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -4252,7 +4257,7 @@ namespace System.Windows.Forms
             base.OnAutoScaleModeChanged();
             if (formStateEx[FormStateExSettingAutoScale] != 1)
             {
-            // Obsolete code required here for backwards compat
+                // Obsolete code required here for backwards compat
 #pragma warning disable 618
                 AutoScale = false;
 #pragma warning restore 618
@@ -5873,6 +5878,8 @@ namespace System.Windows.Forms
             return !TransparencyKey.Equals(Color.Empty);
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  This is called when we are about to become minimized.  Laying out
         ///  while minimized can be a problem because the physical dimensions
@@ -6202,7 +6209,7 @@ namespace System.Windows.Forms
         private static Type FindClosestStockType(Type type)
         {
             Type[] stockTypes = new Type[] { typeof(MenuStrip) }; // as opposed to what we had before...
-            // simply add other types here from most specific to most generic if we want to merge other types of toolstrips...
+                                                                  // simply add other types here from most specific to most generic if we want to merge other types of toolstrips...
             foreach (Type t in stockTypes)
             {
                 if (t.IsAssignableFrom(type))
@@ -7343,7 +7350,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Removes a control from the form.
+            ///  Removes a control from the form.
             /// </summary>
             public override void Remove(Control value)
             {
