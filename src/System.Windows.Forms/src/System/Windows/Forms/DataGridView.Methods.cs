@@ -3355,7 +3355,7 @@ namespace System.Windows.Forms
 
         private void CaptureMouse(Rectangle cursorClip)
         {
-            CaptureInternal = true;
+            Capture = true;
             Cursor.Clip = RectangleToScreen(cursorClip);
         }
 
@@ -25170,7 +25170,7 @@ namespace System.Windows.Forms
         private void RealeaseMouse()
         {
             Cursor.Clip = Rectangle.Empty;
-            CaptureInternal = false;
+            Capture = false;
         }
 
         private void RemoveIndividualReadOnlyCellsInColumn(int columnIndex)

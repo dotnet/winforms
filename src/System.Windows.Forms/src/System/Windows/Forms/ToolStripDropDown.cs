@@ -1878,7 +1878,7 @@ namespace System.Windows.Forms
 
                         if (!openingEventCancelled)
                         {
-                            // do the actual work to open the window.
+                            // Do the actual work to open the window.
                             if (TopLevel)
                             {
                                 ReparentToActiveToolStripWindow();
@@ -1891,14 +1891,15 @@ namespace System.Windows.Forms
                                 // in the parent, make sure it retains where the mouse really was.
                                 OwnerToolStrip.SnapMouseLocation();
 
-                                // Make sure that mouse capture
-                                // transitions between the owner and dropdown.
-                                if (OwnerToolStrip.CaptureInternal)
+                                // Make sure that mouse capture transitions between the owner and dropdown.
+                                if (OwnerToolStrip.Capture)
                                 {
-                                    CaptureInternal = true;
+                                    Capture = true;
                                 }
                             }
+
                             base.SetVisibleCore(visible);
+
                             if (TopLevel)
                             {
                                 ApplyTopMost(true);
@@ -2006,16 +2007,16 @@ namespace System.Windows.Forms
                                 }
                                 finally
                                 {
-                                    // rRmove ourselves from the active dropdown list.
+                                    // Remove ourselves from the active dropdown list.
                                     OwnerToolStrip?.ActiveDropDowns.Remove(this);
                                     ActiveDropDowns.Clear();
 
-                                    // If the user traps the click event and starts
-                                    // pumping their own messages by calling Application.DoEvents, we
-                                    // should release mouse capture.
-                                    if (CaptureInternal)
+                                    // If the user traps the click event and starts pumping their
+                                    // own messages by calling Application.DoEvents, we should
+                                    // release mouse capture.
+                                    if (Capture)
                                     {
-                                        CaptureInternal = false;
+                                        Capture = false;
                                     }
                                 }
 

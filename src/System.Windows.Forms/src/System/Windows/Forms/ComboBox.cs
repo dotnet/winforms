@@ -1841,54 +1841,60 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     if (childEdit != null && m.HWnd == childEdit.Handle)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), EditMessages.EM_SETMARGINS,
-                                                  NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
+                        UnsafeNativeMethods.SendMessage(
+                            new HandleRef(this, childEdit.Handle),
+                            EditMessages.EM_SETMARGINS,
+                            NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN,
+                            0);
                     }
                     break;
                 case WindowMessages.WM_LBUTTONDBLCLK:
-                    //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
-                    //sequence for doubleclick...
-                    //Set MouseEvents...
+                    // The Listbox gets WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
+                    // sequence for doubleclick.
+
+                    // Set MouseEvents
                     mousePressed = true;
                     mouseEvents = true;
-                    CaptureInternal = true;
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit
-                    //
+                    Capture = true;
+
+                    // Call the DefWndProc() so that mousemove messages get to the windows edit
                     DefChildWndProc(ref m);
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     Point Ptlc = EditToComboboxMapping(m);
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptlc.X, Ptlc.Y, 0));
                     break;
 
                 case WindowMessages.WM_MBUTTONDBLCLK:
-                    //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
-                    //sequence for doubleclick...
-                    //Set MouseEvents...
+                    // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
+                    // sequence for doubleclick
+
+                    // Set MouseEvents
                     mousePressed = true;
                     mouseEvents = true;
-                    CaptureInternal = true;
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit
-                    //
+                    Capture = true;
+
+                    // Call the DefWndProc() so that mousemove messages get to the windows edit
                     DefChildWndProc(ref m);
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     Point Ptmc = EditToComboboxMapping(m);
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, Ptmc.X, Ptmc.Y, 0));
                     break;
 
                 case WindowMessages.WM_RBUTTONDBLCLK:
-                    //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
-                    //sequence for doubleclick...
-                    //Set MouseEvents...
+                    // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
+                    // sequence for doubleclick
+
+                    // Set MouseEvents.
                     mousePressed = true;
                     mouseEvents = true;
-                    CaptureInternal = true;
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit
-                    //
+                    Capture = true;
+
+                    // Call the DefWndProc() so that mousemove messages get to the windows edit
                     DefChildWndProc(ref m);
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     Point Ptrc = EditToComboboxMapping(m);
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Ptrc.X, Ptrc.Y, 0));
                     break;
@@ -1896,36 +1902,34 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_LBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
-                    //set the mouse capture .. this is the Child Wndproc..
-                    //
-                    CaptureInternal = true;
+
+                    // Set the mouse capture as this is the child Wndproc.
+                    Capture = true;
                     DefChildWndProc(ref m);
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     Point Ptl = EditToComboboxMapping(m);
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                     break;
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
-                    //
-                    RECT r = new RECT();
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
-                    Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
-                    // Get the mouse location
-                    //
+                    RECT rect = new RECT();
+                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
+                    Rectangle clientRect = rect;
+
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     int y = NativeMethods.Util.SignedHIWORD(m.LParam);
                     Point pt = new Point(x, y);
                     pt = PointToScreen(pt);
-                    // combo box gets a WM_LBUTTONUP for focus change ...
-                    // So check MouseEvents....
+
+                    // Combobox gets a WM_LBUTTONUP for focus change- check MouseEvents
                     if (mouseEvents && !ValidationCancelled)
                     {
                         mouseEvents = false;
                         if (mousePressed)
                         {
-                            if (ClientRect.Contains(pt))
+                            if (clientRect.Contains(pt))
                             {
                                 mousePressed = false;
                                 OnClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
@@ -1939,11 +1943,11 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    DefChildWndProc(ref m);
-                    CaptureInternal = false;
 
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+                    DefChildWndProc(ref m);
+                    Capture = false;
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     pt = EditToComboboxMapping(m);
 
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
@@ -1951,12 +1955,12 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_MBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
-                    //set the mouse capture .. this is the Child Wndproc..
-                    //
-                    CaptureInternal = true;
+
+                    // Set the mouse capture as this is the child Wndproc.
+                    Capture = true;
                     DefChildWndProc(ref m);
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     Point P = EditToComboboxMapping(m);
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
@@ -1965,17 +1969,15 @@ namespace System.Windows.Forms
                     mousePressed = true;
                     mouseEvents = true;
 
-                    //set the mouse capture .. this is the Child Wndproc..
-                    //
-
                     if (ContextMenu != null || ContextMenuStrip != null)
                     {
-                        CaptureInternal = true;
+                        // Set the mouse capture as this is the child Wndproc.
+                        Capture = true;
                     }
 
                     DefChildWndProc(ref m);
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     Point Pt = EditToComboboxMapping(m);
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
@@ -1983,25 +1985,25 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_MBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
-                    //set the mouse capture .. this is the Child Wndproc..
-                    //
-                    CaptureInternal = false;
+
+                    // Set the mouse capture as this is the child Wndproc.
+                    Capture = false;
                     DefChildWndProc(ref m);
                     OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                     break;
                 case WindowMessages.WM_RBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
-                    //set the mouse capture .. this is the Child Wndproc..
-                    //
+
                     if (ContextMenu != null)
                     {
-                        CaptureInternal = false;
+                        // Set the mouse capture as this is the child Wndproc.
+                        Capture = false;
                     }
 
                     DefChildWndProc(ref m);
-                    //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
-                    //
+
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
                     Point ptRBtnUp = EditToComboboxMapping(m);
 
                     OnMouseUp(new MouseEventArgs(MouseButtons.Right, 1, ptRBtnUp.X, ptRBtnUp.Y, 0));
@@ -2021,8 +2023,8 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_MOUSEMOVE:
                     Point point = EditToComboboxMapping(m);
-                    //Call the DefWndProc() so that mousemove messages get to the windows edit
-                    //
+
+                    // Call the DefWndProc() so that mousemove messages get to the windows edit control
                     DefChildWndProc(ref m);
                     OnMouseEnterInternal(EventArgs.Empty);
                     OnMouseMove(new MouseEventArgs(MouseButtons, 0, point.X, point.Y, 0));
@@ -2053,7 +2055,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Helper to handle MouseEnter.
         /// </summary>
-        /// <param name="args"></param>
         private void OnMouseEnterInternal(EventArgs args)
         {
             if (!mouseInEdit)
@@ -2064,9 +2065,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Helper to handle mouseleave
+        ///  Helper to handle MouseLeave.
         /// </summary>
-        /// <param name="args"></param>
         private void OnMouseLeaveInternal(EventArgs args)
         {
             RECT rect = new RECT();
@@ -3916,7 +3916,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        CaptureInternal = false;
+                        Capture = false;
                         DefWndProc(ref m);
                     }
                     break;

@@ -3801,7 +3801,7 @@ namespace System.Windows.Forms
                     // set capture only when we know we're not on a dropdown (already effectively have capture due to modal menufilter)
                     // and the item in question requires the mouse to be in the same item to be clicked.
                     SetToolStripState(STATE_LASTMOUSEDOWNEDITEMCAPTURE, true);
-                    CaptureInternal = true;
+                    Capture = true;
                 }
                 MenuAutoExpand = true;
 

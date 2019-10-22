@@ -6335,11 +6335,12 @@ namespace System.Windows.Forms
                         //just maintain state and fire double click.. in final mouseUp...
                         listViewState[LISTVIEWSTATE_doubleclickFired] = true;
                     }
-                    //fire Up in the Wndproc !!
+
+                    // Fire mouse up in the Wndproc
                     listViewState[LISTVIEWSTATE_mouseUpFired] = false;
-                    //problem getting the UP... outside the control...
-                    //
-                    CaptureInternal = true;
+
+                    // Make sure we get the mouse up if it happens outside the control.
+                    Capture = true;
                     break;
 
                 case NativeMethods.LVN_KEYDOWN:
@@ -6570,7 +6571,7 @@ namespace System.Windows.Forms
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.
                     ItemCollectionChangedInMouseDown = false;
-                    CaptureInternal = true;
+                    Capture = true;
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     break;
 
@@ -6607,7 +6608,7 @@ namespace System.Windows.Forms
                     ItemCollectionChangedInMouseDown = false;
 
                     listViewState[LISTVIEWSTATE_mouseUpFired] = true;
-                    CaptureInternal = false;
+                    Capture = false;
                     break;
                 case WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
@@ -6629,7 +6630,7 @@ namespace System.Windows.Forms
                         OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                         listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     }
-                    CaptureInternal = false;
+                    Capture = false;
                     base.WndProc(ref m);
                     break;
                 case WindowMessages.WM_MOUSEHOVER:

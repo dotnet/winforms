@@ -5338,24 +5338,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.Capture);
         }
 
-        /// <summary>
-        ///  Data for the CaptureInternalGetSet test
-        /// </summary>
-        public static TheoryData<bool> CaptureInternalGetSetData =>
-            CommonTestHelper.GetBoolTheoryData();
-
-        [Theory]
-        [MemberData(nameof(CaptureInternalGetSetData))]
-        public void Control_CaptureInternalGetSet(bool expected)
-        {
-            var cont = new Control
-            {
-                CaptureInternal = expected
-            };
-
-            Assert.Equal(expected, cont.CaptureInternal);
-        }
-
         #endregion
 
         #region CanProcessMnemonic

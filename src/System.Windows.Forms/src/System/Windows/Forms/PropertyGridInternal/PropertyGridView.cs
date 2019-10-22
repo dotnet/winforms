@@ -962,7 +962,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (GetFlag(FlagIsSplitterMove))
             {
                 SetFlag(FlagIsSplitterMove, false);
-                CaptureInternal = false;
+                Capture = false;
 
                 if (selectedRow != -1)
                 {
@@ -3635,7 +3635,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 UnfocusSelection();
                 SetFlag(FlagIsSplitterMove, true);
                 tipInfo = -1;
-                CaptureInternal = true;
+                Capture = true;
                 return;
             }
 

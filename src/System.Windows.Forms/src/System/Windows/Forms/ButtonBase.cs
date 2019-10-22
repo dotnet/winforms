@@ -851,7 +851,7 @@ namespace System.Windows.Forms
 
             // Hitting tab while holding down the space key.
             SetFlag(FlagMouseDown, false);
-            CaptureInternal = false;
+            Capture = false;
 
             Invalidate();
         }
