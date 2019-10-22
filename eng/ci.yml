@@ -30,66 +30,52 @@ stages:
         variables:
 
           # needed for signing
-          - name: _TeamName
-            value: DotNetCore
-          - name: _SignType
-            value: test
-          - name: _SignArgs
-            value: ''
-          - name: _Sign
-            value: true
+          - _TeamName: DotNetCore
+          - _SignType: test
+          - _SignArgs: ''
+          - _Sign: true
 
           # needed for darc (dependency flow) publishing
-          - name: _PublishType
-            value: none
-          - name: _DotNetPublishToBlobFeed
-            value: false
-          - name: _PublishArgs
-            value: ''
-          - name: _OfficialBuildIdArgs
-            value: ''
+          - _PublishType: none
+          - _DotNetPublishToBlobFeed: false
+          - _PublishArgs: ''
+          - _OfficialBuildIdArgs: ''
 
           # Override some values if we're building internally (not public)
           - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
             # note: You have to use list syntax here (-name: value) or 
             # you will get errors about declaring the same variable multiple times
-            - name: _PublishType
-              value: blob
-            - name: _SignType
-              value: real
-            - name: _DotNetPublishToBlobFeed
-              value: true
+            - _PublishType: blob
+            - _SignType: real
+            - _DotNetPublishToBlobFeed: true
             - group: DotNet-Blob-Feed
             - group: DotNet-Symbol-Server-Pats
-            - name: _PublishBlobFeedUrl
-              value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
+            - _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
             # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
             # are not resolved until the agent is running on the machine. They can be overridden any 
             # time before they are resolved, like in the job matrix below (see Build_Debug)
-            - name: _SignArgs
-              value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
-            - name: _PublishArgs
-              value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
+            - _SignArgs: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
+            - _PublishArgs: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
                 /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
                 /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
                 /p:DotNetPublishUsingPipelines=$(_PublishUsingPipelines)
                 /p:DotNetArtifactsCategory=$(_DotNetArtifactsCategory)
                 /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
                 /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
-            - name: _OfficialBuildIdArgs
-              value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+            - _OfficialBuildIdArgs: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
         strategy:
           matrix:
-            Debug:
-              _BuildConfig: Debug
-              # override some variables for debug
-              _PublishType: none
-              _SignType: test
-              _DotNetPublishToBlobFeed : false
-              _Coverage: true
+            ${{ if ne(parameters.runAsPublic, 'false') }}:
+              Debug:
+                _BuildConfig: Debug
+                # override some variables for debug
+                _PublishType: none
+                _SignType: test
+                _DotNetPublishToBlobFeed : false
+                _Coverage: true
             Release:
               _BuildConfig: Release
               _Coverage: false
