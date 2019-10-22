@@ -165,7 +165,7 @@ stages:
 
       SDLValidationParameters:
         # Disable SDL Validation until https://github.com/dotnet/arcade/issues/4099 is resolved
-        enable: false
+        enable: true
         params: ' -SourceToolsList @("policheck","credscan")
         -TsaInstanceURL "https://devdiv.visualstudio.com/"
         -TsaProjectName "DEVDIV"
