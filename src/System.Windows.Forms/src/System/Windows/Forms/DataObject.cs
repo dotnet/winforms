@@ -144,7 +144,16 @@ namespace System.Windows.Forms
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
             IntPtr destOld = Gdi32.SelectObject(dcDest, hBitmapNew);
-            SafeNativeMethods.BitBlt(new HandleRef(null, dcDest), 0, 0, bm.Size.Width, bm.Size.Height, new HandleRef(null, dcSrc), 0, 0, 0x00CC0020);
+            Gdi32.BitBlt(
+                dcDest,
+                0,
+                0,
+                bm.Size.Width,
+                bm.Size.Height,
+                dcSrc,
+                0,
+                0,
+                Gdi32.ROP.SRCCOPY);
 
             // Clear the source and destination compatible DCs.
             Gdi32.SelectObject(dcSrc, srcOld);

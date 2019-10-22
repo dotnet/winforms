@@ -315,8 +315,16 @@ namespace System.Windows.Forms
             //
             Gdi32.SetBkColor(target, 0x00ffffff); // white
             Gdi32.SetTextColor(target, 0x00000000); // black
-            SafeNativeMethods.BitBlt(new HandleRef(null, target), 0, 0, size.Width, size.Height, new HandleRef(null, source),
-                                     0, 0, 0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
+            Gdi32.BitBlt(
+                target,
+                0,
+                0,
+                size.Width,
+                size.Height,
+                source,
+                0,
+                0,
+                (Gdi32.ROP)0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
             Gdi32.SelectObject(source, previousSourceBitmap);
             Gdi32.SelectObject(target, previousTargetBitmap);
@@ -358,17 +366,22 @@ namespace System.Windows.Forms
             int destHeight = blockRegionSize.Height;
 
             DeviceContext dc = DeviceContext.FromHwnd(sourceHwnd);
-            HandleRef targetHDC = new HandleRef(null, targetDC.GetHdc());
-            HandleRef screenHDC = new HandleRef(null, dc.Hdc);
-
+            IntPtr targetHDC = targetDC.GetHdc();
             try
             {
-                bool result = SafeNativeMethods.BitBlt(targetHDC, destinationLocation.X, destinationLocation.Y, destWidth, destHeight,
-                                                      screenHDC,
-                                                      sourceLocation.X, sourceLocation.Y, (int)copyPixelOperation);
+                BOOL result = Gdi32.BitBlt(
+                    targetHDC,
+                    destinationLocation.X,
+                    destinationLocation.Y,
+                    destWidth,
+                    destHeight,
+                    dc.Hdc,
+                    sourceLocation.X,
+                    sourceLocation.Y,
+                    (Gdi32.ROP)copyPixelOperation);
 
-                //a zero result indicates a win32 exception has been thrown
-                if (!result)
+                // Zero result indicates a win32 exception has been thrown
+                if (!result.IsTrue())
                 {
                     throw new Win32Exception();
                 }
