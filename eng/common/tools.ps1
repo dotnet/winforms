@@ -49,6 +49,8 @@
 # An array of names of processes to stop on script exit if prepareMachine is true.
 $processesToStopOnExit = if (Test-Path variable:processesToStopOnExit) { $processesToStopOnExit } else { @("msbuild", "dotnet", "vbcscompiler") }
 
+$disableConfigureToolsetImport = if (Test-Path variable:disableConfigureToolsetImport) { $disableConfigureToolsetImport } else { $null }
+
 set-strictmode -version 2.0
 $ErrorActionPreference = "Stop"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -418,6 +420,9 @@ function GetSdkTaskProject([string]$taskName) {
 }
 
 function InitializeNativeTools() {
+  if ($env:DisableNativeToolsetInstalls) {
+    return
+  }
   if (Get-Member -InputObject $GlobalJson -Name "native-tools") {
     $nativeArgs= @{}
     if ($ci) {
@@ -602,7 +607,9 @@ Write-PipelineSetVariable -Name 'TMP' -Value $TempDir
 
 # Import custom tools configuration, if present in the repo.
 # Note: Import in global scope so that the script set top-level variables without qualification.
-$configureToolsetScript = Join-Path $EngRoot "configure-toolset.ps1"
-if (Test-Path $configureToolsetScript) {
-    . $configureToolsetScript
+if (!$disableConfigureToolsetImport) {
+  $configureToolsetScript = Join-Path $EngRoot "configure-toolset.ps1"
+  if (Test-Path $configureToolsetScript) {
+      . $configureToolsetScript
+  }
 }
