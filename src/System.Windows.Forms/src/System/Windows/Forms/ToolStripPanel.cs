@@ -760,7 +760,7 @@ namespace System.Windows.Forms
                 try
                 {
                     CurrentFeedbackRect.Show(screenLocation);
-                    toolStripToDrag.CaptureInternal = true;
+                    toolStripToDrag.Capture = true;
                 }
                 finally
                 {

@@ -1246,20 +1246,14 @@ namespace System.Windows.Forms
         ]
         public bool Capture
         {
-            get => CaptureInternal;
-            set => CaptureInternal = value;
-        }
-
-        internal bool CaptureInternal
-        {
             get => IsHandleCreated && User32.GetCapture() == Handle;
             set
             {
-                if (CaptureInternal != value)
+                if (Capture != value)
                 {
                     if (value)
                     {
-                        User32.SetCapture(new HandleRef(this, Handle));
+                        User32.SetCapture(this);
                     }
                     else
                     {
@@ -3028,7 +3022,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                MouseButtons buttons = (MouseButtons)0;
+                MouseButtons buttons = default;
 
                 if (User32.GetKeyState((int)Keys.LButton) < 0)
                 {
@@ -12461,8 +12455,8 @@ namespace System.Windows.Forms
 
             if (!GetExtendedState(ExtendedStates.MaintainsOwnCaptureMode))
             {
-                //CaptureInternal is set usually in MouseDown (ToolStrip main exception)
-                CaptureInternal = true;
+                // Capture is set usually in MouseDown (ToolStrip main exception)
+                Capture = true;
             }
 
             if (realState != MouseButtons)
@@ -12470,8 +12464,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // control should be enabled when this method is entered, but may have become
-            // disabled during its lifetime (e.g. through a Click or Focus listener)
+            // Control should be enabled when this method is entered, but may have become
+            // disabled during its lifetime (e.g. through a Click or Focus listener).
             if (Enabled)
             {
                 OnMouseDown(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
@@ -12627,13 +12621,14 @@ namespace System.Windows.Forms
             }
             finally
             {
-                //Always Reset the States.DOUBLECLICKFIRED in UP.. Since we get UP - DOWN - DBLCLK - UP sequqnce
-                //The Flag is set in L_BUTTONDBLCLK in the controls WndProc() ...
+                // Always reset the States.DoubleClickFired in UP.. Since we get UP - DOWN - DBLCLK - UP sequence
+                // The flag is set in L_BUTTONDBLCLK in the controls WndProc() ...
                 SetState(States.DoubleClickFired, false);
                 SetState(States.MousePressed, false);
                 SetState(States.ValidationCancelled, false);
-                //CaptureInternal is Resetted while exiting the MouseUp
-                CaptureInternal = false;
+
+                // Capture is reset while exiting MouseUp
+                Capture = false;
             }
         }
 

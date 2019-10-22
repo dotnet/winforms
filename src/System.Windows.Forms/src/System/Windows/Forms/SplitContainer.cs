@@ -1371,7 +1371,7 @@ namespace System.Windows.Forms
             }
             if (!IsSplitterFixed && IsSplitterMovable && splitterClick)
             {
-                CaptureInternal = false;
+                Capture = false;
 
                 if (splitterDrag)
                 {
@@ -2279,7 +2279,7 @@ namespace System.Windows.Forms
             }
             Application.AddMessageFilter(splitContainerMessageFilter);
 
-            CaptureInternal = true;
+            Capture = true;
             DrawSplitBar(DRAW_START);
         }
 

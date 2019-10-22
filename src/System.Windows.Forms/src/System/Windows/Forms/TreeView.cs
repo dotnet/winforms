@@ -3304,13 +3304,15 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
-                    //just maintain state and fire double click.. in final mouseUp...
+
+                    // Just maintain state and fire double click in final mouseUp.
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
-                    //fire Up in the Wndproc !!
+
+                    // Fire mouse up in the Wndproc.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    //problem getting the UP... outside the control...
-                    //
-                    CaptureInternal = true;
+
+                    // Make sure we get the mouse up if it happens outside the control.
+                    Capture = true;
                     break;
                 case WindowMessages.WM_LBUTTONDOWN:
                     try
@@ -3322,7 +3324,8 @@ namespace System.Windows.Forms
                     {
                         treeViewState[TREEVIEWSTATE_ignoreSelects] = false;
                     }
-                    //Always Reset the MouseupFired....
+
+                    // Always reset the MouseupFired.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO
                     {
@@ -3363,8 +3366,8 @@ namespace System.Windows.Forms
                         pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
                     };
                     IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
-                    //Important for CheckBoxes ... click needs to be fired ...
-                    //
+
+                    // Important for CheckBoxes. Click needs to be fired.
                     if (hnode != IntPtr.Zero)
                     {
                         if (!ValidationCancelled && !treeViewState[TREEVIEWSTATE_doubleclickFired] & !treeViewState[TREEVIEWSTATE_mouseUpFired])
@@ -3401,18 +3404,18 @@ namespace System.Windows.Forms
 
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = false;
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    CaptureInternal = false;
+                    Capture = false;
 
-                    //always clear our hit-tested node we cached on mouse down
+                    // Always clear our hit-tested node we cached on mouse down
                     hNodeMouseDown = IntPtr.Zero;
                     break;
                 case WindowMessages.WM_MBUTTONDBLCLK:
-                    //fire Up in the Wndproc !!
+                    // Fire mouse up in the Wndproc.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
                 case WindowMessages.WM_MBUTTONDOWN:
-                    //Always Reset the MouseupFired....
+                    // Always reset MouseupFired.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
@@ -3425,13 +3428,15 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
-                    //just maintain state and fire double click.. in final mouseUp...
+
+                    // Just maintain state and fire double click in the final mouseUp.
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
-                    //fire Up in the Wndproc !!
+
+                    // Fire mouse up in the Wndproc
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    //problem getting the UP... outside the control...
-                    //
-                    CaptureInternal = true;
+
+                    // Make sure we get the mouse up if it happens outside the control.
+                    Capture = true;
                     break;
                 case WindowMessages.WM_RBUTTONDOWN:
                     //Always Reset the MouseupFired....

@@ -949,7 +949,7 @@ namespace System.Windows.Forms
                 }
                 Application.AddMessageFilter(splitterMessageFilter);
 
-                CaptureInternal = true;
+                Capture = true;
                 DrawSplitBar(DRAW_START);
             }
         }
@@ -961,7 +961,7 @@ namespace System.Windows.Forms
         {
             DrawSplitBar(DRAW_END);
             splitTarget = null;
-            CaptureInternal = false;
+            Capture = false;
             if (splitterMessageFilter != null)
             {
                 Application.RemoveMessageFilter(splitterMessageFilter);

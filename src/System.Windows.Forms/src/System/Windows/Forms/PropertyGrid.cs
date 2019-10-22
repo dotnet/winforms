@@ -3332,22 +3332,21 @@ namespace System.Windows.Forms
             }
         }
 
-        //
         protected override void OnMouseDown(MouseEventArgs me)
         {
             SnappableControl target = DividerInside(me.X, me.Y);
             if (target != null && me.Button == MouseButtons.Left)
             {
-                // capture mouse.
-                CaptureInternal = true;
+                // Capture the mouse.
+                Capture = true;
                 targetMove = target;
                 dividerMoveY = me.Y;
                 DividerDraw(dividerMoveY);
             }
+
             base.OnMouseDown(me);
         }
 
-        //
         protected override void OnMouseMove(MouseEventArgs me)
         {
             if (dividerMoveY == -1)
@@ -3371,10 +3370,10 @@ namespace System.Windows.Forms
                 dividerMoveY = yNew;
                 DividerDraw(dividerMoveY);
             }
+
             base.OnMouseMove(me);
         }
 
-        //
         protected override void OnMouseUp(MouseEventArgs me)
         {
             if (dividerMoveY == -1)
@@ -3404,8 +3403,8 @@ namespace System.Windows.Forms
                 gridView.Invalidate(new Rectangle(0, gridView.Size.Height - cyDivider, Size.Width, cyDivider));
             }
 
-            // end the move
-            CaptureInternal = false;
+            // End the move
+            Capture = false;
             dividerMoveY = -1;
             targetMove = null;
             base.OnMouseUp(me);

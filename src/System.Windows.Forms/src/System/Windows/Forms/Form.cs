@@ -7195,13 +7195,14 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_CAPTURECHANGED:
                     base.WndProc(ref m);
-                    // This is a work-around for the Win32 scroll bar; it
-                    // doesn't release it's capture in response to a CAPTURECHANGED
-                    // message, so we force capture away if no button is down.
-                    //
-                    if (CaptureInternal && MouseButtons == (MouseButtons)0)
+
+                    // This is a work-around for the Win32 scroll bar; it doesn't release
+                    // it's capture in response to a CAPTURECHANGED message, so we force
+                    // capture away if no button is down.
+                    
+                    if (Capture && MouseButtons == MouseButtons.None)
                     {
-                        CaptureInternal = false;
+                        Capture = false;
                     }
                     break;
                 case WindowMessages.WM_GETDPISCALEDSIZE:

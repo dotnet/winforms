@@ -1076,7 +1076,7 @@ namespace System.Windows.Forms
                         FocusLink = (Link)links[i];
                         InvalidateLink(FocusLink);
                     }
-                    CaptureInternal = true;
+                    Capture = true;
                     break;
                 }
             }
@@ -1108,7 +1108,7 @@ namespace System.Windows.Forms
                 {
                     ((Link)links[i]).State &= (~LinkState.Active);
                     InvalidateLink((Link)links[i]);
-                    CaptureInternal = false;
+                    Capture = false;
 
                     Link clicked = PointInLink(e.X, e.Y);
 
