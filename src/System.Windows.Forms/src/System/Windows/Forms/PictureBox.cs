@@ -597,7 +597,7 @@ namespace System.Windows.Forms
                         new AsyncCallback(ReadCallBack),
                         responseStream);
                 }
-                catch (TaskCanceledException)
+                catch (OperationCanceledException)
                 {
                     PostCompleted(null, true);
                 }
