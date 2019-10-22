@@ -459,7 +459,7 @@ namespace System.Windows.Forms
                 var pW = new Point();
                 var sWindowExt = new Size();
                 var sViewportExt = new Size();
-                int iMode = NativeMethods.MM_TEXT;
+                Gdi32.MM iMode = Gdi32.MM.TEXT;
 
                 if (!_control.IsHandleCreated)
                 {
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
                     // use.
                     SafeNativeMethods.LPtoDP(new HandleRef(null, hdcDraw), ref rc, 2);
 
-                    iMode = SafeNativeMethods.SetMapMode(hdcDraw, NativeMethods.MM_ANISOTROPIC);
+                    iMode = Gdi32.SetMapMode(hdcDraw, Gdi32.MM.ANISOTROPIC);
                     Gdi32.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
                     Gdi32.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
                     Gdi32.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
@@ -512,7 +512,7 @@ namespace System.Windows.Forms
                         Gdi32.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
                         Gdi32.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
                         Gdi32.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
-                        SafeNativeMethods.SetMapMode(hdcDraw, iMode);
+                        Gdi32.SetMapMode(hdcDraw, iMode);
                     }
                 }
             }

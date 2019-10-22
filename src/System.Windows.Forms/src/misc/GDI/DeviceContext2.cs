@@ -206,7 +206,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  DC map mode.
         /// </summary>
-        public DeviceContextMapMode MapMode => (DeviceContextMapMode)IntUnsafeNativeMethods.GetMapMode(new HandleRef(this, Hdc));
+        public Gdi32.MM MapMode => Gdi32.GetMapMode(this);
 
         public bool IsFontOnContextStack(WindowsFont wf)
         {
@@ -229,8 +229,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Sets the DC map mode and returns the old value.
         /// </summary>
-        public DeviceContextMapMode SetMapMode(DeviceContextMapMode newMode)
-            => (DeviceContextMapMode)IntUnsafeNativeMethods.SetMapMode(new HandleRef(this, Hdc), (int)newMode);
+        public Gdi32.MM SetMapMode(Gdi32.MM newMode) => Gdi32.SetMapMode(this, newMode);
 
         /// <summary>
         ///  Selects the specified object into the dc and returns the old object.
