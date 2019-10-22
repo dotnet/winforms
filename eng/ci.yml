@@ -171,7 +171,7 @@ stages:
         -TsaProjectName "DEVDIV"
         -TsaNotificationEmail "wffteam@microsoft.com"
         -TsaCodebaseAdmin "REDMOND\advolker"
-        -TsaBugAreaPath "DevDiv\NET\NET Core\Winforms"
+        -TsaBugAreaPath "DevDiv\NET Core\Winforms"
         -TsaIterationPath "DevDiv"
         -TsaRepositoryName "Winforms"
         -TsaCodebaseName "Winforms"
