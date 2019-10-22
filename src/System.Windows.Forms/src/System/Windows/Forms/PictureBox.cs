@@ -53,7 +53,7 @@ namespace System.Windows.Forms
 
         private bool _currentlyAnimating;
 
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource;
 
         // Instance members for asynchronous behavior
         private AsyncOperation _currentAsyncLoadOperation;
@@ -183,7 +183,10 @@ namespace System.Windows.Forms
         public void CancelAsync()
         {
             _pictureBoxState[CancellationPendingState] = true;
-            _cancellationTokenSource.Cancel();
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+            }
         }
 
         [Browsable(false)]
@@ -567,18 +570,21 @@ namespace System.Windows.Forms
             _contentLength = -1;
             _tempDownloadStream = new MemoryStream();
 
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken token = _cancellationTokenSource.Token;
+
             Task.Run(async () =>
             {
                 try
                 {
-                    HttpResponseMessage responseMessage = await _httpClient.GetAsync(CalculateUri(_imageLocation), _cancellationTokenSource.Token);
+                    HttpResponseMessage responseMessage = await _httpClient.GetAsync(CalculateUri(_imageLocation), token);
                     if (!responseMessage.IsSuccessStatusCode)
                     {
-                        PostCompleted(new Exception($"HttpClient received non-successful status code: {responseMessage.StatusCode}"), false);
+                        PostCompleted(new Exception($"{responseMessage.ReasonPhrase}: {responseMessage.StatusCode}"), false);
                         return;
                     }
 
-                    _contentLength = (int)responseMessage.Content.Headers.ContentLength;
+                    _contentLength = (int)responseMessage.Content.Headers.ContentLength.GetValueOrDefault();
                     _totalBytesRead = 0;
 
                     Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
