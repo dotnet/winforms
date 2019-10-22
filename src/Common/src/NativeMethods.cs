@@ -421,7 +421,6 @@ namespace System.Windows.Forms
         public const int IME_CMODE_NATIVE = 0x0001,
         IME_CMODE_KATAKANA = 0x0002,
         IME_CMODE_FULLSHAPE = 0x0008,
-        INPLACE_E_NOTOOLSPACE = unchecked((int)0x800401A1),
         ICON_SMALL = 0,
         ICON_BIG = 1,
         IMAGE_ICON = 1,
@@ -741,7 +740,6 @@ namespace System.Windows.Forms
         OLEIVERB_INPLACEACTIVATE = -5,
         OLEIVERB_DISCARDUNDOSTATE = -6,
         OLEIVERB_PROPERTIES = -7,
-        OLE_E_INVALIDRECT = unchecked((int)0x8004000D),
         OLECLOSE_SAVEIFDIRTY = 0,
         OLECLOSE_PROMPTSAVE = 2;
 

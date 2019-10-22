@@ -4395,7 +4395,7 @@ namespace System.Windows.Forms
             }
 
             unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
-                out UnsafeNativeMethods.IOleInPlaceFrame ppFrame,
+                out Ole32.IOleInPlaceFrame ppFrame,
                 out Ole32.IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
@@ -5506,7 +5506,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class AxContainer : Ole32.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame, IReflect
+        internal class AxContainer : Ole32.IOleContainer, Ole32.IOleInPlaceFrame, IReflect
         {
             internal ContainerControl parent;
             private IContainer assocContainer; // associated IContainer...
@@ -6223,7 +6223,7 @@ namespace System.Windows.Forms
             }
 
             // IOleInPlaceFrame methods:
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
             {
                 if (phwnd == null)
                 {
@@ -6235,28 +6235,28 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            HRESULT UnsafeNativeMethods.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
+            HRESULT Ole32.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
                 return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.GetBorder(NativeMethods.COMRECT lprectBorder)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetBorder");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.RequestBorderSpace(NativeMethods.COMRECT pborderwidths)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RequestBorderSpace");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetBorderSpace(NativeMethods.COMRECT pborderwidths)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetBorderSpace");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             internal void OnExitEditMode(AxHost ctl)
@@ -6270,7 +6270,7 @@ namespace System.Windows.Forms
                 ctlInEditMode = null;
             }
 
-            HRESULT UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
+            HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + (pszObjName ?? "<null>"));
                 if (siteUIActive != null)
@@ -6333,40 +6333,41 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in InsertMenus");
                 return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
+            HRESULT Ole32.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetMenu");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
+            HRESULT Ole32.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RemoveMenus");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetStatusText(string pszStatusText)
+            HRESULT Ole32.IOleInPlaceFrame.SetStatusText(string pszStatusText)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetStatusText");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.EnableModeless(bool fEnable)
+            HRESULT Ole32.IOleInPlaceFrame.EnableModeless(BOOL fEnable)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnableModeless");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
                 return HRESULT.S_FALSE;

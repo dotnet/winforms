@@ -263,7 +263,7 @@ namespace System.Windows.Forms
         }
 
         unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
-            out UnsafeNativeMethods.IOleInPlaceFrame ppFrame,
+            out Ole32.IOleInPlaceFrame ppFrame,
             out Ole32.IOleInPlaceUIWindow ppDoc,
             RECT* lprcPosRect,
             RECT* lprcClipRect,

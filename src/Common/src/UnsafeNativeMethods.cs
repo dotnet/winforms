@@ -663,7 +663,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT GetWindowContext(
-                out IOleInPlaceFrame ppFrame,
+                out Ole32.IOleInPlaceFrame ppFrame,
                 out Ole32.IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
@@ -689,73 +689,6 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT OnPosRectChange(
                 RECT* lprcPosRect);
-        }
-
-        [ComImport]
-        [Guid("00000116-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceFrame
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            int GetBorder(
-                [Out]
-                NativeMethods.COMRECT lprectBorder);
-
-            [PreserveSig]
-            int RequestBorderSpace(
-                [In]
-                NativeMethods.COMRECT pborderwidths);
-
-            [PreserveSig]
-            int SetBorderSpace(
-                [In]
-                NativeMethods.COMRECT pborderwidths);
-
-            [PreserveSig]
-            HRESULT SetActiveObject(
-                Ole32.IOleInPlaceActiveObject pActiveObject,
-                [MarshalAs(UnmanagedType.LPWStr)] string pszObjName);
-
-            [PreserveSig]
-            HRESULT InsertMenus(
-                IntPtr hmenuShared,
-                Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths);
-
-            [PreserveSig]
-            int SetMenu(
-                [In]
-                IntPtr hmenuShared,
-                [In]
-                IntPtr holemenu,
-                [In]
-                IntPtr hwndActiveObject);
-
-            [PreserveSig]
-            int RemoveMenus(
-                [In]
-                IntPtr hmenuShared);
-
-            [PreserveSig]
-            int SetStatusText(
-                [In, MarshalAs(UnmanagedType.LPWStr)]
-                string pszStatusText);
-
-            [PreserveSig]
-            int EnableModeless(
-                bool fEnable);
-
-            [PreserveSig]
-            HRESULT TranslateAccelerator(
-                User32.MSG* lpmsg,
-                ushort wID);
         }
 
         // Used to control the webbrowser appearance and provide DTE to script via window.external
@@ -786,7 +719,7 @@ namespace System.Windows.Forms
                 uint dwID,
                 Ole32.IOleInPlaceActiveObject activeObject,
                 Ole32.IOleCommandTarget commandTarget,
-                IOleInPlaceFrame frame,
+                Ole32.IOleInPlaceFrame frame,
                 Ole32.IOleInPlaceUIWindow doc);
 
             [return: MarshalAs(UnmanagedType.I4)]
