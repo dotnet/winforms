@@ -140,7 +140,7 @@ namespace System.Windows.Forms
 
             // Create a compatible DC and a new compatible bitmap.
             IntPtr dcDest = Gdi32.CreateCompatibleDC(hDC);
-            IntPtr hBitmapNew = SafeNativeMethods.CreateCompatibleBitmap(new HandleRef(null, hDC), bm.Size.Width, bm.Size.Height);
+            IntPtr hBitmapNew = Gdi32.CreateCompatibleBitmap(hDC, bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
             IntPtr destOld = Gdi32.SelectObject(dcDest, hBitmapNew);

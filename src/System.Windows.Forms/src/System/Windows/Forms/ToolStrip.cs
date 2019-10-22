@@ -5722,7 +5722,7 @@ namespace System.Windows.Forms
                 }
 
                 // create compatible bitmap with the correct size.
-                _cachedItemBitmap = SafeNativeMethods.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
+                _cachedItemBitmap = Gdi32.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
                 IntPtr oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // delete the old bitmap
