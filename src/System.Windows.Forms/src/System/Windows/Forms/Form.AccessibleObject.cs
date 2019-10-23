@@ -26,6 +26,15 @@ namespace System.Windows.Forms
 
             internal override Rectangle BoundingRectangle => _owner.Bounds;
 
+            // TODO: Need to implement Next and Previous UIA navigation for all WinForms controls. Otherwise navigation is broken with below change.
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) =>
+                direction switch
+                {
+                    UnsafeNativeMethods.NavigateDirection.FirstChild => _owner.GetFirstChildControlInTabOrder(true)?.AccessibilityObject,
+                    UnsafeNativeMethods.NavigateDirection.LastChild => _owner.GetFirstChildControlInTabOrder(false)?.AccessibilityObject,
+                    _ => base.FragmentNavigate(direction)
+                };
+
             internal override bool IsIAccessibleExSupported()
             {
                 if (_owner != null)
