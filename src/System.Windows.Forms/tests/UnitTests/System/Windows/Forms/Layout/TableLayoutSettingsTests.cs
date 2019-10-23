@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Xunit;
@@ -705,7 +703,7 @@ namespace System.Windows.Forms.Layout.Tests
                 formatter.Serialize(stream, settings);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                Assert.Throws<TargetInvocationException>(() => formatter.Deserialize(stream));
+                Assert.Throws<SerializationException>(() => formatter.Deserialize(stream));
             }
         }
 
