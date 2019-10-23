@@ -82,6 +82,8 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DVASPECT.cs" Link="Interop\Ole32\Interop.DVASPECT.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ELEMDESC.cs" Link="Interop\Ole32\Interop.ELEMDESC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCDESC.cs" Link="Interop\Ole32\Interop.FUNCDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCFLAGS.cs" Link="Interop\Ole32\Interop.FUNCFLAGS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCKIND.cs" Link="Interop\Ole32\Interop.FUNCKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDLFLAG.cs" Link="Interop\Ole32\Interop.IDLFLAG.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" Link="Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" Link="Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMISC.cs" Link="Interop\Ole32\Interop.OLEMISC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMDESC.cs" Link="Interop\Ole32\Interop.PARAMDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMFLAG.cs" Link="Interop\Ole32\Interop.PARAMFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
@@ -114,6 +117,8 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGM.cs" Link="Interop\Ole32\Interop.STGM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.TYPEKIND.cs" Link="Interop\Ole32\Interop.TYPEKIND.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.TYPEDESC.cs" Link="Interop\Ole32\Interop.TYPEDESC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARDESC.cs" Link="Interop\Ole32\Interop.VARDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARENUM.cs" Link="Interop\Ole32\Interop.VARENUM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARFLAGS.cs" Link="Interop\Ole32\Interop.VARFLAGS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARKIND.cs" Link="Interop\Ole32\Interop.VARKIND.cs" />

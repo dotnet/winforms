@@ -1917,47 +1917,6 @@ namespace System.Windows.Forms
             public int scode = 0;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct tagFUNCDESC
-        {
-            public Ole32.DispatchID memid;
-
-            public IntPtr lprgscode;
-
-            // This is marked as NATIVE_TYPE_PTR,
-            // but the EE doesn't look for that, tries to handle it as
-            // a ELEMENT_TYPE_VALUECLASS and fails because it
-            // isn't a NATIVE_TYPE_NESTEDSTRUCT
-            /*[MarshalAs(UnmanagedType.PTR)]*/
-
-            public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam;
-
-            public Ole32.FUNCKIND funckind;
-            public Ole32.INVOKEKIND invkind;
-            public Ole32.CALLCONV callconv;
-            [MarshalAs(UnmanagedType.I2)]
-            public short cParams;
-            [MarshalAs(UnmanagedType.I2)]
-            public short cParamsOpt;
-            [MarshalAs(UnmanagedType.I2)]
-            public short oVft;
-            [MarshalAs(UnmanagedType.I2)]
-            public short cScodesi;
-            public tagELEMDESC elemdescFunc;
-            public Ole32.FUNCFLAGS wFuncFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct tagVARDESC
-        {
-            public Ole32.DispatchID memid;
-            public IntPtr lpstrSchema;
-            public IntPtr unionMember;
-            public tagELEMDESC elemdescVar;
-            public Ole32.VARFLAGS wVarFlags;
-            public Ole32.VARKIND varkind;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TOOLTIPTEXT
         {
@@ -2585,20 +2544,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct tagTYPEDESC
-        {
-            public IntPtr unionMember;
-            public Ole32.VARENUM vt;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct tagPARAMDESC
-        {
-            public IntPtr pparamdescex;
-            public Ole32.PARAMFLAG wParamFlags;
-        }
-
         public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
 
         [ComImport]
@@ -2636,84 +2581,6 @@ namespace System.Windows.Forms
         {
             [PreserveSig]
             HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct tagTYPEATTR
-        {
-            public Guid guid;
-            [MarshalAs(UnmanagedType.U4)]
-            public int lcid;
-            [MarshalAs(UnmanagedType.U4)]
-            public int dwReserved;
-            public int memidConstructor;
-            public int memidDestructor;
-            public IntPtr lpstrSchema;
-            [MarshalAs(UnmanagedType.U4)]
-            public int cbSizeInstance;
-            public Ole32.TYPEKIND typekind;
-            [MarshalAs(UnmanagedType.U2)]
-            public short cFuncs;
-            [MarshalAs(UnmanagedType.U2)]
-            public short cVars;
-            [MarshalAs(UnmanagedType.U2)]
-            public short cImplTypes;
-            [MarshalAs(UnmanagedType.U2)]
-            public short cbSizeVft;
-            [MarshalAs(UnmanagedType.U2)]
-            public short cbAlignment;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wTypeFlags;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wMajorVerNum;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wMinorVerNum;
-
-            //these are inline too
-            //public    NativeMethods.tagTYPEDESC tdescAlias;
-            [MarshalAs(UnmanagedType.U4)]
-            public int tdescAlias_unionMember;
-
-            public Ole32.VARENUM tdescAlias_vt;
-
-            //public    NativeMethods.tagIDLDESC idldescType;
-            [MarshalAs(UnmanagedType.U4)]
-            public int idldescType_dwReserved;
-
-            public Ole32.IDLFLAG idldescType_wIDLFlags;
-
-            public tagTYPEDESC Get_tdescAlias()
-            {
-                tagTYPEDESC td;
-                td.unionMember = (IntPtr)tdescAlias_unionMember;
-                td.vt = tdescAlias_vt;
-                return td;
-            }
-
-            public tagIDLDESC Get_idldescType()
-            {
-                tagIDLDESC id = new tagIDLDESC
-                {
-                    dwReserved = idldescType_dwReserved,
-                    wIDLFlags = idldescType_wIDLFlags
-                };
-                return id;
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct tagELEMDESC
-        {
-            public tagTYPEDESC tdesc;
-            public tagPARAMDESC paramdesc;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct tagIDLDESC
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int dwReserved;
-            public Ole32.IDLFLAG wIDLFlags;
         }
 
         public struct RGBQUAD
