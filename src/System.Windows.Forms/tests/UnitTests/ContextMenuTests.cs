@@ -8,144 +8,180 @@ using System.Drawing;
 using System.Linq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
     public class ContextMenuTests
     {
-        [Fact]
+        [WinFormsFact]
         public void ContextMenu_Ctor_Default()
         {
-            var menu = new ContextMenu();
-            Assert.Empty(menu.MenuItems);
-            Assert.False(menu.IsParent);
-            Assert.Equal(RightToLeft.No, menu.RightToLeft);
-            Assert.Null(menu.SourceControl);
-            Assert.Empty(menu.Name);
-            Assert.Null(menu.Site);
+            using var menu = new SubContextMenu();
+            Assert.True(menu.CanRaiseEvents);
             Assert.Null(menu.Container);
+            Assert.False(menu.DesignMode);
+            Assert.NotNull(menu.Events);
+            Assert.Same(menu.Events, menu.Events);
+            Assert.False(menu.IsParent);
+            Assert.Empty(menu.MenuItems);
+            Assert.Same(menu.MenuItems, menu.MenuItems);
+            Assert.Empty(menu.Name);
+            Assert.Equal(RightToLeft.No, menu.RightToLeft);
+            Assert.Null(menu.Site);
+            Assert.Null(menu.SourceControl);
             Assert.Null(menu.Tag);
         }
 
         public static IEnumerable<object[]> Ctor_MenuItemArray_TestData()
         {
-            yield return new object[] { null, false };
-            yield return new object[] { Array.Empty<MenuItem>(), false };
-            yield return new object[] { new MenuItem[] { new MenuItem() }, true };
+            var menuItem = new MenuItem();
+            yield return new object[] { null, false, Array.Empty<MenuItem>() };
+            yield return new object[] { Array.Empty<MenuItem>(), false, Array.Empty<MenuItem>() };
+            yield return new object[] { new MenuItem[] { menuItem }, true, new MenuItem[] { menuItem } };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_MenuItemArray_TestData))]
-        public void ContextMenu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent)
+        public void ContextMenu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent, MenuItem[] expectedItems)
         {
-            var menu = new ContextMenu(items);
-            Assert.Equal(items ?? Array.Empty<MenuItem>(), menu.MenuItems.Cast<MenuItem>());
-            for (int i = 0; i < (items?.Length ?? 0); i++)
+            using var menu = new SubContextMenu(items);
+            Assert.True(menu.CanRaiseEvents);
+            Assert.Null(menu.Container);
+            Assert.False(menu.DesignMode);
+            Assert.NotNull(menu.Events);
+            Assert.Same(menu.Events, menu.Events);
+            Assert.Equal(expectedIsParent, menu.IsParent);
+            Assert.Equal(expectedItems, menu.MenuItems.Cast<MenuItem>());
+            for (int i = 0; i < menu.MenuItems.Count; i++)
             {
                 Assert.Equal(i, menu.MenuItems[i].Index);
                 Assert.Equal(menu, menu.MenuItems[i].Parent);
             }
-            Assert.Equal(expectedIsParent, menu.IsParent);
-            Assert.Equal(RightToLeft.No, menu.RightToLeft);
-            Assert.Null(menu.SourceControl);
+            Assert.Same(menu.MenuItems, menu.MenuItems);
             Assert.Empty(menu.Name);
+            Assert.Equal(RightToLeft.No, menu.RightToLeft);
             Assert.Null(menu.Site);
-            Assert.Null(menu.Container);
+            Assert.Null(menu.SourceControl);
             Assert.Null(menu.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContextMenu_Ctor_NullItemInMenuItemArray_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("item", () => new ContextMenu(new MenuItem[] { null }));
         }
 
-        [Fact]
-        public void ContextMenu_SourceControl_GetProcessingKeyMessage_Succes()
+        [WinFormsTheory]
+        [InlineData((int)User32.WindowMessage.WM_KEYDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_SYSKEYDOWN)]
+        public void ContextMenu_SourceControl_GetProcessingKeyMessage_Success(int windowMessage)
         {
-            var control = new Control
+            using var menu = new ContextMenu();
+            using var control = new Control
             {
-                ContextMenu = new ContextMenu()
+                ContextMenu = menu
             };
-
-            ContextMenu menu = control.ContextMenu;
             Assert.Null(menu.SourceControl);
 
-            var message = new Message
+            var msg = new Message
             {
-                Msg = 0x0100 // WM_KEYDOWN
+                Msg = windowMessage
             };
-            control.PreProcessMessage(ref message);
+            control.PreProcessMessage(ref msg);
             Assert.Same(control, menu.SourceControl);
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
-        public void ContextMenu_RightToLeft_SetWithoutSourceControl_GetReturnsExpected(RightToLeft value, RightToLeft expectedValue)
+        public void ContextMenu_RightToLeft_SetWithoutSourceControl_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var menu = new ContextMenu
+            using var menu = new ContextMenu
             {
                 RightToLeft = value
             };
-            Assert.Equal(expectedValue, menu.RightToLeft);
+            Assert.Equal(expected, menu.RightToLeft);
+            
+            // Set same.
+            menu.RightToLeft = value;
+            Assert.Equal(expected, menu.RightToLeft);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void ContextMenu_RightToLeft_SetWithItems_GetReturnsExpected(RightToLeft value, RightToLeft expected)
+        {
+            using var menu = new ContextMenu(new MenuItem[] { new MenuItem() })
+            {
+                RightToLeft = value
+            };
+            Assert.Equal(expected, menu.RightToLeft);
+            
+            // Set same.
+            menu.RightToLeft = value;
+            Assert.Equal(expected, menu.RightToLeft);
         }
 
         [Theory]
         [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
         [InlineData(RightToLeft.No, RightToLeft.No)]
         [InlineData(RightToLeft.Inherit, RightToLeft.Yes)]
-        public void ContextMenu_RightToLeft_SetWithSourceControl_GetReturnsExpected(RightToLeft value, RightToLeft expectedValue)
+        public void ContextMenu_RightToLeft_SetWithSourceControl_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var control = new Control
+            using var menu = new ContextMenu();
+            using var control = new Control
             {
-                ContextMenu = new ContextMenu(),
+                ContextMenu = menu,
                 RightToLeft = RightToLeft.Yes
             };
-
-            ContextMenu menu = control.ContextMenu;
-            var message = new Message
+            var msg = new Message
             {
-                Msg = 0x0100 // WM_KEYDOWN
+                Msg = (int)User32.WindowMessage.WM_KEYDOWN
             };
-            control.PreProcessMessage(ref message);
+            control.PreProcessMessage(ref msg);
 
             menu.RightToLeft = value;
-            Assert.Equal(expectedValue, menu.RightToLeft);
+            Assert.Equal(expected, menu.RightToLeft);
         }
 
-        [Fact]
-        public void ContextMenu_RightToLeft_SetCreated_GetReturnsExpected()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void ContextMenu_RightToLeft_SetCreated_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            using (var menu = new ContextMenu(new MenuItem[] { new MenuItem("text") }))
-            {
-                Assert.NotEqual(IntPtr.Zero, menu.Handle);
-                menu.RightToLeft = RightToLeft.Yes;
-                menu.RightToLeft = RightToLeft.No;
-                Assert.Equal(RightToLeft.No, menu.RightToLeft);
-            }
+            using var menu = new ContextMenu(new MenuItem[] { new MenuItem("text") });
+            Assert.NotEqual(IntPtr.Zero, menu.Handle);
+
+            menu.RightToLeft = value;
+            Assert.Equal(expected, menu.RightToLeft);
+
+            // Set same.
+            menu.RightToLeft = value;
+            Assert.Equal(expected, menu.RightToLeft);
         }
 
         [Theory]
         [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft), MemberType = typeof(CommonTestHelper))]
         public void ContextMenu_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var menu = new ContextMenu();
+            using var menu = new ContextMenu();
             Assert.Throws<InvalidEnumArgumentException>("RightToLeft", () => menu.RightToLeft = value);
         }
 
         public static IEnumerable<object[]> ProcessCmdKey_TestData()
         {
-            yield return new object[] { new MenuItem { Shortcut = Shortcut.CtrlA }, true, 1, 0 };
-            yield return new object[] { new MenuItem { Shortcut = Shortcut.CtrlA, Enabled = false }, false, 0, 0 };
-            yield return new object[] { new MenuItem("text", new MenuItem[] { new MenuItem() }) { Shortcut = Shortcut.CtrlA }, true, 0, 1 };
-            yield return new object[] { new MenuItem("text", new MenuItem[] { new MenuItem() }) { Shortcut = Shortcut.CtrlA, Enabled = false }, false, 0, 0 };
+            foreach (Control control in new Control[] { null, new Control() })
+            {
+                yield return new object[] { new MenuItem { Shortcut = Shortcut.CtrlA }, control, true, 1, 0 };
+                yield return new object[] { new MenuItem { Shortcut = Shortcut.CtrlA, Enabled = false }, control, false, 0, 0 };
+                yield return new object[] { new MenuItem("text", new MenuItem[] { new MenuItem() }) { Shortcut = Shortcut.CtrlA }, control, true, 0, 1 };
+                yield return new object[] { new MenuItem("text", new MenuItem[] { new MenuItem() }) { Shortcut = Shortcut.CtrlA, Enabled = false }, control, false, 0, 0 };
+            }
         }
 
         [Theory]
         [MemberData(nameof(ProcessCmdKey_TestData))]
-        public void ContextMenu_ProcessCmdKey_HasItemWithShoutcutKey_ReturnsExpected(MenuItem menuItem, bool expectedResult, int expectedOnClickCallCount, int expectedOnPopupCallCount)
+        public void ContextMenu_ProcessCmdKey_HasItemWithShoutcutKey_ReturnsExpected(MenuItem menuItem, Control control, bool expectedResult, int expectedOnClickCallCount, int expectedOnPopupCallCount)
         {
-            var control = new Control();
             int onClickCallCount = 0;
             menuItem.Click += (sender, e) =>
             {
@@ -162,18 +198,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(EventArgs.Empty, e);
             };
 
-            var menu = new ContextMenu(new MenuItem[] { menuItem });
-            var message = new Message();
-            Assert.Equal(expectedResult, menu.ProcessCmdKey(ref message, Keys.Control | Keys.A, control));
+            using var menu = new SubContextMenu(new MenuItem[] { menuItem });
+            var msg = new Message();
+            Assert.Equal(expectedResult, menu.ProcessCmdKey(ref msg, Keys.Control | Keys.A, control));
             Assert.Same(control, menu.SourceControl);
             Assert.Equal(expectedOnClickCallCount, onClickCallCount);
             Assert.Equal(expectedOnPopupCallCount, onPopupCallCount);
         }
 
-        [Fact]
-        public void ContextMenu_Show_ControlPoint_Success()
+        [WinFormsFact]
+        public void ContextMenu_Show_InvokeControlPoint_Success()
         {
-            var menu = new ContextMenu();
+            using var menu = new ContextMenu();
             var control = new Control
             {
                 Visible = true
@@ -192,12 +228,12 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control, menu.SourceControl);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(LeftRightAlignment), MemberType = typeof(CommonTestHelper))]
         [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(LeftRightAlignment), MemberType = typeof(CommonTestHelper))]
-        public void ContextMenu_Show_ControlPointLeftRightAlignment_Success(LeftRightAlignment alignment)
+        public void ContextMenu_Show_InvokeControlPointLeftRightAlignment_Success(LeftRightAlignment alignment)
         {
-            var menu = new ContextMenu();
+            using var menu = new ContextMenu();
             var control = new Control
             {
                 Visible = true
@@ -216,18 +252,18 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control, menu.SourceControl);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContextMenu_Show_NullControl_ThrowsArgumentNullException()
         {
-            var menu = new ContextMenu();
+            using var menu = new ContextMenu();
             Assert.Throws<ArgumentNullException>("control", () => menu.Show(null, new Point(1, 2)));
             Assert.Throws<ArgumentNullException>("control", () => menu.Show(null, new Point(1, 2), LeftRightAlignment.Left));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContextMenu_Show_NotVisibleControl_ThrowsArgumentException()
         {
-            var menu = new ContextMenu();
+            using var menu = new ContextMenu();
             var control = new Control
             {
                 Visible = false
@@ -237,10 +273,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("control", () => menu.Show(control, new Point(1, 2), LeftRightAlignment.Left));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContextMenu_Show_ControlHasNoHandle_ThrowsArgumentException()
         {
-            var menu = new ContextMenu();
+            using var menu = new ContextMenu();
             var control = new Control
             {
                 Visible = true
@@ -249,56 +285,75 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("control", () => menu.Show(control, new Point(1, 2), LeftRightAlignment.Left));
         }
 
-        [Fact]
-        public void ContextMenu_OnCollapse_Invoke_Success()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ContextMenu_OnCollapse_Invoke_CallsCollapse(EventArgs eventArgs)
         {
-            var menu = new ContextMenu();
-
-            // No handler.
-            menu.OnCollapse(null);
-
-            // Handler.
+            using var menu = new SubContextMenu();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
-                Assert.Equal(menu, sender);
+                Assert.Same(menu, sender);
+                Assert.Same(eventArgs, e);
                 callCount++;
             };
-
+        
+            // Call with handler.
             menu.Collapse += handler;
-            menu.OnCollapse(null);
+            menu.OnCollapse(eventArgs);
             Assert.Equal(1, callCount);
-
-            // Should not call if the handler is removed.
-            menu.Collapse -= handler;
-            menu.OnCollapse(null);
+        
+           // Remove handler.
+           menu.Collapse -= handler;
+           menu.OnCollapse(eventArgs);
+           Assert.Equal(1, callCount);
+        }
+        
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ContextMenu_OnPopup_Invoke_CallsPopup(EventArgs eventArgs)
+        {
+            using var menu = new SubContextMenu();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(menu, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            menu.Popup += handler;
+            menu.OnPopup(eventArgs);
             Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           menu.Popup -= handler;
+           menu.OnPopup(eventArgs);
+           Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ContextMenu_OnPopup_Invoke_Success()
+        private class SubContextMenu : ContextMenu
         {
-            var menu = new ContextMenu();
-
-            // No handler.
-            menu.OnPopup(null);
-
-            // Handler.
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            public SubContextMenu() : base()
             {
-                Assert.Equal(menu, sender);
-                callCount++;
-            };
+            }
 
-            menu.Popup += handler;
-            menu.OnPopup(null);
-            Assert.Equal(1, callCount);
+            public SubContextMenu(MenuItem[] menuItems) : base(menuItems)
+            {
+            }
 
-            // Should not call if the handler is removed.
-            menu.Popup -= handler;
-            menu.OnPopup(null);
-            Assert.Equal(1, callCount);
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new EventHandlerList Events => base.Events;
+
+            public new void OnCollapse(EventArgs e) => base.OnCollapse(e);
+
+            public new void OnPopup(EventArgs e) => base.OnPopup(e);
+
+            public new bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) => base.ProcessCmdKey(ref msg, keyData, control);
         }
     }
 }
