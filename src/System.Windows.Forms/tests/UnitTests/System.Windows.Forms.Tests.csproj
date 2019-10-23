@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
   </ItemGroup>
 
