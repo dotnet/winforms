@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             IntPtr hdc = dc.GetHdc();
 
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             IntPtr hdc = dc.GetHdc();
 
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
             {
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
             {
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             IntPtr hdc = dc.GetHdc();
 
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             IntPtr hdc = dc.GetHdc();
 
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
             {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
             {
@@ -261,7 +261,8 @@ namespace System.Windows.Forms
             {
                 return Size.Empty;
             }
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             IntPtr hdc = dc.GetHdc();
 
@@ -292,7 +293,7 @@ namespace System.Windows.Forms
                 return Size.Empty;
             }
 
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             IntPtr hdc = dc.GetHdc();
 
@@ -322,7 +323,8 @@ namespace System.Windows.Forms
             {
                 return Size.Empty;
             }
-            WindowsFontQuality fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
+
+            Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
             {

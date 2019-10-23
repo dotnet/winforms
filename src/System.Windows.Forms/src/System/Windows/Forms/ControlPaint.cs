@@ -2288,14 +2288,14 @@ namespace System.Windows.Forms
             User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(source);
 
             short fontWeight = target.Weight;
-            if (fontWeight != logfont.lfWeight)
+            if (fontWeight != (short)logfont.lfWeight)
             {
                 target.Weight = (short)logfont.lfWeight;
                 changed = true;
             }
 
             bool fontBold = target.Bold.IsTrue();
-            bool isBold = logfont.lfWeight >= 700;
+            bool isBold = logfont.lfWeight >= Gdi32.FW.BOLD;
             if (fontBold != isBold)
             {
                 target.Bold = isBold.ToBOOL();
