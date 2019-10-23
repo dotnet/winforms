@@ -31,20 +31,19 @@ namespace System.Windows.Forms
         // these four values define the range of possible values, how to navigate
         // through them, and the current position
         //
-        private int minimum = 0;
-        private int maximum = 100;
-        private int step = 10;
-        private int value = 0;
+        private int _minimum;
+        private int _maximum = 100;
+        private int _step = 10;
+        private int _value;
 
-        //this defines marquee animation speed
-        private int marqueeSpeed = 100;
+        private int _marqueeAnimationSpeed = 100;
 
-        private readonly Color defaultForeColor = SystemColors.Highlight;
+        private static readonly Color s_defaultForeColor = SystemColors.Highlight;
 
-        private ProgressBarStyle style = ProgressBarStyle.Blocks;
+        private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
-        private EventHandler onRightToLeftLayoutChanged;
-        private bool rightToLeftLayout = false;
+        private EventHandler _onRightToLeftLayoutChanged;
+        private bool _rightToLeftLayout;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ProgressBar'/> class in its default
@@ -56,7 +55,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UserPaint |
                      ControlStyles.UseTextForAccessibility |
                      ControlStyles.Selectable, false);
-            ForeColor = defaultForeColor;
+            ForeColor = s_defaultForeColor;
         }
 
         /// <summary>
@@ -131,24 +130,24 @@ namespace System.Windows.Forms
         {
             get
             {
-                return style;
+                return _style;
             }
             set
             {
-                if (style != value)
+                if (_style != value)
                 {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ProgressBarStyle.Blocks, (int)ProgressBarStyle.Marquee))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ProgressBarStyle));
                     }
-                    style = value;
+                    _style = value;
                     if (IsHandleCreated)
                     {
                         RecreateHandle();
                     }
 
-                    if (style == ProgressBarStyle.Marquee)
+                    if (_style == ProgressBarStyle.Marquee)
                     {
                         StartMarquee();
                     }
@@ -297,7 +296,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return marqueeSpeed;
+                return _marqueeAnimationSpeed;
             }
             set
             {
@@ -305,7 +304,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException("MarqueeAnimationSpeed must be non-negative");
                 }
-                marqueeSpeed = value;
+                _marqueeAnimationSpeed = value;
                 if (!DesignMode)
                 {
                     StartMarquee();
@@ -318,15 +317,15 @@ namespace System.Windows.Forms
         /// </summary>
         private void StartMarquee()
         {
-            if (IsHandleCreated && style == ProgressBarStyle.Marquee)
+            if (IsHandleCreated && _style == ProgressBarStyle.Marquee)
             {
-                if (marqueeSpeed == 0)
+                if (_marqueeAnimationSpeed == 0)
                 {
-                    SendMessage(NativeMethods.PBM_SETMARQUEE, 0, marqueeSpeed);
+                    SendMessage(NativeMethods.PBM_SETMARQUEE, 0, _marqueeAnimationSpeed);
                 }
                 else
                 {
-                    SendMessage(NativeMethods.PBM_SETMARQUEE, 1, marqueeSpeed);
+                    SendMessage(NativeMethods.PBM_SETMARQUEE, 1, _marqueeAnimationSpeed);
                 }
             }
         }
@@ -345,11 +344,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maximum;
+                return _maximum;
             }
             set
             {
-                if (maximum != value)
+                if (_maximum != value)
                 {
                     // Ensure that value is in the Win32 control's acceptable range
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
@@ -359,21 +358,21 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Maximum), value, 0));
                     }
 
-                    if (minimum > value)
+                    if (_minimum > value)
                     {
-                        minimum = value;
+                        _minimum = value;
                     }
 
-                    maximum = value;
+                    _maximum = value;
 
-                    if (this.value > maximum)
+                    if (this._value > _maximum)
                     {
-                        this.value = maximum;
+                        this._value = _maximum;
                     }
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.PBM_SETRANGE32, minimum, maximum);
+                        SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
                         UpdatePos();
                     }
                 }
@@ -393,11 +392,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return minimum;
+                return _minimum;
             }
             set
             {
-                if (minimum != value)
+                if (_minimum != value)
                 {
                     // Ensure that value is in the Win32 control's acceptable range
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
@@ -407,21 +406,21 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Minimum), value, 0));
                     }
 
-                    if (maximum < value)
+                    if (_maximum < value)
                     {
-                        maximum = value;
+                        _maximum = value;
                     }
 
-                    minimum = value;
+                    _minimum = value;
 
-                    if (this.value < minimum)
+                    if (this._value < _minimum)
                     {
-                        this.value = minimum;
+                        this._value = _minimum;
                     }
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.PBM_SETRANGE32, minimum, maximum);
+                        SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
                         UpdatePos();
                     }
                 }
@@ -484,14 +483,14 @@ namespace System.Windows.Forms
             get
             {
 
-                return rightToLeftLayout;
+                return _rightToLeftLayout;
             }
 
             set
             {
-                if (value != rightToLeftLayout)
+                if (value != _rightToLeftLayout)
                 {
-                    rightToLeftLayout = value;
+                    _rightToLeftLayout = value;
                     using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
                     {
                         OnRightToLeftLayoutChanged(EventArgs.Empty);
@@ -503,8 +502,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
-            add => onRightToLeftLayoutChanged += value;
-            remove => onRightToLeftLayoutChanged -= value;
+            add => _onRightToLeftLayoutChanged += value;
+            remove => _onRightToLeftLayoutChanged -= value;
         }
 
         /// <summary>
@@ -520,14 +519,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return step;
+                return _step;
             }
             set
             {
-                step = value;
+                _step = value;
                 if (IsHandleCreated)
                 {
-                    SendMessage(NativeMethods.PBM_SETSTEP, step, 0);
+                    SendMessage(NativeMethods.PBM_SETSTEP, _step, 0);
                 }
             }
         }
@@ -585,18 +584,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                return value;
+                return _value;
             }
             set
             {
-                if (this.value != value)
+                if (this._value != value)
                 {
-                    if ((value < minimum) || (value > maximum))
+                    if ((value < _minimum) || (value > _maximum))
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, "'minimum'", "'maximum'"));
                     }
 
-                    this.value = value;
+                    this._value = value;
                     UpdatePos();
                 }
             }
@@ -698,16 +697,16 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
-            this.value += value;
+            this._value += value;
 
             // Enforce that value is within the range (minimum, maximum)
-            if (this.value < minimum)
+            if (this._value < _minimum)
             {
-                this.value = minimum;
+                this._value = _minimum;
             }
-            if (this.value > maximum)
+            if (this._value > _maximum)
             {
-                this.value = maximum;
+                this._value = _maximum;
             }
 
             UpdatePos();
@@ -719,9 +718,9 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessage(NativeMethods.PBM_SETRANGE32, minimum, maximum);
-            SendMessage(NativeMethods.PBM_SETSTEP, step, 0);
-            SendMessage(NativeMethods.PBM_SETPOS, value, 0);
+            SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
+            SendMessage(NativeMethods.PBM_SETSTEP, _step, 0);
+            SendMessage(NativeMethods.PBM_SETPOS, _value, 0);
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBKCOLOR, 0, ColorTranslator.ToWin32(BackColor));
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBARCOLOR, 0, ColorTranslator.ToWin32(ForeColor));
             StartMarquee();
@@ -750,7 +749,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            onRightToLeftLayoutChanged?.Invoke(this, e);
+            _onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -764,7 +763,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ProgressBarPerformStepMarqueeException);
             }
-            Increment(step);
+            Increment(_step);
         }
 
         /// <summary>
@@ -773,7 +772,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetForeColor()
         {
-            ForeColor = defaultForeColor;
+            ForeColor = s_defaultForeColor;
         }
 
         /// <summary>
@@ -782,7 +781,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeForeColor()
         {
-            return ForeColor != defaultForeColor;
+            return ForeColor != s_defaultForeColor;
         }
 
         internal override bool SupportsUiaProviders => true;
@@ -793,7 +792,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + value;
+            return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + _value;
         }
 
         /// <summary>
@@ -804,7 +803,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.PBM_SETPOS, value, 0);
+                SendMessage(NativeMethods.PBM_SETPOS, _value, 0);
             }
         }
 
