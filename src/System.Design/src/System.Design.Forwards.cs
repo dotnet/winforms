@@ -4,6 +4,7 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageIndexEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListControlStringCollectionEditor))]
