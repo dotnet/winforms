@@ -23,9 +23,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32)]
         public static extern int StretchDIBits(IntPtr hdc, int XDest, int YDest, int nDestWidth, int nDestHeight, int XSrc, int YSrc, int nSrcWidth, int nSrcHeight, byte[] lpBits, ref NativeMethods.BITMAPINFO_FLAT lpBitsInfo, int iUsage, int dwRop);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr CreateCompatibleBitmap(HandleRef hDC, int width, int height);
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseFont([In, Out] NativeMethods.CHOOSEFONT cf);
 
@@ -163,13 +160,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DrawFrameControl(HandleRef hDC, ref RECT rect, int type, int state);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool BitBlt(HandleRef hDC, int x, int y, int nWidth, int nHeight,
-                                         HandleRef hSrcDC, int xSrc, int ySrc, int dwRop);
-
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool BitBlt(IntPtr hDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, int dwRop);
 
         // Theming/Visual Styles
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]

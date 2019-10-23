@@ -467,11 +467,27 @@ namespace System.Windows.Forms.Design
                 {
                     gDest.Clear(SystemColors.Control);
                 }
+
                 IntPtr destDC = gDest.GetHdc();
-                //perform our bitblit operation to push the image into the dest bitmap
-                SafeNativeMethods.BitBlt(destDC, 0, 0, image.Width, image.Height, controlDC, 0, 0, 0xcc0020/*RasterOp.SOURCE*/);
-                //clean up all our handles and what not
-                gDest.ReleaseHdc(destDC);
+                try
+                {
+                    // Perform our bitblit operation to push the image into the dest bitmap
+                    Gdi32.BitBlt(
+                        destDC,
+                        0,
+                        0,
+                        image.Width,
+                        image.Height,
+                        controlDC,
+                        0,
+                        0,
+                        Gdi32.ROP.SRCCOPY);
+                }
+                finally
+                {
+                    // Clean up all our handles and what not
+                    gDest.ReleaseHdc(destDC);
+                }
             }
         }
 

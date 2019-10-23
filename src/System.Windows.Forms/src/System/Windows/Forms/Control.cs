@@ -5419,9 +5419,23 @@ namespace System.Windows.Forms
                     using (Graphics destGraphics = Graphics.FromImage(bitmap))
                     {
                         IntPtr desthDC = destGraphics.GetHdc();
-                        SafeNativeMethods.BitBlt(new HandleRef(destGraphics, desthDC), targetBounds.X, targetBounds.Y, width, height,
-                                                 new HandleRef(g, hDc), 0, 0, 0xcc0020);
-                        destGraphics.ReleaseHdcInternal(desthDC);
+                        try
+                        {
+                            Gdi32.BitBlt(
+                                new HandleRef(destGraphics, desthDC),
+                                targetBounds.X,
+                                targetBounds.Y,
+                                width,
+                                height,
+                                new HandleRef(g, hDc),
+                                0,
+                                0,
+                                Gdi32.ROP.SRCCOPY);
+                        }
+                        finally
+                        {
+                            destGraphics.ReleaseHdcInternal(desthDC);
+                        }
                     }
 
                     g.ReleaseHdcInternal(hDc);

@@ -3085,14 +3085,28 @@ namespace System.Windows.Forms
             using (Graphics g = Graphics.FromImage(image))
             {
                 IntPtr imageHdc = g.GetHdc();
-                //send the actual wm_print message
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
-                    (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                try
+                {
+                    //send the actual wm_print message
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
+                        (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
-                //now BLT the result to the destination bitmap.
-                SafeNativeMethods.BitBlt(new HandleRef(this, hDC), bounds.X, bounds.Y, bounds.Width, bounds.Height,
-                                             new HandleRef(g, imageHdc), 0, 0, NativeMethods.SRCCOPY);
-                g.ReleaseHdcInternal(imageHdc);
+                    // Now BLT the result to the destination bitmap.
+                    Gdi32.BitBlt(
+                        new HandleRef(this, hDC),
+                        bounds.X,
+                        bounds.Y,
+                        bounds.Width,
+                        bounds.Height,
+                        new HandleRef(g, imageHdc),
+                        0,
+                        0,
+                        Gdi32.ROP.SRCCOPY);
+                }
+                finally
+                {
+                    g.ReleaseHdcInternal(imageHdc);
+                }
             }
         }
 
@@ -4046,7 +4060,7 @@ namespace System.Windows.Forms
 
                                     // PERF - consider - we only actually need to copy the clipping rect.
                                     // copy the background from the toolstrip onto the offscreen bitmap
-                                    SafeNativeMethods.BitBlt(
+                                    Gdi32.BitBlt(
                                         new HandleRef(ItemHdcInfo, itemHDC),
                                         0,
                                         0,
@@ -4055,7 +4069,7 @@ namespace System.Windows.Forms
                                         toolStripHDC,
                                         item.Bounds.X,
                                         item.Bounds.Y,
-                                        NativeMethods.SRCCOPY);
+                                        Gdi32.ROP.SRCCOPY);
 
                                     // paint the item into the offscreen bitmap
                                     using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
@@ -4064,7 +4078,7 @@ namespace System.Windows.Forms
                                     }
 
                                     // copy the item back onto the toolstrip
-                                    SafeNativeMethods.BitBlt(
+                                    Gdi32.BitBlt(
                                         toolStripHDC,
                                         item.Bounds.X,
                                         item.Bounds.Y,
@@ -4073,7 +4087,7 @@ namespace System.Windows.Forms
                                         new HandleRef(ItemHdcInfo, itemHDC),
                                         0,
                                         0,
-                                        NativeMethods.SRCCOPY);
+                                        Gdi32.ROP.SRCCOPY);
 
                                     GC.KeepAlive(ItemHdcInfo);
                                 }
@@ -5722,7 +5736,7 @@ namespace System.Windows.Forms
                 }
 
                 // create compatible bitmap with the correct size.
-                _cachedItemBitmap = SafeNativeMethods.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
+                _cachedItemBitmap = Gdi32.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
                 IntPtr oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // delete the old bitmap
