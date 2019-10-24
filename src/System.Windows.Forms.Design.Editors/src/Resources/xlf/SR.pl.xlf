@@ -209,6 +209,11 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
         <target state="translated">(Nieznany)</target>
         <note />
       </trans-unit>
+      <trans-unit id="StringCollectionEditor_EmptyText">
+        <source>Empty string</source>
+        <target state="new">Empty string</target>
+        <note />
+      </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
         <target state="translated">Pliki map bitowych</target>

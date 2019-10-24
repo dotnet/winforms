@@ -130,7 +130,7 @@
       <trans-unit id="ContentAlignmentEditorTopRightAccName">
         <source>Top Right</source>
         <target state="new">Top Right</target>
-      <note />
+        <note />
       </trans-unit>
       <trans-unit id="DataSourceLocksItems">
         <source>Items collection cannot be modified when the DataSource property is set.</source>
@@ -207,6 +207,11 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
         <target state="translated">(Neznámý)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StringCollectionEditor_EmptyText">
+        <source>Empty string</source>
+        <target state="new">Empty string</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">

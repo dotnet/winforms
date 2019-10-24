@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using static System.Windows.Forms.Design.UnsafeNativeMethods;
 
 namespace System.Windows.Forms.Design
 {
@@ -208,27 +209,255 @@ namespace System.Windows.Forms.Design
             }
 
             // <summary>
-            //  This is called when the value property in the CollectionForm has changed.
-            //  In it you should update your user interface to reflect the current value.
+            //      This is called when the value property in the CollectionForm has changed.
+            //      In it you should update your user interface to reflect the current value.
             // </summary>
+            // </doc>
             protected override void OnEditValueChanged()
             {
-                object[] items = Items;
-                string text = string.Empty;
+                _textEntry.Text = string.Join("\r\n", Items);
+            }
 
-                for (int i = 0; i < items.Length; i++)
+            public class TextBoxUiaProvider : IRawElementProviderSimple
+            {
+                private TextBox _owningTextBox;
+                private AccessibleObject _defaultAccessibilityObject;
+                private bool notificationEventAvailable = true;
+
+                public TextBoxUiaProvider(TextBox owningTextBox, AccessibleObject accessibilityObject)
                 {
-                    if (items[i] is string)
+                    _owningTextBox = owningTextBox;
+                    _defaultAccessibilityObject = accessibilityObject;
+                }
+
+                public IRawElementProviderSimple HostRawElementProvider
+                {
+                    get
                     {
-                        text += (string)items[i];
-                        if (i != items.Length - 1)
-                        {
-                            text += "\r\n";
-                        }
+                        IRawElementProviderSimple provider;
+                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new Runtime.InteropServices.HandleRef(this, _owningTextBox.Handle), out provider);
+                        return provider;
                     }
                 }
 
-                _textEntry.Text = text;
+                public ProviderOptions ProviderOptions
+                {
+                    get
+                    {
+                        return ProviderOptions.ServerSideProvider;
+                    }
+                }
+
+                public object GetPatternProvider(int patternId)
+                {
+                    return null;
+                }
+
+                public object GetPropertyValue(int propertyId)
+                {
+                    switch (propertyId)
+                    {
+                        case NativeMethods.UIA_ControlTypePropertyId:
+                            return NativeMethods.UIA_EditControlTypeId;
+                        case NativeMethods.UIA_NamePropertyId:
+                            return _defaultAccessibilityObject.Name;
+                        case NativeMethods.UIA_AccessKeyPropertyId:
+                            return _defaultAccessibilityObject.KeyboardShortcut ?? string.Empty;
+                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                            return (_defaultAccessibilityObject.State & AccessibleStates.Focused) == AccessibleStates.Focused;
+                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                            return (_defaultAccessibilityObject.State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
+                        case NativeMethods.UIA_IsEnabledPropertyId:
+                            return _owningTextBox.Enabled;
+                        case NativeMethods.UIA_HelpTextPropertyId:
+                            return _defaultAccessibilityObject.Help ?? string.Empty;
+                        case NativeMethods.UIA_IsPasswordPropertyId:
+                            return false;
+                        case NativeMethods.UIA_IsOffscreenPropertyId:
+                            return (_defaultAccessibilityObject.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    }
+
+                    return null;
+                }
+
+                public int[] GetRuntimeId()
+                {
+                    var runtimeId = new int[2];
+                    runtimeId[0] = 0x2a;
+                    runtimeId[1] = (int)(long)_owningTextBox.Handle;
+                    return runtimeId;
+                }
+
+                public bool RaiseAutomationEvent(int eventId)
+                {
+                    if (UnsafeNativeMethods.UiaClientsAreListening())
+                    {
+                        int result = UnsafeNativeMethods.UiaRaiseAutomationEvent(this, eventId);
+                        return result == NativeMethods.S_OK;
+                    }
+
+                    return false;
+                }
+
+                public bool RaiseAutomationNotification(
+                    NativeMethods.AutomationNotificationKind notificationKind,
+                    NativeMethods.AutomationNotificationProcessing notificationProcessing,
+                    string notificationText)
+                {
+                    if (!notificationEventAvailable)
+                    {
+                        return false;
+                    }
+
+                    if (!UnsafeNativeMethods.UiaClientsAreListening())
+                    {
+                        return false;
+                    }
+
+                    int result = NativeMethods.S_FALSE;
+                    try
+                    {
+                        // The activityId can be any string. It cannot be null. It isn’t used currently.
+                        result = UnsafeNativeMethods.UiaRaiseNotificationEvent(
+                        this,
+                        notificationKind,
+                        notificationProcessing,
+                        notificationText,
+                        String.Empty);
+                    }
+                    catch (EntryPointNotFoundException)
+                    {
+                        // The UIA Notification event is not available, so don't attempt to raise it again.
+                        notificationEventAvailable = false;
+                    }
+
+                    return result == NativeMethods.S_OK;
+                }
+            }
+
+            private sealed class StringCollectionEditorTextBox : TextBox
+            {
+                private int currentRowIndex = 0;
+
+                private IRawElementProviderSimple uiaProvider;
+
+                public IRawElementProviderSimple UiaProvider
+                {
+                    get
+                    {
+                        if (uiaProvider == null)
+                        {
+                            uiaProvider = new TextBoxUiaProvider(this, this.CreateAccessibilityInstance());
+                        }
+
+                        return uiaProvider;
+                    }
+                }
+
+                protected override void OnGotFocus(EventArgs e)
+                {
+                    base.OnGotFocus(e);
+
+                    SelectAndAnnounceCurrentString();
+                }
+
+                protected override void OnKeyUp(KeyEventArgs e)
+                {
+                    base.OnKeyUp(e);
+
+                    if ((e.KeyCode == Keys.Up ||
+                        e.KeyCode == Keys.Down ||
+                        e.KeyCode == Keys.PageUp ||
+                        e.KeyCode == Keys.PageDown) &&
+                        (e.KeyData & Keys.Shift) == 0 &&
+                        (e.KeyData & Keys.Control) == 0)
+                    {
+                        // Announce the string and update the current row index.
+                        SelectAndAnnounceCurrentString();
+                    }
+                    else if (e.KeyCode == Keys.Enter ||
+                        e.KeyCode == Keys.Back)
+                    {
+                        // Update the current row index on enter/backspace
+                        // (current line can be changed in such cases)
+                        int selectionStart = GetFirstCharIndexOfCurrentLine();
+                        currentRowIndex = GetLineFromCharIndex(selectionStart);
+                    }
+                }
+
+                protected override void OnMouseUp(MouseEventArgs mevent)
+                {
+                    base.OnMouseUp(mevent);
+
+                    SelectAndAnnounceCurrentString();
+                }
+
+                public void SelectAndAnnounceCurrentString()
+                {
+                    if (SelectedText.Length > 0)
+                    {
+                        // Do not announce lines when there is a selection.
+                        return;
+                    }
+
+                    var textBoxUiaProvider = UiaProvider as TextBoxUiaProvider;
+                    textBoxUiaProvider.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+
+                    int selectionStart = GetFirstCharIndexOfCurrentLine();
+
+                    if (currentRowIndex == GetLineFromCharIndex(selectionStart))
+                    {
+                        return;
+                    }
+
+                    int selectionEnd = selectionStart;
+                    int position = selectionStart;
+                    while (position < Text.Length && Text[position] != '\r' && Text[position] != '\n')
+                    {
+                        selectionEnd = position++;
+                    }
+
+                    string stringEntryAnnouncement = (selectionEnd - selectionStart == 0)
+                        ? SR.StringCollectionEditor_EmptyText
+                        : Text.Substring(selectionStart, selectionEnd - selectionStart + 1);
+
+                    // NOTE: What is better UI experience: to select the string
+                    // on up/down navigating to another line or not? Disable selecting for now.
+                    // Select(selectionStart, selectionEnd - selectionStart + 1);
+
+                    textBoxUiaProvider.RaiseAutomationNotification(
+                        NativeMethods.AutomationNotificationKind.Other,
+                        NativeMethods.AutomationNotificationProcessing.All,
+                        stringEntryAnnouncement);
+
+                    currentRowIndex = GetLineFromCharIndex(selectionStart);
+                }
+
+                protected override AccessibleObject CreateAccessibilityInstance()
+                {
+                    return base.CreateAccessibilityInstance();
+                }
+
+                protected override void WndProc(ref Message m)
+                {
+                    if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)(NativeMethods.UiaRootObjectId))
+                    {
+                        m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
+                            new Runtime.InteropServices.HandleRef(this, Handle),
+                            m.WParam,
+                            m.LParam,
+                            UiaProvider);
+
+                        return;
+                    }
+
+                    if (m.Msg == Interop.WindowMessages.WM_DESTROY)
+                    {
+                        UnsafeNativeMethods.UiaReturnRawElementProvider(new Runtime.InteropServices.HandleRef(this, Handle), new IntPtr(0), new IntPtr(0), null);
+                    }
+
+                    base.WndProc(ref m);
+                }
             }
         }
     }

@@ -209,6 +209,11 @@ Pressione Ctrl+Enter para aceitar Texto.</target>
         <target state="translated">(Desconhecido)</target>
         <note />
       </trans-unit>
+      <trans-unit id="StringCollectionEditor_EmptyText">
+        <source>Empty string</source>
+        <target state="new">Empty string</target>
+        <note />
+      </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
         <target state="translated">Arquivos de bitmap</target>
