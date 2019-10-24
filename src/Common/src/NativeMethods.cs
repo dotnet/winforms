@@ -2679,8 +2679,5 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
     }
 }
