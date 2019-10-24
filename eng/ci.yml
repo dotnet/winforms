@@ -145,7 +145,6 @@ stages:
       # Symbol validation isn't being very reliable lately. This should be enabled back
       # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
       enableSymbolValidation: false
-      # SourceLink validation
       enableSourceLinkValidation: true
 
       # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
