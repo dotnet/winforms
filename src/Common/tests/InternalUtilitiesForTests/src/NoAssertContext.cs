@@ -56,6 +56,10 @@ namespace System
 
             lock (s_lock)
             {
+                // If we came in during uninstallation we need to wait until it completes.
+                while (s_uninstalling)
+                    Monitor.Wait(s_lock);
+
                 if (!s_suppressedThreads.Add(Thread.CurrentThread.ManagedThreadId))
                 {
                     // If this thread already is suppressed then this is a nested NoAssertContext.
@@ -68,11 +72,6 @@ namespace System
                 if (s_suppressedThreads.Count == 1)
                 {
                     install = true;
-
-                    // If we came in during uninstallation we need to wait until it completes.
-                    while (s_uninstalling)
-                        Monitor.Wait(s_lock);
-
                     s_installing = true;
                 }
                 else
@@ -124,24 +123,23 @@ namespace System
             if (!_registeredSuppression)
                 return;
 
+            _registeredSuppression = false;
             bool uninstall = false;
             TraceListener defaultListener = null;
 
             lock (s_lock)
             {
+                while (s_installing)
+                    Monitor.Wait(s_lock);
+
                 s_suppressedThreads.Remove(Thread.CurrentThread.ManagedThreadId);
                 if (s_suppressedThreads.Count == 0)
                 {
-                    while (s_installing)
-                        Monitor.Wait(s_lock);
-
                     uninstall = true;
                     defaultListener = s_noAssertListener;
                     s_uninstalling = true;
                 }
             }
-
-            _registeredSuppression = false;
 
             if (uninstall)
             {
