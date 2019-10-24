@@ -214,6 +214,11 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <target state="translated">(Neznámý)</target>
         <note />
       </trans-unit>
+      <trans-unit id="StringCollectionEditor_EmptyText">
+        <source>Empty string</source>
+        <target state="new">Empty string</target>
+        <note />
+      </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
         <target state="translated">Rastrové soubory</target>

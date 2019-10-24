@@ -257,4 +257,7 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="iconFileDescription" xml:space="preserve">
     <value>Icon files</value>
   </data>
+  <data name="StringCollectionEditor_EmptyText" xml:space="preserve">
+    <value>Empty string</value>
+  </data>
 </root>

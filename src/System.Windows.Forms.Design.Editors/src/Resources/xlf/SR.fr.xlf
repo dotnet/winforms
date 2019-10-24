@@ -214,6 +214,11 @@ Appuyez sur Ctrl+Entrée pour valider le texte.</target>
         <target state="translated">(Inconnu)</target>
         <note />
       </trans-unit>
+      <trans-unit id="StringCollectionEditor_EmptyText">
+        <source>Empty string</source>
+        <target state="new">Empty string</target>
+        <note />
+      </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
         <target state="translated">Fichiers bitmap</target>
