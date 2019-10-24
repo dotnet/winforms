@@ -44,14 +44,13 @@ stages:
           # Override some values if we're building internally (not public)
           - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
-            # note: You have to use list syntax here (-name: value) or 
-            # you will get errors about declaring the same variable multiple times
             - _PublishType: blob
             - _SignType: real
             - _DotNetPublishToBlobFeed: true
             - group: DotNet-Blob-Feed
             - group: DotNet-Symbol-Server-Pats
             - _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
+            - group: DotNet-Winforms-SDLValidation-Params
 
             # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
             # are not resolved until the agent is running on the machine. They can be overridden any 
@@ -149,17 +148,17 @@ stages:
       # SourceLink validation
       enableSourceLinkValidation: true
 
+      # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
       SDLValidationParameters:
-        # Disable SDL Validation until https://github.com/dotnet/arcade/issues/4099 is resolved
-        enable: true
-        params: ' -SourceToolsList @("policheck","credscan")
-        -TsaInstanceURL "https://devdiv.visualstudio.com/"
-        -TsaProjectName "DEVDIV"
-        -TsaNotificationEmail "wffteam@microsoft.com"
-        -TsaCodebaseAdmin "REDMOND\advolker"
-        -TsaBugAreaPath "DevDiv\NET Framework\Winforms\Runtime\Core"
-        -TsaIterationPath "DevDiv"
-        -TsaRepositoryName "Winforms"
-        -TsaCodebaseName "Winforms"
-        -TsaOnboard $True
-        -TsaPublish $True'
+        enable: $(_TsaEnable)
+        params: ' -SourceToolsList $(_TsaSourceToolsList)
+        -TsaInstanceURL $(_TsaInstanceURL)
+        -TsaProjectName $(_TsaProjectName)
+        -TsaNotificationEmail $(_TsaNotificationEmail)
+        -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
+        -TsaBugAreaPath $(_TsaBugAreaPath)
+        -TsaIterationPath $(_TsaIterationPath)
+        -TsaRepositoryName $(_TsaRepositoryName)
+        -TsaCodebaseName $(_TsaCodebaseName)
+        -TsaOnboard $(_TsaOnboard)
+        -TsaPublish $(_TsaPublish)'
