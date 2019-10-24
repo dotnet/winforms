@@ -148,6 +148,9 @@
   <data name="ColorEditorSystemTab" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="DataSourceLocksItems" xml:space="preserve">
+    <value>Items collection cannot be modified when the DataSource property is set.</value>
+  </data>
   <data name="DockEditorAccName" xml:space="preserve">
     <value>Dock Picker</value>
   </data>
