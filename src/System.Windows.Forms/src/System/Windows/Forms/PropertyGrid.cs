@@ -3527,6 +3527,11 @@ namespace System.Windows.Forms
         {
             OnPropertyValueChanged(new PropertyValueChangedEventArgs(changedItem, oldValue));
 
+            if (changedItem == null)
+            {
+                return;
+            }
+
             // Announce the property value change like standalone combobox control do: "[something] selected".
             bool dropDown = false;
             Type propertyType = changedItem.PropertyDescriptor.PropertyType;
