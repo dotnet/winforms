@@ -114,7 +114,6 @@ namespace System.Windows.Forms.Design.Editors.Tests
         [InlineData(typeof(ToolStripTextBox), "Lines", typeof(StringArrayEditor))]
         [InlineData(typeof(TreeNode), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(TreeNode), "ImageKey", typeof(ImageIndexEditor))]
-        [InlineData(typeof(TreeNode), "ImageIndexEditor", typeof(ImageIndexEditor))]
         [InlineData(typeof(TreeNode), "SelectedImageKey", typeof(ImageIndexEditor))]
         [InlineData(typeof(TreeNode), "StateImageKey", typeof(ImageIndexEditor))]
         [InlineData(typeof(TreeNode), "StateImageIndex", typeof(ImageIndexEditor))]
