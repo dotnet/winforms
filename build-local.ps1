@@ -153,6 +153,10 @@ function Remove-Artifacts {
       [string] $Path
     )
 
+    if (!(Test-Path $Path)) {
+        return 0;
+    }
+
     $errorCount = 0;
     Get-ChildItem -Path $Path -Include @( 'bin', 'obj' ) -Recurse | ForEach-Object {
         $fullPath = $_.FullName;
