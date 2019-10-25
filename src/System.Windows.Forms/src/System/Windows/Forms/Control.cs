@@ -7623,7 +7623,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    UnsafeNativeMethods.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle));
+                    User32.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle));
                     UpdateZOrder();
                 }
             }
@@ -9976,7 +9976,7 @@ namespace System.Windows.Forms
                             // correctly parent back up to where we were before.
                             // if we were parented to a proper windows forms control, CreateControl would have properly parented
                             // us back.
-                            UnsafeNativeMethods.SetParent(new HandleRef(this, Handle), parentHandle);
+                            User32.SetParent(new HandleRef(this, Handle), parentHandle);
                         }
                     }
 
@@ -11040,7 +11040,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            UnsafeNativeMethods.SetParent(new HandleRef(_window, Handle), new HandleRef(null, value));
+                            User32.SetParent(new HandleRef(_window, Handle), value);
                             if (_parent != null)
                             {
                                 _parent.UpdateChildZOrder(this);
@@ -11054,7 +11054,7 @@ namespace System.Windows.Forms
                     // The handle was previously parented to the parking window. Its TopLevel property was
                     // then changed to true so the above call to GetParent returns null even though the parent of the control is
                     // not null. We need to explicitly set the parent to null.
-                    UnsafeNativeMethods.SetParent(new HandleRef(_window, Handle), new HandleRef(null, IntPtr.Zero));
+                    User32.SetParent(new HandleRef(_window, Handle), IntPtr.Zero);
                     Application.UnparkHandle(new HandleRef(_window, Handle), _window.DpiAwarenessContext);
                 }
             }

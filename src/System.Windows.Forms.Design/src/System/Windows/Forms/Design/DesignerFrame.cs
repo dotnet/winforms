@@ -451,7 +451,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private void ParentOverlay(Control control)
             {
-                NativeMethods.SetParent(control.Handle, Handle);
+                User32.SetParent(control.Handle, Handle);
                 User32.SetWindowPos(
                     control.Handle,
                     User32.HWND_TOP,

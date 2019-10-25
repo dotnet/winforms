@@ -820,7 +820,7 @@ namespace System.Windows.Forms
 
         internal void AttachWindow(IntPtr hwnd)
         {
-            UnsafeNativeMethods.SetParent(new HandleRef(null, hwnd), new HandleRef(this, Handle));
+            User32.SetParent(hwnd, new HandleRef(this, Handle));
 
             if (axWindow != null)
             {
