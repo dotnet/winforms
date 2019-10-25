@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 // If we're using themes then go ahead
                 if (DropShadowEnabled)
                 {
-                    cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_DROPSHADOW;
+                    cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                 }
                 // we're a borderless menuless control with no min/max boxes
                 // we dont want to show in the taskbar either
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
                 bool topLevel = TopLevel;
 
                 // opacity
-                if (topLevel && (state[stateLayered]))
+                if (topLevel && state[stateLayered])
                 {
                     cp.ExStyle |= NativeMethods.WS_EX_LAYERED;
                 }
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                     //If the display driver has enough memory, it saves the bits for Windows. If the display driver does not have enough memory, Window
                     //saves the bits itself as a bitmap in global memory and also uses some of User's local heap for housekeeping structures for each window.
                     //When the application removes the window, Windows can restore the screen image quickly by using the stored bits.
-                    cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_SAVEBITS;
+                    cp.ClassStyle |= (int)User32.CS.SAVEBITS;
                 }
                 else if (!topLevel)
                 {

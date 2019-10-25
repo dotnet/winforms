@@ -1617,7 +1617,7 @@ namespace System.Windows.Forms
                 {
                     cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
                 }
-                cp.ClassStyle = (int)NativeMethods.ClassStyle.CS_DBLCLKS;
+                cp.ClassStyle = (int)User32.CS.DBLCLKS;
 
                 if ((_state & States.TopLevel) == 0)
                 {
