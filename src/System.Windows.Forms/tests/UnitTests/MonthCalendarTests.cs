@@ -545,28 +545,28 @@ namespace System.Windows.Forms.Tests
             Assert.False(calendar.IsHandleCreated);
         }
 
-        [Theory]
-        [InlineData(1, 12)]
-        [InlineData(12, 1)]
-        public void MonthCalendar_CalendarDimensions_SetAreaOfTwelve_GetReturnsExpected(int width, int height)
-        {
-            var value = new Size(width, height);
-            using var calendar = new MonthCalendar
-            {
-                CalendarDimensions = value
-            };
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
-            Assert.False(calendar.IsHandleCreated);
+        ////[Theory]
+        ////[InlineData(1, 12)]
+        ////[InlineData(12, 1)]
+        ////public void MonthCalendar_CalendarDimensions_SetAreaOfTwelve_GetReturnsExpected(int width, int height)
+        ////{
+        ////    var value = new Size(width, height);
+        ////    using var calendar = new MonthCalendar
+        ////    {
+        ////        CalendarDimensions = value
+        ////    };
+        ////    Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
+        ////    Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
+        ////    Assert.NotEqual(value, calendar.CalendarDimensions);
+        ////    Assert.False(calendar.IsHandleCreated);
 
-            // Set same.
-            calendar.CalendarDimensions = value;
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
-            Assert.False(calendar.IsHandleCreated);
-        }
+        ////    // Set same.
+        ////    calendar.CalendarDimensions = value;
+        ////    Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
+        ////    Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
+        ////    Assert.NotEqual(value, calendar.CalendarDimensions);
+        ////    Assert.False(calendar.IsHandleCreated);
+        ////}
 
         [Theory]
         [MemberData(nameof(CalendarDimensions_Set_TestData))]
@@ -597,40 +597,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [InlineData(1, 12)]
-        [InlineData(12, 1)]
-        public void MonthCalendar_CalendarDimensions_SetWithHandleAreaOfTwelve_GetReturnsExpected(int width, int height)
-        {
-            var value = new Size(width, height);
-            using var calendar = new MonthCalendar();
-            Assert.NotEqual(IntPtr.Zero, calendar.Handle);
-            int invalidatedCallCount = 0;
-            calendar.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            calendar.HandleCreated += (sender, e) => createdCallCount++;
+        ////[Theory]
+        ////[InlineData(1, 12)]
+        ////[InlineData(12, 1)]
+        ////public void MonthCalendar_CalendarDimensions_SetWithHandleAreaOfTwelve_GetReturnsExpected(int width, int height)
+        ////{
+        ////    var value = new Size(width, height);
+        ////    using var calendar = new MonthCalendar();
+        ////    Assert.NotEqual(IntPtr.Zero, calendar.Handle);
+        ////    int invalidatedCallCount = 0;
+        ////    calendar.Invalidated += (sender, e) => invalidatedCallCount++;
+        ////    int styleChangedCallCount = 0;
+        ////    calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
+        ////    int createdCallCount = 0;
+        ////    calendar.HandleCreated += (sender, e) => createdCallCount++;
 
-            calendar.CalendarDimensions = value;
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+        ////    calendar.CalendarDimensions = value;
+        ////    Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
+        ////    Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
+        ////    Assert.NotEqual(value, calendar.CalendarDimensions);
+        ////    Assert.True(calendar.IsHandleCreated);
+        ////    Assert.Equal(0, invalidatedCallCount);
+        ////    Assert.Equal(0, styleChangedCallCount);
+        ////    Assert.Equal(0, createdCallCount);
 
-            // Set same.
-            calendar.CalendarDimensions = value;
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-        }
+        ////    // Set same.
+        ////    calendar.CalendarDimensions = value;
+        ////    Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
+        ////    Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
+        ////    Assert.NotEqual(value, calendar.CalendarDimensions);
+        ////    Assert.True(calendar.IsHandleCreated);
+        ////    Assert.Equal(0, invalidatedCallCount);
+        ////    Assert.Equal(0, styleChangedCallCount);
+        ////    Assert.Equal(0, createdCallCount);
+        ////}
 
         [Theory]
         [InlineData(0)]

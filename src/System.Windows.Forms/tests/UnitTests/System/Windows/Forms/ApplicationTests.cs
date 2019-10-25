@@ -4,7 +4,6 @@
 
 using System.Windows.Forms.VisualStyles;
 using Xunit;
-using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
@@ -32,21 +31,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(state, Application.VisualStyleState);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
-        public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)
-        {
-            VisualStyleState state = Application.VisualStyleState;
-            try
-            {
-                Application.VisualStyleState = value;
-                Assert.Equal(value, Application.VisualStyleState);
-            }
-            finally
-            {
-                Application.VisualStyleState = state;
-            }
-        }
+        ////[Theory]
+        ////[CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
+        ////[CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
+        ////public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)
+        ////{
+        ////    VisualStyleState state = Application.VisualStyleState;
+        ////    try
+        ////    {
+        ////        Application.VisualStyleState = value;
+        ////        Assert.Equal(value, Application.VisualStyleState);
+        ////    }
+        ////    finally
+        ////    {
+        ////        Application.VisualStyleState = state;
+        ////    }
+        ////}
     }
 }
