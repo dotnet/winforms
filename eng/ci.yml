@@ -3,8 +3,13 @@ parameters:
   # be read from a user-defined variable (Azure DevOps limitation)
   agentPoolName: Hosted Windows 2019 with VS2019
   agentPool: ''
-  runAsPublic: true                      
-  repoName: dotnet/winforms              
+  runAsPublic: true
+  repoName: dotnet/winforms
+
+# used in the post-build phases
+variables:
+  - ${{ if ne(parameters.runAsPublic, 'false') }}:
+    - group: DotNet-Winforms-SDLValidation-Params
 
 stages:
 - stage: build
@@ -50,7 +55,6 @@ stages:
             - group: DotNet-Blob-Feed
             - group: DotNet-Symbol-Server-Pats
             - _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
-            - group: DotNet-Winforms-SDLValidation-Params
 
             # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
             # are not resolved until the agent is running on the machine. They can be overridden any 
