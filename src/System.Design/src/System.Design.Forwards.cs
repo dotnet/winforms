@@ -4,4 +4,10 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridColumnCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageIndexEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListControlStringCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringArrayEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageCollectionEditor))]
