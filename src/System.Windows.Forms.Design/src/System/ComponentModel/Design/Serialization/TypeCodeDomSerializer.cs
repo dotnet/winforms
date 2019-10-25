@@ -48,12 +48,12 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (manager == null)
             {
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
             }
 
             if (declaration == null)
             {
-                throw new ArgumentNullException("declaration");
+                throw new ArgumentNullException(nameof(declaration));
             }
 
             object rootObject = null;
@@ -355,15 +355,15 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (manager == null)
             {
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
             }
             if (declaration == null)
             {
-                throw new ArgumentNullException("declaration");
+                throw new ArgumentNullException(nameof(declaration));
             }
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             if (!(declaration.UserData[s_initMethodKey] is CodeConstructor ctor))
             {
@@ -380,11 +380,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (manager == null)
             {
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
             }
             if (declaration == null)
             {
-                throw new ArgumentNullException("declaration");
+                throw new ArgumentNullException(nameof(declaration));
             }
             foreach (CodeTypeMember member in declaration.Members)
             {
@@ -430,11 +430,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (manager == null)
             {
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
             }
             if (root == null)
             {
-                throw new ArgumentNullException("root");
+                throw new ArgumentNullException(nameof(root));
             }
             Trace("TypeCodeDomSerializer::Serialize");
 
