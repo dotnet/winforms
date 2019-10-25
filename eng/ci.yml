@@ -6,11 +6,6 @@ parameters:
   runAsPublic: true
   repoName: dotnet/winforms
 
-# used in the post-build phases
-variables:
-  - ${{ if ne(parameters.runAsPublic, 'false') }}:
-    - group: DotNet-Winforms-SDLValidation-Params
-
 stages:
 - stage: build
   displayName: Build
@@ -153,8 +148,8 @@ stages:
 
       # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
       SDLValidationParameters:
-        enable: true
-        params: ' -SourceToolsList @("policheck","credscan")
+        enable: $(_TsaEnable)
+        params: ' -SourceToolsList $(_TsaSourceToolsList)
         -TsaInstanceURL $(_TsaInstanceURL)
         -TsaProjectName $(_TsaProjectName)
         -TsaNotificationEmail $(_TsaNotificationEmail)
