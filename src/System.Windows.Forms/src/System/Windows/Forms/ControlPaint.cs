@@ -586,7 +586,6 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    Debug.Fail("Unknown border style");
                     break;
             }
         }
