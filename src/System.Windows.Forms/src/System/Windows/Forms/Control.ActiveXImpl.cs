@@ -923,7 +923,7 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    UnsafeNativeMethods.SetParent(new HandleRef(_control, _control.Handle), new HandleRef(null, hwndParent));
+                    User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent);
 
                     // Now create our handle if it hasn't already been done.
                     _control.CreateControl();

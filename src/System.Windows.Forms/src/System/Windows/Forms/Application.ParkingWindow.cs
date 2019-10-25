@@ -119,7 +119,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                UnsafeNativeMethods.SetParent(handle, new HandleRef(this, Handle));
+                User32.SetParent(handle, new HandleRef(this, Handle));
             }
 
             /// <summary>

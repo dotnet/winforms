@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(state, Application.VisualStyleState);
         }
 
-        [Theory]
+        [Theory(Skip = "Deadlock, see: https://github.com/dotnet/winforms/issues/2192")]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
         public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)
