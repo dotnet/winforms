@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.IO;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -146,11 +147,9 @@ namespace System.Windows.Forms
             if (!result)
             {
                 // Something may have gone wrong - check for error condition
-                //
-                int errorCode = SafeNativeMethods.CommDlgExtendedError();
-                switch (errorCode)
+                switch (Comdlg32.CommDlgExtendedError())
                 {
-                    case NativeMethods.FNERR_INVALIDFILENAME:
+                    case Comdlg32.FNERR.INVALIDFILENAME:
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }
