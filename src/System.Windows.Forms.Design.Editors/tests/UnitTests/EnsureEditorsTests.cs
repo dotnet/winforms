@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         //[InlineData(typeof(ListControl), "ValueMember", typeof(DataMemberFieldEditor))]
         //[InlineData(typeof(ListView), "Columns", typeof(ColumnHeaderCollectionEditor))]
         [InlineData(typeof(ListView), "Groups", typeof(ListViewGroupCollectionEditor))]
-        //[InlineData(typeof(ListView), "Items", typeof(ListViewItemCollectionEditor))]
+        [InlineData(typeof(ListView), "Items", typeof(ListViewItemCollectionEditor))]
         [InlineData(typeof(ListViewItem), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(ListViewItem), "ImageKey", typeof(ImageIndexEditor))]
         [InlineData(typeof(ListViewItem), "StateImageIndex", typeof(ImageIndexEditor))]
