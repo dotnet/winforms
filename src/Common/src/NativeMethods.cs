@@ -334,13 +334,8 @@ namespace System.Windows.Forms
         GA_PARENT = 1,
         GA_ROOT = 2;
 
-        // ImmGetCompostionString index.
-        public const int
-        GCS_COMPSTR = 0x0008,
-        GCS_COMPATTR = 0x0010,
-        GCS_RESULTSTR = 0x0800,
-
         // attribute for COMPOSITIONSTRING Structure
+        public const int
         ATTR_INPUT = 0x00,
         ATTR_TARGET_CONVERTED = 0x01,
         ATTR_CONVERTED = 0x02,
