@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         //[InlineData(typeof(ListControl), "FormatString", typeof(FormatStringEditor))]
         //[InlineData(typeof(ListControl), "ValueMember", typeof(DataMemberFieldEditor))]
         //[InlineData(typeof(ListView), "Columns", typeof(ColumnHeaderCollectionEditor))]
-        //[InlineData(typeof(ListView), "Groups", typeof(ListViewGroupCollectionEditor))]
+        [InlineData(typeof(ListView), "Groups", typeof(ListViewGroupCollectionEditor))]
         //[InlineData(typeof(ListView), "Items", typeof(ListViewItemCollectionEditor))]
         [InlineData(typeof(ListViewItem), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(ListViewItem), "ImageKey", typeof(ImageIndexEditor))]
