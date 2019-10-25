@@ -148,7 +148,7 @@ stages:
 
       # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
       SDLValidationParameters:
-        enable: $(_TsaEnable)
+        enable: true
         params: ' -SourceToolsList $(_TsaSourceToolsList)
         -TsaInstanceURL $(_TsaInstanceURL)
         -TsaProjectName $(_TsaProjectName)
