@@ -598,58 +598,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport]
-        [Guid("00000119-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceSite
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            HRESULT CanInPlaceActivate();
-
-            [PreserveSig]
-            int OnInPlaceActivate();
-
-            [PreserveSig]
-            int OnUIActivate();
-
-            [PreserveSig]
-            HRESULT GetWindowContext(
-                out Ole32.IOleInPlaceFrame ppFrame,
-                out Ole32.IOleInPlaceUIWindow ppDoc,
-                RECT* lprcPosRect,
-                RECT* lprcClipRect,
-                Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo);
-
-            [PreserveSig]
-            HRESULT Scroll(
-                Size scrollExtant);
-
-            [PreserveSig]
-            int OnUIDeactivate(
-                int fUndoable);
-
-            [PreserveSig]
-            int OnInPlaceDeactivate();
-
-            [PreserveSig]
-            int DiscardUndoState();
-
-            [PreserveSig]
-            HRESULT DeactivateAndUndo();
-
-            [PreserveSig]
-            HRESULT OnPosRectChange(
-                RECT* lprcPosRect);
-        }
-
         // Used to control the webbrowser appearance and provide DTE to script via window.external
         [ComImport]
         [ComVisible(true)]
@@ -1815,15 +1763,18 @@ namespace System.Windows.Forms
             public static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)]string pszPath, out IntPtr ppIdl, ref uint rgflnOut);
         }
 
-        [ComVisible(true), Guid("B722BCC6-4E68-101B-A2BC-00AA00404770"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComVisible(true)]
+        [Guid("B722BCC6-4E68-101B-A2BC-00AA00404770")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleDocumentView
         {
-            void SetInPlaceSite(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IOleInPlaceSite pIPSite);
+            [PreserveSig]
+            HRESULT SetInPlaceSite(
+                Ole32.IOleInPlaceSite pIPSite);
 
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IOleInPlaceSite GetInPlaceSite();
+            [PreserveSig]
+            HRESULT GetInPlaceSite(
+                out Ole32.IOleInPlaceSite ppIPSite);
 
             [return: MarshalAs(UnmanagedType.Interface)]
             object GetDocument();
@@ -1866,11 +1817,10 @@ namespace System.Windows.Forms
                  [In, MarshalAs(UnmanagedType.Interface)]
                     IStream pstm);
 
-            void Clone(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IOleInPlaceSite pIPSiteNew,
-                 [Out, MarshalAs(UnmanagedType.LPArray)]
-                    IOleDocumentView[] ppViewNew);
+            [PreserveSig]
+            HRESULT Clone(
+                Ole32.IOleInPlaceSite pIPSiteNew,
+                out IOleDocumentView ppViewNew);
         }
 
         /// <summary>
