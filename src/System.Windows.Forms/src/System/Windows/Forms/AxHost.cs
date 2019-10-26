@@ -4875,15 +4875,7 @@ namespace System.Windows.Forms
             return iOleInPlaceActiveObject;
         }
 
-        private UnsafeNativeMethods.IOleObject GetOleObject()
-        {
-            if (iOleObject == null)
-            {
-                Debug.Assert(instance != null, "must have the ocx");
-                iOleObject = (UnsafeNativeMethods.IOleObject)instance;
-            }
-            return iOleObject;
-        }
+        private UnsafeNativeMethods.IOleObject GetOleObject() => iOleObject ??= (UnsafeNativeMethods.IOleObject)instance;
 
         private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
@@ -6047,27 +6039,12 @@ namespace System.Windows.Forms
 
             internal void OnUIDeactivate(AxHost site)
             {
-#if DEBUG
-                if (siteUIActive != null)
-                {
-                    Debug.Assert(siteUIActive == site, "deactivating when not active...");
-                }
-#endif // DEBUG
+                Debug.Assert(siteUIActive == null || siteUIActive == site, "deactivating when not active...");
 
                 siteUIActive = null;
                 site.RemoveSelectionHandler();
                 site.SetSelectionStyle(1);
                 site.editMode = EDITM_NONE;
-                if (site.GetSiteOwnsDeactivation())
-                {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, " our site owns deactivation ");
-                    ContainerControl f = site.ContainingControl;
-                    Debug.Assert(f != null, "a control has to be on a ContainerControl...");
-                    if (f != null)
-                    {
-                        //    f.setActiveControl(null);
-                    }
-                }
             }
 
             internal void OnUIActivate(AxHost site)
@@ -6099,7 +6076,6 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "active Object is now " + site.ToString());
                 siteUIActive = site;
                 ContainerControl f = site.ContainingControl;
-                Debug.Assert(f != null, "a control has to be on a ContainerControl...");
                 if (f != null)
                 {
                     f.ActiveControl = site;
