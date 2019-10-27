@@ -214,32 +214,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
-
-        // Color conversion
-        public static int RGBToCOLORREF(int rgbValue)
-        {
-            // clear the A value, swap R & B values
-            int bValue = (rgbValue & 0xFF) << 16;
-
-            rgbValue &= 0xFFFF00;
-            rgbValue |= ((rgbValue >> 16) & 0xFF);
-            rgbValue &= 0x00FFFF;
-            rgbValue |= bValue;
-            return rgbValue;
-        }
-
-        public static Color ColorFromCOLORREF(int colorref)
-        {
-            int r = colorref & 0xFF;
-            int g = (colorref >> 8) & 0xFF;
-            int b = (colorref >> 16) & 0xFF;
-            return Color.FromArgb(r, g, b);
-        }
-
-        public static int ColorToCOLORREF(Color color)
-        {
-            return (int)color.R | ((int)color.G << 8) | ((int)color.B << 16);
-        }
     }
 }
 

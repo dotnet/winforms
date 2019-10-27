@@ -2485,8 +2485,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 try
                 {
-                    oldTextColor = Gdi32.SetTextColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(textColor.ToArgb()));
-                    oldBkColor = Gdi32.SetBkColor(new HandleRef(g, hdc), SafeNativeMethods.RGBToCOLORREF(bkColor.ToArgb()));
+                    oldTextColor = Gdi32.SetTextColor(new HandleRef(g, hdc), COLORREF.RgbToCOLORREF(textColor.ToArgb()));
+                    oldBkColor = Gdi32.SetBkColor(new HandleRef(g, hdc), COLORREF.RgbToCOLORREF(bkColor.ToArgb()));
                     hfont = Gdi32.SelectObject(hdc, hfont);
                     User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
                     if (gridHost.DrawValuesRightToLeft)
