@@ -126,8 +126,6 @@ namespace System.Windows.Forms.Internal
 #endif
                 }
 
-                Debug.Assert(_hDC != IntPtr.Zero, "Attempt to use deleted HDC - DC type: " + DeviceContextType);
-
                 return _hDC;
             }
         }
@@ -140,7 +138,6 @@ namespace System.Windows.Forms.Internal
 
         private void CacheInitialState()
         {
-            Debug.Assert(_hDC != IntPtr.Zero, "Cannot get initial state without a valid HDC");
             _hCurrentPen = _hInitialPen = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_PEN);
             _hCurrentBrush = _hInitialBrush = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_BRUSH);
             _hCurrentBmp = _hInitialBmp = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_BITMAP);
@@ -242,17 +239,12 @@ namespace System.Windows.Forms.Internal
         ///  Used for wrapping an existing hdc.  In this case, this object doesn't own the hdc
         ///  so calls to GetHdc/ReleaseHdc don't PInvoke into GDI.
         /// </summary>
-        public static DeviceContext FromHdc(IntPtr hdc)
-        {
-            Debug.Assert(hdc != IntPtr.Zero, "hdc == 0");
-            return new DeviceContext(hdc, DeviceContextType.Unknown);
-        }
+        public static DeviceContext FromHdc(IntPtr hdc) => new DeviceContext(hdc, DeviceContextType.Unknown);
 
         /// <summary>
         ///  When hwnd is null, we are getting the screen DC.
         /// </summary>
-        public static DeviceContext FromHwnd(IntPtr hwnd)
-            => new DeviceContext(hwnd);
+        public static DeviceContext FromHwnd(IntPtr hwnd) => new DeviceContext(hwnd);
 
         ~DeviceContext()
         {

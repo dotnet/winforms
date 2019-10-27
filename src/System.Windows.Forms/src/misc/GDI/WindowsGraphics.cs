@@ -74,15 +74,11 @@ namespace System.Windows.Forms.Internal
 
         public static WindowsGraphics FromHdc(IntPtr hDc)
         {
-            Debug.Assert(hDc != IntPtr.Zero, "null hDc");
-
             DeviceContext dc = DeviceContext.FromHdc(hDc);
-            WindowsGraphics wg = new WindowsGraphics(dc)
+            return new WindowsGraphics(dc)
             {
                 _disposeDc = true // we create it, we dispose it.
             };
-
-            return wg;
         }
 
         /// <summary>

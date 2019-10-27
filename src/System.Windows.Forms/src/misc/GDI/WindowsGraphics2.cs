@@ -137,9 +137,6 @@ namespace System.Windows.Forms.Internal
             }
 
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
-            Debug.Assert((flags & User32.DT.CALCRECT) == 0, "CALCRECT flag is set, text won't be drawn");
-
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             // DrawText requires default text alignment.
             if (DeviceContext.TextAlignment != default)
@@ -175,7 +172,7 @@ namespace System.Windows.Forms.Internal
 
             User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
 
-            bounds = AdjustForVerticalAlignment(hdc, text, bounds, flags, ref dtparams);
+            bounds = AdjustForVerticalAlignment(DeviceContext, text, bounds, flags, ref dtparams);
 
             // Adjust unbounded rect to avoid overflow since Rectangle ctr does not do param validation.
             if (bounds.Width == MaxSize.Width)
@@ -188,7 +185,7 @@ namespace System.Windows.Forms.Internal
             }
 
             var rect = new RECT(bounds);
-            User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
+            User32.DrawTextExW(DeviceContext, text, text.Length, ref rect, flags, ref dtparams);
 
             // No need to restore previous objects into the dc (see comments on top of the class).
         }
@@ -410,7 +407,7 @@ namespace System.Windows.Forms.Internal
         ///  This way we paint the top of the text at the top of the bounds passed in.
         /// </summary>
         public static Rectangle AdjustForVerticalAlignment(
-            HandleRef hdc,
+            IHandle hdc,
             string text,
             Rectangle bounds,
             User32.DT flags,
