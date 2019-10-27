@@ -19,16 +19,7 @@ namespace System.Windows.Forms
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
-        public const int ARW_BOTTOMLEFT = 0x0000,
-        ARW_BOTTOMRIGHT = 0x0001,
-        ARW_TOPLEFT = 0x0002,
-        ARW_TOPRIGHT = 0x0003,
-        ARW_LEFT = 0x0000,
-        ARW_RIGHT = 0x0000,
-        ARW_UP = 0x0004,
-        ARW_DOWN = 0x0004,
-        ARW_HIDE = 0x0008,
-        ACM_OPENA = (0x0400 + 100),
+        public const int ACM_OPENA = (0x0400 + 100),
         ACM_OPENW = (0x0400 + 103),
         ADVF_NODATA = 1,
         ADVF_ONLYONCE = 4,
